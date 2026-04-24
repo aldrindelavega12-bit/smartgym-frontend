@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>GYM SYSTEM</h2>
+    <div class="menu" id="menu"></div>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<div class="layout">
+<div class="main">
+
+    <div class="hero">
+        <h1>ADMIN DASHBOARD</h1>
+        <p>Full system control</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Attendance  </h3>
+            <h1 id="total">0</h1>
+        </div>
+
+        <div class="card">
+            <h3>Current Occupancy</h3>
+            <h1 id="active">0</h1>
+        </div>
+
+        <div class="card">
+            <h3>Occupied Lockers</h3>
+            <h1 id="lockers">0</h1>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+// 🔥 GET USER (NEW SYSTEM)
+const user = JSON.parse(localStorage.getItem("user"));
+
+// 🔒 PROTECT ADMIN (FIXED)
+if (!user || user.role !== "admin") {
+    window.location.href = "index.html";
+}
+
+// 🔥 ROLE MENU
+const menu = document.getElementById("menu");
+
+menu.innerHTML = `
+    <a href="admin.html">Home</a>
+    <a href="messages.html">Messages</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="locker.html">Locker</a>
+    <a href="members.html">Members</a>
+    <a href="staff_manage.html">Staff</a>
+    <a href="create_account.html">Create Account</a>
+`;
+
+// ================= DASHBOARD =================
+async function loadDashboard(){
+    try {
+        const res = await fetch(`${API_URL}/api/dashboard`);
+        const data = await res.json();
+
+        document.getElementById("total").innerText = data.total_attendance || 0;
+        document.getElementById("active").innerText = data.active_users || 0;
+        document.getElementById("lockers").innerText = data.active_lockers || 0;
+    } catch (err) {
+        console.error("Dashboard error:", err);
+    }
+}
+
+
+// ================= SOCKET =================
+const socket = io(API_URL);
+
+socket.on("attendance_update", loadDashboard);
+socket.on("locker_update", () => {
+    loadDashboard();
+    loadAlerts();
+});
+
+// ================= INIT =================
+loadDashboard();
+loadAlerts();
+
+// ================= LOGOUT =================
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

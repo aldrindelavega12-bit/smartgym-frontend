@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workout Programs</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>SMART GYM</h2>
+
+    <div class="menu">
+        <a href="member.html">Home</a>
+        <a href="workouts.html">Suggested Workout</a>
+        <a href="locker_booking.html">Book Locker</a>
+        <a href="membership.html">Membership</a>
+    </div>
+
+    <div class="profile">
+        <span onclick="toggleMenu()" style="cursor:pointer;">👤</span>
+        <div id="dropdown" class="dropdown">
+            <a href="profile.html">Edit Profile</a>
+            <a onclick="logout()">Logout</a>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+<div class="main">
+
+<h2>Select Workout Program</h2>
+
+<div class="cards">
+
+    <div class="card" onclick="openProgram('muscle')">
+        <h3>💪 Building Muscle</h3>
+        <p>Gain size and strength</p>
+    </div>
+
+    <div class="card" onclick="openProgram('fatloss')">
+        <h3>🔥 Weight Loss</h3>
+        <p>Burn fat efficiently</p>
+    </div>
+
+    <div class="card" onclick="openProgram('athlete')">
+        <h3>⚡ Athlete Conditioning</h3>
+        <p>Speed, agility & endurance</p>
+    </div>
+
+</div>
+
+<!-- PROGRAM DETAILS -->
+<div id="program-content" style="margin-top:30px;"></div>
+
+</div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+
+// ================= OPEN PROGRAM =================
+function openProgram(type){
+    const container = document.getElementById("program-content");
+
+    // ===== MUSCLE =====
+    if(type === "muscle"){
+        container.innerHTML = `
+        <h2>💪 Muscle Building Programs</h2>
+
+        <div class="cards">
+
+            <div class="card" onclick="showWorkout('bro')">
+                <h3>Bro Split</h3>
+                <p>1 muscle per day</p>
+            </div>
+
+            <div class="card" onclick="showWorkout('ppl')">
+                <h3>PPL</h3>
+                <p>Push Pull Legs</p>
+            </div>
+
+            <div class="card" onclick="showWorkout('upper')">
+                <h3>Upper / Lower</h3>
+                <p>Balanced program</p>
+            </div>
+
+        </div>
+
+        <div id="workout-details"></div>
+        `;
+    }
+
+    // ===== FAT LOSS =====
+    if(type === "fatloss"){
+        container.innerHTML = `
+        <h2>🔥 Weight Loss</h2>
+
+        <div id="workout-details">
+            <b>HIIT Training</b>
+            <ul>
+                <li>Jump Rope – 1 min</li>
+                <li>Burpees – 15 reps</li>
+                <li>Mountain Climbers – 30 sec</li>
+                <li>Rest – 30 sec</li>
+                <li>Repeat 5 rounds</li>
+            </ul>
+
+            <b>Full Body Circuit</b>
+            <ul>
+                <li>Squats – 15 reps</li>
+                <li>Push Ups – 15 reps</li>
+                <li>Plank – 1 min</li>
+                <li>Lunges – 12 each leg</li>
+                <li>Repeat 4 rounds</li>
+            </ul>
+        </div>
+        `;
+    }
+
+    // ===== ATHLETE =====
+    if(type === "athlete"){
+        container.innerHTML = `
+        <h2>⚡ Athlete Conditioning</h2>
+
+        <div id="workout-details">
+            <b>Speed Training</b>
+            <ul>
+                <li>Sprint 50m – 6 reps</li>
+                <li>Agility Ladder – 5 rounds</li>
+                <li>Shuttle Run – 5 sets</li>
+            </ul>
+
+            <b>Strength</b>
+            <ul>
+                <li>Deadlift – 4x5</li>
+                <li>Squats – 4x6</li>
+                <li>Bench Press – 4x6</li>
+            </ul>
+
+            <b>Explosive</b>
+            <ul>
+                <li>Box Jump – 3x10</li>
+                <li>Kettlebell Swing – 3x15</li>
+            </ul>
+        </div>
+        `;
+    }
+}
+
+// ================= SHOW WORKOUT =================
+function showWorkout(type){
+    const box = document.getElementById("workout-details");
+
+    if(type === "bro"){
+        box.innerHTML = `
+        <h3>📅 Bro Split</h3>
+
+        <b>Monday – Chest</b>
+        <ul>
+            <li>Bench Press – 4x10</li>
+            <li>Incline Dumbbell Press – 4x10</li>
+            <li>Chest Fly – 3x12</li>
+            <li>Push Ups – 3 sets</li>
+        </ul>
+
+        <b>Tuesday – Back</b>
+        <ul>
+            <li>Pull Ups – 4x8</li>
+            <li>Lat Pulldown – 4x10</li>
+            <li>Row – 3x10</li>
+        </ul>
+
+        <b>Wednesday – Shoulders</b>
+        <ul>
+            <li>Shoulder Press – 4x10</li>
+            <li>Lateral Raise – 3x12</li>
+            <li>Rear Delt Fly – 3x12</li>
+        </ul>
+
+        <b>Thursday – Arms</b>
+        <ul>
+            <li>Bicep Curl – 3x12</li>
+            <li>Hammer Curl – 3x10</li>
+            <li>Tricep Pushdown – 3x12</li>
+        </ul>
+
+        <b>Friday – Legs</b>
+        <ul>
+            <li>Squats – 4x10</li>
+            <li>Leg Press – 3x10</li>
+            <li>Calf Raise – 4x15</li>
+        </ul>
+        `;
+    }
+
+    if(type === "ppl"){
+        box.innerHTML = `
+        <h3>📅 PPL Program</h3>
+
+        <b>Push</b>
+        <ul>
+            <li>Bench Press – 4x8</li>
+            <li>Shoulder Press – 3x10</li>
+            <li>Tricep Pushdown – 3x12</li>
+        </ul>
+
+        <b>Pull</b>
+        <ul>
+            <li>Deadlift – 4x6</li>
+            <li>Lat Pulldown – 3x10</li>
+            <li>Bicep Curl – 3x12</li>
+        </ul>
+
+        <b>Legs</b>
+        <ul>
+            <li>Squats – 4x8</li>
+            <li>Lunges – 3x12</li>
+            <li>Calf Raise – 4x15</li>
+        </ul>
+        `;
+    }
+
+    if(type === "upper"){
+        box.innerHTML = `
+        <h3>📅 Upper / Lower</h3>
+
+        <b>Upper</b>
+        <ul>
+            <li>Bench Press – 4x8</li>
+            <li>Row – 3x10</li>
+            <li>Shoulder Press – 3x10</li>
+        </ul>
+
+        <b>Lower</b>
+        <ul>
+            <li>Squats – 4x8</li>
+            <li>Deadlift – 3x6</li>
+            <li>Leg Curl – 3x12</li>
+        </ul>
+        `;
+    }
+}
+
+// ================= DROPDOWN =================
+function toggleMenu(){
+    const menu = document.getElementById("dropdown");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// ================= LOGOUT =================
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+window.onclick = function(e){
+    if(!e.target.closest('.profile')){
+        document.getElementById("dropdown").style.display = "none";
+    }
+}
+</script>
+
+<style>
+.profile{
+    position: relative;
+}
+
+.dropdown{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 160px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+</style>
+
+</body>
+</html>

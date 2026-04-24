@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>SMART GYM</h2>
+
+    <div class="menu">
+        <a href="member.html">Home</a>
+        <a href="workouts.html">Workout</a>
+        <a href="locker_booking.html">Locker</a>
+        <a href="membership.html">Membership</a>
+    </div>
+
+    <!-- USER ICON -->
+    <div class="profile">
+        <img id="nav-pic" src="https://via.placeholder.com/40" class="nav-avatar" onclick="toggleMenu()">
+
+        <div id="dropdown" class="dropdown">
+            <a href="profile.html">Edit Profile</a>
+            <a onclick="logout()">Logout</a>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+<div class="main">
+
+<h2>My Profile</h2>
+
+<div class="card">
+
+    <!-- IMAGE -->
+    <div class="image-section">
+        <img id="profile-pic" src="https://via.placeholder.com/120" class="avatar">
+        <input type="file" onchange="changeImage(event)">
+    </div>
+
+    <!-- FORM -->
+    <div class="form-section">
+
+        <div class="input-group">
+            <label>Nickname</label>
+            <input type="text" id="name" placeholder="Enter nickname">
+        </div>
+
+        <div class="input-group">
+            <label>Age</label>
+            <input type="number" id="age" placeholder="Optional">
+        </div>
+
+        <div class="input-group">
+            <label>Contact Number</label>
+            <input type="text" id="number" placeholder="Optional">
+        </div>
+
+        <button onclick="saveProfile()">Save Changes</button>
+
+    </div>
+
+</div>
+
+</div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+
+// LOAD
+function loadProfile(){
+    const data = JSON.parse(localStorage.getItem("profile")) || {};
+
+    document.getElementById("name").value = data.name || "";
+    document.getElementById("age").value = data.age || "";
+    document.getElementById("number").value = data.number || "";
+
+    if(data.image){
+        document.getElementById("profile-pic").src = data.image;
+        document.getElementById("nav-pic").src = data.image;
+    }
+}
+
+// SAVE
+function saveProfile(){
+    const data = {
+        name: document.getElementById("name").value,
+        age: document.getElementById("age").value,
+        number: document.getElementById("number").value,
+        image: document.getElementById("profile-pic").src
+    };
+
+    localStorage.setItem("profile", JSON.stringify(data));
+    alert("Profile Updated!");
+}
+
+// IMAGE
+function changeImage(event){
+    const reader = new FileReader();
+
+    reader.onload = function(){
+        document.getElementById("profile-pic").src = reader.result;
+        document.getElementById("nav-pic").src = reader.result;
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+// DROPDOWN
+function toggleMenu(){
+    const menu = document.getElementById("dropdown");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// CLOSE
+window.onclick = function(e){
+    if(!e.target.closest('.profile')){
+        document.getElementById("dropdown").style.display = "none";
+    }
+}
+
+// LOGOUT
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+loadProfile();
+
+</script>
+
+<!-- STYLE -->
+<style>
+
+.card{
+    display: flex;
+    gap: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 700px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* IMAGE */
+.image-section{
+    text-align: center;
+}
+
+.avatar{
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* FORM */
+.form-section{
+    flex: 1;
+}
+
+.input-group{
+    margin-bottom: 15px;
+}
+
+label{
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: black;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* NAV */
+.profile{
+    position: relative;
+}
+
+.nav-avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dropdown{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown a{
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown a:hover{
+    background: #f0f0f0;
+}
+
+</style>
+
+</body>
+</html>

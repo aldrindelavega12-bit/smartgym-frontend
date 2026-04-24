@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Members</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 🔒 PROTECT -->
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) {
+    window.location.href = "index.html";
+}
+</script>
+
+<!-- ✅ NAVBAR (SAME SA ATTENDANCE) -->
+<div class="navbar">
+    <h2>GYM SYSTEM</h2>
+    <div class="menu" id="menu"></div>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+<div class="main">
+
+<div class="section">
+    <h2>Member List</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Membership Expire</th>
+                <th>Monthly Expire</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="members-body"></tbody>
+    </table>
+</div>
+
+</div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+// ================= MENU (EXACT COPY) =================
+const menu = document.getElementById("menu");
+
+if(user.role === "admin"){
+    menu.innerHTML = `
+        <a href="admin.html">Home</a>
+        <a href="messages.html">Messages</a>
+        <a href="attendance.html">Attendance</a>
+        <a href="locker.html">Locker</a>
+        <a href="members.html">Members</a>
+        <a href="staff_manage.html">Staff</a>
+        <a href="create_account.html">Create Account</a>
+    `;
+}else{
+    menu.innerHTML = `
+        <a href="staff.html">Home</a>
+        <a href="messages.html">Messages</a>
+        <a href="attendance.html">Attendance</a>
+        <a href="locker.html">Locker</a>
+    `;
+}
+
+// ================= LOAD MEMBERS =================
+async function loadMembers(){
+    try{
+        const res = await fetch(`${API_URL}/api/members_list`);
+        const data = await res.json();
+
+        const table = document.getElementById("members-body");
+        table.innerHTML = "";
+
+        if(!data || data.length === 0){
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6">No members</td>
+                </tr>
+            `;
+            return;
+        }
+
+        data.forEach(row => {
+            const color = row.status === "EXPIRED" ? "red" : "green";
+
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${row.id}</td>
+                <td>${row.name}</td>
+                <td>${cleanType(row.type)}</td>
+                <td>${row.membership_expires || "N/A"}</td>
+                <td>${row.monthly_expires || "N/A"}</td>
+                <td style="color:${color}; font-weight:bold;">
+                    ${row.status}
+                </td>
+            `;
+
+            table.appendChild(tr);
+        });
+
+    }catch(err){
+        console.error("Members error:", err);
+    }
+}
+
+// ================= HELPERS =================
+function cleanType(type){
+    if(!type) return "N/A";
+    return type.replace("membership-", "").toUpperCase();
+}
+
+// ================= INIT =================
+window.onload = () => {
+    loadMembers();
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>GYM SYSTEM</h2>
+    <div class="menu" id="menu"></div>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<div class="layout">
+<div class="main">
+
+    <div class="hero">
+        <h1>STAFF DASHBOARD</h1>
+        <p>Monitoring system</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Attendance</h3>
+            <button onclick="go('attendance.html')">View →</button>
+        </div>
+
+        <div class="card">
+            <h3>Locker</h3>
+            <button onclick="go('locker.html')">View →</button>
+        </div>
+
+        <div class="card">
+            <h3>Messages</h3>
+            <button onclick="go('messages.html')">View →</button>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- SOCKET -->
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+// 🔒 USER CHECK
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user || user.role !== "staff") {
+    window.location.href = "index.html";
+}
+
+// MENU
+document.getElementById("menu").innerHTML = `
+    <a href="staff.html">Home</a>
+    <a href="messages.html">Messages</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="locker.html">Locker</a>
+`;
+
+// ================= SOCKET =================
+const socket = io(API_URL, { transports: ["websocket"] });
+
+socket.on("connect", () => {
+    console.log("CONNECTED 🔥");
+});
+
+// ================= SOUND =================
+let audioCtx = null;
+
+document.addEventListener("click", () => {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+    }
+}, { once: true });
+
+function playBeep(){
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+    }
+
+    for(let i = 0; i < 3; i++){
+        setTimeout(() => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.value = 1000;
+            gain.gain.value = 0.5;
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            setTimeout(() => osc.stop(), 150);
+        }, i * 250);
+    }
+}
+
+// ================= POPUP =================
+function showPopup(text){
+    const popup = document.createElement("div");
+
+    popup.innerHTML = `
+        <strong>⚠️ ALERT</strong><br>
+        ${text}
+    `;
+
+    popup.style.position = "fixed";
+    popup.style.top = "20px";
+    popup.style.right = "20px";
+    popup.style.background = "#ff3b3b";
+    popup.style.color = "white";
+    popup.style.padding = "15px";
+    popup.style.borderRadius = "8px";
+    popup.style.zIndex = "9999";
+    popup.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
+    popup.style.fontSize = "14px";
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => popup.remove(), 5000);
+}
+
+// ================= SAVE MESSAGE =================
+function saveMessage(text, type="GENERAL"){
+    let messages = JSON.parse(localStorage.getItem("messages")) || [];
+
+    messages.unshift({
+        text: text,
+        type: type,
+        time: new Date().toLocaleString()
+    });
+
+    // optional limit
+    messages = messages.slice(0, 50);
+
+    localStorage.setItem("messages", JSON.stringify(messages));
+}
+
+// ================= ALERT HANDLER =================
+function handleAlert(data){
+
+    console.log("🚨 ALERT:", data);
+
+    let text = "";
+
+    if(data.event === "BYPASS"){
+        text = `Unauthorized Entry (${data.lane})`;
+    }
+    else if(data.event === "TAILGATING"){
+        text = `Tailgating Detected (${data.lane})`;
+    }
+    else if(data.type === "OVERTIME"){
+        text = `Locker ${data.locker} is OVERTIME`;
+    }
+
+    if(text){
+        showPopup(text);
+
+        // 🔥 FIX: TYPE BASED SAVE
+        if(data.event){
+            saveMessage(text, "SECURITY");
+        }else{
+            saveMessage(text, "OVERTIME");
+        }
+
+        playBeep();
+    }
+}
+
+// ================= PRIORITY ALERT =================
+socket.on("priority_alert", (data) => {
+
+    console.log("⚠️ PRIORITY:", data);
+
+    let text = `Locker ${data.locker} will be reserved at ${data.time}. Please remind current user.`;
+
+    showPopup(text);
+    saveMessage(text, "PRIORITY");   // 🔥 FIXED
+    playBeep();
+});
+
+// ================= SOCKET EVENTS =================
+socket.on("security_alert", handleAlert);
+socket.on("overtime_alert", handleAlert);
+
+// ================= NAV =================
+function go(page){
+    window.location.href = page;
+}
+
+// ================= LOGOUT =================
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

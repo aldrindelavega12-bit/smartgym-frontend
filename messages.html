@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Messages</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user) {
+    window.location.href = "index.html";
+}
+</script>
+
+<div class="navbar">
+    <h2>GYM SYSTEM</h2>
+    <div class="menu" id="menu"></div>
+</div>
+
+<div class="layout">
+    <div class="main">
+
+        <div class="section">
+            <h2>System Messages</h2>
+
+            <ul id="messages-list"></ul>
+
+            <br>
+            <button onclick="clearMessages()">Clear All</button>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+// ================= MENU =================
+const menu = document.getElementById("menu");
+
+if(user.role === "admin"){
+    menu.innerHTML = `
+        <a href="admin.html">Home</a>
+        <a href="messages.html">Messages</a>
+        <a href="attendance.html">Attendance</a>
+        <a href="locker.html">Locker</a>
+        <a href="members.html">Members</a>
+        <a href="staff_manage.html">Staff</a>
+        <a href="create_account.html">Create Account</a>
+    `;
+}else{
+    menu.innerHTML = `
+        <a href="staff.html">Home</a>
+        <a href="messages.html">Messages</a>
+        <a href="attendance.html">Attendance</a>
+        <a href="locker.html">Locker</a>
+    `;
+}
+
+// ================= SOCKET =================
+const socket = io(API_URL, { transports: ["websocket"] });
+
+// ⚠️ IMPORTANT FIX:
+// Messages page is DISPLAY ONLY
+// ❌ DO NOT SAVE HERE (to avoid duplicates / conflicts)
+
+// ================= LOAD =================
+function loadMessages(){
+    const list = document.getElementById("messages-list");
+    list.innerHTML = "";
+
+    let messages = JSON.parse(localStorage.getItem("messages")) || [];
+
+    if(messages.length === 0){
+        list.innerHTML = "<li>No alerts</li>";
+        return;
+    }
+
+    messages.forEach(msg => {
+
+        let color = "black";
+
+        if(msg.type === "PRIORITY") color = "orange";
+        if(msg.type === "OVERTIME") color = "red";
+        if(msg.type === "SECURITY") color = "purple";
+
+        list.innerHTML += `
+            <li style="margin-bottom:10px; border-left:5px solid ${color}; padding-left:10px;">
+                <b>${msg.text}</b><br>
+                <small>${msg.time}</small>
+            </li>
+        `;
+    });
+}
+
+// ================= CLEAR =================
+function clearMessages(){
+    localStorage.removeItem("messages");
+    loadMessages();
+}
+
+// ================= AUTO REFRESH =================
+setInterval(loadMessages, 1000);
+
+// ================= INIT =================
+loadMessages();
+
+// ================= DEBUG (OPTIONAL) =================
+socket.on("connect", () => {
+    console.log("Messages page connected (display only)");
+});
+</script>
+
+</body>
+</html>

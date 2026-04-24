@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Management</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 🔒 ADMIN ONLY -->
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+    window.location.href = "index.html";
+}
+</script>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>GYM SYSTEM</h2>
+    <div class="menu" id="menu"></div>
+</div>
+
+<div class="layout">
+<div class="main">
+
+<h2>Staff Management</h2>
+
+<div style="margin-bottom:15px;">
+    <input type="text" id="name" placeholder="Enter name">
+    <input type="text" id="roleInput" placeholder="Enter role">
+    <button onclick="addStaff()">Add Staff</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Role</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="staff-body"></tbody>
+</table>
+
+</div>
+</div>
+
+<script>
+// 🔥 MENU
+const menu = document.getElementById("menu");
+menu.innerHTML = `
+    <a href="admin.html">Home</a>
+    <a href="messages.html">Messages</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="locker.html">Locker</a>
+    <a href="members.html">Members</a>
+    <a href="staff_manage.html">Staff</a>
+    <a href="create_account.html">Create Account</a>
+`;
+
+// ===== LOAD =====
+function loadStaff(){
+    let staff = JSON.parse(localStorage.getItem("staff")) || [];
+    const table = document.getElementById("staff-body");
+    table.innerHTML = "";
+
+    if(staff.length === 0){
+        table.innerHTML = `<tr><td colspan="3">No staff</td></tr>`;
+        return;
+    }
+
+    staff.forEach((s, i) => {
+        table.innerHTML += `
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.role}</td>
+            <td><button onclick="removeStaff(${i})">Remove</button></td>
+        </tr>`;
+    });
+}
+
+// ===== ADD =====
+function addStaff(){
+    const name = document.getElementById("name").value.trim();
+    const role = document.getElementById("roleInput").value.trim();
+
+    if(!name || !role){
+        alert("Fill all fields");
+        return;
+    }
+
+    let staff = JSON.parse(localStorage.getItem("staff")) || [];
+
+    staff.push({name, role});
+
+    localStorage.setItem("staff", JSON.stringify(staff));
+
+    // 🔥 clear input
+    document.getElementById("name").value = "";
+    document.getElementById("roleInput").value = "";
+
+    loadStaff();
+}
+
+// ===== REMOVE =====
+function removeStaff(i){
+    let staff = JSON.parse(localStorage.getItem("staff")) || [];
+    staff.splice(i,1);
+    localStorage.setItem("staff", JSON.stringify(staff));
+    loadStaff();
+}
+
+loadStaff();
+</script>
+
+</body>
+</html>

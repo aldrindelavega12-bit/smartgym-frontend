@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 🔒 ROLE PROTECTION -->
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user || user.role !== "member") {
+    window.location.href = "index.html";
+}
+</script>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>SMART GYM</h2>
+
+    <div class="menu">
+        <a href="member.html">Home</a>
+        <a href="workouts.html">Suggested Workout</a>
+        <a href="locker_booking.html">Book Locker</a>
+        <a href="membership.html">Membership</a>
+    </div>
+
+    <!-- 👤 PROFILE -->
+    <div class="profile">
+        <img id="nav-pic" src="https://via.placeholder.com/35" class="nav-avatar" onclick="toggleMenu()">
+
+        <div id="dropdown" class="dropdown">
+            <a href="profile.html">Edit Profile</a>
+            <a onclick="logout()">Logout</a>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+<div class="main">
+
+<div class="hero">
+    <h1 id="welcome">WELCOME 💪</h1>
+    <p>Train smart. Stay strong.</p>
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <h3>Suggested Workout</h3>
+        <button onclick="go('workouts.html')">Open</button>
+    </div>
+
+    <div class="card">
+        <h3>Book Locker</h3>
+        <button onclick="go('locker_booking.html')">Book</button>
+    </div>
+
+    <div class="card">
+        <h3>Membership Details</h3>
+        <button onclick="go('membership.html')">View</button>
+    </div>
+
+</div>
+
+</div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+// 🔥 LOAD USER + PROFILE
+const userData = JSON.parse(localStorage.getItem("user"));
+const profile = JSON.parse(localStorage.getItem("profile")) || {};
+
+// 👉 PRIORITY: nickname → fallback real name
+const displayName = profile.name || userData.name;
+
+// 👉 UPDATE NAME
+document.getElementById("welcome").innerText =
+    "WELCOME, " + displayName + " 💪";
+
+// 👉 UPDATE PROFILE IMAGE
+if(profile.image){
+    document.getElementById("nav-pic").src = profile.image;
+}
+
+// NAVIGATION
+function go(page){
+    window.location.href = page;
+}
+
+// LOGOUT
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+// DROPDOWN
+function toggleMenu(){
+    const menu = document.getElementById("dropdown");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// CLICK OUTSIDE CLOSE
+window.onclick = function(e){
+    if(!e.target.closest('.profile')){
+        document.getElementById("dropdown").style.display = "none";
+    }
+}
+</script>
+
+<!-- STYLE -->
+<style>
+
+.profile{
+    position: relative;
+}
+
+.nav-avatar{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dropdown{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown a{
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown a:hover{
+    background: #f1f2f6;
+}
+
+</style>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Locker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>SMART GYM</h2>
+
+    <div class="menu">
+        <a href="member.html">Home</a>
+        <a href="workouts.html">Suggested Workout</a>
+        <a href="locker_booking.html">Book Locker</a>
+        <a href="membership.html">Membership</a>
+    </div>
+
+    <div class="profile">
+        <span onclick="toggleMenu()" style="cursor:pointer;">👤</span>
+        <div id="dropdown" class="dropdown">
+            <a href="profile.html">Edit Profile</a>
+            <a onclick="logout()">Logout</a>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="layout">
+<div class="main">
+
+<h2>Book a Locker</h2>
+
+<!-- LOCKERS -->
+<div class="cards">
+
+    <div class="card" onclick="selectLocker(1)">
+        <h3>Locker 1</h3>
+    </div>
+
+    <div class="card" onclick="selectLocker(2)">
+        <h3>Locker 2</h3>
+    </div>
+
+    <div class="card" onclick="selectLocker(3)">
+        <h3>Locker 3</h3>
+    </div>
+
+</div>
+
+<!-- BOOKING FORM -->
+<div id="booking-form" style="margin-top:30px; display:none;">
+
+    <h3 id="locker-title"></h3>
+
+    <label>Select Date:</label><br>
+    <input type="date" id="date"><br><br>
+
+    <label>Select Time:</label><br>
+    <input type="time" id="time"><br><br>
+
+    <p style="color:gray;">
+        ⚠ Max usage: <b>3 hours</b><br>
+        ⚠ Grace period: <b>20 minutes</b><br>
+        ⚠ Auto cancel if no show<br>
+        ⚠ Needs admin approval
+    </p>
+
+    <button onclick="submitBooking()">Submit Booking</button>
+
+</div>
+
+</div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+let selectedLocker = null;
+
+// 🔒 CHECK USER (IMPORTANT)
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+    alert("Session expired. Please login again.");
+    window.location.href = "index.html";
+}
+
+// ================= SELECT LOCKER =================
+function selectLocker(locker){
+    selectedLocker = locker;
+
+    document.getElementById("booking-form").style.display = "block";
+    document.getElementById("locker-title").innerText = "Locker " + locker;
+
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("date").value = today;
+}
+
+// ================= SUBMIT =================
+async function submitBooking(){
+
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    const user_id = user.id;
+
+    console.log("USER:", user);
+    console.log("USER ID:", user_id);
+
+    if(!selectedLocker){
+        alert("Select a locker first");
+        return;
+    }
+
+    if(!date || !time){
+        alert("Please select date and time");
+        return;
+    }
+
+    try{
+        const payload = {
+            user_id: user_id,
+            locker: selectedLocker,
+            date: date,
+            time: time
+        };
+
+        console.log("SENDING:", payload);
+
+        const res = await fetch(`${API_URL}/api/book_locker`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        console.log("RESPONSE:", data);
+
+        if(data.status === "success"){
+            alert("✅ Booking submitted!\nWaiting for approval.");
+        } else {
+            alert("❌ " + (data.message || "Booking failed"));
+        }
+
+        document.getElementById("booking-form").style.display = "none";
+        selectedLocker = null;
+
+    }catch(err){
+        console.error(err);
+        alert("❌ Server error");
+    }
+}
+
+// ================= PROFILE =================
+function toggleMenu(){
+    const menu = document.getElementById("dropdown");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+window.onclick = function(e){
+    if(!e.target.closest('.profile')){
+        document.getElementById("dropdown").style.display = "none";
+    }
+}
+</script>
+
+<style>
+.profile{
+    position: relative;
+}
+
+.dropdown{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 160px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cards{
+    display: flex;
+    gap: 20px;
+}
+
+.card{
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+</style>
+
+</body>
+</html>
