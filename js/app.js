@@ -3,7 +3,7 @@ async function login() {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://192.168.1.19:5001/api/login", {
+        const response = await fetch("https://smartgym-api-ia2e.onrender.com/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -12,7 +12,7 @@ async function login() {
         });
 
         const data = await response.json();
-        console.log(data); // debug
+        console.log(data);
 
         if (data.status === "success") {
             localStorage.setItem("user", JSON.stringify(data.user));
