@@ -169,11 +169,6 @@
     font-weight: bold;
 }
 
-.booked-slot{
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
 .rules{
     margin-top: 20px;
     color: gray;
@@ -303,10 +298,11 @@
             <span class="available">Available</span>
         </div>
 
-        <div class="slot booked-slot">
+        <div class="slot"
+             onclick="selectSlot(this,'02:00 PM - 05:00 PM')">
 
             <span>02:00 PM - 05:00 PM</span>
-            <span class="booked">Fully Booked</span>
+            <span class="available">Available</span>
         </div>
 
         <div class="slot"
@@ -374,10 +370,6 @@ function selectDate(element, date){
 
 // SLOT
 function selectSlot(element, slot){
-
-    if(element.classList.contains("booked-slot")){
-        return;
-    }
 
     document.querySelectorAll(".slot")
     .forEach(slotEl => slotEl.classList.remove("selected-slot"));
