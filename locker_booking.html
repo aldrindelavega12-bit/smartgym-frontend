@@ -469,9 +469,6 @@ function renderCalendar(){
 // =============================
 // LOAD BOOKED SLOTS
 // =============================
-// =============================
-// LOAD BOOKED SLOTS
-// =============================
 async function loadBookedSlots(){
 
     try{
@@ -493,12 +490,15 @@ async function loadBookedSlots(){
             status.style.color = "green";
         });
 
-        // NO SELECTION YET
+        // RESET SELECTED SLOT
+        selectedSlot = null;
+
+        // CHECK REQUIRED
         if(!selectedLocker || !selectedDate){
             return;
         }
 
-        // FETCH BOOKED SLOTS
+        // FETCH API
         const res = await fetch(
             `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
         );
@@ -509,30 +509,46 @@ async function loadBookedSlots(){
 
         const bookedSlots = data.slots || [];
 
-        console.log("BOOKED SLOTS:", bookedSlots);
+        console.log(
+            "BOOKED:",
+            JSON.stringify(bookedSlots)
+        );
 
-        // CHECK EACH SLOT
+        // LOOP SLOTS
         document.querySelectorAll(".slot").forEach(slot => {
 
             const slotText =
                 slot.querySelector(".slot-time")
                 .innerText
+                .replace(/\s+/g,' ')
                 .trim()
                 .toUpperCase();
 
-            console.log("FRONT:", slotText);
+            console.log("CHECK:", slotText);
 
             const status =
                 slot.querySelector(".status");
 
-            // MATCH
-            if(
-                bookedSlots.some(
-                    s =>
-                        s.trim().toUpperCase()
-                        === slotText
-                )
-            ){
+            // FIND MATCH
+            const isBooked = bookedSlots.some(s => {
+
+                const cleanSlot =
+                    s.replace(/\s+/g,' ')
+                     .trim()
+                     .toUpperCase();
+
+                console.log(
+                    "COMPARE:",
+                    cleanSlot,
+                    "VS",
+                    slotText
+                );
+
+                return cleanSlot === slotText;
+            });
+
+            // IF BOOKED
+            if(isBooked){
 
                 console.log("MATCH:", slotText);
 
@@ -549,9 +565,13 @@ async function loadBookedSlots(){
                 status.style.color = "red";
             }
         });
+
     }catch(err){
 
-        console.log("BOOKED SLOT ERROR:", err);
+        console.log(
+            "BOOKED SLOT ERROR:",
+            err
+        );
     }
 }
 
