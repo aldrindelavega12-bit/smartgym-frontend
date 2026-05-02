@@ -520,15 +520,21 @@ async function loadBookedSlots(){
                 .trim()
                 .toUpperCase();
 
-            console.log("CHECKING:", slotText);
+            console.log("FRONT:", slotText);
 
             const status =
                 slot.querySelector(".status");
 
-            // MATCH FOUND
-            if(bookedSlots.includes(slotText)){
+            // MATCH
+            if(
+                bookedSlots.some(
+                    s =>
+                        s.trim().toUpperCase()
+                        === slotText
+                )
+            ){
 
-                console.log("MATCH FOUND:", slotText);
+                console.log("MATCH:", slotText);
 
                 slot.classList.add("booked-slot");
 
@@ -543,7 +549,6 @@ async function loadBookedSlots(){
                 status.style.color = "red";
             }
         });
-
     }catch(err){
 
         console.log("BOOKED SLOT ERROR:", err);
