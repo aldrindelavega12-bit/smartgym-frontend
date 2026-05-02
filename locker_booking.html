@@ -469,11 +469,14 @@ function renderCalendar(){
 // =============================
 // LOAD BOOKED SLOTS
 // =============================
+// =============================
+// LOAD BOOKED SLOTS
+// =============================
 async function loadBookedSlots(){
 
     try{
 
-        // reset muna lahat
+        // RESET ALL SLOTS
         document.querySelectorAll(".slot").forEach(slot => {
 
             slot.classList.remove("booked-slot");
@@ -481,40 +484,58 @@ async function loadBookedSlots(){
 
             slot.style.background = "white";
             slot.style.cursor = "pointer";
+            slot.style.opacity = "1";
 
-            const status = slot.querySelector(".status");
+            const status =
+                slot.querySelector(".status");
 
             status.innerText = "Available";
             status.style.color = "green";
         });
 
+        // NO SELECTION YET
         if(!selectedLocker || !selectedDate){
             return;
         }
 
+        // FETCH BOOKED SLOTS
         const res = await fetch(
             `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
         );
 
         const data = await res.json();
 
+        console.log("BOOKED API:", data);
+
         const bookedSlots = data.slots || [];
 
+        console.log("BOOKED SLOTS:", bookedSlots);
+
+        // CHECK EACH SLOT
         document.querySelectorAll(".slot").forEach(slot => {
 
             const slotText =
-                slot.querySelector(".slot-time").innerText;
+                slot.querySelector(".slot-time")
+                .innerText
+                .trim();
+
+            console.log("CHECKING:", slotText);
 
             const status =
                 slot.querySelector(".status");
 
+            // MATCH FOUND
             if(bookedSlots.includes(slotText)){
+
+                console.log("MATCH FOUND:", slotText);
 
                 slot.classList.add("booked-slot");
 
                 slot.style.background = "#fee2e2";
 
                 slot.style.cursor = "not-allowed";
+
+                slot.style.opacity = "0.7";
 
                 status.innerText = "Fully Booked";
 
@@ -524,7 +545,7 @@ async function loadBookedSlots(){
 
     }catch(err){
 
-        console.log(err);
+        console.log("BOOKED SLOT ERROR:", err);
     }
 }
 
