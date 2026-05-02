@@ -3,7 +3,201 @@
 <head>
     <title>Book Locker</title>
     <link rel="stylesheet" href="css/style.css">
+
+<style>
+.profile{
+    position: relative;
+}
+
+.dropdown{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 160px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cards{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card{
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    transition: 0.2s;
+    min-width: 180px;
+    text-align: center;
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+.card.active{
+    border: 2px solid #2563eb;
+    background: #eff6ff;
+}
+
+/* BOOKING AREA */
+.booking-container{
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+/* CALENDAR */
+.calendar-section{
+    width: 45%;
+}
+
+.calendar-box{
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.calendar-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3{
+    font-size: 24px;
+}
+
+.days{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap: 10px;
+    text-align: center;
+}
+
+.day-name{
+    font-weight: bold;
+}
+
+.day{
+    background: #f3f4f6;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.day:hover{
+    background: #dbeafe;
+}
+
+.selected-day{
+    background: #2563eb !important;
+    color: white;
+}
+
+.legend{
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.available-box,
+.booked-box{
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.available-box{
+    background: green;
+}
+
+.booked-box{
+    background: red;
+}
+
+/* TIME SECTION */
+.time-section{
+    width: 55%;
+}
+
+.slot{
+    background: white;
+    padding: 18px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+
+    transition: 0.2s;
+}
+
+.slot:hover{
+    transform: scale(1.01);
+}
+
+.selected-slot{
+    border: 2px solid #2563eb;
+    background: #eff6ff;
+}
+
+.available{
+    color: green;
+    font-weight: bold;
+}
+
+.booked{
+    color: red;
+    font-weight: bold;
+}
+
+.booked-slot{
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.rules{
+    margin-top: 20px;
+    color: gray;
+    line-height: 1.8;
+}
+
+.submit-btn{
+    margin-top: 25px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-btn:hover{
+    background: #1d4ed8;
+}
+</style>
+
 </head>
+
 <body>
 
 <!-- NAVBAR -->
@@ -19,6 +213,7 @@
 
     <div class="profile">
         <span onclick="toggleMenu()" style="cursor:pointer;">👤</span>
+
         <div id="dropdown" class="dropdown">
             <a href="profile.html">Edit Profile</a>
             <a onclick="logout()">Logout</a>
@@ -35,39 +230,104 @@
 <!-- LOCKERS -->
 <div class="cards">
 
-    <div class="card" onclick="selectLocker(1)">
+    <div class="card" onclick="selectLocker(this,1)">
         <h3>Locker 1</h3>
     </div>
 
-    <div class="card" onclick="selectLocker(2)">
+    <div class="card" onclick="selectLocker(this,2)">
         <h3>Locker 2</h3>
     </div>
 
-    <div class="card" onclick="selectLocker(3)">
+    <div class="card" onclick="selectLocker(this,3)">
         <h3>Locker 3</h3>
     </div>
 
 </div>
 
-<!-- BOOKING FORM -->
-<div id="booking-form" style="margin-top:30px; display:none;">
+<!-- BOOKING CONTAINER -->
+<div class="booking-container">
 
-    <h3 id="locker-title"></h3>
+    <!-- LEFT -->
+    <div class="calendar-section">
 
-    <label>Select Date:</label><br>
-    <input type="date" id="date"><br><br>
+        <div class="calendar-box">
 
-    <label>Select Time:</label><br>
-    <input type="time" id="time"><br><br>
+            <div class="calendar-header">
+                <h3>May 2026</h3>
+            </div>
 
-    <p style="color:gray;">
-        ⚠ Max usage: <b>3 hours</b><br>
-        ⚠ Grace period: <b>20 minutes</b><br>
-        ⚠ Auto cancel if no show<br>
-        ⚠ Needs admin approval
-    </p>
+            <div class="days">
 
-    <button onclick="submitBooking()">Submit Booking</button>
+                <div class="day-name">Su</div>
+                <div class="day-name">Mo</div>
+                <div class="day-name">Tu</div>
+                <div class="day-name">We</div>
+                <div class="day-name">Th</div>
+                <div class="day-name">Fr</div>
+                <div class="day-name">Sa</div>
+
+                <div class="day" onclick="selectDate(this,'2026-05-06')">6</div>
+                <div class="day" onclick="selectDate(this,'2026-05-07')">7</div>
+                <div class="day" onclick="selectDate(this,'2026-05-08')">8</div>
+                <div class="day" onclick="selectDate(this,'2026-05-09')">9</div>
+
+                <div class="day" onclick="selectDate(this,'2026-05-10')">10</div>
+                <div class="day" onclick="selectDate(this,'2026-05-11')">11</div>
+                <div class="day" onclick="selectDate(this,'2026-05-12')">12</div>
+
+            </div>
+
+            <div class="legend">
+                <span class="available-box"></span> Available
+                <span class="booked-box"></span> Fully Booked
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="time-section">
+
+        <div class="slot"
+             onclick="selectSlot(this,'08:00 AM - 11:00 AM')">
+
+            <span>08:00 AM - 11:00 AM</span>
+            <span class="available">Available</span>
+        </div>
+
+        <div class="slot"
+             onclick="selectSlot(this,'11:00 AM - 02:00 PM')">
+
+            <span>11:00 AM - 02:00 PM</span>
+            <span class="available">Available</span>
+        </div>
+
+        <div class="slot booked-slot">
+
+            <span>02:00 PM - 05:00 PM</span>
+            <span class="booked">Fully Booked</span>
+        </div>
+
+        <div class="slot"
+             onclick="selectSlot(this,'05:00 PM - 08:00 PM')">
+
+            <span>05:00 PM - 08:00 PM</span>
+            <span class="available">Available</span>
+        </div>
+
+        <div class="rules">
+            ⚠ Max usage: <b>3 hours</b><br>
+            ⚠ Grace period: <b>20 minutes</b><br>
+            ⚠ Auto cancel if no show<br>
+            ⚠ Needs admin approval
+        </div>
+
+        <button class="submit-btn" onclick="submitBooking()">
+            Submit Booking
+        </button>
+
+    </div>
 
 </div>
 
@@ -79,8 +339,10 @@
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 let selectedLocker = null;
+let selectedDate = null;
+let selectedSlot = null;
 
-// 🔒 CHECK USER (IMPORTANT)
+// USER
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (!user) {
@@ -88,43 +350,70 @@ if (!user) {
     window.location.href = "index.html";
 }
 
-// ================= SELECT LOCKER =================
-function selectLocker(locker){
+// LOCKER
+function selectLocker(element, locker){
+
+    document.querySelectorAll(".card")
+    .forEach(card => card.classList.remove("active"));
+
+    element.classList.add("active");
+
     selectedLocker = locker;
-
-    document.getElementById("booking-form").style.display = "block";
-    document.getElementById("locker-title").innerText = "Locker " + locker;
-
-    const today = new Date().toISOString().split("T")[0];
-    document.getElementById("date").value = today;
 }
 
-// ================= SUBMIT =================
+// DATE
+function selectDate(element, date){
+
+    document.querySelectorAll(".day")
+    .forEach(day => day.classList.remove("selected-day"));
+
+    element.classList.add("selected-day");
+
+    selectedDate = date;
+}
+
+// SLOT
+function selectSlot(element, slot){
+
+    if(element.classList.contains("booked-slot")){
+        return;
+    }
+
+    document.querySelectorAll(".slot")
+    .forEach(slotEl => slotEl.classList.remove("selected-slot"));
+
+    element.classList.add("selected-slot");
+
+    selectedSlot = slot;
+}
+
+// SUBMIT
 async function submitBooking(){
 
-    const date = document.getElementById("date").value;
-    const time = document.getElementById("time").value;
     const user_id = user.id;
-
-    console.log("USER:", user);
-    console.log("USER ID:", user_id);
 
     if(!selectedLocker){
         alert("Select a locker first");
         return;
     }
 
-    if(!date || !time){
-        alert("Please select date and time");
+    if(!selectedDate){
+        alert("Please select date");
+        return;
+    }
+
+    if(!selectedSlot){
+        alert("Please select time slot");
         return;
     }
 
     try{
+
         const payload = {
             user_id: user_id,
             locker: selectedLocker,
-            date: date,
-            time: time
+            date: selectedDate,
+            time: selectedSlot
         };
 
         console.log("SENDING:", payload);
@@ -147,19 +436,21 @@ async function submitBooking(){
             alert("❌ " + (data.message || "Booking failed"));
         }
 
-        document.getElementById("booking-form").style.display = "none";
-        selectedLocker = null;
-
     }catch(err){
         console.error(err);
         alert("❌ Server error");
     }
 }
 
-// ================= PROFILE =================
+// PROFILE
 function toggleMenu(){
+
     const menu = document.getElementById("dropdown");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
+
+    menu.style.display =
+        menu.style.display === "block"
+        ? "none"
+        : "block";
 }
 
 function logout(){
@@ -168,47 +459,12 @@ function logout(){
 }
 
 window.onclick = function(e){
+
     if(!e.target.closest('.profile')){
         document.getElementById("dropdown").style.display = "none";
     }
 }
 </script>
-
-<style>
-.profile{
-    position: relative;
-}
-
-.dropdown{
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 35px;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    width: 160px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.cards{
-    display: flex;
-    gap: 20px;
-}
-
-.card{
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    cursor: pointer;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    transition: 0.2s;
-}
-
-.card:hover{
-    transform: scale(1.05);
-}
-</style>
 
 </body>
 </html>
