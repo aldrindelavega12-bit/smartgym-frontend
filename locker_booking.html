@@ -68,9 +68,18 @@
 
 .calendar-header{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+}
+
+.calendar-header button{
+    border: none;
+    background: #f3f4f6;
+    padding: 8px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 .calendar-header h3{
@@ -164,11 +173,6 @@
     font-weight: bold;
 }
 
-.booked{
-    color: red;
-    font-weight: bold;
-}
-
 .rules{
     margin-top: 20px;
     color: gray;
@@ -248,29 +252,12 @@
         <div class="calendar-box">
 
             <div class="calendar-header">
-                <h3>May 2026</h3>
+                <button onclick="changeMonth(-1)">❮</button>
+                <h3 id="monthYear"></h3>
+                <button onclick="changeMonth(1)">❯</button>
             </div>
 
-            <div class="days">
-
-                <div class="day-name">Su</div>
-                <div class="day-name">Mo</div>
-                <div class="day-name">Tu</div>
-                <div class="day-name">We</div>
-                <div class="day-name">Th</div>
-                <div class="day-name">Fr</div>
-                <div class="day-name">Sa</div>
-
-                <div class="day" onclick="selectDate(this,'2026-05-06')">6</div>
-                <div class="day" onclick="selectDate(this,'2026-05-07')">7</div>
-                <div class="day" onclick="selectDate(this,'2026-05-08')">8</div>
-                <div class="day" onclick="selectDate(this,'2026-05-09')">9</div>
-
-                <div class="day" onclick="selectDate(this,'2026-05-10')">10</div>
-                <div class="day" onclick="selectDate(this,'2026-05-11')">11</div>
-                <div class="day" onclick="selectDate(this,'2026-05-12')">12</div>
-
-            </div>
+            <div class="days" id="calendarDays"></div>
 
             <div class="legend">
                 <span class="available-box"></span> Available
@@ -330,7 +317,6 @@
 </div>
 </div>
 
-<!-- SCRIPT -->
 <script>
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
@@ -338,11 +324,10 @@ let selectedLocker = null;
 let selectedDate = null;
 let selectedSlot = null;
 
-// USER
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (!user) {
-    alert("Session expired. Please login again.");
+    alert("Session expired.");
     window.location.href = "index.html";
 }
 
@@ -357,17 +342,6 @@ function selectLocker(element, locker){
     selectedLocker = locker;
 }
 
-// DATE
-function selectDate(element, date){
-
-    document.querySelectorAll(".day")
-    .forEach(day => day.classList.remove("selected-day"));
-
-    element.classList.add("selected-day");
-
-    selectedDate = date;
-}
-
 // SLOT
 function selectSlot(element, slot){
 
@@ -378,6 +352,82 @@ function selectSlot(element, slot){
 
     selectedSlot = slot;
 }
+
+// CALENDAR
+const monthYear = document.getElementById("monthYear");
+const calendarDays = document.getElementById("calendarDays");
+
+let currentDate = new Date();
+
+function renderCalendar(){
+
+    calendarDays.innerHTML = "";
+
+    const month = currentDate.getMonth();
+    const year = currentDate.getFullYear();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    const months = [
+        "January","February","March","April",
+        "May","June","July","August",
+        "September","October","November","December"
+    ];
+
+    monthYear.innerText = `${months[month]} ${year}`;
+
+    const dayNames = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+
+    dayNames.forEach(day => {
+
+        const div = document.createElement("div");
+
+        div.classList.add("day-name");
+        div.innerText = day;
+
+        calendarDays.appendChild(div);
+    });
+
+    for(let i = 0; i < firstDay; i++){
+
+        const empty = document.createElement("div");
+
+        calendarDays.appendChild(empty);
+    }
+
+    for(let day = 1; day <= lastDate; day++){
+
+        const div = document.createElement("div");
+
+        div.classList.add("day");
+        div.innerText = day;
+
+        const fullDate =
+            `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+
+        div.onclick = () => {
+
+            document.querySelectorAll(".day")
+            .forEach(d => d.classList.remove("selected-day"));
+
+            div.classList.add("selected-day");
+
+            selectedDate = fullDate;
+        };
+
+        calendarDays.appendChild(div);
+    }
+}
+
+function changeMonth(direction){
+
+    currentDate.setMonth(currentDate.getMonth() + direction);
+
+    renderCalendar();
+}
+
+renderCalendar();
 
 // SUBMIT
 async function submitBooking(){
@@ -408,29 +458,32 @@ async function submitBooking(){
             time: selectedSlot
         };
 
-        console.log("SENDING:", payload);
+        console.log(payload);
 
-        const res = await fetch(`${API_URL}/api/book_locker`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
+        const res = await fetch(`${API_URL}/api/book_locker`,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
             },
-            body: JSON.stringify(payload)
+            body:JSON.stringify(payload)
         });
 
         const data = await res.json();
 
-        console.log("RESPONSE:", data);
-
         if(data.status === "success"){
-            alert("✅ Booking submitted!\nWaiting for approval.");
-        } else {
-            alert("❌ " + (data.message || "Booking failed"));
+
+            alert("✅ Booking submitted!");
+
+        }else{
+
+            alert("❌ " + data.message);
         }
 
     }catch(err){
-        console.error(err);
-        alert("❌ Server error");
+
+        console.log(err);
+
+        alert("❌ Server Error");
     }
 }
 
@@ -446,13 +499,16 @@ function toggleMenu(){
 }
 
 function logout(){
+
     localStorage.clear();
+
     window.location.href = "index.html";
 }
 
 window.onclick = function(e){
 
     if(!e.target.closest('.profile')){
+
         document.getElementById("dropdown").style.display = "none";
     }
 }
