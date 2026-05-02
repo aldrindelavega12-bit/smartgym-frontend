@@ -598,40 +598,36 @@ renderCalendar();
 // =============================
 async function submitBooking(){
 
-    const user_id = user.id;
-
     if(!selectedLocker){
-        alert("Select a locker first");
+        alert("Select locker first");
         return;
     }
 
     if(!selectedDate){
-        alert("Please select date");
+        alert("Select date");
         return;
     }
 
     if(!selectedSlot){
-        alert("Please select time slot");
+        alert("Select time slot");
         return;
     }
 
     try{
 
-        const payload = {
-            user_id: user_id,
-            locker: selectedLocker,
-            date: selectedDate,
-            time: selectedSlot
-        };
-
         const res = await fetch(
             `${API_URL}/api/book_locker`,
             {
-                method:"POST",
+                method: "POST",
                 headers:{
                     "Content-Type":"application/json"
                 },
-                body:JSON.stringify(payload)
+                body: JSON.stringify({
+                    user_id: user.id,
+                    locker: selectedLocker,
+                    date: selectedDate,
+                    time: selectedSlot
+                })
             }
         );
 
@@ -639,9 +635,20 @@ async function submitBooking(){
 
         if(data.status === "success"){
 
-            alert("✅ Booking submitted!");
+            alert("✅ Booking submitted");
 
-            loadBookedSlots();
+            // RESET SLOT
+            selectedSlot = null;
+
+            document.querySelectorAll(".slot")
+            .forEach(slot=>{
+                slot.classList.remove(
+                    "selected-slot"
+                );
+            });
+
+            // 🔥 IMPORTANT
+            await loadBookedSlots();
 
         }else{
 
@@ -652,7 +659,7 @@ async function submitBooking(){
 
         console.log(err);
 
-        alert("❌ Server Error");
+        alert("Server error");
     }
 }
 
