@@ -343,7 +343,7 @@ function selectLocker(element, locker){
 
     selectedLocker = locker;
 
-    renderCalendar();
+    loadFullyBookedDates();
 }
 
 // =============================
@@ -367,9 +367,43 @@ const calendarDays = document.getElementById("calendarDays");
 
 let currentDate = new Date();
 
-// WALANG DUMMY RED DATES
-const fullyBookedDates = [];
+let fullyBookedDates = [];
 
+// =============================
+// LOAD FULLY BOOKED
+// =============================
+async function loadFullyBookedDates(){
+
+    try{
+
+        if(!selectedLocker){
+
+            fullyBookedDates = [];
+
+            renderCalendar();
+
+            return;
+        }
+
+        const res = await fetch(
+            `${API_URL}/api/fully_booked_dates?locker=${selectedLocker}`
+        );
+
+        const data = await res.json();
+
+        fullyBookedDates = data.dates || [];
+
+        renderCalendar();
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
+
+// =============================
+// RENDER CALENDAR
+// =============================
 function renderCalendar(){
 
     calendarDays.innerHTML = "";
@@ -390,18 +424,23 @@ function renderCalendar(){
 
     const dayNames = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 
+    // =============================
     // DAY NAMES
+    // =============================
     dayNames.forEach(day => {
 
         const div = document.createElement("div");
 
         div.classList.add("day-name");
+
         div.innerText = day;
 
         calendarDays.appendChild(div);
     });
 
+    // =============================
     // EMPTY SPACES
+    // =============================
     for(let i = 0; i < firstDay; i++){
 
         const empty = document.createElement("div");
@@ -409,12 +448,16 @@ function renderCalendar(){
         calendarDays.appendChild(empty);
     }
 
+    // =============================
     // TODAY
+    // =============================
     const today = new Date();
 
     today.setHours(0,0,0,0);
 
+    // =============================
     // DAYS
+    // =============================
     for(let day = 1; day <= lastDate; day++){
 
         const div = document.createElement("div");
@@ -428,7 +471,9 @@ function renderCalendar(){
 
         const checkDate = new Date(year, month, day);
 
+        // =============================
         // PAST DATES
+        // =============================
         if(checkDate < today){
 
             div.style.background = "#ddd";
@@ -436,7 +481,9 @@ function renderCalendar(){
             div.style.cursor = "not-allowed";
         }
 
+        // =============================
         // FULLY BOOKED
+        // =============================
         else if(fullyBookedDates.includes(fullDate)){
 
             div.style.background = "#ef4444";
@@ -444,7 +491,9 @@ function renderCalendar(){
             div.style.cursor = "not-allowed";
         }
 
+        // =============================
         // AVAILABLE
+        // =============================
         else{
 
             div.onclick = () => {
@@ -467,13 +516,17 @@ function renderCalendar(){
 // =============================
 function changeMonth(direction){
 
-    currentDate.setMonth(currentDate.getMonth() + direction);
+    currentDate.setMonth(
+        currentDate.getMonth() + direction
+    );
 
-    renderCalendar();
+    loadFullyBookedDates();
 }
 
+// =============================
 // INITIAL LOAD
-renderCalendar();
+// =============================
+loadFullyBookedDates();
 
 // =============================
 // SUBMIT BOOKING
@@ -508,19 +561,24 @@ async function submitBooking(){
 
         console.log(payload);
 
-        const res = await fetch(`${API_URL}/api/book_locker`,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload)
-        });
+        const res = await fetch(
+            `${API_URL}/api/book_locker`,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(payload)
+            }
+        );
 
         const data = await res.json();
 
         if(data.status === "success"){
 
             alert("✅ Booking submitted!");
+
+            loadFullyBookedDates();
 
         }else{
 
@@ -540,7 +598,8 @@ async function submitBooking(){
 // =============================
 function toggleMenu(){
 
-    const menu = document.getElementById("dropdown");
+    const menu =
+        document.getElementById("dropdown");
 
     menu.style.display =
         menu.style.display === "block"
