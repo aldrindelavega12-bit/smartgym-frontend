@@ -469,6 +469,9 @@ function renderCalendar(){
 // =============================
 // LOAD BOOKED SLOTS
 // =============================
+// =============================
+// LOAD BOOKED SLOTS
+// =============================
 async function loadBookedSlots(){
 
     try{
@@ -486,19 +489,23 @@ async function loadBookedSlots(){
             const status =
                 slot.querySelector(".status");
 
+            // RESET STATUS
             status.innerText = "Available";
+
+            status.classList.add("available");
+
             status.style.color = "green";
         });
 
         // RESET SELECTED SLOT
         selectedSlot = null;
 
-        // CHECK REQUIRED
+        // REQUIRED
         if(!selectedLocker || !selectedDate){
             return;
         }
 
-        // FETCH API
+        // FETCH BOOKED
         const res = await fetch(
             `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
         );
@@ -514,7 +521,7 @@ async function loadBookedSlots(){
             JSON.stringify(bookedSlots)
         );
 
-        // LOOP SLOTS
+        // LOOP ALL SLOTS
         document.querySelectorAll(".slot").forEach(slot => {
 
             const slotText =
@@ -547,7 +554,7 @@ async function loadBookedSlots(){
                 return cleanSlot === slotText;
             });
 
-            // IF BOOKED
+            // BOOKED SLOT
             if(isBooked){
 
                 console.log("MATCH:", slotText);
@@ -560,7 +567,10 @@ async function loadBookedSlots(){
 
                 slot.style.opacity = "0.7";
 
+                // STATUS
                 status.innerText = "Fully Booked";
+
+                status.classList.remove("available");
 
                 status.style.color = "red";
             }
