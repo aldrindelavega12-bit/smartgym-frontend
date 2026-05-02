@@ -517,7 +517,8 @@ async function loadBookedSlots(){
             const slotText =
                 slot.querySelector(".slot-time")
                 .innerText
-                .trim();
+                .trim()
+                .toUpperCase();
 
             console.log("CHECKING:", slotText);
 
