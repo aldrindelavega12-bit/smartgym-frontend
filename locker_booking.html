@@ -367,12 +367,8 @@ const calendarDays = document.getElementById("calendarDays");
 
 let currentDate = new Date();
 
-// SAMPLE FULLY BOOKED DATES
-// later manggagaling sa database
-const fullyBookedDates = [
-    "2026-05-10",
-    "2026-05-15"
-];
+// WALANG DUMMY RED DATES
+const fullyBookedDates = [];
 
 function renderCalendar(){
 
@@ -424,6 +420,7 @@ function renderCalendar(){
         const div = document.createElement("div");
 
         div.classList.add("day");
+
         div.innerText = day;
 
         const fullDate =
@@ -431,31 +428,23 @@ function renderCalendar(){
 
         const checkDate = new Date(year, month, day);
 
-        // =============================
         // PAST DATES
-        // =============================
         if(checkDate < today){
 
             div.style.background = "#ddd";
             div.style.opacity = "0.5";
             div.style.cursor = "not-allowed";
-
         }
 
-        // =============================
-        // FULLY BOOKED DATE
-        // =============================
+        // FULLY BOOKED
         else if(fullyBookedDates.includes(fullDate)){
 
             div.style.background = "#ef4444";
             div.style.color = "white";
             div.style.cursor = "not-allowed";
-
         }
 
-        // =============================
-        // AVAILABLE DATE
-        // =============================
+        // AVAILABLE
         else{
 
             div.onclick = () => {
