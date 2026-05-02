@@ -173,6 +173,9 @@
 .submit-btn:hover{
     background: #1d4ed8;
 }
+.booked-slot{
+    pointer-events: none;
+}
 </style>
 
 </head>
@@ -469,9 +472,6 @@ function renderCalendar(){
 // =============================
 // LOAD BOOKED SLOTS
 // =============================
-// =============================
-// LOAD BOOKED SLOTS
-// =============================
 async function loadBookedSlots(){
 
     try{
@@ -494,7 +494,7 @@ async function loadBookedSlots(){
 
             status.classList.add("available");
 
-            status.style.color = "green";
+            status.style.color = "";
         });
 
         // RESET SELECTED SLOT
@@ -543,13 +543,6 @@ async function loadBookedSlots(){
                     s.replace(/\s+/g,' ')
                      .trim()
                      .toUpperCase();
-
-                console.log(
-                    "COMPARE:",
-                    cleanSlot,
-                    "VS",
-                    slotText
-                );
 
                 return cleanSlot === slotText;
             });
