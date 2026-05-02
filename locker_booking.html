@@ -271,34 +271,59 @@
     <!-- RIGHT -->
     <div class="time-section">
 
+        <!-- SLOT 1 -->
         <div class="slot"
-             onclick="selectSlot(this,'08:00 AM - 11:00 AM')">
+            onclick="selectSlot(this,'08:00 AM - 11:00 AM')">
 
-            <span>08:00 AM - 11:00 AM</span>
-            <span class="available">Available</span>
+            <span class="slot-time">
+                08:00 AM - 11:00 AM
+            </span>
+
+            <span class="status available">
+                Available
+            </span>
         </div>
 
+        <!-- SLOT 2 -->
         <div class="slot"
-             onclick="selectSlot(this,'11:00 AM - 02:00 PM')">
+            onclick="selectSlot(this,'11:00 AM - 02:00 PM')">
 
-            <span>11:00 AM - 02:00 PM</span>
-            <span class="available">Available</span>
+            <span class="slot-time">
+                11:00 AM - 02:00 PM
+            </span>
+
+            <span class="status available">
+                Available
+            </span>
         </div>
 
+        <!-- SLOT 3 -->
         <div class="slot"
-             onclick="selectSlot(this,'02:00 PM - 05:00 PM')">
+            onclick="selectSlot(this,'02:00 PM - 05:00 PM')">
 
-            <span>02:00 PM - 05:00 PM</span>
-            <span class="available">Available</span>
+            <span class="slot-time">
+                02:00 PM - 05:00 PM
+            </span>
+
+            <span class="status available">
+                Available
+            </span>
         </div>
 
+        <!-- SLOT 4 -->
         <div class="slot"
-             onclick="selectSlot(this,'05:00 PM - 08:00 PM')">
+            onclick="selectSlot(this,'05:00 PM - 08:00 PM')">
 
-            <span>05:00 PM - 08:00 PM</span>
-            <span class="available">Available</span>
+            <span class="slot-time">
+                05:00 PM - 08:00 PM
+            </span>
+
+            <span class="status available">
+                Available
+            </span>
         </div>
 
+        <!-- RULES -->
         <div class="rules">
             ⚠ Max usage: <b>3 hours</b><br>
             ⚠ Grace period: <b>20 minutes</b><br>
@@ -306,6 +331,7 @@
             ⚠ Needs admin approval
         </div>
 
+        <!-- BUTTON -->
         <button class="submit-btn" onclick="submitBooking()">
             Submit Booking
         </button>
@@ -343,13 +369,20 @@ function selectLocker(element, locker){
 
     selectedLocker = locker;
 
-    loadFullyBookedDates();
+    if(selectedDate){
+        loadBookedSlots();
+    }
 }
 
 // =============================
 // SLOT
 // =============================
 function selectSlot(element, slot){
+
+    // bawal click pag fully booked
+    if(element.classList.contains("booked-slot")){
+        return;
+    }
 
     document.querySelectorAll(".slot")
     .forEach(slotEl => slotEl.classList.remove("selected-slot"));
@@ -366,40 +399,6 @@ const monthYear = document.getElementById("monthYear");
 const calendarDays = document.getElementById("calendarDays");
 
 let currentDate = new Date();
-
-let fullyBookedDates = [];
-
-// =============================
-// LOAD FULLY BOOKED
-// =============================
-async function loadFullyBookedDates(){
-
-    try{
-
-        if(!selectedLocker){
-
-            fullyBookedDates = [];
-
-            renderCalendar();
-
-            return;
-        }
-
-        const res = await fetch(
-            `${API_URL}/api/fully_booked_dates?locker=${selectedLocker}`
-        );
-
-        const data = await res.json();
-
-        fullyBookedDates = data.dates || [];
-
-        renderCalendar();
-
-    }catch(err){
-
-        console.log(err);
-    }
-}
 
 // =============================
 // RENDER CALENDAR
@@ -424,9 +423,7 @@ function renderCalendar(){
 
     const dayNames = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 
-    // =============================
     // DAY NAMES
-    // =============================
     dayNames.forEach(day => {
 
         const div = document.createElement("div");
@@ -438,9 +435,7 @@ function renderCalendar(){
         calendarDays.appendChild(div);
     });
 
-    // =============================
     // EMPTY SPACES
-    // =============================
     for(let i = 0; i < firstDay; i++){
 
         const empty = document.createElement("div");
@@ -448,16 +443,12 @@ function renderCalendar(){
         calendarDays.appendChild(empty);
     }
 
-    // =============================
     // TODAY
-    // =============================
     const today = new Date();
 
     today.setHours(0,0,0,0);
 
-    // =============================
     // DAYS
-    // =============================
     for(let day = 1; day <= lastDate; day++){
 
         const div = document.createElement("div");
@@ -471,9 +462,7 @@ function renderCalendar(){
 
         const checkDate = new Date(year, month, day);
 
-        // =============================
         // PAST DATES
-        // =============================
         if(checkDate < today){
 
             div.style.background = "#ddd";
@@ -481,19 +470,7 @@ function renderCalendar(){
             div.style.cursor = "not-allowed";
         }
 
-        // =============================
-        // FULLY BOOKED
-        // =============================
-        else if(fullyBookedDates.includes(fullDate)){
-
-            div.style.background = "#ef4444";
-            div.style.color = "white";
-            div.style.cursor = "not-allowed";
-        }
-
-        // =============================
-        // AVAILABLE
-        // =============================
+        // AVAILABLE DATES
         else{
 
             div.onclick = () => {
@@ -504,10 +481,74 @@ function renderCalendar(){
                 div.classList.add("selected-day");
 
                 selectedDate = fullDate;
+
+                loadBookedSlots();
             };
         }
 
         calendarDays.appendChild(div);
+    }
+}
+
+// =============================
+// LOAD BOOKED SLOTS
+// =============================
+async function loadBookedSlots(){
+
+    try{
+
+        // reset muna lahat
+        document.querySelectorAll(".slot").forEach(slot => {
+
+            slot.classList.remove("booked-slot");
+            slot.classList.remove("selected-slot");
+
+            slot.style.background = "white";
+            slot.style.cursor = "pointer";
+
+            const status = slot.querySelector(".status");
+
+            status.innerText = "Available";
+            status.style.color = "green";
+        });
+
+        if(!selectedLocker || !selectedDate){
+            return;
+        }
+
+        const res = await fetch(
+            `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
+        );
+
+        const data = await res.json();
+
+        const bookedSlots = data.slots || [];
+
+        document.querySelectorAll(".slot").forEach(slot => {
+
+            const slotText =
+                slot.querySelector(".slot-time").innerText;
+
+            const status =
+                slot.querySelector(".status");
+
+            if(bookedSlots.includes(slotText)){
+
+                slot.classList.add("booked-slot");
+
+                slot.style.background = "#fee2e2";
+
+                slot.style.cursor = "not-allowed";
+
+                status.innerText = "Fully Booked";
+
+                status.style.color = "red";
+            }
+        });
+
+    }catch(err){
+
+        console.log(err);
     }
 }
 
@@ -520,13 +561,11 @@ function changeMonth(direction){
         currentDate.getMonth() + direction
     );
 
-    loadFullyBookedDates();
+    renderCalendar();
 }
 
-// =============================
 // INITIAL LOAD
-// =============================
-loadFullyBookedDates();
+renderCalendar();
 
 // =============================
 // SUBMIT BOOKING
@@ -559,8 +598,6 @@ async function submitBooking(){
             time: selectedSlot
         };
 
-        console.log(payload);
-
         const res = await fetch(
             `${API_URL}/api/book_locker`,
             {
@@ -578,7 +615,7 @@ async function submitBooking(){
 
             alert("✅ Booking submitted!");
 
-            loadFullyBookedDates();
+            loadBookedSlots();
 
         }else{
 
