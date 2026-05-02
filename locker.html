@@ -250,50 +250,111 @@ async function loadHistory(){
 
 // ================= APPROVAL =================
 async function loadApproval(){
-    try{
-        const res = await fetch(`${API_URL}/api/bookings`);
-        const result = await res.json();
-        const data = result.data;
 
-        const table = document.getElementById("approval-body");
+    try{
+
+        const res = await fetch(`${API_URL}/api/bookings`);
+
+        const result = await res.json();
+
+        console.log("BOOKINGS:", result);
+
+        const data = result.data || [];
+
+        const table =
+            document.getElementById("approval-body");
+
         table.innerHTML = "";
 
-        if(!data || data.length === 0){
-            table.innerHTML = `<tr><td colspan="7">No bookings</td></tr>`;
+        // =========================
+        // NO BOOKINGS
+        // =========================
+        if(data.length === 0){
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        No bookings
+                    </td>
+                </tr>
+            `;
+
             return;
         }
 
+        // =========================
+        // LOOP BOOKINGS
+        // =========================
         data.forEach(b => {
 
             let actions = "";
 
+            // =====================
+            // PENDING
+            // =====================
             if(b.status === "PENDING"){
+
                 actions = `
-                    <button onclick="approve(${b.id})">Approve</button>
-                    <button onclick="decline(${b.id})">Decline</button>
+                    <button onclick="approve(${b.id})">
+                        Approve
+                    </button>
+
+                    <button onclick="decline(${b.id})">
+                        Decline
+                    </button>
                 `;
-            } else {
+            }
+
+            // =====================
+            // APPROVED/DECLINED
+            // =====================
+            else{
+
                 actions = b.status;
             }
 
+            // =====================
+            // SLOT FIX
+            // =====================
+            let slot = "-";
+
+            if(b.slot){
+
+                slot = b.slot;
+            }
+
+            // =====================
+            // ROW
+            // =====================
             table.innerHTML += `
+
                 <tr>
+
                     <td>${b.id}</td>
+
                     <td>${b.user_id}</td>
-                    <td>${b.locker_number}</td> <!-- 🔥 FIX -->
+
+                    <td>
+                        Locker ${b.locker_number}
+                    </td>
+
                     <td>${b.date}</td>
-                    <td>${b.slot}</td>
+
+                    <td>${slot}</td>
+
                     <td>${b.status}</td>
+
                     <td>${actions}</td>
+
                 </tr>
             `;
         });
 
     }catch(err){
-        console.error(err);
+
+        console.error("LOAD APPROVAL ERROR:", err);
     }
 }
-
 // ================= ACTION =================
 async function approve(id){
     await fetch(`${API_URL}/api/update_booking`, {
