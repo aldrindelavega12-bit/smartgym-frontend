@@ -77,30 +77,53 @@ if (!user) {
     <!-- ================= APPROVAL ================= -->
     <div id="approval-view" style="display:none;">
 
-        <h3>Locker Booking Requests</h3>
+        <div class="approval-header">
+            <h3>Locker Booking Requests</h3>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Locker</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+            <div class="approval-filters">
 
-            <tbody id="approval-body"></tbody>
-        </table>
+                <input type="date" id="approvalDate">
+
+                <select id="approvalStatus">
+                    <option value="">All Status</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="DECLINED">Declined</option>
+                </select>
+
+                <button onclick="loadApproval()">
+                    Filter
+                </button>
+
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table class="approval-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Locker</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="approval-body"></tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
 </div>
 
-</div>
-</div>
 
 <!-- SOCKET -->
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
