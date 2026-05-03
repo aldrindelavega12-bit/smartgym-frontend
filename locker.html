@@ -79,25 +79,64 @@ if (!user) {
 
         <h3>Locker Booking Requests</h3>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Locker</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+        <!-- FILTER -->
+        <div style="margin-bottom:10px; display:flex; gap:10px; flex-wrap:wrap;">
 
-            <tbody id="approval-body"></tbody>
-        </table>
+            <input
+                type="date"
+                id="approvalDate"
+            >
+
+            <select id="approvalStatus">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="PENDING">
+                    Pending
+                </option>
+
+                <option value="APPROVED">
+                    Approved
+                </option>
+
+                <option value="DECLINED">
+                    Declined
+                </option>
+
+            </select>
+
+            <button onclick="loadApproval()">
+                Filter
+            </button>
+
+        </div>
+
+        <!-- TABLE -->
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Locker</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="approval-body"></tbody>
+
+            </table>
+
+        </div>
 
     </div>
-
-</div>
 
 </div>
 </div>
@@ -264,6 +303,12 @@ async function loadApproval(){
 
         const table =
             document.getElementById("approval-body");
+        
+        const selectedDate =
+            document.getElementById("approvalDate").value;
+
+        const selectedStatus =
+            document.getElementById("approvalStatus").value;
 
         table.innerHTML = "";
 
@@ -287,6 +332,20 @@ async function loadApproval(){
         // LOOP BOOKINGS
         // =========================
         data.forEach(b => {
+
+            if(
+                selectedDate &&
+                b.date !== selectedDate
+            ){
+                return;
+            }
+
+            if(
+                selectedStatus &&
+                b.status !== selectedStatus
+            ){
+                return;
+            }
 
             let actions = "";
 
@@ -343,7 +402,11 @@ async function loadApproval(){
 
                     <td>${slot}</td>
 
-                    <td>${b.status}</td>
+                    <td>
+                        <span class="status ${b.status}">
+                            ${b.status}
+                        </span>
+                    </td>
 
                     <td>${actions}</td>
 

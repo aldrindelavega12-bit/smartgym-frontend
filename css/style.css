@@ -324,3 +324,24 @@ tr:hover {
     }
 }
 
+.status{
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.status.APPROVED{
+    background:#d4edda;
+    color:#155724;
+}
+
+.status.PENDING{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.status.DECLINED{
+    background:#f8d7da;
+    color:#721c24;
+}
