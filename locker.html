@@ -80,16 +80,30 @@ if (!user) {
         <h3>Locker Booking Requests</h3>
 
         <!-- FILTER -->
-        <div style="margin-bottom:15px;">
+        <div
+            style="
+                margin-bottom:10px;
+                display:flex;
+                gap:10px;
+                align-items:center;
+                flex-wrap:wrap;
+            "
+        >
+
+            <input
+                type="date"
+                id="approvalDate"
+                onchange="loadApproval()"
+            >
 
             <select
                 id="approvalStatus"
                 onchange="loadApproval()"
                 style="
-                    padding:8px 12px;
-                    border-radius:8px;
+                    height:32px;
+                    padding:0 10px;
+                    border-radius:4px;
                     border:1px solid #ccc;
-                    width:160px;
                 "
             >
 
@@ -111,7 +125,12 @@ if (!user) {
 
             </select>
 
+            <button onclick="loadApproval()">
+                Filter
+            </button>
+
         </div>
+        
 
         <!-- TABLE -->
         <div style="overflow-x:auto;">
@@ -307,8 +326,8 @@ async function loadApproval(){
         const selectedStatus =
             document.getElementById("approvalStatus").value;
 
-        const today =
-            new Date().toISOString().split("T")[0];
+        const selectedDate =
+            document.getElementById("approvalDate").value;
 
         table.innerHTML = "";
 
@@ -340,7 +359,10 @@ async function loadApproval(){
                 return;
             }
 
-            if(b.date !== today){
+            if(
+                selectedDate &&
+                b.date !== selectedDate
+            ){
                 return;
             }
 
@@ -466,6 +488,7 @@ window.onload = () => {
 
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("dateFilter").value = today;
+    document.getElementById("approvalDate").value = today;
 };
 
 // fallback refresh
