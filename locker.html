@@ -80,14 +80,18 @@ if (!user) {
         <h3>Locker Booking Requests</h3>
 
         <!-- FILTER -->
-        <div style="margin-bottom:10px; display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="margin-bottom:15px;">
 
-            <input
-                type="date"
-                id="approvalDate"
+            <select
+                id="approvalStatus"
+                onchange="loadApproval()"
+                style="
+                    padding:8px 12px;
+                    border-radius:8px;
+                    border:1px solid #ccc;
+                    width:160px;
+                "
             >
-
-            <select id="approvalStatus">
 
                 <option value="">
                     All Status
@@ -106,10 +110,6 @@ if (!user) {
                 </option>
 
             </select>
-
-            <button onclick="loadApproval()">
-                Filter
-            </button>
 
         </div>
 
@@ -303,12 +303,12 @@ async function loadApproval(){
 
         const table =
             document.getElementById("approval-body");
-        
-        const selectedDate =
-            document.getElementById("approvalDate").value;
 
         const selectedStatus =
             document.getElementById("approvalStatus").value;
+
+        const today =
+            new Date().toISOString().split("T")[0];
 
         table.innerHTML = "";
 
@@ -334,16 +334,13 @@ async function loadApproval(){
         data.forEach(b => {
 
             if(
-                selectedDate &&
-                b.date !== selectedDate
+                selectedStatus &&
+                b.status !== selectedStatus
             ){
                 return;
             }
 
-            if(
-                selectedStatus &&
-                b.status !== selectedStatus
-            ){
+            if(b.date !== today){
                 return;
             }
 
