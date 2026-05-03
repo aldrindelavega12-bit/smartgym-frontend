@@ -6,12 +6,13 @@ body {
     color: #2d3436;
 }
 
-/* ===== LANDING PAGE ===== */
 .container {
     display: flex;
-    height: 100vh;
-    justify-content: space-around;
+    min-height: 100vh;
+    justify-content: center;
     align-items: center;
+    gap: 60px;
+    padding: 20px;
 }
 
 .left h1 {
@@ -272,7 +273,7 @@ tr:hover {
     }
 
     .cards {
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 
     .card {
@@ -285,5 +286,40 @@ tr:hover {
 
     .hero p {
         font-size: 14px;
+    }
+}
+
+/* ===== LANDING PAGE MOBILE ===== */
+@media (max-width: 768px) {
+
+    .container {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+        gap: 30px;
+    }
+
+    .left {
+        width: 100%;
+    }
+
+    .left h1 {
+        font-size: 42px;
+        line-height: 1.1;
+    }
+
+    .left p {
+        font-size: 16px;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 320px;
+        padding: 25px;
+    }
+
+    .login-card h1,
+    .login-card h2 {
+        font-size: 30px;
     }
 }
