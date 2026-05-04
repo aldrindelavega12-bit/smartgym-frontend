@@ -23,8 +23,10 @@
             <h2>SMART GYM</h2>
 
             <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Password">
+                <span class="toggle-password" onclick="togglePassword()">👁</span>
+            </div>
             <button onclick="login()">Log in</button>
 
             <p id="error"></p>
@@ -85,6 +87,15 @@ function openModal(type){
 
 function closeModal(){
     document.getElementById("modal").style.display = "none";
+}
+function togglePassword() {
+    const input = document.getElementById("password");
+
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
 }
 
 // close outside

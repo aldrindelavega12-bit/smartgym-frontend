@@ -138,3 +138,26 @@ body.bg-gym {
         background-size: 110%;
     }
 }
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding: 10px 40px 10px 12px;
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+}
+
+.toggle-password:hover {
+    color: #00ff88;
+}
