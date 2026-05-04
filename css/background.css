@@ -43,13 +43,14 @@ body.bg-gym {
     backdrop-filter: blur(20px);
     border-radius: 20px;
 
-    padding: 35px;
+    padding: 28px;
     width: 340px;
 
     border: 1px solid rgba(255,255,255,0.15);
     box-shadow: 0 15px 40px rgba(0,0,0,0.6);
 
     color: white;
+    overflow: hidden;
 }
 
 /* TITLE */
@@ -62,8 +63,9 @@ body.bg-gym {
 /* ===== INPUTS ===== */
 .login-card input {
     width: 100%;
-    padding: 14px;
-    margin: 12px 0;
+    padding: 10px 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
     border-radius: 10px;
 
     border: 1px solid rgba(255,255,255,0.2);
@@ -104,7 +106,7 @@ body.bg-gym {
 
 .login-card button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,255,136,0.4);
+    box-shadow: 0 8px 20px rgba(1, 2, 2, 0.4);
 }
 
 /* ===== LINKS ===== */
@@ -120,7 +122,7 @@ body.bg-gym {
 }
 
 .links span:hover {
-    color: #00ff88;
+    color: #010202;
 }
 
 /* ===== OPTIONAL ANIMATION ===== */
