@@ -661,8 +661,8 @@ async function submitBooking(){
         return;
     }
 
-    if(!selectedSlot){
-        alert("Select time slot");
+    if(!selectedStart){
+        alert("Select start time");
         return;
     }
 
@@ -691,17 +691,15 @@ async function submitBooking(){
 
             alert("✅ Booking submitted");
 
-            // RESET SLOT
-            selectedSlot = null;
+            // RESET
+            selectedStart = null;
+            selectedEnd = null;
 
-            document.querySelectorAll(".slot")
-            .forEach(slot=>{
-                slot.classList.remove(
-                    "selected-slot"
-                );
-            });
+            document.getElementById("startTime").value = "";
 
-            // 🔥 IMPORTANT
+            document.getElementById("previewStart").innerText = "--:--";
+            document.getElementById("previewEnd").innerText = "--:--";
+
             await loadBookedSlots();
 
         }else{
