@@ -1,7 +1,7 @@
 body.bg-gym {
     margin: 0;
     height: 100vh;
-    background: url("../images/gym.jpg") no-repeat center center/cover;
+    background: url("/images/gym.jpg") no-repeat center center/cover;
 }
 
 /* dark overlay */
