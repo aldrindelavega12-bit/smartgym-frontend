@@ -1,0 +1,24 @@
+body.bg-gym {
+    margin: 0;
+    height: 100vh;
+    background: url("../images/gym.jpg") no-repeat center center/cover;
+}
+
+/* dark overlay */
+.bg-overlay {
+    min-height: 100vh;
+    background: rgba(0,0,0,0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* OPTIONAL: glass effect sa login */
+.login-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px;
+    color: white;
+}

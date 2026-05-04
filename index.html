@@ -4,35 +4,39 @@
     <title>Smart Gym</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/background.css">
 </head>
 <body>
 
-<div class="container">
+<div class="bg-overlay">
 
-    <!-- LEFT TEXT -->
-    <div class="left">
-        <h1>BE STRONG,<br>BE FIT</h1>
-        <p>Train for your future self.</p>
-    </div>
+    <div class="container">
 
-    <!-- LOGIN CARD -->
-    <div class="login-card">
-        <h2>SMART GYM</h2>
-
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-
-        <button onclick="login()">Log in</button>
-
-        <p id="error"></p>
-
-        <!-- 🔥 LINKS -->
-        <div class="links">
-            <span onclick="openModal('faq')">FAQ</span> |
-            <span onclick="openModal('about')">About Us</span> |
-            <span onclick="openModal('contact')">Contact</span> |
-            <span onclick="openModal('terms')">Terms</span>
+        <!-- LEFT TEXT -->
+        <div class="left">
+            <h1>BE STRONG,<br>BE FIT</h1>
+            <p>Train for your future self.</p>
         </div>
+
+        <!-- LOGIN CARD -->
+        <div class="login-card">
+            <h2>SMART GYM</h2>
+
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+
+            <button onclick="login()">Log in</button>
+
+            <p id="error"></p>
+
+            <div class="links">
+                <span onclick="openModal('faq')">FAQ</span> |
+                <span onclick="openModal('about')">About Us</span> |
+                <span onclick="openModal('contact')">Contact</span> |
+                <span onclick="openModal('terms')">Terms</span>
+            </div>
+        </div>
+
     </div>
 
 </div>
