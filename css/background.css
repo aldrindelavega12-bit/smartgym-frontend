@@ -80,8 +80,8 @@ body.bg-gym {
 
 /* FOCUS EFFECT */
 .login-card input:focus {
-    border: 1px solid #00ff88;
-    box-shadow: 0 0 10px rgba(0,255,136,0.4);
+    border: 1px solid #060a08;
+    box-shadow: 0 0 10px rgba(7, 8, 8, 0.4);
     background: rgba(255,255,255,0.15);
 }
 
@@ -91,8 +91,8 @@ body.bg-gym {
     padding: 14px;
     margin-top: 10px;
 
-    background: linear-gradient(135deg, #00ff88, #00cc6a);
-    color: black;
+    background: linear-gradient(135deg, #001109, #030303);
+    color: rgb(245, 244, 244);
 
     border: none;
     border-radius: 10px;
