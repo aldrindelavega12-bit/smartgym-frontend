@@ -22,3 +22,11 @@ body.bg-gym {
     padding: 25px;
     color: white;
 }
+/* ===== TEXT COLOR FIX ===== */
+.left h1 {
+    color: rgba(255,255,255,0.85);
+}
+
+.left span {
+    color: #00ff88;
+}
