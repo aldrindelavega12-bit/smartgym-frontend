@@ -251,57 +251,53 @@
     <!-- RIGHT -->
     <div class="time-section">
 
-        <!-- SLOT 1 -->
-        <div class="slot"
-            onclick="selectSlot(this,'08:00 AM - 11:00 AM')">
+        <div class="time-picker-box">
 
-            <span class="slot-time">
-                08:00 AM - 11:00 AM
-            </span>
+            <h3>Select Start Time</h3>
 
-            <span class="status available">
-                Available
-            </span>
+            <input
+                type="time"
+                id="startTime"
+                class="time-input"
+                onchange="updateTimePreview()"
+            >
+
+            <div class="preview-box">
+
+                <div class="preview-row">
+                    <span>Start:</span>
+                    <span id="previewStart">--:--</span>
+                </div>
+
+                <div class="preview-row">
+                    <span>End:</span>
+                    <span id="previewEnd">--:--</span>
+                </div>
+
+                <div class="preview-row">
+                    <span>Duration:</span>
+                    <span>3 Hours</span>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- SLOT 2 -->
-        <div class="slot"
-            onclick="selectSlot(this,'11:00 AM - 02:00 PM')">
+        <!-- EXISTING BOOKINGS -->
+        <div class="existing-bookings">
 
-            <span class="slot-time">
-                11:00 AM - 02:00 PM
-            </span>
+            <h3>Reserved Slots</h3>
 
-            <span class="status available">
-                Available
-            </span>
+            <div id="reservedList">
+
+                <div class="empty-booking">
+                    No reservations
+                </div>
+
+            </div>
+
         </div>
-
-        <!-- SLOT 3 -->
-        <div class="slot"
-            onclick="selectSlot(this,'02:00 PM - 05:00 PM')">
-
-            <span class="slot-time">
-                02:00 PM - 05:00 PM
-            </span>
-
-            <span class="status available">
-                Available
-            </span>
-        </div>
-
-        <!-- SLOT 4 -->
-        <div class="slot"
-            onclick="selectSlot(this,'05:00 PM - 08:00 PM')">
-
-            <span class="slot-time">
-                05:00 PM - 08:00 PM
-            </span>
-
-            <span class="status available">
-                Available
-            </span>
-        </div>
+        
 
         <!-- RULES -->
         <div class="rules">
@@ -328,7 +324,8 @@ const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 let selectedLocker = null;
 let selectedDate = null;
-let selectedSlot = null;
+let selectedStart = null;
+let selectedEnd = null;
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -469,6 +466,85 @@ function renderCalendar(){
         calendarDays.appendChild(div);
     }
 }
+function updateTimePreview(){
+
+    const input =
+        document.getElementById("startTime").value;
+
+    if(!input){
+        return;
+    }
+
+    selectedStart = input;
+
+    const [hour, minute] =
+        input.split(":").map(Number);
+
+    const startDate = new Date();
+
+    startDate.setHours(hour);
+    startDate.setMinutes(minute);
+
+    const endDate = new Date(startDate);
+
+    endDate.setHours(endDate.getHours() + 3);
+
+    selectedEnd =
+        endDate.toTimeString().slice(0,5);
+
+    // DISPLAY
+    document.getElementById("previewStart")
+    .innerText = formatTime(input);
+
+    document.getElementById("previewEnd")
+    .innerText = formatTime(selectedEnd);
+
+    // CHECK CONFLICT
+    checkTimeConflict();
+}
+function formatTime(time24){
+
+    const [h,m] =
+        time24.split(":");
+
+    let hour = parseInt(h);
+
+    const ampm =
+        hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12 || 12;
+
+    return `${hour}:${m} ${ampm}`;
+}
+
+function checkTimeConflict(){
+
+    const reserved =
+        document.querySelectorAll(".booking-item");
+
+    let hasConflict = false;
+
+    reserved.forEach(item => {
+
+        const text = item.innerText;
+
+        if(text.includes(
+            formatTime(selectedStart)
+        )){
+            hasConflict = true;
+        }
+    });
+
+    if(hasConflict){
+
+        alert("❌ Time overlaps reservation");
+
+        selectedStart = null;
+        selectedEnd = null;
+
+        document.getElementById("startTime").value = "";
+    }
+}
 
 // =============================
 // LOAD BOOKED SLOTS
@@ -477,36 +553,33 @@ async function loadBookedSlots(){
 
     try{
 
-        // RESET ALL SLOTS
-        document.querySelectorAll(".slot").forEach(slot => {
+        // =============================
+        // RESET TIME INPUT
+        // =============================
+        selectedStart = null;
+        selectedEnd = null;
 
-            slot.classList.remove("booked-slot");
-            slot.classList.remove("selected-slot");
+        const timeInput =
+            document.getElementById("startTime");
 
-            slot.style.background = "white";
-            slot.style.cursor = "pointer";
-            slot.style.opacity = "1";
+        if(timeInput){
+            timeInput.value = "";
+        }
 
-            const status =
-                slot.querySelector(".status");
+        // RESET PREVIEW
+        document.getElementById("previewStart").innerText = "--:--";
+        document.getElementById("previewEnd").innerText = "--:--";
 
-            // RESET STATUS
-            status.innerText = "Available";
-
-            status.classList.add("available");
-
-            status.style.color = "";
-        });
-
-        // RESET SELECTED SLOT
-        selectedSlot = null;
-
+        // =============================
         // REQUIRED
+        // =============================
         if(!selectedLocker || !selectedDate){
             return;
         }
 
+        // =============================
         // FETCH BOOKED
+        // =============================
         const res = await fetch(
             `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
         );
@@ -517,65 +590,44 @@ async function loadBookedSlots(){
 
         const bookedSlots = data.slots || [];
 
-        console.log(
-            "BOOKED:",
-            JSON.stringify(bookedSlots)
-        );
+        // =============================
+        // DISPLAY RESERVED LIST
+        // =============================
+        const reservedList =
+            document.getElementById("reservedList");
 
-        // LOOP ALL SLOTS
-        document.querySelectorAll(".slot").forEach(slot => {
+        reservedList.innerHTML = "";
 
-            const slotText =
-                slot.querySelector(".slot-time")
-                .innerText
-                .replace(/\s+/g,' ')
-                .trim()
-                .toUpperCase();
+        if(bookedSlots.length === 0){
 
-            console.log("CHECK:", slotText);
+            reservedList.innerHTML = `
+                <div class="empty-booking">
+                    No reservations
+                </div>
+            `;
 
-            const status =
-                slot.querySelector(".status");
+        }else{
 
-            // FIND MATCH
-            const isBooked = bookedSlots.some(s => {
+            bookedSlots.forEach(slot => {
 
-                const cleanSlot =
-                    s.replace(/\s+/g,' ')
-                     .trim()
-                     .toUpperCase();
+                // expect backend returns:
+                // start_time & end_time
 
-                return cleanSlot === slotText;
+                const start = slot.start_time || "";
+                const end   = slot.end_time || "";
+
+                reservedList.innerHTML += `
+                    <div class="booking-item">
+                        ${start} - ${end}
+                    </div>
+                `;
             });
-
-            // BOOKED SLOT
-            if(isBooked){
-
-                console.log("MATCH:", slotText);
-
-                slot.classList.add("booked-slot");
-
-                slot.style.background = "#fee2e2";
-
-                slot.style.cursor = "not-allowed";
-
-                slot.style.opacity = "0.7";
-
-                // STATUS
-                status.innerText = "Fully Booked";
-
-                status.classList.remove("available");
-
-                status.style.color = "red";
-            }
-        });
+        }
 
     }catch(err){
 
-        console.log(
-            "BOOKED SLOT ERROR:",
-            err
-        );
+        console.log("BOOKED SLOT ERROR:", err);
+
     }
 }
 
@@ -627,7 +679,8 @@ async function submitBooking(){
                     user_id: user.id,
                     locker: selectedLocker,
                     date: selectedDate,
-                    time: selectedSlot
+                    start_time: selectedStart,
+                    end_time: selectedEnd
                 })
             }
         );

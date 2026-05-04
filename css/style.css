@@ -345,3 +345,45 @@ tr:hover {
     background:#f8d7da;
     color:#721c24;
 }
+
+.time-picker-box,
+.existing-bookings{
+    background: white;
+    padding: 18px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.time-input{
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.preview-box{
+    margin-top: 15px;
+}
+
+.preview-row{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.booking-item{
+    background: #f3f4f6;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.empty-booking{
+    color: gray;
+    margin-top: 10px;
+}
