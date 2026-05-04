@@ -62,16 +62,18 @@ body.bg-gym {
 /* ===== INPUTS ===== */
 .login-card input {
     width: 100%;
-    padding: 14px;
-    margin: 12px 0;
-    border-radius: 10px;
+    padding: 10px 12px;   /* 👈 mas maliit */
+    margin: 8px 0;        /* 👈 bawas spacing */
+
+    border-radius: 8px;   /* konting liit */
+    font-size: 14px;      /* hindi bulky */
 
     border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
     color: white;
 
     outline: none;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
 .login-card input::placeholder {
