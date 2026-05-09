@@ -161,3 +161,46 @@ body.bg-gym {
 .toggle-password:hover {
     color: #080808;
 }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+    .container {
+        flex-direction: column;
+        text-align: center;
+        gap: 25px;
+        padding: 20px;
+    }
+
+    /* LEFT TEXT */
+    .left h1 {
+        font-size: clamp(40px, 8vw, 65px);
+        line-height: 1.1;
+    }
+
+    .left p {
+        font-size: 14px;
+    }
+
+    /* LOGIN CARD */
+    .login-card {
+        width: 100%;
+        max-width: 320px;
+        padding: 25px;
+    }
+
+    /* INPUTS */
+    .login-card input {
+        font-size: 14px;
+    }
+
+    /* BUTTON */
+    .login-card button {
+        font-size: 14px;
+    }
+
+    /* LINKS */
+    .links {
+        font-size: 11px;
+    }
+}
