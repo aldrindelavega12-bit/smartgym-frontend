@@ -2,7 +2,7 @@
 body.bg-gym {
     margin: 0;
     min-height: 100vh;
-    background: url("/images/gym.jpg") no-repeat center center/cover;
+    background: url("/images/gym.jpg") no-repeat center top/cover;
     font-family: 'Poppins', sans-serif;
 }
 
