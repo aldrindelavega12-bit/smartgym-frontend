@@ -1,7 +1,7 @@
 /* ===== BACKGROUND ===== */
 body.bg-gym {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     background: url("/images/gym.jpg") no-repeat center center/cover;
     font-family: 'Poppins', sans-serif;
 }
@@ -165,37 +165,50 @@ body.bg-gym {
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
+    .bg-overlay {
+        padding: 30px 20px;
+    }
+
     .container {
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
         text-align: center;
-        gap: 25px;
-        padding: 20px;
+
+        gap: 20px;
+        padding: 0;
     }
 
     /* LEFT TEXT */
     .left h1 {
-        font-size: clamp(40px, 8vw, 65px);
+        font-size: 42px;
         line-height: 1.1;
+        margin-bottom: 10px;
     }
 
     .left p {
         font-size: 14px;
+        margin: 0;
     }
 
     /* LOGIN CARD */
     .login-card {
         width: 100%;
         max-width: 320px;
+
         padding: 25px;
+        border-radius: 20px;
     }
 
     /* INPUTS */
     .login-card input {
         font-size: 14px;
+        padding: 10px 12px;
     }
 
     /* BUTTON */
     .login-card button {
+        padding: 12px;
         font-size: 14px;
     }
 
