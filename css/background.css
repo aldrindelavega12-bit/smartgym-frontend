@@ -2,16 +2,30 @@
 body.bg-gym {
     margin: 0;
     min-height: 100vh;
-    background: url("/images/gym.jpg") no-repeat center top/cover;
+
+    background: url("/images/gym.jpg") no-repeat center center/cover;
     font-family: 'Poppins', sans-serif;
+
+    animation: zoomBg 25s ease-in-out infinite alternate;
+}
+
+/* ===== BACKGROUND ANIMATION ===== */
+@keyframes zoomBg {
+    from {
+        background-size: 100%;
+    }
+    to {
+        background-size: 110%;
+    }
 }
 
 /* ===== OVERLAY ===== */
 .bg-overlay {
     min-height: 100vh;
+
     background: linear-gradient(
-        rgba(0,0,0,0.7),
-        rgba(0,0,0,0.5)
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.55)
     );
 
     display: flex;
@@ -23,56 +37,73 @@ body.bg-gym {
 .left h1 {
     font-family: 'Oswald', sans-serif;
     font-size: 65px;
+    line-height: 1.1;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
+
+    color: rgba(255,255,255,0.9);
+
+    margin: 0;
 }
 
 .left span {
-    color: #000805;
+    color: #00ff88;
 }
 
 .left p {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.7);
     font-size: 16px;
+    margin-top: 15px;
 }
 
 /* ===== LOGIN CARD ===== */
 .login-card {
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(20px);
+
     border-radius: 20px;
 
-    padding: 28px;
     width: 340px;
+    padding: 28px;
 
     border: 1px solid rgba(255,255,255,0.15);
+
     box-shadow: 0 15px 40px rgba(0,0,0,0.6);
 
     color: white;
+
     overflow: hidden;
 }
 
-/* TITLE */
+/* ===== TITLE ===== */
 .login-card h2 {
+    margin-top: 0;
     margin-bottom: 20px;
-    letter-spacing: 2px;
+
     font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    font-size: 32px;
 }
 
 /* ===== INPUTS ===== */
 .login-card input {
     width: 100%;
+
     padding: 10px 12px;
     margin: 8px 0;
-    box-sizing: border-box;
-    border-radius: 10px;
 
+    box-sizing: border-box;
+
+    border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.08);
+
     color: white;
+    font-size: 14px;
 
     outline: none;
+
     transition: 0.3s;
 }
 
@@ -80,25 +111,65 @@ body.bg-gym {
     color: rgba(255,255,255,0.6);
 }
 
-/* FOCUS EFFECT */
+/* ===== INPUT FOCUS ===== */
 .login-card input:focus {
-    border: 1px solid #060a08;
-    box-shadow: 0 0 10px rgba(7, 8, 8, 0.4);
-    background: rgba(255,255,255,0.15);
+    border: 1px solid #00ff88;
+
+    box-shadow: 0 0 10px rgba(0,255,136,0.35);
+
+    background: rgba(255,255,255,0.12);
+}
+
+/* ===== PASSWORD WRAPPER ===== */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 42px;
+}
+
+/* ===== TOGGLE PASSWORD ===== */
+.toggle-password {
+    position: absolute;
+
+    right: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    cursor: pointer;
+
+    color: rgba(255,255,255,0.6);
+
+    transition: 0.2s;
+}
+
+.toggle-password:hover {
+    color: #00ff88;
 }
 
 /* ===== BUTTON ===== */
 .login-card button {
     width: 100%;
-    padding: 14px;
-    margin-top: 10px;
 
-    background: linear-gradient(135deg, #001109, #030303);
-    color: rgb(245, 244, 244);
+    padding: 13px;
+    margin-top: 10px;
 
     border: none;
     border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #00ff88,
+        #00cc6a
+    );
+
+    color: black;
+
+    font-size: 15px;
     font-weight: 600;
+
     cursor: pointer;
 
     transition: 0.3s;
@@ -106,113 +177,86 @@ body.bg-gym {
 
 .login-card button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(1, 2, 2, 0.4);
+
+    box-shadow: 0 8px 20px rgba(0,255,136,0.35);
 }
 
 /* ===== LINKS ===== */
 .links {
-    margin-top: 15px;
+    margin-top: 18px;
+
     font-size: 12px;
-    color: rgba(255,255,255,0.6);
+
+    color: rgba(255,255,255,0.7);
+
+    text-align: center;
 }
 
 .links span {
     cursor: pointer;
+
     transition: 0.2s;
 }
 
 .links span:hover {
-    color: #010202;
-}
-
-/* ===== OPTIONAL ANIMATION ===== */
-body.bg-gym {
-    animation: zoomBg 25s ease-in-out infinite alternate;
-}
-
-@keyframes zoomBg {
-    from {
-        background-size: 100%;
-    }
-    to {
-        background-size: 110%;
-    }
-}
-
-.password-wrapper {
-    position: relative;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding: 10px 40px 10px 12px;
-    box-sizing: border-box;
-}
-
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: rgba(255,255,255,0.6);
-}
-
-.toggle-password:hover {
-    color: #080808;
+    color: #00ff88;
 }
 
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
+    body.bg-gym {
+        background-position: center center;
+    }
+
     .bg-overlay {
-        padding: 30px 20px;
+        padding: 20px;
     }
 
     .container {
+        width: 100%;
+
         flex-direction: column;
+
         justify-content: center;
         align-items: center;
+
         text-align: center;
 
         gap: 20px;
-        padding: 0;
     }
 
-    /* LEFT TEXT */
+    /* ===== TEXT ===== */
     .left h1 {
-        font-size: 42px;
+        font-size: 38px;
         line-height: 1.1;
-        margin-bottom: 10px;
     }
 
     .left p {
         font-size: 14px;
-        margin: 0;
+        margin-top: 10px;
     }
 
-    /* LOGIN CARD */
+    /* ===== CARD ===== */
     .login-card {
         width: 100%;
         max-width: 320px;
 
-        padding: 25px;
-        border-radius: 20px;
+        padding: 24px;
     }
 
-    /* INPUTS */
+    /* ===== INPUTS ===== */
     .login-card input {
         font-size: 14px;
-        padding: 10px 12px;
     }
 
-    /* BUTTON */
+    /* ===== BUTTON ===== */
     .login-card button {
         padding: 12px;
         font-size: 14px;
     }
 
-    /* LINKS */
+    /* ===== LINKS ===== */
     .links {
         font-size: 11px;
     }
