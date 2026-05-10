@@ -239,7 +239,7 @@ body.bg-gym {
 
     .bg-overlay {
         width: 100%;
-        height: 100vh;
+        min-height: 100dvh;
 
         padding: 12px;
 
