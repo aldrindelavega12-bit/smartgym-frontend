@@ -4,6 +4,7 @@ body.bg-gym {
     height: 100vh;
     overflow: hidden;
 
+    /* DESKTOP BACKGROUND */
     background: url("/images/gym.jpg") no-repeat center center/cover;
 
     font-family: 'Poppins', sans-serif;
@@ -228,11 +229,12 @@ body.bg-gym {
 @media (max-width: 768px) {
 
     body.bg-gym {
+
+        /* MOBILE BACKGROUND */
+        background: url("/images/gym-mobile.jpg") no-repeat center center/cover;
+
         height: 100vh;
         overflow: hidden;
-
-        background-position: center center;
-        background-size: cover;
     }
 
     .bg-overlay {
