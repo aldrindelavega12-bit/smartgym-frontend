@@ -231,7 +231,7 @@ body.bg-gym {
     body.bg-gym {
 
         /* MOBILE BACKGROUND */
-        background: url("/images/gyn-mobile.jpg") no-repeat center center/cover;
+        background: url("/images/gym-mobile.jpg") no-repeat center center/cover;
 
         height: 100vh;
         overflow: hidden;
