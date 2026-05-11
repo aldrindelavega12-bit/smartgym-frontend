@@ -35,8 +35,10 @@ if (!user) {
                 <th>Name</th>
                 <th>Type</th>
                 <th>Membership Expire</th>
+                <th>Membership Status</th>
+
                 <th>Monthly Expire</th>
-                <th>Status</th>
+                <th>Monthly Status</th>
             </tr>
         </thead>
 
@@ -93,19 +95,44 @@ async function loadMembers(){
         }
 
         data.forEach(row => {
-            const color = row.status === "EXPIRED" ? "red" : "green";
+            const membershipColor =
+                row.membership_status === "ACTIVE"
+                ? "green"
+                : "red";
+
+            const monthlyColor =
+                row.monthly_status === "PAID"
+                ? "green"
+                : "red";
 
             const tr = document.createElement("tr");
 
             tr.innerHTML = `
+
                 <td>${row.id}</td>
+
                 <td>${row.name}</td>
+
                 <td>${cleanType(row.type)}</td>
+
                 <td>${row.membership_expires || "N/A"}</td>
-                <td>${row.monthly_expires || "N/A"}</td>
-                <td style="color:${color}; font-weight:bold;">
-                    ${row.status}
+
+                <td style="
+                    color:${membershipColor};
+                    font-weight:bold;
+                ">
+                    ${row.membership_status}
                 </td>
+
+                <td>${row.monthly_expires || "N/A"}</td>
+
+                <td style="
+                    color:${monthlyColor};
+                    font-weight:bold;
+                ">
+                    ${row.monthly_status}
+                </td>
+
             `;
 
             table.appendChild(tr);
