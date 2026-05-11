@@ -28,11 +28,14 @@
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Type</th>
-<th>Membership Validity</th>
-<th>Monthly Validity</th>
-<th>Status</th>
+    <th>Name</th>
+    <th>Type</th>
+
+    <th>Membership Validity</th>
+    <th>Membership Status</th>
+
+    <th>Monthly Validity</th>
+    <th>Monthly Status</th>
 </tr>
 </thead>
 
@@ -71,17 +74,35 @@ async function loadMembership(){
         const table = document.getElementById("membership-body");
         table.innerHTML = "";
 
-        const color = m.membership_status === "ACTIVE" ? "green" : "red";
+        const membershipColor =
+            m.membership_status === "ACTIVE"
+            ? "green"
+            : "red";
+
+        const monthlyColor =
+            m.monthly_status === "PAID"
+            ? "green"
+            : "red";
 
         table.innerHTML = `
         <tr>
+
             <td>${m.full_name}</td>
+
             <td>${cleanType(m.membership_type)}</td>
-            <td>${m.membership_validity}</td>
-            <td>${m.monthly_validity}</td>
-            <td style="color:${color}; font-weight:bold;">
+
+            <td>${m.membership_validity || "-"}</td>
+
+            <td style="color:${membershipColor}; font-weight:bold;">
                 ${m.membership_status}
             </td>
+
+            <td>${m.monthly_validity || "-"}</td>
+
+            <td style="color:${monthlyColor}; font-weight:bold;">
+                ${m.monthly_status}
+            </td>
+
         </tr>
         `;
 
