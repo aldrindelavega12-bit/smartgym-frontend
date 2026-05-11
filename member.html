@@ -47,24 +47,13 @@ if (!user || user.role !== "member") {
     </div>
 
     <!-- 👤 PROFILE -->
+        <!-- LOGOUT -->
     <div class="profile">
 
-        <div class="profile-icon"
-             onclick="toggleMenu()">
-            👤
-        </div>
-
-        <div id="dropdown" class="dropdown">
-
-            <a href="profile.html">
-                Edit Profile
-            </a>
-
-            <a onclick="logout()">
-                Logout
-            </a>
-
-        </div>
+        <button class="logout-btn"
+                onclick="logout()">
+            Logout
+        </button>
 
     </div>
 
