@@ -440,3 +440,53 @@ tr:hover {
 
     font-weight: bold;
 }
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 20px 30px;
+
+    background: white;
+}
+
+/* LEFT */
+.nav-left{
+    width: 220px;
+}
+
+/* CENTER */
+.menu{
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 40px;
+}
+
+.menu a{
+
+    text-decoration: none;
+
+    color: #1e293b;
+
+    font-weight: 600;
+
+    font-size: 18px;
+}
+
+/* RIGHT */
+.nav-right{
+    width: 220px;
+}
