@@ -2,115 +2,196 @@
 <html>
 <head>
     <title>Member Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <!-- 🔒 ROLE PROTECTION -->
 <script>
-const user = JSON.parse(localStorage.getItem("user"));
+
+const user =
+    JSON.parse(localStorage.getItem("user"));
 
 if (!user || user.role !== "member") {
+
     window.location.href = "index.html";
 }
+
 </script>
 
 <!-- NAVBAR -->
 <div class="navbar">
+
     <h2>SMART GYM</h2>
 
     <div class="menu">
+
         <a href="member.html">Home</a>
-        <a href="workouts.html">Suggested Workout</a>
-        <a href="locker_booking.html">Book Locker</a>
-        <a href="membership.html">Membership</a>
+
+        <a href="workouts.html">
+            Suggested Workout
+        </a>
+
+        <a href="locker_booking.html">
+            Book Locker
+        </a>
+
+        <a href="membership.html">
+            Membership
+        </a>
+
     </div>
 
     <!-- 👤 PROFILE -->
     <div class="profile">
-        <img id="nav-pic" src="https://via.placeholder.com/35" class="nav-avatar" onclick="toggleMenu()">
+
+        <div class="profile-icon"
+             onclick="toggleMenu()">
+            👤
+        </div>
 
         <div id="dropdown" class="dropdown">
-            <a href="profile.html">Edit Profile</a>
-            <a onclick="logout()">Logout</a>
+
+            <a href="profile.html">
+                Edit Profile
+            </a>
+
+            <a onclick="logout()">
+                Logout
+            </a>
+
         </div>
+
     </div>
+
 </div>
 
 <!-- MAIN -->
 <div class="layout">
 <div class="main">
 
-<div class="hero">
-    <h1 id="welcome">WELCOME 💪</h1>
-    <p>Train smart. Stay strong.</p>
-</div>
+    <div class="hero">
 
-<div class="cards">
+        <h1 id="welcome">
+            WELCOME 💪
+        </h1>
 
-    <div class="card">
-        <h3>Suggested Workout</h3>
-        <button onclick="go('workouts.html')">Open</button>
+        <p>
+            Train smart. Stay strong.
+        </p>
+
     </div>
 
-    <div class="card">
-        <h3>Book Locker</h3>
-        <button onclick="go('locker_booking.html')">Book</button>
-    </div>
+    <div class="cards">
 
-    <div class="card">
-        <h3>Membership Details</h3>
-        <button onclick="go('membership.html')">View</button>
-    </div>
+        <div class="card">
 
-</div>
+            <h3>
+                Suggested Workout
+            </h3>
+
+            <button onclick="go('workouts.html')">
+                Open
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Book Locker
+            </h3>
+
+            <button onclick="go('locker_booking.html')">
+                Book
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Membership Details
+            </h3>
+
+            <button onclick="go('membership.html')">
+                View
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 </div>
 
 <!-- SCRIPT -->
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
-// 🔥 LOAD USER + PROFILE
-const userData = JSON.parse(localStorage.getItem("user"));
-const profile = JSON.parse(localStorage.getItem("profile")) || {};
 
-// 👉 PRIORITY: nickname → fallback real name
-const displayName = profile.name || userData.name;
+const API_URL =
+"https://smartgym-api-ia2e.onrender.com";
+
+// 🔥 LOAD USER
+const userData =
+    JSON.parse(localStorage.getItem("user"));
+
+const profile =
+    JSON.parse(localStorage.getItem("profile")) || {};
+
+// 👉 PRIORITY:
+// nickname → fallback real name
+const displayName =
+    profile.name || userData.name;
 
 // 👉 UPDATE NAME
 document.getElementById("welcome").innerText =
     "WELCOME, " + displayName + " 💪";
 
-// 👉 UPDATE PROFILE IMAGE
-if(profile.image){
-    document.getElementById("nav-pic").src = profile.image;
-}
 
-// NAVIGATION
+// ================= NAVIGATION =================
 function go(page){
+
     window.location.href = page;
 }
 
-// LOGOUT
+
+// ================= LOGOUT =================
 function logout(){
+
     localStorage.clear();
+
     window.location.href = "index.html";
 }
 
-// DROPDOWN
+
+// ================= DROPDOWN =================
 function toggleMenu(){
-    const menu = document.getElementById("dropdown");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
+
+    const menu =
+        document.getElementById("dropdown");
+
+    menu.style.display =
+        menu.style.display === "block"
+        ? "none"
+        : "block";
 }
 
-// CLICK OUTSIDE CLOSE
+
+// ================= CLICK OUTSIDE =================
 window.onclick = function(e){
+
     if(!e.target.closest('.profile')){
-        document.getElementById("dropdown").style.display = "none";
+
+        document.getElementById(
+            "dropdown"
+        ).style.display = "none";
     }
 }
+
 </script>
 
 <!-- STYLE -->
@@ -120,33 +201,68 @@ window.onclick = function(e){
     position: relative;
 }
 
-.nav-avatar{
-    width: 35px;
-    height: 35px;
+/* 👤 ICON */
+.profile-icon{
+
+    width: 40px;
+    height: 40px;
+
     border-radius: 50%;
+
+    background: #6c3eb8;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
     cursor: pointer;
+
+    user-select: none;
 }
 
+/* DROPDOWN */
 .dropdown{
+
     display: none;
+
     position: absolute;
+
     right: 0;
-    top: 40px;
+    top: 50px;
+
     background: white;
+
     border-radius: 10px;
+
     padding: 10px;
-    width: 150px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+    width: 160px;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.1);
+
+    z-index: 999;
 }
 
 .dropdown a{
+
     display: block;
-    padding: 8px;
+
+    padding: 10px;
+
     text-decoration: none;
+
     color: black;
+
+    border-radius: 8px;
 }
 
 .dropdown a:hover{
+
     background: #f1f2f6;
 }
 
