@@ -2,46 +2,88 @@
 <html>
 <head>
     <title>Membership</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="css/style.css">
 </head>
+
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <h2>SMART GYM</h2>
 
-    <div class="menu">
-        <a href="member.html">Home</a>
-        <a href="workouts.html">Workout</a>
-        <a href="locker_booking.html">Locker</a>
-        <a href="membership.html">Membership</a>
+    <!-- LEFT -->
+    <div class="nav-left">
+        <h2>SMART GYM</h2>
     </div>
+
+    <!-- CENTER -->
+    <div class="menu">
+
+        <a href="member.html">
+            Home
+        </a>
+
+        <a href="workouts.html">
+            Suggested Workout
+        </a>
+
+        <a href="locker_booking.html">
+            Book Locker
+        </a>
+
+        <a href="membership.html">
+            Membership
+        </a>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="nav-right">
+
+        <button class="logout-btn"
+                onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
 </div>
 
 <!-- MAIN -->
 <div class="layout">
 <div class="main">
 
-<h2>Membership Details</h2>
+    <h2>Membership Details</h2>
 
-<table>
-<thead>
-<tr>
-    <th>Name</th>
-    <th>Type</th>
+    <table>
 
-    <th>Membership Validity</th>
-    <th>Membership Status</th>
+        <thead>
 
-    <th>Monthly Validity</th>
-    <th>Monthly Status</th>
-</tr>
-</thead>
+            <tr>
 
-<tbody id="membership-body"></tbody>
+                <th>Name</th>
 
-</table>
+                <th>Type</th>
+
+                <th>Membership Validity</th>
+
+                <th>Membership Status</th>
+
+                <th>Monthly Validity</th>
+
+                <th>Monthly Status</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="membership-body"></tbody>
+
+    </table>
 
 </div>
 </div>
@@ -49,29 +91,52 @@
 <!-- SCRIPT -->
 <script>
 
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
+const API_URL =
+"https://smartgym-api-ia2e.onrender.com";
 
+
+// ================= LOAD MEMBERSHIP =================
 async function loadMembership(){
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user =
+        JSON.parse(
+            localStorage.getItem("user")
+        );
 
     if(!user){
-        window.location.href = "index.html";
+
+        window.location.href =
+            "index.html";
+
         return;
     }
 
     try{
-        const res = await fetch(`${API_URL}/api/membership/${user.id}`);
-        const data = await res.json();
+
+        const res =
+            await fetch(
+                `${API_URL}/api/membership/${user.id}`
+            );
+
+        const data =
+            await res.json();
 
         const m = data.data;
 
         if(!m){
-            alert("No membership data found");
+
+            alert(
+                "No membership data found"
+            );
+
             return;
         }
 
-        const table = document.getElementById("membership-body");
+        const table =
+            document.getElementById(
+                "membership-body"
+            );
+
         table.innerHTML = "";
 
         const membershipColor =
@@ -80,7 +145,7 @@ async function loadMembership(){
             : "red";
 
         const monthlyColor =
-            m.monthly_status === "PAID"
+            m.monthly_status === "ACTIVE"
             ? "green"
             : "red";
 
@@ -89,17 +154,33 @@ async function loadMembership(){
 
             <td>${m.full_name}</td>
 
-            <td>${cleanType(m.membership_type)}</td>
+            <td>
+                ${cleanType(m.membership_type)}
+            </td>
 
-            <td>${m.membership_validity || "-"}</td>
+            <td>
+                ${m.membership_validity || "-"}
+            </td>
 
-            <td style="color:${membershipColor}; font-weight:bold;">
+            <td
+                style="
+                    color:${membershipColor};
+                    font-weight:bold;
+                "
+            >
                 ${m.membership_status}
             </td>
 
-            <td>${m.monthly_validity || "-"}</td>
+            <td>
+                ${m.monthly_validity || "-"}
+            </td>
 
-            <td style="color:${monthlyColor}; font-weight:bold;">
+            <td
+                style="
+                    color:${monthlyColor};
+                    font-weight:bold;
+                "
+            >
                 ${m.monthly_status}
             </td>
 
@@ -107,17 +188,37 @@ async function loadMembership(){
         `;
 
     }catch(err){
+
         console.error(err);
+
         alert("Server error");
     }
 }
 
-// CLEAN TYPE
+
+// ================= CLEAN TYPE =================
 function cleanType(type){
-    if(!type) return "N/A";
-    return type.replace("membership-", "").toUpperCase();
+
+    if(!type)
+        return "N/A";
+
+    return type
+        .replace("membership-", "")
+        .toUpperCase();
 }
 
+
+// ================= LOGOUT =================
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+}
+
+
+// ================= INIT =================
 loadMembership();
 
 </script>
@@ -125,30 +226,120 @@ loadMembership();
 <!-- STYLE -->
 <style>
 
-table{
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+/* ================= NAVBAR ================= */
+
+.navbar{
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 18px 30px;
+
     background: white;
-    border-radius: 10px;
+}
+
+/* LEFT */
+.nav-left{
+    width: 250px;
+}
+
+/* CENTER */
+.menu{
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 40px;
+}
+
+.menu a{
+
+    text-decoration: none;
+
+    color: #1e293b;
+
+    font-weight: 600;
+
+    font-size: 18px;
+}
+
+/* RIGHT */
+.nav-right{
+
+    width: 250px;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+/* LOGOUT */
+.logout-btn{
+
+    background: #2d3436;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    font-size: 15px;
+}
+
+/* ================= TABLE ================= */
+
+table{
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 20px;
+
+    background: white;
+
+    border-radius: 12px;
+
     overflow: hidden;
 }
 
-th, td{
-    padding: 12px;
+th,
+td{
+
+    padding: 14px;
+
     text-align: left;
 }
 
 th{
+
     background: #333;
+
     color: white;
 }
 
 tr:nth-child(even){
+
     background: #f5f5f5;
 }
 
 tr:hover{
+
     background: #eaeaea;
 }
 
