@@ -26,7 +26,9 @@
 <div class="layout">
 <div class="main">
 
+<!-- ================= CREATE ACCOUNT ================= -->
 <div class="section">
+
     <h2>Create Member Account</h2>
 
     <div style="max-width:400px;">
@@ -40,9 +42,33 @@
         <label>Password</label>
         <input id="password" type="password" placeholder="Enter password">
 
-        <button onclick="createAccount()">Create Account</button>
+        <button onclick="createAccount()">
+            Create Account
+        </button>
 
     </div>
+
+</div>
+
+<!-- ================= ACCOUNT STATUS ================= -->
+<div class="section" style="margin-top:30px;">
+
+    <h2>Account Status</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="account-table"></tbody>
+
+    </table>
 
 </div>
 
@@ -51,41 +77,133 @@
 
 <!-- SCRIPT -->
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
+const API_URL =
+"https://smartgym-api-ia2e.onrender.com";
+
+
+// ================= CREATE ACCOUNT =================
 async function createAccount(){
-    const user_id = document.getElementById("user_id").value;
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+
+    const user_id =
+        document.getElementById("user_id").value;
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
 
     if(!user_id || !username || !password){
+
         alert("Complete all fields");
         return;
     }
 
     try{
-        const res = await fetch(`${API_URL}/api/create_account`,{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({user_id, username, password})
-        });
+
+        const res = await fetch(
+            `${API_URL}/api/create_account`,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body: JSON.stringify({
+                    user_id,
+                    username,
+                    password
+                })
+            }
+        );
 
         const data = await res.json();
 
         if(data.status === "success"){
+
             alert("✅ Account Created");
+
             document.getElementById("user_id").value = "";
+
             document.getElementById("username").value = "";
+
             document.getElementById("password").value = "";
-        } else {
+
+            // 🔥 REFRESH TABLE
+            loadAccounts();
+
+        }else{
+
             alert(data.message || "Error");
         }
 
     }catch(err){
+
         console.error(err);
+
         alert("Server error");
     }
 }
+
+
+// ================= LOAD ACCOUNT STATUS =================
+async function loadAccounts(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/account_status`
+        );
+
+        const data = await res.json();
+
+        const table =
+            document.getElementById("account-table");
+
+        table.innerHTML = "";
+
+        data.forEach(row => {
+
+            const color =
+                row.status === "HAS ACCOUNT"
+                ? "green"
+                : "red";
+
+            table.innerHTML += `
+                <tr>
+
+                    <td>${row.id}</td>
+
+                    <td>${row.name}</td>
+
+                    <td>${row.username || "-"}</td>
+
+                    <td style="
+                        color:${color};
+                        font-weight:bold;
+                    ">
+                        ${row.status}
+                    </td>
+
+                </tr>
+            `;
+        });
+
+    }catch(err){
+
+        console.error(err);
+    }
+}
+
+
+// ================= INIT =================
+window.onload = () => {
+
+    loadAccounts();
+};
+
 </script>
 
 </body>
