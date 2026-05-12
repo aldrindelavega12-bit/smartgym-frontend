@@ -604,15 +604,15 @@ tr:hover {
 /* CENTER */
 .menu{
 
-    flex: 1;
+    flex:1;
 
-    display: flex;
+    display:flex;
 
-    justify-content: center;
+    justify-content:center;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 40px;
+    gap:28px;
 }
 
 .menu a{
@@ -759,9 +759,9 @@ button{
 
 .menu a i{
 
-    font-size:18px;
+    font-size:14px;
 
-    opacity:0.9;
+    color:white;
 }
 
 .menu a:hover{
