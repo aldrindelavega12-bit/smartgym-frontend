@@ -371,17 +371,26 @@ th, td {
     font-size: 14px;
 }
 
-th {
-    background: #f1f2f6;
-    color: #2d3436;
+th{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    color:white;
+
+    backdrop-filter:blur(8px);
 }
 
-tr {
-    border-bottom: 1px solid #eee;
+tr{
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.05);
 }
 
-tr:hover {
-    background: #f9fafb;
+tr:hover{
+
+    background:
+    rgba(255,255,255,0.04);
 }
 
 /* ===== STATUS COLORS ===== */
@@ -520,7 +529,11 @@ tr:hover {
 
 .time-picker-box,
 .existing-bookings{
-    background: white;
+
+    background:
+    rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(10px);
     padding: 18px;
     border-radius: 15px;
     margin-bottom: 15px;
@@ -534,6 +547,32 @@ tr:hover {
     border: 1px solid #ddd;
     font-size: 16px;
     margin-top: 10px;
+}
+
+input,
+select{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    color:white;
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(8px);
+
+    border-radius:10px;
+
+    padding:12px;
+}
+
+/* DATE PICKER ICON */
+input[type="date"]::-webkit-calendar-picker-indicator{
+
+    filter:invert(1);
+
+    cursor:pointer;
 }
 
 .preview-box{
@@ -855,4 +894,36 @@ button{
     border:1px solid rgba(255,255,255,0.05);
 
     backdrop-filter:blur(8px);
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    background:
+    rgba(255,255,255,0.03);
+
+    backdrop-filter:blur(10px);
+}
+
+tr{
+
+    background:
+    rgba(255,255,255,0.02);
+}
+
+td{
+
+    color:white;
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.05);
 }
