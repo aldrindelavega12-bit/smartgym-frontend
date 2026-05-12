@@ -735,3 +735,36 @@ button{
 .icon.purple{
     background:#7c3aed;
 }
+
+/*admin*/
+
+.menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    text-decoration:none;
+
+    color:white;
+
+    font-weight:600;
+
+    font-size:18px;
+
+    transition:0.3s;
+}
+
+.menu a i{
+
+    font-size:18px;
+
+    opacity:0.9;
+}
+
+.menu a:hover{
+
+    color:#60a5fa;
+}

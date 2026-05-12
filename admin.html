@@ -103,13 +103,40 @@ if (!user || user.role !== "admin") {
 const menu = document.getElementById("menu");
 
 menu.innerHTML = `
-    <a href="admin.html">Home</a>
-    <a href="messages.html">Messages</a>
-    <a href="attendance.html">Attendance</a>
-    <a href="locker.html">Locker</a>
-    <a href="members.html">Members</a>
-    <a href="staff_manage.html">Staff</a>
-    <a href="create_account.html">Create Account</a>
+    <a href="admin.html">
+        <i class="fa-solid fa-house"></i>
+        Home
+    </a>
+
+    <a href="messages.html">
+        <i class="fa-regular fa-comment"></i>
+        Messages
+    </a>
+
+    <a href="attendance.html">
+        <i class="fa-regular fa-calendar-check"></i>
+        Attendance
+    </a>
+
+    <a href="locker.html">
+        <i class="fa-solid fa-lock"></i>
+        Locker
+    </a>
+
+    <a href="members.html">
+        <i class="fa-solid fa-users"></i>
+        Members
+    </a>
+
+    <a href="staff_manage.html">
+        <i class="fa-regular fa-user"></i>
+        Staff
+    </a>
+
+    <a href="create_account.html">
+        <i class="fa-solid fa-user-plus"></i>
+        Create Account
+    </a>
 `;
 
 // ================= DASHBOARD =================
