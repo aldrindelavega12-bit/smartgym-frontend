@@ -4,10 +4,11 @@
     <title>Create Account</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<!-- NAVBAR -->
 <!-- NAVBAR -->
 <div class="navbar">
 
@@ -19,36 +20,51 @@
     <!-- CENTER -->
     <div class="menu">
 
-        <a href="admin.html">Home</a>
+        <a href="admin.html">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
 
         <a href="messages.html">
+            <i class="fa-regular fa-comment"></i>
             Messages
         </a>
 
         <a href="attendance.html">
+            <i class="fa-regular fa-calendar-check"></i>
             Attendance
         </a>
 
         <a href="locker.html">
+            <i class="fa-solid fa-lock"></i>
             Locker
         </a>
 
         <a href="members.html">
+            <i class="fa-solid fa-users"></i>
             Members
         </a>
 
         <a href="staff_manage.html">
+            <i class="fa-regular fa-user"></i>
             Staff
         </a>
 
         <a href="create_account.html">
+            <i class="fa-solid fa-user-plus"></i>
             Create Account
         </a>
 
     </div>
 
     <!-- RIGHT -->
-    <div class="nav-right"></div>
+    <div class="nav-right">
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+    </div>
 
 </div>
 
