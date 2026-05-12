@@ -998,17 +998,7 @@ table{
     margin-top:18px;
 }
 
-.nav-left,
-.nav-right{
+.nav-space{
 
-    width:220px;
-
-    display:flex;
-
-    align-items:center;
-}
-
-.nav-right{
-
-    justify-content:flex-end;
+    width:90px;
 }
