@@ -329,12 +329,29 @@ button:hover {
 }
 
 /* ===== SECTION ===== */
-.section {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-top: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+.section{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.78),
+        rgba(15,23,42,0.82)
+    );
+
+    padding:30px;
+
+    border-radius:28px;
+
+    margin-top:20px;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:
+    0 0 25px rgba(0,0,0,0.35);
+
+    color:white;
 }
 
 .section h2 {
@@ -784,4 +801,45 @@ button{
 .menu a:hover{
 
     color:#60a5fa;
+}
+
+/* message */
+
+#messages-list{
+
+    list-style:none;
+
+    padding:0;
+
+    margin-top:25px;
+}
+
+#messages-list li{
+
+    background:
+    rgba(255,255,255,0.04);
+
+    border-radius:16px;
+
+    padding:18px;
+
+    margin-bottom:15px;
+
+    color:white;
+
+    backdrop-filter:blur(8px);
+
+    border:1px solid rgba(255,255,255,0.05);
+
+    transition:0.3s;
+}
+
+#messages-list li:hover{
+
+    transform:translateX(5px);
+}
+
+#messages-list small{
+
+    color:#94a3b8;
 }
