@@ -226,6 +226,7 @@ button:hover {
     gap:28px;
 }
 
+
 .card{
 
     position:relative;
@@ -233,13 +234,13 @@ button:hover {
     background:
     linear-gradient(
         135deg,
-        rgba(0,0,0,0.88),
-        rgba(15,23,42,0.92)
+        rgba(0,0,0,0.82),
+        rgba(15,23,42,0.88)
     );
 
-    border-radius:30px;
+    border-radius:28px;
 
-    padding:35px;
+    padding:28px 32px;
 
     min-height:120px;
 
@@ -248,15 +249,16 @@ button:hover {
     border:1px solid rgba(255,255,255,0.08);
 
     box-shadow:
-    0 0 25px rgba(0,0,0,0.35);
+    0 0 20px rgba(0,0,0,0.35);
 
     transition:0.3s;
 
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 }
-
 .card:hover{
 
     transform:translateY(-5px);
@@ -349,14 +351,14 @@ tr:hover {
 }
 
 /* ===== STATUS COLORS ===== */
-.green {
-    color: #00b894;
-    font-weight: bold;
+.text-green{
+    color:#00b894;
+    font-weight:bold;
 }
 
-.blue {
-    color: #0984e3;
-    font-weight: bold;
+.text-blue{
+    color:#0984e3;
+    font-weight:bold;
 }
 
 .red {
@@ -689,4 +691,47 @@ button{
 
 .cards{
     margin-top:10px;
+}
+.card-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    z-index:2;
+}
+
+.icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:24px;
+
+    color:white;
+
+    flex-shrink:0;
+}
+
+.icon.blue{
+    background:#2563eb;
+}
+
+.icon.green{
+    background:#059669;
+}
+
+.icon.purple{
+    background:#7c3aed;
 }
