@@ -93,16 +93,25 @@ body::before{
 .navbar{
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:20px 30px;
+    padding:16px 28px;
 
-    background:rgba(0,0,0,0.45);
+    backdrop-filter:blur(12px);
 
-    backdrop-filter:blur(10px);
+    background:rgba(0,0,0,0.55);
 
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:
+    1px solid rgba(255,255,255,0.05);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
 }
 
 .navbar h2 {
@@ -657,16 +666,25 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 .navbar{
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:20px 30px;
+    padding:16px 28px;
 
-    background:rgba(0,0,0,0.45);
+    backdrop-filter:blur(12px);
 
-    backdrop-filter:blur(10px);
+    background:rgba(0,0,0,0.55);
 
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:
+    1px solid rgba(255,255,255,0.05);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
 }
 
 /* LEFT */
@@ -754,8 +772,14 @@ button{
 }
 
 .main{
-    max-width:1800px;
+
+    width:100%;
+
+    max-width:1850px;
+
     margin:auto;
+
+    padding:20px;
 }
 
 .hero p{
@@ -853,7 +877,7 @@ button{
         rgba(15,23,42,0.82)
     );
 
-    padding:30px;
+    padding:22px 26px;
 
     border-radius:28px;
 
@@ -867,6 +891,10 @@ button{
     0 0 25px rgba(0,0,0,0.35);
 
     color:white;
+
+    max-width:1700px;
+
+margin:auto;
 }
 
 #messages-list{
@@ -935,7 +963,7 @@ td{
 
     gap:14px;
 
-    max-width:420px;
+    max-width:500px;
 
     margin-top:25px;
 }
@@ -963,4 +991,9 @@ td{
     width:fit-content;
 
     padding:12px 22px;
+}
+
+table{
+
+    margin-top:18px;
 }
