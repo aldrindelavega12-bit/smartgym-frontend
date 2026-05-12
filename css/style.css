@@ -927,3 +927,40 @@ td{
     border-bottom:
     1px solid rgba(255,255,255,0.05);
 }
+.account-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    max-width:420px;
+
+    margin-top:25px;
+}
+
+.account-form label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:white;
+}
+
+.account-form input{
+
+    width:100%;
+
+    box-sizing:border-box;
+}
+
+.account-form button{
+
+    margin-top:10px;
+
+    width:fit-content;
+
+    padding:12px 22px;
+}
