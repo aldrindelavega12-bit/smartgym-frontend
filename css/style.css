@@ -4,8 +4,8 @@ body{
 
     background:
     linear-gradient(
-        rgba(0,0,0,0.78),
-        rgba(0,0,0,0.78)
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.55)
     ),
     url('../images/gym.jpg');
 
@@ -92,13 +92,6 @@ body{
     margin: 0;
 }
 
-.menu a {
-    margin: 0 12px;
-    cursor: pointer;
-    font-weight: 500;
-    color: #2d3436;
-    text-decoration: none;
-}
 
 .menu a:hover {
     color: #0984e3;
@@ -153,9 +146,9 @@ button:hover {
     background:
     linear-gradient(
         90deg,
-        rgba(0,0,0,0.92),
-        rgba(2,6,23,0.92),
-        rgba(30,64,175,0.55)
+        rgba(0,0,0,0.70),
+        rgba(2,6,23,0.68),
+        rgba(30,64,175,0.38)
     );
 
     padding:50px 45px;
@@ -164,7 +157,7 @@ button:hover {
 
     margin-bottom:35px;
 
-    min-height:220px;
+    min-height:140px;
 
     display:flex;
     flex-direction:column;
@@ -202,7 +195,9 @@ button:hover {
 
 .hero h1{
 
-    font-size:72px;
+    font-size:42px;
+
+    font-weight:700;
 
     margin:0;
 
@@ -246,7 +241,7 @@ button:hover {
 
     padding:35px;
 
-    min-height:170px;
+    min-height:120px;
 
     overflow:hidden;
 
@@ -291,16 +286,21 @@ button:hover {
 
 .card h3{
 
-    font-size:24px;
+    font-size:18px;
+
+    font-weight:600;
 
     color:white;
+
+    margin:0;
 
     z-index:2;
 }
 
 .card h1{
 
-    font-size:72px;
+    font-size:48px;
+    font-weight:700;
 
     color:white;
 
@@ -676,4 +676,17 @@ button{
 .main{
 
     padding:15px;
+}
+
+.main{
+    max-width:1800px;
+    margin:auto;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.cards{
+    margin-top:10px;
 }
