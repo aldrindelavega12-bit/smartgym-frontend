@@ -158,8 +158,8 @@ async function loadAttendance(){
             tr.innerHTML = `
                 <td>${row.name}</td>
                 <td>${row.type}</td>
-                <td>${formatTime(row.time_in)}</td>
-                <td>${formatTime(row.time_out)}</td>
+                <td>${row.time_in}</td>
+                <td>${row.time_out}</td>
                 <td>${row.locker}</td>
                 <td class="${getColor(row.remarks)}">${row.remarks}</td>
             `;
