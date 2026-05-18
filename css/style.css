@@ -19,6 +19,8 @@ body::before{
 
     content:"";
 
+    pointer-events:none;
+
     position:fixed;
 
     inset:0;
@@ -256,6 +258,7 @@ button:hover {
 .card{
 
     position:relative;
+    z-index:1;
 
     background:
     linear-gradient(
@@ -1001,4 +1004,15 @@ table{
 .nav-space{
 
     width:90px;
+}
+
+.card button{
+
+    position:relative;
+
+    z-index:20;
+
+    pointer-events:auto;
+
+    cursor:pointer;
 }
