@@ -168,26 +168,32 @@ function saveMessage(text, type="GENERAL"){
 }
 
 // ================= ALERT HANDLER =================
+// ================= ALERT HANDLER =================
 function handleAlert(data){
 
-    console.log("🚨 ALERT:", data);
+    console.log("🚨 RAW DATA:", data);
 
     let text = "";
 
-    if(data.event === "BYPASS"){
+    const eventType =
+        (data.event || "").trim().toUpperCase();
+
+    if(eventType === "BYPASS"){
         text = `Unauthorized Entry (${data.lane})`;
     }
-    else if(data.event === "TAILGATING"){
+    else if(eventType === "TAILGATING"){
         text = `Tailgating Detected (${data.lane})`;
     }
     else if(data.type === "OVERTIME"){
         text = `Locker ${data.locker} is OVERTIME`;
     }
 
+    console.log("FINAL TEXT:", text);
+
     if(text){
+
         showPopup(text);
 
-        // 🔥 FIX: TYPE BASED SAVE
         if(data.event){
             saveMessage(text, "SECURITY");
         }else{
@@ -197,7 +203,6 @@ function handleAlert(data){
         playBeep();
     }
 }
-
 // ================= PRIORITY ALERT =================
 socket.on("priority_alert", (data) => {
 
