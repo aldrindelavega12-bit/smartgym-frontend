@@ -126,13 +126,21 @@ async function loadMembership(){
 
             <td>${m.membership_validity || "-"}</td>
 
-            <td style="color:${membershipColor}; font-weight:bold;">
+            <td class="${
+                m.membership_status === "ACTIVE"
+                ? "status-green"
+                : "status-red"
+            }">
                 ${m.membership_status}
             </td>
 
             <td>${m.monthly_validity || "-"}</td>
 
-            <td style="color:${monthlyColor}; font-weight:bold;">
+            <td class="${
+                m.monthly_status === "PAID"
+                ? "status-green"
+                : "status-red"
+            }">
                 ${m.monthly_status}
             </td>
 
@@ -219,9 +227,21 @@ tr:hover{
 
 tbody td{
 
-    color:white !important;
+    color:white;
+}
 
-    font-weight:500;
+.status-green{
+
+    color:#00ff88 !important;
+
+    font-weight:bold;
+}
+
+.status-red{
+
+    color:#ff4d4d !important;
+
+    font-weight:bold;
 }
 
 tbody tr{
