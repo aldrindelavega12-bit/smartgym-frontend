@@ -114,8 +114,16 @@ async function login() {
         // INVALID LOGIN
         else {
 
-            error.innerText =
-            data.message || "Invalid login";
+            if(data.message){
+
+                error.innerText = data.message;
+
+            }else{
+
+                error.innerText =
+                "Incorrect username or password";
+
+            }
 
             card.classList.add("shake");
 
@@ -125,13 +133,10 @@ async function login() {
 
             }, 400);
 
-            // RESET BUTTON
             btn.innerText = "Log in";
 
             btn.classList.remove("loading");
         }
-
-    }
 
     catch (err) {
 
