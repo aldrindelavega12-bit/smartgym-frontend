@@ -4,6 +4,8 @@
     <title>Staff Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -55,10 +57,27 @@ if (!user || user.role !== "staff") {
 
 // MENU
 document.getElementById("menu").innerHTML = `
-    <a href="staff.html">Home</a>
-    <a href="messages.html">Messages</a>
-    <a href="attendance.html">Attendance</a>
-    <a href="locker.html">Locker</a>
+
+    <a href="staff.html">
+        <i class="fa-solid fa-house"></i>
+        Home
+    </a>
+
+    <a href="messages.html">
+        <i class="fa-regular fa-comment"></i>
+        Messages
+    </a>
+
+    <a href="attendance.html">
+        <i class="fa-regular fa-calendar-check"></i>
+        Attendance
+    </a>
+
+    <a href="locker.html">
+        <i class="fa-solid fa-lock"></i>
+        Locker
+    </a>
+
 `;
 
 // ================= SOCKET =================
