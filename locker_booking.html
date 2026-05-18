@@ -29,14 +29,20 @@
 }
 
 .card{
-    background: white;
-    padding: 18px;
-    border-radius: 15px;
-    cursor: pointer;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    transition: 0.2s;
-    min-width: 180px;
-    text-align: center;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.78),
+        rgba(15,23,42,0.82)
+    );
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
 }
 
 .card:hover{
@@ -44,8 +50,11 @@
 }
 
 .card.active{
-    border: 2px solid #2563eb;
-    background: #eff6ff;
+
+    border:2px solid #3b82f6;
+
+    background:
+    rgba(37,99,235,0.18);
 }
 
 /* BOOKING AREA */
@@ -61,12 +70,21 @@
 }
 
 .calendar-box{
-    background: white;
-    padding: 18px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-}
 
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.78),
+        rgba(15,23,42,0.82)
+    );
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
+}
 .calendar-header{
     display: flex;
     justify-content: space-between;
@@ -100,7 +118,11 @@
 }
 
 .day{
-    background: #f3f4f6;
+
+    background:
+    rgba(255,255,255,0.06);
+
+    color:white;
     padding: 8px;
     border-radius: 10px;
     cursor: pointer;
@@ -109,7 +131,9 @@
 }
 
 .day:hover{
-    background: #dbeafe;
+
+    background:
+    rgba(59,130,246,0.3);
 }
 
 .selected-day{
@@ -176,6 +200,92 @@
 }
 .booked-slot{
     pointer-events: none;
+}
+.time-picker-box{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.78),
+        rgba(15,23,42,0.82)
+    );
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    border-radius:24px;
+
+    padding:22px;
+
+    color:white;
+
+    margin-bottom:20px;
+}
+.existing-bookings{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.78),
+        rgba(15,23,42,0.82)
+    );
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    border-radius:24px;
+
+    padding:22px;
+
+    color:white;
+
+    margin-top:20px;
+}
+
+.booking-item{
+
+    background:
+    rgba(255,255,255,0.05);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    padding:12px;
+
+    border-radius:12px;
+
+    margin-top:10px;
+
+    color:white;
+}
+
+.empty-booking{
+
+    color:#aaa;
+}
+.time-input{
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:16px;
+
+    border:
+    1px solid rgba(255,255,255,0.15);
+
+    background:
+    rgba(255,255,255,0.05);
+
+    color:white;
+
+    font-size:18px;
+
+    margin-top:15px;
 }
 </style>
 

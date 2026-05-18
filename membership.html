@@ -4,6 +4,8 @@
     <title>Membership</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -15,10 +17,27 @@
     <h2>SMART GYM</h2>
 
     <div class="menu">
-        <a href="member.html">Home</a>
-        <a href="workouts.html">Suggested Workout</a>
-        <a href="locker_booking.html">Book Locker</a>
-        <a href="membership.html">Membership</a>
+
+        <a href="member.html">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
+
+        <a href="workouts.html">
+            <i class="fa-solid fa-dumbbell"></i>
+            Suggested Workout
+        </a>
+
+        <a href="locker_booking.html">
+            <i class="fa-solid fa-lock"></i>
+            Book Locker
+        </a>
+
+        <a href="membership.html">
+            <i class="fa-solid fa-id-card"></i>
+            Membership
+        </a>
+
     </div>
 
     <!-- LOGOUT -->
@@ -137,36 +156,70 @@ loadMembership();
 </script>
 
 <!-- STYLE -->
+
 <style>
 
 table{
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.78),
+        rgba(15,23,42,0.82)
+    );
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    color:white;
 }
 
 th, td{
-    padding: 12px;
-    text-align: left;
+
+    padding:16px;
+
+    text-align:left;
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.05);
 }
 
 th{
-    background: #333;
-    color: white;
+
+    background:
+    rgba(255,255,255,0.06);
+
+    color:white;
+
+    font-size:15px;
 }
 
-tr:nth-child(even){
-    background: #f5f5f5;
+td{
+
+    background:transparent;
 }
 
 tr:hover{
-    background: #eaeaea;
+
+    background:
+    rgba(255,255,255,0.03);
 }
 
 </style>
+
+
 
 </body>
 </html>
