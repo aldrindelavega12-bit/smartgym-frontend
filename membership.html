@@ -18,27 +18,27 @@
 
     <div class="menu">
 
-        <a href="member.html">
-            <i class="fa-solid fa-house"></i>
-            Home
-        </a>
+    <a href="member.html">
+        <i class="fa-solid fa-house"></i>
+        Home
+    </a>
 
-        <a href="workouts.html">
-            <i class="fa-solid fa-dumbbell"></i>
-            Suggested Workout
-        </a>
+    <a href="workouts.html">
+        <i class="fa-solid fa-dumbbell"></i>
+        Suggested Workout
+    </a>
 
-        <a href="locker_booking.html">
-            <i class="fa-solid fa-lock"></i>
-            Book Locker
-        </a>
+    <a href="locker_booking.html">
+        <i class="fa-solid fa-lock"></i>
+        Book Locker
+    </a>
 
-        <a href="membership.html">
-            <i class="fa-solid fa-id-card"></i>
-            Membership
-        </a>
+    <a href="membership.html">
+        <i class="fa-solid fa-id-card"></i>
+        Membership
+    </a>
 
-    </div>
+</div>
 
     <!-- LOGOUT -->
     <div class="profile">
@@ -108,14 +108,14 @@ async function loadMembership(){
         table.innerHTML = "";
 
         const membershipColor =
-            m.membership_status === "ACTIVE"
-            ? "green"
-            : "red";
+        m.membership_status === "ACTIVE"
+        ? "#00ff88"
+        : "#ff4d4d";
 
-        const monthlyColor =
-            m.monthly_status === "PAID"
-            ? "green"
-            : "red";
+    const monthlyColor =
+        m.monthly_status === "PAID"
+        ? "#00ff88"
+        : "#ff4d4d";
 
         table.innerHTML = `
         <tr>
@@ -215,6 +215,24 @@ tr:hover{
 
     background:
     rgba(255,255,255,0.03);
+}
+tbody td{
+
+    color:white !important;
+
+    font-weight:500;
+}
+
+tbody tr{
+
+    background:
+    rgba(255,255,255,0.04);
+}
+
+tbody tr:hover{
+
+    background:
+    rgba(59,130,246,0.12);
 }
 
 </style>
