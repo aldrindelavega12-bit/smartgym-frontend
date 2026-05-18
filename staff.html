@@ -87,6 +87,11 @@ socket.on("connect", () => {
     console.log("CONNECTED 🔥");
 });
 
+socket.onAny((event, data) => {
+    console.log("EVENT:", event);
+    console.log("DATA:", data);
+});
+
 // ================= SOUND =================
 let audioCtx = null;
 
