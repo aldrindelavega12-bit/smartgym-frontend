@@ -81,7 +81,9 @@ document.getElementById("menu").innerHTML = `
 `;
 
 // ================= SOCKET =================
-const socket = io(API_URL);
+const socket = io("https://smartgym-api-ia2e.onrender.com", {
+    transports: ["polling"]
+});
 
 socket.on("connect", () => {
     console.log("CONNECTED 🔥");
