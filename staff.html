@@ -81,9 +81,7 @@ document.getElementById("menu").innerHTML = `
 `;
 
 // ================= SOCKET =================
-const socket = io(API_URL, {
-    transports: ["polling", "websocket"]
-});
+const socket = io(API_URL);
 
 socket.on("connect", () => {
     console.log("CONNECTED 🔥");
