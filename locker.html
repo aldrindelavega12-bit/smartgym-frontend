@@ -457,9 +457,26 @@ async function loadApproval(){
             // =====================
             let slot = "-";
 
-            if(b.slot){
+            if(b.start_time && b.end_time){
 
-                slot = b.slot;
+                const format12 = (time) => {
+
+                    return new Date(
+                        `1970-01-01T${time}`
+                    ).toLocaleTimeString(
+                        [],
+                        {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                        }
+                    );
+                };
+
+                slot =
+                    `${format12(b.start_time)} - ${
+                        format12(b.end_time)
+                    }`;
             }
 
             // =====================
@@ -477,7 +494,12 @@ async function loadApproval(){
                         Locker ${b.locker_number}
                     </td>
 
-                    <td>${b.date}</td>
+                    <td>
+                        ${
+                            new Date(b.date)
+                            .toLocaleDateString("en-CA")
+                        }
+                    </td>
 
                     <td>${slot}</td>
 
