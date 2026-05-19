@@ -342,16 +342,43 @@
 <!-- LOCKERS -->
 <div class="cards">
 
-    <div class="card" onclick="selectLocker(this,1)">
+    <div class="card"
+         data-locker="1"
+         onclick="selectLocker(this,1)">
+
         <h3>Locker 1</h3>
+
+        <div class="locker-status available">
+            <span class="status-dot"></span>
+            Available
+        </div>
+
     </div>
 
-    <div class="card" onclick="selectLocker(this,2)">
+    <div class="card"
+         data-locker="2"
+         onclick="selectLocker(this,2)">
+
         <h3>Locker 2</h3>
+
+        <div class="locker-status available">
+            <span class="status-dot"></span>
+             Available
+        </div>
+
     </div>
 
-    <div class="card" onclick="selectLocker(this,3)">
+    <div class="card"
+         data-locker="3"
+         onclick="selectLocker(this,3)">
+
         <h3>Locker 3</h3>
+
+        <div class="locker-status available">
+            <span class="status-dot"></span>
+            Available
+        </div>
+
     </div>
 
 </div>
@@ -456,6 +483,12 @@ let selectedDate = null;
 let selectedStart = null;
 let selectedEnd = null;
 
+window.onload = () => {
+
+    renderCalendar();
+
+    loadCurrentLockerStatus();
+};
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -754,7 +787,74 @@ async function loadBookedSlots(){
 
     }
 }
+async function loadCurrentLockerStatus(){
 
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/current_lockers`
+        );
+
+        const data = await res.json();
+
+        document
+        .querySelectorAll(".card")
+        .forEach(card => {
+
+            const locker =
+                card.dataset.locker;
+
+            console.log(
+                locker,
+                data[locker]
+            );
+
+            const status =
+                data[locker] || "AVAILABLE";
+
+            const statusDiv =
+                card.querySelector(
+                    ".locker-status"
+                );
+
+            const statusClass =
+
+                status === "OVERTIME"
+                ? "overtime"
+
+                : status === "IN_USE"
+                ? "inuse"
+
+                : status === "RESERVED"
+                ? "reserved"
+
+                : "available";
+
+            const statusText =
+
+                status === "OVERTIME"
+                ? "🔴 Overtime"
+
+                : status === "IN_USE"
+                ? "🔵 In Use"
+
+                : status === "RESERVED"
+                ? "🟡 Reserved"
+
+                : "✅ Available";
+
+            statusDiv.className =
+                `locker-status ${statusClass}`;
+
+            statusDiv.innerHTML =
+                statusText;
+        });
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
 // =============================
 // CHANGE MONTH
 // =============================
@@ -767,8 +867,6 @@ function changeMonth(direction){
     renderCalendar();
 }
 
-// INITIAL LOAD
-renderCalendar();
 
 // =============================
 // SUBMIT BOOKING
