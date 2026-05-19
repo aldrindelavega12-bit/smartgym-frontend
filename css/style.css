@@ -1179,3 +1179,48 @@ table{
     color:#4dff88;
     font-weight:bold;
 }
+
+.msg-card{
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter: blur(10px);
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    margin-bottom: 15px;
+
+    color: white; /* 🔥 ADD THIS */
+}
+
+.msg-card h3{
+
+    color: #4da3ff;
+
+    margin-bottom: 8px;
+}
+
+.msg-card p{
+
+    color: white;
+
+    margin-bottom: 8px;
+}
+
+.msg-card small{
+
+    color: #cfcfcf;
+}
+
+.reason{
+
+    color: #ff8b8b;
+
+    margin-top: 8px;
+
+    font-weight: bold;
+}
