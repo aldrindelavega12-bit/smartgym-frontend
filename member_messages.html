@@ -125,7 +125,7 @@ async function loadMessages(){
 
             container.innerHTML += `
 
-                <div class="msg-card">
+                 <div class="msg-card">
 
                     <h3>
                         ${msg.title}
@@ -133,6 +133,13 @@ async function loadMessages(){
 
                     <p>
                         ${msg.message}
+                    </p>
+
+                    <p class="reason">
+
+                        Reason:
+                        ${msg.reason || "-"}
+
                     </p>
 
                     <small>
@@ -161,28 +168,46 @@ loadMessages();
 
 .msg-card{
 
-    background: white;
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter: blur(10px);
 
     padding: 15px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
     margin-bottom: 15px;
 
-    box-shadow:
-    0 2px 10px rgba(0,0,0,0.05);
+    color: white;
 }
 
 .msg-card h3{
+
+    color: #4da3ff;
+
+    margin-bottom: 10px;
+}
+
+.msg-card p{
+
+    color: white;
 
     margin-bottom: 10px;
 }
 
 .msg-card small{
 
-    color: gray;
+    color: #cfcfcf;
 }
 
+.reason{
+
+    color: #ff8b8b;
+
+    font-weight: bold;
+}
 </style>
 
 </body>
