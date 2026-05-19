@@ -20,9 +20,20 @@
             Home
         </a>
 
-        <a href="member_messages.html">
+        <a href="member_messages.html"
+            class="msg-link">
+
             <i class="fa-solid fa-envelope"></i>
+
             Messages
+
+            <span id="msg-count"
+                class="msg-count">
+
+                0
+
+            </span>
+
         </a>
 
         <a href="workouts.html">
@@ -286,6 +297,39 @@ window.onclick = function(e){
         document.getElementById("dropdown").style.display = "none";
     }
 }
+// ================= MESSAGE COUNT =================
+async function loadMessageCount(){
+
+    try{
+
+        const user =
+            JSON.parse(localStorage.getItem("user"));
+
+        const res = await fetch(
+            `${API_URL}/api/messages/${user.id}`
+        );
+
+        const data = await res.json();
+
+        const badge =
+            document.getElementById("msg-count");
+
+        badge.innerText = data.length;
+
+        // HIDE IF ZERO
+        if(data.length === 0){
+
+            badge.style.display = "none";
+        }
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
+
+// LOAD
+loadMessageCount();
 </script>
 
 <style>
@@ -303,6 +347,38 @@ window.onclick = function(e){
     padding: 10px;
     width: 160px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+/* MESSAGE BADGE */
+.msg-link{
+
+    position: relative;
+}
+
+.msg-count{
+
+    position: absolute;
+
+    top: -10px;
+    right: -14px;
+
+    background: red;
+
+    color: white;
+
+    min-width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    padding: 2px;
 }
 </style>
 

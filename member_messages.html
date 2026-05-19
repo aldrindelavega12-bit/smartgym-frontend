@@ -40,9 +40,16 @@ if(!user || user.role !== "member"){
             Home
         </a>
 
-        <a href="member_messages.html">
+        <a href="member_messages.html" class="msg-link">
+
             <i class="fa-solid fa-envelope"></i>
+
             Messages
+
+            <span id="msg-count" class="msg-count">
+                0
+            </span>
+
         </a>
 
         <a href="workouts.html">
@@ -207,6 +214,38 @@ loadMessages();
     color: #ff8b8b;
 
     font-weight: bold;
+}
+
+.msg-link{
+
+    position: relative;
+}
+
+.msg-count{
+
+    position: absolute;
+
+    top: -8px;
+    right: -12px;
+
+    background: red;
+
+    color: white;
+
+    min-width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    font-size: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+
+    padding: 2px;
 }
 </style>
 
