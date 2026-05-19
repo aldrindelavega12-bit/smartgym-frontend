@@ -1160,3 +1160,22 @@ table{
     background:#ff4d4d;
 }
 
+.blue{
+    color:#4da3ff;
+    font-weight:bold;
+}
+
+.red{
+    color:#ff4d4d;
+    font-weight:bold;
+}
+
+.yellow{
+    color:#ffd633;
+    font-weight:bold;
+}
+
+.green{
+    color:#4dff88;
+    font-weight:bold;
+}

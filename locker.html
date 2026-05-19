@@ -287,7 +287,8 @@ async function loadLockers(){
 
             const date = lock.time_start.split(" ")[0];
 
-            if(date === today && lock.status === "ACTIVE"){
+            if(date === today){
+
                 lockers[lock.locker] = {
                     name: lock.name,
                     status: lock.status,
@@ -301,10 +302,21 @@ async function loadLockers(){
 
             table.innerHTML += `
                 <tr>
+
                     <td>Locker ${i}</td>
-                    <td>${l.name}</td>
-                    <td>${formatTime(l.time_start)}</td>
-                    <td class="${getColor(l.status)}">${l.status}</td>
+
+                    <td class="${getColor(l.status)}">
+                        ${l.name}
+                    </td>
+
+                    <td>
+                        ${formatTime(l.time_start)}
+                    </td>
+
+                    <td class="${getColor(l.status)}">
+                        ${formatStatus(l.status)}
+                    </td>
+
                 </tr>
             `;
         }
@@ -558,9 +570,31 @@ async function decline(id){
 
 // ================= HELPERS =================
 function getColor(status){
-    if(status === "ACTIVE") return "blue";
-    if(status === "OVERTIME") return "red";
+
+    if(status === "IN_USE")
+        return "blue";
+
+    if(status === "OVERTIME")
+        return "red";
+
+    if(status === "RESERVED")
+        return "yellow";
+
     return "green";
+}
+
+function formatStatus(status){
+
+    if(status === "IN_USE")
+        return "🔵 IN USE";
+
+    if(status === "OVERTIME")
+        return "🔴 OVERTIME";
+
+    if(status === "RESERVED")
+        return "🟡 RESERVED";
+
+    return "🟢 AVAILABLE";
 }
 
 function formatTime(dt){
