@@ -548,14 +548,23 @@ async function approve(id){
 }
 
 async function decline(id){
+
     const reason = prompt("Reason:");
 
     await fetch(`${API_URL}/api/update_booking`, {
+
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
         body: JSON.stringify({
+
             id:id,
-            status:"DECLINED",
+
+            status:"REJECTED",
+
             reason:reason
         })
     });
