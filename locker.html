@@ -394,6 +394,7 @@ async function loadApproval(){
         // =========================
         // LOOP BOOKINGS
         // =========================
+        let found = false;
         data.forEach(b => {
 
             if(
@@ -409,6 +410,7 @@ async function loadApproval(){
             ){
                 return;
             }
+            found = true;
 
             let actions = "";
 
@@ -476,6 +478,17 @@ async function loadApproval(){
                 </tr>
             `;
         });
+
+        if(!found){
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        No bookings
+                    </td>
+                </tr>
+            `;
+        }
 
     }catch(err){
 
