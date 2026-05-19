@@ -10,10 +10,23 @@
           href="css/style.css">
 
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
+
+<!-- 🔒 PROTECT -->
+<script>
+
+const user =
+    JSON.parse(localStorage.getItem("user"));
+
+if(!user || user.role !== "member"){
+
+    window.location.href = "index.html";
+}
+
+</script>
 
 <!-- NAVBAR -->
 <div class="navbar">
@@ -71,6 +84,79 @@
 </div>
 </div>
 
+<!-- SCRIPT -->
+<script>
+
+const API_URL =
+"https://smartgym-api-ia2e.onrender.com";
+
+
+// ================= LOAD MESSAGES =================
+async function loadMessages(){
+
+    const user =
+        JSON.parse(localStorage.getItem("user"));
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/messages/${user.id}`
+        );
+
+        const data = await res.json();
+
+        const container =
+            document.getElementById("message-list");
+
+        container.innerHTML = "";
+
+        // NO DATA
+        if(data.length === 0){
+
+            container.innerHTML = `
+                <p>No messages</p>
+            `;
+
+            return;
+        }
+
+        // LOOP
+        data.forEach(msg => {
+
+            container.innerHTML += `
+
+                <div class="msg-card">
+
+                    <h3>
+                        ${msg.title}
+                    </h3>
+
+                    <p>
+                        ${msg.message}
+                    </p>
+
+                    <small>
+                        ${msg.created_at}
+                    </small>
+
+                </div>
+
+            `;
+        });
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
+
+
+// ================= INIT =================
+loadMessages();
+
+</script>
+
+<!-- STYLE -->
 <style>
 
 .msg-card{
