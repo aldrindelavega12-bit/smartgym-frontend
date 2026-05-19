@@ -31,7 +31,10 @@
                 Log in
             </button>
 
-            <button onclick="openChangePassword()">
+            <button
+                class="change-password-main-btn"
+                onclick="openChangePassword()"
+            >
                 Change Password
             </button>
 
@@ -60,33 +63,46 @@
 
 <div id="changeModal" class="modal">
 
-    <div class="modal-content">
+    <div class="modal-content change-password-card">
 
-        <span class="close"
+        <span class="close-btn"
         onclick="closeChangePassword()">×</span>
 
-        <h2>Change Password</h2>
+        <h2 class="change-title">
+            Change Password
+        </h2>
 
-        <input type="text"
-        id="cp_user"
-        placeholder="User ID">
+        <input
+            type="text"
+            id="cp_user"
+            placeholder="User ID"
+            class="change-input"
+        >
 
-        <input type="password"
-        id="old_password"
-        placeholder="Old Password">
+        <input
+            type="password"
+            id="old_password"
+            placeholder="Old Password"
+            class="change-input"
+        >
 
-        <input type="password"
-        id="new_password"
-        placeholder="New Password">
+        <input
+            type="password"
+            id="new_password"
+            placeholder="New Password"
+            class="change-input"
+        >
 
-        <button onclick="changePassword()">
+        <button
+            class="change-btn"
+            onclick="changePassword()"
+        >
             Update Password
         </button>
 
     </div>
 
 </div>
-
 <script src="js/app.js"></script>
 
 <!-- SCRIPT -->
@@ -306,6 +322,147 @@ window.onclick = function(e){
     0 10px 25px rgba(0,0,0,0.25);
 
     animation:slideIn 0.4s ease;
+}
+
+/* CHANGE PASSWORD MODAL */
+
+.change-password-card{
+
+    width: 420px;
+
+    background: #ffffff;
+
+    border-radius: 22px;
+
+    padding: 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    position: relative;
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,0.35);
+
+    animation: fadeIn 0.25s ease;
+}
+
+.change-title{
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    color: #111;
+
+    margin-bottom: 10px;
+
+    text-align: center;
+}
+
+.change-input{
+
+    width: 100%;
+
+    height: 58px;
+
+    border-radius: 14px;
+
+    border: 2px solid #e5e5e5;
+
+    padding: 0 18px;
+
+    font-size: 17px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.change-input:focus{
+
+    border-color: #00d26a;
+
+    box-shadow:
+    0 0 10px rgba(0,210,106,0.25);
+}
+
+.change-btn{
+
+    height: 58px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #00d26a;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.change-btn:hover{
+
+    transform: scale(1.02);
+
+    background: #00be60;
+}
+
+.close-btn{
+
+    position: absolute;
+
+    top: 18px;
+
+    right: 22px;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    color: #333;
+}
+
+.change-password-main-btn{
+
+    width: 100%;
+
+    height: 55px;
+
+    border-radius: 16px;
+
+    border: 2px solid #00e676;
+
+    background: transparent;
+
+    color: #00e676;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    margin-top: 12px;
+
+    transition: 0.2s;
+}
+
+.change-password-main-btn:hover{
+
+    background: #00e676;
+
+    color: black;
 }
 
 @keyframes slideIn{
