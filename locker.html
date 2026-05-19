@@ -283,18 +283,13 @@ async function loadLockers(){
         };
 
         data.forEach(lock => {
-            if(!lock.time_start) return;
 
-            const date = lock.time_start.split(" ")[0];
+            lockers[lock.locker] = {
+                name: lock.name || "-",
+                status: lock.status || "AVAILABLE",
+                time_start: lock.time_start || "-"
+            };
 
-            if(date === today){
-
-                lockers[lock.locker] = {
-                    name: lock.name,
-                    status: lock.status,
-                    time_start: lock.time_start
-                };
-            }
         });
 
         for(let i=1; i<=3; i++){
