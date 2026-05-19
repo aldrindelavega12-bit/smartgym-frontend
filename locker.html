@@ -411,15 +411,19 @@ async function loadApproval(){
                 return;
             }
 
-           if(selectedDate){
+            if(selectedDate){
 
                 const bookingDate =
-                    String(b.date).split("T")[0];
+                    new Date(b.date)
+                    .toISOString()
+                    .split("T")[0];
 
                 if(bookingDate !== selectedDate){
                     return;
                 }
             }
+
+           
             found = true;
 
             let actions = "";
