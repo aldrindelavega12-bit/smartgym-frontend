@@ -739,15 +739,9 @@ async function loadBookedSlots(){
 
             bookedSlots.forEach(slot => {
 
-                // expect backend returns:
-                // start_time & end_time
-
-                const start = slot.start_time || "";
-                const end   = slot.end_time || "";
-
                 reservedList.innerHTML += `
                     <div class="booking-item">
-                        ${start} - ${end}
+                        ${slot}
                     </div>
                 `;
             });
