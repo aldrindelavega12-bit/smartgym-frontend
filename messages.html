@@ -121,51 +121,130 @@ const socket = io(API_URL, { transports: ["websocket"] });
 // ❌ DO NOT SAVE HERE (to avoid duplicates / conflicts)
 
 // ================= LOAD =================
-function loadMessages(){
-    const list = document.getElementById("messages-list");
-    list.innerHTML = "";
 
-    let messages = JSON.parse(localStorage.getItem("messages")) || [];
 
-    if(messages.length === 0){
-        list.innerHTML = "<li>No alerts</li>";
-        return;
+// ================= LOAD ADMIN MESSAGES =================
+async function loadMessages(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/admin_messages`
+        );
+
+        const data = await res.json();
+
+        const list =
+            document.getElementById(
+                "messages-list"
+            );
+
+        list.innerHTML = "";
+
+        // NO DATA
+        if(data.length === 0){
+
+            list.innerHTML = `
+                <li>No alerts</li>
+            `;
+
+            return;
+        }
+
+        // LOOP
+        data.forEach(msg => {
+
+            list.innerHTML += `
+
+                <li class="msg-card">
+
+                    <b>
+                        ${msg.title}
+                    </b>
+
+                    <br><br>
+
+                    ${msg.message}
+
+                    <br><br>
+
+                    <small>
+                        ${msg.created_at}
+                    </small>
+
+                </li>
+
+            `;
+        });
+
+    }catch(err){
+
+        console.log(err);
     }
-
-    messages.forEach(msg => {
-
-        let color = "black";
-
-        if(msg.type === "PRIORITY") color = "orange";
-        if(msg.type === "OVERTIME") color = "red";
-        if(msg.type === "SECURITY") color = "purple";
-
-        list.innerHTML += `
-            <li style="margin-bottom:10px; border-left:5px solid ${color}; padding-left:10px;">
-                <b>${msg.text}</b><br>
-                <small>${msg.time}</small>
-            </li>
-        `;
-    });
 }
+
 
 // ================= CLEAR =================
 function clearMessages(){
-    localStorage.removeItem("messages");
-    loadMessages();
+
+    alert(
+        "Database messages cannot be cleared here."
+    );
 }
 
-// ================= AUTO REFRESH =================
-setInterval(loadMessages, 1000);
 
 // ================= INIT =================
 loadMessages();
 
-// ================= DEBUG (OPTIONAL) =================
-socket.on("connect", () => {
-    console.log("Messages page connected (display only)");
+// ================= REALTIME =================
+socket.on("new_booking", (data) => {
+
+    console.log(
+        "NEW BOOKING RECEIVED",
+        data
+    );
+
+    loadMessages();
 });
+
+
+// ================= SOCKET =================
+socket.on("connect", () => {
+
+    console.log(
+        "Messages page connected"
+    );
+});
+
 </script>
+
+<style>
+
+.msg-card{
+
+    list-style: none;
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter: blur(10px);
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    margin-bottom: 15px;
+
+    color: white;
+}
+
+.msg-card small{
+
+    color: #cfcfcf;
+}
+
+</style>
 
 </body>
 </html>
