@@ -456,6 +456,13 @@ let selectedDate = null;
 let selectedStart = null;
 let selectedEnd = null;
 
+window.onload = () => {
+
+    renderCalendar();
+
+    loadCurrentLockerStatus();
+};
+
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (!user) {
@@ -753,7 +760,72 @@ async function loadBookedSlots(){
 
     }
 }
+async function loadCurrentLockerStatus(){
 
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/current_lockers`
+        );
+
+        const data = await res.json();
+
+        document
+        .querySelectorAll(".card")
+        .forEach(card => {
+
+            const text =
+                card.innerText;
+
+            const locker =
+                parseInt(
+                    text.replace(/\D/g,'')
+                );
+
+            const status =
+                data[locker] || "AVAILABLE";
+
+            card.innerHTML = `
+                <h3>
+                    Locker ${locker}
+                </h3>
+
+                <div class="
+                    locker-status
+                    ${
+                        status === "OVERTIME"
+                        ? "overtime"
+
+                        : status === "IN_USE"
+                        ? "inuse"
+
+                        : status === "RESERVED"
+                        ? "reserved"
+
+                        : "available"
+                    }
+                ">
+                    ${
+                        status === "OVERTIME"
+                        ? "🔴 Overtime"
+
+                        : status === "IN_USE"
+                        ? "🔵 In Use"
+
+                        : status === "RESERVED"
+                        ? "🟡 Reserved"
+
+                        : "✅ Available"
+                    }
+                </div>
+            `;
+        });
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
 // =============================
 // CHANGE MONTH
 // =============================
@@ -766,8 +838,6 @@ function changeMonth(direction){
     renderCalendar();
 }
 
-// INITIAL LOAD
-renderCalendar();
 
 // =============================
 // SUBMIT BOOKING

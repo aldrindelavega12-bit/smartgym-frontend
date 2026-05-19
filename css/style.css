@@ -1097,3 +1097,28 @@ table{
     background:
     rgba(255,255,255,0.08) !important;
 }
+
+.locker-status{
+
+    margin-top:12px;
+
+    font-size:14px;
+
+    font-weight:700;
+}
+
+.available{
+    color:#00ff99;
+}
+
+.inuse{
+    color:#4da6ff;
+}
+
+.reserved{
+    color:#ffd54a;
+}
+
+.overtime{
+    color:#ff4d4d;
+}
