@@ -404,11 +404,14 @@ async function loadApproval(){
                 return;
             }
 
-            if(
-                selectedDate &&
-                b.date !== selectedDate
-            ){
-                return;
+           if(selectedDate){
+
+                const bookingDate =
+                    String(b.date).split("T")[0];
+
+                if(bookingDate !== selectedDate){
+                    return;
+                }
             }
             found = true;
 
