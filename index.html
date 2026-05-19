@@ -31,14 +31,18 @@
                 Log in
             </button>
 
-            <button
-                class="change-password-main-btn"
-                onclick="openChangePassword()"
-            >
-                Change Password
-            </button>
-
             <p id="error" class="error-message"></p>
+
+            <div class="extra-links">
+
+                <span
+                    class="change-password-link"
+                    onclick="openChangePassword()"
+                >
+                    Change Password
+                </span>
+
+            </div>
 
             <div class="links">
                 <span onclick="openModal('faq')">FAQ</span> |
@@ -636,6 +640,33 @@ window.onclick = function(e){
     cursor: pointer;
 
     color: #333;
+}
+
+.extra-links{
+
+    margin-top: 14px;
+
+    text-align: right;
+}
+
+.change-password-link{
+
+    color: #00e676;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.change-password-link:hover{
+
+    text-decoration: underline;
+
+    opacity: 0.8;
 }
 
 @keyframes slideIn{
