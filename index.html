@@ -63,7 +63,7 @@
 
 <div id="changeModal" class="modal">
 
-    <div class="modal-content change-password-card">
+    <div class="change-password-card">
 
         <span class="close-btn"
         onclick="closeChangePassword()">×</span>
@@ -75,7 +75,7 @@
         <input
             type="text"
             id="cp_user"
-            placeholder="User ID"
+            placeholder="Username"
             class="change-input"
         >
 
@@ -164,38 +164,61 @@ function closeChangePassword(){
 
 async function changePassword(){
 
-    const user_id =
-        document.getElementById("cp_user").value;
+    const username =
+        document.getElementById("cp_user").value.trim();
 
     const old_password =
-        document.getElementById("old_password").value;
+        document.getElementById("old_password").value.trim();
 
     const new_password =
-        document.getElementById("new_password").value;
+        document.getElementById("new_password").value.trim();
 
-    const response = await fetch(
-        "https://smartgym-api-ia2e.onrender.com/api/change_password",
-        {
-            method:"POST",
+    if(!username || !old_password || !new_password){
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+        alert("Fill all fields");
+        return;
+    }
 
-            body:JSON.stringify({
-                user_id,
-                old_password,
-                new_password
-            })
+    try{
+
+        const response = await fetch(
+            "https://smartgym-api-ia2e.onrender.com/api/change_password",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    username,
+                    old_password,
+                    new_password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        if(data.status === "success"){
+
+            closeChangePassword();
+
+            document.getElementById("cp_user").value = "";
+            document.getElementById("old_password").value = "";
+            document.getElementById("new_password").value = "";
         }
-    );
 
-    const data = await response.json();
+    }catch(err){
 
-    alert(data.message);
+        console.log(err);
+
+        alert("Server error");
+    }
 }
 
-// close outside
 window.onclick = function(e){
 
     if(e.target.id === "modal"){
@@ -463,6 +486,156 @@ window.onclick = function(e){
     background: #00e676;
 
     color: black;
+}
+
+/* CHANGE PASSWORD BUTTON */
+
+.change-password-main-btn{
+
+    width: 100%;
+
+    height: 58px;
+
+    border-radius: 14px;
+
+    border: 2px solid #00e676;
+
+    background: transparent;
+
+    color: #00e676;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    margin-top: 12px;
+
+    transition: 0.2s;
+}
+
+.change-password-main-btn:hover{
+
+    background: #00e676;
+
+    color: black;
+}
+
+/* MODAL */
+
+.change-password-card{
+
+    width: 420px;
+
+    background: white;
+
+    border-radius: 24px;
+
+    padding: 35px;
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,0.35);
+}
+
+.change-title{
+
+    text-align: center;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    color: #111;
+
+    margin-bottom: 10px;
+}
+
+.change-input{
+
+    width: 100%;
+
+    height: 60px;
+
+    border-radius: 14px;
+
+    border: 2px solid #dcdcdc;
+
+    background: #f8f8f8;
+
+    padding: 0 20px;
+
+    font-size: 17px;
+
+    color: #111;
+
+    outline: none;
+
+    box-sizing: border-box;
+}
+
+.change-input::placeholder{
+
+    color: #888;
+}
+
+.change-input:focus{
+
+    border-color: #00d26a;
+
+    box-shadow:
+    0 0 10px rgba(0,210,106,0.25);
+}
+
+.change-btn{
+
+    width: 100%;
+
+    height: 60px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #00d26a;
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.change-btn:hover{
+
+    background: #00be60;
+}
+
+.close-btn{
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 20px;
+
+    font-size: 34px;
+
+    cursor: pointer;
+
+    color: #333;
 }
 
 @keyframes slideIn{
