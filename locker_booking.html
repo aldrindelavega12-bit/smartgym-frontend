@@ -1032,7 +1032,17 @@ async function loadMessageCount(){
         const badge =
             document.getElementById("msg-count");
 
-        badge.innerText = data.length;
+        const read =
+            localStorage.getItem("messages_read");
+
+        if(read === "true"){
+
+            badge.style.display = "none";
+
+        }else{
+
+            badge.innerText = data.length;
+        }
 
         // HIDE IF ZERO
         if(data.length === 0){

@@ -166,7 +166,14 @@ async function loadMessages(){
 
 
 // ================= INIT =================
+
 loadMessages();
+
+// CLEAR BADGE
+localStorage.setItem(
+    "messages_read",
+    "true"
+);
 
 </script>
 
