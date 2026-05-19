@@ -1098,29 +1098,64 @@ table{
     rgba(255,255,255,0.08) !important;
 }
 
+.card{
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    gap:14px;
+}
+
 .locker-status{
 
-    margin-top:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
 
-    font-size:14px;
-
+    font-size:15px;
     font-weight:700;
 
-    text-align:center;
+    margin-top:4px;
+}
+
+.status-dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
 }
 
 .available{
-    color:#00ff99;
+    color:#00ff88;
+}
+
+.available .status-dot{
+    background:#00ff88;
 }
 
 .inuse{
     color:#4da6ff;
 }
 
+.inuse .status-dot{
+    background:#4da6ff;
+}
+
 .reserved{
     color:#ffd54a;
 }
 
+.reserved .status-dot{
+    background:#ffd54a;
+}
+
 .overtime{
     color:#ff4d4d;
+}
+
+.overtime .status-dot{
+    background:#ff4d4d;
 }
