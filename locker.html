@@ -360,9 +360,10 @@ async function loadApproval(){
 
         const result = await res.json();
 
-        console.log("BOOKINGS:", result);
+        console.log("DATA:", result);
 
         const data = result.data || [];
+        console.log("FIRST:", data[0]);
 
         const table =
             document.getElementById("approval-body");
@@ -396,6 +397,12 @@ async function loadApproval(){
         // =========================
         let found = false;
         data.forEach(b => {
+
+            console.log(
+                "COMPARE:",
+                b.date,
+                selectedDate
+            );
 
             if(
                 selectedStatus &&
