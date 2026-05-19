@@ -340,18 +340,38 @@
 <h2>Book a Locker</h2>
 
 <!-- LOCKERS -->
-<div class="cards">
+<div class="card"
+     data-locker="1"
+     onclick="selectLocker(this,1)">
 
-    <div class="card" onclick="selectLocker(this,1)">
-        <h3>Locker 1</h3>
+    <h3>Locker 1</h3>
+
+    <div class="locker-status available">
+        ✅ Available
     </div>
 
-    <div class="card" onclick="selectLocker(this,2)">
-        <h3>Locker 2</h3>
+</div>
+
+<div class="card"
+     data-locker="2"
+     onclick="selectLocker(this,2)">
+
+    <h3>Locker 2</h3>
+
+    <div class="locker-status available">
+        ✅ Available
     </div>
 
-    <div class="card" onclick="selectLocker(this,3)">
-        <h3>Locker 3</h3>
+</div>
+
+<div class="card"
+     data-locker="3"
+     onclick="selectLocker(this,3)">
+
+    <h3>Locker 3</h3>
+
+    <div class="locker-status available">
+        ✅ Available
     </div>
 
 </div>
@@ -774,51 +794,50 @@ async function loadCurrentLockerStatus(){
         .querySelectorAll(".card")
         .forEach(card => {
 
-            const text =
-                card.innerText;
-
             const locker =
                 parseInt(
-                    text.replace(/\D/g,'')
+                    card.dataset.locker
                 );
 
             const status =
                 data[locker] || "AVAILABLE";
 
-            card.innerHTML = `
-                <h3>
-                    Locker ${locker}
-                </h3>
+            const statusDiv =
+                card.querySelector(
+                    ".locker-status"
+                );
 
-                <div class="
-                    locker-status
-                    ${
-                        status === "OVERTIME"
-                        ? "overtime"
+            const statusClass =
 
-                        : status === "IN_USE"
-                        ? "inuse"
+                status === "OVERTIME"
+                ? "overtime"
 
-                        : status === "RESERVED"
-                        ? "reserved"
+                : status === "IN_USE"
+                ? "inuse"
 
-                        : "available"
-                    }
-                ">
-                    ${
-                        status === "OVERTIME"
-                        ? "🔴 Overtime"
+                : status === "RESERVED"
+                ? "reserved"
 
-                        : status === "IN_USE"
-                        ? "🔵 In Use"
+                : "available";
 
-                        : status === "RESERVED"
-                        ? "🟡 Reserved"
+            const statusText =
 
-                        : "✅ Available"
-                    }
-                </div>
-            `;
+                status === "OVERTIME"
+                ? "🔴 Overtime"
+
+                : status === "IN_USE"
+                ? "🔵 In Use"
+
+                : status === "RESERVED"
+                ? "🟡 Reserved"
+
+                : "✅ Available";
+
+            statusDiv.className =
+                `locker-status ${statusClass}`;
+
+            statusDiv.innerHTML =
+                statusText;
         });
 
     }catch(err){
