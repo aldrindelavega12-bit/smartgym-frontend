@@ -802,9 +802,12 @@ async function loadCurrentLockerStatus(){
         .forEach(card => {
 
             const locker =
-                parseInt(
-                    card.dataset.locker
-                );
+                card.dataset.locker;
+
+            console.log(
+                locker,
+                data[locker]
+            );
 
             const status =
                 data[locker] || "AVAILABLE";
