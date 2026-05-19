@@ -1159,3 +1159,79 @@ table{
 .overtime .status-dot{
     background:#ff4d4d;
 }
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 18px 30px;
+
+    background: white;
+
+    box-shadow:
+    0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* MENU */
+.menu{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 35px;
+}
+
+/* LINKS */
+.menu a{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    text-decoration: none;
+
+    color: #2f3640;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.menu a:hover{
+
+    color: #6c5ce7;
+}
+
+/* LOGOUT */
+.logout-btn{
+
+    background: #2f3640;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.logout-btn:hover{
+
+    opacity: 0.9;
+}
