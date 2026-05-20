@@ -2,107 +2,114 @@
 <html>
 <head>
     <title>Messages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-<!-- 🔒 PROTECT -->
 <script>
-
-const user =
-    JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("user"));
 
 if(!user || user.role !== "member"){
-
     window.location.href = "index.html";
 }
-
 </script>
 
-<!-- NAVBAR -->
 <div class="navbar">
-
     <h2>SMART GYM</h2>
 
     <div class="menu">
-
         <a href="member.html">
-            <i class="fa-solid fa-house"></i>
-            Home
+            <i class="fa-solid fa-house"></i> Home
         </a>
 
         <a href="member_messages.html" class="msg-link">
-
             <i class="fa-solid fa-envelope"></i>
-
             Messages
-
-            <span id="msg-count" class="msg-count">
-                0
-            </span>
-
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
         <a href="workouts.html">
-            <i class="fa-solid fa-dumbbell"></i>
-            Suggested Workout
+            <i class="fa-solid fa-dumbbell"></i> Suggested Workout
         </a>
 
         <a href="locker_booking.html">
-            <i class="fa-solid fa-lock"></i>
-            Book Locker
+            <i class="fa-solid fa-lock"></i> Book Locker
         </a>
 
         <a href="membership.html">
-            <i class="fa-solid fa-id-card"></i>
-            Membership
+            <i class="fa-solid fa-id-card"></i> Membership
         </a>
-
     </div>
-
 </div>
 
-<!-- MAIN -->
 <div class="layout">
 <div class="main">
 
     <div class="section">
-
         <h2>Messages</h2>
 
-        <!-- 🔥 MESSAGE CONTAINER -->
         <div id="message-list">
-
             <p>No messages</p>
-
         </div>
-
     </div>
 
 </div>
 </div>
 
-<!-- SCRIPT -->
-<script>
+<audio id="notifSound">
+    <source src="notif.mp3" type="audio/mpeg">
+</audio>
 
-const API_URL =
-"https://smartgym-api-ia2e.onrender.com";
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+const socket = io(API_URL, {
+    transports: ["websocket"]
+});
+
+let lastCount = 0;
+
+// ================= LOAD COUNT =================
+async function loadMessageCount(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/messages_count/${user.id}`
+        );
+
+        const data = await res.json();
+
+        const badge = document.getElementById("msg-count");
+
+        if(data.count > 0){
+            badge.style.display = "flex";
+            badge.innerText = data.count;
+        }else{
+            badge.style.display = "none";
+        }
+
+        if(data.count > lastCount && lastCount !== 0){
+            document.getElementById("notifSound").play();
+        }
+
+        lastCount = data.count;
+
+    }catch(err){
+        console.log(err);
+    }
+}
 
 
 // ================= LOAD MESSAGES =================
 async function loadMessages(){
-
-    const user =
-        JSON.parse(localStorage.getItem("user"));
 
     try{
 
@@ -112,46 +119,54 @@ async function loadMessages(){
 
         const data = await res.json();
 
-        const container =
-            document.getElementById("message-list");
+        const container = document.getElementById("message-list");
 
         container.innerHTML = "";
 
-        // NO DATA
         if(data.length === 0){
-
-            container.innerHTML = `
-                <p>No messages</p>
-            `;
-
+            container.innerHTML = `<p>No messages</p>`;
             return;
         }
 
-        // LOOP
         data.forEach(msg => {
 
             container.innerHTML += `
 
-                 <div class="msg-card">
+                <div class="msg-card ${msg.is_read == 0 ? 'unread' : ''}">
 
-                    <h3>
-                        ${msg.title}
-                    </h3>
+                    <div class="msg-top">
 
-                    <p>
-                        ${msg.message}
-                    </p>
+                        <h3>${msg.title}</h3>
+
+                        <div class="dots" onclick="toggleMenu(${msg.id})">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+
+                        <div class="msg-menu" id="menu-${msg.id}">
+
+                            <button onclick="deleteMessage(${msg.id})">
+                                Delete
+                            </button>
+
+                            <button onclick="markRead(${msg.id})">
+                                Mark as Read
+                            </button>
+
+                            <button onclick="markUnread(${msg.id})">
+                                Mark as Unread
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p>${msg.message}</p>
 
                     <p class="reason">
-
-                        Reason:
-                        ${msg.reason || "-"}
-
+                        Reason: ${msg.reason || "-"}
                     </p>
 
-                    <small>
-                        ${msg.created_at}
-                    </small>
+                    <small>${msg.created_at}</small>
 
                 </div>
 
@@ -159,101 +174,185 @@ async function loadMessages(){
         });
 
     }catch(err){
-
         console.log(err);
     }
 }
 
 
+// ================= TOGGLE 3 DOT MENU =================
+function toggleMenu(id){
+
+    document.querySelectorAll(".msg-menu").forEach(menu => {
+        if(menu.id !== `menu-${id}`){
+            menu.style.display = "none";
+        }
+    });
+
+    const menu = document.getElementById(`menu-${id}`);
+
+    menu.style.display =
+        menu.style.display === "block"
+        ? "none"
+        : "block";
+}
+
+
+// ================= MARK READ =================
+async function markRead(id){
+
+    await fetch(`${API_URL}/api/messages_read_single/${id}`, {
+        method: "POST"
+    });
+
+    loadMessages();
+    loadMessageCount();
+}
+
+
+// ================= MARK UNREAD =================
+async function markUnread(id){
+
+    await fetch(`${API_URL}/api/messages_unread_single/${id}`, {
+        method: "POST"
+    });
+
+    loadMessages();
+    loadMessageCount();
+}
+
+
+// ================= DELETE =================
+async function deleteMessage(id){
+
+    if(!confirm("Delete this message?")) return;
+
+    await fetch(`${API_URL}/api/messages_delete/${id}`, {
+        method: "DELETE"
+    });
+
+    loadMessages();
+    loadMessageCount();
+}
+
+
+// ================= SOCKET NOTIF =================
+socket.on("member_message", data => {
+
+    if(data.user_id === user.id){
+
+        document.getElementById("notifSound").play();
+
+        loadMessages();
+        loadMessageCount();
+    }
+});
+
+
 // ================= INIT =================
-
 loadMessages();
-
-// CLEAR BADGE
-localStorage.setItem(
-    "messages_read",
-    "true"
-);
+loadMessageCount();
 
 </script>
 
-<!-- STYLE -->
 <style>
 
 .msg-card{
-
+    position: relative;
     background: rgba(255,255,255,0.08);
-
     border: 1px solid rgba(255,255,255,0.1);
-
     backdrop-filter: blur(10px);
-
     padding: 15px;
-
     border-radius: 12px;
-
     margin-bottom: 15px;
-
     color: white;
 }
 
+.msg-card.unread{
+    border-left: 5px solid #4da3ff;
+}
+
+.msg-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
 .msg-card h3{
-
     color: #4da3ff;
-
     margin-bottom: 10px;
 }
 
 .msg-card p{
-
     color: white;
-
     margin-bottom: 10px;
 }
 
 .msg-card small{
-
     color: #cfcfcf;
 }
 
 .reason{
-
     color: #ff8b8b;
-
     font-weight: bold;
 }
 
-.msg-link{
+.dots{
+    cursor: pointer;
+    padding: 8px;
+    font-size: 18px;
+}
 
+.msg-menu{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 8px;
+    z-index: 999;
+    width: 150px;
+}
+
+.msg-menu button{
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.msg-menu button:hover{
+    background: rgba(255,255,255,0.1);
+}
+
+.msg-link{
     position: relative;
 }
 
 .msg-count{
-
     position: absolute;
-
     top: -8px;
     right: -12px;
-
     background: red;
-
     color: white;
-
     min-width: 18px;
     height: 18px;
-
     border-radius: 50%;
-
     font-size: 11px;
-
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
-
     font-weight: bold;
-
     padding: 2px;
 }
+
 </style>
 
 </body>
