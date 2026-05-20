@@ -70,6 +70,9 @@ if(!user || user.role !== "member"){
 <script>
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
+const memberId =
+    user.id || user.user_id;
+
 const socket = io(API_URL, {
     transports: ["websocket"]
 });
@@ -82,7 +85,7 @@ async function loadMessageCount(){
     try{
 
         const res = await fetch(
-            `${API_URL}/api/messages_count/${user.id}`
+            `${API_URL}/api/messages_count/${memberId}`
         );
 
         const data = await res.json();
@@ -114,7 +117,7 @@ async function loadMessages(){
     try{
 
         const res = await fetch(
-            `${API_URL}/api/messages/${user.id}`
+            `${API_URL}/api/messages/${memberId}`
         );
 
         const data = await res.json();
@@ -238,7 +241,7 @@ async function deleteMessage(id){
 // ================= SOCKET NOTIF =================
 socket.on("member_message", data => {
 
-    if(data.user_id === user.id){
+    if(data.user_id === memberId){
 
         document.getElementById("notifSound").play();
 
