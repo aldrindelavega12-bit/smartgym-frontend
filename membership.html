@@ -90,14 +90,15 @@
 
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(!user || user.role !== "member"){
+    window.location.href = "index.html";
+}
+
+
+
 async function loadMembership(){
-
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if(!user){
-        window.location.href = "index.html";
-        return;
-    }
 
     try{
         const res = await fetch(`${API_URL}/api/membership/${user.id}`);
@@ -319,32 +320,7 @@ tbody tr:hover{
     position: relative;
 }
 
-.msg-count{
 
-    position: absolute;
-
-    top: -10px;
-    right: -14px;
-
-    background: red;
-
-    color: white;
-
-    min-width: 18px;
-    height: 18px;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    padding: 2px;
-}
 </style>
 
 

@@ -287,6 +287,14 @@ window.onclick = function(e){
         document.getElementById("dropdown").style.display = "none";
     }
 }
+
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(!user || user.role !== "member"){
+    window.location.href = "index.html";
+}
 // ================= MESSAGE COUNT =================
 const memberId = user.id || user.user_id;
 
