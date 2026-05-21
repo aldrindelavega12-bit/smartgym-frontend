@@ -206,6 +206,15 @@ socket.on("new_booking", (data) => {
 
     loadMessages();
 });
+socket.on("new_message", () => {
+    console.log("NEW MESSAGE RECEIVED");
+    loadMessages();
+});
+
+socket.on("priority_alert", (data) => {
+    console.log("PRIORITY ALERT RECEIVED", data);
+    loadMessages();
+});
 
 
 // ================= SOCKET =================
