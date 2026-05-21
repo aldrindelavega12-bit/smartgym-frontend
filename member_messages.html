@@ -47,6 +47,25 @@ if(!user || user.role !== "member"){
     </div>
 </div>
 
+<!-- MESSAGE POPUP -->
+<div id="messageModal" class="modal">
+    <div class="modal-box">
+
+        <button class="modal-close" onclick="closeMessage()">
+            ×
+        </button>
+
+        <h2 id="modalTitle"></h2>
+
+        <p id="modalMessage"></p>
+
+        <p id="modalReason" class="reason"></p>
+
+        <small id="modalDate"></small>
+
+    </div>
+</div>
+
 <div class="layout">
 <div class="main">
 
@@ -136,7 +155,7 @@ async function loadMessages(){
             container.innerHTML += `
 
                 <div class="msg-card ${msg.is_read == 0 ? 'unread' : ''}"
-                    onclick="viewMessage(${msg.id})">
+                    onclick='openMessage(${JSON.stringify(msg)})'>
 
                     <div class="msg-top">
 
@@ -182,7 +201,36 @@ async function loadMessages(){
     }
 }
 
+async function openMessage(msg){
 
+    document.getElementById("modalTitle").innerText =
+        msg.title;
+
+    document.getElementById("modalMessage").innerText =
+        msg.message;
+
+    document.getElementById("modalReason").innerText =
+        "Reason: " + (msg.reason || "-");
+
+    document.getElementById("modalDate").innerText =
+        msg.created_at;
+
+    document.getElementById("messageModal").style.display =
+        "flex";
+
+    await fetch(`${API_URL}/api/messages_read_single/${msg.id}`, {
+        method: "POST"
+    });
+
+    loadMessageCount();
+    loadMessages();
+}
+
+function closeMessage(){
+
+    document.getElementById("messageModal").style.display =
+        "none";
+}
 // ================= TOGGLE 3 DOT MENU =================
 function toggleMenu(id){
 
@@ -267,6 +315,51 @@ loadMessageCount();
 </script>
 
 <style>
+
+.modal{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-box{
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    background: #111827;
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.modal-close{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.modal-box h2{
+    color: #4da3ff;
+    margin-bottom: 15px;
+}
+
+.modal-box p{
+    margin-bottom: 12px;
+}
+
+.modal-box small{
+    color: #cfcfcf;
+}
 
 .msg-card{
     position: relative;

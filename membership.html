@@ -160,6 +160,15 @@ async function loadMembership(){
 }
 
 // ================= MESSAGE COUNT =================
+
+// CLEAN TYPE
+function cleanType(type){
+    if(!type) return "N/A";
+    return type.replace("membership-", "").toUpperCase();
+}
+
+loadMembership();
+
 const memberId = user.id || user.user_id;
 
 async function loadMessageCount(){
@@ -187,14 +196,6 @@ async function loadMessageCount(){
 }
 
 loadMessageCount();
-
-// CLEAN TYPE
-function cleanType(type){
-    if(!type) return "N/A";
-    return type.replace("membership-", "").toUpperCase();
-}
-
-loadMembership();
 
 </script>
 
