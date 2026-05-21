@@ -135,27 +135,28 @@ async function loadMessages(){
 
             container.innerHTML += `
 
-                <div class="msg-card ${msg.is_read == 0 ? 'unread' : ''}">
+                <div class="msg-card ${msg.is_read == 0 ? 'unread' : ''}"
+                    onclick="viewMessage(${msg.id})">
 
                     <div class="msg-top">
 
                         <h3>${msg.title}</h3>
 
-                        <div class="dots" onclick="toggleMenu(${msg.id})">
+                        <div class="dots" onclick="event.stopPropagation(); toggleMenu(${msg.id})">
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </div>
 
                         <div class="msg-menu" id="menu-${msg.id}">
 
-                            <button onclick="deleteMessage(${msg.id})">
+                            <button onclick="event.stopPropagation(); deleteMessage(${msg.id})">
                                 Delete
                             </button>
 
-                            <button onclick="markRead(${msg.id})">
+                            <button onclick="event.stopPropagation(); markRead(${msg.id})">
                                 Mark as Read
                             </button>
 
-                            <button onclick="markUnread(${msg.id})">
+                            <button onclick="event.stopPropagation(); markUnread(${msg.id})">
                                 Mark as Unread
                             </button>
 
@@ -211,7 +212,15 @@ async function markRead(id){
     loadMessageCount();
 }
 
+async function viewMessage(id){
 
+    await fetch(`${API_URL}/api/messages_read_single/${id}`, {
+        method: "POST"
+    });
+
+    loadMessages();
+    loadMessageCount();
+}
 // ================= MARK UNREAD =================
 async function markUnread(id){
 

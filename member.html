@@ -37,20 +37,10 @@ if (!user || user.role !== "member") {
             Home
         </a>
 
-        <a href="member_messages.html"
-            class="msg-link">
-
+        <a href="member_messages.html" class="msg-link">
             <i class="fa-solid fa-envelope"></i>
-
             Messages
-
-            <span id="msg-count"
-                class="msg-count">
-
-                0
-
-             </span>
-
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
         <a href="workouts.html">
@@ -220,51 +210,58 @@ window.onclick = function(e){
 }
 
 // ================= MESSAGE COUNT =================
+const memberId = user.id || user.user_id;
+
 async function loadMessageCount(){
 
     try{
 
         const res = await fetch(
-            `${API_URL}/api/messages/${userData.id}`
+            `${API_URL}/api/messages_count/${memberId}`
         );
 
         const data = await res.json();
 
-        const badge =
-            document.getElementById("msg-count");
+        const badge = document.getElementById("msg-count");
 
-        const read =
-            localStorage.getItem("messages_read");
-
-        if(read === "true"){
-
-            badge.style.display = "none";
-
+        if(data.count > 0){
+            badge.style.display = "flex";
+            badge.innerText = data.count;
         }else{
-
-            badge.innerText = data.length;
-        }
-
-        // HIDE IF ZERO
-        if(data.length === 0){
-
             badge.style.display = "none";
         }
 
     }catch(err){
-
         console.log(err);
     }
 }
 
-
-// LOAD COUNT
 loadMessageCount();
-
 </script>
 
 <!-- STYLE -->
 <style>
+
+.msg-link{
+    position: relative;
+}
+
+.msg-count{
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background: red;
+    color: white;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 11px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    padding: 2px;
+}
 
 .profile{
     position: relative;
