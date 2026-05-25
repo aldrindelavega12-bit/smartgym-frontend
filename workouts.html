@@ -397,6 +397,53 @@ loadMessageCount();
 </script>
 
 <style>
+
+/* 🔔 NOTIFICATION POPUP */
+.notif-popup{
+    position: fixed;
+    top: 80px;
+    right: 25px;
+
+    width: 280px;
+
+    background: #111827;
+    color: white;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-left: 5px solid #4da3ff;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    z-index: 99999;
+
+    opacity: 0;
+    transform: translateX(120%);
+
+    transition: 0.3s ease;
+
+    cursor: pointer;
+}
+
+.notif-popup.show{
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notif-popup b{
+    color: #4da3ff;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.notif-popup p{
+    margin: 0;
+    font-size: 14px;
+}
+
 .msg-link{
     position: relative;
 }
