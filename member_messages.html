@@ -233,11 +233,7 @@ async function loadMessages(){
                         <div>
                             <h3>${msg.title}</h3>
 
-                            ${
-                                msg.is_read == 0
-                                ? '<span class="unread-badge">Unread</span>'
-                                : ''
-                            }
+                            ${Number(msg.is_read) === 0 ? '<span class="unread-badge">NEW / UNREAD</span>' : ''}
                         </div>
 
                         <div class="dots"
@@ -395,16 +391,27 @@ loadMessageCount();
 
 /* READ MESSAGE */
 .msg-card{
-    opacity: 0.65;
+    opacity: 0.55;
+    background: rgba(255,255,255,0.06);
 }
 
-/* UNREAD MESSAGE */
 .msg-card.unread{
-    opacity: 1 !important;
-    border: 2px solid #4da3ff !important;
-    border-left: 10px solid #4da3ff !important;
-    background: rgba(77,163,255,0.25) !important;
-    box-shadow: 0 0 20px rgba(77,163,255,0.45) !important;
+    opacity: 1;
+    border-left: 6px solid #4da3ff;
+    background: rgba(77,163,255,0.18);
+    box-shadow: 0 0 18px rgba(77,163,255,0.35);
+}
+
+.unread-badge{
+    display: inline-block;
+    background: #4da3ff;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 9px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
 }
 
 .msg-card.unread h3{
@@ -424,18 +431,6 @@ loadMessageCount();
     margin-bottom: 10px;
 }
 
-
-
-.unread-badge{
-    display: inline-block;
-    background: #4da3ff;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 4px 8px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-}
 
 .msg-top{
     display: flex;
