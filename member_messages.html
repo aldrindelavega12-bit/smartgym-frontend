@@ -225,7 +225,7 @@ async function loadMessages(){
 
             container.innerHTML += `
 
-                <div class="msg-card ${msg.is_read == 0 ? 'unread' : ''}"
+                <div class="msg-card ${Number(msg.is_read) === 0 ? 'unread' : ''}"
                     onclick='openMessage(${JSON.stringify(msg)})'>
 
                     <div class="msg-top">
@@ -392,6 +392,37 @@ loadMessageCount();
 </script>
 
 <style>
+
+/* READ MESSAGE */
+.msg-card{
+    opacity: 0.65;
+}
+
+/* UNREAD MESSAGE */
+.msg-card.unread{
+    opacity: 1 !important;
+    border: 2px solid #4da3ff !important;
+    border-left: 10px solid #4da3ff !important;
+    background: rgba(77,163,255,0.25) !important;
+    box-shadow: 0 0 20px rgba(77,163,255,0.45) !important;
+}
+
+.msg-card.unread h3{
+    color: #7cc0ff !important;
+    font-weight: 900;
+}
+
+.msg-card.unread::before{
+    content: "UNREAD";
+    display: inline-block;
+    background: #4da3ff;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
 
 
 
