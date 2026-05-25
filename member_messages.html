@@ -79,6 +79,10 @@ if(!user || user.role !== "member"){
 
 </div>
 </div>
+<div id="notifPopup" class="notif-popup" onclick="goMessages()">
+    <b id="notifTitle">New Message</b>
+    <p id="notifText">You have a new message</p>
+</div>
 
 <audio id="notifSound">
     <source src="notif.mp3" type="audio/mpeg">
@@ -95,6 +99,73 @@ const memberId =
 const socket = io(API_URL, {
     transports: ["websocket"]
 });
+
+let lastMessageCount = 0;
+let firstLoad = true;
+
+async function checkNewMessage(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/messages_count/${memberId}`
+        );
+
+        const data = await res.json();
+
+        const count = data.count || 0;
+
+        const badge =
+            document.getElementById("msg-count");
+
+        if(count > 0){
+            badge.style.display = "flex";
+            badge.innerText = count;
+        }else{
+            badge.style.display = "none";
+        }
+
+        if(!firstLoad && count > lastMessageCount){
+
+            showNotifPopup(
+                "New Message",
+                "You received a new gym notification."
+            );
+        }
+
+        lastMessageCount = count;
+        firstLoad = false;
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
+function showNotifPopup(title, text){
+
+    const popup =
+        document.getElementById("notifPopup");
+
+    document.getElementById("notifTitle").innerText =
+        title;
+
+    document.getElementById("notifText").innerText =
+        text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 4000);
+}
+
+function goMessages(){
+    window.location.href = "member_messages.html";
+}
+
+checkNewMessage();
+
+setInterval(checkNewMessage, 3000);
 
 let lastCount = 0;
 
@@ -456,6 +527,50 @@ loadMessageCount();
     justify-content: center;
     font-weight: bold;
     padding: 2px;
+}
+.notif-popup{
+    position: fixed;
+    top: 80px;
+    right: 25px;
+
+    width: 280px;
+
+    background: #111827;
+    color: white;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-left: 5px solid #4da3ff;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    z-index: 99999;
+
+    opacity: 0;
+    transform: translateX(120%);
+
+    transition: 0.3s ease;
+
+    cursor: pointer;
+}
+
+.notif-popup.show{
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notif-popup b{
+    color: #4da3ff;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.notif-popup p{
+    margin: 0;
+    font-size: 14px;
 }
 
 </style>
