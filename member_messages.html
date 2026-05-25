@@ -230,28 +230,19 @@ async function loadMessages(){
 
                     <div class="msg-top">
 
-                        <h3>${msg.title}</h3>
+                        <div>
+                            <h3>${msg.title}</h3>
 
-                        ${msg.is_read == 0 ? '<span class="unread-badge">Unread</span>' : ''}
-
-                        <div class="dots" onclick="event.stopPropagation(); toggleMenu(${msg.id})">
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                            ${
+                                msg.is_read == 0
+                                ? '<span class="unread-badge">Unread</span>'
+                                : ''
+                            }
                         </div>
 
-                        <div class="msg-menu" id="menu-${msg.id}">
-
-                            <button onclick="event.stopPropagation(); deleteMessage(${msg.id})">
-                                Delete
-                            </button>
-
-                            <button onclick="event.stopPropagation(); markRead(${msg.id})">
-                                Mark as Read
-                            </button>
-
-                            <button onclick="event.stopPropagation(); markUnread(${msg.id})">
-                                Mark as Unread
-                            </button>
-
+                        <div class="dots"
+                            onclick="event.stopPropagation(); toggleMenu(${msg.id})">
+                            ⋮
                         </div>
 
                     </div>
@@ -264,8 +255,21 @@ async function loadMessages(){
 
                     <small>${msg.created_at}</small>
 
-                </div>
+                    <div id="menu-${msg.id}" class="msg-menu">
+                        <button onclick="event.stopPropagation(); deleteMessage(${msg.id})">
+                            Delete
+                        </button>
 
+                        <button onclick="event.stopPropagation(); markRead(${msg.id})">
+                            Mark as Read
+                        </button>
+
+                        <button onclick="event.stopPropagation(); markUnread(${msg.id})">
+                            Mark as Unread
+                        </button>
+                    </div>
+
+                </div>
             `;
         });
 
@@ -395,10 +399,6 @@ loadMessageCount();
     box-shadow: 0 0 18px rgba(77,163,255,0.25);
 }
 
-.msg-card.unread h3{
-    color: #7cc0ff;
-}
-
 .unread-badge{
     display: inline-block;
     background: #4da3ff;
@@ -408,6 +408,33 @@ loadMessageCount();
     padding: 4px 8px;
     border-radius: 20px;
     margin-bottom: 10px;
+}
+
+.msg-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.dots{
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.msg-menu{
+    display: none;
+    margin-top: 10px;
+}
+
+.msg-menu button{
+    display: block;
+    width: 140px;
+    margin-bottom: 5px;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .modal{
