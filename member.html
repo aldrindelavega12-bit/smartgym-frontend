@@ -146,6 +146,11 @@ if (!user || user.role !== "member") {
 </div>
 </div>
 
+<div id="notifPopup" class="notif-popup" onclick="goMessages()">
+    <b id="notifTitle">New Message</b>
+    <p id="notifText">You have a new message</p>
+</div>
+
 <!-- SCRIPT -->
 <script>
 
@@ -237,6 +242,73 @@ async function loadMessageCount(){
 }
 
 loadMessageCount();
+
+let lastMessageCount = 0;
+let firstLoad = true;
+
+async function checkNewMessage(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/messages_count/${memberId}`
+        );
+
+        const data = await res.json();
+
+        const count = data.count || 0;
+
+        const badge =
+            document.getElementById("msg-count");
+
+        if(count > 0){
+            badge.style.display = "flex";
+            badge.innerText = count;
+        }else{
+            badge.style.display = "none";
+        }
+
+        if(!firstLoad && count > lastMessageCount){
+
+            showNotifPopup(
+                "New Message",
+                "You received a new gym notification."
+            );
+        }
+
+        lastMessageCount = count;
+        firstLoad = false;
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
+function showNotifPopup(title, text){
+
+    const popup =
+        document.getElementById("notifPopup");
+
+    document.getElementById("notifTitle").innerText =
+        title;
+
+    document.getElementById("notifText").innerText =
+        text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 4000);
+}
+
+function goMessages(){
+    window.location.href = "member_messages.html";
+}
+
+checkNewMessage();
+
+setInterval(checkNewMessage, 3000);
 </script>
 
 <!-- STYLE -->
