@@ -302,6 +302,48 @@ function closeMessage(){
     ).style.display = "none";
 }
 
+async function markRead(id){
+
+    await fetch(
+        `${API_URL}/api/message_read/${id}`,
+        {
+            method:"POST"
+        }
+    );
+
+    loadMessages();
+}
+async function deleteMessage(id){
+
+    if(
+        !confirm(
+            "Delete this message?"
+        )
+    ) return;
+
+    await fetch(
+        `${API_URL}/api/delete_message/${id}`,
+        {
+            method:"DELETE"
+        }
+    );
+
+    loadMessages();
+}
+
+async function markUnread(id){
+
+    await fetch(
+        `${API_URL}/api/message_unread/${id}`,
+        {
+            method:"POST"
+        }
+    );
+
+    loadMessages();
+}
+
+
 function toggleMenu(id){
 
     const menu =
