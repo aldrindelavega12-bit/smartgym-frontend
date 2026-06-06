@@ -44,7 +44,6 @@ if (!user) {
                 <th>Type</th>
                 <th>Time In</th>
                 <th>Time Out</th>
-                <th>Locker</th>
                 <th>Remarks</th>
             </tr>
         </thead>
@@ -175,7 +174,6 @@ async function loadAttendance(){
                 <td>${row.type}</td>
                 <td>${row.time_in}</td>
                 <td>${row.time_out}</td>
-                <td>${row.locker}</td>
                 <td class="${getColor(row.remarks)}">${row.remarks}</td>
             `;
 
