@@ -211,22 +211,22 @@ async function loadMessages(){
                             id="menu-${msg.id}"
                             class="msg-menu">
 
-                            <button
-                                onclick="
+                            <button onclick="
+                                event.stopPropagation();
                                 markRead(${msg.id})
                                 ">
                                 Mark Read
                             </button>
 
-                            <button
-                                onclick="
+                            <button onclick="
+                                event.stopPropagation();
                                 markUnread(${msg.id})
                                 ">
                                 Mark Unread
                             </button>
 
-                            <button
-                                onclick="
+                            <button onclick="
+                                event.stopPropagation();
                                 deleteMessage(${msg.id})
                                 ">
                                 Delete
@@ -330,6 +330,15 @@ async function deleteMessage(id){
 
     loadMessages();
 }
+document.addEventListener("click", () => {
+
+    document
+        .querySelectorAll(".msg-menu")
+        .forEach(menu => {
+
+            menu.classList.remove("show");
+        });
+});
 
 async function markUnread(id){
 
@@ -408,10 +417,9 @@ socket.on("connect", () => {
 
     transition:.3s;
 }
-
 .msg-card.unread{
 
-    border-left:6px solid #4da3ff;
+    border-left: 6px solid #4da3ff;
 
     background:
         rgba(77,163,255,.15);
@@ -420,6 +428,7 @@ socket.on("connect", () => {
         0 0 15px
         rgba(77,163,255,.25);
 }
+
 
 .unread-badge{
 
@@ -514,6 +523,32 @@ socket.on("connect", () => {
     cursor:pointer;
 }
 
+.msg-actions{
+    position:relative;
+}
+.msg-menu button{
+
+    display:block;
+
+    width:100%;
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    padding:10px 15px;
+
+    text-align:left;
+
+    cursor:pointer;
+}
+
+.msg-menu button:hover{
+
+    background:#222;
+}
 </style>
 
 </body>
