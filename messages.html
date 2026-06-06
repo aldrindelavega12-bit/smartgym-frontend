@@ -43,6 +43,25 @@ if (!user) {
 
     </div>
 </div>
+<div id="messageModal" class="modal">
+
+    <div class="modal-content">
+
+        <button
+            class="close-btn"
+            onclick="closeMessage()">
+            ×
+        </button>
+
+        <h2 id="modalTitle"></h2>
+
+        <p id="modalMessage"></p>
+
+        <small id="modalDate"></small>
+
+    </div>
+
+</div>
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
@@ -134,6 +153,8 @@ async function loadMessages(){
 
         const data = await res.json();
 
+        currentMessages = data;
+
         const list =
             document.getElementById(
                 "messages-list"
@@ -154,26 +175,74 @@ async function loadMessages(){
         // LOOP
         data.forEach(msg => {
 
+            const unreadClass =
+                msg.is_read == 0
+                ? "unread"
+                : "";
+
+            const badge =
+                msg.is_read == 0
+                ? `<span class="unread-badge">
+                        NEW
+                </span>`
+                : "";
+
             list.innerHTML += `
 
-                <li class="msg-card">
+            <li class="msg-card ${unreadClass}"
+                onclick="openMessage(${msg.id})">
 
-                    <b>
-                        ${msg.title}
-                    </b>
+                <div class="msg-header">
 
-                    <br><br>
+                    <b>${msg.title}</b>
 
-                    ${msg.message}
+                    ${badge}
 
-                    <br><br>
+                    <div class="msg-actions">
 
-                    <small>
-                        ${msg.created_at}
-                    </small>
+                        <i class="fa-solid fa-ellipsis-vertical"
+                        onclick="
+                        event.stopPropagation();
+                        toggleMenu(${msg.id})
+                        ">
+                        </i>
 
-                </li>
+                        <div
+                            id="menu-${msg.id}"
+                            class="msg-menu">
 
+                            <button
+                                onclick="
+                                markRead(${msg.id})
+                                ">
+                                Mark Read
+                            </button>
+
+                            <button
+                                onclick="
+                                markUnread(${msg.id})
+                                ">
+                                Mark Unread
+                            </button>
+
+                            <button
+                                onclick="
+                                deleteMessage(${msg.id})
+                                ">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <p>${msg.message}</p>
+
+                <small>${msg.created_at}</small>
+
+            </li>
             `;
         });
 
@@ -195,6 +264,53 @@ function clearMessages(){
 
 // ================= INIT =================
 loadMessages();
+
+let currentMessages = [];
+
+function openMessage(id){
+
+    const msg =
+        currentMessages.find(
+            m => m.id == id
+        );
+
+    if(!msg) return;
+
+    document.getElementById(
+        "modalTitle"
+    ).innerText = msg.title;
+
+    document.getElementById(
+        "modalMessage"
+    ).innerText = msg.message;
+
+    document.getElementById(
+        "modalDate"
+    ).innerText = msg.created_at;
+
+    document.getElementById(
+        "messageModal"
+    ).style.display = "flex";
+
+    markRead(id);
+}
+
+function closeMessage(){
+
+    document.getElementById(
+        "messageModal"
+    ).style.display = "none";
+}
+
+function toggleMenu(id){
+
+    const menu =
+        document.getElementById(
+            `menu-${id}`
+        );
+
+    menu.classList.toggle("show");
+}
 
 // ================= REALTIME =================
 socket.on("new_booking", (data) => {
@@ -225,32 +341,135 @@ socket.on("connect", () => {
     );
 });
 
+
 </script>
 
 <style>
 
 .msg-card{
 
-    list-style: none;
+    list-style:none;
 
-    background: rgba(255,255,255,0.08);
+    background:rgba(255,255,255,.08);
 
-    border: 1px solid rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,.1);
 
-    backdrop-filter: blur(10px);
+    border-radius:14px;
 
-    padding: 15px;
+    padding:18px;
 
-    border-radius: 12px;
+    margin-bottom:15px;
 
-    margin-bottom: 15px;
+    color:white;
 
-    color: white;
+    cursor:pointer;
+
+    transition:.3s;
 }
 
-.msg-card small{
+.msg-card.unread{
 
-    color: #cfcfcf;
+    border-left:6px solid #4da3ff;
+
+    background:
+        rgba(77,163,255,.15);
+
+    box-shadow:
+        0 0 15px
+        rgba(77,163,255,.25);
+}
+
+.unread-badge{
+
+    background:#4da3ff;
+
+    color:white;
+
+    padding:4px 10px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:bold;
+}
+
+.msg-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.msg-menu{
+
+    display:none;
+
+    position:absolute;
+
+    right:0;
+
+    top:25px;
+
+    background:#111;
+
+    border-radius:10px;
+
+    overflow:hidden;
+}
+
+.msg-menu.show{
+    display:block;
+}
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.7);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+}
+
+.modal-content{
+
+    background:#111;
+
+    width:90%;
+
+    max-width:600px;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    color:white;
+}
+
+.close-btn{
+
+    float:right;
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    font-size:25px;
+
+    cursor:pointer;
 }
 
 </style>
