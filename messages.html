@@ -85,9 +85,17 @@ if(user.role === "admin"){
     </a>
 
     <a href="messages.html" class="msg-link">
+
         <i class="fa-solid fa-envelope"></i>
+
         Messages
-        <span id="msg-count" class="msg-count">0</span>
+
+        <span
+            id="msg-count"
+            class="msg-count">
+            0
+        </span>
+
     </a>
 
     <a href="attendance.html">
@@ -122,9 +130,18 @@ if(user.role === "admin"){
             Home
         </a>
 
-        <a href="messages.html">
-            <i class="fa-regular fa-comment"></i>
+        <a href="messages.html" class="msg-link">
+
+            <i class="fa-solid fa-envelope"></i>
+
             Messages
+
+            <span
+                id="msg-count"
+                class="msg-count">
+                0
+            </span>
+
         </a>
 
         <a href="attendance.html">
@@ -422,14 +439,7 @@ loadMessageCount();
 <style>
 
 .msg-link{
-
     position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
 }
 
 .msg-count{
@@ -437,24 +447,22 @@ loadMessageCount();
     position:absolute;
 
     top:-8px;
+    right:-12px;
 
-    right:-10px;
+    min-width:20px;
+    height:20px;
 
-    min-width:18px;
+    padding:0 6px;
 
-    height:18px;
+    border-radius:999px;
 
-    padding:0 4px;
-
-    border-radius:50px;
-
-    background:#ff2b2b;
+    background:#ff3b30;
 
     color:white;
 
     font-size:11px;
 
-    font-weight:bold;
+    font-weight:700;
 
     display:flex;
 
