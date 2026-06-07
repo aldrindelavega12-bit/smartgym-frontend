@@ -163,13 +163,17 @@ async function loadMessageCount(){
             m => m.is_read == 0
         ).length;
 
-    document.getElementById(
-        "msg-count"
-    ).innerText = unread;
+    const badge =
+        document.getElementById(
+            "msg-count"
+        );
 
-    document.getElementById(
-        "msg-count"
-    ).style.display =
+    badge.innerText =
+        unread > 99
+        ? "99+"
+        : unread;
+
+    badge.style.display =
         unread > 0
         ? "flex"
         : "none";
