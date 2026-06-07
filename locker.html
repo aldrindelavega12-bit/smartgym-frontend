@@ -177,9 +177,18 @@ if(user.role === "admin"){
         Home
     </a>
 
-    <a href="messages.html">
+    <a href="messages.html" class="msg-link">
+
         <i class="fa-regular fa-comment"></i>
+
         Messages
+
+        <span
+            id="msg-count"
+            class="msg-count">
+            0
+        </span>
+
     </a>
 
     <a href="attendance.html">
@@ -214,9 +223,18 @@ if(user.role === "admin"){
             Home
         </a>
 
-        <a href="messages.html">
+        <a href="messages.html" class="msg-link">
+
             <i class="fa-regular fa-comment"></i>
+
             Messages
+
+            <span
+                id="msg-count"
+                class="msg-count">
+                0
+            </span>
+
         </a>
 
         <a href="attendance.html">
@@ -320,7 +338,36 @@ async function loadLockers(){
         console.error(err);
     }
 }
+async function loadMessageCount(){
 
+    const res = await fetch(
+        `${API_URL}/api/admin_messages`
+    );
+
+    const data = await res.json();
+
+    const unread =
+        data.filter(
+            m => m.is_read == 0
+        ).length;
+
+    const badge =
+        document.getElementById(
+            "msg-count"
+        );
+
+    if(!badge) return;
+
+    badge.innerText =
+        unread > 99
+        ? "99+"
+        : unread;
+
+    badge.style.display =
+        unread > 0
+        ? "flex"
+        : "none";
+}
 // ================= HISTORY =================
 async function loadHistory(){
     try{
@@ -631,6 +678,14 @@ window.onload = () => {
 
 // fallback refresh
 setInterval(loadLockers, 10000);
+loadMessageCount();
+socket.on("new_message", () => {
+    loadMessageCount();
+});
+
+socket.on("priority_alert", () => {
+    loadMessageCount();
+});
 </script>
 
 </body>
