@@ -370,10 +370,23 @@ async function markUnread(id){
 
 function toggleMenu(id){
 
+    event.stopPropagation();
+
+    document
+    .querySelectorAll(".msg-card")
+    .forEach(card=>{
+        card.classList.remove("menu-open");
+    });
+
     const menu =
-        document.getElementById(
-            `menu-${id}`
-        );
+        document.getElementById(`menu-${id}`);
+
+    const card =
+        menu.closest(".msg-card");
+
+    if(!menu.classList.contains("show")){
+        card.classList.add("menu-open");
+    }
 
     menu.classList.toggle("show");
 }
@@ -431,6 +444,12 @@ socket.on("connect", () => {
     cursor:pointer;
 
     transition:.3s;
+
+    position:relative;
+
+    overflow:visible;
+
+    z-index:1;
 }
 .msg-card.unread{
 
@@ -492,24 +511,22 @@ socket.on("connect", () => {
 
     right:0;
 
-    top:35px;
+    top:40px;
 
-    min-width:180px;
+    width:180px;
 
     background:#121212;
 
-    border:1px solid
-    rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
 
     border-radius:14px;
 
     overflow:hidden;
 
-    z-index:9999;
+    z-index:99999;
 
     box-shadow:
-    0 10px 25px
-    rgba(0,0,0,.5);
+    0 10px 25px rgba(0,0,0,.5);
 }
 
 .msg-menu.show{
@@ -564,7 +581,9 @@ socket.on("connect", () => {
 
     cursor:pointer;
 }
-
+.msg-card.menu-open{
+    z-index:9999;
+}
 .msg-actions{
     position:relative;
 }
