@@ -197,10 +197,23 @@ socket.on("locker_update", () => {
     loadDashboard();
     loadAlerts();
 });
+socket.on("new_message", () => {
+
+    loadMessageCount();
+});
+
+socket.on("priority_alert", () => {
+
+    loadMessageCount();
+});
 
 // ================= INIT =================
+// ================= INIT =================
 loadDashboard();
-loadAlerts();
+loadMessageCount();
+
+// tanggalin kung wala naman function
+// loadAlerts();
 
 // ================= LOGOUT =================
 function logout(){
