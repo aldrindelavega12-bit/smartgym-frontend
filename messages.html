@@ -359,22 +359,7 @@ async function markUnread(id){
     loadMessages();
 }
 
-const badge =
-document.getElementById("msg-count");
 
-if(unread > 0){
-
-    badge.innerText =
-        unread > 99
-        ? "99+"
-        : unread;
-
-    badge.style.display = "flex";
-
-}else{
-
-    badge.style.display = "none";
-}
 
 function toggleMenu(id){
 
