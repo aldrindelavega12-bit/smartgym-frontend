@@ -178,6 +178,33 @@ async function loadMessageCount(){
         ? "flex"
         : "none";
 }
+function showNotifPopup(title,text){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+    if(!popup) return;
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "notifText"
+    ).innerText = text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    },4000);
+}
 
 async function loadDashboard(){
     try {

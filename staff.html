@@ -321,6 +321,33 @@ function showNotifPopup(title,text){
 
     },4000);
 }
+function showNotifPopup(title,text){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+    if(!popup) return;
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "notifText"
+    ).innerText = text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    },4000);
+}
 // ================= LOGOUT =================
 function logout(){
     localStorage.clear();
