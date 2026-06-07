@@ -431,6 +431,17 @@ socket.on("connect", () => {
 
 <style>
 
+.msg-link{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
 .msg-count{
 
     position:absolute;
@@ -439,17 +450,21 @@ socket.on("connect", () => {
 
     right:-10px;
 
-    background:red;
+    min-width:18px;
+
+    height:18px;
+
+    padding:0 4px;
+
+    border-radius:50px;
+
+    background:#ff2b2b;
 
     color:white;
 
-    border-radius:50%;
+    font-size:11px;
 
-    min-width:20px;
-
-    height:20px;
-
-    font-size:12px;
+    font-weight:bold;
 
     display:flex;
 
