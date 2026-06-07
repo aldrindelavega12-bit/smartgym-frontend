@@ -359,6 +359,22 @@ async function markUnread(id){
     loadMessages();
 }
 
+const badge =
+document.getElementById("msg-count");
+
+if(unread > 0){
+
+    badge.innerText =
+        unread > 99
+        ? "99+"
+        : unread;
+
+    badge.style.display = "flex";
+
+}else{
+
+    badge.style.display = "none";
+}
 
 function toggleMenu(id){
 
@@ -758,6 +774,34 @@ socket.on("connect", () => {
     box-shadow:
     0 8px 20px
     rgba(0,0,0,.25);
+}
+.msg-count{
+
+    display:none;
+
+    position:absolute;
+
+    top:-8px;
+
+    right:-12px;
+
+    min-width:18px;
+
+    height:18px;
+
+    border-radius:50%;
+
+    background:#ff2b2b;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    align-items:center;
+
+    justify-content:center;
 }
 </style>
 
