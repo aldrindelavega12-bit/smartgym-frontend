@@ -400,6 +400,49 @@ function toggleMenu(id){
 
     menu.classList.toggle("show");
 }
+async function loadMessageCount(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/admin_messages`
+        );
+
+        const data = await res.json();
+
+        const unread =
+            data.filter(
+                m => m.is_read == 0
+            ).length;
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+        if(!badge) return;
+
+        if(unread > 0){
+
+            badge.innerText =
+                unread > 99
+                ? "99+"
+                : unread;
+
+            badge.style.display =
+                "flex";
+
+        }else{
+
+            badge.style.display =
+                "none";
+        }
+
+    }catch(err){
+
+        console.log(err);
+    }
+}
 
 // ================= REALTIME =================
 socket.on("new_booking", (data) => {
