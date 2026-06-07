@@ -160,6 +160,14 @@ if (!user) {
 
 </div>
 </div>
+<div id="notifPopup" class="notif-popup">
+    <b id="notifTitle">New Message</b>
+    <p id="notifText">You have a new message</p>
+</div>
+
+<audio id="notifSound">
+    <source src="notif.mp3" type="audio/mpeg">
+</audio>
 
 <!-- SOCKET -->
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
@@ -350,6 +358,24 @@ async function loadMessageCount(){
         data.filter(
             m => m.is_read == 0
         ).length;
+    if(
+        lastUnread !== 0 &&
+        unread > lastUnread
+    ){
+
+        document
+            .getElementById(
+                "notifSound"
+            )
+            ?.play();
+
+        showNotifPopup(
+            "New Message",
+            `${unread - lastUnread} new notification`
+        );
+    }
+
+    lastUnread = unread;
 
     const badge =
         document.getElementById(
@@ -659,7 +685,33 @@ function formatTime(dt){
         minute: '2-digit'
     });
 }
+let lastUnread = 0;
 
+function showNotifPopup(title,text){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "notifText"
+    ).innerText = text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    },4000);
+}
 // ================= INIT =================
 window.onload = () => {
     showTab("current");
@@ -680,10 +732,14 @@ window.onload = () => {
 setInterval(loadLockers, 10000);
 loadMessageCount();
 socket.on("new_message", () => {
+
+    loadMessages();
     loadMessageCount();
 });
 
 socket.on("priority_alert", () => {
+
+    loadMessages();
     loadMessageCount();
 });
 </script>

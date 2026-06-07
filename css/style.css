@@ -1258,3 +1258,51 @@ table{
 
     line-height:18px;
 }
+.notif-popup{
+
+    position:fixed;
+
+    right:25px;
+
+    bottom:25px;
+
+    width:320px;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0b1320,
+        #101828
+    );
+
+    border:1px solid
+    rgba(77,163,255,.3);
+
+    color:white;
+
+    box-shadow:
+    0 0 25px
+    rgba(77,163,255,.25);
+
+    transform:
+    translateX(400px);
+
+    transition:.4s;
+
+    z-index:999999;
+}
+
+.notif-popup.show{
+
+    transform:
+    translateX(0);
+}
+
+.notif-popup b{
+
+    color:#4da3ff;
+}

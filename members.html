@@ -50,6 +50,14 @@ if (!user) {
 
 </div>
 </div>
+<div id="notifPopup" class="notif-popup">
+    <b id="notifTitle">New Message</b>
+    <p id="notifText">You have a new message</p>
+</div>
+
+<audio id="notifSound">
+    <source src="notif.mp3" type="audio/mpeg">
+</audio>
 
 <!-- SCRIPT -->
 <script>
@@ -135,10 +143,24 @@ async function loadMessageCount(){
 
     const data = await res.json();
 
-    const unread =
-        data.filter(
-            m => m.is_read == 0
-        ).length;
+    if(
+        lastUnread !== 0 &&
+        unread > lastUnread
+    ){
+
+        document
+            .getElementById(
+                "notifSound"
+            )
+            ?.play();
+
+        showNotifPopup(
+            "New Message",
+            `${unread - lastUnread} new notification`
+        );
+    }
+
+    lastUnread = unread;
 
     const badge =
         document.getElementById(
@@ -228,17 +250,47 @@ function cleanType(type){
     if(!type) return "N/A";
     return type.replace("membership-", "").toUpperCase();
 }
+let lastUnread = 0;
 
+function showNotifPopup(title,text){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "notifText"
+    ).innerText = text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    },4000);
+}
 // ================= INIT =================
 window.onload = () => {
     loadMembers();
 };
 loadMessageCount();
 socket.on("new_message", () => {
+
+    loadMessages();
     loadMessageCount();
 });
 
 socket.on("priority_alert", () => {
+
+    loadMessages();
     loadMessageCount();
 });
 </script>
