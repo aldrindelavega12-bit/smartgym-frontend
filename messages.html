@@ -477,6 +477,10 @@ socket.on("connect", () => {
 
 .msg-card{
 
+    position:relative;
+
+    overflow:visible;
+
     list-style:none;
 
     background:rgba(255,255,255,.08);
@@ -494,12 +498,6 @@ socket.on("connect", () => {
     cursor:pointer;
 
     transition:.3s;
-
-    position:relative;
-
-    overflow:visible;
-
-    z-index:1;
 }
 .msg-card.unread{
 
@@ -636,6 +634,7 @@ socket.on("connect", () => {
 }
 .msg-actions{
     position:relative;
+    z-index:10000;
 }
 .msg-menu button{
 
@@ -666,8 +665,7 @@ socket.on("connect", () => {
     color:#4da3ff;
 }
 .msg-card:not(.unread){
-
-    opacity:.65;
+    opacity:.9;
 }
 .unread-badge{
 
