@@ -62,21 +62,7 @@ if (!user) {
     </div>
 
 </div>
-<div class="msg-header">
 
-    <b>${msg.title}</b>
-
-    <div class="msg-right">
-
-        ${badge}
-
-        <div class="msg-actions">
-            ...
-        </div>
-
-    </div>
-
-</div>
 <div id="notifPopup" class="notif-popup" onclick="goMessages()">
     <b id="notifTitle">New Message</b>
     <p id="notifText">You have a new message</p>
@@ -98,7 +84,7 @@ if(user.role === "admin"){
         Home
     </a>
 
-    <a href="member_messages.html" class="msg-link">
+    <a href="messages.html" class="msg-link">
         <i class="fa-solid fa-envelope"></i>
         Messages
         <span id="msg-count" class="msg-count">0</span>
