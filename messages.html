@@ -77,6 +77,11 @@ if (!user) {
     </div>
 
 </div>
+<div id="notifPopup" class="notif-popup" onclick="goMessages()">
+    <b id="notifTitle">New Message</b>
+    <p id="notifText">You have a new message</p>
+</div>
+
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
@@ -93,9 +98,10 @@ if(user.role === "admin"){
         Home
     </a>
 
-    <a href="messages.html">
-        <i class="fa-regular fa-comment"></i>
+    <a href="member_messages.html" class="msg-link">
+        <i class="fa-solid fa-envelope"></i>
         Messages
+        <span id="msg-count" class="msg-count">0</span>
     </a>
 
     <a href="attendance.html">
@@ -424,6 +430,33 @@ socket.on("connect", () => {
 </script>
 
 <style>
+
+.msg-count{
+
+    position:absolute;
+
+    top:-8px;
+
+    right:-10px;
+
+    background:red;
+
+    color:white;
+
+    border-radius:50%;
+
+    min-width:20px;
+
+    height:20px;
+
+    font-size:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
 
 .msg-card{
 

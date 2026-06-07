@@ -110,9 +110,17 @@ menu.innerHTML = `
         Home
     </a>
 
-    <a href="messages.html">
+    <a href="messages.html" class="msg-link">
+
         <i class="fa-regular fa-comment"></i>
+
         Messages
+
+        <span id="msg-count"
+            class="msg-count">
+            0
+        </span>
+
     </a>
 
     <a href="attendance.html">
@@ -142,6 +150,31 @@ menu.innerHTML = `
 `;
 
 // ================= DASHBOARD =================
+async function loadMessageCount(){
+
+    const res = await fetch(
+        `${API_URL}/api/admin_messages`
+    );
+
+    const data = await res.json();
+
+    const unread =
+        data.filter(
+            m => m.is_read == 0
+        ).length;
+
+    document.getElementById(
+        "msg-count"
+    ).innerText = unread;
+
+    document.getElementById(
+        "msg-count"
+    ).style.display =
+        unread > 0
+        ? "flex"
+        : "none";
+}
+
 async function loadDashboard(){
     try {
         const res = await fetch(`${API_URL}/api/dashboard`);
