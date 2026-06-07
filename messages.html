@@ -445,15 +445,12 @@ async function loadMessageCount(){
 }
 
 // ================= REALTIME =================
-socket.on("new_booking", (data) => {
-
-    console.log(
-        "NEW BOOKING RECEIVED",
-        data
-    );
-
+socket.on("new_message", () => {
+    console.log("NEW MESSAGE RECEIVED");
     loadMessages();
+    loadMessageCount();
 });
+
 socket.on("new_message", () => {
     console.log("NEW MESSAGE RECEIVED");
     loadMessages();
@@ -462,6 +459,7 @@ socket.on("new_message", () => {
 socket.on("priority_alert", (data) => {
     console.log("PRIORITY ALERT RECEIVED", data);
     loadMessages();
+    loadMessageCount();
 });
 
 
