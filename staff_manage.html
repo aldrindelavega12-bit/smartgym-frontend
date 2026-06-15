@@ -152,10 +152,10 @@ async function loadStaff(){
 
         table.innerHTML += `
         <tr>
-            <td>${s.username}</td>
+            <td>${s.fullname}</td>
             <td>${s.role}</td>
             <td>
-                <button>
+                <button onclick="removeStaff('${s.user_id}')">
                     Remove
                 </button>
             </td>
@@ -349,10 +349,21 @@ function showNotifPopup(title,text){
     },4000);
 }
 // ===== REMOVE =====
-function removeStaff(i){
-    let staff = JSON.parse(localStorage.getItem("staff")) || [];
-    staff.splice(i,1);
-    localStorage.setItem("staff", JSON.stringify(staff));
+async function removeStaff(userId){
+
+    if(!confirm(
+        "Delete account?"
+    )){
+        return;
+    }
+
+    await fetch(
+        `${API_URL}/api/delete_staff/${userId}`,
+        {
+            method:"DELETE"
+        }
+    );
+
     loadStaff();
 }
 function showNotifPopup(title,text){
