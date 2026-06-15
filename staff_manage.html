@@ -30,9 +30,20 @@ if (!user) {
 <h2>Staff Management</h2>
 
 <div style="margin-bottom:15px;">
-    <input type="text" id="name" placeholder="Enter name">
-    <input type="text" id="roleInput" placeholder="Enter role">
-    <button onclick="addStaff()">Add Staff</button>
+    <input type="text" id="fullname" placeholder="Full Name">
+
+    <select id="role">
+        <option value="staff">Desk Staff</option>
+        <option value="trainer">Trainer</option>
+    </select>
+
+    <input type="text" id="username" placeholder="Username">
+
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="createAccount()">
+        Create Account
+    </button>
 </div>
 
 <table>
