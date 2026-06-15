@@ -100,6 +100,14 @@ async function login() {
                 }
 
                 else if (
+                    data.user.role === "trainer"
+                ) {
+
+                    window.location.href =
+                    "trainer.html";
+                }
+
+                else if (
                     data.user.role === "admin"
                 ) {
 

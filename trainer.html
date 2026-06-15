@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trainer Dashboard</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="navbar">
+
+    <h2>SMART GYM</h2>
+
+    <div class="menu" id="menu"></div>
+
+    <button onclick="logout()">
+        Logout
+    </button>
+
+</div>
+
+<div class="layout">
+<div class="main">
+
+    <div class="hero">
+
+        <h1>TRAINER DASHBOARD</h1>
+
+        <p>
+            Monitor assigned members
+        </p>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <div class="card-left">
+
+                <div class="icon blue">
+                    👥
+                </div>
+
+                <div>
+                    <h3>Assigned Members</h3>
+                </div>
+
+            </div>
+
+            <h1 id="members">
+                0
+            </h1>
+
+        </div>
+
+        <div class="card">
+
+            <div class="card-left">
+
+                <div class="icon green">
+                    📅
+                </div>
+
+                <div>
+                    <h3>Today's Attendance</h3>
+                </div>
+
+            </div>
+
+            <h1 id="attendance">
+                0
+            </h1>
+
+        </div>
+
+        <div class="card">
+
+            <div class="card-left">
+
+                <div class="icon purple">
+                    💬
+                </div>
+
+                <div>
+                    <h3>Unread Messages</h3>
+                </div>
+
+            </div>
+
+            <h1 id="messages">
+                0
+            </h1>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+<script>
+
+const user =
+JSON.parse(
+    localStorage.getItem("user")
+);
+
+if(
+    !user ||
+    user.role !== "trainer"
+){
+    window.location.href =
+    "index.html";
+}
+
+document.getElementById(
+    "menu"
+).innerHTML = `
+
+<a href="trainer.html">
+    <i class="fa-solid fa-house"></i>
+    Home
+</a>
+
+<a href="trainer_members.html">
+    <i class="fa-solid fa-users"></i>
+    My Members
+</a>
+
+<a href="attendance.html">
+    <i class="fa-regular fa-calendar-check"></i>
+    Attendance
+</a>
+
+<a href="messages.html">
+    <i class="fa-regular fa-comment"></i>
+    Messages
+</a>
+
+<a href="profile.html">
+    <i class="fa-solid fa-user"></i>
+    Profile
+</a>
+
+`;
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+    "index.html";
+}
+
+</script>
+
+</body>
+</html>
