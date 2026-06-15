@@ -120,23 +120,47 @@ menu.innerHTML = `
 `;
 
 // ===== LOAD =====
-function loadStaff(){
-    let staff = JSON.parse(localStorage.getItem("staff")) || [];
-    const table = document.getElementById("staff-body");
+async function loadStaff(){
+
+    const res = await fetch(
+        `${API_URL}/api/staff_accounts`
+    );
+
+    const data = await res.json();
+
+    const table =
+        document.getElementById(
+            "staff-body"
+        );
+
     table.innerHTML = "";
 
-    if(staff.length === 0){
-        table.innerHTML = `<tr><td colspan="3">No staff</td></tr>`;
+    if(data.length === 0){
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="3">
+                    No staff
+                </td>
+            </tr>
+        `;
+
         return;
     }
 
-    staff.forEach((s, i) => {
+    data.forEach(s => {
+
         table.innerHTML += `
         <tr>
-            <td>${s.name}</td>
+            <td>${s.username}</td>
             <td>${s.role}</td>
-            <td><button onclick="removeStaff(${i})">Remove</button></td>
-        </tr>`;
+            <td>
+                <button>
+                    Remove
+                </button>
+            </td>
+        </tr>
+        `;
     });
 }
 async function loadMessageCount(){
@@ -266,6 +290,15 @@ async function createAccount(){
             data.message ||
             data.status
         );
+
+        if(data.status === "success"){
+
+            loadStaff();
+
+            document.getElementById("fullname").value = "";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+        }
 
         document.getElementById(
             "fullname"
