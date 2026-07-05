@@ -394,12 +394,108 @@ function closeModal(){
         "none";
 
 }
+async function saveProfile(){
 
-function saveProfile(){
+    const fullname =
+        document.getElementById("editName").value;
 
-    alert("Backend natin ito ikokonekta mamaya.");
+    const phone =
+        document.getElementById("editPhone").value;
+
+    const username =
+        document.getElementById("editUsername").value;
+
+    try{
+
+        const res = await fetch(
+
+            "https://smartgym-api-ia2e.onrender.com/api/pre_member/profile",
+
+            {
+
+                method:"PUT",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+
+                    id:userData.id,
+
+                    fullname:fullname,
+
+                    phone_number:phone,
+
+                    username:username
+
+                })
+
+            }
+
+        );
+
+        const data = await res.json();
+
+        if(data.status=="success"){
+
+            // Update Card
+            document.getElementById("profileName").innerText =
+                fullname;
+
+            document.getElementById("profilePhone").innerText =
+                phone;
+
+            document.getElementById("profileUsername").innerText =
+                username;
+
+            // Update Welcome
+            document.getElementById("welcome").innerText =
+                "WELCOME, " + fullname + " 👋";
+
+            // Update localStorage
+            userData.name = fullname;
+            userData.phone_number = phone;
+            userData.username = username;
+
+            localStorage.setItem(
+                "user",
+                JSON.stringify(userData)
+            );
+
+            closeModal();
+
+            showNotifPopup(
+                "Success",
+                "Profile updated successfully."
+            );
+
+        }
+
+        else{
+
+            showNotifPopup(
+                "Error",
+                data.message
+            );
+
+        }
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        showNotifPopup(
+            "Error",
+            "Unable to update profile."
+        );
+
+    }
 
 }
+
 function logout(){
 
     localStorage.clear();
