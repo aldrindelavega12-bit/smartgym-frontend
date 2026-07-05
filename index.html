@@ -179,6 +179,8 @@
 
 <!-- SCRIPT -->
 <script>
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
 
 function openRegister(){
 
@@ -347,7 +349,9 @@ async function registerAccount() {
 
     try {
 
-        const response = await fetch("/api/register", {
+        const response = await fetch(
+            `${API_URL}/api/register`,
+            {
 
             method: "POST",
 
