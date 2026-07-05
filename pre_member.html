@@ -100,36 +100,96 @@ if(!user || user.role !== "pre_member"){
 
         <div class="card">
 
-            <h3>
-
-                Registration Status
-
-            </h3>
-
-            <br>
-
-            <div
-            style="
-                text-align:left;
-                line-height:2.2;
-                font-size:15px;
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:20px;
             ">
 
-                🟢 Account Created
+                <h3 style="margin:0;">
+                    <i class="fa-solid fa-user"></i>
+                    Profile Information
+                </h3>
 
-                <br>
-
-                🟢 Registration Submitted
-
-                <br>
-
-                🟡 Waiting for Fingerprint Enrollment
-
-                <br>
-
-                🟡 Waiting for Face Enrollment
+                <span style="
+                    background:#ff9800;
+                    color:white;
+                    padding:6px 12px;
+                    border-radius:20px;
+                    font-size:12px;
+                    font-weight:bold;
+                ">
+                    PRE-MEMBER
+                </span>
 
             </div>
+
+            <table style="
+                width:100%;
+                color:white;
+                border-collapse:collapse;
+            ">
+
+                <tr>
+                    <td style="padding:12px 0;">
+                        <i class="fa-solid fa-user"></i>
+                        Full Name
+                    </td>
+
+                    <td
+                        id="profileName"
+                        style="
+                        text-align:right;
+                        font-weight:bold;
+                    ">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:12px 0;">
+                        <i class="fa-solid fa-phone"></i>
+                        Phone Number
+                    </td>
+
+                    <td
+                        id="profilePhone"
+                        style="
+                        text-align:right;
+                        font-weight:bold;
+                    ">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:12px 0;">
+                        <i class="fa-solid fa-at"></i>
+                        Username
+                    </td>
+
+                    <td
+                        id="profileUsername"
+                        style="
+                        text-align:right;
+                        font-weight:bold;
+                    ">
+                    </td>
+                </tr>
+
+            </table>
+
+            <button
+                style="
+                    margin-top:25px;
+                    width:100%;
+                "
+                onclick="editProfile()">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Edit Profile
+
+            </button>
 
         </div>
                 <!-- CARD 2 -->
@@ -253,6 +313,21 @@ document.getElementById(
     "WELCOME, " +
     userData.name +
     " 👋";
+
+    document.getElementById("profileName").innerText =
+    userData.name || "-";
+
+document.getElementById("profilePhone").innerText =
+    userData.phone_number || "-";
+
+document.getElementById("profileUsername").innerText =
+    userData.username || "-";
+
+function editProfile(){
+
+    alert("Profile update will be added in the next phase.");
+
+}
 
 function logout(){
 
