@@ -304,9 +304,103 @@ async function changePassword(){
         alert("Server error");
     }
 }
-async function registerAccount(){
+async function registerAccount() {
 
-    alert("Frontend Complete");
+    const fullname =
+        document.getElementById("reg_name").value.trim();
+
+    const phone =
+        document.getElementById("reg_phone").value.trim();
+
+    const username =
+        document.getElementById("reg_username").value.trim();
+
+    const password =
+        document.getElementById("reg_password").value;
+
+    const confirm =
+        document.getElementById("reg_confirm").value;
+
+    // ==========================
+    // Validation
+    // ==========================
+
+    if (
+        !fullname ||
+        !phone ||
+        !username ||
+        !password ||
+        !confirm
+    ) {
+
+        alert("Please complete all fields.");
+        return;
+
+    }
+
+    if (password !== confirm) {
+
+        alert("Passwords do not match.");
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch("/api/register", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                fullname: fullname,
+                phone_number: phone,
+                username: username,
+                password: password
+
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+
+            alert(
+                "Registration submitted.\n\nPlease visit the gym for biometric enrollment."
+            );
+
+            closeRegister();
+
+            document.getElementById("reg_name").value = "";
+            document.getElementById("reg_phone").value = "";
+            document.getElementById("reg_username").value = "";
+            document.getElementById("reg_password").value = "";
+            document.getElementById("reg_confirm").value = "";
+
+        }
+
+        else {
+
+            alert(data.message);
+
+        }
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("Unable to connect to server.");
+
+    }
 
 }
 window.onclick = function(e){
