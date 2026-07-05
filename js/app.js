@@ -85,31 +85,31 @@ async function login() {
             // REDIRECT DELAY
             setTimeout(() => {
 
-                if (data.user.role === "member") {
+                if (data.user.role === "pre_member") {
+
+                    window.location.href =
+                    "pre_member.html";
+                }
+
+                else if (data.user.role === "member") {
 
                     window.location.href =
                     "member.html";
                 }
 
-                else if (
-                    data.user.role === "staff"
-                ) {
+                else if (data.user.role === "staff") {
 
                     window.location.href =
                     "staff.html";
                 }
 
-                else if (
-                    data.user.role === "trainer"
-                ) {
+                else if (data.user.role === "trainer") {
 
                     window.location.href =
                     "trainer.html";
                 }
 
-                else if (
-                    data.user.role === "admin"
-                ) {
+                else if (data.user.role === "admin") {
 
                     window.location.href =
                     "admin.html";
