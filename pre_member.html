@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
     <title>Pre Member Dashboard</title>
@@ -10,85 +9,548 @@
 
     <link rel="stylesheet" href="css/style.css">
 
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
 
 <body>
 
-<div class="container">
+<!-- ROLE PROTECTION -->
+<script>
 
-    <h1>SMART GYM</h1>
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
 
-    <h2 id="welcome"></h2>
+if(!user || user.role !== "pre_member"){
 
-    <hr>
+    window.location.href =
+        "index.html";
+}
 
-    <h3>
-        Status :
-        <span style="color:orange;">
-            Waiting for Biometric Enrollment
-        </span>
-    </h3>
+</script>
 
-    <br>
+<!-- ================= NAVBAR ================= -->
 
-    <p>
+<div class="navbar">
 
-        Your account has been created successfully.
+    <h2>
 
-        <br><br>
+        SMART GYM
 
-        Please visit the gym to complete your
+    </h2>
 
-        fingerprint and facial enrollment.
+    <div class="menu">
+
+        <a href="pre_member.html">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </a>
+
+    </div>
+
+    <div class="profile">
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ================= MAIN ================= -->
+
+<div class="layout">
+
+<div class="main">
+
+    <div class="hero">
+
+        <h1 id="welcome">
+
+            WELCOME 👋
+
+        </h1>
+
+        <p>
+
+            Your account has been created successfully.
+
+            <br>
+
+            Complete your biometric enrollment to activate your Smart Gym Membership.
+
+        </p>
+
+    </div>
+
+    <div class="cards">
+
+        <!-- CARD 1 -->
+
+        <div class="card">
+
+            <h3>
+
+                Registration Status
+
+            </h3>
+
+            <br>
+
+            <div
+            style="
+                text-align:left;
+                line-height:2.2;
+                font-size:15px;
+            ">
+
+                🟢 Account Created
+
+                <br>
+
+                🟢 Registration Submitted
+
+                <br>
+
+                🟡 Waiting for Fingerprint Enrollment
+
+                <br>
+
+                🟡 Waiting for Face Enrollment
+
+            </div>
+
+        </div>
+                <!-- CARD 2 -->
+
+        <div class="card">
+
+            <h3>
+
+                Next Step
+
+            </h3>
+
+            <br>
+
+            <div
+            style="
+                text-align:left;
+                line-height:2.1;
+                font-size:15px;
+            ">
+
+                Visit Smart Gym and complete
+                your biometric enrollment.
+
+                <br><br>
+
+                ✔ Fingerprint Enrollment
+
+                <br>
+
+                ✔ Face Recognition Enrollment
+
+                <br><br>
+
+                Once both biometrics are completed,
+
+                your account will automatically
+
+                become an Active Member Account.
+
+            </div>
+
+        </div>
+
+        <!-- CARD 3 -->
+
+        <div class="card">
+
+            <h3>
+
+                Important Notice
+
+            </h3>
+
+            <br>
+
+            <div
+            style="
+                text-align:left;
+                line-height:2.1;
+                font-size:15px;
+            ">
+
+                • Bring a valid ID during enrollment.
+
+                <br>
+
+                • Visit during gym operating hours.
+
+                <br>
+
+                • Biometric enrollment is required
+                before accessing gym facilities.
+
+                <br>
+
+                • After successful enrollment,
+                your account will automatically
+                switch to a Member Account.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- ================= NOTIFICATION ================= -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+
+        Smart Gym
+
+    </b>
+
+    <p id="notifText">
+
+        Waiting for biometric enrollment.
 
     </p>
-
-    <br>
-
-    <button onclick="logout()">
-
-        Logout
-
-    </button>
 
 </div>
 
 <script>
 
-const user = JSON.parse(
-
-    localStorage.getItem("user")
-
-);
-
-if(!user){
-
-    window.location = "index.html";
-
-}
+const userData =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
 
 document.getElementById(
-
     "welcome"
-
 ).innerText =
-
-"Welcome, " + user.name;
+    "WELCOME, " +
+    userData.name +
+    " 👋";
 
 function logout(){
 
-    localStorage.removeItem(
+    localStorage.clear();
 
-        "user"
+    window.location.href =
+        "index.html";
+}
 
-    );
 
-    window.location = "index.html";
+// ================= SHOW NOTIFICATION =================
+
+function showNotifPopup(title,text){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "notifText"
+    ).innerText = text;
+
+    popup.classList.add("show");
+
+    setTimeout(() => {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    },4000);
+}
+
+
+// ================= CHECK ACTIVATION =================
+
+async function checkActivation(){
+
+    try{
+
+        const res = await fetch(
+
+            `https://smartgym-api-ia2e.onrender.com/api/check_account/${userData.id}`
+
+        );
+
+        const data = await res.json();
+
+        if(
+            data.status === "success" &&
+            data.role === "member"
+        ){
+
+            localStorage.setItem(
+
+                "user",
+
+                JSON.stringify(data.user)
+
+            );
+
+            showNotifPopup(
+
+                "Congratulations!",
+
+                "Your membership has been activated."
+
+            );
+
+            setTimeout(()=>{
+
+                window.location.href =
+                    "member.html";
+
+            },2000);
+
+        }
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
 
 }
 
+
+// ================= START =================
+
+checkActivation();
+
+setInterval(
+
+    checkActivation,
+
+    5000
+
+);
+
 </script>
 
-</body>
 
+<style>
+
+.profile{
+
+    position:relative;
+
+}
+
+.logout-btn{
+
+    cursor:pointer;
+
+}
+
+.hero{
+
+    margin-bottom:30px;
+
+}
+
+.hero p{
+
+    max-width:700px;
+
+    margin:auto;
+
+    color:#666;
+
+    line-height:1.8;
+
+}
+
+.card{
+
+    min-height:260px;
+
+}
+
+.card h3{
+
+    margin-bottom:10px;
+
+}
+
+.notif-popup{
+
+    position:fixed;
+
+    top:80px;
+    right:25px;
+
+    width:300px;
+
+    background:#111827;
+
+    color:white;
+
+    border-left:5px solid #4da3ff;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    box-shadow:
+
+        0 10px 25px rgba(0,0,0,.35);
+
+    z-index:9999;
+
+    opacity:0;
+
+    transform:translateX(120%);
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+.notif-popup.show{
+
+    opacity:1;
+
+    transform:translateX(0);
+
+}
+
+.notif-popup b{
+
+    color:#4da3ff;
+
+    display:block;
+
+    margin-bottom:6px;
+
+}
+
+.notif-popup p{
+
+    margin:0;
+
+    font-size:14px;
+
+}
+
+.profile{
+
+    position:relative;
+
+}
+
+.menu a{
+
+    font-weight:600;
+
+}
+
+.logout-btn{
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.logout-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.card{
+
+    transition:0.25s ease;
+
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.12);
+
+}
+
+@media(max-width:900px){
+
+    .cards{
+
+        display:grid;
+
+        grid-template-columns:1fr;
+
+        gap:20px;
+
+    }
+
+    .hero h1{
+
+        font-size:30px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .hero{
+
+        padding:15px;
+
+    }
+
+    .card{
+
+        min-height:auto;
+
+    }
+
+    .logout-btn{
+
+        width:100%;
+
+    }
+
+}
+
+</style>
+
+</body>
 </html>
