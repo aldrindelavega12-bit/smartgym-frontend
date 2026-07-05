@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Pre Member Dashboard</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>SMART GYM</h1>
+
+    <h2 id="welcome"></h2>
+
+    <hr>
+
+    <h3>
+        Status :
+        <span style="color:orange;">
+            Waiting for Biometric Enrollment
+        </span>
+    </h3>
+
+    <br>
+
+    <p>
+
+        Your account has been created successfully.
+
+        <br><br>
+
+        Please visit the gym to complete your
+
+        fingerprint and facial enrollment.
+
+    </p>
+
+    <br>
+
+    <button onclick="logout()">
+
+        Logout
+
+    </button>
+
+</div>
+
+<script>
+
+const user = JSON.parse(
+
+    localStorage.getItem("user")
+
+);
+
+if(!user){
+
+    window.location = "index.html";
+
+}
+
+document.getElementById(
+
+    "welcome"
+
+).innerText =
+
+"Welcome, " + user.name;
+
+function logout(){
+
+    localStorage.removeItem(
+
+        "user"
+
+    );
+
+    window.location = "index.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
