@@ -35,12 +35,20 @@
 
                 <span
                     class="change-password-link"
+                    onclick="openRegister()"
+                >
+                    Create Account
+                </span>
+
+                <span
+                    class="change-password-link"
                     onclick="openChangePassword()"
                 >
                     Change Password
                 </span>
 
             </div>
+            
 
             <p id="error" class="error-message"></p>
             
@@ -107,10 +115,84 @@
     </div>
 
 </div>
+
+<div id="registerModal" class="modal">
+
+    <div class="change-password-card">
+
+        <span
+            class="close-btn"
+            onclick="closeRegister()"
+        >×</span>
+
+        <h2 class="change-title">
+            Create Account
+        </h2>
+
+        <input
+            type="text"
+            id="reg_name"
+            placeholder="Full Name"
+            class="change-input"
+        >
+
+        <input
+            type="text"
+            id="reg_phone"
+            placeholder="Phone Number"
+            class="change-input"
+        >
+
+        <input
+            type="text"
+            id="reg_username"
+            placeholder="Username"
+            class="change-input"
+        >
+
+        <input
+            type="password"
+            id="reg_password"
+            placeholder="Password"
+            class="change-input"
+        >
+
+        <input
+            type="password"
+            id="reg_confirm"
+            placeholder="Confirm Password"
+            class="change-input"
+        >
+
+        <button
+            class="change-btn"
+            onclick="registerAccount()"
+        >
+            Create Account
+        </button>
+
+    </div>
+
+</div>
+
 <script src="js/app.js"></script>
 
 <!-- SCRIPT -->
 <script>
+
+function openRegister(){
+
+    document.getElementById(
+        "registerModal"
+    ).style.display = "flex";
+}
+
+function closeRegister(){
+
+    document.getElementById(
+        "registerModal"
+    ).style.display = "none";
+}
 
 function openModal(type){
     const modal = document.getElementById("modal");
@@ -222,7 +304,11 @@ async function changePassword(){
         alert("Server error");
     }
 }
+async function registerAccount(){
 
+    alert("Frontend Complete");
+
+}
 window.onclick = function(e){
 
     if(e.target.id === "modal"){
@@ -231,6 +317,11 @@ window.onclick = function(e){
 
     if(e.target.id === "changeModal"){
         closeChangePassword();
+    }
+    if(e.target.id === "registerModal"){
+
+        closeRegister();
+
     }
 }
 
