@@ -246,46 +246,46 @@ if(!user || user.role !== "pre_member"){
             <br>
             <div style="
             text-align:left;
-            line-height:2;
+            line-height:1.6;
             font-size:15px;
             ">
 
-            <p>
+            <p style="margin:0 0 16px;"></p>
             <i class="fa-regular fa-clock"></i>
             <b> Operating Hours</b><br>
             Monday - Sunday<br>
             6:00 AM - 10:00 PM
-            </p>
+            <p style="margin:0 0 16px;"></p>
 
-            <p>
+            <p style="margin:0 0 16px;"></p>
             <i class="fa-solid fa-location-dot"></i>
             <b> Address</b><br>
             Poblacion, Balayan, Batangas
-            </p>
+            <p style="margin:0 0 16px;"></p>
 
-            <p>
+            <p style="margin:0 0 16px;"></p>
             <i class="fa-solid fa-phone"></i>
             <b> Contact</b><br>
             0912 345 6789
-            </p>
+            <p style="margin:0 0 16px;"></p>
 
-            <p>
+            <p style="margin:0 0 16px;"></p>
             <i class="fa-solid fa-envelope"></i>
             <b> Email</b><br>
             info@smartgym.com
-            </p>
+            <p style="margin:0 0 16px;"></p>
 
-            <p>
+            <p style="margin:0 0 16px;"></p>
             <i class="fa-solid fa-globe"></i>
             <b> Website</b><br>
             www.smartgym.com
-            </p>
+            <p style="margin:0 0 16px;"></p>
 
-            <p>
+            <p style="margin:0 0 16px;"></p>
             <i class="fa-brands fa-facebook"></i>
             <b> Facebook</b><br>
             Smart Gym Official
-            </p>
+            <p style="margin:0 0 16px;"></p>
 
             </div>
 
@@ -623,6 +623,12 @@ setInterval(
 
 
 <style>
+.main{
+    width:100%;
+    max-width:1400px;
+    margin:auto;
+    padding:30px;
+}
 
 .profile{
 
@@ -635,10 +641,13 @@ setInterval(
     cursor:pointer;
 
 }
-
 .hero{
 
-    margin-bottom:30px;
+margin-bottom:45px;
+
+padding:45px;
+
+border-radius:25px;
 
 }
 
@@ -653,12 +662,18 @@ setInterval(
     line-height:1.8;
 
 }
-
-.card{
-
-    min-height:260px;
-
+.cards{
+    display:grid;
+    align-items:start;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
 }
+.card{
+    min-height:340px;
+    display:flex;
+    flex-direction:column;
+}
+
 
 .card h3{
 
