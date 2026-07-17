@@ -73,231 +73,237 @@ if(!user || user.role !== "pre_member"){
 <div class="layout">
 
 <div class="main">
-
     <div class="hero">
 
-        <h1 id="welcome">
+        <div class="hero-content">
 
-            WELCOME 👋
+            <h1 id="welcome">
+                WELCOME
+            </h1>
 
-        </h1>
+            <p class="hero-subtitle">
+                Your account has been created successfully.
+            </p>
 
-        <p>
+            <p class="hero-desc">
+                Complete your biometric enrollment to activate your Smart Gym Membership.
+            </p>
 
-            Your account has been created successfully.
-
-            <br>
-
-            Complete your biometric enrollment to activate your Smart Gym Membership.
-
-        </p>
+        </div>
 
     </div>
 
     <div class="cards">
 
         <!-- CARD 1 -->
+        <div class="card profile-card">
 
-        <div class="card">
+            <div class="profile-header">
 
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                margin-bottom:20px;
-            ">
-
-                <h3 style="margin:0;">
+                <h3>
                     <i class="fa-solid fa-user"></i>
                     Profile Information
                 </h3>
 
-                <span style="
-                    background:#ff9800;
-                    color:white;
-                    padding:6px 12px;
-                    border-radius:20px;
-                    font-size:12px;
-                    font-weight:bold;
-                ">
-                    PRE-MEMBER
+                <span class="member-badge">
+                    PRE-<br>MEMBER
                 </span>
+
 
             </div>
 
-            <table style="
-                width:100%;
-                color:white;
-                border-collapse:collapse;
-            ">
+            <div class="profile-divider"></div>
 
-                <tr>
-                    <td style="padding:12px 0;">
+            <div class="profile-box">
+
+                <div class="profile-row">
+
+                    <div class="profile-left">
                         <i class="fa-solid fa-user"></i>
-                        Full Name
-                    </td>
+                        <span>Full Name</span>
+                    </div>
 
-                    <td
-                        id="profileName"
-                        style="
-                        text-align:right;
-                        font-weight:bold;
-                    ">
-                    </td>
-                </tr>
+                    <span id="profileName" class="profile-value"></span>
 
-                <tr>
-                    <td style="padding:12px 0;">
+                </div>
+
+                <div class="profile-row">
+
+                    <div class="profile-left">
                         <i class="fa-solid fa-phone"></i>
-                        Phone Number
-                    </td>
+                        <span>Phone Number</span>
+                    </div>
 
-                    <td
-                        id="profilePhone"
-                        style="
-                        text-align:right;
-                        font-weight:bold;
-                    ">
-                    </td>
-                </tr>
+                    <span id="profilePhone" class="profile-value"></span>
 
-                <tr>
-                    <td style="padding:12px 0;">
+                </div>
+
+                <div class="profile-row">
+
+                    <div class="profile-left">
                         <i class="fa-solid fa-at"></i>
-                        Username
-                    </td>
+                        <span>Username</span>
+                    </div>
 
-                    <td
-                        id="profileUsername"
-                        style="
-                        text-align:right;
-                        font-weight:bold;
-                    ">
-                    </td>
-                </tr>
+                    <span id="profileUsername" class="profile-value"></span>
 
-            </table>
+                </div>
+
+            </div>
 
             <button
-                style="
-                    margin-top:25px;
-                    width:100%;
-                "
+                class="profile-btn"
                 onclick="editProfile()">
 
                 <i class="fa-solid fa-pen"></i>
-
                 Edit Profile
 
             </button>
 
         </div>
-                <!-- CARD 2 -->
 
-        <div class="card">
+                
+               
+        <!-- CARD 2 -->
+        <div class="card next-card">
 
-            <h3>
+            <div class="next-header">
 
-                Next Step
+                <div class="next-icon">
+                    <i class="fa-solid fa-circle-arrow-right"></i>
+                </div>
 
-            </h3>
-
-            <br>
-
-            <div
-            style="
-                text-align:left;
-                line-height:2.1;
-                font-size:15px;
-            ">
-
-                Visit Smart Gym and complete
-                your biometric enrollment.
-
-                <br><br>
-
-                ✔ Fingerprint Enrollment
-
-                <br>
-
-                ✔ Face Recognition Enrollment
-
-                <br><br>
-
-                Once both biometrics are completed,
-
-                your account will automatically
-
-                become an Active Member Account.
+                <h3>Next Step</h3>
 
             </div>
 
+            <div class="next-divider"></div>
+
+            <p class="next-desc">
+                Visit Smart Gym and complete your biometric enrollment.
+            </p>
+
+            <div class="step-item">
+                <i class="fa-regular fa-circle-check"></i>
+                <span>Fingerprint Enrollment</span>
+            </div>
+
+            <div class="step-item">
+                <i class="fa-regular fa-circle-check"></i>
+                <span>Face Recognition Enrollment</span>
+            </div>
+
+            <div class="next-divider"></div>
+
+            <p class="next-note">
+                Once both biometrics are completed, your account will automatically become an Active Member Account.
+            </p>
+
         </div>
 
-        <!-- CARD 3 -->
+                
 
-        <div class="card">
+        <!-- CARD 3 -->
+        
+        <div class="card gym-card">
 
             <h3>
                 <i class="fa-solid fa-dumbbell"></i>
                 Gym Information
             </h3>
 
-            <br>
-            <div style="
-            text-align:left;
-            line-height:1.6;
-            font-size:15px;
-            ">
+            <div class="gym-list">
 
-            <p style="margin:0 0 16px;"></p>
-            <i class="fa-regular fa-clock"></i>
-            <b> Operating Hours</b><br>
-            Monday - Sunday<br>
-            6:00 AM - 10:00 PM
-            <p style="margin:0 0 16px;"></p>
+                <div class="gym-row">
+                    <div class="gym-left">
+                        <div class="gym-icon">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
 
-            <p style="margin:0 0 16px;"></p>
-            <i class="fa-solid fa-location-dot"></i>
-            <b> Address</b><br>
-            Poblacion, Balayan, Batangas
-            <p style="margin:0 0 16px;"></p>
+                        <span>Operating Hours</span>
+                    </div>
 
-            <p style="margin:0 0 16px;"></p>
-            <i class="fa-solid fa-phone"></i>
-            <b> Contact</b><br>
-            0912 345 6789
-            <p style="margin:0 0 16px;"></p>
+                    <div class="gym-right">
+                        6:00 AM – 10:00 PM<br>
+                        Everyday
+                    </div>
+                </div>
 
-            <p style="margin:0 0 16px;"></p>
-            <i class="fa-solid fa-envelope"></i>
-            <b> Email</b><br>
-            info@smartgym.com
-            <p style="margin:0 0 16px;"></p>
+                <div class="gym-row">
+                    <div class="gym-left">
+                        <div class="gym-icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
 
-            <p style="margin:0 0 16px;"></p>
-            <i class="fa-solid fa-globe"></i>
-            <b> Website</b><br>
-            www.smartgym.com
-            <p style="margin:0 0 16px;"></p>
+                        <span>Address</span>
+                    </div>
 
-            <p style="margin:0 0 16px;"></p>
-            <i class="fa-brands fa-facebook"></i>
-            <b> Facebook</b><br>
-            Smart Gym Official
-            <p style="margin:0 0 16px;"></p>
+                    <div class="gym-right">
+                        Poblacion,<br>
+                        Balayan, Batangas
+                    </div>
+                </div>
+
+                <div class="gym-row">
+                    <div class="gym-left">
+                        <div class="gym-icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+
+                        <span>Phone</span>
+                    </div>
+
+                    <div class="gym-right">
+                        0912 345 6789
+                    </div>
+                </div>
+
+                <div class="gym-row">
+                    <div class="gym-left">
+                        <div class="gym-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+
+                        <span>Email</span>
+                    </div>
+
+                    <div class="gym-right">
+                        info@smartgym.com
+                    </div>
+                </div>
+
+                <div class="gym-row">
+                    <div class="gym-left">
+                        <div class="gym-icon">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+
+                        <span>Website</span>
+                    </div>
+
+                    <div class="gym-right">
+                        www.smartgym.com
+                    </div>
+                </div>
+
+                <div class="gym-row">
+                    <div class="gym-left">
+                        <div class="gym-icon">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </div>
+
+                        <span>Facebook</span>
+                    </div>
+
+                    <div class="gym-right">
+                        Smart Gym Official
+                    </div>
+                </div>
 
             </div>
 
-            
         </div>
-
-    </div>
-
-</div>
-
-</div>
-
+                
 <!-- ================= NOTIFICATION ================= -->
 
 <div
@@ -641,27 +647,8 @@ setInterval(
     cursor:pointer;
 
 }
-.hero{
 
-margin-bottom:45px;
 
-padding:45px;
-
-border-radius:25px;
-
-}
-
-.hero p{
-
-    max-width:700px;
-
-    margin:auto;
-
-    color:#666;
-
-    line-height:1.8;
-
-}
 .cards{
     display:grid;
     align-items:start;
