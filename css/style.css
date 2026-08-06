@@ -1714,9 +1714,9 @@ table{
 
     filter:blur(25px);
 }
-/*====================================
+/*======================================
     ACTIVATION MODAL
-====================================*/
+======================================*/
 
 #activationModal{
 
@@ -1726,11 +1726,11 @@ table{
 
     inset:0;
 
-    background:rgba(0,0,0,.55);
-
     justify-content:center;
 
     align-items:center;
+
+    background:rgba(0,0,0,.55);
 
     z-index:9999;
 
@@ -1740,7 +1740,7 @@ table{
 
     position:relative;
 
-    width:500px;
+    width:460px;
 
     max-width:90%;
 
@@ -1748,11 +1748,11 @@ table{
 
     border-radius:22px;
 
-    padding:40px;
+    padding:35px;
 
     box-sizing:border-box;
 
-    box-shadow:0 20px 45px rgba(0,0,0,.25);
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
 
     animation:popup .25s ease;
 
@@ -1768,7 +1768,7 @@ table{
 
     color:#222;
 
-    margin:0 0 35px;
+    margin:0 0 30px;
 
 }
 
@@ -1776,25 +1776,29 @@ table{
 
     width:100%;
 
-    margin-bottom:22px;
+    margin-bottom:20px;
 
 }
 
-.activation-input{
+#activationModal .activation-input{
+
+    display:block;
 
     width:100%;
 
-    height:60px;
+    height:58px;
 
-    padding:0 20px;
+    padding:0 18px;
 
     border:2px solid #dddddd;
 
     border-radius:14px;
 
-    font-size:17px;
+    background:#ffffff !important;
 
-    background:#fff;
+    color:#222222 !important;
+
+    font-size:17px;
 
     outline:none;
 
@@ -1804,11 +1808,17 @@ table{
 
 }
 
-.activation-input:focus{
+#activationModal .activation-input::placeholder{
 
-    border-color:#16c85d;
+    color:#888888 !important;
 
-    box-shadow:0 0 0 4px rgba(22,200,93,.12);
+}
+
+#activationModal .activation-input:focus{
+
+    border-color:#18d26b;
+
+    box-shadow:0 0 0 4px rgba(24,210,107,.15);
 
 }
 
@@ -1816,31 +1826,39 @@ table{
 
     width:100%;
 
-    height:60px;
+    height:58px;
 
-    margin-top:8px;
+    margin-top:10px;
 
     border:none;
 
     border-radius:14px;
 
-    background:#16c85d;
+    background:#18d26b;
 
-    color:#fff;
+    color:#ffffff;
 
-    font-size:19px;
+    font-size:18px;
 
     font-weight:700;
 
     cursor:pointer;
 
-    transition:.2s;
+    transition:.25s;
 
 }
 
 .activate-btn:hover{
 
-    background:#13b656;
+    background:#14bf60;
+
+}
+
+.activate-btn:disabled{
+
+    opacity:.7;
+
+    cursor:not-allowed;
 
 }
 
@@ -1848,19 +1866,25 @@ table{
 
     position:absolute;
 
-    top:18px;
+    top:15px;
 
-    right:22px;
+    right:18px;
+
+    width:40px;
+
+    height:40px;
 
     border:none;
 
     background:none;
 
-    font-size:42px;
+    color:#333;
+
+    font-size:40px;
+
+    line-height:40px;
 
     cursor:pointer;
-
-    color:#333;
 
     transition:.2s;
 
@@ -1868,7 +1892,7 @@ table{
 
 .activation-close:hover{
 
-    color:#16c85d;
+    color:#18d26b;
 
 }
 
@@ -1899,6 +1923,12 @@ table{
         width:95%;
 
         padding:28px;
+
+    }
+
+    .activation-title{
+
+        font-size:28px;
 
     }
 
