@@ -167,7 +167,9 @@ const profile =
 // 👉 PRIORITY:
 // nickname → fallback real name
 const displayName =
-    profile.name || userData.name;
+    profile.name ||
+    userData.fullname ||
+    userData.username;
 
 // 👉 UPDATE NAME
 document.getElementById("welcome").innerText =
