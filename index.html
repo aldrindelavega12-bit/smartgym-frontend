@@ -117,50 +117,30 @@
 
     </div>
 
-</div>
+<!-- ==========================
+     ACTIVATE ACCOUNT MODAL
+========================== -->
+
 <div id="activationModal" class="modal">
 
     <div class="activation-card">
 
-        <!-- CLOSE -->
         <button
-            type="button"
             class="activation-close"
             onclick="closeActivationModal()">
 
-            <i class="fa-solid fa-xmark"></i>
+            &times;
 
         </button>
 
-        <!-- ICON -->
-        <div class="activation-icon">
-
-            <i class="fa-solid fa-user-shield"></i>
-
-        </div>
-
-        <!-- TITLE -->
         <h2 class="activation-title">
 
             Activate Account
 
         </h2>
 
-        <div class="activation-title-line"></div>
-
-        <!-- WELCOME -->
-        <div
-            id="activationName"
-            class="activation-name">
-
-            Loading...
-
-        </div>
-
-        <!-- INPUTS -->
+        <!-- Username -->
         <div class="activation-input">
-
-            <i class="fa-regular fa-user left-icon"></i>
 
             <input
 
@@ -174,9 +154,8 @@
 
         </div>
 
+        <!-- Password -->
         <div class="activation-input">
-
-            <i class="fa-solid fa-lock left-icon"></i>
 
             <input
 
@@ -188,19 +167,10 @@
 
             >
 
-            <i
-
-                class="fa-regular fa-eye right-icon"
-
-                onclick="togglePassword('activationPassword',this)">
-
-            </i>
-
         </div>
 
+        <!-- Confirm Password -->
         <div class="activation-input">
-
-            <i class="fa-solid fa-lock left-icon"></i>
 
             <input
 
@@ -212,17 +182,8 @@
 
             >
 
-            <i
-
-                class="fa-regular fa-eye right-icon"
-
-                onclick="togglePassword('activationConfirm',this)">
-
-            </i>
-
         </div>
 
-        <!-- BUTTON -->
         <button
 
             id="activateBtn"
@@ -231,37 +192,9 @@
 
             onclick="activateAccount()">
 
-            <span>
-
-                Activate Account
-
-            </span>
-
-            <i class="fa-solid fa-arrow-right"></i>
+            Activate Account
 
         </button>
-
-        <div class="activation-divider">
-
-            <span></span>
-
-            <div class="dot"></div>
-
-            <span></span>
-
-        </div>
-
-        <div class="activation-footer">
-
-            Having trouble?
-
-            <a href="#">
-
-                Contact support.
-
-            </a>
-
-        </div>
 
     </div>
 

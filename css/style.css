@@ -1714,108 +1714,59 @@ table{
 
     filter:blur(25px);
 }
-.activation-name{
-
-    text-align: center;
-    color: #666;
-    font-size: 15px;
-    margin-bottom: 20px;
-    line-height: 1.6;
-
-}
-
-.activation-name strong{
-
-    display: block;
-    color: #111;
-    font-size: 22px;
-    font-weight: 700;
-    margin-top: 5px;
-
-}
-
-/* ==========================
-   ACTIVATION MODAL
-========================== */
+/*======================================
+    ACTIVATE ACCOUNT MODAL
+======================================*/
 
 .activation-card{
 
     position:relative;
 
-    width:700px;
+    width:520px;
 
-    max-width:92%;
+    max-width:90%;
 
     background:#ffffff;
 
-    border:2px solid #22c55e;
+    border-radius:22px;
 
-    border-radius:28px;
+    padding:45px;
 
-    padding:35px 55px 45px;
-
-    box-shadow:
-    0 25px 60px rgba(0,0,0,.18);
+    box-shadow:0 20px 55px rgba(0,0,0,.25);
 
     animation:popup .25s ease;
 
 }
 
-/* CLOSE */
+/* CLOSE BUTTON */
 
 .activation-close{
 
     position:absolute;
 
-    top:25px;
+    top:18px;
 
-    right:25px;
+    right:20px;
 
-    width:58px;
+    border:none;
 
-    height:58px;
+    background:none;
 
-    border-radius:50%;
+    color:#333;
 
-    border:2px solid #22c55e;
-
-    background:#fff;
+    font-size:36px;
 
     cursor:pointer;
 
-    color:#222;
-
-    font-size:28px;
-
-    transition:.25s;
+    transition:.2s;
 
 }
 
 .activation-close:hover{
 
-    background:#22c55e;
-
-    color:#fff;
-
-}
-
-/* ICON */
-
-.activation-icon{
-
-    display:flex;
-
-    justify-content:center;
-
-    margin-top:5px;
-
-}
-
-.activation-icon i{
-
-    font-size:72px;
-
     color:#16c85d;
+
+    transform:scale(1.1);
 
 }
 
@@ -1823,59 +1774,15 @@ table{
 
 .activation-title{
 
-    margin-top:18px;
-
     text-align:center;
-
-    font-size:58px;
-
-    font-weight:800;
-
-    color:#202020;
-
-}
-
-.activation-title-line{
-
-    width:90px;
-
-    height:4px;
-
-    border-radius:10px;
-
-    background:#19cf63;
-
-    margin:18px auto 30px;
-
-}
-
-/* NAME */
-
-.activation-name{
-
-    text-align:center;
-
-    color:#777;
-
-    font-size:17px;
-
-    margin-bottom:28px;
-
-    line-height:1.8;
-
-}
-
-.activation-name strong{
-
-    display:block;
-
-    margin-top:8px;
-
-    color:#18c964;
 
     font-size:34px;
 
     font-weight:700;
+
+    color:#1d1d1d;
+
+    margin-bottom:35px;
 
 }
 
@@ -1883,9 +1790,7 @@ table{
 
 .activation-input{
 
-    position:relative;
-
-    margin-bottom:18px;
+    margin-bottom:20px;
 
 }
 
@@ -1893,65 +1798,29 @@ table{
 
     width:100%;
 
-    height:74px;
+    height:62px;
 
-    border-radius:18px;
+    border:2px solid #dddddd;
 
-    border:2px solid #dcdcdc;
+    border-radius:16px;
 
-    padding-left:72px;
+    padding:0 22px;
 
-    padding-right:70px;
-
-    font-size:22px;
-
-    transition:.25s;
+    font-size:18px;
 
     outline:none;
 
-    background:#fff;
+    transition:.2s;
+
+    box-sizing:border-box;
 
 }
 
 .activation-input input:focus{
 
-    border-color:#18d26e;
+    border-color:#16c85d;
 
-    box-shadow:0 0 0 4px rgba(24,210,110,.15);
-
-}
-
-.left-icon{
-
-    position:absolute;
-
-    left:25px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    color:#18d26e;
-
-    font-size:24px;
-
-}
-
-.right-icon{
-
-    position:absolute;
-
-    right:25px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    cursor:pointer;
-
-    color:#999;
-
-    font-size:22px;
+    box-shadow:0 0 0 3px rgba(22,200,93,.12);
 
 }
 
@@ -1959,111 +1828,61 @@ table{
 
 .activate-btn{
 
-    margin-top:10px;
-
     width:100%;
 
-    height:72px;
+    height:62px;
 
     border:none;
 
-    border-radius:18px;
+    border-radius:16px;
 
-    background:linear-gradient(
-        90deg,
-        #19cf63,
-        #10b957
-    );
+    background:#16c85d;
 
-    color:#fff;
+    color:#ffffff;
 
-    font-size:24px;
+    font-size:20px;
 
     font-weight:700;
 
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:18px;
-
     cursor:pointer;
 
-    transition:.25s;
+    transition:.2s;
+
+    margin-top:8px;
 
 }
 
 .activate-btn:hover{
 
-    transform:translateY(-2px);
-
-    box-shadow:0 10px 25px rgba(25,207,99,.35);
+    background:#12b956;
 
 }
 
-/* DIVIDER */
+.activate-btn:disabled{
 
-.activation-divider{
+    opacity:.7;
 
-    display:flex;
-
-    align-items:center;
-
-    margin:35px 0;
+    cursor:not-allowed;
 
 }
 
-.activation-divider span{
+/* RESPONSIVE */
 
-    flex:1;
+@media(max-width:600px){
 
-    height:1px;
+    .activation-card{
 
-    background:#d7d7d7;
+        width:92%;
 
-}
+        padding:30px;
 
-.activation-divider .dot{
+    }
 
-    width:10px;
+    .activation-title{
 
-    height:10px;
+        font-size:28px;
 
-    background:#19cf63;
-
-    border-radius:50%;
-
-    margin:0 15px;
-
-}
-
-/* FOOTER */
-
-.activation-footer{
-
-    text-align:center;
-
-    color:#666;
-
-    font-size:18px;
-
-}
-
-.activation-footer a{
-
-    color:#18c964;
-
-    text-decoration:none;
-
-    font-weight:700;
-
-}
-
-.activation-footer a:hover{
-
-    text-decoration:underline;
+    }
 
 }
 
@@ -2075,7 +1894,7 @@ table{
 
         opacity:0;
 
-        transform:scale(.92);
+        transform:scale(.95);
 
     }
 
