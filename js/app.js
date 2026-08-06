@@ -162,3 +162,66 @@ async function login() {
         btn.classList.remove("loading");
     }
 }
+
+// ==========================================
+// Activation Link
+// ==========================================
+
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+let activationToken = null;
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    const params = new URLSearchParams(window.location.search);
+
+    activationToken = params.get("token");
+
+    if (!activationToken) {
+
+        return;
+
+    }
+
+    checkActivationToken();
+
+});
+
+async function checkActivationToken() {
+
+    try {
+
+        const response = await fetch(
+
+            `${API_URL}/api/activation/${activationToken}`
+
+        );
+
+        const result = await response.json();
+
+        console.log(result);
+
+        if (!result.success) {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+        document.getElementById("activationName").innerHTML =
+            `Welcome, <b>${result.full_name}</b>`;
+
+        document.getElementById("activationModal").style.display = "flex";
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("Unable to verify activation link.");
+
+    }
+
+}
