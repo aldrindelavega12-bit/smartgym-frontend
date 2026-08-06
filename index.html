@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/background.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body class="bg-gym">
 
@@ -115,36 +118,37 @@
     </div>
 
 </div>
-
-<!-- Activation Modal -->
 <div id="activationModal" class="modal">
 
     <div class="activation-card">
 
-        <!-- Exit Button -->
+        <!-- CLOSE -->
         <button
+            type="button"
             class="activation-close"
             onclick="closeActivationModal()">
-            ✕
+
+            <i class="fa-solid fa-xmark"></i>
+
         </button>
 
-        <!-- Icon -->
+        <!-- ICON -->
         <div class="activation-icon">
 
             <i class="fa-solid fa-user-shield"></i>
 
         </div>
 
-        <!-- Title -->
+        <!-- TITLE -->
         <h2 class="activation-title">
 
             Activate Account
 
         </h2>
 
-        <div class="activation-line"></div>
+        <div class="activation-title-line"></div>
 
-        <!-- Welcome -->
+        <!-- WELCOME -->
         <div
             id="activationName"
             class="activation-name">
@@ -153,16 +157,16 @@
 
         </div>
 
-        <!-- Username -->
-        <div class="input-group">
+        <!-- INPUTS -->
+        <div class="activation-input">
 
-            <i class="fa-regular fa-user"></i>
+            <i class="fa-regular fa-user left-icon"></i>
 
             <input
 
-                type="text"
-
                 id="activationUsername"
+
+                type="text"
 
                 placeholder="Username"
 
@@ -170,51 +174,55 @@
 
         </div>
 
-        <!-- Password -->
-        <div class="input-group">
+        <div class="activation-input">
 
-            <i class="fa-solid fa-lock"></i>
+            <i class="fa-solid fa-lock left-icon"></i>
 
             <input
 
-                type="password"
-
                 id="activationPassword"
+
+                type="password"
 
                 placeholder="Password"
 
             >
 
             <i
-                class="fa-regular fa-eye eye"
-                onclick="togglePassword('activationPassword', this)">
+
+                class="fa-regular fa-eye right-icon"
+
+                onclick="togglePassword('activationPassword',this)">
+
             </i>
 
         </div>
 
-        <!-- Confirm -->
-        <div class="input-group">
+        <div class="activation-input">
 
-            <i class="fa-solid fa-lock"></i>
+            <i class="fa-solid fa-lock left-icon"></i>
 
             <input
 
-                type="password"
-
                 id="activationConfirm"
+
+                type="password"
 
                 placeholder="Confirm Password"
 
             >
 
             <i
-                class="fa-regular fa-eye eye"
-                onclick="togglePassword('activationConfirm', this)">
+
+                class="fa-regular fa-eye right-icon"
+
+                onclick="togglePassword('activationConfirm',this)">
+
             </i>
 
         </div>
 
-        <!-- Activate -->
+        <!-- BUTTON -->
         <button
 
             id="activateBtn"
@@ -223,42 +231,37 @@
 
             onclick="activateAccount()">
 
-            Activate Account
+            <span>
+
+                Activate Account
+
+            </span>
 
             <i class="fa-solid fa-arrow-right"></i>
 
         </button>
 
-        <div class="divider">
+        <div class="activation-divider">
 
-            <span>or</span>
+            <span></span>
+
+            <div class="dot"></div>
+
+            <span></span>
 
         </div>
 
-        <!-- Exit -->
-        <button
-
-            class="cancel-btn"
-
-            onclick="closeActivationModal()">
-
-            <i class="fa-solid fa-right-from-bracket"></i>
-
-            Exit
-
-        </button>
-
-        <p class="support-text">
+        <div class="activation-footer">
 
             Having trouble?
 
             <a href="#">
 
-                Contact support
+                Contact support.
 
             </a>
 
-        </p>
+        </div>
 
     </div>
 
