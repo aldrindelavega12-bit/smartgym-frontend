@@ -208,9 +208,8 @@ async function checkActivationToken() {
             return;
 
         }
-
         document.getElementById("activationName").innerHTML =
-            `Welcome, <b>${result.full_name}</b>`;
+            `Welcome,<strong>${result.full_name}</strong>`;
 
         document.getElementById("activationModal").style.display = "flex";
 

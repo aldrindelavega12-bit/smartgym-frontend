@@ -1714,3 +1714,22 @@ table{
 
     filter:blur(25px);
 }
+.activation-name{
+
+    text-align: center;
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+
+}
+
+.activation-name strong{
+
+    display: block;
+    color: #111;
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 5px;
+
+}
