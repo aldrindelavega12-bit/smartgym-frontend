@@ -98,13 +98,14 @@ const user = JSON.parse(localStorage.getItem("user"));
 if(!user || user.role !== "member"){
     window.location.href = "index.html";
 }
+const memberId = user.user_id;
 
 
 
 async function loadMembership(){
 
     try{
-        const res = await fetch(`${API_URL}/api/membership/${user.id}`);
+        const res = await fetch(`${API_URL}/api/membership/${user.user_id}`);
         const data = await res.json();
 
         const m = data.data;
@@ -238,7 +239,6 @@ function cleanType(type){
 
 loadMembership();
 
-const memberId = user.id || user.user_id;
 function showNotifPopup(title,text){
 
     const popup =
