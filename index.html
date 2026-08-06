@@ -115,45 +115,150 @@
     </div>
 
 </div>
+
+<!-- Activation Modal -->
 <div id="activationModal" class="modal">
 
-    <div class="change-password-card">
+    <div class="activation-card">
 
-        <h2 class="change-title">
+        <!-- Exit Button -->
+        <button
+            class="activation-close"
+            onclick="closeActivationModal()">
+            ✕
+        </button>
+
+        <!-- Icon -->
+        <div class="activation-icon">
+
+            <i class="fa-solid fa-user-shield"></i>
+
+        </div>
+
+        <!-- Title -->
+        <h2 class="activation-title">
+
             Activate Account
+
         </h2>
 
-        <p id="activationName" class="activation-name">
+        <div class="activation-line"></div>
+
+        <!-- Welcome -->
+        <div
+            id="activationName"
+            class="activation-name">
+
             Loading...
-        </p>
-        
-        <input
-            id="activationUsername"
-            type="text"
-            class="change-input"
-            placeholder="Username"
-        >
 
-        <input
-            id="activationPassword"
-            type="password"
-            class="change-input"
-            placeholder="Password"
-        >
+        </div>
 
-        <input
-            id="activationConfirm"
-            type="password"
-            class="change-input"
-            placeholder="Confirm Password"
-        >
+        <!-- Username -->
+        <div class="input-group">
+
+            <i class="fa-regular fa-user"></i>
+
+            <input
+
+                type="text"
+
+                id="activationUsername"
+
+                placeholder="Username"
+
+            >
+
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+
+            <i class="fa-solid fa-lock"></i>
+
+            <input
+
+                type="password"
+
+                id="activationPassword"
+
+                placeholder="Password"
+
+            >
+
+            <i
+                class="fa-regular fa-eye eye"
+                onclick="togglePassword('activationPassword', this)">
+            </i>
+
+        </div>
+
+        <!-- Confirm -->
+        <div class="input-group">
+
+            <i class="fa-solid fa-lock"></i>
+
+            <input
+
+                type="password"
+
+                id="activationConfirm"
+
+                placeholder="Confirm Password"
+
+            >
+
+            <i
+                class="fa-regular fa-eye eye"
+                onclick="togglePassword('activationConfirm', this)">
+            </i>
+
+        </div>
+
+        <!-- Activate -->
         <button
+
             id="activateBtn"
-            class="change-btn"
-            onclick="activateAccount()"
-        >
+
+            class="activate-btn"
+
+            onclick="activateAccount()">
+
             Activate Account
+
+            <i class="fa-solid fa-arrow-right"></i>
+
         </button>
+
+        <div class="divider">
+
+            <span>or</span>
+
+        </div>
+
+        <!-- Exit -->
+        <button
+
+            class="cancel-btn"
+
+            onclick="closeActivationModal()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Exit
+
+        </button>
+
+        <p class="support-text">
+
+            Having trouble?
+
+            <a href="#">
+
+                Contact support
+
+            </a>
+
+        </p>
 
     </div>
 

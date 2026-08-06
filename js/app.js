@@ -224,33 +224,50 @@ async function checkActivationToken() {
     }
 
 }
-
-async function activateAccount() {
+async function activateAccount(){
 
     const username =
-        document.getElementById("activationUsername").value.trim();
+    document.getElementById("activationUsername").value.trim();
 
     const password =
-        document.getElementById("activationPassword").value;
+    document.getElementById("activationPassword").value;
 
     const confirm =
-        document.getElementById("activationConfirm").value;
+    document.getElementById("activationConfirm").value;
 
-    if (!username || !password || !confirm) {
+    const btn =
+    document.getElementById("activateBtn");
 
-        alert("Please complete all fields.");
+    if(username===""){
+
+        alert("Username is required.");
+
         return;
 
     }
 
-    if (password !== confirm) {
+    if(password===""){
+
+        alert("Password is required.");
+
+        return;
+
+    }
+
+    if(password!==confirm){
 
         alert("Passwords do not match.");
+
         return;
 
     }
 
-    try {
+    btn.disabled = true;
+
+    btn.innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Activating...';
+
+    try{
 
         const response = await fetch(
 
@@ -258,19 +275,21 @@ async function activateAccount() {
 
             {
 
-                method: "POST",
+                method:"POST",
 
-                headers: {
+                headers:{
 
-                    "Content-Type": "application/json"
+                    "Content-Type":"application/json"
 
                 },
 
-                body: JSON.stringify({
+                body:JSON.stringify({
 
-                    token: activationToken,
-                    username: username,
-                    password: password
+                    token:activationToken,
+
+                    username:username,
+
+                    password:password
 
                 })
 
@@ -278,34 +297,84 @@ async function activateAccount() {
 
         );
 
-        const result = await response.json();
+        const result =
+        await response.json();
 
-        if (!result.success) {
+        if(!result.success){
+
+            btn.disabled = false;
+
+            btn.innerHTML =
+            'Activate Account <i class="fa-solid fa-arrow-right"></i>';
 
             alert(result.message);
+
             return;
 
         }
 
-        alert("Account activated successfully!");
+        btn.innerHTML =
+        '<i class="fa-solid fa-circle-check"></i> Activated';
 
-        // Close modal
-        document.getElementById("activationModal").style.display = "none";
+        setTimeout(()=>{
 
-        // Remove token from URL
-        window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname
-        );
+            closeActivationModal();
+
+            alert(
+                "Account activated successfully!\n\nYou can now login."
+            );
+
+        },1200);
 
     }
 
-    catch (err) {
+    catch(err){
 
         console.error(err);
 
-        alert("Unable to activate account.");
+        btn.disabled = false;
+
+        btn.innerHTML =
+        'Activate Account <i class="fa-solid fa-arrow-right"></i>';
+
+        alert("Server Error.");
+
+    }
+
+}
+
+
+function closeActivationModal(){
+
+    document.getElementById("activationModal").style.display = "none";
+
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+
+}
+
+function togglePassword(id, icon){
+
+    const input = document.getElementById(id);
+
+    if(input.type === "password"){
+
+        input.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    }
+
+    else{
+
+        input.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
 
     }
 
