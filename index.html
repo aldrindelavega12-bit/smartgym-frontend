@@ -117,15 +117,17 @@
 
     </div>
 
-<!-- ==========================
+<!-- ===========================
      ACTIVATE ACCOUNT MODAL
-========================== -->
+=========================== -->
 
 <div id="activationModal" class="modal">
 
     <div class="activation-card">
 
+        <!-- CLOSE -->
         <button
+            type="button"
             class="activation-close"
             onclick="closeActivationModal()">
 
@@ -133,14 +135,60 @@
 
         </button>
 
+        <!-- TITLE -->
         <h2 class="activation-title">
 
             Activate Account
 
         </h2>
 
-        <!-- Username -->
-        <div class="activation-input">
+        <!-- ACTIVATION CODE -->
+
+        <div class="activation-group">
+
+            <label>
+
+                Activation Code
+
+            </label>
+
+            <div class="activation-code-wrapper">
+
+                <input
+
+                    id="activationToken"
+
+                    type="text"
+
+                    readonly
+
+                >
+
+                <button
+
+                    type="button"
+
+                    class="copy-btn"
+
+                    onclick="copyActivationCode()">
+
+                    Copy
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- USERNAME -->
+
+        <div class="activation-group">
+
+            <label>
+
+                Username
+
+            </label>
 
             <input
 
@@ -148,14 +196,21 @@
 
                 type="text"
 
-                placeholder="Username"
+                placeholder="Enter username"
 
             >
 
         </div>
 
-        <!-- Password -->
-        <div class="activation-input">
+        <!-- PASSWORD -->
+
+        <div class="activation-group">
+
+            <label>
+
+                Password
+
+            </label>
 
             <input
 
@@ -163,14 +218,21 @@
 
                 type="password"
 
-                placeholder="Password"
+                placeholder="Enter password"
 
             >
 
         </div>
 
-        <!-- Confirm Password -->
-        <div class="activation-input">
+        <!-- CONFIRM -->
+
+        <div class="activation-group">
+
+            <label>
+
+                Confirm Password
+
+            </label>
 
             <input
 
@@ -178,11 +240,13 @@
 
                 type="password"
 
-                placeholder="Confirm Password"
+                placeholder="Confirm password"
 
             >
 
         </div>
+
+        <!-- BUTTON -->
 
         <button
 

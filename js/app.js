@@ -186,10 +186,9 @@ window.addEventListener("DOMContentLoaded", () => {
     checkActivationToken();
 
 });
+async function checkActivationToken(){
 
-async function checkActivationToken() {
-
-    try {
+    try{
 
         const response = await fetch(
 
@@ -197,29 +196,36 @@ async function checkActivationToken() {
 
         );
 
-        const result = await response.json();
+        const result =
+        await response.json();
 
         console.log(result);
 
-        if (!result.success) {
+        if(!result.success){
 
             alert(result.message);
 
             return;
 
         }
-        document.getElementById("activationName").innerHTML =
-            `Welcome,<strong>${result.full_name}</strong>`;
 
-        document.getElementById("activationModal").style.display = "flex";
+        document.getElementById(
+            "activationToken"
+        ).value = activationToken;
+
+        document.getElementById(
+            "activationModal"
+        ).style.display = "flex";
 
     }
 
-    catch (err) {
+    catch(err){
 
         console.error(err);
 
-        alert("Unable to verify activation link.");
+        alert(
+            "Unable to verify activation link."
+        );
 
     }
 
@@ -227,20 +233,30 @@ async function checkActivationToken() {
 async function activateAccount(){
 
     const username =
-    document.getElementById("activationUsername").value.trim();
+    document.getElementById(
+        "activationUsername"
+    ).value.trim();
 
     const password =
-    document.getElementById("activationPassword").value;
+    document.getElementById(
+        "activationPassword"
+    ).value;
 
     const confirm =
-    document.getElementById("activationConfirm").value;
+    document.getElementById(
+        "activationConfirm"
+    ).value;
 
     const btn =
-    document.getElementById("activateBtn");
+    document.getElementById(
+        "activateBtn"
+    );
 
     if(username===""){
 
-        alert("Username is required.");
+        alert(
+            "Please enter username."
+        );
 
         return;
 
@@ -248,7 +264,9 @@ async function activateAccount(){
 
     if(password===""){
 
-        alert("Password is required.");
+        alert(
+            "Please enter password."
+        );
 
         return;
 
@@ -256,7 +274,9 @@ async function activateAccount(){
 
     if(password!==confirm){
 
-        alert("Passwords do not match.");
+        alert(
+            "Passwords do not match."
+        );
 
         return;
 
@@ -264,8 +284,8 @@ async function activateAccount(){
 
     btn.disabled = true;
 
-    btn.innerHTML =
-    '<i class="fa-solid fa-spinner fa-spin"></i> Activating...';
+    btn.innerText =
+    "Activating...";
 
     try{
 
@@ -304,8 +324,8 @@ async function activateAccount(){
 
             btn.disabled = false;
 
-            btn.innerHTML =
-            'Activate Account <i class="fa-solid fa-arrow-right"></i>';
+            btn.innerText =
+            "Activate Account";
 
             alert(result.message);
 
@@ -313,18 +333,11 @@ async function activateAccount(){
 
         }
 
-        btn.innerHTML =
-        '<i class="fa-solid fa-circle-check"></i> Activated';
+        alert(
+            "Account activated successfully!"
+        );
 
-        setTimeout(()=>{
-
-            closeActivationModal();
-
-            alert(
-                "Account activated successfully!\n\nYou can now login."
-            );
-
-        },1200);
+        closeActivationModal();
 
     }
 
@@ -332,12 +345,14 @@ async function activateAccount(){
 
         console.error(err);
 
+        alert(
+            "Server Error."
+        );
+
         btn.disabled = false;
 
-        btn.innerHTML =
-        'Activate Account <i class="fa-solid fa-arrow-right"></i>';
-
-        alert("Server Error.");
+        btn.innerText =
+        "Activate Account";
 
     }
 
@@ -353,6 +368,18 @@ function closeActivationModal(){
         document.title,
         window.location.pathname
     );
+
+}
+function copyActivationCode(){
+
+    const input =
+    document.getElementById("activationToken");
+
+    navigator.clipboard.writeText(
+        input.value
+    );
+
+    alert("Activation code copied.");
 
 }
 
