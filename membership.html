@@ -238,7 +238,13 @@ function cleanType(type){
 }
 
 loadMembership();
+function logout() {
 
+    localStorage.removeItem("user");
+    localStorage.removeItem("profile");
+
+    window.location.replace("index.html");
+}
 function showNotifPopup(title,text){
 
     const popup =
