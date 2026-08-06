@@ -127,55 +127,58 @@
 
     <div class="activation-card">
 
-        <!-- CLOSE -->
-        <span
-            class="close-btn"
-            onclick="closeActivationModal()"
-        >
-            ×
-        </span>
+        <button
+            type="button"
+            class="activation-close"
+            onclick="closeActivationModal()">
 
-        <!-- TITLE -->
-        <h2 class="change-title">
+            &times;
+
+        </button>
+
+        <h2 class="activation-title">
 
             Activate Account
 
         </h2>
 
-        <!-- USERNAME -->
+        <div class="activation-group">
 
-        <input
-            type="text"
-            id="activationUsername"
-            class="change-input"
-            placeholder="Username"
-        >
+            <input
+                id="activationUsername"
+                class="activation-input"
+                type="text"
+                placeholder="Username"
+            >
 
-        <!-- PASSWORD -->
+        </div>
 
-        <input
-            type="password"
-            id="activationPassword"
-            class="change-input"
-            placeholder="Password"
-        >
+        <div class="activation-group">
 
-        <!-- CONFIRM PASSWORD -->
+            <input
+                id="activationPassword"
+                class="activation-input"
+                type="password"
+                placeholder="Password"
+            >
 
-        <input
-            type="password"
-            id="activationConfirm"
-            class="change-input"
-            placeholder="Confirm Password"
-        >
+        </div>
 
-        <!-- BUTTON -->
+        <div class="activation-group">
+
+            <input
+                id="activationConfirm"
+                class="activation-input"
+                type="password"
+                placeholder="Confirm Password"
+            >
+
+        </div>
 
         <button
             id="activateBtn"
-            class="change-btn"
-            onclick="activateAccount()"
-        >
+            class="activate-btn"
+            onclick="activateAccount()">
 
             Activate Account
 
