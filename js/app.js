@@ -162,15 +162,15 @@ async function login() {
         btn.classList.remove("loading");
     }
 }
-
 // ==========================================
-// Activation Link
+// ACTIVATION
 // ==========================================
 
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 let activationToken = null;
 
+// CHECK LINK
 window.addEventListener("DOMContentLoaded", () => {
 
     const params = new URLSearchParams(window.location.search);
@@ -186,9 +186,11 @@ window.addEventListener("DOMContentLoaded", () => {
     checkActivationToken();
 
 });
-async function checkActivationToken(){
 
-    try{
+// VERIFY TOKEN
+async function checkActivationToken() {
+
+    try {
 
         const response = await fetch(
 
@@ -196,12 +198,11 @@ async function checkActivationToken(){
 
         );
 
-        const result =
-        await response.json();
+        const result = await response.json();
 
         console.log(result);
 
-        if(!result.success){
+        if (!result.success) {
 
             alert(result.message);
 
@@ -210,27 +211,38 @@ async function checkActivationToken(){
         }
 
         document.getElementById(
-            "activationToken"
-        ).value = activationToken;
-
-        document.getElementById(
             "activationModal"
         ).style.display = "flex";
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.error(err);
 
-        alert(
-            "Unable to verify activation link."
-        );
+        alert("Unable to verify activation link.");
 
     }
 
 }
-async function activateAccount(){
+
+// CLOSE
+function closeActivationModal() {
+
+    document.getElementById(
+        "activationModal"
+    ).style.display = "none";
+
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+
+}
+
+// ACTIVATE ACCOUNT
+async function activateAccount() {
 
     const username =
     document.getElementById(
@@ -252,31 +264,25 @@ async function activateAccount(){
         "activateBtn"
     );
 
-    if(username===""){
+    if (username === "") {
 
-        alert(
-            "Please enter username."
-        );
+        alert("Please enter username.");
 
         return;
 
     }
 
-    if(password===""){
+    if (password.length < 8) {
 
-        alert(
-            "Please enter password."
-        );
+        alert("Password must be at least 8 characters.");
 
         return;
 
     }
 
-    if(password!==confirm){
+    if (password !== confirm) {
 
-        alert(
-            "Passwords do not match."
-        );
+        alert("Passwords do not match.");
 
         return;
 
@@ -284,10 +290,9 @@ async function activateAccount(){
 
     btn.disabled = true;
 
-    btn.innerText =
-    "Activating...";
+    btn.innerText = "Activating...";
 
-    try{
+    try {
 
         const response = await fetch(
 
@@ -295,21 +300,21 @@ async function activateAccount(){
 
             {
 
-                method:"POST",
+                method: "POST",
 
-                headers:{
+                headers: {
 
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
 
                 },
 
-                body:JSON.stringify({
+                body: JSON.stringify({
 
-                    token:activationToken,
+                    token: activationToken,
 
-                    username:username,
+                    username: username,
 
-                    password:password
+                    password: password
 
                 })
 
@@ -317,15 +322,15 @@ async function activateAccount(){
 
         );
 
-        const result =
-        await response.json();
+        const result = await response.json();
 
-        if(!result.success){
+        console.log(result);
+
+        if (!result.success) {
 
             btn.disabled = false;
 
-            btn.innerText =
-            "Activate Account";
+            btn.innerText = "Activate Account";
 
             alert(result.message);
 
@@ -333,75 +338,23 @@ async function activateAccount(){
 
         }
 
-        alert(
-            "Account activated successfully!"
-        );
+        alert("Account activated successfully!");
 
         closeActivationModal();
 
+        window.location.href = "index.html";
+
     }
 
-    catch(err){
+    catch (err) {
 
         console.error(err);
 
-        alert(
-            "Server Error."
-        );
+        alert("Server Error.");
 
         btn.disabled = false;
 
-        btn.innerText =
-        "Activate Account";
-
-    }
-
-}
-
-
-function closeActivationModal(){
-
-    document.getElementById("activationModal").style.display = "none";
-
-    window.history.replaceState(
-        {},
-        document.title,
-        window.location.pathname
-    );
-
-}
-function copyActivationCode(){
-
-    const input =
-    document.getElementById("activationToken");
-
-    navigator.clipboard.writeText(
-        input.value
-    );
-
-    alert("Activation code copied.");
-
-}
-
-function togglePassword(id, icon){
-
-    const input = document.getElementById(id);
-
-    if(input.type === "password"){
-
-        input.type = "text";
-
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
-
-    }
-
-    else{
-
-        input.type = "password";
-
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
+        btn.innerText = "Activate Account";
 
     }
 
