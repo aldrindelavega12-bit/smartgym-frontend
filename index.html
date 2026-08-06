@@ -117,6 +117,8 @@
 
     </div>
 
+</div>
+
 <!-- ===========================
      ACTIVATE ACCOUNT MODAL
 =========================== -->
@@ -126,17 +128,15 @@
     <div class="activation-card">
 
         <!-- CLOSE -->
-        <button
-            type="button"
-            class="activation-close"
-            onclick="closeActivationModal()">
-
-            &times;
-
-        </button>
+        <span
+            class="close-btn"
+            onclick="closeActivationModal()"
+        >
+            ×
+        </span>
 
         <!-- TITLE -->
-        <h2 class="activation-title">
+        <h2 class="change-title">
 
             Activate Account
 
@@ -144,79 +144,38 @@
 
         <!-- USERNAME -->
 
-        <div class="activation-group">
-
-            <label>
-
-                Username
-
-            </label>
-
-            <input
-
-                id="activationUsername"
-
-                type="text"
-
-                placeholder="Enter username"
-
-            >
-
-        </div>
+        <input
+            type="text"
+            id="activationUsername"
+            class="change-input"
+            placeholder="Username"
+        >
 
         <!-- PASSWORD -->
 
-        <div class="activation-group">
+        <input
+            type="password"
+            id="activationPassword"
+            class="change-input"
+            placeholder="Password"
+        >
 
-            <label>
+        <!-- CONFIRM PASSWORD -->
 
-                Password
-
-            </label>
-
-            <input
-
-                id="activationPassword"
-
-                type="password"
-
-                placeholder="Enter password"
-
-            >
-
-        </div>
-
-        <!-- CONFIRM -->
-
-        <div class="activation-group">
-
-            <label>
-
-                Confirm Password
-
-            </label>
-
-            <input
-
-                id="activationConfirm"
-
-                type="password"
-
-                placeholder="Confirm password"
-
-            >
-
-        </div>
+        <input
+            type="password"
+            id="activationConfirm"
+            class="change-input"
+            placeholder="Confirm Password"
+        >
 
         <!-- BUTTON -->
 
         <button
-
             id="activateBtn"
-
-            class="activate-btn"
-
-            onclick="activateAccount()">
+            class="change-btn"
+            onclick="activateAccount()"
+        >
 
             Activate Account
 
