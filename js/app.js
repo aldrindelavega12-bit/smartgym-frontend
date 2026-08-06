@@ -225,3 +225,89 @@ async function checkActivationToken() {
     }
 
 }
+
+async function activateAccount() {
+
+    const username =
+        document.getElementById("activationUsername").value.trim();
+
+    const password =
+        document.getElementById("activationPassword").value;
+
+    const confirm =
+        document.getElementById("activationConfirm").value;
+
+    if (!username || !password || !confirm) {
+
+        alert("Please complete all fields.");
+        return;
+
+    }
+
+    if (password !== confirm) {
+
+        alert("Passwords do not match.");
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+
+            `${API_URL}/api/activate_account`,
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    token: activationToken,
+                    username: username,
+                    password: password
+
+                })
+
+            }
+
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+            alert(result.message);
+            return;
+
+        }
+
+        alert("Account activated successfully!");
+
+        // Close modal
+        document.getElementById("activationModal").style.display = "none";
+
+        // Remove token from URL
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("Unable to activate account.");
+
+    }
+
+}
