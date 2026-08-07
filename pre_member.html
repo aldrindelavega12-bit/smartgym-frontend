@@ -375,121 +375,502 @@ if(!user || user.role !== "pre_member"){
 
 <script>
 
-const userData =
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+// =====================================================
+// LOAD USER
+// =====================================================
+
+let userData =
     JSON.parse(
         localStorage.getItem("user")
     );
 
-const displayName =
-    userData.full_name ||
-    userData.name ||
-    userData.username ||
-    "-";
 
-document.getElementById("welcome").innerText =
-    "WELCOME, " + displayName + " 👋";
+// =====================================================
+// ROLE PROTECTION
+// =====================================================
 
-document.getElementById("profileName").innerText =
-    displayName;
-    
-document.getElementById("profilePhone").innerText =
-    userData.phone_number || "-";
+if (
+    !userData ||
+    userData.role !== "pre_member"
+) {
 
-document.getElementById("profileUsername").innerText =
-    userData.username || "-";
+    window.location.href =
+        "index.html";
+
+}
+
+
+// =====================================================
+// LOAD PRE-MEMBER PROFILE
+// =====================================================
+
+async function loadProfile(){
+
+    try{
+
+        // ---------------------------------------------
+        // Get pending members from backend
+        // ---------------------------------------------
+
+        const response = await fetch(
+            `${API_URL}/api/pending_members`
+        );
+
+        const result =
+            await response.json();
+
+
+        if(
+            result.status !== "success" ||
+            !Array.isArray(result.data)
+        ){
+
+            console.log(
+                "Unable to load pending member data."
+            );
+
+            showLocalProfile();
+
+            return;
+
+        }
+
+
+        // ---------------------------------------------
+        // Find current account
+        // ---------------------------------------------
+
+        const currentMember =
+            result.data.find(
+                member =>
+                    String(member.account_id) ===
+                    String(userData.id)
+            );
+
+
+        // ---------------------------------------------
+        // No pending record found
+        // ---------------------------------------------
+
+        if(!currentMember){
+
+            console.log(
+                "Pending member record not found."
+            );
+
+            showLocalProfile();
+
+            return;
+
+        }
+
+
+        // ---------------------------------------------
+        // Get REAL data from database
+        // ---------------------------------------------
+
+        const fullName =
+            currentMember.full_name || "-";
+
+        const phone =
+            currentMember.phone_number || "-";
+
+
+        // ---------------------------------------------
+        // Username comes from login account
+        // ---------------------------------------------
+
+        const username =
+            userData.username || "-";
+
+
+        // ---------------------------------------------
+        // Update localStorage
+        // ---------------------------------------------
+
+        userData.name =
+            fullName;
+
+        userData.fullname =
+            fullName;
+
+        userData.phone_number =
+            phone;
+
+        userData.username =
+            username;
+
+
+        localStorage.setItem(
+            "user",
+            JSON.stringify(userData)
+        );
+
+
+        // ---------------------------------------------
+        // UPDATE UI
+        // ---------------------------------------------
+
+        updateProfileUI(
+            fullName,
+            phone,
+            username
+        );
+
+
+        console.log(
+            "Pre-member profile loaded:",
+            {
+                fullName,
+                phone,
+                username
+            }
+        );
+
+    }
+
+    catch(err){
+
+        console.error(
+            "Profile loading error:",
+            err
+        );
+
+        showLocalProfile();
+
+    }
+
+}
+
+
+// =====================================================
+// FALLBACK LOCAL PROFILE
+// =====================================================
+
+function showLocalProfile(){
+
+    const fullName =
+        userData.fullname ||
+        userData.name ||
+        userData.full_name ||
+        "-";
+
+
+    const phone =
+        userData.phone_number ||
+        userData.phone ||
+        "-";
+
+
+    const username =
+        userData.username ||
+        "-";
+
+
+    updateProfileUI(
+        fullName,
+        phone,
+        username
+    );
+
+}
+
+
+// =====================================================
+// UPDATE PROFILE UI
+// =====================================================
+
+function updateProfileUI(
+    fullName,
+    phone,
+    username
+){
+
+    const welcome =
+        document.getElementById(
+            "welcome"
+        );
+
+    const profileName =
+        document.getElementById(
+            "profileName"
+        );
+
+    const profilePhone =
+        document.getElementById(
+            "profilePhone"
+        );
+
+    const profileUsername =
+        document.getElementById(
+            "profileUsername"
+        );
+
+
+    // ---------------------------------------------
+    // Welcome
+    // ---------------------------------------------
+
+    if(welcome){
+
+        welcome.innerText =
+            "WELCOME, " +
+            fullName +
+            " 👋";
+
+    }
+
+
+    // ---------------------------------------------
+    // Full Name
+    // ---------------------------------------------
+
+    if(profileName){
+
+        profileName.innerText =
+            fullName;
+
+    }
+
+
+    // ---------------------------------------------
+    // Phone
+    // ---------------------------------------------
+
+    if(profilePhone){
+
+        profilePhone.innerText =
+            phone;
+
+    }
+
+
+    // ---------------------------------------------
+    // Username
+    // ---------------------------------------------
+
+    if(profileUsername){
+
+        profileUsername.innerText =
+            username;
+
+    }
+
+}
+
+
+// =====================================================
+// EDIT PROFILE
+// =====================================================
 
 function editProfile(){
 
-    document.getElementById("editName").value =
-        userData.name || "";
+    document.getElementById(
+        "editName"
+    ).value =
+        userData.fullname ||
+        userData.name ||
+        "";
 
-    document.getElementById("editPhone").value =
-        userData.phone_number || "";
 
-    document.getElementById("editUsername").value =
-        userData.username || "";
+    document.getElementById(
+        "editPhone"
+    ).value =
+        userData.phone_number ||
+        "";
 
-    document.getElementById("editModal").style.display =
+
+    document.getElementById(
+        "editUsername"
+    ).value =
+        userData.username ||
+        "";
+
+
+    document.getElementById(
+        "editModal"
+    ).style.display =
         "flex";
 
 }
 
+
+// =====================================================
+// CLOSE EDIT PROFILE
+// =====================================================
+
 function closeModal(){
 
-    document.getElementById("editModal").style.display =
+    document.getElementById(
+        "editModal"
+    ).style.display =
         "none";
 
 }
+
+
+// =====================================================
+// SAVE PROFILE
+// =====================================================
+
 async function saveProfile(){
 
     const fullname =
-        document.getElementById("editName").value;
+        document.getElementById(
+            "editName"
+        ).value.trim();
+
 
     const phone =
-        document.getElementById("editPhone").value;
+        document.getElementById(
+            "editPhone"
+        ).value.trim();
+
 
     const username =
-        document.getElementById("editUsername").value;
+        document.getElementById(
+            "editUsername"
+        ).value.trim();
+
+
+    // ---------------------------------------------
+    // Validation
+    // ---------------------------------------------
+
+    if(!fullname){
+
+        showNotifPopup(
+            "Error",
+            "Full name is required."
+        );
+
+        return;
+
+    }
+
+
+    if(!phone){
+
+        showNotifPopup(
+            "Error",
+            "Phone number is required."
+        );
+
+        return;
+
+    }
+
+
+    if(!username){
+
+        showNotifPopup(
+            "Error",
+            "Username is required."
+        );
+
+        return;
+
+    }
+
 
     try{
 
-        const res = await fetch(
+        const response =
+            await fetch(
 
-            "https://smartgym-api-ia2e.onrender.com/api/pre_member/profile",
+                `${API_URL}/api/pre_member/profile`,
 
-            {
+                {
 
-                method:"PUT",
+                    method: "PUT",
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+                    headers: {
 
-                body:JSON.stringify({
+                        "Content-Type":
+                            "application/json"
 
-                    id:userData.id,
+                    },
 
-                    fullname:fullname,
+                    body: JSON.stringify({
 
-                    phone_number:phone,
+                        id:
+                            userData.id,
 
-                    username:username
+                        fullname:
+                            fullname,
 
-                })
+                        phone_number:
+                            phone,
 
-            }
+                        username:
+                            username
 
+                    })
+
+                }
+
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Profile update:",
+            result
         );
 
-        const data = await res.json();
 
-        if(data.status=="success"){
+        // -----------------------------------------
+        // SUCCESS
+        // -----------------------------------------
 
-            // Update Card
-            document.getElementById("profileName").innerText =
+        if(
+            result.status ===
+            "success"
+        ){
+
+            // Update local data
+
+            userData.name =
                 fullname;
 
-            document.getElementById("profilePhone").innerText =
+            userData.fullname =
+                fullname;
+
+            userData.phone_number =
                 phone;
 
-            document.getElementById("profileUsername").innerText =
+            userData.username =
                 username;
 
-            // Update Welcome
-            document.getElementById("welcome").innerText =
-                "WELCOME, " + fullname + " 👋";
-
-            // Update localStorage
-            userData.name = fullname;
-            userData.phone_number = phone;
-            userData.username = username;
 
             localStorage.setItem(
                 "user",
                 JSON.stringify(userData)
             );
 
+
+            // Update UI
+
+            updateProfileUI(
+                fullname,
+                phone,
+                username
+            );
+
+
+            // Close modal
+
             closeModal();
+
+
+            // Notification
 
             showNotifPopup(
                 "Success",
@@ -502,7 +883,8 @@ async function saveProfile(){
 
             showNotifPopup(
                 "Error",
-                data.message
+                result.message ||
+                "Unable to update profile."
             );
 
         }
@@ -511,16 +893,25 @@ async function saveProfile(){
 
     catch(err){
 
-        console.log(err);
+        console.error(
+            "Save profile error:",
+            err
+        );
+
 
         showNotifPopup(
             "Error",
-            "Unable to update profile."
+            "Unable to connect to server."
         );
 
     }
 
 }
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
 
 function logout(){
 
@@ -528,79 +919,152 @@ function logout(){
 
     window.location.href =
         "index.html";
+
 }
 
 
-// ================= SHOW NOTIFICATION =================
+// =====================================================
+// NOTIFICATION POPUP
+// =====================================================
 
-function showNotifPopup(title,text){
+function showNotifPopup(
+    title,
+    text
+){
 
     const popup =
         document.getElementById(
             "notifPopup"
         );
 
-    document.getElementById(
-        "notifTitle"
-    ).innerText = title;
 
-    document.getElementById(
-        "notifText"
-    ).innerText = text;
+    if(!popup){
 
-    popup.classList.add("show");
+        return;
 
-    setTimeout(() => {
+    }
 
-        popup.classList.remove(
-            "show"
+
+    const notifTitle =
+        document.getElementById(
+            "notifTitle"
         );
 
-    },4000);
+
+    const notifText =
+        document.getElementById(
+            "notifText"
+        );
+
+
+    if(notifTitle){
+
+        notifTitle.innerText =
+            title;
+
+    }
+
+
+    if(notifText){
+
+        notifText.innerText =
+            text;
+
+    }
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
 }
 
 
-// ================= CHECK ACTIVATION =================
+// =====================================================
+// CHECK ACTIVATION
+// =====================================================
 
 async function checkActivation(){
 
     try{
 
-        const res = await fetch(
+        const response =
+            await fetch(
 
-            `https://smartgym-api-ia2e.onrender.com/api/check_account/${userData.id}`
+                `${API_URL}/api/check_account/${userData.id}`
 
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Activation check:",
+            data
         );
 
-        const data = await res.json();
+
+        // ---------------------------------------------
+        // ACCOUNT BECAME MEMBER
+        // ---------------------------------------------
 
         if(
-            data.status === "success" &&
-            data.role === "member"
+            data.status ===
+                "success" &&
+
+            data.role ===
+                "member"
         ){
 
+            // -----------------------------------------
+            // Save updated account
+            // -----------------------------------------
+
             localStorage.setItem(
-
                 "user",
-
-                JSON.stringify(data.user)
-
+                JSON.stringify(
+                    data.user
+                )
             );
+
+
+            // -----------------------------------------
+            // Notification
+            // -----------------------------------------
 
             showNotifPopup(
-
                 "Congratulations!",
-
                 "Your membership has been activated."
-
             );
 
-            setTimeout(()=>{
 
-                window.location.href =
-                    "member.html";
+            // -----------------------------------------
+            // Redirect
+            // -----------------------------------------
 
-            },2000);
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "member.html";
+
+                },
+                2000
+            );
 
         }
 
@@ -608,23 +1072,32 @@ async function checkActivation(){
 
     catch(err){
 
-        console.log(err);
+        console.log(
+            "Activation check error:",
+            err
+        );
 
     }
 
 }
 
 
-// ================= START =================
+// =====================================================
+// START
+// =====================================================
 
+// Load REAL profile from backend
+loadProfile();
+
+
+// Check activation immediately
 checkActivation();
 
+
+// Continue checking activation
 setInterval(
-
     checkActivation,
-
     5000
-
 );
 
 </script>
