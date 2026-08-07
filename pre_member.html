@@ -380,16 +380,18 @@ const userData =
         localStorage.getItem("user")
     );
 
-document.getElementById(
-    "welcome"
-).innerText =
-    "WELCOME, " +
-    userData.name +
-    " 👋";
+const displayName =
+    userData.full_name ||
+    userData.name ||
+    userData.username ||
+    "-";
 
-    document.getElementById("profileName").innerText =
-    userData.name || "-";
+document.getElementById("welcome").innerText =
+    "WELCOME, " + displayName + " 👋";
 
+document.getElementById("profileName").innerText =
+    displayName;
+    
 document.getElementById("profilePhone").innerText =
     userData.phone_number || "-";
 
