@@ -412,90 +412,106 @@ async function loadProfile(){
 
     try{
 
-        // ---------------------------------------------
-        // Get pending members from backend
-        // ---------------------------------------------
-
         const response = await fetch(
             `${API_URL}/api/pending_members`
         );
 
-        const result =
-            await response.json();
+        const result = await response.json();
 
+        console.log("PENDING MEMBERS:", result);
+        console.log("CURRENT USER:", userData);
 
         if(
             result.status !== "success" ||
             !Array.isArray(result.data)
         ){
 
-            console.log(
-                "Unable to load pending member data."
-            );
+            console.log("Unable to load pending member data.");
 
             showLocalProfile();
 
             return;
-
         }
 
+        // SUPPORT BOTH id AND user_id
+        const currentUserId =
+            userData.id ||
+            userData.user_id;
 
-        // ---------------------------------------------
-        // Find current account
-        // ---------------------------------------------
-
+        // FIND CURRENT MEMBER
         const currentMember =
-            result.data.find(
-                member =>
+            result.data.find(member => {
+
+                return (
                     String(member.account_id) ===
-                    String(userData.id)
-            );
+                    String(currentUserId)
+                );
 
-
-        // ---------------------------------------------
-        // No pending record found
-        // ---------------------------------------------
+            });
 
         if(!currentMember){
 
             console.log(
-                "Pending member record not found."
+                "Pending member record not found.",
+                "User ID:",
+                currentUserId
             );
 
             showLocalProfile();
 
             return;
-
         }
 
+        console.log(
+            "CURRENT MEMBER:",
+            currentMember
+        );
 
-        // ---------------------------------------------
-        // Get REAL data from database
-        // ---------------------------------------------
+        // ==============================
+        // FULL NAME
+        // ==============================
 
         const fullName =
-            currentMember.full_name || "-";
+            currentMember.full_name ||
+            currentMember.fullname ||
+            currentMember.name ||
+            "-";
+
+        // ==============================
+        // PHONE NUMBER
+        // ==============================
 
         const phone =
-            currentMember.phone_number || "-";
+            currentMember.phone_number ||
+            currentMember.phone ||
+            currentMember.contact_number ||
+            currentMember.mobile_number ||
+            "-";
 
-
-        // ---------------------------------------------
-        // Username comes from login account
-        // ---------------------------------------------
+        // ==============================
+        // USERNAME
+        // ==============================
 
         const username =
-            userData.username || "-";
+            userData.username ||
+            currentMember.username ||
+            "-";
 
+        // ==============================
+        // UPDATE LOCAL STORAGE
+        // ==============================
 
-        // ---------------------------------------------
-        // Update localStorage
-        // ---------------------------------------------
+        userData.id =
+            userData.id ||
+            userData.user_id;
 
         userData.name =
             fullName;
 
         userData.fullname =
+            fullName;
+
+        userData.full_name =
             fullName;
 
         userData.phone_number =
@@ -504,16 +520,14 @@ async function loadProfile(){
         userData.username =
             username;
 
-
         localStorage.setItem(
             "user",
             JSON.stringify(userData)
         );
 
-
-        // ---------------------------------------------
+        // ==============================
         // UPDATE UI
-        // ---------------------------------------------
+        // ==============================
 
         updateProfileUI(
             fullName,
@@ -521,10 +535,10 @@ async function loadProfile(){
             username
         );
 
-
         console.log(
             "Pre-member profile loaded:",
             {
+                id: currentUserId,
                 fullName,
                 phone,
                 username
@@ -545,7 +559,6 @@ async function loadProfile(){
     }
 
 }
-
 
 // =====================================================
 // FALLBACK LOCAL PROFILE
