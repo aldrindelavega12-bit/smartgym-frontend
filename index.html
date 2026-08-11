@@ -89,27 +89,30 @@
 
         <input
             type="text"
-            id="cp_user"
-            placeholder="Username"
-            class="change-input"
+            id="changeUsername"
+            readonly
         >
 
         <input
             type="password"
-            id="old_password"
-            placeholder="Old Password"
-            class="change-input"
+            id="currentPassword"
+            placeholder="Current Password"
         >
 
         <input
             type="password"
-            id="new_password"
+            id="newPassword"
             placeholder="New Password"
-            class="change-input"
+        >
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm New Password"
         >
 
         <button
-            class="change-btn"
+            id="updatePasswordBtn"
             onclick="changePassword()"
         >
             Update Password
@@ -319,33 +322,75 @@ function closeChangePassword(){
         "changeModal"
     ).style.display = "none";
 }
+
 async function changePassword() {
 
     const currentPassword =
-        document.getElementById("currentPassword").value;
+        document.getElementById("currentPassword");
 
     const newPassword =
-        document.getElementById("newPassword").value;
+        document.getElementById("newPassword");
 
     const confirmPassword =
-        document.getElementById("confirmPassword").value;
+        document.getElementById("confirmPassword");
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-        alert("Please fill in all fields.");
+
+        console.error("Change password input not found.");
+
         return;
     }
 
-    if (newPassword !== confirmPassword) {
+    const current = currentPassword.value;
+    const newPass = newPassword.value;
+    const confirm = confirmPassword.value;
+
+    // GET LOGGED-IN USER
+    const storedUser = localStorage.getItem("user");
+
+    if (!storedUser) {
+
+        alert("User session not found.");
+        return;
+    }
+
+    const user = JSON.parse(storedUser);
+
+    console.log("CURRENT USER:", user);
+
+    // IMPORTANT:
+    // user.id = user_accounts.id
+    const accountId = user.id;
+
+    if (!accountId) {
+
+        alert("User account ID not found.");
+        console.error("Missing user.id:", user);
+
+        return;
+    }
+
+    if (!current) {
+
+        alert("Please enter your current password.");
+        return;
+    }
+
+    if (!newPass) {
+
+        alert("Please enter your new password.");
+        return;
+    }
+
+    if (newPass.length < 8) {
+
+        alert("New password must be at least 8 characters.");
+        return;
+    }
+
+    if (newPass !== confirm) {
+
         alert("New passwords do not match.");
-        return;
-    }
-
-    const user = JSON.parse(
-        localStorage.getItem("user")
-    );
-
-    if (!user || !user.id) {
-        alert("User account not found.");
         return;
     }
 
@@ -361,9 +406,13 @@ async function changePassword() {
                 },
 
                 body: JSON.stringify({
-                    id: user.id,
-                    current_password: currentPassword,
-                    new_password: newPassword
+
+                    account_id: accountId,
+
+                    current_password: current,
+
+                    new_password: newPass
+
                 })
             }
         );
@@ -372,22 +421,24 @@ async function changePassword() {
 
         console.log("CHANGE PASSWORD:", result);
 
-        if (result.success) {
+        if (!result.success) {
 
-            alert("Password changed successfully!");
-
-            // optional: clear fields
-            document.getElementById("currentPassword").value = "";
-            document.getElementById("newPassword").value = "";
-            document.getElementById("confirmPassword").value = "";
-
-        } else {
-
-            alert(result.message || "Failed to change password.");
-
+            alert(result.message);
+            return;
         }
 
-    } catch (error) {
+        alert("Password changed successfully!");
+
+        // CLEAR FIELDS
+        currentPassword.value = "";
+        newPassword.value = "";
+        confirmPassword.value = "";
+
+        closeChangePassword();
+
+    }
+
+    catch (error) {
 
         console.error("CHANGE PASSWORD ERROR:", error);
 
