@@ -319,63 +319,83 @@ function closeChangePassword(){
         "changeModal"
     ).style.display = "none";
 }
+async function changePassword() {
 
-async function changePassword(){
+    const currentPassword =
+        document.getElementById("currentPassword").value;
 
-    const username =
-        document.getElementById("cp_user").value.trim();
+    const newPassword =
+        document.getElementById("newPassword").value;
 
-    const old_password =
-        document.getElementById("old_password").value.trim();
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
 
-    const new_password =
-        document.getElementById("new_password").value.trim();
-
-    if(!username || !old_password || !new_password){
-
-        alert("Fill all fields");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        alert("Please fill in all fields.");
         return;
     }
 
-    try{
+    if (newPassword !== confirmPassword) {
+        alert("New passwords do not match.");
+        return;
+    }
+
+    const user = JSON.parse(
+        localStorage.getItem("user")
+    );
+
+    if (!user || !user.id) {
+        alert("User account not found.");
+        return;
+    }
+
+    try {
 
         const response = await fetch(
             "https://smartgym-api-ia2e.onrender.com/api/change_password",
             {
-                method:"POST",
+                method: "POST",
 
-                headers:{
-                    "Content-Type":"application/json"
+                headers: {
+                    "Content-Type": "application/json"
                 },
 
-                body:JSON.stringify({
-                    username,
-                    old_password,
-                    new_password
+                body: JSON.stringify({
+                    id: user.id,
+                    current_password: currentPassword,
+                    new_password: newPassword
                 })
             }
         );
 
-        const data = await response.json();
+        const result = await response.json();
 
-        alert(data.message);
+        console.log("CHANGE PASSWORD:", result);
 
-        if(data.status === "success"){
+        if (result.success) {
 
-            closeChangePassword();
+            alert("Password changed successfully!");
 
-            document.getElementById("cp_user").value = "";
-            document.getElementById("old_password").value = "";
-            document.getElementById("new_password").value = "";
+            // optional: clear fields
+            document.getElementById("currentPassword").value = "";
+            document.getElementById("newPassword").value = "";
+            document.getElementById("confirmPassword").value = "";
+
+        } else {
+
+            alert(result.message || "Failed to change password.");
+
         }
 
-    }catch(err){
+    } catch (error) {
 
-        console.log(err);
+        console.error("CHANGE PASSWORD ERROR:", error);
 
-        alert("Server error");
+        alert("Server error.");
+
     }
 }
+
 async function registerAccount() {
 
     const fullname =
