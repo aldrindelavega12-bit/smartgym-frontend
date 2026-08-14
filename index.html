@@ -3,67 +3,236 @@
 <head>
     <title>Smart Gym</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/background.css">
+    <link rel="stylesheet" href="css/login.css">
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body class="bg-gym">
 
-<div class="bg-overlay">
+<div class="login-page">
 
-    <div class="container">
+    <header class="login-header">
+        <div class="brand">
+            <div class="brand-mark">S</div>
 
-        <!-- LEFT TEXT -->
-        <div class="left">
-            <h1>BE STRONG,<br>BE FIT</h1>
-            <p>Train for your future self.</p>
-        </div>
-
-        <!-- LOGIN CARD -->
-        <div class="login-card">
-            <h2>SMART GYM</h2>
-
-            <input type="text" id="username" placeholder="Username">
-            <div class="password-wrapper">
-                <input type="password" id="password" placeholder="Password">
-                <span class="toggle-password" onclick="togglePassword()">👁</span>
-            </div>
-            <div class="login-area">
-
-                <button id="loginBtn" onclick="login()">
-                    Log in
-                </button>
-
-                <span
-                    class="change-password-link"
-                    onclick="openRegister()"
-                >
-                    Create Account
-                </span>
-
-                <span
-                    class="change-password-link"
-                    onclick="openChangePassword()"
-                >
-                    Change Password
-                </span>
-
-            </div>
-            
-
-            <p id="error" class="error-message"></p>
-            
-            <div class="links">
-                <span onclick="openModal('faq')">FAQ</span> |
-                <span onclick="openModal('about')">About Us</span> |
-                <span onclick="openModal('contact')">Contact</span> |
-                <span onclick="openModal('terms')">Terms</span>
+            <div>
+                <strong>SMART GYM</strong>
+                <span>MEMBER ACCESS SYSTEM</span>
             </div>
         </div>
 
-    </div>
+        <div class="header-tagline">
+            STRONGER PEOPLE • A HEALTHIER TOMORROW
+        </div>
+    </header>
+
+
+    <main class="login-container">
+
+        <!-- LEFT -->
+        <section class="login-hero">
+
+            <div class="hero-content">
+
+                <span class="hero-label">
+                    SMART FITNESS MANAGEMENT
+                </span>
+
+                <h1>
+                    BE STRONG,<br>
+                    <span>BE FIT.</span>
+                </h1>
+
+                <p>
+                    Train for your future self. Manage your
+                    membership, access, attendance and fitness
+                    journey with Smart Gym.
+                </p>
+
+                <div class="feature-list">
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+
+                        <div>
+                            <strong>Secure Access</strong>
+                            <span>Smart member identification</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+
+                        <div>
+                            <strong>Track Progress</strong>
+                            <span>Monitor your gym activity</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+
+                        <div>
+                            <strong>Smart Lockers</strong>
+                            <span>Safe and convenient storage</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT -->
+        <section class="login-panel">
+
+            <div class="login-card">
+
+                <div class="login-heading">
+                    <span>MEMBER ACCESS</span>
+
+                    <h2>Welcome Back!</h2>
+
+                    <p>
+                        Sign in to continue to your Smart Gym account.
+                    </p>
+                </div>
+
+
+                <div class="login-form">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="input-box">
+                        <i class="fa-regular fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter your username"
+                        >
+                    </div>
+
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-box password-wrapper">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                        >
+
+                        <span
+                            class="toggle-password"
+                            onclick="togglePassword()"
+                        >
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+
+                    </div>
+
+
+                    <div class="login-options">
+
+                        <label class="remember-option">
+
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                            >
+
+                            <span>Remember me</span>
+
+                        </label>
+
+
+                        <span
+                            class="forgot-password"
+                            onclick="openChangePassword()"
+                        >
+                            Forgot password?
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        id="loginBtn"
+                        class="login-btn"
+                        onclick="login()"
+                    >
+                        Log in
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+
+                    <p id="error" class="error-message"></p>
+
+
+                    <div class="create-account">
+
+                        <span>New here?</span>
+
+                        <button
+                            type="button"
+                            onclick="openRegister()"
+                        >
+                            Create an account
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-footer">
+
+                    <span onclick="openModal('faq')">
+                        FAQ
+                    </span>
+
+                    <span onclick="openModal('about')">
+                        About Us
+                    </span>
+
+                    <span onclick="openModal('contact')">
+                        Contact
+                    </span>
+
+                    <span onclick="openModal('terms')">
+                        Terms
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+        <span>© 2026 Smart Gym System</span>
+        <span>Built for a stronger, healthier tomorrow.</span>
+    </footer>
 
 </div>
 
