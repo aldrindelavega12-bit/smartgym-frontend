@@ -1187,3 +1187,53 @@
         transition: none !important;
     }
 }
+
+/* =========================================================
+   INDEX MODAL FIX
+========================================================= */
+
+.modal {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background: rgba(15, 30, 24, 0.45);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    z-index: 99999 !important;
+
+    isolation: isolate;
+}
+
+
+/* Modal card */
+.change-password-card {
+    position: relative !important;
+
+    z-index: 100000 !important;
+
+    max-width: 460px;
+
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.22);
+}
