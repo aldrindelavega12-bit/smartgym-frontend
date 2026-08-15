@@ -332,6 +332,9 @@
                 ></i>
 
             </div>
+            <div id="forgotPasswordHint" class="password-hint">
+                Password must be at least 8 characters.
+            </div>
 
             <div class="forgot-password-wrapper">
 
@@ -348,6 +351,9 @@
                     onclick="toggleForgotPassword('cp_confirm_password', this)"
                 ></i>
 
+            </div>
+            <div id="forgotConfirmHint" class="password-hint">
+                Passwords must match.
             </div>
 
             <button
@@ -1354,7 +1360,98 @@ function toggleForgotPassword(inputId, icon) {
     }
 
 }
+/* =========================================================
+   FORGOT PASSWORD VALIDATION
+========================================================= */
 
+const forgotNewPassword =
+    document.getElementById("cp_new_password");
+
+const forgotConfirmPassword =
+    document.getElementById("cp_confirm_password");
+
+const forgotPasswordHint =
+    document.getElementById("forgotPasswordHint");
+
+const forgotConfirmHint =
+    document.getElementById("forgotConfirmHint");
+
+
+function validateForgotPassword() {
+
+    const password =
+        forgotNewPassword.value;
+
+    const confirm =
+        forgotConfirmPassword.value;
+
+
+    /* PASSWORD LENGTH */
+
+    if (password.length === 0) {
+
+        forgotPasswordHint.textContent =
+            "Password must be at least 8 characters.";
+
+        forgotPasswordHint.className =
+            "password-hint";
+
+    } else if (password.length < 8) {
+
+        forgotPasswordHint.textContent =
+            "✕ Password must be at least 8 characters.";
+
+        forgotPasswordHint.className =
+            "password-hint invalid";
+
+    } else {
+
+        forgotPasswordHint.textContent =
+            "✓ Password length is valid.";
+
+        forgotPasswordHint.className =
+            "password-hint valid";
+    }
+
+
+    /* PASSWORD MATCH */
+
+    if (confirm.length === 0) {
+
+        forgotConfirmHint.textContent =
+            "Passwords must match.";
+
+        forgotConfirmHint.className =
+            "password-hint";
+
+    } else if (password !== confirm) {
+
+        forgotConfirmHint.textContent =
+            "✕ Passwords do not match.";
+
+        forgotConfirmHint.className =
+            "password-hint invalid";
+
+    } else {
+
+        forgotConfirmHint.textContent =
+            "✓ Passwords match.";
+
+        forgotConfirmHint.className =
+            "password-hint valid";
+    }
+}
+
+
+forgotNewPassword.addEventListener(
+    "input",
+    validateForgotPassword
+);
+
+forgotConfirmPassword.addEventListener(
+    "input",
+    validateForgotPassword
+);
 async function registerAccount() {
 
     const fullname =

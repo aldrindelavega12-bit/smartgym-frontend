@@ -1543,3 +1543,33 @@
 
     color: var(--green);
 }
+/* =========================================================
+   FORGOT PASSWORD VALIDATION
+========================================================= */
+
+.password-hint {
+
+    margin: -4px 0 8px 4px;
+
+    font-size: 11px;
+
+    color: #8d9791;
+
+    text-align: left;
+
+    transition: .2s ease;
+}
+
+.password-hint.valid {
+
+    color: #16b866;
+
+    font-weight: 600;
+}
+
+.password-hint.invalid {
+
+    color: #e34b4b;
+
+    font-weight: 600;
+}
