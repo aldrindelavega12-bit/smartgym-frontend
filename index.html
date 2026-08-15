@@ -1336,29 +1336,46 @@ async function resetForgotPassword() {
 ========================================================= */
 function closeForgotPasswordSuccess() {
 
-    document.getElementById(
-        "forgotSuccess"
-    ).style.display = "none";
-
-    document.getElementById(
-        "forgotStepTwo"
-    ).style.display = "none";
-
-    document.getElementById(
-        "forgotStepOne"
-    ).style.display = "block";
-
-    document.getElementById(
-        "forgotSubtitle"
-    ).style.display = "block";
-
-    document.getElementById(
-        "forgotSubtitle"
-    ).innerText =
-        "Enter your username and registered mobile number to receive a verification code.";
+    resetForgotPasswordForm();
 
     closeChangePassword();
 
+}
+
+function resetForgotPasswordForm() {
+
+    document.getElementById("cp_username").value = "";
+    document.getElementById("cp_mobile").value = "";
+    document.getElementById("cp_otp").value = "";
+    document.getElementById("cp_new_password").value = "";
+    document.getElementById("cp_confirm_password").value = "";
+
+    document.getElementById("forgotStepOne").style.display = "block";
+    document.getElementById("forgotStepTwo").style.display = "none";
+    document.getElementById("forgotSuccess").style.display = "none";
+
+    document.getElementById("forgotSubtitle").style.display = "block";
+
+    document.getElementById("forgotSubtitle").innerText =
+        "Enter your username and registered mobile number to receive a verification code.";
+
+    document.getElementById("forgotMessage").innerText = "";
+
+    document.getElementById("forgotPasswordHint").textContent =
+        "Password must be at least 8 characters.";
+
+    document.getElementById("forgotPasswordHint").className =
+        "password-hint";
+
+    document.getElementById("forgotConfirmHint").textContent =
+        "Passwords must match.";
+
+    document.getElementById("forgotConfirmHint").className =
+        "password-hint";
+
+    document.getElementById("resetPasswordBtn").disabled = true;
+
+    clearInterval(otpCooldownTimer);
 }
 function toggleForgotPassword(inputId, icon) {
 
