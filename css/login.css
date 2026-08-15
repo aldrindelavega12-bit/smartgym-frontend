@@ -1497,3 +1497,49 @@
 
     }
 }
+
+/* =========================================================
+   FORGOT PASSWORD EYE
+========================================================= */
+
+.forgot-password-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    margin-bottom: 10px;
+}
+
+.forgot-password-wrapper .change-input {
+
+    width: 100%;
+
+    padding-right: 48px;
+}
+
+.forgot-password-toggle {
+
+    position: absolute;
+
+    right: 16px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #8d9791;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    z-index: 2;
+}
+
+.forgot-password-toggle:hover {
+
+    color: var(--green);
+}

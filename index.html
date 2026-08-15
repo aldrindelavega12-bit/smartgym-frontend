@@ -316,21 +316,39 @@
                 aria-label="6-digit verification code"
             >
 
-            <input
-                type="password"
-                id="cp_new_password"
-                placeholder="New Password"
-                class="change-input"
-                autocomplete="new-password"
-            >
+            <div class="forgot-password-wrapper">
 
-            <input
-                type="password"
-                id="cp_confirm_password"
-                placeholder="Confirm Password"
-                class="change-input"
-                autocomplete="new-password"
-            >
+                <input
+                    type="password"
+                    id="cp_new_password"
+                    placeholder="New Password"
+                    class="change-input"
+                    autocomplete="new-password"
+                >
+
+                <i
+                    class="fa-solid fa-eye forgot-password-toggle"
+                    onclick="toggleForgotPassword('cp_new_password', this)"
+                ></i>
+
+            </div>
+
+            <div class="forgot-password-wrapper">
+
+                <input
+                    type="password"
+                    id="cp_confirm_password"
+                    placeholder="Confirm Password"
+                    class="change-input"
+                    autocomplete="new-password"
+                >
+
+                <i
+                    class="fa-solid fa-eye forgot-password-toggle"
+                    onclick="toggleForgotPassword('cp_confirm_password', this)"
+                ></i>
+
+            </div>
 
             <button
                 id="resetPasswordBtn"
@@ -1308,6 +1326,34 @@ async function resetForgotPassword() {
 
 }
 
+/* =========================================================
+   FORGOT PASSWORD SHOW / HIDE
+========================================================= */
+
+function toggleForgotPassword(inputId, icon) {
+
+    const input =
+        document.getElementById(inputId);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.classList.remove("fa-eye");
+
+        icon.classList.add("fa-eye-slash");
+
+    } else {
+
+        input.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+
+        icon.classList.add("fa-eye");
+
+    }
+
+}
 
 async function registerAccount() {
 
