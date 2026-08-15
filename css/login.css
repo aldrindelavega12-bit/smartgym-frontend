@@ -1237,3 +1237,210 @@
     box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.22);
 }
+
+/* =========================================================
+   FORGOT PASSWORD MODAL
+========================================================= */
+
+.forgot-subtitle {
+
+    margin: -5px 0 5px;
+
+    color: #7b8580;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+
+.forgot-resend {
+
+    margin-top: 2px;
+
+    color: #8a938e;
+
+    font-size: 11px;
+
+    text-align: center;
+}
+
+
+.forgot-resend button {
+
+    width: auto;
+
+    height: auto;
+
+    margin: 0;
+
+    padding: 0;
+
+    border: none;
+
+    background: none;
+
+    color: var(--green);
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.forgot-resend button:hover {
+
+    color: var(--green-dark);
+
+    text-decoration: underline;
+}
+
+
+.forgot-resend button:disabled {
+
+    color: #aeb7b2;
+
+    cursor: not-allowed;
+
+    text-decoration: none;
+}
+
+
+.forgot-message {
+
+    min-height: 18px;
+
+    margin: 0;
+
+    color: #e53935;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+.forgot-message.success {
+
+    color: var(--green-dark);
+}
+
+
+/* SUCCESS STATE */
+
+.forgot-success {
+
+    text-align: center;
+
+    padding:
+        5px 5px 0;
+}
+
+
+.success-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    margin: 0 auto 17px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--green-light);
+
+    color: var(--green);
+
+    font-size: 25px;
+}
+
+
+.forgot-success h3 {
+
+    margin: 0 0 9px;
+
+    color: var(--text-dark);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.forgot-success p {
+
+    margin: 0 0 22px;
+
+    color: var(--text-light);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* DISABLED BUTTON */
+
+.change-btn:disabled {
+
+    opacity: .65;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+
+    .change-password-card {
+
+        width: 100%;
+
+        max-width: 390px;
+
+        padding: 28px 22px;
+
+        border-radius: 20px;
+    }
+
+    .change-title {
+
+        font-size: 30px;
+    }
+
+    .forgot-subtitle {
+
+        font-size: 11px;
+    }
+
+    .change-input {
+
+        height: 54px;
+
+        font-size: 15px;
+    }
+
+    .change-btn {
+
+        height: 54px;
+
+        font-size: 16px;
+    }
+}
