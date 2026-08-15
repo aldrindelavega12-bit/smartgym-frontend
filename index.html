@@ -405,11 +405,11 @@
                 Your password has been updated successfully.
                 You can now log in using your new password.
             </p>
-
             <button
                 type="button"
                 id="forgotBackToLoginBtn"
                 class="forgot-success-button"
+                onclick="closeForgotPasswordSuccess()"
             >
                 Back to Login
             </button>
@@ -419,6 +419,7 @@
     </div>
 
 </div>
+
 
 <!-- ===========================
      ACTIVATE ACCOUNT MODAL
@@ -1344,7 +1345,8 @@ function closeForgotPasswordSuccess() {
 
 function resetForgotPasswordForm() {
 
-    document.getElementById("cp_username").value = "";
+
+    document.getElementById("cp_user").value = "";
     document.getElementById("cp_mobile").value = "";
     document.getElementById("cp_otp").value = "";
     document.getElementById("cp_new_password").value = "";
@@ -1401,24 +1403,10 @@ function toggleForgotPassword(inputId, icon) {
     }
 
 }
-const resetButton =
-    document.getElementById("resetPasswordBtn");
 
-const otp =
-    document.getElementById("cp_otp").value.trim();
-
-const passwordValid =
-    password.length >= 8;
-
-const passwordsMatch =
-    password.length > 0 &&
-    password === confirm;
-
-const otpValid =
-    /^\d{6}$/.test(otp);
-
-resetButton.disabled =
-    !(otpValid && passwordValid && passwordsMatch);
+/* =========================================================
+   FORGOT PASSWORD VALIDATION
+========================================================= */
 /* =========================================================
    FORGOT PASSWORD VALIDATION
 ========================================================= */
@@ -1443,6 +1431,12 @@ function validateForgotPassword() {
 
     const confirm =
         forgotConfirmPassword.value;
+
+    const otp =
+        document.getElementById("cp_otp").value.trim();
+
+    const resetButton =
+        document.getElementById("resetPasswordBtn");
 
 
     /* PASSWORD LENGTH */
@@ -1499,6 +1493,27 @@ function validateForgotPassword() {
         forgotConfirmHint.className =
             "password-hint valid";
     }
+
+
+    /* VALIDATION */
+
+    const passwordValid =
+        password.length >= 8;
+
+    const passwordsMatch =
+        password.length > 0 &&
+        password === confirm;
+
+    const otpValid =
+        /^\d{6}$/.test(otp);
+
+
+    /* BUTTON */
+
+    resetButton.disabled =
+        !(otpValid &&
+          passwordValid &&
+          passwordsMatch);
 }
 
 
@@ -1511,9 +1526,13 @@ forgotConfirmPassword.addEventListener(
     "input",
     validateForgotPassword
 );
+
 document
     .getElementById("cp_otp")
-    .addEventListener("input", validateForgotPassword);
+    .addEventListener(
+        "input",
+        validateForgotPassword
+    );
 async function registerAccount() {
 
     const fullname =
