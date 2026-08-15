@@ -1,53 +1,76 @@
 async function login() {
 
     const username =
-    document.getElementById("username").value;
+        document.getElementById("username").value.trim();
 
     const password =
-    document.getElementById("password").value;
+        document.getElementById("password").value;
 
     const error =
-    document.getElementById("error");
+        document.getElementById("error");
 
     const btn =
-    document.getElementById("loginBtn");
+        document.getElementById("loginBtn");
 
     const card =
-    document.querySelector(".login-card");
+        document.querySelector(".login-card");
+
 
     // CLEAR ERROR
     error.innerText = "";
 
-    // EMPTY CHECK
-    if(!username || !password){
+
+    // EMPTY USERNAME
+    if (!username) {
 
         error.innerText =
-        "Please enter username and password";
+            "Please enter your username.";
 
         card.classList.add("shake");
 
         setTimeout(() => {
-
             card.classList.remove("shake");
-
         }, 400);
 
         return;
     }
 
+
+    // EMPTY PASSWORD
+    if (!password) {
+
+        error.innerText =
+            "Please enter your password.";
+
+        card.classList.add("shake");
+
+        setTimeout(() => {
+            card.classList.remove("shake");
+        }, 400);
+
+        return;
+    }
+
+
     // LOADING
-    btn.innerText = "Logging in...";
+    btn.disabled = true;
+
+    btn.innerText =
+        "Logging in...";
+
     btn.classList.add("loading");
+
 
     try {
 
         const response = await fetch(
-            "https://smartgym-api-ia2e.onrender.com/api/login",
+            `${API_URL}/api/login`,
             {
                 method: "POST",
 
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
 
                 body: JSON.stringify({
@@ -57,9 +80,13 @@ async function login() {
             }
         );
 
-        const data = await response.json();
 
-        console.log(data);
+        const data =
+            await response.json();
+
+
+        console.log("LOGIN:", data);
+
 
         // SUCCESS
         if (data.status === "success") {
@@ -70,97 +97,133 @@ async function login() {
                 JSON.stringify(data.user)
             );
 
+
             // SUCCESS POPUP
             const popup =
-            document.createElement("div");
+                document.createElement("div");
 
             popup.className =
-            "success-popup";
+                "success-popup";
 
             popup.innerText =
-            "✅ Login successful";
+                "✅ Login successful";
 
             document.body.appendChild(popup);
 
-            // REDIRECT DELAY
+
+            // REDIRECT
             setTimeout(() => {
 
                 if (data.user.role === "pre_member") {
 
                     window.location.href =
-                    "pre_member.html";
+                        "pre_member.html";
+
                 }
 
                 else if (data.user.role === "member") {
 
                     window.location.href =
-                    "member.html";
+                        "member.html";
+
                 }
 
                 else if (data.user.role === "staff") {
 
                     window.location.href =
-                    "staff.html";
+                        "staff.html";
+
                 }
 
                 else if (data.user.role === "trainer") {
 
                     window.location.href =
-                    "trainer.html";
+                        "trainer.html";
+
                 }
 
                 else if (data.user.role === "admin") {
 
                     window.location.href =
-                    "admin.html";
+                        "admin.html";
+
+                }
+
+                else {
+
+                    // Unknown role
+                    error.innerText =
+                        "Account role is not recognized.";
+
+                    btn.disabled = false;
+
+                    btn.innerText =
+                        "Log in";
+
+                    btn.classList.remove(
+                        "loading"
+                    );
+
+                    popup.remove();
                 }
 
             }, 1000);
 
+            return;
         }
+
 
         // INVALID LOGIN
-        else {
-
-            error.innerText =
-            data.message || "Invalid login";
-
-            card.classList.add("shake");
-
-            setTimeout(() => {
-
-                card.classList.remove("shake");
-
-            }, 400);
-
-            // RESET BUTTON
-            btn.innerText = "Log in";
-
-            btn.classList.remove("loading");
-        }
-
-    }
-
-    catch (err) {
-
-        console.error(err);
-
         error.innerText =
-        "Server error";
+            data.message ||
+            "Invalid username or password.";
 
         card.classList.add("shake");
 
         setTimeout(() => {
-
             card.classList.remove("shake");
-
         }, 400);
 
+
         // RESET BUTTON
-        btn.innerText = "Log in";
+        btn.disabled = false;
+
+        btn.innerText =
+            "Log in";
 
         btn.classList.remove("loading");
+
     }
+
+
+    catch (err) {
+
+        console.error(
+            "LOGIN ERROR:",
+            err
+        );
+
+
+        error.innerText =
+            "Unable to connect to server.";
+
+        card.classList.add("shake");
+
+        setTimeout(() => {
+            card.classList.remove("shake");
+        }, 400);
+
+
+        // RESET BUTTON
+        btn.disabled = false;
+
+        btn.innerText =
+            "Log in";
+
+        btn.classList.remove("loading");
+
+    }
+
 }
 // ==========================================
 // ACTIVATION
