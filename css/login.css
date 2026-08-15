@@ -1573,3 +1573,21 @@
 
     font-weight: 600;
 }
+
+#resetPasswordBtn:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+#resetPasswordBtn:not(:disabled) {
+
+    opacity: 1;
+
+    cursor: pointer;
+}

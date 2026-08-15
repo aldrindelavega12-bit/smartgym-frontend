@@ -357,12 +357,14 @@
             </div>
 
             <button
+                type="button"
                 id="resetPasswordBtn"
-                class="change-btn"
                 onclick="resetForgotPassword()"
+                disabled
             >
                 Reset Password
             </button>
+
 
             <div class="forgot-resend">
 
@@ -1360,6 +1362,24 @@ function toggleForgotPassword(inputId, icon) {
     }
 
 }
+const resetButton =
+    document.getElementById("resetPasswordBtn");
+
+const otp =
+    document.getElementById("cp_otp").value.trim();
+
+const passwordValid =
+    password.length >= 8;
+
+const passwordsMatch =
+    password.length > 0 &&
+    password === confirm;
+
+const otpValid =
+    /^\d{6}$/.test(otp);
+
+resetButton.disabled =
+    !(otpValid && passwordValid && passwordsMatch);
 /* =========================================================
    FORGOT PASSWORD VALIDATION
 ========================================================= */
@@ -1452,6 +1472,9 @@ forgotConfirmPassword.addEventListener(
     "input",
     validateForgotPassword
 );
+document
+    .getElementById("cp_otp")
+    .addEventListener("input", validateForgotPassword);
 async function registerAccount() {
 
     const fullname =
