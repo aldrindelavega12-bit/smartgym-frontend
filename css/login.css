@@ -1591,3 +1591,62 @@
 
     cursor: pointer;
 }
+
+/* =========================================================
+   FORGOT PASSWORD RESET BUTTON
+========================================================= */
+
+#resetPasswordBtn {
+
+    width: 100%;
+
+    height: 54px;
+
+    margin-top: 10px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #00d26a;
+
+    color: white;
+
+    font-family: 'Poppins', sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+    box-shadow:
+        0 8px 20px rgba(0, 210, 106, 0.18);
+}
+
+#resetPasswordBtn:hover:not(:disabled) {
+
+    background: #00c463;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 24px rgba(0, 210, 106, 0.24);
+}
+
+#resetPasswordBtn:disabled {
+
+    background: #00d26a;
+
+    color: white;
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
