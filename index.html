@@ -393,26 +393,23 @@
 
         <!-- SUCCESS -->
 
-        <div
-            id="forgotSuccess"
-            class="forgot-success"
-            style="display: none;"
-        >
+        <div id="forgotSuccess" class="forgot-success">
 
-            <div class="success-icon">
+            <div class="forgot-success-icon">
                 <i class="fa-solid fa-check"></i>
             </div>
 
             <h3>Password Reset Successfully</h3>
 
             <p>
-                Your password has been updated.
-                You can now log in with your new password.
+                Your password has been updated successfully.
+                You can now log in using your new password.
             </p>
 
             <button
-                class="change-btn"
-                onclick="closeChangePassword()"
+                type="button"
+                onclick="closeForgotPasswordSuccess()"
+                class="forgot-success-button"
             >
                 Back to Login
             </button>
@@ -1337,7 +1334,32 @@ async function resetForgotPassword() {
 /* =========================================================
    FORGOT PASSWORD SHOW / HIDE
 ========================================================= */
+function closeForgotPasswordSuccess() {
 
+    document.getElementById(
+        "forgotSuccess"
+    ).style.display = "none";
+
+    document.getElementById(
+        "forgotStepTwo"
+    ).style.display = "none";
+
+    document.getElementById(
+        "forgotStepOne"
+    ).style.display = "block";
+
+    document.getElementById(
+        "forgotSubtitle"
+    ).style.display = "block";
+
+    document.getElementById(
+        "forgotSubtitle"
+    ).innerText =
+        "Enter your username and registered mobile number to receive a verification code.";
+
+    closeChangePassword();
+
+}
 function toggleForgotPassword(inputId, icon) {
 
     const input =
