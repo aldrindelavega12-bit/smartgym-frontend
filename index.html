@@ -307,11 +307,13 @@
             <input
                 type="text"
                 id="cp_otp"
-                placeholder="6-digit verification code"
-                class="change-input"
+                placeholder="Enter 6-digit code"
+                class="change-input otp-input"
                 inputmode="numeric"
+                pattern="[0-9]*"
                 maxlength="6"
                 autocomplete="one-time-code"
+                aria-label="6-digit verification code"
             >
 
             <input
@@ -838,11 +840,17 @@ async function sendForgotPasswordOTP() {
             "forgotStepTwo"
         ).style.display = "block";
 
-
         document.getElementById(
             "forgotSubtitle"
         ).innerText =
             "A verification code has been sent to your registered mobile number.";
+
+        /* AUTO FOCUS OTP */
+        setTimeout(() => {
+
+            document.getElementById("cp_otp").focus();
+
+        }, 100);
 
 
         showForgotMessage(
@@ -1054,6 +1062,50 @@ async function resendForgotPasswordOTP() {
 /* =========================================================
    RESET PASSWORD
 ========================================================= */
+/* =========================================================
+   OTP INPUT
+========================================================= */
+
+const otpInput =
+    document.getElementById("cp_otp");
+
+
+otpInput.addEventListener("input", function () {
+
+    /* Numbers only */
+    this.value =
+        this.value.replace(/\D/g, "").slice(0, 6);
+
+});
+
+
+otpInput.addEventListener("keydown", function (event) {
+
+    const allowedKeys = [
+        "Backspace",
+        "Delete",
+        "ArrowLeft",
+        "ArrowRight",
+        "Tab",
+        "Home",
+        "End"
+    ];
+
+    if (
+        allowedKeys.includes(event.key) ||
+        event.ctrlKey ||
+        event.metaKey
+    ) {
+        return;
+    }
+
+    if (!/^[0-9]$/.test(event.key)) {
+
+        event.preventDefault();
+
+    }
+
+});
 
 async function resetForgotPassword() {
 

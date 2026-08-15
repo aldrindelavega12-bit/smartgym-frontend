@@ -1444,3 +1444,56 @@
         font-size: 16px;
     }
 }
+
+/* =========================================================
+   OTP INPUT
+========================================================= */
+
+.otp-input {
+
+    text-align: center;
+
+    letter-spacing: 8px;
+
+    font-size: 22px !important;
+
+    font-weight: 700;
+
+    color: var(--text-dark);
+
+    padding-left: 24px !important;
+
+    padding-right: 18px !important;
+}
+
+.otp-input::placeholder {
+
+    letter-spacing: 0;
+
+    font-size: 15px;
+
+    font-weight: 400;
+
+    color: #9aa49e;
+}
+
+.otp-input:focus {
+
+    border-color: var(--green);
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 4px rgba(24,200,117,.09);
+}
+
+@media (max-width: 500px) {
+
+    .otp-input {
+
+        font-size: 20px !important;
+
+        letter-spacing: 7px;
+
+    }
+}
