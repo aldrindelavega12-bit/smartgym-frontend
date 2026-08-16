@@ -4,9 +4,16 @@
     <title>Messages</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/member-dashboard.css">
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+>
 </head>
 
 <body>
@@ -19,39 +26,193 @@ if(!user || user.role !== "member"){
 }
 </script>
 
+<!-- ================= SIDEBAR ================= -->
+<!-- ================= SIDEBAR ================= -->
+
 <div class="navbar">
-    <h2>SMART GYM</h2>
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
 
     <div class="menu">
+
         <a href="member.html">
-            <i class="fa-solid fa-house"></i> Home
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
         </a>
 
-        <a href="member_messages.html" class="msg-link">
+
+        <a href="member_messages.html"
+           class="msg-link active">
+
             <i class="fa-solid fa-envelope"></i>
+
             Messages
-            <span id="msg-count" class="msg-count">0</span>
+
+            <span
+                id="msg-count"
+                class="msg-count">
+                0
+            </span>
+
         </a>
+
 
         <a href="workouts.html">
-            <i class="fa-solid fa-dumbbell"></i> Suggested Workout
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+            Suggested Workout
+
         </a>
+
 
         <a href="locker_booking.html">
-            <i class="fa-solid fa-lock"></i> Book Locker
+
+            <i class="fa-solid fa-lock"></i>
+
+            Book Locker
+
         </a>
+
 
         <a href="membership.html">
-            <i class="fa-solid fa-id-card"></i> Membership
+
+            <i class="fa-solid fa-id-card"></i>
+
+            Membership
+
         </a>
+
     </div>
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Keep Pushing
+        </h3>
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+
 </div>
 
-<!-- MESSAGE POPUP -->
-<div id="messageModal" class="modal">
+
+<!-- ================= TOP PROFILE ================= -->
+<!-- ================= TOP HEADER ================= -->
+
+<div class="top-header">
+
+    <div class="top-right">
+
+        <div class="user-profile"
+             onclick="toggleProfileMenu()">
+
+            <!-- AVATAR -->
+            <div class="user-avatar"
+                 id="profileAvatar">
+                A
+            </div>
+
+            <!-- USER INFO -->
+            <div class="user-info">
+
+                <strong id="profileName">
+                    Member
+                </strong>
+
+                <small>
+                    Member
+                </small>
+
+            </div>
+
+            <i class="fa-solid fa-chevron-down profile-chevron"></i>
+
+            <!-- DROPDOWN -->
+            <div id="profileDropdown"
+                 class="profile-dropdown">
+
+                <button
+                    onclick="event.stopPropagation();">
+
+                    <i class="fa-solid fa-key"></i>
+                    Change Password
+
+                </button>
+
+                <div class="dropdown-divider"></div>
+
+                <button
+                    class="dropdown-logout"
+                    onclick="event.stopPropagation(); logout();">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Log Out
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= MESSAGE MODAL ================= -->
+
+<div id="messageModal"
+     class="modal">
+
     <div class="modal-box">
 
-        <button class="modal-close" onclick="closeMessage()">
+        <button class="modal-close"
+                onclick="closeMessage()">
             ×
         </button>
 
@@ -59,49 +220,147 @@ if(!user || user.role !== "member"){
 
         <p id="modalMessage"></p>
 
-        <p id="modalReason" class="reason"></p>
+        <p id="modalReason"
+           class="reason"></p>
 
         <small id="modalDate"></small>
 
     </div>
+
 </div>
+
+
+<!-- ================= MAIN ================= -->
+<!-- ================= MAIN ================= -->
 
 <div class="layout">
-<div class="main">
 
-    <div class="section">
-        <h2>Messages</h2>
+<main class="main">
 
-        <div id="message-list">
-            <p>No messages</p>
-        </div>
+    <div class="page-header">
+
+        <h1>Messages</h1>
+
+        <p>
+            View your latest gym notifications and updates.
+        </p>
+
     </div>
 
-</div>
-</div>
-<div id="notifPopup" class="notif-popup" onclick="goMessages()">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
+
+    <section class="messages-panel">
+
+        <div class="panel-header">
+
+            <div class="panel-icon">
+
+                <i class="fa-solid fa-envelope"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Gym Messages</h2>
+
+                <p>
+                    Your latest notifications
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="message-divider"></div>
+
+
+        <div id="message-list">
+
+            <p class="empty-message">
+                No messages
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
 </div>
 
+<!-- ================= NOTIFICATION POPUP ================= -->
+
+<div id="notifPopup"
+     class="notif-popup"
+     onclick="goMessages()">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
 <audio id="notifSound">
-    <source src="notif.mp3" type="audio/mpeg">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
 </audio>
+
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
+
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+/* ================= MEMBER ID ================= */
 
 const memberId =
-    user.id || user.user_id;
+    user.user_id || user.id;
+
+
+/* ================= PROFILE ================= */
+
+const profileName =
+    user.name ||
+    user.full_name ||
+    user.username ||
+    "Member";
+
+document.getElementById(
+    "profileName"
+).innerText = profileName;
+
+
+const firstLetter =
+    profileName.trim().charAt(0).toUpperCase() || "M";
+
+document.getElementById(
+    "profileAvatar"
+).innerText = firstLetter;
+
+
+/* ================= SOCKET ================= */
 
 const socket = io(API_URL, {
     transports: ["websocket"]
 });
 
+
 let lastMessageCount = 0;
 let firstLoad = true;
+
+
+/* ================= MESSAGE COUNT ================= */
 
 async function checkNewMessage(){
 
@@ -113,63 +372,103 @@ async function checkNewMessage(){
 
         const data = await res.json();
 
-        const count = data.count || 0;
+        const count =
+            data.count || 0;
 
         const badge =
-            document.getElementById("msg-count");
+            document.getElementById(
+                "msg-count"
+            );
+
 
         if(count > 0){
+
             badge.style.display = "flex";
+
             badge.innerText = count;
+
         }else{
+
             badge.style.display = "none";
+
         }
 
-        if(!firstLoad && count > lastMessageCount){
+
+        if(
+            !firstLoad &&
+            count > lastMessageCount
+        ){
 
             showNotifPopup(
                 "New Message",
                 "You received a new gym notification."
             );
+
         }
 
+
         lastMessageCount = count;
+
         firstLoad = false;
 
+
     }catch(err){
+
         console.log(err);
+
     }
+
 }
 
-function showNotifPopup(title, text){
+
+/* ================= POPUP ================= */
+
+function showNotifPopup(
+    title,
+    text
+){
 
     const popup =
-        document.getElementById("notifPopup");
+        document.getElementById(
+            "notifPopup"
+        );
 
-    document.getElementById("notifTitle").innerText =
-        title;
 
-    document.getElementById("notifText").innerText =
-        text;
+    document.getElementById(
+        "notifTitle"
+    ).innerText = title;
+
+
+    document.getElementById(
+        "notifText"
+    ).innerText = text;
+
 
     popup.classList.add("show");
 
+
     setTimeout(() => {
+
         popup.classList.remove("show");
+
     }, 4000);
+
 }
+
 
 function goMessages(){
-    window.location.href = "member_messages.html";
+
+    window.location.href =
+        "member_messages.html";
+
 }
 
-checkNewMessage();
 
-setInterval(checkNewMessage, 3000);
+/* ================= LOAD COUNT ================= */
 
 let lastCount = 0;
 
-// ================= LOAD COUNT =================
+
 async function loadMessageCount(){
 
     try{
@@ -178,30 +477,62 @@ async function loadMessageCount(){
             `${API_URL}/api/messages_count/${memberId}`
         );
 
-        const data = await res.json();
+        const data =
+            await res.json();
 
-        const badge = document.getElementById("msg-count");
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
 
         if(data.count > 0){
-            badge.style.display = "flex";
-            badge.innerText = data.count;
+
+            badge.style.display =
+                "flex";
+
+            badge.innerText =
+                data.count;
+
         }else{
-            badge.style.display = "none";
+
+            badge.style.display =
+                "none";
+
         }
 
-        if(data.count > lastCount && lastCount !== 0){
-            document.getElementById("notifSound").play();
+
+        if(
+            data.count > lastCount &&
+            lastCount !== 0
+        ){
+
+            document
+                .getElementById(
+                    "notifSound"
+                )
+                .play()
+                .catch(() => {});
+
         }
 
-        lastCount = data.count;
+
+        lastCount =
+            data.count;
+
 
     }catch(err){
+
         console.log(err);
+
     }
+
 }
 
 
-// ================= LOAD MESSAGES =================
+/* ================= LOAD MESSAGES ================= */
+
 async function loadMessages(){
 
     try{
@@ -210,454 +541,1875 @@ async function loadMessages(){
             `${API_URL}/api/messages/${memberId}`
         );
 
-        const data = await res.json();
+        const data =
+            await res.json();
 
-        const container = document.getElementById("message-list");
+
+        const container =
+            document.getElementById(
+                "message-list"
+            );
+
 
         container.innerHTML = "";
 
+
         if(data.length === 0){
-            container.innerHTML = `<p>No messages</p>`;
+
+            container.innerHTML = `
+                <p class="empty-message">
+                    No messages
+                </p>
+            `;
+
             return;
+
         }
+
 
         data.forEach(msg => {
 
             container.innerHTML += `
 
-                <div class="msg-card ${Number(msg.is_read) === 0 ? 'unread' : ''}"
-                    onclick='openMessage(${JSON.stringify(msg)})'>
+                <div
+                    class="msg-card ${
+                        Number(msg.is_read) === 0
+                        ? "unread"
+                        : ""
+                    }"
+                    onclick='openMessage(${JSON.stringify(msg)})'
+                >
 
                     <div class="msg-top">
 
                         <div>
-                            <h3>${msg.title}</h3>
 
-                            ${Number(msg.is_read) === 0 ? '<span class="unread-badge">NEW / UNREAD</span>' : ''}
+                            <h3>
+                                ${msg.title}
+                            </h3>
+
+                            ${
+                                Number(msg.is_read) === 0
+                                ?
+                                '<span class="unread-badge">NEW / UNREAD</span>'
+                                :
+                                ''
+                            }
+
                         </div>
 
-                        <div class="dots"
-                            onclick="event.stopPropagation(); toggleMenu(${msg.id})">
+
+                        <div
+                            class="dots"
+                            onclick="
+                                event.stopPropagation();
+                                toggleMenu(${msg.id})
+                            "
+                        >
                             ⋮
                         </div>
 
                     </div>
 
-                    <p>${msg.message}</p>
 
-                    <p class="reason">
-                        Reason: ${msg.reason || "-"}
-                    </p>
+                    <div class="msg-content">
 
-                    <small>${msg.created_at}</small>
+                        <p class="msg-text">
+                            ${msg.message}
+                        </p>
 
-                    <div id="menu-${msg.id}" class="msg-menu">
-                        <button onclick="event.stopPropagation(); deleteMessage(${msg.id})">
+                        ${
+                            msg.image_url
+                            ?
+                            `
+                            <div class="msg-image-wrap">
+                                <img
+                                    src="${msg.image_url}"
+                                    class="msg-image"
+                                    alt="Message image"
+                                >
+                            </div>
+                            `
+                            :
+                            ""
+                        }
+
+                        <p class="reason">
+                            <strong>Reason:</strong>
+                            ${msg.reason || "-"}
+                        </p>
+
+                        <small>
+                            ${msg.created_at}
+                        </small>
+
+                    </div>
+
+
+                    <div
+                        id="menu-${msg.id}"
+                        class="msg-menu"
+                    >
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                deleteMessage(${msg.id})
+                            "
+                        >
                             Delete
                         </button>
 
-                        <button onclick="event.stopPropagation(); markRead(${msg.id})">
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markRead(${msg.id})
+                            "
+                        >
                             Mark as Read
                         </button>
 
-                        <button onclick="event.stopPropagation(); markUnread(${msg.id})">
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markUnread(${msg.id})
+                            "
+                        >
                             Mark as Unread
                         </button>
+
                     </div>
 
                 </div>
+
             `;
+
         });
 
+
     }catch(err){
+
         console.log(err);
+
     }
+
 }
+
+
+/* ================= OPEN MESSAGE ================= */
 
 async function openMessage(msg){
 
-    document.getElementById("modalTitle").innerText =
+    document.getElementById(
+        "modalTitle"
+    ).innerText =
         msg.title;
 
-    document.getElementById("modalMessage").innerText =
+
+    document.getElementById(
+        "modalMessage"
+    ).innerText =
         msg.message;
 
-    document.getElementById("modalReason").innerText =
-        "Reason: " + (msg.reason || "-");
 
-    document.getElementById("modalDate").innerText =
+    document.getElementById(
+        "modalReason"
+    ).innerText =
+        "Reason: " +
+        (msg.reason || "-");
+
+
+    document.getElementById(
+        "modalDate"
+    ).innerText =
         msg.created_at;
 
-    document.getElementById("messageModal").style.display =
+
+    document.getElementById(
+        "messageModal"
+    ).style.display =
         "flex";
 
-    await fetch(`${API_URL}/api/messages_read_single/${msg.id}`, {
-        method: "POST"
-    });
+
+    await fetch(
+        `${API_URL}/api/messages_read_single/${msg.id}`,
+        {
+            method: "POST"
+        }
+    );
+
 
     loadMessageCount();
+
     loadMessages();
+
 }
+
+
+/* ================= CLOSE ================= */
 
 function closeMessage(){
 
-    document.getElementById("messageModal").style.display =
+    document.getElementById(
+        "messageModal"
+    ).style.display =
         "none";
+
 }
-// ================= TOGGLE 3 DOT MENU =================
+
+
+/* ================= MENU ================= */
+
 function toggleMenu(id){
 
-    document.querySelectorAll(".msg-menu").forEach(menu => {
-        if(menu.id !== `menu-${id}`){
-            menu.style.display = "none";
-        }
-    });
+    document
+        .querySelectorAll(".msg-menu")
+        .forEach(menu => {
 
-    const menu = document.getElementById(`menu-${id}`);
+            if(
+                menu.id !==
+                `menu-${id}`
+            ){
+
+                menu.style.display =
+                    "none";
+
+            }
+
+        });
+
+
+    const menu =
+        document.getElementById(
+            `menu-${id}`
+        );
+
 
     menu.style.display =
         menu.style.display === "block"
         ? "none"
         : "block";
+
 }
 
 
-// ================= MARK READ =================
+/* ================= MARK READ ================= */
+
 async function markRead(id){
 
-    await fetch(`${API_URL}/api/messages_read_single/${id}`, {
-        method: "POST"
-    });
+    await fetch(
+        `${API_URL}/api/messages_read_single/${id}`,
+        {
+            method: "POST"
+        }
+    );
 
     loadMessages();
     loadMessageCount();
+
 }
 
-async function viewMessage(id){
 
-    await fetch(`${API_URL}/api/messages_read_single/${id}`, {
-        method: "POST"
-    });
+/* ================= MARK UNREAD ================= */
 
-    loadMessages();
-    loadMessageCount();
-}
-// ================= MARK UNREAD =================
 async function markUnread(id){
 
-    await fetch(`${API_URL}/api/messages_unread_single/${id}`, {
-        method: "POST"
-    });
+    await fetch(
+        `${API_URL}/api/messages_unread_single/${id}`,
+        {
+            method: "POST"
+        }
+    );
 
     loadMessages();
     loadMessageCount();
+
 }
 
 
-// ================= DELETE =================
+/* ================= DELETE ================= */
+
 async function deleteMessage(id){
 
-    if(!confirm("Delete this message?")) return;
+    if(
+        !confirm(
+            "Delete this message?"
+        )
+    ){
 
-    await fetch(`${API_URL}/api/messages_delete/${id}`, {
-        method: "DELETE"
-    });
+        return;
+
+    }
+
+
+    await fetch(
+        `${API_URL}/api/messages_delete/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
+
 
     loadMessages();
     loadMessageCount();
+
 }
 
 
-// ================= SOCKET NOTIF =================
-socket.on("member_message", data => {
+/* ================= SOCKET ================= */
 
-    if(data.user_id === memberId){
+socket.on(
+    "member_message",
+    data => {
 
-        document.getElementById("notifSound").play();
+        if(
+            String(data.user_id) ===
+            String(memberId)
+        ){
 
-        loadMessages();
-        loadMessageCount();
+            document
+                .getElementById(
+                    "notifSound"
+                )
+                .play()
+                .catch(() => {});
+
+
+            loadMessages();
+
+            loadMessageCount();
+
+        }
+
     }
+);
+
+function toggleProfileMenu(){
+
+    const profile =
+        document.querySelector(".user-profile");
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+
+}
+
+
+window.addEventListener("click", function(event){
+
+    if(
+        !event.target.closest(".user-profile")
+    ){
+
+        const profile =
+            document.querySelector(".user-profile");
+
+        const dropdown =
+            document.getElementById("profileDropdown");
+
+        if(profile){
+            profile.classList.remove("active");
+        }
+
+        if(dropdown){
+            dropdown.classList.remove("show");
+        }
+
+    }
+
 });
 
 
-// ================= INIT =================
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href = "index.html";
+
+}
+
+/* ================= INIT ================= */
+
 loadMessages();
+
 loadMessageCount();
+
+checkNewMessage();
+
+setInterval(
+    checkNewMessage,
+    3000
+);
 
 </script>
 
 <style>
 
-/* READ MESSAGE */
-.msg-card{
-    opacity: 0.55;
-    background: rgba(255,255,255,0.06);
+/* =========================================================
+   MEMBER MESSAGES
+   SAME CONTENT STYLE AS MEMBERSHIP PAGE
+   SIDEBAR IS NOT TOUCHED
+========================================================= */
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+    padding: 38px 40px 0 !important;
+    margin: 0 0 28px !important;
 }
 
-.msg-card.unread{
-    opacity: 1;
-    border-left: 6px solid #4da3ff;
-    background: rgba(77,163,255,0.18);
-    box-shadow: 0 0 18px rgba(77,163,255,0.35);
+.page-header h1 {
+    margin: 0;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    color: #17231e;
+
+    letter-spacing: -0.8px;
 }
 
-.unread-badge{
-    display: inline-block;
-    background: #4da3ff;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 4px 9px;
+.page-header p {
+    margin: 8px 0 28px;
+
+    color: #66776f;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   MAIN MESSAGE CARD
+   SAME AS .membership-card
+========================================================= */
+
+.messages-panel {
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+
     border-radius: 20px;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-}
 
-.msg-card.unread h3{
-    color: #7cc0ff !important;
-    font-weight: 900;
-}
+    padding: 28px;
 
-.msg-card.unread::before{
-    content: "UNREAD";
-    display: inline-block;
-    background: #4da3ff;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+
+    margin: 0 40px 60px;
 }
 
 
-.msg-top{
+/* =========================================================
+   CARD HEADER
+   SAME AS MEMBERSHIP CARD HEADER
+========================================================= */
+
+.panel-header {
+
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
 
-.dots{
-    font-size: 24px;
-    cursor: pointer;
-    padding: 5px;
-}
-
-.msg-menu{
-    display: none;
-    margin-top: 10px;
-}
-
-.msg-menu button{
-    display: block;
-    width: 140px;
-    margin-bottom: 5px;
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.modal{
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 9999;
     align-items: center;
-    justify-content: center;
+
+    gap: 16px;
+
+    padding-bottom: 24px;
+
+    margin-bottom: 24px;
+
+    border-bottom: 1px solid #e7efeb;
 }
 
-.modal-box{
-    position: relative;
-    width: 90%;
-    max-width: 420px;
-    background: #111827;
-    color: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
 
-.modal-close{
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    border: none;
-    background: transparent;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-}
+/* =========================================================
+   HEADER ICON
+========================================================= */
 
-.modal-box h2{
-    color: #4da3ff;
-    margin-bottom: 15px;
-}
+.panel-icon {
 
-.modal-box p{
-    margin-bottom: 12px;
-}
+    width: 52px;
+    height: 52px;
 
-.modal-box small{
-    color: #cfcfcf;
-}
+    flex-shrink: 0;
 
-.msg-card{
-    position: relative;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    color: white;
-}
-
-.msg-card.unread{
-    border: 2px solid #4da3ff !important;
-    border-left: 8px solid #4da3ff !important;
-    background: rgba(77,163,255,0.22) !important;
-    box-shadow: 0 0 18px rgba(77,163,255,0.35) !important;
-}
-
-.msg-card.unread::before{
-    content: "UNREAD";
-    display: inline-block;
-    background: #4da3ff;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-}
-
-.msg-top{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-}
-
-.msg-card h3{
-    color: #4da3ff;
-    margin-bottom: 10px;
-}
-
-.msg-card p{
-    color: white;
-    margin-bottom: 10px;
-}
-
-.msg-card small{
-    color: #cfcfcf;
-}
-
-.reason{
-    color: #ff8b8b;
-    font-weight: bold;
-}
-
-.dots{
-    cursor: pointer;
-    padding: 8px;
-    font-size: 18px;
-}
-
-.msg-menu{
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 35px;
-    background: #111827;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 10px;
-    padding: 8px;
-    z-index: 999;
-    width: 150px;
-}
-
-.msg-menu button{
-    display: block;
-    width: 100%;
-    background: none;
-    border: none;
-    color: white;
-    padding: 10px;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 8px;
-}
-
-.msg-menu button:hover{
-    background: rgba(255,255,255,0.1);
-}
-
-.msg-link{
-    position: relative;
-}
-
-.msg-count{
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    background: red;
-    color: white;
-    min-width: 18px;
-    height: 18px;
     border-radius: 50%;
-    font-size: 11px;
-    display: none;
+
+    background: #e6f6ed;
+
+    display: flex;
+
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    padding: 2px;
+
+    color: #008744;
+
+    font-size: 21px;
 }
-.notif-popup{
+
+
+/* =========================================================
+   HEADER TEXT
+========================================================= */
+
+.panel-header h2 {
+
+    margin: 0 0 4px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #17231e;
+}
+
+.panel-header p {
+
+    margin: 0;
+
+    color: #71817a;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.message-divider {
+    display: none;
+}
+
+
+/* =========================================================
+   MESSAGE LIST
+========================================================= */
+
+#message-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   MESSAGE CARD
+========================================================= */
+
+.msg-card {
+
+    position: relative;
+
+    background: #f6faf8;
+
+    border: 1px solid #e4eee8;
+
+    border-radius: 14px;
+
+    padding: 20px 22px;
+
+    min-height: 120px;
+
+    cursor: pointer;
+
+    transition:
+        box-shadow .2s ease,
+        transform .2s ease,
+        border-color .2s ease;
+}
+
+
+/* =========================================================
+   UNREAD CARD
+========================================================= */
+
+.msg-card.unread {
+
+    border-left:
+        4px solid #008744;
+
+    padding-left: 19px;
+
+}
+
+
+/* =========================================================
+   MESSAGE TOP
+========================================================= */
+
+.msg-top {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   MESSAGE TITLE
+========================================================= */
+
+.msg-top h3 {
+
+    margin: 0 0 8px;
+
+    color: #17231e;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+}
+
+
+/* UNREAD TITLE */
+
+.msg-card.unread .msg-top h3 {
+
+    color: #008744;
+
+}
+
+
+/* =========================================================
+   UNREAD BADGE
+========================================================= */
+
+.unread-badge {
+
+    display: inline-flex;
+
+    width: fit-content;
+
+    align-items: center;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    background: #008744;
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   THREE DOTS
+========================================================= */
+
+.dots {
+
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    color: #17231e;
+
+    font-size: 21px;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.dots:hover {
+
+    background: #eaf6ee;
+
+    color: #008744;
+}
+
+
+/* =========================================================
+   MESSAGE CONTENT
+========================================================= */
+
+.msg-content {
+
+    margin-top: 12px;
+}
+
+
+/* MESSAGE TEXT */
+
+.msg-text {
+
+    margin: 0 0 10px;
+
+    color: #17231e;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   REASON
+========================================================= */
+
+.msg-content .reason {
+
+    margin: 0 0 8px;
+
+    color: #17231e;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+.msg-content .reason strong {
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.msg-content small {
+
+    display: block;
+
+    color: #71817a;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   MESSAGE IMAGE
+========================================================= */
+
+.msg-image-wrap {
+
+    margin: 14px 0;
+
+    max-width: 100%;
+}
+
+.msg-image {
+
+    display: block;
+
+    max-width: 100%;
+
+    width: auto;
+
+    max-height: 300px;
+
+    border-radius: 12px;
+
+    border: 1px solid #e1ebe6;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   MESSAGE MENU
+========================================================= */
+
+.msg-menu {
+
+    position: absolute;
+
+    top: 48px;
+
+    right: 18px;
+
+    width: 170px;
+
+    padding: 7px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 10px 25px rgba(18,70,40,.12);
+
+    display: none;
+
+    z-index: 20;
+}
+
+
+.msg-menu button {
+
+    width: 100%;
+
+    padding: 9px 11px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #17231e;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.msg-menu button:hover {
+
+    background: #eaf6ee;
+
+    color: #087c3d;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-message {
+
+    margin: 0;
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: #71817a;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MESSAGE MODAL
+========================================================= */
+
+.modal {
+
     position: fixed;
-    top: 80px;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15,25,19,.35);
+
+    z-index: 99999;
+}
+
+
+.modal-box {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    border: 1px solid #e1ebe6;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.18);
+
+    position: relative;
+}
+
+
+.modal-box h2 {
+
+    margin: 0 0 14px;
+
+    color: #17231e;
+
+    font-size: 22px;
+}
+
+
+.modal-box p {
+
+    color: #17231e;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.modal-box .reason {
+
+    font-weight: 500;
+}
+
+
+.modal-box small {
+
+    color: #71817a;
+
+    font-size: 12px;
+}
+
+
+.modal-close {
+
+    position: absolute;
+
+    top: 14px;
+
+    right: 16px;
+
+    width: 32px;
+
+    height: 32px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #68736d;
+
+    font-size: 24px;
+
+    cursor: pointer;
+}
+
+
+.modal-close:hover {
+
+    background: #eaf6ee;
+
+    color: #087c3d;
+}
+
+
+/* =========================================================
+   KEEP EXISTING NOTIFICATION POPUP
+========================================================= */
+
+.notif-popup {
+
+    position: fixed;
+
+    top: 25px;
+
     right: 25px;
 
-    width: 280px;
+    width: 300px;
 
-    background: #111827;
-    color: white;
+    padding: 17px 18px;
 
-    border: 1px solid rgba(255,255,255,0.15);
-    border-left: 5px solid #4da3ff;
+    box-sizing: border-box;
 
-    padding: 15px;
+    border-left: 5px solid #087c3d;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    background: #ffffff;
+
+    color: #17211b;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.12);
 
     z-index: 99999;
 
     opacity: 0;
+
     transform: translateX(120%);
 
-    transition: 0.3s ease;
+    transition:
+        opacity .3s ease,
+        transform .3s ease;
 
     cursor: pointer;
 }
 
-.notif-popup.show{
+
+.notif-popup.show {
+
     opacity: 1;
+
     transform: translateX(0);
 }
 
-.notif-popup b{
-    color: #4da3ff;
+
+.notif-popup b {
+
     display: block;
+
     margin-bottom: 5px;
+
+    color: #087c3d;
+
+    font-size: 14px;
 }
 
-.notif-popup p{
+
+.notif-popup p {
+
     margin: 0;
+
+    color: #59645e;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .page-header {
+
+        padding: 15px 25px 0;
+    }
+
+    .messages-panel {
+
+        margin-left: 25px;
+
+        margin-right: 25px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .page-header {
+
+        padding: 20px 20px 0;
+    }
+
+    .page-header h1 {
+
+        font-size: 26px;
+    }
+
+    .messages-panel {
+
+        margin: 0 20px 40px;
+
+        padding: 20px;
+
+        border-radius: 16px;
+    }
+
+    .panel-header {
+
+        gap: 12px;
+
+        padding-bottom: 20px;
+
+        margin-bottom: 20px;
+    }
+
+    .panel-icon {
+
+        width: 46px;
+
+        height: 46px;
+
+        font-size: 18px;
+    }
+
+    .panel-header h2 {
+
+        font-size: 18px;
+    }
+
+    .msg-card {
+
+        padding: 17px;
+    }
+
+    .msg-card.unread {
+
+        padding-left: 14px;
+    }
+
+}
+/* =========================================================
+   MESSAGE PAGE
+   MEMBERSHIP-STYLE LAYOUT
+   ========================================================= */
+
+.main {
+    box-sizing: border-box;
+
+    min-height: 100vh;
+
+    background: #f7faf8;
+
+}
+/* =========================================================
+   TOP HEADER - MATCH MEMBERSHIP / GOAL
+========================================================= */
+.top-header {
+    height: 70px;
+
+    background: #f7faf8;
+
+    border-bottom: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding: 0 34px;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+    z-index: 100;
+}
+
+
+/* PROFILE AREA */
+
+.top-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.user-profile {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+}
+
+
+/* AVATAR */
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: #008744;
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+
+/* NAME + ROLE */
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    line-height: 1.2;
+}
+
+.user-info strong {
+    color: #17231e;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.user-info small {
+    margin-top: 4px;
+
+    color: #71817a;
+
+    font-size: 13px;
+}
+
+
+/* ARROW */
+
+.profile-chevron {
+    margin-left: 5px;
+
+    color: #17231e;
+
+    font-size: 12px;
+
+    transition: transform .2s ease;
+}
+
+.user-profile.active .profile-chevron {
+    transform: rotate(180deg);
+}
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+.profile-dropdown {
+    position: absolute;
+
+    top: calc(100% + 12px);
+
+    right: 0;
+
+    width: 190px;
+
+    padding: 7px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 30px rgba(18,70,40,.12);
+
+    display: none;
+
+    z-index: 9999;
+}
+
+
+.profile-dropdown.show {
+    display: block;
+}
+
+
+.profile-dropdown button {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #17231e;
+
+    font-size: 13px;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.profile-dropdown button:hover {
+    background: #eaf6ee;
+
+    color: #087c3d;
+}
+
+
+.profile-dropdown button i {
+    width: 16px;
+
+    color: #68736d;
+}
+
+
+.profile-dropdown button:hover i {
+    color: #087c3d;
+}
+
+
+.dropdown-divider {
+    height: 1px;
+
+    margin: 5px 0;
+
+    background: #e7efeb;
+}
+
+
+.profile-dropdown .dropdown-logout {
+    color: #c0392b;
+}
+
+
+.profile-dropdown .dropdown-logout i {
+    color: #c0392b;
+}
+/* PAGE HEADER */
+
+.page-header {
+    padding: 38px 40px 0 !important;
+
+    margin: 0 0 28px !important;
+}
+
+.page-header h1 {
+    margin: 0;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    color: #17231e;
+}
+
+.page-header p {
+    margin: 0;
+
+    color: #66776f;
+
+    font-size: 15px;
+}
+
+/* =========================================================
+   MAIN CARD
+   SAME PROPORTION AS MEMBERSHIP CARD
+   ========================================================= */
+
+.messages-panel {
+    box-sizing: border-box;
+
+    width: calc(100% - 80px);
+
+    margin: 0 40px 60px !important;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.panel-header {
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding-bottom: 24px;
+
+    margin-bottom: 24px;
+
+    border-bottom: 1px solid #e7efeb;
+}
+
+.panel-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #e6f6ed;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #008744;
+
+    font-size: 21px;
+}
+
+.panel-header h2 {
+    margin: 0 0 4px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    color: #17231e;
+}
+
+.panel-header p {
+    margin: 0;
+
+    color: #71817a;
+
     font-size: 14px;
+}
+
+
+/* =========================================================
+   MESSAGE LIST
+   ========================================================= */
+
+#message-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   MESSAGE CARD
+   ========================================================= */
+
+.msg-card {
+    position: relative;
+
+    box-sizing: border-box;
+
+    width: 100%;
+
+    background: #f8fbf9;
+
+    border: 1px solid #dfeae4;
+
+    border-radius: 14px;
+
+    padding: 20px 22px;
+
+    min-height: 120px;
+
+    cursor: pointer;
+}
+
+
+/* UNREAD */
+
+.msg-card.unread {
+    border-left: 4px solid #008744;
+
+    padding-left: 19px;
+}
+
+
+/* =========================================================
+   MESSAGE TOP
+   ========================================================= */
+
+.msg-top {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.msg-top h3 {
+    margin: 0 0 8px;
+
+    color: #17231e;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+}
+
+.msg-card.unread .msg-top h3 {
+    color: #008744;
+}
+
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.unread-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    width: fit-content;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    background: #008744;
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   THREE DOTS
+   ========================================================= */
+
+.dots {
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    color: #17231e;
+
+    font-size: 21px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.msg-content {
+    margin-top: 12px;
+}
+
+.msg-text {
+    margin: 0 0 10px;
+
+    color: #17231e;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.msg-content .reason {
+    margin: 0 0 8px;
+
+    color: #17231e;
+
+    font-size: 13px;
+}
+
+.msg-content small {
+    display: block;
+
+    color: #71817a;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.msg-image-wrap {
+    margin: 14px 0;
+}
+
+.msg-image {
+    display: block;
+
+    max-width: 100%;
+
+    max-height: 300px;
+
+    border-radius: 12px;
+
+    border: 1px solid #e1ebe6;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+.msg-menu {
+    position: absolute;
+
+    top: 48px;
+    right: 18px;
+
+    width: 170px;
+
+    padding: 7px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 10px 25px rgba(18,70,40,.12);
+
+    display: none;
+
+    z-index: 20;
+}
+
+.msg-menu button {
+    width: 100%;
+
+    padding: 9px 11px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #17231e;
+
+    font-size: 12px;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.msg-menu button:hover {
+    background: #eaf6ee;
+
+    color: #087c3d;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-message {
+    margin: 0;
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: #71817a;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .page-header {
+        padding: 15px 25px 0 !important;
+    }
+
+    .messages-panel {
+        width: calc(100% - 50px);
+
+        margin-left: 25px !important;
+        margin-right: 25px !important;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .page-header {
+        padding: 20px !important;
+    }
+
+    .page-header h1 {
+        font-size: 26px;
+    }
+
+    .messages-panel {
+        width: calc(100% - 40px);
+
+        margin-left: 20px !important;
+        margin-right: 20px !important;
+
+        padding: 20px;
+
+        border-radius: 16px;
+    }
+
+    .panel-header {
+        gap: 12px;
+
+        padding-bottom: 20px;
+
+        margin-bottom: 20px;
+    }
+
+    .panel-icon {
+        width: 46px;
+        height: 46px;
+
+        font-size: 18px;
+    }
+
+    .panel-header h2 {
+        font-size: 18px;
+    }
+
+    .msg-card {
+        padding: 17px;
+    }
+
+    .msg-card.unread {
+        padding-left: 14px;
+    }
+}
+
+/* =========================================================
+   FINAL — MATCH MEMBERSHIP PAGE EXACTLY
+========================================================= */
+
+.layout {
+    padding-top: 0 !important;
+}
+
+/* =========================================================
+   FINAL SPACING FIX — MATCH MEMBERSHIP
+========================================================= */
+
+/* =========================================================
+   FINAL MESSAGE PAGE SPACING
+   MATCH MEMBERSHIP PAGE
+========================================================= */
+
+.layout .main {
+    padding-top: 0 !important;
+}
+
+.main .page-header {
+    padding-top: 15px !important;
+    margin-top: 0 !important;
+}
+/* TOP HEADER */
+
+.layout .main .top-header {
+    height: 42px !important;
+    margin-bottom: 10px !important;
+}
+
+
+/* PAGE HEADER */
+
+
+.main .page-header h1 {
+    margin: 0 !important;
+
+    font-family: "Inter", "Segoe UI", Arial, sans-serif !important;
+
+    font-size: 30px !important;
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+
+    color: #17231e !important;
+
+    letter-spacing: 0 !important;
+}
+
+.main .page-header p {
+    margin: 8px 0 28px !important;
+
+    font-family: "Inter", "Segoe UI", Arial, sans-serif !important;
+
+    color: #66776f !important;
+
+    font-size: 15px !important;
+    font-weight: 400 !important;
+
+    line-height: 1.4 !important;
+}
+
+
+/* MESSAGE PANEL */
+
+.messages-panel {
+    margin: 0 40px 60px !important;
+}
+/* REMOVE HEADER DIVIDER — MATCH MEMBERSHIP */
+.top-header {
+    border-bottom: none !important;
+    box-shadow: none !important;
 }
 
 </style>
