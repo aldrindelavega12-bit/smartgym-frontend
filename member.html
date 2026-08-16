@@ -134,9 +134,9 @@ if (!user || user.role !== "member") {
 
                 <div id="dropdown" class="profile-dropdown">
 
-                    <button onclick="openEditProfile(); event.stopPropagation();">
-                        <i class="fa-solid fa-user-pen"></i>
-                        Edit Profile
+                    <button onclick="openChangePassword(); event.stopPropagation();">
+                        <i class="fa-solid fa-key"></i>
+                        Change Password
                     </button>
 
                     <div class="dropdown-divider"></div>
@@ -419,142 +419,126 @@ if (!user || user.role !== "member") {
 
 </div>
 <!-- EDIT PROFILE MODAL -->
-<div id="editProfileModal" class="edit-profile-overlay">
+<!-- CHANGE PASSWORD MODAL -->
+<div id="changePasswordModal" class="edit-profile-overlay">
 
     <div class="edit-profile-modal">
 
         <div class="edit-profile-header">
 
             <div>
-                <span>Edit Profile</span>
-                <h2>Your Profile</h2>
+                <span>Account Security</span>
+                <h2>Change Password</h2>
             </div>
 
             <button
                 class="edit-close"
-                onclick="closeEditProfile()">
+                onclick="closeChangePassword()">
                 &times;
             </button>
 
         </div>
 
+
         <div class="edit-profile-body">
 
             <div class="profile-avatar-large">
-                A
+                <i class="fa-solid fa-lock"></i>
             </div>
 
 
-            <!-- USERNAME -->
+            <!-- CURRENT PASSWORD -->
             <div class="profile-field">
 
-                <label>Username</label>
+                <label>Current Password</label>
 
-                <input
-                    type="text"
-                    id="editUsername"
-                    placeholder="Enter username">
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeCurrentPassword"
+                        placeholder="Current password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('changeCurrentPassword', this)">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
 
             </div>
 
 
-            <!-- PHONE NUMBER -->
+            <!-- NEW PASSWORD -->
             <div class="profile-field">
 
-                <label>Phone Number</label>
+                <label>New Password</label>
 
-                <input
-                    type="text"
-                    id="editPhone"
-                    placeholder="Enter phone number">
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeNewPassword"
+                        placeholder="New password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('changeNewPassword', this)">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
 
             </div>
 
 
-            <!-- PASSWORD -->
-            <div class="password-section">
+            <!-- CONFIRM PASSWORD -->
+            <div class="profile-field">
 
-                <div class="password-section-title">
-                    Change Password
-                </div>
+                <label>Confirm New Password</label>
 
-                <small>
-                    Leave these fields blank if you don't want to change your password.
-                </small>
+                <div class="password-wrapper">
 
+                    <input
+                        type="password"
+                        id="changeConfirmPassword"
+                        placeholder="Confirm new password">
 
-                <div class="profile-field">
-                    <label>Current Password</label>
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('changeConfirmPassword', this)">
 
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            id="editCurrentPassword"
-                            placeholder="Current password">
+                        <i class="fa-regular fa-eye"></i>
 
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            onclick="togglePassword('editCurrentPassword', this)">
-                            <i class="fa-regular fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
+                    </button>
 
-
-                <div class="profile-field">
-                    <label>New Password</label>
-
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            id="editNewPassword"
-                            placeholder="New password">
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            onclick="togglePassword('editNewPassword', this)">
-                            <i class="fa-regular fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-
-                <div class="profile-field">
-                    <label>Confirm New Password</label>
-
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            id="editConfirmPassword"
-                            placeholder="Confirm new password">
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            onclick="togglePassword('editConfirmPassword', this)">
-                            <i class="fa-regular fa-eye"></i>
-                        </button>
-                    </div>
                 </div>
 
             </div>
 
         </div>
-        
+
+
         <div class="edit-profile-footer">
 
             <button
                 class="cancel-profile"
-                onclick="closeEditProfile()">
+                onclick="closeChangePassword()">
                 Cancel
             </button>
 
             <button
                 class="save-profile"
-                onclick="saveProfile()">
-                Save Changes
+                onclick="changePassword()">
+                Change Password
             </button>
 
         </div>
@@ -601,54 +585,6 @@ function go(page){
     window.location.href = page;
 }
 
-// ================= EDIT PROFILE =================
-function openEditProfile(){
-
-    const dropdown =
-        document.getElementById("dropdown");
-
-    const profile =
-        document.querySelector(".user-profile");
-
-
-    dropdown.classList.remove("show");
-    profile.classList.remove("active");
-
-
-    // CURRENT USERNAME
-    document.getElementById("editUsername").value =
-        userData.username || "";
-
-
-    // CURRENT PHONE NUMBER
-    document.getElementById("editPhone").value =
-        userData.phone_number || "";
-
-
-    // CLEAR PASSWORD FIELDS
-    document.getElementById("editCurrentPassword").value =
-        "";
-
-    document.getElementById("editNewPassword").value =
-        "";
-
-    document.getElementById("editConfirmPassword").value =
-        "";
-
-
-    // OPEN MODAL
-    document
-        .getElementById("editProfileModal")
-        .classList.add("show");
-}
-
-function closeEditProfile(){
-
-    document
-        .getElementById("editProfileModal")
-        .classList.remove("show");
-}
-
 function togglePassword(inputId, button) {
 
     const input = document.getElementById(inputId);
@@ -669,201 +605,164 @@ function togglePassword(inputId, button) {
         icon.classList.add("fa-eye");
     }
 }
+// ================= CHANGE PASSWORD =================
 
-async function saveProfile(){
+function openChangePassword(){
 
-    const username =
-        document.getElementById("editUsername").value.trim();
+    const dropdown =
+        document.getElementById("dropdown");
 
-    const phone =
-        document.getElementById("editPhone").value.trim();
+    const profile =
+        document.querySelector(".user-profile");
+
+    dropdown.classList.remove("show");
+    profile.classList.remove("active");
+
+
+    document.getElementById(
+        "changeCurrentPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changeNewPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changeConfirmPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.add("show");
+}
+
+
+function closeChangePassword(){
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.remove("show");
+}
+
+
+async function changePassword(){
 
     const currentPassword =
-        document.getElementById("editCurrentPassword").value;
+        document.getElementById(
+            "changeCurrentPassword"
+        ).value;
 
     const newPassword =
-        document.getElementById("editNewPassword").value;
+        document.getElementById(
+            "changeNewPassword"
+        ).value;
 
     const confirmPassword =
-        document.getElementById("editConfirmPassword").value;
+        document.getElementById(
+            "changeConfirmPassword"
+        ).value;
 
 
-    // =========================
-    // BASIC VALIDATION
-    // =========================
+    if(!currentPassword){
 
-    if(!username){
-
-        alert("Username is required.");
-        return;
-    }
-
-    if(!phone){
-
-        alert("Phone number is required.");
+        alert("Enter your current password.");
         return;
     }
 
 
-    // =========================
-    // PASSWORD VALIDATION
-    // =========================
+    if(!newPassword){
 
-    const changingPassword =
-        currentPassword ||
-        newPassword ||
-        confirmPassword;
-
-    if(changingPassword){
-
-        if(!currentPassword){
-
-            alert("Enter your current password.");
-            return;
-        }
-
-        if(!newPassword){
-
-            alert("Enter your new password.");
-            return;
-        }
-
-        if(!confirmPassword){
-
-            alert("Confirm your new password.");
-            return;
-        }
-
-        if(newPassword !== confirmPassword){
-
-            alert("New passwords do not match.");
-            return;
-        }
-
-        if(newPassword.length < 8){
-
-            alert("Password must be at least 8 characters.");
-            return;
-        }
+        alert("Enter your new password.");
+        return;
     }
 
 
-    // =========================
-    // SEND TO API
-    // =========================
+    if(newPassword.length < 8){
+
+        alert(
+            "New password must be at least 8 characters."
+        );
+
+        return;
+    }
+
+
+    if(newPassword !== confirmPassword){
+
+        alert(
+            "New passwords do not match."
+        );
+
+        return;
+    }
+
 
     try{
 
-        const response = await fetch(
-            `${API_URL}/api/member/profile`,
-            {
-                method: "PUT",
+        const response =
+            await fetch(
+                `${API_URL}/api/member/profile`,
+                {
+                    method: "PUT",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
+                    body: JSON.stringify({
 
-                    // IMPORTANT:
-                    // userData.id = user_accounts.id
-                    id: userData.id,
+                        id:
+                            userData.id,
 
-                    username: username,
+                        username:
+                            userData.username,
 
-                    phone_number: phone,
+                        phone_number:
+                            userData.phone_number,
 
-                    current_password: currentPassword,
+                        current_password:
+                            currentPassword,
 
-                    new_password: newPassword,
+                        new_password:
+                            newPassword,
 
-                    confirm_password: confirmPassword
+                        confirm_password:
+                            confirmPassword
 
-                })
-            }
-        );
+                    })
+                }
+            );
 
 
         const result =
             await response.json();
 
 
-        // =========================
-        // API ERROR
-        // =========================
-
         if(!response.ok || !result.success){
 
             alert(
                 result.message ||
-                "Failed to update profile."
+                "Failed to change password."
             );
 
             return;
         }
 
 
-        // =========================
-        // UPDATE LOCAL STORAGE
-        // =========================
-
-        userData.username =
-            username;
-
-        userData.phone_number =
-            phone;
-
-
-        localStorage.setItem(
-            "user",
-            JSON.stringify(userData)
-        );
-
-
-        // =========================
-        // UPDATE DISPLAY
-        // =========================
-
-        document.getElementById(
-            "profile-name"
-        ).innerText =
-            userData.fullname ||
-            username;
-
-
-        // =========================
-        // CLOSE MODAL
-        // =========================
-
-        closeEditProfile();
-
-
-        // =========================
-        // CLEAR PASSWORD
-        // =========================
-
-        document.getElementById(
-            "editCurrentPassword"
-        ).value = "";
-
-        document.getElementById(
-            "editNewPassword"
-        ).value = "";
-
-        document.getElementById(
-            "editConfirmPassword"
-        ).value = "";
-
+        closeChangePassword();
 
         alert(
-            "Profile updated successfully."
+            "Password changed successfully."
         );
 
+    }
 
-    }catch(error){
+    catch(error){
 
         console.error(
-            "SAVE PROFILE ERROR:",
+            "CHANGE PASSWORD ERROR:",
             error
         );
 
@@ -871,8 +770,8 @@ async function saveProfile(){
             "Unable to connect to the server."
         );
     }
-}
 
+}
 // ================= LOGOUT =================
 function logout(){
 
