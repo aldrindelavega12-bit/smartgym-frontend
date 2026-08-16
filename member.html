@@ -844,6 +844,10 @@ async function loadAttendance(){
             error
         );
 
+        alert(
+            "Attendance failed to load. Check console."
+        );
+
         attendanceDates.clear();
 
         renderCalendar();
