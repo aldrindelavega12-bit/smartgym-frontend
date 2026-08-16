@@ -484,38 +484,59 @@ if (!user || user.role !== "member") {
 
 
                 <div class="profile-field">
-
                     <label>Current Password</label>
 
-                    <input
-                        type="password"
-                        id="editCurrentPassword"
-                        placeholder="Current password">
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="editCurrentPassword"
+                            placeholder="Current password">
 
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('editCurrentPassword', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
 
                 <div class="profile-field">
-
                     <label>New Password</label>
 
-                    <input
-                        type="password"
-                        id="editNewPassword"
-                        placeholder="New password">
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="editNewPassword"
+                            placeholder="New password">
 
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('editNewPassword', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
 
                 <div class="profile-field">
-
                     <label>Confirm New Password</label>
 
-                    <input
-                        type="password"
-                        id="editConfirmPassword"
-                        placeholder="Confirm new password">
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="editConfirmPassword"
+                            placeholder="Confirm new password">
 
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('editConfirmPassword', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -627,6 +648,28 @@ function closeEditProfile(){
         .getElementById("editProfileModal")
         .classList.remove("show");
 }
+
+function togglePassword(inputId, button) {
+
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector("i");
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    } else {
+
+        input.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
 async function saveProfile(){
 
     const username =
