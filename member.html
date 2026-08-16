@@ -1280,23 +1280,20 @@ async function loadMembership() {
         // MEMBERSHIP PROGRESS
         // =========================
 
-        const startDate =
-            membership.membership_start ||
-            membership.membership_started ||
-            membership.membership_start_date;
-
-
-        if (startDate && expiryDate) {
-
-            const start =
-                new Date(
-                    startDate + "T00:00:00"
-                );
+        if (expiryDate) {
 
             const expiry =
                 new Date(
                     expiryDate + "T00:00:00"
                 );
+
+            const start =
+                new Date(expiry);
+
+            // Membership validity = 1 year
+            start.setFullYear(
+                start.getFullYear() - 1
+            );
 
             const today =
                 new Date();
@@ -1309,6 +1306,7 @@ async function loadMembership() {
             );
 
 
+            // Total days in the 1-year membership
             const totalDays =
                 Math.ceil(
                     (
@@ -1319,7 +1317,8 @@ async function loadMembership() {
                 );
 
 
-            const remaining =
+            // Remaining days
+            const remainingDays =
                 Math.max(
                     0,
                     Math.ceil(
@@ -1332,6 +1331,7 @@ async function loadMembership() {
                 );
 
 
+            // Remaining percentage
             const percentage =
                 totalDays > 0
                     ? Math.min(
@@ -1340,7 +1340,7 @@ async function loadMembership() {
                             0,
                             Math.round(
                                 (
-                                    remaining /
+                                    remainingDays /
                                     totalDays
                                 ) * 100
                             )
@@ -1349,31 +1349,18 @@ async function loadMembership() {
                     : 0;
 
 
+            // Percentage text
             document.getElementById(
                 "membershipPercent"
             ).innerText =
                 `${percentage}%`;
 
 
+            // Progress bar
             document.getElementById(
                 "membershipProgress"
             ).style.width =
                 `${percentage}%`;
-
-
-        } else {
-
-            // No membership start date
-            // available from API yet.
-
-            document.getElementById(
-                "membershipPercent"
-            ).innerText = "-%";
-
-
-            document.getElementById(
-                "membershipProgress"
-            ).style.width = "0%";
 
         }
 
