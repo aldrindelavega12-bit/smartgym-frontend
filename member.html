@@ -768,9 +768,12 @@ window.onclick = function(e){
     }
 };
 
-// ================= MESSAGE COUNT =================
+const memberId =
+    userData.user_id ||
+    userData.member_id ||
+    userData.id;
 
-const memberId = userData.id || userData.user_id;
+
 
 // ================= ATTENDANCE CALENDAR =================
 
@@ -792,22 +795,6 @@ async function loadAttendance(){
 
     try{
 
-        /*
-         * IMPORTANT:
-         * This must return the member's actual attendance dates.
-         *
-         * Expected:
-         *
-         * {
-         *     dates: [
-         *         "2026-08-01",
-         *         "2026-08-05",
-         *         "2026-08-12"
-         *     ],
-         *     total: 3
-         * }
-         */
-
         const response = await fetch(
             `${API_URL}/api/member/attendance/${memberId}`
         );
@@ -821,6 +808,8 @@ async function loadAttendance(){
 
         const data = await response.json();
 
+        console.log("ATTENDANCE MEMBER ID:", memberId);
+        console.log("ATTENDANCE DATA:", data);
 
         attendanceDates = new Set(
             (data.dates || []).map(date =>
@@ -828,12 +817,10 @@ async function loadAttendance(){
             )
         );
 
-
         document.getElementById(
             "totalUses"
         ).innerText =
             data.total ?? attendanceDates.size;
-
 
         renderCalendar();
 
@@ -842,10 +829,6 @@ async function loadAttendance(){
         console.error(
             "ATTENDANCE ERROR:",
             error
-        );
-
-        alert(
-            "Attendance failed to load. Check console."
         );
 
         attendanceDates.clear();
