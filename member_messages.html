@@ -362,65 +362,145 @@ const socket = io(API_URL, {
 let lastMessageCount = 0;
 let firstLoad = true;
 
-async function loadMessageCount(){
+/* ================= LOAD MESSAGES ================= */
 
-    try {
+async function loadMessages(){
+
+    try{
 
         const res = await fetch(
-            `${API_URL}/api/messages_count/${messageUserId}`
+            `${API_URL}/api/messages/${memberId}`
         );
 
-        const data = await res.json();
+        const data =
+            await res.json();
 
-        const count =
-            Number(data.count) || 0;
+        const container =
+            document.getElementById("message-list");
 
-        const badge =
-            document.getElementById("msg-count");
+        container.innerHTML = "";
 
-        if(count > 0){
+        if(!Array.isArray(data) || data.length === 0){
 
-            badge.style.display = "flex";
-            badge.innerText = count;
+            container.innerHTML = `
+                <p class="empty-message">
+                    No messages
+                </p>
+            `;
 
-        }else{
-
-            badge.style.display = "none";
-
+            return;
         }
 
-        if(
-            !firstLoad &&
-            count > lastMessageCount
-        ){
+        data.forEach(msg => {
 
-            showNotifPopup(
-                "New Message",
-                "You received a new gym notification."
-            );
+            container.innerHTML += `
 
-            document
-                .getElementById("notifSound")
-                .play()
-                .catch(() => {});
+                <div
+                    class="msg-card ${
+                        Number(msg.is_read) === 0
+                            ? "unread"
+                            : ""
+                    }"
+                    onclick='openMessage(${JSON.stringify(msg)})'
+                >
 
-        }
+                    <div class="msg-top">
 
-        lastMessageCount = count;
-        firstLoad = false;
+                        <div>
+
+                            <h3>
+                                ${msg.title}
+                            </h3>
+
+                            ${
+                                Number(msg.is_read) === 0
+                                ?
+                                '<span class="unread-badge">NEW / UNREAD</span>'
+                                :
+                                ''
+                            }
+
+                        </div>
+
+                        <div
+                            class="dots"
+                            onclick="
+                                event.stopPropagation();
+                                toggleMenu(${msg.id})
+                            "
+                        >
+                            ⋮
+                        </div>
+
+                    </div>
+
+                    <div class="msg-content">
+
+                        <p class="msg-text">
+                            ${msg.message}
+                        </p>
+
+                        <p class="reason">
+                            <strong>Reason:</strong>
+                            ${msg.reason || "-"}
+                        </p>
+
+                        <small>
+                            ${msg.created_at}
+                        </small>
+
+                    </div>
+
+                    <div
+                        id="menu-${msg.id}"
+                        class="msg-menu"
+                    >
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                deleteMessage(${msg.id})
+                            "
+                        >
+                            Delete
+                        </button>
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markRead(${msg.id})
+                            "
+                        >
+                            Mark as Read
+                        </button>
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markUnread(${msg.id})
+                            "
+                        >
+                            Mark as Unread
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
 
     }catch(err){
 
-        console.log(
-            "Message count error:",
+        console.error(
+            "LOAD MESSAGES ERROR:",
             err
         );
 
     }
 
 }
-/* ================= POPUP ================= */
-
 function showNotifPopup(
     title,
     text
@@ -703,17 +783,15 @@ function logout(){
 
 /* ================= INIT ================= */
 
+
 loadMessages();
 
 loadMessageCount();
 
-checkNewMessage();
-
 setInterval(
-    checkNewMessage,
+    loadMessageCount,
     3000
 );
-
 </script>
 
 <style>
