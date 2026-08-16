@@ -6,10 +6,13 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/member-dashboard.css">
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    </head>
 <body>
 
 <!-- 🔒 ROLE PROTECTION -->
@@ -24,12 +27,24 @@ if (!user || user.role !== "member") {
 }
 
 </script>
-
-<!-- NAVBAR -->
 <div class="navbar">
 
-    <h2>SMART GYM</h2>
+    <!-- BRAND -->
+    <div class="brand">
 
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <div class="brand-text">
+            <strong>SMART GYM</strong>
+            <span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span>
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
     <div class="menu">
 
         <a href="member.html">
@@ -60,12 +75,29 @@ if (!user || user.role !== "member") {
 
     </div>
 
-    <!-- 👤 PROFILE -->
-        <!-- LOGOUT -->
+
+    <!-- MOTIVATIONAL CARD -->
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <h3>Keep Pushing</h3>
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+
+    <!-- LOGOUT -->
     <div class="profile">
 
-        <button class="logout-btn"
-                onclick="logout()">
+        <button class="logout-btn" onclick="logout()">
             Logout
         </button>
 
@@ -76,6 +108,51 @@ if (!user || user.role !== "member") {
 <!-- MAIN -->
 <div class="layout">
 <div class="main">
+
+    <!-- TOP HEADER -->
+    <div class="top-header">
+
+        <div class="top-right">
+
+            <div class="notification-icon">
+                <i class="fa-regular fa-bell"></i>
+                <span>2</span>
+            </div>
+
+            <div class="user-profile" onclick="toggleMenu()">
+
+                <div class="user-avatar">
+                    A
+                </div>
+
+                <div class="user-info">
+                    <strong id="profile-name">Aldrin</strong>
+                    <small>Member</small>
+                </div>
+
+                <i class="fa-solid fa-chevron-down profile-chevron"></i>
+
+                <div id="dropdown" class="profile-dropdown">
+
+                    <button onclick="openEditProfile(); event.stopPropagation();">
+                        <i class="fa-solid fa-user-pen"></i>
+                        Edit Profile
+                    </button>
+
+                    <div class="dropdown-divider"></div>
+
+                    <button onclick="logout(); event.stopPropagation();" class="dropdown-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Log Out
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <div class="hero">
 
@@ -94,10 +171,12 @@ if (!user || user.role !== "member") {
         <!-- MESSAGES -->
         <div class="card">
 
+            <h3>Messages</h3>
 
-            <h3>
-                Messages
-            </h3>
+            <p>
+                View your<br>
+                messages
+            </p>
 
             <button onclick="go('member_messages.html')">
                 Open
@@ -105,11 +184,15 @@ if (!user || user.role !== "member") {
 
         </div>
 
+
         <div class="card">
 
-            <h3>
-                Suggested Workout
-            </h3>
+            <h3>Suggested Workout</h3>
+
+            <p>
+                Discover workouts<br>
+                tailored for you
+            </p>
 
             <button onclick="go('workouts.html')">
                 Open
@@ -117,23 +200,31 @@ if (!user || user.role !== "member") {
 
         </div>
 
+
         <div class="card">
 
-            <h3>
-                Book Locker
-            </h3>
+            <h3>Book Locker</h3>
+
+            <p>
+                Reserve a locker<br>
+                for your items
+            </p>
 
             <button onclick="go('locker_booking.html')">
-                Book
+                Book Now
             </button>
 
         </div>
 
+
         <div class="card">
 
-            <h3>
-                Membership Details
-            </h3>
+            <h3>Membership Details</h3>
+
+            <p>
+                View your membership<br>
+                information
+            </p>
 
             <button onclick="go('membership.html')">
                 View
@@ -144,6 +235,311 @@ if (!user || user.role !== "member") {
     </div>
 
 </div>
+<!-- DASHBOARD INFO -->
+<div class="dashboard-info">
+
+    <!-- ATTENDANCE CALENDAR -->
+    <div class="dashboard-panel">
+
+        <div class="panel-title">
+            <i class="fa-solid fa-calendar-days"></i>
+            <h2>Attendance Calendar</h2>
+        </div>
+
+        <div class="attendance-content">
+
+            <div class="calendar">
+
+                <div class="calendar-head">
+
+                    <button type="button">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <span>May 2026</span>
+
+                    <button type="button">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="weekdays">
+                    <span>SUN</span>
+                    <span>MON</span>
+                    <span>TUE</span>
+                    <span>WED</span>
+                    <span>THU</span>
+                    <span>FRI</span>
+                    <span>SAT</span>
+                </div>
+
+                <div class="calendar-days">
+
+                    <span class="day muted">27</span>
+                    <span class="day muted">28</span>
+                    <span class="day muted">29</span>
+                    <span class="day muted">30</span>
+
+                    <span class="day attended">1</span>
+                    <span class="day attended">2</span>
+                    <span class="day">3</span>
+
+                    <span class="day attended">4</span>
+                    <span class="day">5</span>
+                    <span class="day attended">6</span>
+                    <span class="day attended">7</span>
+                    <span class="day">8</span>
+                    <span class="day attended">9</span>
+                    <span class="day">10</span>
+
+                    <span class="day">11</span>
+                    <span class="day">12</span>
+                    <span class="day attended">13</span>
+                    <span class="day today">14</span>
+                    <span class="day attended">15</span>
+                    <span class="day">16</span>
+                    <span class="day">17</span>
+
+                    <span class="day attended">18</span>
+                    <span class="day">19</span>
+                    <span class="day attended">20</span>
+                    <span class="day">21</span>
+                    <span class="day attended">22</span>
+                    <span class="day">23</span>
+                    <span class="day">24</span>
+
+                    <span class="day">25</span>
+                    <span class="day attended">26</span>
+                    <span class="day">27</span>
+                    <span class="day attended">28</span>
+                    <span class="day">29</span>
+                    <span class="day">30</span>
+                    <span class="day">31</span>
+
+                </div>
+
+            </div>
+
+            <!-- USAGE -->
+            <div class="usage-stats">
+
+                <div class="usage-item">
+
+                    <div class="usage-icon">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+
+                    <div>
+                        <span>Times Used</span>
+                        <strong>12</strong>
+                        <small>this month</small>
+                    </div>
+
+                </div>
+
+                <div class="usage-item">
+
+                    <div class="usage-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <div>
+                        <span>Total Uses</span>
+                        <strong>48</strong>
+                        <small>all time</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MEMBERSHIP -->
+    <div class="dashboard-panel">
+
+        <div class="panel-title">
+            <i class="fa-solid fa-crown"></i>
+            <h2>Membership Status</h2>
+        </div>
+
+        <div class="membership-box">
+
+            <div class="membership-top">
+
+                <div class="membership-icon">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+
+                <div>
+
+                    <div class="membership-name">
+                        Premium Membership
+                    </div>
+
+                    <span class="status">
+                        Active
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="membership-info">
+
+                <span>Valid Until</span>
+                <strong>September 30, 2026</strong>
+
+                <span>Days Remaining</span>
+                <strong>78 days</strong>
+
+            </div>
+
+            <div class="progress-row">
+
+                <div class="progress">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <strong>78%</strong>
+
+            </div>
+
+            <div class="remaining">
+                78 days remaining
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- EDIT PROFILE MODAL -->
+<div id="editProfileModal" class="edit-profile-overlay">
+
+    <div class="edit-profile-modal">
+
+        <div class="edit-profile-header">
+
+            <div>
+                <span>Edit Profile</span>
+                <h2>Your Profile</h2>
+            </div>
+
+            <button
+                class="edit-close"
+                onclick="closeEditProfile()">
+                &times;
+            </button>
+
+        </div>
+
+        <div class="edit-profile-body">
+
+            <div class="profile-avatar-large">
+                A
+            </div>
+
+
+            <!-- USERNAME -->
+            <div class="profile-field">
+
+                <label>Username</label>
+
+                <input
+                    type="text"
+                    id="editUsername"
+                    placeholder="Enter username">
+
+            </div>
+
+
+            <!-- PHONE NUMBER -->
+            <div class="profile-field">
+
+                <label>Phone Number</label>
+
+                <input
+                    type="text"
+                    id="editPhone"
+                    placeholder="Enter phone number">
+
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="password-section">
+
+                <div class="password-section-title">
+                    Change Password
+                </div>
+
+                <small>
+                    Leave these fields blank if you don't want to change your password.
+                </small>
+
+
+                <div class="profile-field">
+
+                    <label>Current Password</label>
+
+                    <input
+                        type="password"
+                        id="editCurrentPassword"
+                        placeholder="Current password">
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <label>New Password</label>
+
+                    <input
+                        type="password"
+                        id="editNewPassword"
+                        placeholder="New password">
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <label>Confirm New Password</label>
+
+                    <input
+                        type="password"
+                        id="editConfirmPassword"
+                        placeholder="Confirm new password">
+
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="edit-profile-footer">
+
+            <button
+                class="cancel-profile"
+                onclick="closeEditProfile()">
+                Cancel
+            </button>
+
+            <button
+                class="save-profile"
+                onclick="saveProfile()">
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
 <div id="notifPopup" class="notif-popup" onclick="goMessages()">
@@ -173,8 +569,10 @@ const displayName =
 
 // 👉 UPDATE NAME
 document.getElementById("welcome").innerText =
-    "WELCOME, " + displayName + " 💪";
+    displayName + " 💪";
 
+document.getElementById("profile-name").innerText =
+    displayName;
 
 // ================= NAVIGATION =================
 function go(page){
@@ -182,6 +580,255 @@ function go(page){
     window.location.href = page;
 }
 
+// ================= EDIT PROFILE =================
+function openEditProfile(){
+
+    const dropdown =
+        document.getElementById("dropdown");
+
+    const profile =
+        document.querySelector(".user-profile");
+
+
+    dropdown.classList.remove("show");
+    profile.classList.remove("active");
+
+
+    // CURRENT USERNAME
+    document.getElementById("editUsername").value =
+        userData.username || "";
+
+
+    // CURRENT PHONE NUMBER
+    document.getElementById("editPhone").value =
+        userData.phone_number || "";
+
+
+    // CLEAR PASSWORD FIELDS
+    document.getElementById("editCurrentPassword").value =
+        "";
+
+    document.getElementById("editNewPassword").value =
+        "";
+
+    document.getElementById("editConfirmPassword").value =
+        "";
+
+
+    // OPEN MODAL
+    document
+        .getElementById("editProfileModal")
+        .classList.add("show");
+}
+
+function closeEditProfile(){
+
+    document
+        .getElementById("editProfileModal")
+        .classList.remove("show");
+}
+async function saveProfile(){
+
+    const username =
+        document.getElementById("editUsername").value.trim();
+
+    const phone =
+        document.getElementById("editPhone").value.trim();
+
+    const currentPassword =
+        document.getElementById("editCurrentPassword").value;
+
+    const newPassword =
+        document.getElementById("editNewPassword").value;
+
+    const confirmPassword =
+        document.getElementById("editConfirmPassword").value;
+
+
+    // =========================
+    // BASIC VALIDATION
+    // =========================
+
+    if(!username){
+
+        alert("Username is required.");
+        return;
+    }
+
+    if(!phone){
+
+        alert("Phone number is required.");
+        return;
+    }
+
+
+    // =========================
+    // PASSWORD VALIDATION
+    // =========================
+
+    const changingPassword =
+        currentPassword ||
+        newPassword ||
+        confirmPassword;
+
+    if(changingPassword){
+
+        if(!currentPassword){
+
+            alert("Enter your current password.");
+            return;
+        }
+
+        if(!newPassword){
+
+            alert("Enter your new password.");
+            return;
+        }
+
+        if(!confirmPassword){
+
+            alert("Confirm your new password.");
+            return;
+        }
+
+        if(newPassword !== confirmPassword){
+
+            alert("New passwords do not match.");
+            return;
+        }
+
+        if(newPassword.length < 8){
+
+            alert("Password must be at least 8 characters.");
+            return;
+        }
+    }
+
+
+    // =========================
+    // SEND TO API
+    // =========================
+
+    try{
+
+        const response = await fetch(
+            `${API_URL}/api/member/profile`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    // IMPORTANT:
+                    // userData.id = user_accounts.id
+                    id: userData.id,
+
+                    username: username,
+
+                    phone_number: phone,
+
+                    current_password: currentPassword,
+
+                    new_password: newPassword,
+
+                    confirm_password: confirmPassword
+
+                })
+            }
+        );
+
+
+        const result =
+            await response.json();
+
+
+        // =========================
+        // API ERROR
+        // =========================
+
+        if(!response.ok || !result.success){
+
+            alert(
+                result.message ||
+                "Failed to update profile."
+            );
+
+            return;
+        }
+
+
+        // =========================
+        // UPDATE LOCAL STORAGE
+        // =========================
+
+        userData.username =
+            username;
+
+        userData.phone_number =
+            phone;
+
+
+        localStorage.setItem(
+            "user",
+            JSON.stringify(userData)
+        );
+
+
+        // =========================
+        // UPDATE DISPLAY
+        // =========================
+
+        document.getElementById(
+            "profile-name"
+        ).innerText =
+            userData.fullname ||
+            username;
+
+
+        // =========================
+        // CLOSE MODAL
+        // =========================
+
+        closeEditProfile();
+
+
+        // =========================
+        // CLEAR PASSWORD
+        // =========================
+
+        document.getElementById(
+            "editCurrentPassword"
+        ).value = "";
+
+        document.getElementById(
+            "editNewPassword"
+        ).value = "";
+
+        document.getElementById(
+            "editConfirmPassword"
+        ).value = "";
+
+
+        alert(
+            "Profile updated successfully."
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "SAVE PROFILE ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to connect to the server."
+        );
+    }
+}
 
 // ================= LOGOUT =================
 function logout(){
@@ -193,32 +840,38 @@ function logout(){
 
 
 // ================= DROPDOWN =================
+
 function toggleMenu(){
 
-    const menu =
+    const profile =
+        document.querySelector(".user-profile");
+
+    const dropdown =
         document.getElementById("dropdown");
 
-    menu.style.display =
-        menu.style.display === "block"
-        ? "none"
-        : "block";
+    profile.classList.toggle("active");
+    dropdown.classList.toggle("show");
 }
-
 
 // ================= CLICK OUTSIDE =================
 window.onclick = function(e){
 
-    if(!e.target.closest('.profile')){
+    if(!e.target.closest(".user-profile")){
 
-        document.getElementById(
-            "dropdown"
-        ).style.display = "none";
+        const profile =
+            document.querySelector(".user-profile");
+
+        const dropdown =
+            document.getElementById("dropdown");
+
+        profile.classList.remove("active");
+        dropdown.classList.remove("show");
     }
-}
+};
 
 // ================= MESSAGE COUNT =================
-const memberId = user.id || user.user_id;
 
+const memberId = userData.id || userData.user_id;
 async function loadMessageCount(){
 
     try{
@@ -312,179 +965,5 @@ checkNewMessage();
 
 setInterval(checkNewMessage, 3000);
 </script>
-
-<!-- STYLE -->
-<style>
-
-.msg-link{
-    position: relative;
-}
-
-.msg-count{
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    background: red;
-    color: white;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    font-size: 11px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    padding: 2px;
-}
-
-.profile{
-    position: relative;
-}
-
-/* 👤 ICON */
-.profile-icon{
-
-    width: 40px;
-    height: 40px;
-
-    border-radius: 50%;
-
-    background: #f9f7fc;
-
-    color: white;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    user-select: none;
-}
-
-/* DROPDOWN */
-.dropdown{
-
-    display: none;
-
-    position: absolute;
-
-    right: 0;
-    top: 50px;
-
-    background: white;
-
-    border-radius: 10px;
-
-    padding: 10px;
-
-    width: 160px;
-
-    box-shadow:
-        0 5px 15px rgba(0,0,0,0.1);
-
-    z-index: 999;
-}
-
-.dropdown a{
-
-    display: block;
-
-    padding: 10px;
-
-    text-decoration: none;
-
-    color: black;
-
-    border-radius: 8px;
-}
-
-.dropdown a:hover{
-
-    background: #f1f2f6;
-}
-/* MESSAGE BADGE */
-.msg-link{
-
-    position: relative;
-}
-
-.msg-count{
-
-    position: absolute;
-
-    top: -10px;
-    right: -14px;
-
-    background: red;
-
-    color: white;
-
-    min-width: 18px;
-    height: 18px;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-    padding: 2px;
-}
-
-/* 🔔 NOTIFICATION POPUP */
-.notif-popup{
-    position: fixed;
-    top: 80px;
-    right: 25px;
-
-    width: 280px;
-
-    background: #111827;
-    color: white;
-
-    border: 1px solid rgba(255,255,255,0.15);
-    border-left: 5px solid #4da3ff;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-
-    z-index: 99999;
-
-    opacity: 0;
-    transform: translateX(120%);
-
-    transition: 0.3s ease;
-
-    cursor: pointer;
-}
-
-.notif-popup.show{
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.notif-popup b{
-    color: #4da3ff;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.notif-popup p{
-    margin: 0;
-    font-size: 14px;
-}
-
-</style>
-
 </body>
 </html>
