@@ -106,7 +106,7 @@ if (!user || user.role !== "member") {
 
             <div class="user-profile" onclick="toggleMenu()">
 
-                <div class="user-avatar">
+                <div class="user-avatar" id="profileInitial">
                     A
                 </div>
 
@@ -519,6 +519,11 @@ const displayName =
     userData.fullname ||
     userData.username;
 
+const firstLetter =
+    displayName.trim().charAt(0).toUpperCase();
+
+document.getElementById("profileInitial").innerText =
+    firstLetter;  
 // 👉 UPDATE NAME
 document.getElementById("welcome").innerText =
     displayName;
