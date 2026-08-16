@@ -972,15 +972,14 @@ function renderCalendar(){
         // ATTENDED
         // =========================
 
-        if(
-            attendanceDates.has(
-                dateKey
-            )
-        ){
+        if (
+            attendanceDates.has(dateKey)
+        ) {
 
-            day.classList.add(
-                "attended"
-            );
+            day.classList.add("attended");
+
+            day.innerHTML =
+                `<i class="fa-solid fa-check"></i>`;
 
             monthlyCount++;
         }

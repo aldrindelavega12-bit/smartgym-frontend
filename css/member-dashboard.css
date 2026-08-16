@@ -1244,31 +1244,39 @@ textarea {
     color: #c7ceca;
 }
 
-.day.attended::after {
-    content: "";
+/* =========================
+   ATTENDED DAY
+   ========================= */
 
-    position: absolute;
+.day.attended {
+    background: var(--green);
+    color: #ffffff;
 
-    bottom: -2px;
-
-    width: 3px;
-    height: 3px;
+    font-weight: 700;
 
     border-radius: 50%;
-
-    background: var(--green);
 }
+
+.day.attended i {
+    font-size: 10px;
+    color: #ffffff;
+}
+
+
+/* =========================
+   TODAY
+   ========================= */
 
 .day.today {
     background: var(--green);
-    color: white;
+    color: #ffffff;
+
     font-weight: 700;
 }
 
-.day.today::after {
-    background: white;
+.day.today i {
+    color: #ffffff;
 }
-
 
 /* ================= USAGE ================= */
 
