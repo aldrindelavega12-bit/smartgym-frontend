@@ -1052,10 +1052,13 @@ loadMembership();
 // MESSAGES NOTIFICATION
 // ==============================
 
+
+const messageUserId =
+    userData.id ||
+    userData.user_id;
+
 let lastMessageCount = 0;
 let firstMessageCheck = true;
-
-
 // ==============================
 // UPDATE SIDEBAR BADGE
 // ==============================
@@ -1141,9 +1144,7 @@ async function checkNewMessage(){
 
     }
 }
-const messageUserId =
-    userData.id ||
-    userData.user_id;
+
 // ==============================
 // NOTIFICATION POPUP
 // ==============================
