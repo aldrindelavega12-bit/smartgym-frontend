@@ -759,8 +759,11 @@ window.onclick = function(e){
 };
 
 const memberId =
-    userData.id ||
-    userData.user_id;
+    userData.user_id ||
+    userData.member_id ||
+    userData.id;
+
+
 
 // ================= ATTENDANCE CALENDAR =================
 
@@ -1089,58 +1092,35 @@ async function checkNewMessage(){
 
         const response =
             await fetch(
-                `${API_URL}/api/messages_count/${memberId}`
+                `${API_URL}/api/messages_count/${messageUserId}`
             );
 
-
         if(!response.ok){
-
             throw new Error(
                 `Message API error: ${response.status}`
             );
-
         }
-
 
         const data =
             await response.json();
 
-
         const count =
             Number(data.count || 0);
 
-        console.log("UNREAD MESSAGE COUNT:", count);
-
-
-        // UPDATE SIDEBAR BADGE
         updateMessageBadge(count);
-
-
-        // =========================
-        // FIRST LOAD
-        // =========================
 
         if(firstMessageCheck){
 
-            lastMessageCount =
-                count;
-
-            firstMessageCheck =
-                false;
+            lastMessageCount = count;
+            firstMessageCheck = false;
 
             return;
         }
-
-
-        // =========================
-        // NEW MESSAGE
-        // =========================
 
         if(count > lastMessageCount){
 
             const newMessages =
                 count - lastMessageCount;
-
 
             showNotifPopup(
                 "New Message",
@@ -1148,13 +1128,9 @@ async function checkNewMessage(){
                     ? "You received a new message."
                     : `You received ${newMessages} new messages.`
             );
-
         }
 
-
-        lastMessageCount =
-            count;
-
+        lastMessageCount = count;
 
     }catch(error){
 
@@ -1165,7 +1141,6 @@ async function checkNewMessage(){
 
     }
 }
-
 
 // ==============================
 // NOTIFICATION POPUP
