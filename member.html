@@ -334,11 +334,11 @@ if (!user || user.role !== "member") {
 
                 <div>
 
-                    <div class="membership-name">
-                        Premium Membership
+                    <div class="membership-name" id="membershipType">
+                        Membership
                     </div>
 
-                    <span class="status">
+                    <span class="status" id="membershipStatus">
                         Active
                     </span>
 
@@ -349,25 +349,30 @@ if (!user || user.role !== "member") {
             <div class="membership-info">
 
                 <span>Valid Until</span>
-                <strong>September 30, 2026</strong>
+                <strong id="membershipValidUntil">-</strong>
 
                 <span>Days Remaining</span>
-                <strong>78 days</strong>
+                <strong id="daysRemaining">0 days</strong>
 
             </div>
 
             <div class="progress-row">
 
                 <div class="progress">
-                    <div class="progress-fill"></div>
+                    <div
+                        class="progress-fill"
+                        id="membershipProgress">
+                    </div>
                 </div>
 
-                <strong>78%</strong>
+                <strong id="membershipPercent">0%</strong>
 
             </div>
 
-            <div class="remaining">
-                78 days remaining
+            <div
+                class="remaining"
+                id="membershipRemaining">
+                0 days remaining
             </div>
 
         </div>
@@ -1053,10 +1058,12 @@ document.getElementById(
 
 
 // INITIAL LOAD
-
 renderCalendar();
 
 loadAttendance();
+
+loadMembership();
+
 async function loadMessageCount(){
 
     try{
@@ -1123,7 +1130,173 @@ async function checkNewMessage(){
         console.log(err);
     }
 }
+// ==============================
+// MEMBERSHIP STATUS
+// ==============================
 
+async function loadMembership() {
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/membership/${memberId}`
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Membership API error: ${response.status}`
+            );
+        }
+
+        const result = await response.json();
+
+        console.log(
+            "MEMBERSHIP DATA:",
+            result
+        );
+
+        if (!result.data) {
+            return;
+        }
+
+        const membership = result.data;
+
+        // =========================
+        // MEMBERSHIP TYPE
+        // =========================
+
+        document.getElementById(
+            "membershipType"
+        ).innerText =
+            membership.membership_type || "Membership";
+
+
+        // =========================
+        // STATUS
+        // =========================
+
+        const statusElement =
+            document.getElementById(
+                "membershipStatus"
+            );
+
+        statusElement.innerText =
+            membership.membership_status === "ACTIVE"
+                ? "Active"
+                : "Expired";
+
+
+        // =========================
+        // VALID UNTIL
+        // =========================
+
+        const expiryDate =
+            membership.membership_validity;
+
+        if (expiryDate) {
+
+            const date =
+                new Date(
+                    expiryDate + "T00:00:00"
+                );
+
+            document.getElementById(
+                "membershipValidUntil"
+            ).innerText =
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+        } else {
+
+            document.getElementById(
+                "membershipValidUntil"
+            ).innerText = "-";
+
+        }
+
+
+        // =========================
+        // DAYS REMAINING
+        // =========================
+
+        let daysRemaining = 0;
+
+        if (expiryDate) {
+
+            const today =
+                new Date();
+
+            today.setHours(
+                0, 0, 0, 0
+            );
+
+            const expiry =
+                new Date(
+                    expiryDate + "T00:00:00"
+                );
+
+            const diff =
+                expiry.getTime() -
+                today.getTime();
+
+            daysRemaining =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        diff /
+                        (1000 * 60 * 60 * 24)
+                    )
+                );
+        }
+
+
+        document.getElementById(
+            "daysRemaining"
+        ).innerText =
+            `${daysRemaining} days`;
+
+        document.getElementById(
+            "membershipRemaining"
+        ).innerText =
+            `${daysRemaining} days remaining`;
+
+
+        // =========================
+        // PROGRESS
+        // =========================
+        //
+        // NOTE:
+        // Current backend only gives
+        // expiry date, not start date.
+        //
+        // So percentage cannot yet
+        // be truly calculated.
+        //
+
+        document.getElementById(
+            "membershipPercent"
+        ).innerText = "-%";
+
+        document.getElementById(
+            "membershipProgress"
+        ).style.width = "0%";
+
+
+    } catch (error) {
+
+        console.error(
+            "MEMBERSHIP ERROR:",
+            error
+        );
+
+    }
+}
 function showNotifPopup(title, text){
 
     const popup =
