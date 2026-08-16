@@ -561,12 +561,29 @@ document.getElementById(
    MEMBER ID
 ========================================================= */
 
-const memberId =
-    userData.id ||
-    userData.user_id ||
-    userData.member_id;
+/* =========================================================
+   MEMBER IDS
+========================================================= */
 
-console.log("MEMBERSHIP MESSAGE USER ID:", memberId);
+// Membership API uses MEMBER ID e.g. M0012
+const memberId =
+    userData.user_id ||
+    userData.member_id ||
+    userData.id;
+
+// Message API uses numeric user ID e.g. 73
+const messageUserId =
+    userData.id;
+
+console.log(
+    "MEMBERSHIP ID:",
+    memberId
+);
+
+console.log(
+    "MESSAGE USER ID:",
+    messageUserId
+);
 
 /* =========================================================
    MEMBERSHIP
@@ -848,7 +865,7 @@ async function checkMessageNotification(){
 
         const response =
             await fetch(
-                `${API_URL}/api/messages_count/${memberId}`
+                `${API_URL}/api/messages_count/${memssageUserId}`
             );
 
 
