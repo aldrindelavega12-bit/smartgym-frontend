@@ -1471,27 +1471,6 @@ async function loadMembership() {
 
     }
 }
-function showNotifPopup(title, text){
-
-    const popup =
-        document.getElementById("notifPopup");
-
-    document.getElementById("notifTitle").innerText =
-        title;
-
-    document.getElementById("notifText").innerText =
-        text;
-
-    popup.classList.add("show");
-
-    setTimeout(() => {
-        popup.classList.remove("show");
-    }, 4000);
-}
-
-function goMessages(){
-    window.location.href = "member_messages.html";
-}
 
 checkNewMessage();
 
