@@ -505,6 +505,49 @@ async function loadMessages(){
     }
 
 }
+
+let lastCount = 0;
+
+async function loadMessageCount(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/messages_count/${memberId}`
+        );
+
+        const data = await res.json();
+
+        const badge =
+            document.getElementById("msg-count");
+
+        const count =
+            Number(data.count) || 0;
+
+        if(count > 0){
+
+            badge.style.display = "flex";
+            badge.innerText = count;
+
+        }else{
+
+            badge.style.display = "none";
+
+        }
+
+        lastCount = count;
+
+    }catch(err){
+
+        console.error(
+            "LOAD MESSAGE COUNT ERROR:",
+            err
+        );
+
+    }
+
+}
+
 function showNotifPopup(
     title,
     text
