@@ -1112,6 +1112,8 @@ async function checkNewMessage(){
         const count =
             Number(data.count || 0);
 
+        console.log("UNREAD MESSAGE COUNT:", count);
+
 
         // UPDATE SIDEBAR BADGE
         updateMessageBadge(count);
