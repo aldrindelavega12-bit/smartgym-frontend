@@ -326,10 +326,14 @@ const API_URL =
 
 const memberId =
     user.user_id ||
+    user.member_id ||
     user.id;
 
 const messageUserId =
     user.id;
+
+console.log("MEMBER ID:", memberId);
+console.log("MESSAGE USER ID:", messageUserId);
 /* ================= PROFILE ================= */
 
 const profileName =
@@ -369,7 +373,7 @@ async function loadMessages(){
     try{
 
         const res = await fetch(
-            `${API_URL}/api/messages/${memberId}`
+            `${API_URL}/api/messages/${messageUserId}`
         );
 
         const data =
