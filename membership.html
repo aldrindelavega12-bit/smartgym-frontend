@@ -562,11 +562,11 @@ document.getElementById(
 ========================================================= */
 
 const memberId =
+    userData.id ||
     userData.user_id ||
-    userData.member_id ||
-    userData.id;
+    userData.member_id;
 
-
+console.log("MEMBERSHIP MESSAGE USER ID:", memberId);
 
 /* =========================================================
    MEMBERSHIP
