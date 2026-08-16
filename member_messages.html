@@ -513,7 +513,7 @@ async function loadMessageCount(){
     try{
 
         const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
+            `${API_URL}/api/messages_count/${messageUserId}`
         );
 
         const data = await res.json();
