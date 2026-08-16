@@ -2453,3 +2453,237 @@ textarea {
 .password-toggle i {
     font-size: 16px;
 }
+
+
+
+/* membership details
+
+/* ================================
+   MEMBERSHIP PAGE
+================================ */
+
+.membership-page{
+    padding: 38px 40px 60px;
+}
+
+.membership-page h1{
+    margin: 0;
+    font-size: 30px;
+    font-weight: 800;
+    color: #17231e;
+}
+
+.membership-subtitle{
+    margin: 8px 0 28px;
+    color: #66776f;
+    font-size: 15px;
+}
+
+
+/* ================================
+   MEMBERSHIP CARD
+================================ */
+
+.membership-card{
+    background: #ffffff;
+    border: 1px solid #e1ebe6;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+}
+
+
+.membership-card-header{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+
+    border-bottom: 1px solid #e7efeb;
+}
+
+
+.membership-card-icon{
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    background: #e6f6ed;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #008744;
+    font-size: 21px;
+}
+
+
+.membership-card-header h2{
+    margin: 0 0 4px;
+
+    font-size: 20px;
+}
+
+
+.membership-card-header p{
+    margin: 0;
+
+    color: #71817a;
+    font-size: 14px;
+}
+
+
+/* ================================
+   INFO GRID
+================================ */
+
+.membership-info-grid{
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+}
+
+
+.membership-field{
+
+    background: #f6faf8;
+
+    border: 1px solid #e4eee8;
+
+    border-radius: 14px;
+
+    padding: 18px 20px;
+
+    min-height: 82px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 7px;
+
+}
+
+
+.membership-field span:first-child{
+
+    color: #71817a;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+.membership-field strong{
+
+    color: #17231e;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.status-badge{
+
+    display: inline-flex;
+
+    width: fit-content;
+
+    align-items: center;
+
+    padding: 5px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.status-badge.active{
+
+    background: #dcf4e6;
+
+    color: #008744;
+
+}
+
+
+.status-badge.inactive{
+
+    background: #fde7e7;
+
+    color: #c0392b;
+
+}
+
+
+/* ================================
+   LOADING
+================================ */
+
+.membership-loading{
+
+    grid-column: 1 / -1;
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: #71817a;
+
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width: 1000px){
+
+    .membership-info-grid{
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media(max-width: 650px){
+
+    .membership-page{
+
+        padding: 25px 20px 50px;
+
+    }
+
+    .membership-info-grid{
+
+        grid-template-columns: 1fr;
+
+    }
+
+}

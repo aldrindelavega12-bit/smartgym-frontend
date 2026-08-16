@@ -1,474 +1,1411 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Membership</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <title>Membership Details</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- SAME CSS AS MEMBER DASHBOARD -->
+    <link rel="stylesheet" href="css/member-dashboard.css">
+
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
 </head>
+
 <body>
 
-<!-- NAVBAR -->
 
-<!-- NAVBAR -->
+<!-- =========================================================
+     ROLE PROTECTION
+========================================================= -->
+
+<script>
+
+const userData =
+    JSON.parse(localStorage.getItem("user"));
+
+if(!userData || userData.role !== "member"){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
 <div class="navbar">
 
-    <h2>SMART GYM</h2>
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <div class="brand-text">
+
+            <strong>SMART GYM</strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
 
     <div class="menu">
 
+
         <a href="member.html">
+
             <i class="fa-solid fa-house"></i>
+
             Home
+
         </a>
 
-        <a href="member_messages.html" class="msg-link">
+
+        <a href="member_messages.html"
+           class="msg-link">
+
             <i class="fa-solid fa-envelope"></i>
+
             Messages
-            <span id="msg-count" class="msg-count">0</span>
+
+            <span id="msg-count"
+                  class="msg-count">
+                0
+            </span>
+
         </a>
+
 
         <a href="workouts.html">
+
             <i class="fa-solid fa-dumbbell"></i>
+
             Suggested Workout
+
         </a>
+
 
         <a href="locker_booking.html">
+
             <i class="fa-solid fa-lock"></i>
+
             Book Locker
+
         </a>
 
-        <a href="membership.html">
+
+        <!-- ACTIVE -->
+
+        <a href="membership.html"
+           class="active">
+
             <i class="fa-solid fa-id-card"></i>
+
             Membership
+
         </a>
 
-    </div>
-
-    <!-- LOGOUT -->
-    <div class="profile">
-
-        <button class="logout-btn"
-                onclick="logout()">
-            Logout
-        </button>
 
     </div>
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Keep Pushing
+        </h3>
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 
 </div>
 
-<!-- MAIN -->
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
 <div class="layout">
+
 <div class="main">
 
-<h2>Membership Details</h2>
 
-<table>
-<thead>
-<tr>
-    <th>Name</th>
-    <th>Type</th>
+    <!-- =====================================================
+         TOP HEADER
+    ====================================================== -->
 
-    <th>Membership Validity</th>
-    <th>Membership Status</th>
+    <div class="top-header">
 
-    <th>Monthly Validity</th>
-    <th>Monthly Status</th>
-</tr>
-</thead>
+        <div class="top-right">
 
-<tbody id="membership-body"></tbody>
+            <div class="user-profile"
+                 onclick="toggleMenu()">
 
-</table>
+
+                <!-- AVATAR -->
+
+                <div class="user-avatar"
+                     id="profileInitial">
+
+                    A
+
+                </div>
+
+
+                <!-- USER INFO -->
+
+                <div class="user-info">
+
+                    <strong id="profile-name">
+                        Aldrin
+                    </strong>
+
+                    <small>
+                        Member
+                    </small>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-down profile-chevron">
+                </i>
+
+
+                <!-- DROPDOWN -->
+
+                <div id="dropdown"
+                     class="profile-dropdown">
+
+
+                    <button
+                        onclick="openChangePassword(); event.stopPropagation();">
+
+                        <i class="fa-solid fa-key"></i>
+
+                        Change Password
+
+                    </button>
+
+
+                    <div class="dropdown-divider">
+                    </div>
+
+
+                    <button
+                        onclick="logout(); event.stopPropagation();"
+                        class="dropdown-logout">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Log Out
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MEMBERSHIP PAGE
+    ====================================================== -->
+
+    <div class="membership-page">
+
+
+        <h1>
+            Membership Details
+        </h1>
+
+
+        <p class="membership-subtitle">
+            View and manage your membership information.
+        </p>
+
+
+
+        <!-- MEMBERSHIP TABLE -->
+
+        <div class="membership-card">
+
+            <div class="membership-card-header">
+
+                <div class="membership-card-icon">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+
+                <div>
+                    <h2>Membership Information</h2>
+                    <p>Your current gym membership details</p>
+                </div>
+
+            </div>
+
+
+            <div id="membership-body"
+                class="membership-info-grid">
+
+                <div class="membership-loading">
+                    Loading membership...
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
 
 </div>
+
 </div>
-<div id="notifPopup" class="notif-popup" onclick="goMessages()">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
+
+
+
+<!-- =========================================================
+     CHANGE PASSWORD MODAL
+========================================================= -->
+
+<div id="changePasswordModal"
+     class="edit-profile-overlay">
+
+
+    <div class="edit-profile-modal">
+
+
+        <div class="edit-profile-header">
+
+            <div>
+
+                <span>
+                    Account Security
+                </span>
+
+                <h2>
+                    Change Password
+                </h2>
+
+            </div>
+
+
+            <button
+                class="edit-close"
+                onclick="closeChangePassword()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+
+        <div class="edit-profile-body">
+
+
+            <div class="profile-avatar-large">
+
+                <i class="fa-solid fa-lock"></i>
+
+            </div>
+
+
+
+            <!-- CURRENT -->
+
+            <div class="profile-field">
+
+                <label>
+                    Current Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeCurrentPassword"
+                        placeholder="Current password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword(
+                            'changeCurrentPassword',
+                            this
+                        )">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NEW -->
+
+            <div class="profile-field">
+
+                <label>
+                    New Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeNewPassword"
+                        placeholder="New password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword(
+                            'changeNewPassword',
+                            this
+                        )">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CONFIRM -->
+
+            <div class="profile-field">
+
+                <label>
+                    Confirm New Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeConfirmPassword"
+                        placeholder="Confirm new password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword(
+                            'changeConfirmPassword',
+                            this
+                        )">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="edit-profile-footer">
+
+            <button
+                class="cancel-profile"
+                onclick="closeChangePassword()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="save-profile"
+                onclick="changePassword()">
+
+                Change Password
+
+            </button>
+
+        </div>
+
+
+    </div>
+
 </div>
-<!-- SCRIPT -->
+
+
+
+<!-- =========================================================
+     NOTIFICATION POPUP
+========================================================= -->
+
+<div id="notifPopup"
+     class="notif-popup"
+     onclick="goMessages()">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
 <script>
 
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
-const user = JSON.parse(localStorage.getItem("user"));
-
-if(!user || user.role !== "member"){
-    window.location.href = "index.html";
-}
-const memberId = user.user_id;
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
 
 
+/* =========================================================
+   USER
+========================================================= */
+
+const profile =
+    JSON.parse(
+        localStorage.getItem("profile")
+    ) || {};
+
+
+const displayName =
+    profile.name ||
+    userData.fullname ||
+    userData.username ||
+    "Member";
+
+
+const firstLetter =
+    displayName
+        .trim()
+        .charAt(0)
+        .toUpperCase();
+
+
+document.getElementById(
+    "profileInitial"
+).innerText =
+    firstLetter;
+
+
+document.getElementById(
+    "profile-name"
+).innerText =
+    displayName;
+
+
+
+/* =========================================================
+   MEMBER ID
+========================================================= */
+
+const memberId =
+    userData.user_id ||
+    userData.member_id ||
+    userData.id;
+
+
+
+/* =========================================================
+   MEMBERSHIP
+========================================================= */
 
 async function loadMembership(){
 
     try{
-        const res = await fetch(`${API_URL}/api/membership/${user.user_id}`);
-        const data = await res.json();
 
-        const m = data.data;
+        const response =
+            await fetch(
+                `${API_URL}/api/membership/${memberId}`
+            );
 
-        if(!m){
-            alert("No membership data found");
-            return;
+
+        if(!response.ok){
+
+            throw new Error(
+                `Membership API error: ${response.status}`
+            );
+
         }
 
-        const table = document.getElementById("membership-body");
-        table.innerHTML = "";
 
-        const membershipColor =
-            m.membership_status === "ACTIVE"
-            ? "green"
-            : "red";
+        const result =
+            await response.json();
 
-        const monthlyColor =
-            m.monthly_status === "PAID"
-            ? "green"
-            : "red";
+
+        console.log(
+            "MEMBERSHIP DATA:",
+            result
+        );
+
+
+        const membership =
+            result.data;
+
+
+        const table =
+            document.getElementById(
+                "membership-body"
+            );
+
+
+        if(!membership){
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6"
+                        style="text-align:center;">
+                        No membership data found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        /* =========================
+           TYPE
+        ========================= */
+
+        let type =
+            membership.membership_type ||
+            "N/A";
+
+
+        type =
+            type
+                .replace("membership-", "")
+                .toUpperCase();
+
+
+
+        /* =========================
+           MEMBERSHIP STATUS
+        ========================= */
+
+        const membershipStatus =
+            membership.membership_status ||
+            "N/A";
+
+
+        const membershipStatusClass =
+            membershipStatus === "ACTIVE"
+                ? "status-green"
+                : "status-red";
+
+
+
+        /* =========================
+           MONTHLY STATUS
+        ========================= */
+
+        const monthlyStatus =
+            membership.monthly_status ||
+            "N/A";
+
+
+        const monthlyStatusClass =
+            monthlyStatus === "PAID"
+                ? "status-green"
+                : "status-red";
+
+
+
+        /* =========================
+           FORMAT DATE
+        ========================= */
+
+        function formatMembershipDate(date){
+
+            if(!date)
+                return "-";
+
+
+            const d =
+                new Date(
+                    date + "T00:00:00"
+                );
+
+
+            if(isNaN(d.getTime()))
+                return date;
+
+
+            return d.toLocaleDateString(
+                "en-US",
+                {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
 
         table.innerHTML = `
-        <tr>
 
-            <td>${m.full_name}</td>
+            <div class="membership-field">
 
-            <td>${cleanType(m.membership_type)}</td>
+                <span>Name</span>
 
-            <td>${m.membership_validity || "-"}</td>
+                <strong>
+                    ${membership.full_name || displayName}
+                </strong>
 
-            <td class="${
-                m.membership_status === "ACTIVE"
-                ? "status-green"
-                : "status-red"
-            }">
-                ${m.membership_status}
-            </td>
+            </div>
 
-            <td>${m.monthly_validity || "-"}</td>
 
-            <td class="${
-                m.monthly_status === "PAID"
-                ? "status-green"
-                : "status-red"
-            }">
-                ${m.monthly_status}
-            </td>
+            <div class="membership-field">
 
-        </tr>
+                <span>Membership Type</span>
+
+                <strong>
+                    ${type}
+                </strong>
+
+            </div>
+
+
+            <div class="membership-field">
+
+                <span>Membership Validity</span>
+
+                <strong>
+                    ${formatMembershipDate(
+                        membership.membership_validity
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="membership-field">
+
+                <span>Membership Status</span>
+
+                <strong>
+
+                    <span class="${
+                        membershipStatus === "ACTIVE"
+                            ? "status-badge active"
+                            : "status-badge inactive"
+                    }">
+
+                        ${membershipStatus}
+
+                    </span>
+
+                </strong>
+
+            </div>
+
+
+            <div class="membership-field">
+
+                <span>Monthly Validity</span>
+
+                <strong>
+                    ${formatMembershipDate(
+                        membership.monthly_validity
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="membership-field">
+
+                <span>Monthly Status</span>
+
+                <strong>
+
+                    <span class="${
+                        monthlyStatus === "PAID"
+                            ? "status-badge active"
+                            : "status-badge inactive"
+                    }">
+
+                        ${monthlyStatus}
+
+                    </span>
+
+                </strong>
+
+            </div>
+
         `;
 
-    }catch(err){
-        console.error(err);
-        alert("Server error");
+
+    }catch(error){
+
+        console.error(
+            "MEMBERSHIP ERROR:",
+            error
+        );
+
+
+        document.getElementById(
+            "membership-body"
+        ).innerHTML = `
+
+            <tr>
+
+                <td colspan="6"
+                    style="text-align:center;">
+
+                    Unable to load membership data.
+
+                </td>
+
+            </tr>
+
+        `;
+
     }
+
 }
 
-// ================= MESSAGE COUNT =================
-let lastMessageCount = 0;
-let firstLoad = true;
+
+
+/* =========================================================
+   MESSAGE BADGE
+========================================================= */
 
 async function checkNewMessage(){
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
-        );
+        const response =
+            await fetch(
+                `${API_URL}/api/messages_count/${memberId}`
+            );
 
-        const data = await res.json();
 
-        const count = data.count || 0;
+        if(!response.ok)
+            return;
+
+
+        const data =
+            await response.json();
+
+
+        const count =
+            Number(data.count || 0);
+
 
         const badge =
-            document.getElementById("msg-count");
+            document.getElementById(
+                "msg-count"
+            );
+
 
         if(count > 0){
-            badge.style.display = "flex";
-            badge.innerText = count;
+
+            badge.style.display =
+                "flex";
+
+            badge.innerText =
+                count;
+
         }else{
-            badge.style.display = "none";
+
+            badge.style.display =
+                "none";
+
+            badge.innerText =
+                "0";
+
         }
 
-        if(!firstLoad && count > lastMessageCount){
+
+    }catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   NOTIFICATION POPUP
+========================================================= */
+
+let lastMessageCount = 0;
+let firstMessageCheck = true;
+
+
+async function checkMessageNotification(){
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/messages_count/${memberId}`
+            );
+
+
+        if(!response.ok)
+            return;
+
+
+        const data =
+            await response.json();
+
+
+        const count =
+            Number(data.count || 0);
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(count > 0){
+
+            badge.style.display =
+                "flex";
+
+            badge.innerText =
+                count;
+
+        }else{
+
+            badge.style.display =
+                "none";
+
+        }
+
+
+        if(firstMessageCheck){
+
+            lastMessageCount =
+                count;
+
+            firstMessageCheck =
+                false;
+
+            return;
+
+        }
+
+
+        if(count > lastMessageCount){
+
+            const newMessages =
+                count -
+                lastMessageCount;
+
 
             showNotifPopup(
                 "New Message",
-                "You received a new gym notification."
+                newMessages === 1
+                    ? "You received a new message."
+                    : `You received ${newMessages} new messages.`
             );
+
         }
 
-        lastMessageCount = count;
-        firstLoad = false;
 
-    }catch(err){
-        console.log(err);
+        lastMessageCount =
+            count;
+
+
+    }catch(error){
+
+        console.error(
+            "MESSAGE NOTIFICATION ERROR:",
+            error
+        );
+
     }
+
 }
 
-function showNotifPopup(title, text){
 
-    const popup =
-        document.getElementById("notifPopup");
 
-    document.getElementById("notifTitle").innerText =
-        title;
-
-    document.getElementById("notifText").innerText =
-        text;
-
-    popup.classList.add("show");
-
-    setTimeout(() => {
-        popup.classList.remove("show");
-    }, 4000);
-}
-
-function goMessages(){
-    window.location.href = "member_messages.html";
-}
-
-checkNewMessage();
-
-setInterval(checkNewMessage, 3000);
-// CLEAN TYPE
-function cleanType(type){
-    if(!type) return "N/A";
-    return type.replace("membership-", "").toUpperCase();
-}
-
-loadMembership();
-function logout() {
-
-    localStorage.removeItem("user");
-    localStorage.removeItem("profile");
-
-    window.location.replace("index.html");
-}
-function showNotifPopup(title,text){
+function showNotifPopup(
+    title,
+    text
+){
 
     const popup =
         document.getElementById(
             "notifPopup"
         );
 
-    if(!popup) return;
 
     document.getElementById(
         "notifTitle"
-    ).innerText = title;
+    ).innerText =
+        title;
+
 
     document.getElementById(
         "notifText"
-    ).innerText = text;
+    ).innerText =
+        text;
 
-    popup.classList.add("show");
 
-    setTimeout(() => {
+    popup.classList.add(
+        "show"
+    );
 
-        popup.classList.remove(
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+
+function goMessages(){
+
+    window.location.href =
+        "member_messages.html";
+
+}
+
+
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+function toggleMenu(){
+
+    const profile =
+        document.querySelector(
+            ".user-profile"
+        );
+
+
+    const dropdown =
+        document.getElementById(
+            "dropdown"
+        );
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+
+window.onclick =
+function(event){
+
+    if(
+        !event.target.closest(
+            ".user-profile"
+        )
+    ){
+
+        const profile =
+            document.querySelector(
+                ".user-profile"
+            );
+
+
+        const dropdown =
+            document.getElementById(
+                "dropdown"
+            );
+
+
+        profile.classList.remove(
+            "active"
+        );
+
+
+        dropdown.classList.remove(
             "show"
         );
 
-    },4000);
+    }
+
+};
+
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+function togglePassword(
+    inputId,
+    button
+){
+
+    const input =
+        document.getElementById(
+            inputId
+        );
+
+
+    const icon =
+        button.querySelector(
+            "i"
+        );
+
+
+    if(
+        input.type === "password"
+    ){
+
+        input.type =
+            "text";
+
+
+        icon.classList.remove(
+            "fa-eye"
+        );
+
+
+        icon.classList.add(
+            "fa-eye-slash"
+        );
+
+    }else{
+
+        input.type =
+            "password";
+
+
+        icon.classList.remove(
+            "fa-eye-slash"
+        );
+
+
+        icon.classList.add(
+            "fa-eye"
+        );
+
+    }
+
 }
-async function loadMessageCount(){
+
+
+
+function openChangePassword(){
+
+    document.getElementById(
+        "dropdown"
+    ).classList.remove(
+        "show"
+    );
+
+
+    document.querySelector(
+        ".user-profile"
+    ).classList.remove(
+        "active"
+    );
+
+
+    document.getElementById(
+        "changeCurrentPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "changeNewPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "changeConfirmPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+
+function closeChangePassword(){
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+
+async function changePassword(){
+
+    const currentPassword =
+        document.getElementById(
+            "changeCurrentPassword"
+        ).value;
+
+
+    const newPassword =
+        document.getElementById(
+            "changeNewPassword"
+        ).value;
+
+
+    const confirmPassword =
+        document.getElementById(
+            "changeConfirmPassword"
+        ).value;
+
+
+    if(!currentPassword){
+
+        alert(
+            "Enter your current password."
+        );
+
+        return;
+
+    }
+
+
+    if(!newPassword){
+
+        alert(
+            "Enter your new password."
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword.length < 8){
+
+        alert(
+            "New password must be at least 8 characters."
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword !== confirmPassword){
+
+        alert(
+            "New passwords do not match."
+        );
+
+        return;
+
+    }
+
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
-        );
+        const response =
+            await fetch(
+                `${API_URL}/api/member/profile`,
+                {
 
-        const data = await res.json();
+                    method: "PUT",
 
-        const badge = document.getElementById("msg-count");
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-        if(data.count > 0){
-            badge.style.display = "flex";
-            badge.innerText = data.count;
-        }else{
-            badge.style.display = "none";
+                    body: JSON.stringify({
+
+                        id:
+                            userData.id,
+
+                        username:
+                            userData.username,
+
+                        phone_number:
+                            userData.phone_number,
+
+                        current_password:
+                            currentPassword,
+
+                        new_password:
+                            newPassword,
+
+                        confirm_password:
+                            confirmPassword
+
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !result.success
+        ){
+
+            alert(
+                result.message ||
+                "Failed to change password."
+            );
+
+            return;
+
         }
 
-    }catch(err){
-        console.log(err);
+
+        closeChangePassword();
+
+
+        alert(
+            "Password changed successfully."
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "CHANGE PASSWORD ERROR:",
+            error
+        );
+
+
+        alert(
+            "Unable to connect to the server."
+        );
+
     }
+
 }
 
-loadMessageCount();
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+loadMembership();
+
+checkMessageNotification();
+
+
+setInterval(
+    checkMessageNotification,
+    3000
+);
 
 </script>
-
-<!-- STYLE -->
-
-<style>
-
-/* 🔔 NOTIFICATION POPUP */
-.notif-popup{
-    position: fixed;
-    top: 80px;
-    right: 25px;
-
-    width: 280px;
-
-    background: #111827;
-    color: white;
-
-    border: 1px solid rgba(255,255,255,0.15);
-    border-left: 5px solid #4da3ff;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-
-    z-index: 99999;
-
-    opacity: 0;
-    transform: translateX(120%);
-
-    transition: 0.3s ease;
-
-    cursor: pointer;
-}
-
-.notif-popup.show{
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.notif-popup b{
-    color: #4da3ff;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.notif-popup p{
-    margin: 0;
-    font-size: 14px;
-}
-
-.msg-link{
-    position: relative;
-}
-
-.msg-count{
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    background: red;
-    color: white;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    font-size: 11px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    padding: 2px;
-}
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    margin-top:20px;
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(0,0,0,0.78),
-        rgba(15,23,42,0.82)
-    );
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter:blur(10px);
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    color:white;
-}
-
-th, td{
-
-    padding:16px;
-
-    text-align:left;
-
-    border-bottom:
-    1px solid rgba(255,255,255,0.05);
-}
-
-th{
-
-    background:
-    rgba(255,255,255,0.06);
-
-    color:white;
-
-    font-size:15px;
-}
-
-td{
-
-    background:transparent;
-}
-
-tr:hover{
-
-    background:
-    rgba(59,130,246,0.10);
-}
-
-tbody td{
-
-    color:white;
-}
-
-.status-green{
-
-    color:#00ff88 !important;
-
-    font-weight:bold;
-}
-
-.status-red{
-
-    color:#ff4d4d !important;
-
-    font-weight:bold;
-}
-
-tbody tr{
-
-    background:
-    rgba(255,255,255,0.03);
-}
-
-tbody tr:hover{
-
-    background:
-    rgba(59,130,246,0.12);
-}
-
-/* MESSAGE BADGE */
-.msg-link{
-
-    position: relative;
-}
-
-
-</style>
-
 
 
 </body>
