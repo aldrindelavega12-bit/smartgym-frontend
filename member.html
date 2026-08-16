@@ -1048,73 +1048,184 @@ renderCalendar();
 loadAttendance();
 
 loadMembership();
+// ==============================
+// MESSAGES NOTIFICATION
+// ==============================
 
-async function loadMessageCount(){
+let lastMessageCount = 0;
+let firstMessageCheck = true;
 
-    try{
 
-        const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
-        );
+// ==============================
+// UPDATE SIDEBAR BADGE
+// ==============================
 
-        const data = await res.json();
+function updateMessageBadge(count){
 
-        const badge = document.getElementById("msg-count");
+    const badge =
+        document.getElementById("msg-count");
 
-        if(data.count > 0){
-            badge.style.display = "flex";
-            badge.innerText = data.count;
-        }else{
-            badge.style.display = "none";
-        }
+    if(!badge) return;
 
-    }catch(err){
-        console.log(err);
+
+    if(count > 0){
+
+        badge.style.display = "flex";
+        badge.innerText = count;
+
+    }else{
+
+        badge.style.display = "none";
+        badge.innerText = "0";
+
     }
 }
 
-loadMessageCount();
 
-let lastMessageCount = 0;
-let firstLoad = true;
+// ==============================
+// CHECK UNREAD MESSAGES
+// ==============================
 
 async function checkNewMessage(){
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
-        );
+        const response =
+            await fetch(
+                `${API_URL}/api/messages_count/${memberId}`
+            );
 
-        const data = await res.json();
 
-        const count = data.count || 0;
+        if(!response.ok){
 
-        const badge =
-            document.getElementById("msg-count");
+            throw new Error(
+                `Message API error: ${response.status}`
+            );
 
-        if(count > 0){
-            badge.style.display = "flex";
-            badge.innerText = count;
-        }else{
-            badge.style.display = "none";
         }
 
-        if(!firstLoad && count > lastMessageCount){
+
+        const data =
+            await response.json();
+
+
+        const count =
+            Number(data.count || 0);
+
+
+        // UPDATE SIDEBAR BADGE
+        updateMessageBadge(count);
+
+
+        // =========================
+        // FIRST LOAD
+        // =========================
+
+        if(firstMessageCheck){
+
+            lastMessageCount =
+                count;
+
+            firstMessageCheck =
+                false;
+
+            return;
+        }
+
+
+        // =========================
+        // NEW MESSAGE
+        // =========================
+
+        if(count > lastMessageCount){
+
+            const newMessages =
+                count - lastMessageCount;
+
 
             showNotifPopup(
                 "New Message",
-                "You received a new gym notification."
+                newMessages === 1
+                    ? "You received a new message."
+                    : `You received ${newMessages} new messages.`
             );
+
         }
 
-        lastMessageCount = count;
-        firstLoad = false;
 
-    }catch(err){
-        console.log(err);
+        lastMessageCount =
+            count;
+
+
+    }catch(error){
+
+        console.error(
+            "MESSAGE NOTIFICATION ERROR:",
+            error
+        );
+
     }
 }
+
+
+// ==============================
+// NOTIFICATION POPUP
+// ==============================
+
+function showNotifPopup(title, text){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText =
+        title;
+
+
+    document.getElementById(
+        "notifText"
+    ).innerText =
+        text;
+
+
+    popup.classList.add("show");
+
+
+    setTimeout(() => {
+
+        popup.classList.remove("show");
+
+    }, 4000);
+
+}
+
+
+// ==============================
+// OPEN MESSAGES
+// ==============================
+
+function goMessages(){
+
+    window.location.href =
+        "member_messages.html";
+
+}
+
+
+// ==============================
+// START
+// ==============================
+
+checkNewMessage();
+
+setInterval(
+    checkNewMessage,
+    3000
+);
 // ==============================
 // MEMBERSHIP STATUS
 // ==============================
