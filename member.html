@@ -252,13 +252,13 @@ if (!user || user.role !== "member") {
 
                 <div class="calendar-head">
 
-                    <button type="button">
+                    <button type="button" id="prevMonth">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
 
-                    <span>May 2026</span>
+                    <span id="calendarMonth"></span>
 
-                    <button type="button">
+                    <button type="button" id="nextMonth">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
 
@@ -274,50 +274,7 @@ if (!user || user.role !== "member") {
                     <span>SAT</span>
                 </div>
 
-                <div class="calendar-days">
-
-                    <span class="day muted">27</span>
-                    <span class="day muted">28</span>
-                    <span class="day muted">29</span>
-                    <span class="day muted">30</span>
-
-                    <span class="day attended">1</span>
-                    <span class="day attended">2</span>
-                    <span class="day">3</span>
-
-                    <span class="day attended">4</span>
-                    <span class="day">5</span>
-                    <span class="day attended">6</span>
-                    <span class="day attended">7</span>
-                    <span class="day">8</span>
-                    <span class="day attended">9</span>
-                    <span class="day">10</span>
-
-                    <span class="day">11</span>
-                    <span class="day">12</span>
-                    <span class="day attended">13</span>
-                    <span class="day today">14</span>
-                    <span class="day attended">15</span>
-                    <span class="day">16</span>
-                    <span class="day">17</span>
-
-                    <span class="day attended">18</span>
-                    <span class="day">19</span>
-                    <span class="day attended">20</span>
-                    <span class="day">21</span>
-                    <span class="day attended">22</span>
-                    <span class="day">23</span>
-                    <span class="day">24</span>
-
-                    <span class="day">25</span>
-                    <span class="day attended">26</span>
-                    <span class="day">27</span>
-                    <span class="day attended">28</span>
-                    <span class="day">29</span>
-                    <span class="day">30</span>
-                    <span class="day">31</span>
-
-                </div>
+                <div class="calendar-days" id="calendarDays"></div>
 
             </div>
 
@@ -332,7 +289,7 @@ if (!user || user.role !== "member") {
 
                     <div>
                         <span>Times Used</span>
-                        <strong>12</strong>
+                        <strong id="monthlyUses">0</strong>
                         <small>this month</small>
                     </div>
 
@@ -346,7 +303,7 @@ if (!user || user.role !== "member") {
 
                     <div>
                         <span>Total Uses</span>
-                        <strong>48</strong>
+                        <strong id="totalUses">0</strong>
                         <small>all time</small>
                     </div>
 
@@ -814,6 +771,306 @@ window.onclick = function(e){
 // ================= MESSAGE COUNT =================
 
 const memberId = userData.id || userData.user_id;
+
+// ================= ATTENDANCE CALENDAR =================
+
+let calendarDate = new Date();
+let attendanceDates = new Set();
+
+
+// FORMAT DATE
+function formatDate(year, month, day){
+
+    return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+}
+
+
+// ================= LOAD ATTENDANCE =================
+
+async function loadAttendance(){
+
+    try{
+
+        /*
+         * IMPORTANT:
+         * This must return the member's actual attendance dates.
+         *
+         * Expected:
+         *
+         * {
+         *     dates: [
+         *         "2026-08-01",
+         *         "2026-08-05",
+         *         "2026-08-12"
+         *     ],
+         *     total: 3
+         * }
+         */
+
+        const response = await fetch(
+            `${API_URL}/api/member/attendance/${memberId}`
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                `Attendance API error: ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+
+        attendanceDates = new Set(
+            (data.dates || []).map(date =>
+                String(date).substring(0, 10)
+            )
+        );
+
+
+        document.getElementById(
+            "totalUses"
+        ).innerText =
+            data.total ?? attendanceDates.size;
+
+
+        renderCalendar();
+
+    }catch(error){
+
+        console.error(
+            "ATTENDANCE ERROR:",
+            error
+        );
+
+        attendanceDates.clear();
+
+        renderCalendar();
+    }
+}
+
+
+// ================= CALENDAR =================
+
+function renderCalendar(){
+
+    const year =
+        calendarDate.getFullYear();
+
+    const month =
+        calendarDate.getMonth();
+
+
+    const calendarDays =
+        document.getElementById(
+            "calendarDays"
+        );
+
+    const calendarMonth =
+        document.getElementById(
+            "calendarMonth"
+        );
+
+
+    calendarDays.innerHTML = "";
+
+
+    // MONTH NAME
+
+    calendarMonth.innerText =
+        new Date(
+            year,
+            month,
+            1
+        ).toLocaleDateString(
+            "en-US",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+
+    // FIRST DAY OF MONTH
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    // NUMBER OF DAYS
+
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    // PREVIOUS MONTH DAYS
+
+    const previousMonthDays =
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
+
+
+    for(
+        let i = firstDay - 1;
+        i >= 0;
+        i--
+    ){
+
+        const dayNumber =
+            previousMonthDays - i;
+
+        const day =
+            document.createElement(
+                "span"
+            );
+
+        day.className =
+            "day muted";
+
+        day.innerText =
+            dayNumber;
+
+        calendarDays.appendChild(day);
+    }
+
+
+    // CURRENT MONTH
+
+    let monthlyCount = 0;
+
+
+    const today =
+        new Date();
+
+
+    for(
+        let dayNumber = 1;
+        dayNumber <= daysInMonth;
+        dayNumber++
+    ){
+
+        const day =
+            document.createElement(
+                "span"
+            );
+
+        day.className =
+            "day";
+
+        day.innerText =
+            dayNumber;
+
+
+        const dateKey =
+            formatDate(
+                year,
+                month,
+                dayNumber
+            );
+
+
+        // =========================
+        // ATTENDED
+        // =========================
+
+        if(
+            attendanceDates.has(
+                dateKey
+            )
+        ){
+
+            day.classList.add(
+                "attended"
+            );
+
+            monthlyCount++;
+        }
+
+
+        // =========================
+        // TODAY
+        // =========================
+
+        if(
+            dayNumber === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+        ){
+
+            day.classList.add(
+                "today"
+            );
+        }
+
+
+        calendarDays.appendChild(day);
+    }
+
+
+    // =========================
+    // MONTHLY USES
+    // =========================
+
+    document.getElementById(
+        "monthlyUses"
+    ).innerText =
+        monthlyCount;
+}
+
+
+// =========================
+// MONTH NAVIGATION
+// =========================
+
+document.getElementById(
+    "prevMonth"
+).addEventListener(
+    "click",
+    function(){
+
+        calendarDate.setMonth(
+            calendarDate.getMonth() - 1
+        );
+
+        renderCalendar();
+
+    }
+);
+
+
+document.getElementById(
+    "nextMonth"
+).addEventListener(
+    "click",
+    function(){
+
+        calendarDate.setMonth(
+            calendarDate.getMonth() + 1
+        );
+
+        renderCalendar();
+
+    }
+);
+
+
+// INITIAL LOAD
+
+renderCalendar();
+
+loadAttendance();
 async function loadMessageCount(){
 
     try{
