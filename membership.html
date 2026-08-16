@@ -833,69 +833,6 @@ async function loadMembership(){
 
 
 
-/* =========================================================
-   MESSAGE BADGE
-========================================================= */
-
-async function checkNewMessage(){
-
-    try{
-
-        const response =
-            await fetch(
-                `${API_URL}/api/messages_count/${memberId}`
-            );
-
-
-        if(!response.ok)
-            return;
-
-
-        const data =
-            await response.json();
-
-
-        const count =
-            Number(data.count || 0);
-
-
-        const badge =
-            document.getElementById(
-                "msg-count"
-            );
-
-
-        if(count > 0){
-
-            badge.style.display =
-                "flex";
-
-            badge.innerText =
-                count;
-
-        }else{
-
-            badge.style.display =
-                "none";
-
-            badge.innerText =
-                "0";
-
-        }
-
-
-    }catch(error){
-
-        console.error(
-            "MESSAGE COUNT ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
 
 /* =========================================================
    NOTIFICATION POPUP
@@ -1407,6 +1344,87 @@ setInterval(
 
 </script>
 
+<style>
 
+/* MEMBERSHIP PAGE - ACTIVE SIDEBAR */
+
+.navbar .menu a[href="member.html"] {
+    background: transparent;
+    color: #17231e;
+}
+
+.navbar .menu a[href="member.html"] i {
+    color: #64756d;
+}
+
+.navbar .menu a[href="membership.html"].active {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+.navbar .menu a[href="membership.html"].active i {
+    color: #087c3d;
+}
+/* ================================
+   MEMBERSHIP PAGE ADJUSTMENTS
+================================ */
+
+/* Move membership content higher */
+.membership-page {
+    padding-top: 18px;
+}
+
+/* Strong green status badges */
+.status-badge.active {
+    background: #d9f4e4;
+    color: #008744 !important;
+    font-weight: 700;
+}
+
+.status-badge.inactive {
+    background: #fde2e2;
+    color: #c0392b !important;
+    font-weight: 700;
+}
+
+/* Paid status */
+.status-badge.active {
+    color: #008744 !important;
+}
+
+/* MESSAGE COUNT - SAME AS MEMBER HOME */
+
+.navbar .menu .msg-link {
+    position: relative;
+}
+
+.navbar .menu .msg-count {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #087c3d;
+    color: white;
+
+    border-radius: 50%;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+</style>
 </body>
 </html>
