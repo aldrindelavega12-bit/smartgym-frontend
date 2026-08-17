@@ -532,6 +532,57 @@
     }
 
 }
+
+/* =========================================================
+   REAL-TIME LOCKER STATUS
+========================================================= */
+
+.locker-status.available {
+    color: #087c3d;
+}
+
+.locker-status.inuse {
+    color: #2563eb;
+}
+
+.locker-status.reserved {
+    color: #d97706;
+}
+
+.locker-status.overtime {
+    color: #dc2626;
+}
+
+.locker-status.unknown {
+    color: #718096;
+}
+
+
+/* Locker is not currently available */
+
+.locker-card.disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+}
+
+.locker-card.disabled:hover {
+    transform: none;
+    border-color: #dce8e1;
+}
+
+.locker-card.disabled::after {
+    content: none;
+}
+
+
+/* Active selection should only be possible
+   for available lockers */
+
+.locker-card.disabled.active {
+    border: 1px solid #dce8e1;
+    background: #ffffff;
+}
+
 </style>
 <body>
 
@@ -666,7 +717,6 @@
             <div
                 class="locker-card"
                 data-locker="1"
-                onclick="selectLocker(this,1)"
             >
                 <h3>Locker 1</h3>
 
@@ -679,7 +729,6 @@
             <div
                 class="locker-card"
                 data-locker="2"
-                onclick="selectLocker(this,2)"
             >
                 <h3>Locker 2</h3>
 
@@ -692,7 +741,6 @@
             <div
                 class="locker-card"
                 data-locker="3"
-                onclick="selectLocker(this,3)"
             >
                 <h3>Locker 3</h3>
 
@@ -1623,34 +1671,45 @@ async function loadBookedSlots(){
 /* =========================================================
    LOCKER STATUS
 ========================================================= */
+/* =========================================================
+   REAL-TIME LOCKER STATUS
+========================================================= */
 
 async function loadCurrentLockerStatus(){
 
     try{
 
-        const res =
-            await fetch(
-                `${API_URL}/api/current_lockers`
+        const res = await fetch(
+            `${API_URL}/api/current_lockers`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if(!res.ok){
+
+            throw new Error(
+                `HTTP ${res.status}`
             );
 
+        }
 
-        const data =
-            await res.json();
+        const data = await res.json();
+
+        console.log(
+            "[LOCKER STATUS]",
+            data
+        );
 
 
         document
-            .querySelectorAll(
-                ".locker-card"
-            )
+            .querySelectorAll(".locker-card")
             .forEach(card => {
 
                 const locker =
-                    card.dataset.locker;
-
-
-                const status =
-                    data[locker]
-                    || "AVAILABLE";
+                    String(
+                        card.dataset.locker
+                    );
 
 
                 const statusDiv =
@@ -1659,40 +1718,156 @@ async function loadCurrentLockerStatus(){
                     );
 
 
-                const statusClass =
-
-                    status === "OVERTIME"
-                        ? "overtime"
-
-                    : status === "IN_USE"
-                        ? "inuse"
-
-                    : status === "RESERVED"
-                        ? "reserved"
-
-                    : "available";
+                if(!statusDiv){
+                    return;
+                }
 
 
-                const statusText =
+                /*
+                 * API RESPONSE:
+                 *
+                 * {
+                 *   "1": "AVAILABLE",
+                 *   "2": "IN_USE",
+                 *   "3": "RESERVED"
+                 * }
+                 */
 
-                    status === "OVERTIME"
-                        ? "🔴 Overtime"
+                const status =
+                    String(
+                        data[locker] || ""
+                    ).toUpperCase();
 
-                    : status === "IN_USE"
-                        ? "🔵 In Use"
 
-                    : status === "RESERVED"
-                        ? "🟡 Reserved"
+                /* =========================
+                   STATUS CLASS
+                ========================= */
 
-                    : "Available";
+                let statusClass =
+                    "available";
+
+
+                let statusText =
+                    "Available";
+
+
+                if(status === "IN_USE"){
+
+                    statusClass =
+                        "inuse";
+
+                    statusText =
+                        "In Use";
+
+                }
+
+                else if(status === "RESERVED"){
+
+                    statusClass =
+                        "reserved";
+
+                    statusText =
+                        "Reserved";
+
+                }
+
+                else if(status === "OVERTIME"){
+
+                    statusClass =
+                        "overtime";
+
+                    statusText =
+                        "Overtime";
+
+                }
+
+                else if(status === "AVAILABLE"){
+
+                    statusClass =
+                        "available";
+
+                    statusText =
+                        "Available";
+
+                }
+
+                else{
+
+                    /*
+                     * IMPORTANT:
+                     * Kapag walang valid response,
+                     * huwag magsinungaling na Available.
+                     */
+
+                    statusClass =
+                        "unknown";
+
+                    statusText =
+                        "Unavailable";
+
+                }
 
 
                 statusDiv.className =
                     `locker-status ${statusClass}`;
 
 
-                statusDiv.innerHTML =
+                statusDiv.innerText =
                     statusText;
+
+
+                /*
+                 * =========================
+                 * DISABLE UNAVAILABLE LOCKERS
+                 * =========================
+                 */
+
+                const isAvailable =
+                    status === "AVAILABLE";
+
+
+                card.classList.toggle(
+                    "disabled",
+                    !isAvailable
+                );
+
+
+                /*
+                 * Huwag payagan piliin ang
+                 * occupied/reserved/overtime.
+                 */
+
+                card.onclick =
+                    isAvailable
+
+                        ? () => selectLocker(
+                            card,
+                            Number(locker)
+                          )
+
+                        : null;
+
+
+                /*
+                 * Kung currently selected locker
+                 * tapos naging unavailable,
+                 * tanggalin ang selection.
+                 */
+
+                if(
+                    !isAvailable &&
+                    selectedLocker ===
+                    Number(locker)
+                ){
+
+                    selectedLocker =
+                        null;
+
+                    card.classList.remove(
+                        "active"
+                    );
+
+                }
 
             });
 
@@ -1700,7 +1875,7 @@ async function loadCurrentLockerStatus(){
 
     catch(err){
 
-        console.log(
+        console.error(
             "LOCKER STATUS ERROR:",
             err
         );
@@ -1708,8 +1883,6 @@ async function loadCurrentLockerStatus(){
     }
 
 }
-
-
 
 /* =========================================================
    SUBMIT BOOKING
@@ -2110,6 +2283,15 @@ loadMessageCount();
 setInterval(
     loadMessageCount,
     3000
+);
+
+/* =========================================================
+   REAL-TIME LOCKER STATUS REFRESH
+========================================================= */
+
+setInterval(
+    loadCurrentLockerStatus,
+    5000
 );
 
 </script>
