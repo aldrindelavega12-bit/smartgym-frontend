@@ -983,19 +983,13 @@
 
         <div class="user-profile" onclick="toggleMenu()">
 
-            <div class="user-avatar" id="profileInitial">
-                A
-            </div>
+            <div class="user-avatar" id="profileInitial"></div>
 
             <div class="user-info">
 
-                <strong id="profile-name">
-                    Aldrin
-                </strong>
+                <strong id="profile-name"></strong>
 
-                <small>
-                    Member
-                </small>
+                <small id="profile-role"></small>
 
             </div>
 
@@ -1027,6 +1021,8 @@
             </div>
 
         </div>
+
+           
 
     </div>
 
@@ -1508,16 +1504,34 @@ let lockerBookedStatus = {};
 /* =========================================================
    PROFILE
 ========================================================= */
+
+/* =========================================================
+   PROFILE - DYNAMIC FROM LOGGED-IN USER
+========================================================= */
+
 const profile =
     JSON.parse(
         localStorage.getItem("profile")
     ) || {};
 
+
+/*
+ * Get the actual logged-in user's name.
+ * No hardcoded name.
+ */
+
 const displayName =
     profile.name ||
+    profile.fullname ||
     user.fullname ||
+    user.name ||
     user.username ||
-    "Member";
+    "";
+
+
+/*
+ * Get first letter dynamically.
+ */
 
 const firstLetter =
     displayName
@@ -1525,15 +1539,39 @@ const firstLetter =
         .charAt(0)
         .toUpperCase();
 
+
+/*
+ * Get role dynamically.
+ */
+
+const displayRole =
+    profile.role ||
+    user.role ||
+    user.user_type ||
+    user.account_type ||
+    "Member";
+
+
+/*
+ * Update profile UI.
+ */
+
 document.getElementById(
     "profileInitial"
 ).innerText =
     firstLetter;
 
+
 document.getElementById(
     "profile-name"
 ).innerText =
     displayName;
+
+
+document.getElementById(
+    "profile-role"
+).innerText =
+    displayRole;
 
 function updateLockerCards() {
 
