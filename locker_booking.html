@@ -1303,13 +1303,11 @@ function selectLocker(element, locker) {
     const lockerNumber =
         String(locker);
 
-
     const physicalStatus =
         String(
             lockerPhysicalStatus[lockerNumber] ||
             "AVAILABLE"
         ).toUpperCase();
-
 
     /*
      * ONLY physical status can block
@@ -1328,9 +1326,7 @@ function selectLocker(element, locker) {
         );
 
         return;
-
     }
-
 
     /*
      * Remove previous selection
@@ -1344,7 +1340,6 @@ function selectLocker(element, locker) {
 
         });
 
-
     /*
      * Select locker
      */
@@ -1354,23 +1349,10 @@ function selectLocker(element, locker) {
     selectedLocker =
         Number(locker);
 
-
     console.log(
         "[SELECTED LOCKER]",
         selectedLocker
     );
-
-
-    /*
-     * Load reservations for this locker/date.
-     */
-
-    if (selectedDate) {
-
-        loadBookedSlots();
-
-    }
-
 }
 
 /* =========================================================
