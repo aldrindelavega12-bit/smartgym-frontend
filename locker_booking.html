@@ -1043,112 +1043,148 @@ function setProfile(){
 
 function updateLockerCards() {
 
-    document.querySelectorAll(".locker-card").forEach(card => {
+    document
+        .querySelectorAll(".locker-card")
+        .forEach(card => {
 
-        const lockerNumber =
-            String(card.dataset.locker);
+            const lockerNumber =
+                String(card.dataset.locker);
 
-        const statusElement =
-            card.querySelector(".locker-status");
+            const statusElement =
+                card.querySelector(
+                    ".locker-status"
+                );
 
-        if (!statusElement) return;
-
-
-        const physicalStatus =
-            String(
-                lockerPhysicalStatus[lockerNumber] ||
-                "AVAILABLE"
-            ).toUpperCase();
-
-
-        const hasBooking =
-            lockerBookedStatus[lockerNumber] === true;
+            if (!statusElement) {
+                return;
+            }
 
 
-        let statusText = "Available";
-        let statusClass = "available";
+            const physicalStatus =
+                String(
+                    lockerPhysicalStatus[
+                        lockerNumber
+                    ] || "AVAILABLE"
+                ).toUpperCase();
 
 
-        /*
-         * PHYSICAL STATUS
-         * has priority over booking status.
-         */
+            const hasBooking =
+                lockerBookedStatus[
+                    lockerNumber
+                ] === true;
 
-        if (physicalStatus === "IN_USE") {
 
-            statusText = "In Use";
-            statusClass = "inuse";
+            let statusText =
+                "Available";
 
-        }
+            let statusClass =
+                "available";
 
-        else if (physicalStatus === "OVERTIME") {
-
-            statusText = "Overtime";
-            statusClass = "overtime";
-
-        }
-
-        else if (hasBooking) {
 
             /*
-             * IMPORTANT:
-             * Reserved lockers are STILL selectable.
+             * PHYSICAL STATUS HAS PRIORITY
              */
 
-            statusText = "Reserved";
-            statusClass = "reserved";
+            if (
+                physicalStatus === "IN_USE"
+            ) {
 
-        }
+                statusText =
+                    "In Use";
+
+                statusClass =
+                    "inuse";
+
+            }
+
+            else if (
+                physicalStatus === "OVERTIME"
+            ) {
+
+                statusText =
+                    "Overtime";
+
+                statusClass =
+                    "overtime";
+
+            }
+
+            /*
+             * BOOKED = RESERVED
+             *
+             * BUT STILL CLICKABLE
+             */
+
+            else if (hasBooking) {
+
+                statusText =
+                    "Reserved";
+
+                statusClass =
+                    "reserved";
+
+            }
 
 
-        statusElement.textContent =
-            statusText;
+            statusElement.textContent =
+                statusText;
 
-        statusElement.className =
-            `locker-status ${statusClass}`;
-
-
-        /*
-         * ONLY PHYSICAL UNAVAILABLE
-         * LOCKERS ARE DISABLED.
-         */
-
-        if (
-            physicalStatus === "IN_USE" ||
-            physicalStatus === "OVERTIME"
-        ) {
-
-            card.classList.add("disabled");
-
-        }
-
-        else {
-
-            card.classList.remove("disabled");
-
-        }
+            statusElement.className =
+                `locker-status ${statusClass}`;
 
 
-        /*
-         * Remove selection only if the
-         * physical locker becomes unusable.
-         */
+            /*
+             * ONLY IN_USE / OVERTIME
+             * ARE DISABLED.
+             *
+             * RESERVED IS NOT DISABLED.
+             */
 
-        if (
-            selectedLocker === Number(lockerNumber) &&
-            (
+            if (
                 physicalStatus === "IN_USE" ||
                 physicalStatus === "OVERTIME"
-            )
-        ) {
+            ) {
 
-            card.classList.remove("active");
+                card.classList.add(
+                    "disabled"
+                );
 
-            selectedLocker = null;
+            }
 
-        }
+            else {
 
-    });
+                card.classList.remove(
+                    "disabled"
+                );
+
+            }
+
+
+            /*
+             * Remove active selection only
+             * if physically unavailable.
+             */
+
+            if (
+                selectedLocker ===
+                    Number(lockerNumber) &&
+
+                (
+                    physicalStatus === "IN_USE" ||
+                    physicalStatus === "OVERTIME"
+                )
+            ) {
+
+                card.classList.remove(
+                    "active"
+                );
+
+                selectedLocker =
+                    null;
+
+            }
+
+        });
 
 }
 
@@ -1345,31 +1381,25 @@ async function loadBookedSlots() {
         selectedDate
     );
 
-
+    // Reset booking status
     lockerBookedStatus = {
         1: false,
         2: false,
         3: false
     };
 
-
     const reservedList =
         document.getElementById("reservedList");
 
-
     if (reservedList) {
-
         reservedList.innerHTML = "";
-
     }
-
 
     try {
 
         const lockers = [1, 2, 3];
 
         let totalReservations = 0;
-
 
         for (const locker of lockers) {
 
@@ -1380,7 +1410,6 @@ async function loadBookedSlots() {
                 }
             );
 
-
             if (!res.ok) {
 
                 console.error(
@@ -1388,26 +1417,14 @@ async function loadBookedSlots() {
                 );
 
                 continue;
-
             }
 
-
             const data = await res.json();
-
 
             console.log(
                 `[BOOKED SLOTS] Locker ${locker}:`,
                 data
             );
-
-
-            /*
-             * API response:
-             *
-             * {
-             *     slots: [...]
-             * }
-             */
 
             const slots =
                 Array.isArray(data)
@@ -1418,65 +1435,133 @@ async function loadBookedSlots() {
 
 
             /*
-             * Locker is considered RESERVED
-             * if there is at least one booking
-             * on the selected date.
+             * IMPORTANT
+             *
+             * If there is at least one booking
+             * for this locker on this date,
+             * mark it RESERVED.
+             */
+
+            if (slots.length > 0) {
+
+                lockerBookedStatus[String(locker)] = true;
+
+            }
+
+
+            /*
+             * DISPLAY ALL BOOKINGS
              */
 
             slots.forEach(slot => {
 
                 totalReservations++;
 
-                console.log("[BOOKING SLOT RAW]", slot);
+                console.log(
+                    "[BOOKING SLOT RAW]",
+                    slot
+                );
+
+
+                let start = "";
+                let end = "";
+
+
+                /*
+                 * CASE 1
+                 *
+                 * API returns:
+                 *
+                 * "2:43 PM - 5:43 PM"
+                 */
+
+                if (typeof slot === "string") {
+
+                    const parts =
+                        slot.split(/\s*-\s*/);
+
+                    if (parts.length >= 2) {
+
+                        start =
+                            parts[0].trim();
+
+                        end =
+                            parts[1].trim();
+
+                    }
+
+                }
+
+
+                /*
+                 * CASE 2
+                 *
+                 * API returns object
+                 */
+
+                else if (
+                    slot &&
+                    typeof slot === "object"
+                ) {
+
+                    const rawStart =
+                        slot.start_time ??
+                        slot.startTime ??
+                        slot.start ??
+                        slot.time ??
+                        slot.booking_start ??
+                        slot.booking_start_time ??
+                        slot.from ??
+                        "";
+
+                    const rawEnd =
+                        slot.end_time ??
+                        slot.endTime ??
+                        slot.end ??
+                        slot.booking_end ??
+                        slot.booking_end_time ??
+                        slot.to ??
+                        "";
+
+
+                    start =
+                        normalizeBookingTime(
+                            rawStart
+                        );
+
+                    end =
+                        normalizeBookingTime(
+                            rawEnd
+                        );
+
+                }
+
+
+                console.log(
+                    `[BOOKING PARSED] Locker ${locker}:`,
+                    start,
+                    "-",
+                    end
+                );
+
 
                 if (!reservedList) {
                     return;
                 }
 
-                const item = document.createElement("div");
 
-                item.className = "booking-item";
-
-
-                /*
-                * SUPPORT DIFFERENT API FIELD NAMES
-                */
-
-                const rawStart =
-                    slot.start_time ??
-                    slot.startTime ??
-                    slot.start ??
-                    slot.time ??
-                    slot.booking_start ??
-                    slot.booking_start_time ??
-                    slot.from ??
-                    null;
+                const item =
+                    document.createElement("div");
 
 
-                const rawEnd =
-                    slot.end_time ??
-                    slot.endTime ??
-                    slot.end ??
-                    slot.booking_end ??
-                    slot.booking_end_time ??
-                    slot.to ??
-                    null;
+                item.className =
+                    "booking-item";
 
 
                 /*
-                * Convert to HH:MM
-                */
-
-                const start =
-                    normalizeBookingTime(rawStart);
-
-                const end =
-                    normalizeBookingTime(rawEnd);
-
-
-                /*
-                * SAVE REAL VALUES FOR CONFLICT CHECK
-                */
+                 * SAVE VALUES FOR
+                 * CONFLICT CHECK
+                 */
 
                 item.dataset.locker =
                     locker;
@@ -1489,28 +1574,39 @@ async function loadBookedSlots() {
 
 
                 /*
-                * DISPLAY
-                */
+                 * DISPLAY
+                 */
 
                 item.innerHTML = `
-                    <strong>Locker ${locker}</strong>
+                    <strong>
+                        Locker ${locker}
+                    </strong>
+
                     <br>
+
                     <span>
-                        ${formatBookingTime(start)}
+                        ${
+                            start || "--:--"
+                        }
                         -
-                        ${formatBookingTime(end)}
+                        ${
+                            end || "--:--"
+                        }
                     </span>
                 `;
 
 
-                reservedList.appendChild(item);
+                reservedList.appendChild(
+                    item
+                );
 
             });
+
         }
 
 
         /*
-         * No reservations
+         * NO RESERVATIONS
          */
 
         if (
@@ -1528,9 +1624,7 @@ async function loadBookedSlots() {
 
 
         /*
-         * IMPORTANT:
-         * Refresh locker cards after
-         * booking status has been loaded.
+         * UPDATE LOCKER CARDS
          */
 
         updateLockerCards();
@@ -1541,8 +1635,8 @@ async function loadBookedSlots() {
             lockerBookedStatus
         );
 
-
     }
+
     catch (err) {
 
         console.error(
@@ -1553,7 +1647,6 @@ async function loadBookedSlots() {
     }
 
 }
-
 
 /* =========================================================
    FORMAT BOOKING TIME
