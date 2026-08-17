@@ -380,15 +380,16 @@ const userData =
         localStorage.getItem("user")
     );
 
-document.getElementById(
-    "welcome"
-).innerText =
-    "WELCOME, " +
-    userData.name +
-    " 👋";
+const displayName =
+    userData.fullname ||
+    userData.name ||
+    "-";
 
-    document.getElementById("profileName").innerText =
-    userData.name || "-";
+document.getElementById("welcome").innerText =
+    "WELCOME, " + displayName + " 👋";
+
+document.getElementById("profileName").innerText =
+    displayName;
 
 document.getElementById("profilePhone").innerText =
     userData.phone_number || "-";
@@ -399,7 +400,9 @@ document.getElementById("profileUsername").innerText =
 function editProfile(){
 
     document.getElementById("editName").value =
-        userData.name || "";
+        userData.fullname ||
+        userData.name ||
+        "";
 
     document.getElementById("editPhone").value =
         userData.phone_number || "";
@@ -479,6 +482,7 @@ async function saveProfile(){
 
             // Update localStorage
             userData.name = fullname;
+            userData.fullname = fullname;
             userData.phone_number = phone;
             userData.username = username;
 
