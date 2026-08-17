@@ -1,0 +1,1269 @@
+/* =========================================================
+   SMART GYM — PRE-MEMBER DASHBOARD
+   MEMBER DASHBOARD LAYOUT + PRE-MEMBER CONTENT
+   ========================================================= */
+
+@import url("member-dashboard.css");
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    background: #f7faf8;
+    color: #101a16;
+    font-family: Inter, Arial, sans-serif;
+}
+
+
+/* =========================================================
+   LAYOUT
+   SAME STRUCTURE AS MEMBER
+   ========================================================= */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main {
+    width: calc(100% - 318px);
+
+    margin-left: 318px;
+
+    padding: 28px 26px 40px;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   TOP HEADER
+   ========================================================= */
+
+.top-header {
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-bottom: 14px;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: #07883f;
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1.15;
+}
+
+.user-info strong {
+    color: #101a16;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.user-info small {
+    margin-top: 4px;
+
+    color: #718078;
+
+    font-size: 12px;
+}
+
+.profile-chevron {
+    margin-left: 5px;
+
+    color: #101a16;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    position: relative;
+
+    width: 100%;
+    height: 280px;
+
+    margin-bottom: 24px;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(238, 250, 244, .98) 0%,
+            rgba(238, 250, 244, .91) 25%,
+            rgba(238, 250, 244, .38) 53%,
+            rgba(255, 255, 255, 0) 75%
+        ),
+        url("../images/gym.jpg");
+
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-content {
+    position: absolute;
+
+    left: 42px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 2;
+}
+
+.hero-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #07883f;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hero h1 {
+    margin: 0;
+
+    color: #101a16;
+
+    font-size: 56px;
+    line-height: 1;
+
+    font-weight: 800;
+}
+
+.hero p {
+    margin: 18px 0 0;
+
+    color: #243c31;
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   PRE-MEMBER CARDS
+   ========================================================= */
+
+.pre-member-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 24px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.dashboard-card {
+    background: #ffffff;
+
+    border: 1px solid #dfe9e3;
+
+    border-radius: 20px;
+
+    padding: 26px;
+
+    box-shadow:
+        0 3px 14px rgba(20, 60, 40, .04);
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.card-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #edf8f1;
+
+    color: #07883f;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-header h2 {
+    margin: 0;
+
+    color: #101a16;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+.card-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 18px 0;
+
+    background: #dfe9e3;
+}
+
+
+/* =========================================================
+   NEXT STEP
+   ========================================================= */
+
+.next-step-description {
+    margin: 0 0 20px;
+
+    color: #4e655a;
+
+    font-size: 16px;
+
+    line-height: 1.55;
+}
+
+.enrollment-step {
+    min-height: 62px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    border-bottom: 1px solid #dfe9e3;
+}
+
+.enrollment-step i {
+    color: #07883f;
+
+    font-size: 23px;
+}
+
+.enrollment-step strong {
+    color: #101a16;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIVATION NOTE
+   ========================================================= */
+
+.activation-note {
+    margin-top: 20px;
+
+    padding: 17px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    border-radius: 15px;
+
+    background: linear-gradient(
+        145deg,
+        #f1faf5,
+        #e8f5ed
+    );
+}
+
+.activation-note > i {
+    color: #07883f;
+
+    font-size: 20px;
+
+    margin-top: 2px;
+}
+
+.activation-note p {
+    margin: 0;
+
+    color: #4d6258;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+}
+
+.activation-note strong {
+    color: #07883f;
+}
+
+
+/* =========================================================
+   GYM INFORMATION
+   ========================================================= */
+
+.gym-info-row {
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom: 1px solid #dfe9e3;
+}
+
+.gym-info-row:last-child {
+    border-bottom: none;
+}
+
+.gym-info-left {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.gym-info-left strong {
+    color: #101a16;
+
+    font-size: 15px;
+}
+
+.gym-info-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #edf8f1;
+
+    color: #07883f;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gym-info-value {
+    color: #4d6258;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+   ========================================================= */
+
+.profile-dropdown {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    width: 250px;
+
+    display: none;
+
+    padding: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe9e3;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.15);
+
+    z-index: 99999;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+.profile-menu-header {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 10px;
+}
+
+.profile-avatar-large {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    background: #07883f;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+}
+
+.profile-menu-name {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-menu-name strong {
+    color: #101a16;
+}
+
+.profile-menu-name span {
+    margin-top: 3px;
+
+    color: #718078;
+
+    font-size: 12px;
+}
+
+.dropdown-divider {
+    height: 1px;
+
+    margin: 6px 0;
+
+    background: #edf2ef;
+}
+
+.profile-dropdown button {
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 11px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    color: #26352d;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profile-dropdown button:hover {
+    background: #edf8f1;
+}
+
+.profile-dropdown button i {
+    width: 18px;
+
+    color: #07883f;
+
+    text-align: center;
+}
+
+.dropdown-logout,
+.dropdown-logout i {
+    color: #dc3545 !important;
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.55);
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+}
+
+.modal-content {
+    width: 420px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    color: #101a16;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content label {
+    display: block;
+
+    margin: 15px 0 7px;
+
+    font-weight: 600;
+}
+
+.modal-content input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #dfe9e3;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+.modal-buttons {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+.cancel-btn,
+.save-btn {
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 11px 17px;
+
+    cursor: pointer;
+
+    color: white;
+}
+
+.cancel-btn {
+    background: #6b7280;
+}
+
+.save-btn {
+    background: #07883f;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 280px !important;
+        min-width: 280px !important;
+    }
+
+    .main {
+        width: calc(100% - 280px);
+        margin-left: 280px;
+    }
+
+    .pre-member-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        width: 230px !important;
+        min-width: 230px !important;
+
+        padding: 20px 14px;
+    }
+
+    .main {
+        width: calc(100% - 230px);
+        margin-left: 230px;
+
+        padding: 18px;
+    }
+
+    .sidebar-logo strong {
+        font-size: 21px;
+    }
+
+    .sidebar-logo small {
+        display: none;
+    }
+
+    .sidebar-nav a {
+        padding: 0 14px;
+        font-size: 15px;
+    }
+
+    .hero {
+        height: 230px;
+    }
+
+    .hero-content {
+        left: 28px;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+}
+.user-profile > i {
+    margin-left: 5px;
+
+    font-size: 11px;
+
+    color: #17211b;
+}
+/* =========================================================
+   PRE-MEMBER PROFILE
+   SAME STYLE AS MEMBER DASHBOARD
+   ========================================================= */
+
+/* =========================================================
+   PRE-MEMBER PROFILE DROPDOWN
+   SAME AS MEMBER DASHBOARD
+   ========================================================= */
+
+.user-profile {
+    position: relative;
+}
+
+.profile-chevron {
+    transition: transform .2s ease;
+}
+
+.user-profile.active .profile-chevron {
+    transform: rotate(180deg);
+}
+
+.profile-dropdown {
+
+    position: absolute;
+
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 190px;
+
+    padding: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6eee9;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 30px rgba(18, 70, 40, .12);
+
+    display: none;
+
+    z-index: 1000;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+
+.profile-dropdown button {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #17211b;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.profile-dropdown button:hover {
+
+    background: #eaf6ee;
+}
+
+
+.profile-dropdown button i {
+
+    width: 18px;
+
+    color: #087c3d;
+}
+
+
+.profile-dropdown .dropdown-divider {
+
+    height: 1px;
+
+    margin: 6px 4px;
+
+    background: #e6eee9;
+}
+
+
+.profile-dropdown .dropdown-logout {
+
+    color: #b42318;
+}
+
+
+.profile-dropdown .dropdown-logout i {
+
+    color: #b42318;
+}
+
+/* =========================================================
+   PRE-MEMBER MODAL FINAL
+   ========================================================= */
+
+.edit-profile-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, .35);
+
+    z-index: 99999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition: .2s ease;
+}
+
+
+.edit-profile-overlay.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+.edit-profile-modal {
+
+    width: 420px;
+
+    max-width: calc(100vw - 40px);
+
+    max-height: 90vh;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.18);
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.edit-profile-header {
+
+    padding: 18px 22px 14px;
+
+    border-bottom: 1px solid #e6eee9;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+}
+
+
+.edit-profile-header span {
+
+    display: block;
+
+    color: #087c3d;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 2px;
+}
+
+
+.edit-profile-header h2 {
+
+    margin: 0;
+
+    color: #17211b;
+
+    font-size: 24px;
+
+    line-height: 1.1;
+}
+
+
+.edit-close {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #68736d;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    padding: 0;
+}
+
+
+.edit-profile-body {
+
+    padding: 18px 22px;
+
+    overflow-y: auto;
+}
+
+
+.edit-profile-body .profile-avatar-large {
+
+    width: 64px;
+
+    height: 64px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: #07883f;
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+.profile-field {
+
+    margin-bottom: 12px;
+}
+
+
+.profile-field label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #17211b;
+}
+
+
+.profile-field input {
+
+    width: 100%;
+
+    height: 42px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dfe7e2;
+
+    border-radius: 10px;
+
+    background: #f9fbfa;
+
+    color: #17211b;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+
+.profile-field input:focus {
+
+    border-color: #087c3d;
+
+    background: #ffffff;
+}
+
+
+.edit-profile-footer {
+
+    padding: 12px 22px;
+
+    border-top: 1px solid #e6eee9;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    background: #ffffff;
+}
+
+
+.cancel-profile,
+.save-profile {
+
+    height: 38px;
+
+    padding: 0 18px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.cancel-profile {
+
+    border: 1px solid #dfe7e2;
+
+    background: #ffffff;
+
+    color: #59635e;
+}
+
+
+.save-profile {
+
+    border: 0;
+
+    background: #087c3d;
+
+    color: #ffffff;
+}
+
+
+.save-profile:hover {
+
+    background: #075d2e;
+}
+
+
+/* PASSWORD INPUT */
+
+.password-wrapper {
+
+    position: relative;
+
+    width: 100%;
+}
+
+
+.password-wrapper input {
+
+    width: 100%;
+
+    padding-right: 48px;
+
+    box-sizing: border-box;
+}
+
+
+.password-toggle {
+
+    position: absolute;
+
+    top: 50%;
+
+    right: 14px;
+
+    transform: translateY(-50%);
+
+    width: 32px;
+
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    cursor: pointer;
+}
+
+
+.password-toggle:hover {
+
+    color: #087c3d;
+}
+
+
+.password-toggle i {
+
+    font-size: 16px;
+}
+
+/* =========================================================
+   PRE-MEMBER PROFILE DROPDOWN — FINAL
+   ========================================================= */
+
+.user-profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-chevron {
+    transition: transform .2s ease;
+}
+
+.user-profile.active .profile-chevron {
+    transform: rotate(180deg);
+}
+
+.profile-dropdown {
+
+    position: absolute;
+
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 190px;
+
+    padding: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6eee9;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 30px rgba(18, 70, 40, .12);
+
+    display: none;
+
+    z-index: 99999;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+.profile-dropdown button {
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #17211b;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+    background: #eaf6ee;
+}
+
+.profile-dropdown button i {
+
+    width: 18px;
+
+    color: #087c3d;
+}
+
+.profile-dropdown .dropdown-divider {
+
+    height: 1px;
+
+    margin: 6px 4px;
+
+    background: #e6eee9;
+}
+
+.profile-dropdown .dropdown-logout,
+.profile-dropdown .dropdown-logout i {
+
+    color: #b42318 !important;
+}

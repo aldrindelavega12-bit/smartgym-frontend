@@ -6,8 +6,7 @@
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pre-member.css">
 
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -16,294 +15,404 @@
 
 <body>
 
-<!-- ROLE PROTECTION -->
-<script>
-
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
-
-if(!user || user.role !== "pre_member"){
-
-    window.location.href =
-        "index.html";
-}
-
-</script>
-
-<!-- ================= NAVBAR ================= -->
-
-<div class="navbar">
-
-    <h2>
-
-        SMART GYM
-
-    </h2>
-
-    <div class="menu">
-
-        <a href="pre_member.html">
-
-            <i class="fa-solid fa-house"></i>
-
-            Home
-
-        </a>
-
-    </div>
-
-    <div class="profile">
-
-        <button
-            class="logout-btn"
-            onclick="logout()">
-
-            Logout
-
-        </button>
-
-    </div>
-
-</div>
 
 <!-- ================= MAIN ================= -->
 
 <div class="layout">
+    <!-- =========================
+     PRE-MEMBER HOME CONTENT
+     ========================= -->
 
-<div class="main">
-    <div class="hero">
 
-        <div class="hero-content">
+    <div class="navbar">
 
-            <h1 id="welcome">
-                WELCOME
-            </h1>
+        <!-- BRAND -->
+        <div class="brand">
 
-            <p class="hero-subtitle">
-                Your account has been created successfully.
+            <div class="brand-icon">
+                <i class="fa-solid fa-dumbbell"></i>
+            </div>
+
+            <div class="brand-text">
+
+                <strong>SMART GYM</strong>
+
+                <span>
+                    STRONGER PEOPLE • A HEALTHIER TOMORROW
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+        <div class="menu">
+
+            <!-- HOME ONLY -->
+            <a href="pre_member.html">
+
+                <i class="fa-solid fa-house"></i>
+
+                Home
+
+            </a>
+
+        </div>
+
+
+        <!-- MOTIVATIONAL CARD -->
+        <div class="sidebar-message">
+
+            <div class="sidebar-message-icon">
+
+                <i class="fa-solid fa-dumbbell"></i>
+
+            </div>
+
+            <h3>
+                Keep Pushing
+            </h3>
+
+            <p>
+                Small steps every day lead to big results.
             </p>
 
-            <p class="hero-desc">
-                Complete your biometric enrollment to activate your Smart Gym Membership.
-            </p>
+            <div class="message-line"></div>
 
         </div>
 
     </div>
 
-    <div class="cards">
+    <main class="main">
 
-        <!-- CARD 1 -->
-        <div class="card profile-card">
+        <!-- TOP HEADER -->
+        <div class="top-header">
+            <div class="top-right">
 
-            <div class="profile-header">
+                <div
+                    class="user-profile"
+                    id="userProfile"
+                    onclick="toggleProfileDropdown(event)"
+                >
 
-                <h3>
-                    <i class="fa-solid fa-user"></i>
-                    Profile Information
-                </h3>
+                    <!-- AVATAR -->
+                    <div
+                        class="user-avatar"
+                        id="topAvatar"
+                    >
+                        A
+                    </div>
 
-                <span class="member-badge">
-                    PRE-<br>MEMBER
+
+                    <!-- USER INFO -->
+                    <div class="user-info">
+
+                        <strong id="topProfileName">
+                            Aldrin
+                        </strong>
+
+                        <small>
+                            Pre-Member
+                        </small>
+
+                    </div>
+
+
+                    <!-- CHEVRON -->
+                    <i class="fa-solid fa-chevron-down profile-chevron"></i>
+
+
+                    <div
+                        id="profileDropdown"
+                        class="profile-dropdown"
+                    >
+
+                        <!-- EDIT PROFILE -->
+                        <button
+                            type="button"
+                            onclick="openEditProfile(event)"
+                        >
+                            <i class="fa-solid fa-user-pen"></i>
+                            Edit Profile
+                        </button>
+
+
+                        <!-- CHANGE PASSWORD -->
+                        <button
+                            type="button"
+                            onclick="openChangePassword(event)"
+                        >
+                            <i class="fa-solid fa-key"></i>
+                            Change Password
+                        </button>
+
+
+                        <div class="dropdown-divider"></div>
+
+
+                        <!-- LOGOUT -->
+                        <button
+                            type="button"
+                            class="dropdown-logout"
+                            onclick="logout(event)"
+                        >
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Log Out
+                        </button>
+
+                    </div>
+
+                </div>
+
+                
+
+            </div>
+        </div>
+
+
+        <!-- =========================
+             HERO
+             ========================= -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="hero-label">
+                    WELCOME,
                 </span>
 
+                <h1 id="welcomeName">
+                    Aldrin
+                </h1>
+
+                <p>
+                    Train smart. Stay strong.
+                </p>
 
             </div>
 
-            <div class="profile-divider"></div>
+        </section>
 
-            <div class="profile-box">
 
-                <div class="profile-row">
+        <!-- =========================
+             PRE-MEMBER CONTENT
+             ========================= -->
 
-                    <div class="profile-left">
-                        <i class="fa-solid fa-user"></i>
-                        <span>Full Name</span>
+        <div class="pre-member-grid">
+
+
+            <!-- NEXT STEP -->
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-arrow-right"></i>
                     </div>
 
-                    <span id="profileName" class="profile-value"></span>
+                    <h2>
+                        Next Step
+                    </h2>
 
                 </div>
 
-                <div class="profile-row">
+                <div class="card-divider"></div>
 
-                    <div class="profile-left">
-                        <i class="fa-solid fa-phone"></i>
-                        <span>Phone Number</span>
+                <p class="next-step-description">
+                    Visit Smart Gym and complete your
+                    biometric enrollment.
+                </p>
+
+                <div class="enrollment-step">
+
+                    <i class="fa-regular fa-circle-check"></i>
+
+                    <strong>
+                        Fingerprint Enrollment
+                    </strong>
+
+                </div>
+
+                <div class="enrollment-step">
+
+                    <i class="fa-regular fa-circle-check"></i>
+
+                    <strong>
+                        Face Recognition Enrollment
+                    </strong>
+
+                </div>
+
+                <div class="activation-note">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <p>
+                        Once both biometrics are completed,
+                        your account will automatically become
+                        an <strong>Active Member Account.</strong>
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- GYM INFORMATION -->
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-dumbbell"></i>
                     </div>
 
-                    <span id="profilePhone" class="profile-value"></span>
+                    <h2>
+                        Gym Information
+                    </h2>
 
                 </div>
 
-                <div class="profile-row">
+                <div class="card-divider"></div>
 
-                    <div class="profile-left">
-                        <i class="fa-solid fa-at"></i>
-                        <span>Username</span>
-                    </div>
 
-                    <span id="profileUsername" class="profile-value"></span>
+                <div class="gym-info-row">
 
-                </div>
+                    <div class="gym-info-left">
 
-            </div>
-
-            <button
-                class="profile-btn"
-                onclick="editProfile()">
-
-                <i class="fa-solid fa-pen"></i>
-                Edit Profile
-
-            </button>
-
-        </div>
-
-                
-               
-        <!-- CARD 2 -->
-        <div class="card next-card">
-
-            <div class="next-header">
-
-                <div class="next-icon">
-                    <i class="fa-solid fa-circle-arrow-right"></i>
-                </div>
-
-                <h3>Next Step</h3>
-
-            </div>
-
-            <div class="next-divider"></div>
-
-            <p class="next-desc">
-                Visit Smart Gym and complete your biometric enrollment.
-            </p>
-
-            <div class="step-item">
-                <i class="fa-regular fa-circle-check"></i>
-                <span>Fingerprint Enrollment</span>
-            </div>
-
-            <div class="step-item">
-                <i class="fa-regular fa-circle-check"></i>
-                <span>Face Recognition Enrollment</span>
-            </div>
-
-            <div class="next-divider"></div>
-
-            <p class="next-note">
-                Once both biometrics are completed, your account will automatically become an Active Member Account.
-            </p>
-
-        </div>
-
-                
-
-        <!-- CARD 3 -->
-        
-        <div class="card gym-card">
-
-            <h3>
-                <i class="fa-solid fa-dumbbell"></i>
-                Gym Information
-            </h3>
-
-            <div class="gym-list">
-
-                <div class="gym-row">
-                    <div class="gym-left">
-                        <div class="gym-icon">
+                        <div class="gym-info-icon">
                             <i class="fa-regular fa-clock"></i>
                         </div>
 
-                        <span>Operating Hours</span>
+                        <strong>
+                            Operating Hours
+                        </strong>
+
                     </div>
 
-                    <div class="gym-right">
+                    <div class="gym-info-value">
                         6:00 AM – 10:00 PM<br>
                         Everyday
                     </div>
+
                 </div>
 
-                <div class="gym-row">
-                    <div class="gym-left">
-                        <div class="gym-icon">
+
+                <div class="gym-info-row">
+
+                    <div class="gym-info-left">
+
+                        <div class="gym-info-icon">
                             <i class="fa-solid fa-location-dot"></i>
                         </div>
 
-                        <span>Address</span>
+                        <strong>
+                            Address
+                        </strong>
+
                     </div>
 
-                    <div class="gym-right">
+                    <div class="gym-info-value">
                         Poblacion,<br>
                         Balayan, Batangas
                     </div>
+
                 </div>
 
-                <div class="gym-row">
-                    <div class="gym-left">
-                        <div class="gym-icon">
+
+                <div class="gym-info-row">
+
+                    <div class="gym-info-left">
+
+                        <div class="gym-info-icon">
                             <i class="fa-solid fa-phone"></i>
                         </div>
 
-                        <span>Phone</span>
+                        <strong>
+                            Phone
+                        </strong>
+
                     </div>
 
-                    <div class="gym-right">
+                    <div class="gym-info-value">
                         0912 345 6789
                     </div>
+
                 </div>
 
-                <div class="gym-row">
-                    <div class="gym-left">
-                        <div class="gym-icon">
+
+                <div class="gym-info-row">
+
+                    <div class="gym-info-left">
+
+                        <div class="gym-info-icon">
                             <i class="fa-solid fa-envelope"></i>
                         </div>
 
-                        <span>Email</span>
+                        <strong>
+                            Email
+                        </strong>
+
                     </div>
 
-                    <div class="gym-right">
+                    <div class="gym-info-value">
                         info@smartgym.com
                     </div>
+
                 </div>
 
-                <div class="gym-row">
-                    <div class="gym-left">
-                        <div class="gym-icon">
+
+                <div class="gym-info-row">
+
+                    <div class="gym-info-left">
+
+                        <div class="gym-info-icon">
                             <i class="fa-solid fa-globe"></i>
                         </div>
 
-                        <span>Website</span>
+                        <strong>
+                            Website
+                        </strong>
+
                     </div>
 
-                    <div class="gym-right">
+                    <div class="gym-info-value">
                         www.smartgym.com
                     </div>
+
                 </div>
 
-                <div class="gym-row">
-                    <div class="gym-left">
-                        <div class="gym-icon">
+
+                <div class="gym-info-row">
+
+                    <div class="gym-info-left">
+
+                        <div class="gym-info-icon">
                             <i class="fa-brands fa-facebook-f"></i>
                         </div>
 
-                        <span>Facebook</span>
+                        <strong>
+                            Facebook Page
+                        </strong>
+
                     </div>
 
-                    <div class="gym-right">
+                    <div class="gym-info-value">
                         Smart Gym Official
                     </div>
+
                 </div>
 
-            </div>
+            </section>
 
         </div>
-                
+
+    </main>
+
+</div>
+    
 <!-- ================= NOTIFICATION ================= -->
 
 <div
@@ -323,48 +432,98 @@ if(!user || user.role !== "pre_member"){
     </p>
 
 </div>
+
 <!-- ================= EDIT PROFILE MODAL ================= -->
 
-<div id="editModal" class="modal">
+<div id="editModal" class="edit-profile-overlay">
 
-    <div class="modal-content">
+    <div class="edit-profile-modal">
 
-        <h2>Edit Profile</h2>
+        <!-- HEADER -->
+        <div class="edit-profile-header">
 
-        <label>Full Name</label>
-
-        <input
-            type="text"
-            id="editName">
-
-        <label>Phone Number</label>
-
-        <input
-            type="text"
-            id="editPhone">
-
-        <label>Username</label>
-
-        <input
-            type="text"
-            id="editUsername">
-
-        <div class="modal-buttons">
+            <div>
+                <span>Account Settings</span>
+                <h2>Edit Profile</h2>
+            </div>
 
             <button
-                class="cancel-btn"
+                type="button"
+                class="edit-close"
                 onclick="closeModal()">
+                &times;
+            </button>
 
+        </div>
+
+
+        <!-- BODY -->
+        <div class="edit-profile-body">
+
+            <!-- AVATAR -->
+            <div
+                class="profile-avatar-large"
+                id="editProfileAvatar">
+                A
+            </div>
+
+
+            <!-- FULL NAME -->
+            <div class="profile-field">
+
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    id="editName"
+                    placeholder="Enter your full name">
+
+            </div>
+
+
+            <!-- PHONE -->
+            <div class="profile-field">
+
+                <label>Phone Number</label>
+
+                <input
+                    type="text"
+                    id="editPhone"
+                    placeholder="Enter your phone number">
+
+            </div>
+
+
+            <!-- USERNAME -->
+            <div class="profile-field">
+
+                <label>Username</label>
+
+                <input
+                    type="text"
+                    id="editUsername"
+                    placeholder="Enter your username">
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="edit-profile-footer">
+
+            <button
+                type="button"
+                class="cancel-profile"
+                onclick="closeModal()">
                 Cancel
-
             </button>
 
             <button
-                class="save-btn"
+                type="button"
+                class="save-profile"
                 onclick="saveProfile()">
-
                 Save Changes
-
             </button>
 
         </div>
@@ -373,36 +532,296 @@ if(!user || user.role !== "pre_member"){
 
 </div>
 
+<!-- ================= CHANGE PASSWORD MODAL ================= -->
+<!-- ================= CHANGE PASSWORD MODAL ================= -->
+
+<div id="changePasswordModal" class="edit-profile-overlay">
+
+    <div class="edit-profile-modal">
+
+        <!-- HEADER -->
+        <div class="edit-profile-header">
+
+            <div>
+
+                <span>Account Security</span>
+
+                <h2>
+                    Change Password
+                </h2>
+
+            </div>
+
+            <button
+                type="button"
+                class="edit-close"
+                onclick="closeChangePassword()">
+                &times;
+            </button>
+
+        </div>
+
+
+        <!-- BODY -->
+        <div class="edit-profile-body">
+
+            <!-- LOCK ICON -->
+            <div class="profile-avatar-large">
+
+                <i class="fa-solid fa-lock"></i>
+
+            </div>
+
+
+            <!-- CURRENT PASSWORD -->
+            <div class="profile-field">
+
+                <label>
+                    Current Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeCurrentPassword"
+                        placeholder="Current password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="
+                            togglePassword(
+                                'changeCurrentPassword',
+                                this
+                            )
+                        ">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- NEW PASSWORD -->
+            <div class="profile-field">
+
+                <label>
+                    New Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeNewPassword"
+                        placeholder="New password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="
+                            togglePassword(
+                                'changeNewPassword',
+                                this
+                            )
+                        ">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="profile-field">
+
+                <label>
+                    Confirm New Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeConfirmPassword"
+                        placeholder="Confirm new password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="
+                            togglePassword(
+                                'changeConfirmPassword',
+                                this
+                            )
+                        ">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="edit-profile-footer">
+
+            <button
+                type="button"
+                class="cancel-profile"
+                onclick="closeChangePassword()">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="save-profile"
+                onclick="changePassword()">
+                Change Password
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <script>
 
-const userData =
-    JSON.parse(
-        localStorage.getItem("user")
+const userData = JSON.parse(localStorage.getItem("user")) || {};
+
+/* =========================================================
+   USER DATA
+   ========================================================= */
+
+function getDisplayName() {
+
+    return (
+        userData.full_name ||
+        userData.fullname ||
+        userData.fullName ||
+        userData.name ||
+        userData.account_fullname ||
+        "User"
     );
 
-const displayName =
-    userData.fullname ||
-    userData.name ||
-    "-";
+}
 
-document.getElementById("welcome").innerText =
-    "WELCOME, " + displayName + " 👋";
+function getInitial(name) {
 
-document.getElementById("profileName").innerText =
-    displayName;
+    return name
+        ? name.trim().charAt(0).toUpperCase()
+        : "U";
 
-document.getElementById("profilePhone").innerText =
-    userData.phone_number || "-";
+}
 
-document.getElementById("profileUsername").innerText =
-    userData.username || "-";
 
-function editProfile(){
+/* =========================================================
+   LOAD PROFILE
+   ========================================================= */
 
-    document.getElementById("editName").value =
+function loadUserProfile() {
+
+    const name = getDisplayName();
+    const initial = getInitial(name);
+
+    const topName = document.getElementById("topProfileName");
+    const dropdownName = document.getElementById("dropdownName");
+    const welcomeName = document.getElementById("welcomeName");
+
+    const topAvatar = document.getElementById("topAvatar");
+    const dropdownAvatar = document.getElementById("dropdownAvatar");
+
+    if (topName)
+        topName.textContent = name;
+
+    if (dropdownName)
+        dropdownName.textContent = name;
+
+    if (welcomeName)
+        welcomeName.textContent = name;
+
+    if (topAvatar)
+        topAvatar.textContent = initial;
+
+    if (dropdownAvatar)
+        dropdownAvatar.textContent = initial;
+
+}
+
+loadUserProfile();
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+   ========================================================= */
+
+/* =========================================================
+   CLOSE PROFILE DROPDOWN WHEN CLICKING OUTSIDE
+   ========================================================= */
+
+document.addEventListener("click", function(event) {
+
+    const profile =
+        document.getElementById("userProfile");
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    if (
+        profile &&
+        dropdown &&
+        !profile.contains(event.target)
+    ) {
+
+        profile.classList.remove("active");
+
+        dropdown.classList.remove("show");
+
+    }
+
+});
+
+/* =========================================================
+   EDIT PROFILE
+   ========================================================= */
+function openEditProfile(event) {
+
+    if (event)
+        event.stopPropagation();
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    const profile =
+        document.getElementById("userProfile");
+
+    if (dropdown)
+        dropdown.classList.remove("show");
+
+    if (profile)
+        profile.classList.remove("active");
+
+
+    const name =
+        userData.full_name ||
         userData.fullname ||
+        userData.fullName ||
         userData.name ||
         "";
+
+    document.getElementById("editName").value =
+        name;
 
     document.getElementById("editPhone").value =
         userData.phone_number || "";
@@ -410,79 +829,114 @@ function editProfile(){
     document.getElementById("editUsername").value =
         userData.username || "";
 
-    document.getElementById("editModal").style.display =
-        "flex";
+
+    document.getElementById("editProfileAvatar")
+        .textContent =
+        getInitial(name);
+
+
+    document.getElementById("editModal")
+        .classList.add("show");
+}
+
+
+function closeModal() {
+
+    document.getElementById("editModal")
+        .classList.remove("show");
+
+}
+function openChangePassword(event) {
+
+    if (event)
+        event.stopPropagation();
+
+    const profile =
+        document.getElementById("userProfile");
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    if (profile)
+        profile.classList.remove("active");
+
+    if (dropdown)
+        dropdown.classList.remove("show");
+
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.add("show");
 
 }
 
-function closeModal(){
 
-    document.getElementById("editModal").style.display =
-        "none";
+function closeChangePassword() {
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.remove("show");
 
 }
-async function saveProfile(){
+
+/* =========================================================
+   SAVE PROFILE
+   ========================================================= */
+
+async function saveProfile() {
 
     const fullname =
-        document.getElementById("editName").value;
+        document.getElementById("editName").value.trim();
 
     const phone =
-        document.getElementById("editPhone").value;
+        document.getElementById("editPhone").value.trim();
 
     const username =
-        document.getElementById("editUsername").value;
+        document.getElementById("editUsername").value.trim();
 
-    try{
+    if (!fullname || !username) {
+
+        showNotifPopup(
+            "Error",
+            "Full name and username are required."
+        );
+
+        return;
+
+    }
+
+    try {
 
         const res = await fetch(
-
             "https://smartgym-api-ia2e.onrender.com/api/pre_member/profile",
-
             {
+                method: "PUT",
 
-                method:"PUT",
-
-                headers:{
-                    "Content-Type":"application/json"
+                headers: {
+                    "Content-Type": "application/json"
                 },
 
-                body:JSON.stringify({
+                body: JSON.stringify({
 
-                    id:userData.id,
+                    id: userData.id,
 
-                    fullname:fullname,
+                    fullname: fullname,
 
-                    phone_number:phone,
+                    phone_number: phone,
 
-                    username:username
+                    username: username
 
                 })
-
             }
-
         );
 
         const data = await res.json();
 
-        if(data.status=="success"){
+        if (data.status === "success") {
 
-            // Update Card
-            document.getElementById("profileName").innerText =
-                fullname;
-
-            document.getElementById("profilePhone").innerText =
-                phone;
-
-            document.getElementById("profileUsername").innerText =
-                username;
-
-            // Update Welcome
-            document.getElementById("welcome").innerText =
-                "WELCOME, " + fullname + " 👋";
-
-            // Update localStorage
-            userData.name = fullname;
+            userData.full_name = fullname;
             userData.fullname = fullname;
+            userData.name = fullname;
             userData.phone_number = phone;
             userData.username = username;
 
@@ -491,6 +945,8 @@ async function saveProfile(){
                 JSON.stringify(userData)
             );
 
+            loadUserProfile();
+
             closeModal();
 
             showNotifPopup(
@@ -498,22 +954,18 @@ async function saveProfile(){
                 "Profile updated successfully."
             );
 
-        }
-
-        else{
+        } else {
 
             showNotifPopup(
                 "Error",
-                data.message
+                data.message || "Unable to update profile."
             );
 
         }
 
-    }
+    } catch (err) {
 
-    catch(err){
-
-        console.log(err);
+        console.error("PROFILE UPDATE ERROR:", err);
 
         showNotifPopup(
             "Error",
@@ -524,398 +976,354 @@ async function saveProfile(){
 
 }
 
-function logout(){
+async function changePassword() {
+
+    const currentPassword =
+        document.getElementById(
+            "changeCurrentPassword"
+        ).value;
+
+    const newPassword =
+        document.getElementById(
+            "changeNewPassword"
+        ).value;
+
+    const confirmPassword =
+        document.getElementById(
+            "changeConfirmPassword"
+        ).value;
+
+
+    if (!currentPassword) {
+
+        showNotifPopup(
+            "Error",
+            "Enter your current password."
+        );
+
+        return;
+    }
+
+
+    if (!newPassword) {
+
+        showNotifPopup(
+            "Error",
+            "Enter your new password."
+        );
+
+        return;
+    }
+
+
+    if (newPassword.length < 8) {
+
+        showNotifPopup(
+            "Error",
+            "New password must be at least 8 characters."
+        );
+
+        return;
+    }
+
+
+    if (newPassword !== confirmPassword) {
+
+        showNotifPopup(
+            "Error",
+            "New passwords do not match."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "https://smartgym-api-ia2e.onrender.com/api/member/profile",
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        id:
+                            userData.id,
+
+                        username:
+                            userData.username,
+
+                        phone_number:
+                            userData.phone_number,
+
+                        current_password:
+                            currentPassword,
+
+                        new_password:
+                            newPassword,
+
+                        confirm_password:
+                            confirmPassword
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            showNotifPopup(
+                "Error",
+                result.message ||
+                "Failed to change password."
+            );
+
+            return;
+        }
+
+
+        closeChangePassword();
+
+
+        showNotifPopup(
+            "Success",
+            "Password changed successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "CHANGE PASSWORD ERROR:",
+            error
+        );
+
+        showNotifPopup(
+            "Error",
+            "Unable to connect to the server."
+        );
+    }
+}
+
+    const currentPassword =
+        document.getElementById("currentPassword").value;
+
+    const newPassword =
+        document.getElementById("newPassword").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+
+    if (
+        !currentPassword ||
+        !newPassword ||
+        !confirmPassword
+    ) {
+
+        showNotifPopup(
+            "Error",
+            "Please complete all password fields."
+        );
+
+        return;
+
+    }
+
+
+    if (newPassword !== confirmPassword) {
+
+        showNotifPopup(
+            "Error",
+            "New passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    showNotifPopup(
+        "Notice",
+        "Password change function is ready for the existing API."
+    );
+
+function togglePassword(inputId, button) {
+
+    const input =
+        document.getElementById(inputId);
+
+    const icon =
+        button.querySelector("i");
+
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.classList.remove(
+            "fa-eye"
+        );
+
+        icon.classList.add(
+            "fa-eye-slash"
+        );
+
+    } else {
+
+        input.type = "password";
+
+        icon.classList.remove(
+            "fa-eye-slash"
+        );
+
+        icon.classList.add(
+            "fa-eye"
+        );
+    }
+}
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+function logout(event) {
+
+    if (event)
+        event.stopPropagation();
 
     localStorage.clear();
 
-    window.location.href =
-        "index.html";
+    window.location.href = "index.html";
+
 }
 
 
-// ================= SHOW NOTIFICATION =================
+/* =========================================================
+   NOTIFICATION
+   ========================================================= */
 
-function showNotifPopup(title,text){
+function showNotifPopup(title, text) {
 
     const popup =
-        document.getElementById(
-            "notifPopup"
-        );
+        document.getElementById("notifPopup");
 
-    document.getElementById(
-        "notifTitle"
-    ).innerText = title;
+    if (!popup) return;
 
-    document.getElementById(
-        "notifText"
-    ).innerText = text;
+    document.getElementById("notifTitle").innerText =
+        title;
+
+    document.getElementById("notifText").innerText =
+        text;
 
     popup.classList.add("show");
 
     setTimeout(() => {
 
-        popup.classList.remove(
-            "show"
-        );
+        popup.classList.remove("show");
 
-    },4000);
+    }, 4000);
+
 }
 
 
-// ================= CHECK ACTIVATION =================
+/* =========================================================
+   CHECK ACCOUNT ACTIVATION
+   ========================================================= */
 
-async function checkActivation(){
+async function checkActivation() {
 
-    try{
+    if (!userData.id)
+        return;
+
+    try {
 
         const res = await fetch(
-
             `https://smartgym-api-ia2e.onrender.com/api/check_account/${userData.id}`
-
         );
 
         const data = await res.json();
 
-        if(
+        if (
             data.status === "success" &&
             data.role === "member"
-        ){
+        ) {
 
             localStorage.setItem(
-
                 "user",
-
                 JSON.stringify(data.user)
-
             );
 
             showNotifPopup(
-
                 "Congratulations!",
-
                 "Your membership has been activated."
-
             );
 
-            setTimeout(()=>{
+            setTimeout(() => {
 
                 window.location.href =
                     "member.html";
 
-            },2000);
+            }, 2000);
 
         }
 
-    }
+    } catch (err) {
 
-    catch(err){
-
-        console.log(err);
+        console.error(
+            "ACTIVATION CHECK ERROR:",
+            err
+        );
 
     }
 
 }
 
+/* =========================================================
+   PROFILE DROPDOWN
+   ========================================================= */
 
-// ================= START =================
+function toggleProfileDropdown(event) {
+
+    event.stopPropagation();
+
+    const profile =
+        document.getElementById("userProfile");
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    if (!profile || !dropdown)
+        return;
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+
+}
 
 checkActivation();
 
 setInterval(
-
     checkActivation,
-
     5000
-
 );
 
 </script>
 
-
-<style>
-.main{
-    width:100%;
-    max-width:1400px;
-    margin:auto;
-    padding:30px;
-}
-
-.profile{
-
-    position:relative;
-
-}
-
-.logout-btn{
-
-    cursor:pointer;
-
-}
-
-
-.cards{
-    display:grid;
-    align-items:start;
-    grid-template-columns:repeat(3,1fr);
-    gap:30px;
-}
-.card{
-    min-height:340px;
-    display:flex;
-    flex-direction:column;
-}
-
-
-.card h3{
-
-    margin-bottom:10px;
-
-}
-
-.notif-popup{
-
-    position:fixed;
-
-    top:80px;
-    right:25px;
-
-    width:300px;
-
-    background:#111827;
-
-    color:white;
-
-    border-left:5px solid #4da3ff;
-
-    border-radius:12px;
-
-    padding:15px;
-
-    box-shadow:
-
-        0 10px 25px rgba(0,0,0,.35);
-
-    z-index:9999;
-
-    opacity:0;
-
-    transform:translateX(120%);
-
-    transition:.3s;
-
-    cursor:pointer;
-
-}
-
-.notif-popup.show{
-
-    opacity:1;
-
-    transform:translateX(0);
-
-}
-
-.notif-popup b{
-
-    color:#4da3ff;
-
-    display:block;
-
-    margin-bottom:6px;
-
-}
-
-.notif-popup p{
-
-    margin:0;
-
-    font-size:14px;
-
-}
-
-.profile{
-
-    position:relative;
-
-}
-
-.menu a{
-
-    font-weight:600;
-
-}
-
-.logout-btn{
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.logout-btn:hover{
-
-    transform:translateY(-2px);
-
-}
-
-.card{
-
-    transition:0.25s ease;
-
-}
-
-.card:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.12);
-
-}
-
-@media(max-width:900px){
-
-    .cards{
-
-        display:grid;
-
-        grid-template-columns:1fr;
-
-        gap:20px;
-
-    }
-
-    .hero h1{
-
-        font-size:30px;
-
-    }
-
-}
-
-@media(max-width:600px){
-
-    .hero{
-
-        padding:15px;
-
-    }
-
-    .card{
-
-        min-height:auto;
-
-    }
-
-    .logout-btn{
-
-        width:100%;
-
-    }
-
-}
-/* ================= MODAL ================= */
-
-.modal{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.65);
-
-    justify-content:center;
-
-    align-items:center;
-
-    z-index:99999;
-
-}
-
-.modal-content{
-
-    width:420px;
-
-    background:#1e293b;
-
-    border-radius:15px;
-
-    padding:30px;
-
-    color:white;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.45);
-
-}
-
-.modal-content h2{
-
-    margin-top:0;
-
-    margin-bottom:25px;
-
-}
-
-.modal-content label{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    margin-top:15px;
-
-}
-
-.modal-content input{
-
-    width:100%;
-
-    padding:12px;
-
-    border:none;
-
-    border-radius:8px;
-
-    outline:none;
-
-    font-size:15px;
-
-    box-sizing:border-box;
-
-}
-
-.modal-buttons{
-
-    display:flex;
-
-    justify-content:flex-end;
-
-    gap:12px;
-
-    margin-top:25px;
-
-}
-
-.cancel-btn{
-
-    background:#6b7280;
-
-    color:white;
-
-}
-
-.save-btn{
-
-    background:#2563eb;
-
-    color:white;
-
-}
-
-</style>
 
 </body>
 </html>
