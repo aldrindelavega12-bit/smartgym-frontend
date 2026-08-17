@@ -685,17 +685,30 @@
             </div>
 
             <div class="user-info">
-                <strong id="profile-name">Aldrin</strong>
-                <small>Member</small>
+
+                <strong id="profile-name">
+                    Aldrin
+                </strong>
+
+                <small>
+                    Member
+                </small>
+
             </div>
 
             <i class="fa-solid fa-chevron-down profile-chevron"></i>
 
             <div id="dropdown" class="profile-dropdown">
-                <button onclick="logout(); event.stopPropagation();">
+
+                <button
+                    onclick="logout(); event.stopPropagation();">
+
                     <i class="fa-solid fa-right-from-bracket"></i>
+
                     Log Out
+
                 </button>
+
             </div>
 
         </div>
@@ -1015,57 +1028,32 @@ let lockerBookedStatus = {};
 /* =========================================================
    PROFILE
 ========================================================= */
+const profile =
+    JSON.parse(
+        localStorage.getItem("profile")
+    ) || {};
 
-function setProfile(){
+const displayName =
+    profile.name ||
+    user.fullname ||
+    user.username ||
+    "Member";
 
-    /*
-       Priority:
-       name
-       full_name
-       display_name
-       first_name
-       username
-    */
+const firstLetter =
+    displayName
+        .trim()
+        .charAt(0)
+        .toUpperCase();
 
-    const name =
-        user.name ||
-        user.full_name ||
-        user.display_name ||
-        user.first_name ||
-        user.username ||
-        "Member";
+document.getElementById(
+    "profileInitial"
+).innerText =
+    firstLetter;
 
-
-    const nameEl =
-        document.getElementById(
-            "profile-name"
-        );
-
-
-    const avatarEl =
-        document.getElementById(
-            "profileInitial"
-        );
-
-
-    if(nameEl){
-
-        nameEl.innerText =
-            name;
-
-    }
-
-
-    if(avatarEl){
-
-        avatarEl.innerText =
-            String(name)
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
-}
+document.getElementById(
+    "profile-name"
+).innerText =
+    displayName;
 
 function updateLockerCards() {
 
@@ -1219,7 +1207,6 @@ function updateLockerCards() {
 ========================================================= */
 window.onload = async () => {
 
-    setProfile();
 
     renderCalendar();
 
