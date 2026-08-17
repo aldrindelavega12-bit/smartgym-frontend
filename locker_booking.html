@@ -609,6 +609,309 @@
 .navbar .menu a[href="locker_booking.html"] i {
     color: #087c3d !important;
 }
+
+/* =========================================================
+   PROFILE DROPDOWN
+   SAME AS MEMBERSHIP
+========================================================= */
+
+.profile-dropdown {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    min-width: 210px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce8e1;
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 30px rgba(20,60,40,.12);
+
+    padding: 8px;
+
+    display: none;
+
+    z-index: 9999;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+.profile-dropdown button {
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 11px 12px;
+
+    border-radius: 9px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    text-align: left;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #17231e;
+
+    cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+.profile-dropdown button i {
+    width: 18px;
+    color: #087c3d;
+}
+
+.profile-dropdown .dropdown-logout {
+    color: #c0392b;
+}
+
+.profile-dropdown .dropdown-logout i {
+    color: #c0392b;
+}
+
+.dropdown-divider {
+    height: 1px;
+
+    background: #e8eeeb;
+
+    margin: 4px 2px;
+}
+
+
+/* =========================================================
+   CHANGE PASSWORD MODAL
+========================================================= */
+
+.edit-profile-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(16,32,39,.35);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10000;
+
+    padding: 20px;
+}
+
+.edit-profile-overlay.show {
+    display: flex;
+}
+
+.edit-profile-modal {
+    width: min(480px, 100%);
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 50px rgba(20,60,40,.18);
+
+    overflow: hidden;
+}
+
+.edit-profile-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    padding: 24px 26px 18px;
+
+    border-bottom: 1px solid #e5ece8;
+}
+
+.edit-profile-header span {
+    color: #617681;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.edit-profile-header h2 {
+    margin: 4px 0 0;
+
+    font-size: 22px;
+
+    color: #102027;
+}
+
+.edit-close {
+    width: 34px;
+    height: 34px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #f1f5f3;
+
+    color: #102027;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+.edit-close:hover {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+.edit-profile-body {
+    padding: 24px 26px;
+}
+
+.profile-avatar-large {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    background: #eaf6ee;
+
+    color: #087c3d;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.profile-field {
+    margin-bottom: 16px;
+}
+
+.profile-field label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #102027;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: 100%;
+
+    height: 46px;
+
+    box-sizing: border-box;
+
+    padding: 0 44px 0 13px;
+
+    border: 1px solid #d5e1dc;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+}
+
+.password-wrapper input:focus {
+    border-color: #087c3d;
+}
+
+.password-toggle {
+    position: absolute;
+
+    right: 10px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: none;
+
+    background: transparent;
+
+    color: #617681;
+
+    cursor: pointer;
+}
+
+.edit-profile-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 16px 26px;
+
+    border-top: 1px solid #e5ece8;
+}
+
+.cancel-profile,
+.save-profile {
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 11px 18px;
+
+    font-family: inherit;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.cancel-profile {
+    background: #f1f5f3;
+    color: #17231e;
+}
+
+.save-profile {
+    background: #087c3d;
+    color: #ffffff;
+}
+
+.save-profile:hover {
+    background: #066c35;
+}
 </style>
 <body>
 
@@ -701,7 +1004,19 @@
             <div id="dropdown" class="profile-dropdown">
 
                 <button
-                    onclick="logout(); event.stopPropagation();">
+                    onclick="openChangePassword(); event.stopPropagation();">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    Change Password
+
+                </button>
+
+                <div class="dropdown-divider"></div>
+
+                <button
+                    onclick="logout(); event.stopPropagation();"
+                    class="dropdown-logout">
 
                     <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -710,6 +1025,171 @@
                 </button>
 
             </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     CHANGE PASSWORD MODAL
+========================================================= -->
+
+<div id="changePasswordModal"
+     class="edit-profile-overlay">
+
+    <div class="edit-profile-modal">
+
+        <div class="edit-profile-header">
+
+            <div>
+
+                <span>
+                    Account Security
+                </span>
+
+                <h2>
+                    Change Password
+                </h2>
+
+            </div>
+
+            <button
+                class="edit-close"
+                onclick="closeChangePassword()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+        <div class="edit-profile-body">
+
+            <div class="profile-avatar-large">
+
+                <i class="fa-solid fa-lock"></i>
+
+            </div>
+
+
+            <!-- CURRENT PASSWORD -->
+
+            <div class="profile-field">
+
+                <label>
+                    Current Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeCurrentPassword"
+                        placeholder="Current password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword(
+                            'changeCurrentPassword',
+                            this
+                        )">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- NEW PASSWORD -->
+
+            <div class="profile-field">
+
+                <label>
+                    New Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeNewPassword"
+                        placeholder="New password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword(
+                            'changeNewPassword',
+                            this
+                        )">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="profile-field">
+
+                <label>
+                    Confirm New Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeConfirmPassword"
+                        placeholder="Confirm new password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword(
+                            'changeConfirmPassword',
+                            this
+                        )">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="edit-profile-footer">
+
+            <button
+                class="cancel-profile"
+                onclick="closeChangePassword()">
+
+                Cancel
+
+            </button>
+
+            <button
+                class="save-profile"
+                onclick="changePassword()">
+
+                Change Password
+
+            </button>
 
         </div>
 
@@ -2548,23 +3028,314 @@ async function submitBooking(){
 
 }
 
-
-
 /* =========================================================
    PROFILE DROPDOWN
 ========================================================= */
 
 function toggleMenu(){
 
-    const profile = document.querySelector(".user-profile");
-    const menu = document.getElementById("dropdown");
+    const profile =
+        document.querySelector(
+            ".user-profile"
+        );
 
-    profile.classList.toggle("active");
-    menu.classList.toggle("show");
+    const dropdown =
+        document.getElementById(
+            "dropdown"
+        );
+
+    profile.classList.toggle(
+        "active"
+    );
+
+    dropdown.classList.toggle(
+        "show"
+    );
 
 }
 
 
+window.onclick = function(event){
+
+    if(
+        !event.target.closest(
+            ".user-profile"
+        )
+    ){
+
+        const profile =
+            document.querySelector(
+                ".user-profile"
+            );
+
+        const dropdown =
+            document.getElementById(
+                "dropdown"
+            );
+
+        profile.classList.remove(
+            "active"
+        );
+
+        dropdown.classList.remove(
+            "show"
+        );
+
+    }
+
+};
+
+
+/* =========================================================
+   CHANGE PASSWORD
+========================================================= */
+
+function togglePassword(
+    inputId,
+    button
+){
+
+    const input =
+        document.getElementById(
+            inputId
+        );
+
+    const icon =
+        button.querySelector(
+            "i"
+        );
+
+    if(
+        input.type === "password"
+    ){
+
+        input.type =
+            "text";
+
+        icon.classList.remove(
+            "fa-eye"
+        );
+
+        icon.classList.add(
+            "fa-eye-slash"
+        );
+
+    }else{
+
+        input.type =
+            "password";
+
+        icon.classList.remove(
+            "fa-eye-slash"
+        );
+
+        icon.classList.add(
+            "fa-eye"
+        );
+
+    }
+
+}
+
+
+function openChangePassword(){
+
+    document.getElementById(
+        "dropdown"
+    ).classList.remove(
+        "show"
+    );
+
+    document.querySelector(
+        ".user-profile"
+    ).classList.remove(
+        "active"
+    );
+
+    document.getElementById(
+        "changeCurrentPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changeNewPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changeConfirmPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+function closeChangePassword(){
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+async function changePassword(){
+
+    const currentPassword =
+        document.getElementById(
+            "changeCurrentPassword"
+        ).value;
+
+    const newPassword =
+        document.getElementById(
+            "changeNewPassword"
+        ).value;
+
+    const confirmPassword =
+        document.getElementById(
+            "changeConfirmPassword"
+        ).value;
+
+
+    if(!currentPassword){
+
+        alert(
+            "Enter your current password."
+        );
+
+        return;
+
+    }
+
+
+    if(!newPassword){
+
+        alert(
+            "Enter your new password."
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword.length < 8){
+
+        alert(
+            "New password must be at least 8 characters."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        newPassword !==
+        confirmPassword
+    ){
+
+        alert(
+            "New passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/profile`,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        id:
+                            user.id,
+
+                        username:
+                            user.username,
+
+                        phone_number:
+                            user.phone_number,
+
+                        current_password:
+                            currentPassword,
+
+                        new_password:
+                            newPassword,
+
+                        confirm_password:
+                            confirmPassword
+
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !result.success
+        ){
+
+            alert(
+                result.message ||
+                "Failed to change password."
+            );
+
+            return;
+
+        }
+
+
+        closeChangePassword();
+
+
+        alert(
+            "Password changed successfully."
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "CHANGE PASSWORD ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to connect to the server."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 function logout(){
 
@@ -2574,38 +3345,6 @@ function logout(){
         "index.html";
 
 }
-
-
-
-window.addEventListener(
-    "click",
-    function(e){
-
-        if(
-            !e.target.closest(
-                ".profile"
-            )
-        ){
-
-            const dropdown =
-                document.getElementById(
-                    "dropdown"
-                );
-
-
-            if(dropdown){
-
-                dropdown.style.display =
-                    "none";
-
-            }
-
-        }
-
-    }
-);
-
-
 
 /* =========================================================
    MESSAGE COUNT
