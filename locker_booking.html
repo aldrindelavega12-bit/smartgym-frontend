@@ -1671,26 +1671,31 @@ async function loadBookedSlots(){
 
         }
 
-        else{
+            else {
 
-            bookedSlots.forEach(
-                slot => {
+        bookedSlots.forEach(slot => {
 
-                    reservedList.innerHTML += `
+            const item =
+                document.createElement("div");
 
-                        <div class="booking-item">
-                            ${slot}
-                        </div>
+            item.className =
+                "booking-item";
 
-                    `;
+            item.innerText =
+                slot;
 
-                }
-            );
+            reservedList.appendChild(item);
 
-        }
-
+        });
 
     }
+
+        
+    }
+        
+
+
+    
 
     catch(err){
 
