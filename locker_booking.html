@@ -83,15 +83,16 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
-    margin: 0 0 20px;
+
     width: 100%;
+    margin: 0 0 24px;
 }
 
 .locker-card {
-    height: 128px;
-    min-height: 128px;
+    height: 142px;
+    min-height: 142px;
 
-    padding: 14px;
+    padding: 18px;
 
     box-sizing: border-box;
 
@@ -111,7 +112,7 @@
 
     transition: .18s ease;
 
-    box-shadow: 0 6px 20px rgba(20,60,40,.04);
+    box-shadow: none;
 }
 
 .locker-card:hover {
@@ -134,13 +135,13 @@
 
     color: #087c3d;
 
-    margin-bottom: 7px;
+    margin-bottom: 9px;
 }
 
 .locker-card h3 {
-    margin: 0 0 5px;
+    margin: 0 0 6px;
 
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
 
     color: #102027;
@@ -705,86 +706,82 @@
 <div class="locker-booking-container">
 
     <!-- =================================================
-         LEFT COLUMN
+        LEFT COLUMN
     ================================================== -->
 
     <div class="locker-left-column">
 
-        <!-- LOCKER CARDS -->
+        <div class="locker-calendar-box">
 
-        <div class="locker-cards">
+            <!-- LOCKER CARDS -->
 
-            <div
-                class="locker-card"
-                data-locker="1"
-            >
-                <h3>Locker 1</h3>
+            <div class="locker-cards">
 
-                <div class="locker-status available">
-                    Available
-                </div>
-            </div>
+                <div
+                    class="locker-card"
+                    data-locker="1"
+                >
+                    <h3>Locker 1</h3>
 
-
-            <div
-                class="locker-card"
-                data-locker="2"
-            >
-                <h3>Locker 2</h3>
-
-                <div class="locker-status available">
-                    Available
-                </div>
-            </div>
-
-
-            <div
-                class="locker-card"
-                data-locker="3"
-            >
-                <h3>Locker 3</h3>
-
-                <div class="locker-status available">
-                    Available
-                </div>
-            </div>
-
-        </div>
-
-
-        <!-- CALENDAR -->
-
-        <div class="locker-calendar-section">
-
-            <div class="locker-calendar-box">
-
-                <div class="calendar-header">
-
-                    <button
-                        type="button"
-                        onclick="changeMonth(-1)"
-                    >
-                        ❮
-                    </button>
-
-                    <h3 id="monthYear"></h3>
-
-                    <button
-                        type="button"
-                        onclick="changeMonth(1)"
-                    >
-                        ❯
-                    </button>
-
+                    <div class="locker-status available">
+                        Available
+                    </div>
                 </div>
 
 
                 <div
-                    class="days"
-                    id="calendarDays"
-                ></div>
+                    class="locker-card"
+                    data-locker="2"
+                >
+                    <h3>Locker 2</h3>
+
+                    <div class="locker-status available">
+                        Available
+                    </div>
+                </div>
+
+
+                <div
+                    class="locker-card"
+                    data-locker="3"
+                >
+                    <h3>Locker 3</h3>
+
+                    <div class="locker-status available">
+                        Available
+                    </div>
+                </div>
 
             </div>
+
+
+            <!-- CALENDAR -->
+
+            <div class="calendar-header">
+
+                <button
+                    type="button"
+                    onclick="changeMonth(-1)"
+                >
+                    ❮
+                </button>
+
+                <h3 id="monthYear"></h3>
+
+                <button
+                    type="button"
+                    onclick="changeMonth(1)"
+                >
+                    ❯
+                </button>
+
+            </div>
+
+
+            <div
+                class="days"
+                id="calendarDays"
+            ></div>
 
         </div>
 
