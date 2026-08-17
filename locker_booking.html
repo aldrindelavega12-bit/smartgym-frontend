@@ -583,7 +583,18 @@
     border: 1px solid #dce8e1;
     background: #ffffff;
 }
+/* =========================================================
+   LOCKER PAGE - ACTIVE SIDEBAR
+========================================================= */
 
+.navbar .menu a[href="locker_booking.html"].active {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+.navbar .menu a[href="locker_booking.html"].active i {
+    color: #087c3d;
+}
 </style>
 <body>
 
@@ -963,7 +974,8 @@ if(!user){
 
 const memberId = user.user_id;
 
-
+const messageUserId =
+    user.id;
 
 /* =========================================================
    VARIABLES
@@ -2606,11 +2618,8 @@ async function loadMessageCount(){
 
         const res =
             await fetch(
-
-                `${API_URL}/api/messages_count/${memberId}`
-
+                `${API_URL}/api/messages_count/${messageUserId}`
             );
-
 
         if(!res.ok){
 
@@ -2620,29 +2629,22 @@ async function loadMessageCount(){
 
         }
 
-
         const data =
             await res.json();
-
 
         const count =
             Number(
                 data.count
             ) || 0;
 
-
         const badge =
             document.getElementById(
                 "msg-count"
             );
 
-
         if(!badge){
-
             return;
-
         }
-
 
         if(count > 0){
 
@@ -2661,30 +2663,20 @@ async function loadMessageCount(){
 
         }
 
-
-        /*
-           Popup only when count increases.
-        */
-
         if(
             !firstLoad &&
             count > lastMessageCount
         ){
 
             showNotifPopup(
-
                 "New Message",
-
                 "You received a new gym notification."
-
             );
 
         }
 
-
         lastMessageCount =
             count;
-
 
         firstLoad =
             false;
@@ -2701,8 +2693,6 @@ async function loadMessageCount(){
     }
 
 }
-
-
 
 /* =========================================================
    NOTIFICATION POPUP
