@@ -1042,9 +1042,6 @@ function setProfile(){
 /* =========================================================
    PAGE LOAD
 ========================================================= */
-
-
-
 window.onload = async () => {
 
     setProfile();
@@ -1055,10 +1052,16 @@ window.onload = async () => {
 
     loadMessageCount();
 
-    // Automatically select today's date
     selectToday();
 
+    // Load reservations for today's date
+    // after selectedDate has been initialized
+    if (selectedLocker && selectedDate) {
+        await loadBookedSlots();
+    }
+
 };
+
 function selectToday(){
 
     const today = new Date();
