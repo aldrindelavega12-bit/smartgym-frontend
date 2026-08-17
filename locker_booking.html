@@ -1043,7 +1043,9 @@ function setProfile(){
    PAGE LOAD
 ========================================================= */
 
-window.onload = () => {
+
+
+window.onload = async () => {
 
     setProfile();
 
@@ -1053,8 +1055,47 @@ window.onload = () => {
 
     loadMessageCount();
 
-};
+    // Automatically select today's date
+    selectToday();
 
+};
+function selectToday(){
+
+    const today = new Date();
+
+    const year =
+        today.getFullYear();
+
+    const month =
+        today.getMonth();
+
+    const day =
+        today.getDate();
+
+    const todayString =
+        `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    selectedDate = todayString;
+
+    // Highlight today's date
+    document
+        .querySelectorAll(".locker-day")
+        .forEach(div => {
+
+            if (
+                Number(div.innerText) === day &&
+                !div.style.cursor.includes("not-allowed")
+            ) {
+
+                div.classList.add(
+                    "selected-day"
+                );
+
+            }
+
+        });
+
+}
 
 
 /* =========================================================
