@@ -1423,55 +1423,59 @@ async function loadBookedSlots() {
              * on the selected date.
              */
 
-            if (slots.length > 0) {
-
-                lockerBookedStatus[locker] = true;
-
-            }
-
-
-            /*
-             * Show reservations
-             */
-
             slots.forEach(slot => {
 
                 totalReservations++;
 
+                console.log("[BOOKING SLOT RAW]", slot);
 
                 if (!reservedList) {
                     return;
                 }
 
+                const item = document.createElement("div");
 
-                const item =
-                    document.createElement("div");
-
-
-                item.className =
-                    "booking-item";
-
-
-                const start =
-                    (
-                        slot.start_time ||
-                        slot.start ||
-                        slot.time ||
-                        ""
-                    ).substring(0, 5);
-
-
-                const end =
-                    (
-                        slot.end_time ||
-                        slot.end ||
-                        ""
-                    ).substring(0, 5);
+                item.className = "booking-item";
 
 
                 /*
-                * SAVE REAL BOOKING TIME
-                * so we can calculate overlap later.
+                * SUPPORT DIFFERENT API FIELD NAMES
+                */
+
+                const rawStart =
+                    slot.start_time ??
+                    slot.startTime ??
+                    slot.start ??
+                    slot.time ??
+                    slot.booking_start ??
+                    slot.booking_start_time ??
+                    slot.from ??
+                    null;
+
+
+                const rawEnd =
+                    slot.end_time ??
+                    slot.endTime ??
+                    slot.end ??
+                    slot.booking_end ??
+                    slot.booking_end_time ??
+                    slot.to ??
+                    null;
+
+
+                /*
+                * Convert to HH:MM
+                */
+
+                const start =
+                    normalizeBookingTime(rawStart);
+
+                const end =
+                    normalizeBookingTime(rawEnd);
+
+
+                /*
+                * SAVE REAL VALUES FOR CONFLICT CHECK
                 */
 
                 item.dataset.locker =
@@ -1484,18 +1488,24 @@ async function loadBookedSlots() {
                     end;
 
 
+                /*
+                * DISPLAY
+                */
+
                 item.innerHTML = `
                     <strong>Locker ${locker}</strong>
                     <br>
-                    ${formatBookingTime(start)}
-                    - ${formatBookingTime(end)}
+                    <span>
+                        ${formatBookingTime(start)}
+                        -
+                        ${formatBookingTime(end)}
+                    </span>
                 `;
 
 
                 reservedList.appendChild(item);
 
             });
-
         }
 
 
@@ -1580,6 +1590,78 @@ function formatBookingTime(time) {
     return time;
 
 }
+
+
+function normalizeBookingTime(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+        return "";
+    }
+
+
+    /*
+     * If API returns a Date/ISO datetime:
+     *
+     * 2026-08-17T14:43:00
+     */
+
+    if (
+        typeof value === "string" &&
+        value.includes("T")
+    ) {
+
+        const timePart =
+            value.split("T")[1];
+
+        if (timePart) {
+
+            return timePart.substring(0, 5);
+
+        }
+
+    }
+
+
+    /*
+     * If API returns:
+     *
+     * 14:43:00
+     */
+
+    if (
+        typeof value === "string" &&
+        /^\d{2}:\d{2}/.test(value)
+    ) {
+
+        return value.substring(0, 5);
+
+    }
+
+
+    /*
+     * If API returns a Date object
+     */
+
+    if (
+        value instanceof Date
+    ) {
+
+        return value
+            .toTimeString()
+            .substring(0, 5);
+
+    }
+
+
+    return String(value)
+        .substring(0, 5);
+
+}
+
 
 /* =========================================================
    CALENDAR
