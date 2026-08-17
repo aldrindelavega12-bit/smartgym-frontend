@@ -586,14 +586,28 @@
 /* =========================================================
    LOCKER PAGE - ACTIVE SIDEBAR
 ========================================================= */
+/* =========================================================
+   LOCKER PAGE - FORCE ONLY BOOK LOCKER ACTIVE
+========================================================= */
 
-.navbar .menu a[href="locker_booking.html"].active {
-    background: #eaf6ee;
-    color: #087c3d;
+/* Remove active appearance from Home */
+.navbar .menu a[href="member.html"] {
+    background: transparent !important;
+    color: #17231e !important;
 }
 
-.navbar .menu a[href="locker_booking.html"].active i {
-    color: #087c3d;
+.navbar .menu a[href="member.html"] i {
+    color: #64756d !important;
+}
+
+/* Book Locker is the ONLY active item */
+.navbar .menu a[href="locker_booking.html"] {
+    background: #eaf6ee !important;
+    color: #087c3d !important;
+}
+
+.navbar .menu a[href="locker_booking.html"] i {
+    color: #087c3d !important;
 }
 </style>
 <body>
