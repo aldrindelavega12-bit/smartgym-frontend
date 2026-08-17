@@ -93,7 +93,7 @@
                 <div
                     class="user-profile"
                     id="userProfile"
-                    onclick="toggleProfileDropdown(event)"
+                    onclick="toggleMenu()"
                 >
 
                     <!-- AVATAR -->
@@ -763,36 +763,6 @@ loadUserProfile();
 
 
 /* =========================================================
-   PROFILE DROPDOWN
-   ========================================================= */
-
-/* =========================================================
-   CLOSE PROFILE DROPDOWN WHEN CLICKING OUTSIDE
-   ========================================================= */
-
-document.addEventListener("click", function(event) {
-
-    const profile =
-        document.getElementById("userProfile");
-
-    const dropdown =
-        document.getElementById("profileDropdown");
-
-    if (
-        profile &&
-        dropdown &&
-        !profile.contains(event.target)
-    ) {
-
-        profile.classList.remove("active");
-
-        dropdown.classList.remove("show");
-
-    }
-
-});
-
-/* =========================================================
    EDIT PROFILE
    ========================================================= */
 function openEditProfile(event) {
@@ -1168,48 +1138,6 @@ async function changePassword() {
         );
     }
 }
-    const currentPassword =
-        document.getElementById("currentPassword").value;
-
-    const newPassword =
-        document.getElementById("newPassword").value;
-
-    const confirmPassword =
-        document.getElementById("confirmPassword").value;
-
-
-    if (
-        !currentPassword ||
-        !newPassword ||
-        !confirmPassword
-    ) {
-
-        showNotifPopup(
-            "Error",
-            "Please complete all password fields."
-        );
-
-        return;
-
-    }
-
-
-    if (newPassword !== confirmPassword) {
-
-        showNotifPopup(
-            "Error",
-            "New passwords do not match."
-        );
-
-        return;
-
-    }
-
-
-    showNotifPopup(
-        "Notice",
-        "Password change function is ready for the existing API."
-    );
 
 function togglePassword(inputId, button) {
 
@@ -1219,36 +1147,24 @@ function togglePassword(inputId, button) {
     const icon =
         button.querySelector("i");
 
-
     if (input.type === "password") {
 
         input.type = "text";
 
-        icon.classList.remove(
-            "fa-eye"
-        );
-
-        icon.classList.add(
-            "fa-eye-slash"
-        );
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
 
     } else {
 
         input.type = "password";
 
-        icon.classList.remove(
-            "fa-eye-slash"
-        );
-
-        icon.classList.add(
-            "fa-eye"
-        );
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
     }
 }
 
-/* =========================================================
-   LOGOUT
-   ========================================================= */
+
+// ================= LOGOUT =================
 
 function logout(event) {
 
@@ -1258,8 +1174,47 @@ function logout(event) {
     localStorage.clear();
 
     window.location.href = "index.html";
-
 }
+
+
+// ================= DROPDOWN =================
+
+function toggleMenu() {
+
+    const profile =
+        document.getElementById("userProfile");
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    if (!profile || !dropdown)
+        return;
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+}
+
+
+// ================= CLICK OUTSIDE =================
+
+window.onclick = function(e) {
+
+    if (!e.target.closest(".user-profile")) {
+
+        const profile =
+            document.getElementById("userProfile");
+
+        const dropdown =
+            document.getElementById("profileDropdown");
+
+        if (profile)
+            profile.classList.remove("active");
+
+        if (dropdown)
+            dropdown.classList.remove("show");
+    }
+};
 
 
 /* =========================================================
@@ -1288,6 +1243,7 @@ function showNotifPopup(title, text) {
     }, 4000);
 
 }
+
 
 
 /* =========================================================
@@ -1345,10 +1301,9 @@ async function checkActivation() {
 /* =========================================================
    PROFILE DROPDOWN
    ========================================================= */
+// ================= DROPDOWN =================
 
-function toggleProfileDropdown(event) {
-
-    event.stopPropagation();
+function toggleMenu() {
 
     const profile =
         document.getElementById("userProfile");
@@ -1362,7 +1317,6 @@ function toggleProfileDropdown(event) {
     profile.classList.toggle("active");
 
     dropdown.classList.toggle("show");
-
 }
 
 checkActivation();
