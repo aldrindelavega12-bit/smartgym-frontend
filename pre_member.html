@@ -982,6 +982,7 @@ async function changePassword() {
         return;
     }
 
+
     if (!newPassword) {
 
         showNotifPopup(
@@ -992,15 +993,6 @@ async function changePassword() {
         return;
     }
 
-    if (!confirmPassword) {
-
-        showNotifPopup(
-            "Error",
-            "Please confirm your new password."
-        );
-
-        return;
-    }
 
     if (newPassword.length < 8) {
 
@@ -1011,6 +1003,7 @@ async function changePassword() {
 
         return;
     }
+
 
     if (newPassword !== confirmPassword) {
 
@@ -1030,11 +1023,10 @@ async function changePassword() {
     const username =
         userData.username;
 
-
     if (!username) {
 
         console.error(
-            "PRE-MEMBER USERNAME MISSING:",
+            "PRE-MEMBER USER DATA:",
             userData
         );
 
@@ -1049,6 +1041,7 @@ async function changePassword() {
 
     // =========================
     // CHANGE PASSWORD API
+    // SAME AS MEMBER.HTML
     // =========================
 
     try {
@@ -1057,7 +1050,7 @@ async function changePassword() {
             await fetch(
                 `${API_URL}/api/change_password`,
                 {
-                    method: "POST",
+                    method: "PUT",
 
                     headers: {
                         "Content-Type":
@@ -1066,14 +1059,23 @@ async function changePassword() {
 
                     body: JSON.stringify({
 
+                        id:
+                            userData.id,
+
                         username:
-                            username,
+                            userData.username,
+
+                        phone_number:
+                            userData.phone_number,
 
                         current_password:
                             currentPassword,
 
                         new_password:
-                            newPassword
+                            newPassword,
+
+                        confirm_password:
+                            confirmPassword
 
                     })
                 }
@@ -1090,8 +1092,10 @@ async function changePassword() {
         );
 
 
-        if (!response.ok ||
-            !result.success) {
+        if (
+            !response.ok ||
+            !result.success
+        ) {
 
             showNotifPopup(
                 "Error",
@@ -1108,7 +1112,6 @@ async function changePassword() {
         // =========================
 
         closeChangePassword();
-
 
         document.getElementById(
             "changeCurrentPassword"
