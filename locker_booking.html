@@ -1,404 +1,559 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Book Locker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- SAME CSS AS MEMBERSHIP -->
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/member-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
 
 <style>
-.profile{
-    position: relative;
+/* =========================================================
+   LOCKER PAGE
+   MATCH MEMBERSHIP / TARGET DESIGN
+========================================================= */
+
+.locker-page-wrap {
+    padding-top: 0;
 }
 
-.dropdown{
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 35px;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    width: 160px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.locker-page-wrap h2 {
+    margin: 0 0 8px;
+
+    font-size: 32px;
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    color: #102027;
 }
 
-.cards{
+.locker-page-wrap > p {
+    margin: 0;
+
+    font-size: 17px;
+    line-height: 1.5;
+
+    color: #617681;
+}
+
+/* =========================================================
+   MAIN BOOKING GRID
+========================================================= */
+
+.locker-booking-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   LEFT COLUMN
+========================================================= */
+
+.locker-left-column {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   LOCKER CARDS
+========================================================= */
+
+.locker-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+
+    margin: 0 0 24px;
+
+    width: 100%;
+}
+
+.locker-card {
+    height: 142px;
+    min-height: 0;
+
+    padding: 18px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dce8e1;
+    border-radius: 18px;
+
     display: flex;
-    gap: 20px;
-    margin-bottom: 25px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+
+    box-shadow: 0 8px 25px rgba(20,60,40,.04);
 }
 
-.card{
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(0,0,0,0.78),
-        rgba(15,23,42,0.82)
-    );
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter:blur(10px);
-
-    color:white;
+.locker-card:hover {
+    transform: translateY(-2px);
+    border-color: #087c3d;
 }
 
-.card:hover{
-    transform: scale(1.03);
+.locker-card.active {
+    border: 2px solid #087c3d;
+    background: #f0faf5;
 }
 
-.card.active{
+.locker-card::before {
+    content: "\f49e";
 
-    border:2px solid #3b82f6;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
 
-    background:
-    rgba(37,99,235,0.18);
+    font-size: 27px;
+
+    color: #087c3d;
+
+    margin-bottom: 8px;
 }
 
-/* BOOKING AREA */
-.booking-container{
-    display: flex;
-    gap: 25px;
-    margin-top: 15px;
+.locker-card h3 {
+    margin: 0 0 7px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #102027;
 }
 
-/* CALENDAR */
-.calendar-section{
-    width: 38%;
+.locker-status {
+    font-size: 15px;
+    font-weight: 700;
 }
 
-.calendar-box{
 
-    background:
-    linear-gradient(
-        135deg,
-        rgba(0,0,0,0.78),
-        rgba(15,23,42,0.82)
-    );
+/* =========================================================
+   CALENDAR
+========================================================= */
 
-    border:
-    1px solid rgba(255,255,255,0.08);
+.locker-calendar-box {
+    background: #ffffff;
 
-    backdrop-filter:blur(10px);
+    border: 1px solid #dce8e1;
+    border-radius: 18px;
 
-    color:white;
+    box-shadow: 0 8px 25px rgba(20,60,40,.04);
+
+    padding: 22px;
 }
-.calendar-header{
+
+.calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+
+    margin-bottom: 18px;
 }
 
-.calendar-header button{
-    border: none;
-    background: #f3f4f6;
-    padding: 6px 12px;
+.calendar-header button {
+    width: 38px;
+    height: 38px;
+
+    border: 0;
     border-radius: 10px;
+
+    background: #f1f5f3;
+
+    color: #102027;
+
     cursor: pointer;
-    font-size: 14px;
+
+    font-size: 16px;
 }
 
-.calendar-header h3{
-    font-size: 20px;
+.calendar-header h3 {
+    margin: 0;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    color: #102027;
 }
 
-.days{
+.days {
     display: grid;
-    grid-template-columns: repeat(7,1fr);
-    gap: 6px;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 4px;
+
     text-align: center;
 }
 
-.day-name{
-    font-weight: bold;
+.day-name {
+    padding: 7px 0;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #102027;
+}
+
+.locker-day {
+    min-height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    color: #17262c;
+
+    cursor: pointer;
+
     font-size: 14px;
 }
 
-.day{
-
-    background:
-    rgba(255,255,255,0.06);
-
-    color:white;
-    padding: 8px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 15px;
+.locker-day:hover {
+    background: #e9f7ef;
+    color: #087c3d;
 }
 
-.day:hover{
+.selected-day {
+    background: #087c3d !important;
+    color: #ffffff !important;
 
-    background:
-    rgba(59,130,246,0.3);
+    font-weight: 700;
 }
 
-.selected-day{
-    background: #2563eb !important;
-    color: white;
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+.locker-calendar-box {
+    background: #ffffff;
+    border: 1px solid #dce8e1;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(20,60,40,.04);
+    padding: 25px;
 }
 
-/* TIME SECTION */
-.time-section{
-    width: 62%;
-}
-
-.slot{
-    background: white;
-    padding: 16px;
-    border-radius: 15px;
-    margin-bottom: 12px;
-
+.calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    cursor: pointer;
-
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-
-    transition: 0.2s;
+    margin-bottom: 20px;
 }
 
-.slot:hover{
-    transform: scale(1.01);
-}
+.calendar-header button {
+    width: 38px;
+    height: 38px;
 
-.selected-slot{
-    border: 2px solid #2563eb;
-    background: #eff6ff;
-}
-
-.available{
-    color: green;
-    font-weight: bold;
-}
-
-.rules{
-    margin-top: 15px;
-    color: gray;
-    line-height: 1.7;
-    font-size: 15px;
-}
-
-.submit-btn{
-    margin-top: 20px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 13px 28px;
+    border: 0;
     border-radius: 10px;
+
+    background: #f1f5f3;
+    color: #102027;
+
     cursor: pointer;
-    font-size: 15px;
+    font-size: 16px;
 }
 
-.submit-btn:hover{
-    background: #1d4ed8;
-}
-.booked-slot{
-    pointer-events: none;
-}
-.time-picker-box{
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(0,0,0,0.78),
-        rgba(15,23,42,0.82)
-    );
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter:blur(10px);
-
-    border-radius:24px;
-
-    padding:22px;
-
-    color:white;
-
-    margin-bottom:20px;
-}
-.existing-bookings{
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(0,0,0,0.78),
-        rgba(15,23,42,0.82)
-    );
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter:blur(10px);
-
-    border-radius:24px;
-
-    padding:22px;
-
-    color:white;
-
-    margin-top:20px;
+.calendar-header button:hover {
+    background: #e9f7ef;
+    color: #087c3d;
 }
 
-.booking-item{
-
-    background:
-    rgba(255,255,255,0.05);
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    padding:12px;
-
-    border-radius:12px;
-
-    margin-top:10px;
-
-    color:white;
+.calendar-header h3 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+    color: #102027;
 }
 
-.empty-booking{
-
-    color:#aaa;
-}
-.time-input{
-
-    width:100%;
-
-    padding:14px;
-
-    border-radius:16px;
-
-    border:
-    1px solid rgba(255,255,255,0.15);
-
-    background:
-    rgba(255,255,255,0.05);
-
-    color:white;
-
-    font-size:18px;
-
-    margin-top:15px;
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 5px;
+    text-align: center;
 }
 
-/* MESSAGE BADGE */
-.msg-link{
-
-    position: relative;
+.day-name {
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #102027;
 }
 
-.msg-count{
-
-    position: absolute;
-
-    top: -10px;
-    right: -14px;
-
-    background: red;
-
-    color: white;
-
-    min-width: 18px;
-    height: 18px;
-
-    border-radius: 50%;
+.locker-day {
+    min-height: 43px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-size: 11px;
+    border-radius: 9px;
 
-    font-weight: bold;
-
-    padding: 2px;
-}
-
-.msg-link{
-    position: relative;
-}
-
-.msg-count{
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    background: red;
-    color: white;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    font-size: 11px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    padding: 2px;
-}
-
-/* 🔔 NOTIFICATION POPUP */
-.notif-popup{
-    position: fixed;
-    top: 80px;
-    right: 25px;
-
-    width: 280px;
-
-    background: #111827;
-    color: white;
-
-    border: 1px solid rgba(255,255,255,0.15);
-    border-left: 5px solid #4da3ff;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-
-    z-index: 99999;
-
-    opacity: 0;
-    transform: translateX(120%);
-
-    transition: 0.3s ease;
-
+    color: #17262c;
     cursor: pointer;
-}
-
-.notif-popup.show{
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.notif-popup b{
-    color: #4da3ff;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.notif-popup p{
-    margin: 0;
     font-size: 14px;
 }
 
+.locker-day:hover {
+    background: #e9f7ef;
+    color: #087c3d;
+}
+
+.selected-day {
+    background: #087c3d !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* =========================================================
+   RIGHT COLUMN
+========================================================= */
+
+.locker-time-section {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+
+    min-width: 0;
+}
+
+.locker-time-box,
+.locker-existing-bookings {
+    background: #ffffff;
+
+    border: 1px solid #dce8e1;
+    border-radius: 18px;
+
+    box-shadow: 0 8px 25px rgba(20,60,40,.04);
+
+    padding: 22px;
+}
+
+.locker-time-box h3,
+.locker-existing-bookings h3 {
+    margin: 0 0 20px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    color: #102027;
+}
+
+.time-input {
+    width: 100%;
+    height: 52px;
+
+    padding: 0 16px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d5e1dc;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    color: #102027;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.preview-box {
+    margin-top: 18px;
+}
+
+.preview-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 6px 0;
+
+    font-size: 15px;
+}
+
+.preview-row span:first-child {
+    color: #617681;
+}
+
+.preview-row span:last-child {
+    color: #102027;
+    font-weight: 600;
+}
+
+.locker-existing-bookings {
+    min-height: 122px;
+}
+
+.booking-item {
+    background: #f7faf8;
+
+    border: 1px solid #dce8e1;
+
+    padding: 12px 14px;
+
+    border-radius: 11px;
+
+    margin-top: 10px;
+
+    color: #102027;
+
+    font-size: 14px;
+}
+
+.empty-booking {
+    color: #617681;
+
+    font-size: 14px;
+}
+
+.locker-rules {
+    color: #617681;
+
+    line-height: 1.9;
+
+    font-size: 14px;
+
+    padding: 0 2px;
+}
+
+.locker-rules b {
+    color: #102027;
+}
+
+.locker-submit-btn {
+    align-self: flex-start;
+
+    background: #087c3d;
+
+    color: #ffffff;
+
+    border: none;
+
+    padding: 13px 28px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.locker-submit-btn:hover {
+    background: #066c35;
+}
+
+/* =========================================================
+   MESSAGE COUNT
+   SAME STYLE AS MEMBERSHIP
+========================================================= */
+
+.navbar .menu .msg-link {
+    position: relative;
+}
+
+.navbar .menu .msg-count {
+    position: absolute;
+
+    right: 18px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+
+    padding: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #087c3d;
+    color: #ffffff;
+
+    border-radius: 50%;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 1000px) {
+
+    .locker-booking-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width: 700px) {
+
+    .locker-cards {
+        grid-template-columns: 1fr;
+    }
+
+}
 </style>
-
-</head>
-
 <body>
 
-<!-- NAVBAR -->
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
 <div class="navbar">
-    <h2>SMART GYM</h2>
+
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+        <div class="brand-text">
+            <strong>SMART GYM</strong>
+            <span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span>
+        </div>
+    </div>
 
     <div class="menu">
 
@@ -418,7 +573,7 @@
             Suggested Workout
         </a>
 
-        <a href="locker_booking.html">
+        <a href="locker_booking.html" class="active">
             <i class="fa-solid fa-lock"></i>
             Book Locker
         </a>
@@ -427,96 +582,183 @@
             <i class="fa-solid fa-id-card"></i>
             Membership
         </a>
-    </div>
-
-    <!-- LOGOUT -->
-    <div class="profile">
-
-        <button class="logout-btn"
-                onclick="logout()">
-            Logout
-        </button>
 
     </div>
-</div>
 
-<!-- MAIN -->
-<div class="layout">
-<div class="main">
-
-<h2>Book a Locker</h2>
-
-<!-- LOCKERS -->
-<div class="cards">
-
-    <div class="card"
-         data-locker="1"
-         onclick="selectLocker(this,1)">
-
-        <h3>Locker 1</h3>
-
-        <div class="locker-status available">
-            <span class="status-dot"></span>
-            Available
+    <div class="sidebar-message">
+        <div class="sidebar-message-icon">
+            <i class="fa-solid fa-dumbbell"></i>
         </div>
-
-    </div>
-
-    <div class="card"
-         data-locker="2"
-         onclick="selectLocker(this,2)">
-
-        <h3>Locker 2</h3>
-
-        <div class="locker-status available">
-            <span class="status-dot"></span>
-             Available
-        </div>
-
-    </div>
-
-    <div class="card"
-         data-locker="3"
-         onclick="selectLocker(this,3)">
-
-        <h3>Locker 3</h3>
-
-        <div class="locker-status available">
-            <span class="status-dot"></span>
-            Available
-        </div>
-
+        <h3>Keep Pushing</h3>
+        <p>Small steps every day lead to big results.</p>
+        <div class="message-line"></div>
     </div>
 
 </div>
 
-<!-- BOOKING CONTAINER -->
-<div class="booking-container">
+<!-- =========================================================
+     TOP HEADER
+========================================================= -->
 
-    <!-- LEFT -->
-    <div class="calendar-section">
+<div class="top-header">
 
-        <div class="calendar-box">
+    <div class="top-right">
 
-            <div class="calendar-header">
-                <button onclick="changeMonth(-1)">❮</button>
-                <h3 id="monthYear"></h3>
-                <button onclick="changeMonth(1)">❯</button>
+        <div class="user-profile" onclick="toggleMenu()">
+
+            <div class="user-avatar" id="profileInitial">
+                A
             </div>
 
-            <div class="days" id="calendarDays"></div>
+            <div class="user-info">
+                <strong id="profile-name">Aldrin</strong>
+                <small>Member</small>
+            </div>
 
+            <i class="fa-solid fa-chevron-down profile-chevron"></i>
+
+            <div id="dropdown" class="profile-dropdown">
+                <button onclick="logout(); event.stopPropagation();">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Log Out
+                </button>
+            </div>
 
         </div>
 
     </div>
 
-    <!-- RIGHT -->
-    <div class="time-section">
+</div>
 
-        <div class="time-picker-box">
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-            <h3>Select Start Time</h3>
+<div class="layout">
+
+<div class="main">
+
+<div class="locker-page-wrap">
+
+    <h2>
+        Book a Locker
+    </h2>
+
+    <p>
+        Reserve an available locker for your gym session.
+    </p>
+
+
+
+<!-- =====================================================
+     BOOKING AREA
+====================================================== -->
+
+<div class="locker-booking-container">
+
+    <!-- =================================================
+         LEFT COLUMN
+    ================================================== -->
+
+    <div class="locker-left-column">
+
+        <!-- LOCKER CARDS -->
+
+        <div class="locker-cards">
+
+            <div
+                class="locker-card"
+                data-locker="1"
+                onclick="selectLocker(this,1)"
+            >
+                <h3>Locker 1</h3>
+
+                <div class="locker-status available">
+                    Available
+                </div>
+            </div>
+
+
+            <div
+                class="locker-card"
+                data-locker="2"
+                onclick="selectLocker(this,2)"
+            >
+                <h3>Locker 2</h3>
+
+                <div class="locker-status available">
+                    Available
+                </div>
+            </div>
+
+
+            <div
+                class="locker-card"
+                data-locker="3"
+                onclick="selectLocker(this,3)"
+            >
+                <h3>Locker 3</h3>
+
+                <div class="locker-status available">
+                    Available
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- CALENDAR -->
+
+        <div class="locker-calendar-section">
+
+            <div class="locker-calendar-box">
+
+                <div class="calendar-header">
+
+                    <button
+                        type="button"
+                        onclick="changeMonth(-1)"
+                    >
+                        ❮
+                    </button>
+
+                    <h3 id="monthYear"></h3>
+
+                    <button
+                        type="button"
+                        onclick="changeMonth(1)"
+                    >
+                        ❯
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="days"
+                    id="calendarDays"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         RIGHT COLUMN
+    ================================================== -->
+
+    <div class="locker-time-section">
+
+        <!-- SELECT START TIME -->
+
+        <div class="locker-time-box">
+
+            <h3>
+                Select Start Time
+            </h3>
 
             <input
                 type="time"
@@ -528,28 +770,55 @@
             <div class="preview-box">
 
                 <div class="preview-row">
-                    <span>Start:</span>
-                    <span id="previewStart">--:--</span>
+
+                    <span>
+                        Start:
+                    </span>
+
+                    <span id="previewStart">
+                        --:--
+                    </span>
+
                 </div>
 
-                <div class="preview-row">
-                    <span>End:</span>
-                    <span id="previewEnd">--:--</span>
-                </div>
 
                 <div class="preview-row">
-                    <span>Duration:</span>
-                    <span>3 Hours</span>
+
+                    <span>
+                        End:
+                    </span>
+
+                    <span id="previewEnd">
+                        --:--
+                    </span>
+
+                </div>
+
+
+                <div class="preview-row">
+
+                    <span>
+                        Duration:
+                    </span>
+
+                    <span>
+                        3 Hours
+                    </span>
+
                 </div>
 
             </div>
 
         </div>
 
-        <!-- EXISTING BOOKINGS -->
-        <div class="existing-bookings">
 
-            <h3>Reserved Slots</h3>
+        <!-- RESERVED SLOTS -->
+
+        <div class="locker-existing-bookings">
+
+            <h3>
+                Reserved Slots
+            </h3>
 
             <div id="reservedList">
 
@@ -560,617 +829,1291 @@
             </div>
 
         </div>
-        
+
 
         <!-- RULES -->
-        <div class="rules">
-            ⚠ Max usage: <b>3 hours</b><br>
-            ⚠ Grace period: <b>20 minutes</b><br>
-            ⚠ Auto cancel if no show<br>
+
+        <div class="locker-rules">
+
+            ⚠ Max usage:
+            <b>3 hours</b>
+            <br>
+
+            ⚠ Grace period:
+            <b>20 minutes</b>
+            <br>
+
+            ⚠ Auto cancel if no show
+            <br>
+
             ⚠ Needs admin approval
+
         </div>
 
-        <!-- BUTTON -->
-        <button class="submit-btn" onclick="submitBooking()">
+
+        <!-- SUBMIT -->
+
+        <button
+            type="button"
+            class="locker-submit-btn"
+            onclick="submitBooking()"
+        >
             Submit Booking
         </button>
 
     </div>
 
 </div>
+<!-- =========================================================
+     NOTIFICATION POPUP
+========================================================= -->
+
+<div
+    id="notifPopup"
+    class="notif-popup"
+    onclick="goMessages()">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
 
 </div>
-</div>
 
-<div id="notifPopup" class="notif-popup" onclick="goMessages()">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
-</div>
+
 
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+/* =========================================================
+   API / USER
+========================================================= */
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+if(!user){
+
+    alert("Session expired.");
+
+    window.location.href =
+        "index.html";
+}
+
+
+/*
+   IMPORTANT:
+   Declare memberId BEFORE calling
+   checkNewMessage().
+*/
+
+const memberId =
+    user.id || user.user_id;
+
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
 
 let selectedLocker = null;
+
 let selectedDate = null;
+
 let selectedStart = null;
+
 let selectedEnd = null;
 
+let currentDate = new Date();
+
+let lastMessageCount = 0;
+
+let firstLoad = true;
+
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function setProfile(){
+
+    /*
+       Priority:
+       name
+       full_name
+       display_name
+       first_name
+       username
+    */
+
+    const name =
+        user.name ||
+        user.full_name ||
+        user.display_name ||
+        user.first_name ||
+        user.username ||
+        "Member";
+
+
+    const nameEl =
+        document.getElementById(
+            "profile-name"
+        );
+
+
+    const avatarEl =
+        document.getElementById(
+            "profileInitial"
+        );
+
+
+    if(nameEl){
+
+        nameEl.innerText =
+            name;
+
+    }
+
+
+    if(avatarEl){
+
+        avatarEl.innerText =
+            String(name)
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   PAGE LOAD
+========================================================= */
+
 window.onload = () => {
+
+    setProfile();
 
     renderCalendar();
 
     loadCurrentLockerStatus();
+
+    loadMessageCount();
+
 };
 
-const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user) {
-    alert("Session expired.");
-    window.location.href = "index.html";
-}
 
-// =============================
-// LOCKER
-// =============================
-function selectLocker(element, locker){
+/* =========================================================
+   LOCKER
+========================================================= */
 
-    document.querySelectorAll(".card")
-    .forEach(card => card.classList.remove("active"));
+function selectLocker(
+    element,
+    locker
+){
 
-    element.classList.add("active");
+    document
+        .querySelectorAll(".locker-card")
+        .forEach(card => {
 
-    selectedLocker = locker;
+            card.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    element.classList.add(
+        "active"
+    );
+
+
+    selectedLocker =
+        locker;
+
 
     if(selectedDate){
+
         loadBookedSlots();
-    }
-}
 
-// =============================
-// SLOT
-// =============================
-function selectSlot(element, slot){
-
-    // bawal click pag fully booked
-    if(element.classList.contains("booked-slot")){
-        return;
     }
 
-    document.querySelectorAll(".slot")
-    .forEach(slotEl => slotEl.classList.remove("selected-slot"));
-
-    element.classList.add("selected-slot");
-
-    selectedSlot = slot;
 }
 
-// =============================
-// CALENDAR
-// =============================
-const monthYear = document.getElementById("monthYear");
-const calendarDays = document.getElementById("calendarDays");
 
-let currentDate = new Date();
 
-// =============================
-// RENDER CALENDAR
-// =============================
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+const monthYear =
+    document.getElementById(
+        "monthYear"
+    );
+
+
+const calendarDays =
+    document.getElementById(
+        "calendarDays"
+    );
+
+
+
 function renderCalendar(){
 
-    calendarDays.innerHTML = "";
+    calendarDays.innerHTML =
+        "";
 
-    const month = currentDate.getMonth();
-    const year = currentDate.getFullYear();
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+    const month =
+        currentDate.getMonth();
+
+
+    const year =
+        currentDate.getFullYear();
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    const lastDate =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
 
     const months = [
-        "January","February","March","April",
-        "May","June","July","August",
-        "September","October","November","December"
+
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+
     ];
 
-    monthYear.innerText = `${months[month]} ${year}`;
 
-    const dayNames = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+    monthYear.innerText =
+        `${months[month]} ${year}`;
 
-    // DAY NAMES
+
+    const dayNames = [
+
+        "Su",
+        "Mo",
+        "Tu",
+        "We",
+        "Th",
+        "Fr",
+        "Sa"
+
+    ];
+
+
+    /* DAY NAMES */
+
     dayNames.forEach(day => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement(
+                "div"
+            );
 
-        div.classList.add("day-name");
 
-        div.innerText = day;
+        div.classList.add(
+            "day-name"
+        );
 
-        calendarDays.appendChild(div);
+
+        div.innerText =
+            day;
+
+
+        calendarDays.appendChild(
+            div
+        );
+
     });
 
-    // EMPTY SPACES
-    for(let i = 0; i < firstDay; i++){
 
-        const empty = document.createElement("div");
 
-        calendarDays.appendChild(empty);
+    /* EMPTY */
+
+    for(
+        let i = 0;
+        i < firstDay;
+        i++
+    ){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        calendarDays.appendChild(
+            empty
+        );
+
     }
 
-    // TODAY
-    const today = new Date();
 
-    today.setHours(0,0,0,0);
 
-    // DAYS
-    for(let day = 1; day <= lastDate; day++){
+    /* TODAY */
 
-        const div = document.createElement("div");
+    const today =
+        new Date();
 
-        div.classList.add("day");
+    today.setHours(
+        0,0,0,0
+    );
 
-        div.innerText = day;
+
+
+    /* DAYS */
+
+    for(
+        let day = 1;
+        day <= lastDate;
+        day++
+    ){
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.classList.add(
+            "locker-day"
+        );
+
+
+        div.innerText =
+            day;
+
 
         const fullDate =
-            `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            `${year}-${String(month + 1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
-        const checkDate = new Date(year, month, day);
 
-        // PAST DATES
+        const checkDate =
+            new Date(
+                year,
+                month,
+                day
+            );
+
+
         if(checkDate < today){
 
-            div.style.background = "#ddd";
-            div.style.opacity = "0.5";
-            div.style.cursor = "not-allowed";
+            div.style.background =
+                "#edf0ee";
+
+            div.style.opacity =
+                "0.55";
+
+            div.style.cursor =
+                "not-allowed";
+
         }
 
-        // AVAILABLE DATES
         else{
 
             div.onclick = () => {
 
-                document.querySelectorAll(".day")
-                .forEach(d => d.classList.remove("selected-day"));
+                document
+                    .querySelectorAll(".locker-day")
+                    .forEach(d => {
 
-                div.classList.add("selected-day");
+                        d.classList.remove(
+                            "selected-day"
+                        );
 
-                selectedDate = fullDate;
+                    });
+
+
+                div.classList.add(
+                    "selected-day"
+                );
+
+
+                selectedDate =
+                    fullDate;
+
 
                 loadBookedSlots();
+
             };
+
         }
 
-        calendarDays.appendChild(div);
+
+        calendarDays.appendChild(
+            div
+        );
+
     }
+
 }
+
+
+
+/* =========================================================
+   CHANGE MONTH
+========================================================= */
+
+function changeMonth(
+    direction
+){
+
+    currentDate.setMonth(
+        currentDate.getMonth()
+        + direction
+    );
+
+
+    renderCalendar();
+
+}
+
+
+
+/* =========================================================
+   TIME PREVIEW
+========================================================= */
+
 function updateTimePreview(){
 
     const input =
-        document.getElementById("startTime").value;
+        document.getElementById(
+            "startTime"
+        ).value;
+
 
     if(!input){
+
         return;
+
     }
 
-    selectedStart = input;
+
+    selectedStart =
+        input;
+
 
     const [hour, minute] =
-        input.split(":").map(Number);
+        input
+            .split(":")
+            .map(Number);
 
-    const startDate = new Date();
 
-    startDate.setHours(hour);
-    startDate.setMinutes(minute);
+    const startDate =
+        new Date();
 
-    const endDate = new Date(startDate);
 
-    endDate.setHours(endDate.getHours() + 3);
+    startDate.setHours(
+        hour
+    );
+
+
+    startDate.setMinutes(
+        minute
+    );
+
+
+    const endDate =
+        new Date(
+            startDate
+        );
+
+
+    endDate.setHours(
+        endDate.getHours()
+        + 3
+    );
+
 
     selectedEnd =
-        endDate.toTimeString().slice(0,5);
+        endDate
+            .toTimeString()
+            .slice(0,5);
 
-    // DISPLAY
-    document.getElementById("previewStart")
-    .innerText = formatTime(input);
 
-    document.getElementById("previewEnd")
-    .innerText = formatTime(selectedEnd);
+    document
+        .getElementById(
+            "previewStart"
+        )
+        .innerText =
+        formatTime(
+            input
+        );
 
-    // CHECK CONFLICT
+
+    document
+        .getElementById(
+            "previewEnd"
+        )
+        .innerText =
+        formatTime(
+            selectedEnd
+        );
+
+
     checkTimeConflict();
+
 }
+
+
+
+/* =========================================================
+   FORMAT TIME
+========================================================= */
+
 function formatTime(time24){
 
     const [h,m] =
         time24.split(":");
 
-    let hour = parseInt(h);
+
+    let hour =
+        parseInt(h);
+
 
     const ampm =
-        hour >= 12 ? "PM" : "AM";
+        hour >= 12
+            ? "PM"
+            : "AM";
 
-    hour = hour % 12 || 12;
+
+    hour =
+        hour % 12 || 12;
+
 
     return `${hour}:${m} ${ampm}`;
+
 }
+
+
+
+/* =========================================================
+   CHECK CONFLICT
+========================================================= */
 
 function checkTimeConflict(){
 
     const reserved =
-        document.querySelectorAll(".booking-item");
+        document.querySelectorAll(
+            ".booking-item"
+        );
 
-    let hasConflict = false;
+
+    let hasConflict =
+        false;
+
 
     reserved.forEach(item => {
 
-        const text = item.innerText;
+        const text =
+            item.innerText;
 
-        if(text.includes(
-            formatTime(selectedStart)
-        )){
-            hasConflict = true;
+
+        if(
+            text.includes(
+                formatTime(
+                    selectedStart
+                )
+            )
+        ){
+
+            hasConflict =
+                true;
+
         }
+
     });
+
 
     if(hasConflict){
 
-        alert("❌ Time overlaps reservation");
+        alert(
+            "❌ Time overlaps reservation"
+        );
 
-        selectedStart = null;
-        selectedEnd = null;
 
-        document.getElementById("startTime").value = "";
+        selectedStart =
+            null;
+
+
+        selectedEnd =
+            null;
+
+
+        document
+            .getElementById(
+                "startTime"
+            )
+            .value = "";
+
     }
+
 }
 
-// =============================
-// LOAD BOOKED SLOTS
-// =============================
+
+
+/* =========================================================
+   LOAD BOOKED SLOTS
+========================================================= */
+
 async function loadBookedSlots(){
 
     try{
 
-        // =============================
-        // RESET TIME INPUT
-        // =============================
-        selectedStart = null;
-        selectedEnd = null;
+        selectedStart =
+            null;
+
+        selectedEnd =
+            null;
+
 
         const timeInput =
-            document.getElementById("startTime");
+            document.getElementById(
+                "startTime"
+            );
+
 
         if(timeInput){
-            timeInput.value = "";
+
+            timeInput.value =
+                "";
+
         }
 
-        // RESET PREVIEW
-        document.getElementById("previewStart").innerText = "--:--";
-        document.getElementById("previewEnd").innerText = "--:--";
 
-        // =============================
-        // REQUIRED
-        // =============================
-        if(!selectedLocker || !selectedDate){
+        document
+            .getElementById(
+                "previewStart"
+            )
+            .innerText =
+            "--:--";
+
+
+        document
+            .getElementById(
+                "previewEnd"
+            )
+            .innerText =
+            "--:--";
+
+
+        if(
+            !selectedLocker ||
+            !selectedDate
+        ){
+
             return;
+
         }
 
-        // =============================
-        // FETCH BOOKED
-        // =============================
-        const res = await fetch(
-            `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
+
+        const res =
+            await fetch(
+
+                `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
+
+            );
+
+
+        const data =
+            await res.json();
+
+
+        console.log(
+            "BOOKED API:",
+            data
         );
 
-        const data = await res.json();
 
-        console.log("BOOKED API:", data);
+        const bookedSlots =
+            data.slots || [];
 
-        const bookedSlots = data.slots || [];
 
-        // =============================
-        // DISPLAY RESERVED LIST
-        // =============================
         const reservedList =
-            document.getElementById("reservedList");
+            document.getElementById(
+                "reservedList"
+            );
 
-        reservedList.innerHTML = "";
 
-        if(bookedSlots.length === 0){
+        reservedList.innerHTML =
+            "";
+
+
+        if(
+            bookedSlots.length === 0
+        ){
 
             reservedList.innerHTML = `
+
                 <div class="empty-booking">
                     No reservations
                 </div>
+
             `;
 
-        }else{
-
-            bookedSlots.forEach(slot => {
-
-                reservedList.innerHTML += `
-                    <div class="booking-item">
-                        ${slot}
-                    </div>
-                `;
-            });
         }
 
-    }catch(err){
+        else{
 
-        console.log("BOOKED SLOT ERROR:", err);
+            bookedSlots.forEach(
+                slot => {
+
+                    reservedList.innerHTML += `
+
+                        <div class="booking-item">
+                            ${slot}
+                        </div>
+
+                    `;
+
+                }
+            );
+
+        }
+
 
     }
+
+    catch(err){
+
+        console.log(
+            "BOOKED SLOT ERROR:",
+            err
+        );
+
+    }
+
 }
+
+
+
+/* =========================================================
+   LOCKER STATUS
+========================================================= */
+
 async function loadCurrentLockerStatus(){
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/current_lockers`
-        );
-
-        const data = await res.json();
-
-        document
-        .querySelectorAll(".card")
-        .forEach(card => {
-
-            const locker =
-                card.dataset.locker;
-
-            console.log(
-                locker,
-                data[locker]
+        const res =
+            await fetch(
+                `${API_URL}/api/current_lockers`
             );
 
-            const status =
-                data[locker] || "AVAILABLE";
 
-            const statusDiv =
-                card.querySelector(
-                    ".locker-status"
-                );
+        const data =
+            await res.json();
 
-            const statusClass =
 
-                status === "OVERTIME"
-                ? "overtime"
+        document
+            .querySelectorAll(
+                ".locker-card"
+            )
+            .forEach(card => {
 
-                : status === "IN_USE"
-                ? "inuse"
+                const locker =
+                    card.dataset.locker;
 
-                : status === "RESERVED"
-                ? "reserved"
 
-                : "available";
+                const status =
+                    data[locker]
+                    || "AVAILABLE";
 
-            const statusText =
 
-                status === "OVERTIME"
-                ? "🔴 Overtime"
+                const statusDiv =
+                    card.querySelector(
+                        ".locker-status"
+                    );
 
-                : status === "IN_USE"
-                ? "🔵 In Use"
 
-                : status === "RESERVED"
-                ? "🟡 Reserved"
+                const statusClass =
 
-                : "✅ Available";
+                    status === "OVERTIME"
+                        ? "overtime"
 
-            statusDiv.className =
-                `locker-status ${statusClass}`;
+                    : status === "IN_USE"
+                        ? "inuse"
 
-            statusDiv.innerHTML =
-                statusText;
-        });
+                    : status === "RESERVED"
+                        ? "reserved"
 
-    }catch(err){
+                    : "available";
 
-        console.log(err);
+
+                const statusText =
+
+                    status === "OVERTIME"
+                        ? "🔴 Overtime"
+
+                    : status === "IN_USE"
+                        ? "🔵 In Use"
+
+                    : status === "RESERVED"
+                        ? "🟡 Reserved"
+
+                    : "Available";
+
+
+                statusDiv.className =
+                    `locker-status ${statusClass}`;
+
+
+                statusDiv.innerHTML =
+                    statusText;
+
+            });
+
     }
+
+    catch(err){
+
+        console.log(
+            "LOCKER STATUS ERROR:",
+            err
+        );
+
+    }
+
 }
-// =============================
-// CHANGE MONTH
-// =============================
-function changeMonth(direction){
-
-    currentDate.setMonth(
-        currentDate.getMonth() + direction
-    );
-
-    renderCalendar();
-}
 
 
-// =============================
-// SUBMIT BOOKING
-// =============================
+
+/* =========================================================
+   SUBMIT BOOKING
+========================================================= */
+
 async function submitBooking(){
 
     if(!selectedLocker){
-        alert("Select locker first");
+
+        alert(
+            "Select locker first"
+        );
+
         return;
+
     }
+
 
     if(!selectedDate){
-        alert("Select date");
+
+        alert(
+            "Select date"
+        );
+
         return;
+
     }
 
+
     if(!selectedStart){
-        alert("Select start time");
+
+        alert(
+            "Select start time"
+        );
+
         return;
+
     }
+
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/book_locker`,
-            {
-                method: "POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify({
-                    user_id: user.id,
-                    locker: selectedLocker,
-                    date: selectedDate,
-                    start_time: selectedStart,
-                    end_time: selectedEnd
-                })
-            }
-        );
+        const res =
+            await fetch(
 
-        const data = await res.json();
+                `${API_URL}/api/book_locker`,
 
-        if(data.status === "success"){
+                {
 
-            alert("✅ Booking submitted");
+                    method:"POST",
 
-            // RESET
-            selectedStart = null;
-            selectedEnd = null;
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            document.getElementById("startTime").value = "";
+                    body:JSON.stringify({
 
-            document.getElementById("previewStart").innerText = "--:--";
-            document.getElementById("previewEnd").innerText = "--:--";
+                        user_id:
+                            user.id,
+
+                        locker:
+                            selectedLocker,
+
+                        date:
+                            selectedDate,
+
+                        start_time:
+                            selectedStart,
+
+                        end_time:
+                            selectedEnd
+
+                    })
+
+                }
+
+            );
+
+
+        const data =
+            await res.json();
+
+
+        if(
+            data.status ===
+            "success"
+        ){
+
+            alert(
+                "✅ Booking submitted"
+            );
+
+
+            selectedStart =
+                null;
+
+
+            selectedEnd =
+                null;
+
+
+            document
+                .getElementById(
+                    "startTime"
+                )
+                .value =
+                "";
+
+
+            document
+                .getElementById(
+                    "previewStart"
+                )
+                .innerText =
+                "--:--";
+
+
+            document
+                .getElementById(
+                    "previewEnd"
+                )
+                .innerText =
+                "--:--";
+
 
             await loadBookedSlots();
 
-        }else{
-
-            alert("❌ " + data.message);
         }
 
-    }catch(err){
+        else{
+
+            alert(
+                "❌ " +
+                data.message
+            );
+
+        }
+
+    }
+
+    catch(err){
 
         console.log(err);
 
-        alert("Server error");
+        alert(
+            "Server error"
+        );
+
     }
+
 }
 
-// =============================
-// PROFILE
-// =============================
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
 function toggleMenu(){
 
-    const menu =
-        document.getElementById("dropdown");
+    const profile = document.querySelector(".user-profile");
+    const menu = document.getElementById("dropdown");
 
-    menu.style.display =
-        menu.style.display === "block"
-        ? "none"
-        : "block";
+    profile.classList.toggle("active");
+    menu.classList.toggle("show");
+
 }
+
+
 
 function logout(){
 
     localStorage.clear();
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
+
 }
 
-window.onclick = function(e){
 
-    if(!e.target.closest('.profile')){
 
-        document.getElementById("dropdown").style.display = "none";
-    }
-}
-let lastMessageCount = 0;
-let firstLoad = true;
+window.addEventListener(
+    "click",
+    function(e){
 
-async function checkNewMessage(){
+        if(
+            !e.target.closest(
+                ".profile"
+            )
+        ){
 
-    try{
+            const dropdown =
+                document.getElementById(
+                    "dropdown"
+                );
 
-        const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
-        );
 
-        const data = await res.json();
+            if(dropdown){
 
-        const count = data.count || 0;
+                dropdown.style.display =
+                    "none";
 
-        const badge =
-            document.getElementById("msg-count");
+            }
 
-        if(count > 0){
-            badge.style.display = "flex";
-            badge.innerText = count;
-        }else{
-            badge.style.display = "none";
         }
 
-        if(!firstLoad && count > lastMessageCount){
-
-            showNotifPopup(
-                "New Message",
-                "You received a new gym notification."
-            );
-        }
-
-        lastMessageCount = count;
-        firstLoad = false;
-
-    }catch(err){
-        console.log(err);
     }
-}
+);
 
-function showNotifPopup(title, text){
 
-    const popup =
-        document.getElementById("notifPopup");
 
-    document.getElementById("notifTitle").innerText =
-        title;
-
-    document.getElementById("notifText").innerText =
-        text;
-
-    popup.classList.add("show");
-
-    setTimeout(() => {
-        popup.classList.remove("show");
-    }, 4000);
-}
-
-function goMessages(){
-    window.location.href = "member_messages.html";
-}
-
-checkNewMessage();
-
-setInterval(checkNewMessage, 3000);
-// ================= MESSAGE COUNT =================
-const memberId = user.id || user.user_id;
+/* =========================================================
+   MESSAGE COUNT
+   FIXED:
+   memberId is declared BEFORE this runs.
+========================================================= */
 
 async function loadMessageCount(){
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/messages_count/${memberId}`
-        );
+        const res =
+            await fetch(
 
-        const data = await res.json();
+                `${API_URL}/api/messages_count/${memberId}`
 
-        const badge = document.getElementById("msg-count");
+            );
 
-        if(data.count > 0){
-            badge.style.display = "flex";
-            badge.innerText = data.count;
-        }else{
-            badge.style.display = "none";
+
+        if(!res.ok){
+
+            throw new Error(
+                `HTTP ${res.status}`
+            );
+
         }
 
-    }catch(err){
-        console.log(err);
+
+        const data =
+            await res.json();
+
+
+        const count =
+            Number(
+                data.count
+            ) || 0;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge){
+
+            return;
+
+        }
+
+
+        if(count > 0){
+
+            badge.style.display =
+                "flex";
+
+            badge.innerText =
+                count;
+
+        }
+
+        else{
+
+            badge.style.display =
+                "none";
+
+        }
+
+
+        /*
+           Popup only when count increases.
+        */
+
+        if(
+            !firstLoad &&
+            count > lastMessageCount
+        ){
+
+            showNotifPopup(
+
+                "New Message",
+
+                "You received a new gym notification."
+
+            );
+
+        }
+
+
+        lastMessageCount =
+            count;
+
+
+        firstLoad =
+            false;
+
     }
+
+    catch(err){
+
+        console.log(
+            "MESSAGE COUNT ERROR:",
+            err
+        );
+
+    }
+
 }
 
+
+
+/* =========================================================
+   NOTIFICATION POPUP
+========================================================= */
+
+function showNotifPopup(
+    title,
+    text
+){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+
+    if(!popup){
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "notifTitle"
+        )
+        .innerText =
+        title;
+
+
+    document
+        .getElementById(
+            "notifText"
+        )
+        .innerText =
+        text;
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+
+        4000
+    );
+
+}
+
+
+
+function goMessages(){
+
+    window.location.href =
+        "member_messages.html";
+
+}
+
+
+
+/* =========================================================
+   START MESSAGE CHECK
+========================================================= */
+
 loadMessageCount();
+
+
+setInterval(
+    loadMessageCount,
+    3000
+);
 
 </script>
 
