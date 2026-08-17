@@ -981,18 +981,22 @@ async function changePassword() {
     const currentPassword =
         document.getElementById(
             "changeCurrentPassword"
-        ).value;
+        ).value.trim();
 
     const newPassword =
         document.getElementById(
             "changeNewPassword"
-        ).value;
+        ).value.trim();
 
     const confirmPassword =
         document.getElementById(
             "changeConfirmPassword"
-        ).value;
+        ).value.trim();
 
+
+    // =========================
+    // VALIDATION
+    // =========================
 
     if (!currentPassword) {
 
@@ -1004,7 +1008,6 @@ async function changePassword() {
         return;
     }
 
-
     if (!newPassword) {
 
         showNotifPopup(
@@ -1015,17 +1018,25 @@ async function changePassword() {
         return;
     }
 
-
-    if (newPassword.length < 8) {
+    if (!confirmPassword) {
 
         showNotifPopup(
             "Error",
-            "New password must be at least 8 characters."
+            "Please confirm your new password."
         );
 
         return;
     }
 
+    if (newPassword.length < 8) {
+
+        showNotifPopup(
+            "Error",
+            "Password must be at least 8 characters."
+        );
+
+        return;
+    }
 
     if (newPassword !== confirmPassword) {
 
@@ -1038,13 +1049,41 @@ async function changePassword() {
     }
 
 
+    // =========================
+    // USERNAME
+    // =========================
+
+    const username =
+        userData.username;
+
+
+    if (!username) {
+
+        console.error(
+            "PRE-MEMBER USERNAME MISSING:",
+            userData
+        );
+
+        showNotifPopup(
+            "Error",
+            "Unable to identify your account."
+        );
+
+        return;
+    }
+
+
+    // =========================
+    // CHANGE PASSWORD API
+    // =========================
+
     try {
 
         const response =
             await fetch(
-                "https://smartgym-api-ia2e.onrender.com/api/member/profile",
+                `${API_URL}/api/change_password`,
                 {
-                    method: "PUT",
+                    method: "POST",
 
                     headers: {
                         "Content-Type":
@@ -1053,23 +1092,14 @@ async function changePassword() {
 
                     body: JSON.stringify({
 
-                        id:
-                            userData.id,
-
                         username:
-                            userData.username,
-
-                        phone_number:
-                            userData.phone_number,
+                            username,
 
                         current_password:
                             currentPassword,
 
                         new_password:
-                            newPassword,
-
-                        confirm_password:
-                            confirmPassword
+                            newPassword
 
                     })
                 }
@@ -1080,10 +1110,14 @@ async function changePassword() {
             await response.json();
 
 
-        if (
-            !response.ok ||
-            !result.success
-        ) {
+        console.log(
+            "CHANGE PASSWORD RESPONSE:",
+            result
+        );
+
+
+        if (!response.ok ||
+            !result.success) {
 
             showNotifPopup(
                 "Error",
@@ -1095,7 +1129,24 @@ async function changePassword() {
         }
 
 
+        // =========================
+        // SUCCESS
+        // =========================
+
         closeChangePassword();
+
+
+        document.getElementById(
+            "changeCurrentPassword"
+        ).value = "";
+
+        document.getElementById(
+            "changeNewPassword"
+        ).value = "";
+
+        document.getElementById(
+            "changeConfirmPassword"
+        ).value = "";
 
 
         showNotifPopup(
@@ -1117,7 +1168,6 @@ async function changePassword() {
         );
     }
 }
-
     const currentPassword =
         document.getElementById("currentPassword").value;
 
