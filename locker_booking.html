@@ -980,7 +980,8 @@ let lastMessageCount = 0;
 
 let firstLoad = true;
 
-
+let lockerPhysicalStatus = {};
+let lockerBookedStatus = {};
 
 /* =========================================================
    PROFILE
@@ -1048,19 +1049,16 @@ window.onload = async () => {
 
     renderCalendar();
 
-    loadCurrentLockerStatus();
+    selectToday();
+
+    await loadCurrentLockerStatus();
+
+    await loadBookedSlots();
 
     loadMessageCount();
 
-    selectToday();
-
-    // Load reservations for today's date
-    // after selectedDate has been initialized
-    if (selectedLocker && selectedDate) {
-        await loadBookedSlots();
-    }
-
 };
+
 async function loadAllBookedSlotsForDate() {
 
     if (!selectedDate) {
@@ -1622,121 +1620,124 @@ async function loadBookedSlots(){
 
     try{
 
-        selectedStart =
-            null;
-
-        selectedEnd =
-            null;
-
-
-        const timeInput =
-            document.getElementById(
-                "startTime"
-            );
-
-
-        if(timeInput){
-
-            timeInput.value =
-                "";
-
-        }
-
-
-        document
-            .getElementById(
-                "previewStart"
-            )
-            .innerText =
-            "--:--";
-
-
-        document
-            .getElementById(
-                "previewEnd"
-            )
-            .innerText =
-            "--:--";
-
-
-        if(
-            !selectedLocker ||
-            !selectedDate
-        ){
-
+        if(!selectedDate){
             return;
-
         }
 
 
-        const res =
-            await fetch(
+        /*
+         * Check ALL lockers for the selected date.
+         */
+        const lockers = [1, 2, 3];
 
-                `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`
+        lockerBookedStatus = {};
 
+
+        for(const locker of lockers){
+
+            const res = await fetch(
+                `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
+                {
+                    cache: "no-store"
+                }
             );
 
 
-        const data =
-            await res.json();
+            if(!res.ok){
 
+                console.log(
+                    `[BOOKED SLOTS] Locker ${locker} HTTP ${res.status}`
+                );
 
-        console.log(
-            "BOOKED API:",
-            data
-        );
+                lockerBookedStatus[locker] = false;
 
-
-        const bookedSlots =
-            data.slots || [];
-
-
-        const reservedList =
-            document.getElementById(
-                "reservedList"
-            );
-
-
-        reservedList.innerHTML =
-            "";
-
-
-        if(
-            bookedSlots.length === 0
-        ){
-
-            reservedList.innerHTML = `
-
-                <div class="empty-booking">
-                    No reservations
-                </div>
-
-            `;
-
-        }
-
-            else {
-
-                bookedSlots.forEach(slot => {
-
-                    const item =
-                        document.createElement("div");
-
-                    item.className =
-                        "booking-item";
-
-                    item.innerText =
-                        slot;
-
-                    reservedList.appendChild(item);
-
-                });
+                continue;
 
             }
 
-                
+
+            const data = await res.json();
+
+            const slots =
+                Array.isArray(data.slots)
+                    ? data.slots
+                    : [];
+
+
+            console.log(
+                `[BOOKED SLOTS] Locker ${locker}:`,
+                data
+            );
+
+
+            lockerBookedStatus[locker] =
+                slots.length > 0;
+
+
+            /*
+             * If this is the selected locker,
+             * update Reserved Slots panel.
+             */
+            if(
+                String(locker) ===
+                String(selectedLocker)
+            ){
+
+                const reservedList =
+                    document.getElementById(
+                        "reservedList"
+                    );
+
+
+                if(reservedList){
+
+                    reservedList.innerHTML = "";
+
+
+                    if(slots.length === 0){
+
+                        reservedList.innerHTML = `
+
+                            <div class="empty-booking">
+                                No reservations
+                            </div>
+
+                        `;
+
+                    }
+
+                    else{
+
+                        slots.forEach(slot => {
+
+                            reservedList.innerHTML += `
+
+                                <div class="booking-item">
+                                    ${slot}
+                                </div>
+
+                            `;
+
+                        });
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * IMPORTANT:
+         * Apply booking status AFTER
+         * all API results are loaded.
+         */
+        updateLockerCards();
+
     }
-        
+
     catch(err){
 
         console.log(
@@ -1747,8 +1748,6 @@ async function loadBookedSlots(){
     }
 
 }
-
-
 
 /* =========================================================
    LOCKER STATUS
@@ -1769,11 +1768,7 @@ async function loadCurrentLockerStatus(){
         );
 
         if(!res.ok){
-
-            throw new Error(
-                `HTTP ${res.status}`
-            );
-
+            throw new Error(`HTTP ${res.status}`);
         }
 
         const data = await res.json();
@@ -1783,181 +1778,15 @@ async function loadCurrentLockerStatus(){
             data
         );
 
+        lockerPhysicalStatus = data;
 
-        document
-            .querySelectorAll(".locker-card")
-            .forEach(card => {
-
-                const locker =
-                    String(
-                        card.dataset.locker
-                    );
-
-
-                const statusDiv =
-                    card.querySelector(
-                        ".locker-status"
-                    );
-
-
-                if(!statusDiv){
-                    return;
-                }
-
-
-                /*
-                 * API RESPONSE:
-                 *
-                 * {
-                 *   "1": "AVAILABLE",
-                 *   "2": "IN_USE",
-                 *   "3": "RESERVED"
-                 * }
-                 */
-
-                const status =
-                    String(
-                        data[locker] || ""
-                    ).toUpperCase();
-
-
-                /* =========================
-                   STATUS CLASS
-                ========================= */
-
-                let statusClass =
-                    "available";
-
-
-                let statusText =
-                    "Available";
-
-
-                if(status === "IN_USE"){
-
-                    statusClass =
-                        "inuse";
-
-                    statusText =
-                        "In Use";
-
-                }
-
-                else if(status === "RESERVED"){
-
-                    statusClass =
-                        "reserved";
-
-                    statusText =
-                        "Reserved";
-
-                }
-
-                else if(status === "OVERTIME"){
-
-                    statusClass =
-                        "overtime";
-
-                    statusText =
-                        "Overtime";
-
-                }
-
-                else if(status === "AVAILABLE"){
-
-                    statusClass =
-                        "available";
-
-                    statusText =
-                        "Available";
-
-                }
-
-                else{
-
-                    /*
-                     * IMPORTANT:
-                     * Kapag walang valid response,
-                     * huwag magsinungaling na Available.
-                     */
-
-                    statusClass =
-                        "unknown";
-
-                    statusText =
-                        "Unavailable";
-
-                }
-
-
-                statusDiv.className =
-                    `locker-status ${statusClass}`;
-
-
-                statusDiv.innerText =
-                    statusText;
-
-
-                /*
-                 * =========================
-                 * DISABLE UNAVAILABLE LOCKERS
-                 * =========================
-                 */
-
-                const isAvailable =
-                    status === "AVAILABLE";
-
-
-                card.classList.toggle(
-                    "disabled",
-                    !isAvailable
-                );
-
-
-                /*
-                 * Huwag payagan piliin ang
-                 * occupied/reserved/overtime.
-                 */
-
-                card.onclick =
-                    isAvailable
-
-                        ? () => selectLocker(
-                            card,
-                            Number(locker)
-                          )
-
-                        : null;
-
-
-                /*
-                 * Kung currently selected locker
-                 * tapos naging unavailable,
-                 * tanggalin ang selection.
-                 */
-
-                if(
-                    !isAvailable &&
-                    selectedLocker ===
-                    Number(locker)
-                ){
-
-                    selectedLocker =
-                        null;
-
-                    card.classList.remove(
-                        "active"
-                    );
-
-                }
-
-            });
+        updateLockerCards();
 
     }
 
     catch(err){
 
-        console.error(
+        console.log(
             "LOCKER STATUS ERROR:",
             err
         );
