@@ -1506,7 +1506,7 @@ let lockerBookedStatus = {};
 ========================================================= */
 
 /* =========================================================
-   PROFILE - USE CURRENT DATABASE DATA
+   PROFILE - DYNAMIC FROM LOGGED-IN USER
 ========================================================= */
 
 const profile =
@@ -1516,22 +1516,16 @@ const profile =
 
 
 /*
- * IMPORTANT:
- * user.user_id = M0012
- *
- * We should NOT use the stale localStorage
- * name ("aldrin") as the primary name.
+ * Get the actual logged-in user's name.
+ * No hardcoded name.
  */
 
 const displayName =
-    user.full_name ||
-    user.fullName ||
-    profile.full_name ||
-    profile.fullName ||
     profile.name ||
     profile.fullname ||
+    user.fullname ||
+    user.name ||
     user.username ||
-    user.user_id ||
     "";
 
 
@@ -1567,10 +1561,12 @@ document.getElementById(
 ).innerText =
     firstLetter;
 
+
 document.getElementById(
     "profile-name"
 ).innerText =
     displayName;
+
 
 document.getElementById(
     "profile-role"
