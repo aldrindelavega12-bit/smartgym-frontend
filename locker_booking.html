@@ -1045,23 +1045,22 @@ function updateLockerCards() {
 
     document.querySelectorAll(".locker-card").forEach(card => {
 
-        const lockerNumber = String(card.dataset.locker);
+        const lockerNumber =
+            String(card.dataset.locker);
 
         const statusElement =
             card.querySelector(".locker-status");
 
-        if (!statusElement) {
-            return;
-        }
+        if (!statusElement) return;
 
-        // REAL-TIME PHYSICAL STATUS
+
         const physicalStatus =
             String(
                 lockerPhysicalStatus[lockerNumber] ||
                 "AVAILABLE"
             ).toUpperCase();
 
-        // BOOKING STATUS FOR SELECTED DATE
+
         const hasBooking =
             lockerBookedStatus[lockerNumber] === true;
 
@@ -1071,12 +1070,8 @@ function updateLockerCards() {
 
 
         /*
-         * PRIORITY:
-         *
-         * IN_USE
-         * OVERTIME
-         * RESERVED
-         * AVAILABLE
+         * PHYSICAL STATUS
+         * has priority over booking status.
          */
 
         if (physicalStatus === "IN_USE") {
@@ -1085,13 +1080,20 @@ function updateLockerCards() {
             statusClass = "inuse";
 
         }
+
         else if (physicalStatus === "OVERTIME") {
 
             statusText = "Overtime";
             statusClass = "overtime";
 
         }
+
         else if (hasBooking) {
+
+            /*
+             * IMPORTANT:
+             * Reserved lockers are STILL selectable.
+             */
 
             statusText = "Reserved";
             statusClass = "reserved";
@@ -1107,17 +1109,19 @@ function updateLockerCards() {
 
 
         /*
-         * LOCKER SELECTION
+         * ONLY PHYSICAL UNAVAILABLE
+         * LOCKERS ARE DISABLED.
          */
 
         if (
-            physicalStatus !== "AVAILABLE" ||
-            hasBooking
+            physicalStatus === "IN_USE" ||
+            physicalStatus === "OVERTIME"
         ) {
 
             card.classList.add("disabled");
 
         }
+
         else {
 
             card.classList.remove("disabled");
@@ -1126,15 +1130,15 @@ function updateLockerCards() {
 
 
         /*
-         * If selected locker becomes unavailable,
-         * remove active selection.
+         * Remove selection only if the
+         * physical locker becomes unusable.
          */
 
         if (
             selectedLocker === Number(lockerNumber) &&
             (
-                physicalStatus !== "AVAILABLE" ||
-                hasBooking
+                physicalStatus === "IN_USE" ||
+                physicalStatus === "OVERTIME"
             )
         ) {
 
@@ -1147,7 +1151,6 @@ function updateLockerCards() {
     });
 
 }
-
 
 /* =========================================================
    PAGE LOAD
@@ -1251,32 +1254,74 @@ async function selectToday(){
    LOCKER
 ========================================================= */
 
-function selectLocker(
-    element,
-    locker
-){
+function selectLocker(element, locker) {
+
+    const lockerNumber =
+        String(locker);
+
+
+    const physicalStatus =
+        String(
+            lockerPhysicalStatus[lockerNumber] ||
+            "AVAILABLE"
+        ).toUpperCase();
+
+
+    /*
+     * ONLY physical status can block
+     * locker selection.
+     *
+     * RESERVED IS ALLOWED.
+     */
+
+    if (
+        physicalStatus === "IN_USE" ||
+        physicalStatus === "OVERTIME"
+    ) {
+
+        console.log(
+            `[LOCKER] Locker ${locker} is physically unavailable`
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Remove previous selection
+     */
 
     document
         .querySelectorAll(".locker-card")
         .forEach(card => {
 
-            card.classList.remove(
-                "active"
-            );
+            card.classList.remove("active");
 
         });
 
 
-    element.classList.add(
-        "active"
+    /*
+     * Select locker
+     */
+
+    element.classList.add("active");
+
+    selectedLocker =
+        Number(locker);
+
+
+    console.log(
+        "[SELECTED LOCKER]",
+        selectedLocker
     );
 
 
-    selectedLocker =
-        locker;
+    /*
+     * Load reservations for this locker/date.
+     */
 
-
-    if(selectedDate){
+    if (selectedDate) {
 
         loadBookedSlots();
 
@@ -1408,20 +1453,35 @@ async function loadBookedSlots() {
 
 
                 const start =
-                    slot.start_time ||
-                    slot.start ||
-                    slot.time ||
-                    "--:--";
+                    (
+                        slot.start_time ||
+                        slot.start ||
+                        slot.time ||
+                        ""
+                    ).substring(0, 5);
 
 
                 const end =
-                    slot.end_time ||
-                    slot.end ||
-                    "--:--";
+                    (
+                        slot.end_time ||
+                        slot.end ||
+                        ""
+                    ).substring(0, 5);
 
+
+                /*
+                * SAVE REAL BOOKING TIME
+                * so we can calculate overlap later.
+                */
 
                 item.dataset.locker =
                     locker;
+
+                item.dataset.start =
+                    start;
+
+                item.dataset.end =
+                    end;
 
 
                 item.innerHTML = `
@@ -1853,7 +1913,32 @@ function updateTimePreview(){
         );
 
 
-    checkTimeConflict();
+    const conflict =
+        checkTimeConflict();
+
+
+    if (conflict) {
+
+        alert(
+            "❌ This locker is already reserved during the selected time."
+        );
+
+        selectedStart = null;
+        selectedEnd = null;
+
+        document
+            .getElementById("startTime")
+            .value = "";
+
+        document
+            .getElementById("previewStart")
+            .innerText = "--:--";
+
+        document
+            .getElementById("previewEnd")
+            .innerText = "--:--";
+
+    }
 
 }
 
@@ -1893,7 +1978,30 @@ function formatTime(time24){
    CHECK CONFLICT
 ========================================================= */
 
-function checkTimeConflict(){
+function checkTimeConflict() {
+
+    if (
+        !selectedLocker ||
+        !selectedStart ||
+        !selectedEnd
+    ) {
+
+        return false;
+
+    }
+
+
+    const newStart =
+        timeToMinutes(
+            selectedStart
+        );
+
+
+    const newEnd =
+        timeToMinutes(
+            selectedEnd
+        );
+
 
     const reserved =
         document.querySelectorAll(
@@ -1907,17 +2015,72 @@ function checkTimeConflict(){
 
     reserved.forEach(item => {
 
-        const text =
-            item.innerText;
+        const locker =
+            Number(
+                item.dataset.locker
+            );
 
 
-        if(
-            text.includes(
-                formatTime(
-                    selectedStart
-                )
-            )
-        ){
+        /*
+         * Only compare bookings
+         * belonging to selected locker.
+         */
+
+        if (
+            locker !== Number(selectedLocker)
+        ) {
+
+            return;
+
+        }
+
+
+        const existingStart =
+            item.dataset.start;
+
+
+        const existingEnd =
+            item.dataset.end;
+
+
+        if (
+            !existingStart ||
+            !existingEnd
+        ) {
+
+            return;
+
+        }
+
+
+        const bookingStart =
+            timeToMinutes(
+                existingStart
+            );
+
+
+        const bookingEnd =
+            timeToMinutes(
+                existingEnd
+            );
+
+
+        /*
+         * OVERLAP CHECK
+         *
+         * New:
+         * 14:00 - 17:00
+         *
+         * Existing:
+         * 14:43 - 17:43
+         *
+         * CONFLICT
+         */
+
+        if (
+            newStart < bookingEnd &&
+            newEnd > bookingStart
+        ) {
 
             hasConflict =
                 true;
@@ -1927,31 +2090,30 @@ function checkTimeConflict(){
     });
 
 
-    if(hasConflict){
-
-        alert(
-            "❌ Time overlaps reservation"
-        );
-
-
-        selectedStart =
-            null;
-
-
-        selectedEnd =
-            null;
-
-
-        document
-            .getElementById(
-                "startTime"
-            )
-            .value = "";
-
-    }
+    return hasConflict;
 
 }
 
+function timeToMinutes(time) {
+
+    if (!time) {
+        return 0;
+    }
+
+
+    const parts =
+        time
+            .substring(0, 5)
+            .split(":")
+            .map(Number);
+
+
+    return (
+        parts[0] * 60 +
+        parts[1]
+    );
+
+}
 
 /* =========================================================
    REAL-TIME LOCKER STATUS
