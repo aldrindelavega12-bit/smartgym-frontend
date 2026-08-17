@@ -1199,9 +1199,12 @@ window.onload = async () => {
 
     await selectToday();
 
-    await loadCurrentLockerStatus();
-
-    await loadBookedSlots();
+    // Load physical status + booking status
+    // at the same time.
+    await Promise.all([
+        loadCurrentLockerStatus(),
+        loadBookedSlots()
+    ]);
 
 };
 
@@ -1262,7 +1265,9 @@ async function selectToday(){
     const todayString =
         `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-    selectedDate = todayString;
+    selectedDate =
+        todayString;
+
 
     document
         .querySelectorAll(".locker-day")
@@ -1271,7 +1276,7 @@ async function selectToday(){
             if (
                 Number(div.innerText) === day &&
                 div.style.cursor !== "not-allowed"
-            ) {
+            ){
 
                 div.classList.add(
                     "selected-day"
@@ -1281,8 +1286,11 @@ async function selectToday(){
 
         });
 
-    // IMPORTANT
-    await loadAllBookedSlotsForDate();
+
+    console.log(
+        "[SELECTED DATE]",
+        selectedDate
+    );
 
 }
 
@@ -1372,237 +1380,308 @@ function selectLocker(element, locker) {
 async function loadBookedSlots() {
 
     if (!selectedDate) {
-        console.log("[BOOKED SLOTS] No selected date");
+
+        console.log(
+            "[BOOKED SLOTS] No selected date"
+        );
+
         return;
     }
+
 
     console.log(
         "[BOOKED SLOTS] Loading for date:",
         selectedDate
     );
 
-    // Reset booking status
+
     lockerBookedStatus = {
         1: false,
         2: false,
         3: false
     };
 
+
     const reservedList =
-        document.getElementById("reservedList");
+        document.getElementById(
+            "reservedList"
+        );
+
 
     if (reservedList) {
+
         reservedList.innerHTML = "";
+
     }
+
 
     try {
 
         const lockers = [1, 2, 3];
 
+
+        /*
+         * FETCH ALL LOCKERS AT ONCE
+         */
+
+        const results =
+            await Promise.all(
+
+                lockers.map(
+                    async locker => {
+
+                        try {
+
+                            const res =
+                                await fetch(
+                                    `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
+                                    {
+                                        cache: "no-store"
+                                    }
+                                );
+
+
+                            if (!res.ok) {
+
+                                console.error(
+                                    `[BOOKED SLOTS] Locker ${locker} HTTP ${res.status}`
+                                );
+
+                                return {
+                                    locker,
+                                    slots: []
+                                };
+
+                            }
+
+
+                            const data =
+                                await res.json();
+
+
+                            console.log(
+                                `[BOOKED SLOTS] Locker ${locker}:`,
+                                data
+                            );
+
+
+                            const slots =
+                                Array.isArray(data)
+                                    ? data
+                                    : Array.isArray(data.slots)
+                                        ? data.slots
+                                        : [];
+
+
+                            return {
+                                locker,
+                                slots
+                            };
+
+                        }
+
+                        catch (err) {
+
+                            console.error(
+                                `[BOOKED SLOTS] Locker ${locker} ERROR:`,
+                                err
+                            );
+
+
+                            return {
+                                locker,
+                                slots: []
+                            };
+
+                        }
+
+                    }
+                )
+
+            );
+
+
+        /*
+         * PROCESS RESULTS
+         */
+
         let totalReservations = 0;
 
-        for (const locker of lockers) {
 
-            const res = await fetch(
-                `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
-                {
-                    cache: "no-store"
-                }
-            );
-
-            if (!res.ok) {
-
-                console.error(
-                    `[BOOKED SLOTS] Locker ${locker} HTTP ${res.status}`
-                );
-
-                continue;
-            }
-
-            const data = await res.json();
-
-            console.log(
-                `[BOOKED SLOTS] Locker ${locker}:`,
-                data
-            );
-
-            const slots =
-                Array.isArray(data)
-                    ? data
-                    : Array.isArray(data.slots)
-                        ? data.slots
-                        : [];
-
-
-            /*
-             * IMPORTANT
-             *
-             * If there is at least one booking
-             * for this locker on this date,
-             * mark it RESERVED.
-             */
-
-            if (slots.length > 0) {
-
-                lockerBookedStatus[String(locker)] = true;
-
-            }
-
-
-            /*
-             * DISPLAY ALL BOOKINGS
-             */
-
-            slots.forEach(slot => {
-
-                totalReservations++;
-
-                console.log(
-                    "[BOOKING SLOT RAW]",
-                    slot
-                );
-
-
-                let start = "";
-                let end = "";
+        results.forEach(
+            ({
+                locker,
+                slots
+            }) => {
 
 
                 /*
-                 * CASE 1
-                 *
-                 * API returns:
-                 *
-                 * "2:43 PM - 5:43 PM"
+                 * MARK RESERVED
                  */
 
-                if (typeof slot === "string") {
+                if (
+                    slots.length > 0
+                ) {
 
-                    const parts =
-                        slot.split(/\s*-\s*/);
+                    lockerBookedStatus[
+                        String(locker)
+                    ] = true;
 
-                    if (parts.length >= 2) {
+                }
 
-                        start =
-                            parts[0].trim();
 
-                        end =
-                            parts[1].trim();
+                /*
+                 * DISPLAY BOOKINGS
+                 */
+
+                slots.forEach(slot => {
+
+                    totalReservations++;
+
+
+                    console.log(
+                        "[BOOKING SLOT RAW]",
+                        slot
+                    );
+
+
+                    let start = "";
+                    let end = "";
+
+
+                    /*
+                     * API CURRENT FORMAT:
+                     *
+                     * "2:43 PM - 5:43 PM"
+                     */
+
+                    if (
+                        typeof slot === "string"
+                    ) {
+
+                        const parts =
+                            slot.split(
+                                /\s*-\s*/
+                            );
+
+
+                        if (
+                            parts.length >= 2
+                        ) {
+
+                            start =
+                                parts[0].trim();
+
+                            end =
+                                parts[1].trim();
+
+                        }
 
                     }
 
-                }
+
+                    /*
+                     * OBJECT FORMAT
+                     */
+
+                    else if (
+                        slot &&
+                        typeof slot === "object"
+                    ) {
+
+                        const rawStart =
+                            slot.start_time ??
+                            slot.startTime ??
+                            slot.start ??
+                            slot.time ??
+                            slot.booking_start ??
+                            slot.booking_start_time ??
+                            slot.from ??
+                            "";
 
 
-                /*
-                 * CASE 2
-                 *
-                 * API returns object
-                 */
-
-                else if (
-                    slot &&
-                    typeof slot === "object"
-                ) {
-
-                    const rawStart =
-                        slot.start_time ??
-                        slot.startTime ??
-                        slot.start ??
-                        slot.time ??
-                        slot.booking_start ??
-                        slot.booking_start_time ??
-                        slot.from ??
-                        "";
-
-                    const rawEnd =
-                        slot.end_time ??
-                        slot.endTime ??
-                        slot.end ??
-                        slot.booking_end ??
-                        slot.booking_end_time ??
-                        slot.to ??
-                        "";
+                        const rawEnd =
+                            slot.end_time ??
+                            slot.endTime ??
+                            slot.end ??
+                            slot.booking_end ??
+                            slot.booking_end_time ??
+                            slot.to ??
+                            "";
 
 
-                    start =
-                        normalizeBookingTime(
-                            rawStart
+                        start =
+                            normalizeBookingTime(
+                                rawStart
+                            );
+
+
+                        end =
+                            normalizeBookingTime(
+                                rawEnd
+                            );
+
+                    }
+
+
+                    console.log(
+                        `[BOOKING PARSED] Locker ${locker}:`,
+                        start,
+                        "-",
+                        end
+                    );
+
+
+                    if (!reservedList) {
+                        return;
+                    }
+
+
+                    const item =
+                        document.createElement(
+                            "div"
                         );
 
-                    end =
-                        normalizeBookingTime(
-                            rawEnd
-                        );
 
-                }
+                    item.className =
+                        "booking-item";
 
 
-                console.log(
-                    `[BOOKING PARSED] Locker ${locker}:`,
-                    start,
-                    "-",
-                    end
-                );
+                    item.dataset.locker =
+                        locker;
 
 
-                if (!reservedList) {
-                    return;
-                }
+                    item.dataset.start =
+                        start;
 
 
-                const item =
-                    document.createElement("div");
+                    item.dataset.end =
+                        end;
 
 
-                item.className =
-                    "booking-item";
+                    item.innerHTML = `
+                        <strong>
+                            Locker ${locker}
+                        </strong>
+
+                        <br>
+
+                        <span>
+                            ${start || "--:--"}
+                            -
+                            ${end || "--:--"}
+                        </span>
+                    `;
 
 
-                /*
-                 * SAVE VALUES FOR
-                 * CONFLICT CHECK
-                 */
+                    reservedList.appendChild(
+                        item
+                    );
 
-                item.dataset.locker =
-                    locker;
+                });
 
-                item.dataset.start =
-                    start;
-
-                item.dataset.end =
-                    end;
-
-
-                /*
-                 * DISPLAY
-                 */
-
-                item.innerHTML = `
-                    <strong>
-                        Locker ${locker}
-                    </strong>
-
-                    <br>
-
-                    <span>
-                        ${
-                            start || "--:--"
-                        }
-                        -
-                        ${
-                            end || "--:--"
-                        }
-                    </span>
-                `;
-
-
-                reservedList.appendChild(
-                    item
-                );
-
-            });
-
-        }
+            }
+        );
 
 
         /*
@@ -1624,7 +1703,7 @@ async function loadBookedSlots() {
 
 
         /*
-         * UPDATE LOCKER CARDS
+         * UPDATE UI IMMEDIATELY
          */
 
         updateLockerCards();
