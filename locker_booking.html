@@ -79,29 +79,26 @@
 /* =========================================================
    LOCKER CARDS
 ========================================================= */
-
 .locker-cards {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
-
-    margin: 0 0 24px;
-
+    gap: 16px;
+    margin: 0 0 20px;
     width: 100%;
 }
 
 .locker-card {
-    height: 142px;
-    min-height: 0;
+    height: 128px;
+    min-height: 128px;
 
-    padding: 18px;
+    padding: 14px;
 
     box-sizing: border-box;
 
     background: #ffffff;
 
     border: 1px solid #dce8e1;
-    border-radius: 18px;
+    border-radius: 16px;
 
     display: flex;
     flex-direction: column;
@@ -114,11 +111,11 @@
 
     transition: .18s ease;
 
-    box-shadow: 0 8px 25px rgba(20,60,40,.04);
+    box-shadow: 0 6px 20px rgba(20,60,40,.04);
 }
 
 .locker-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     border-color: #087c3d;
 }
 
@@ -133,24 +130,24 @@
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
 
-    font-size: 27px;
+    font-size: 25px;
 
     color: #087c3d;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 }
 
 .locker-card h3 {
-    margin: 0 0 7px;
+    margin: 0 0 5px;
 
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
 
     color: #102027;
 }
 
 .locker-status {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
 }
 
