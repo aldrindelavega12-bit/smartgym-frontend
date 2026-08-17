@@ -1061,8 +1061,48 @@ window.onload = async () => {
     }
 
 };
+async function loadAllBookedSlotsForDate() {
 
-function selectToday(){
+    if (!selectedDate) {
+        return;
+    }
+
+    try {
+
+        const lockers = [1, 2, 3];
+
+        for (const locker of lockers) {
+
+            const res = await fetch(
+                `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+            if (!res.ok) {
+                continue;
+            }
+
+            const data = await res.json();
+
+            console.log(
+                `[BOOKED SLOTS] Locker ${locker}:`,
+                data
+            );
+        }
+
+    } catch (err) {
+
+        console.error(
+            "ALL BOOKED SLOTS ERROR:",
+            err
+        );
+
+    }
+
+}
+async function selectToday(){
 
     const today = new Date();
 
@@ -1080,14 +1120,13 @@ function selectToday(){
 
     selectedDate = todayString;
 
-    // Highlight today's date
     document
         .querySelectorAll(".locker-day")
         .forEach(div => {
 
             if (
                 Number(div.innerText) === day &&
-                !div.style.cursor.includes("not-allowed")
+                div.style.cursor !== "not-allowed"
             ) {
 
                 div.classList.add(
@@ -1098,8 +1137,10 @@ function selectToday(){
 
         });
 
-}
+    // IMPORTANT
+    await loadAllBookedSlotsForDate();
 
+}
 
 /* =========================================================
    LOCKER
