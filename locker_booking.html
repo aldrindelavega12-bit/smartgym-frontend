@@ -1303,7 +1303,6 @@ function selectLocker(element, locker) {
     const lockerNumber =
         String(locker);
 
-
     const physicalStatus =
         String(
             lockerPhysicalStatus[lockerNumber] ||
@@ -1315,7 +1314,7 @@ function selectLocker(element, locker) {
      * ONLY physical status can block
      * locker selection.
      *
-     * RESERVED IS ALLOWED.
+     * RESERVED IS STILL CLICKABLE.
      */
 
     if (
@@ -1328,12 +1327,13 @@ function selectLocker(element, locker) {
         );
 
         return;
-
     }
 
 
     /*
-     * Remove previous selection
+     * CHANGE SELECTED LOCKER ONLY.
+     *
+     * DO NOT reload booked slots here.
      */
 
     document
@@ -1344,10 +1344,6 @@ function selectLocker(element, locker) {
 
         });
 
-
-    /*
-     * Select locker
-     */
 
     element.classList.add("active");
 
@@ -1360,18 +1356,8 @@ function selectLocker(element, locker) {
         selectedLocker
     );
 
-
-    /*
-     * Load reservations for this locker/date.
-     */
-
-    if (selectedDate) {
-
-        loadBookedSlots();
-
-    }
-
 }
+
 
 /* =========================================================
    LOAD BOOKED SLOTS
@@ -1689,17 +1675,32 @@ async function loadBookedSlots() {
          */
 
         if (
-            reservedList &&
-            totalReservations === 0
+            reservedList
         ) {
 
-            reservedList.innerHTML = `
-                <div class="empty-booking">
-                    No reservations
-                </div>
-            `;
+            if (totalReservations === 0) {
+
+                reservedList.innerHTML = `
+                    <div class="empty-booking">
+                        No reservations
+                    </div>
+                `;
+
+            }
+
+            else {
+
+                reservedList.innerHTML = "";
+
+                reservedList.appendChild(
+                    newReservedList
+                );
+
+            }
 
         }
+
+       
 
 
         /*
@@ -2027,7 +2028,12 @@ function renderCalendar(){
 
         else{
 
-            div.onclick = () => {
+            div.onclick = async () => {
+
+                if (selectedDate === fullDate) {
+                    return;
+                }
+
 
                 document
                     .querySelectorAll(".locker-day")
@@ -2049,7 +2055,18 @@ function renderCalendar(){
                     fullDate;
 
 
-                loadBookedSlots();
+                console.log(
+                    "[DATE CHANGED]",
+                    selectedDate
+                );
+
+
+                /*
+                * Only the DATE change
+                * reloads reservations.
+                */
+
+                await loadBookedSlots();
 
             };
 
