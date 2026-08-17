@@ -1250,41 +1250,316 @@ async function selectToday(){
 /* =========================================================
    LOCKER
 ========================================================= */
+function selectLocker(element, locker) {
 
-function selectLocker(
-    element,
-    locker
-){
+    const lockerNumber = String(locker);
+
+
+    const physicalStatus =
+        String(
+            lockerPhysicalStatus[lockerNumber] ||
+            "AVAILABLE"
+        ).toUpperCase();
+
+
+    const hasBooking =
+        lockerBookedStatus[lockerNumber] === true;
+
+
+    /*
+     * Do not allow unavailable locker
+     */
+
+    if (
+        physicalStatus !== "AVAILABLE" ||
+        hasBooking
+    ) {
+
+        console.log(
+            `[LOCKER] Locker ${locker} is not available`
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Remove previous selection
+     */
 
     document
         .querySelectorAll(".locker-card")
         .forEach(card => {
 
-            card.classList.remove(
-                "active"
-            );
+            card.classList.remove("active");
 
         });
 
 
-    element.classList.add(
-        "active"
+    /*
+     * Select locker
+     */
+
+    element.classList.add("active");
+
+    selectedLocker = locker;
+
+
+    console.log(
+        "[SELECTED LOCKER]",
+        selectedLocker
     );
 
 
-    selectedLocker =
-        locker;
+    /*
+     * Load reservations
+     * for selected date
+     */
 
-
-    if(selectedDate){
+    if (selectedDate) {
 
         loadBookedSlots();
 
     }
 
 }
+/* =========================================================
+   LOAD BOOKED SLOTS
+========================================================= */
+
+async function loadBookedSlots() {
+
+    if (!selectedDate) {
+        console.log("[BOOKED SLOTS] No selected date");
+        return;
+    }
+
+    console.log(
+        "[BOOKED SLOTS] Loading for date:",
+        selectedDate
+    );
 
 
+    lockerBookedStatus = {
+        1: false,
+        2: false,
+        3: false
+    };
+
+
+    const reservedList =
+        document.getElementById("reservedList");
+
+
+    if (reservedList) {
+
+        reservedList.innerHTML = "";
+
+    }
+
+
+    try {
+
+        const lockers = [1, 2, 3];
+
+        let totalReservations = 0;
+
+
+        for (const locker of lockers) {
+
+            const res = await fetch(
+                `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+            if (!res.ok) {
+
+                console.error(
+                    `[BOOKED SLOTS] Locker ${locker} HTTP ${res.status}`
+                );
+
+                continue;
+
+            }
+
+
+            const data = await res.json();
+
+
+            console.log(
+                `[BOOKED SLOTS] Locker ${locker}:`,
+                data
+            );
+
+
+            /*
+             * API response:
+             *
+             * {
+             *     slots: [...]
+             * }
+             */
+
+            const slots =
+                Array.isArray(data)
+                    ? data
+                    : Array.isArray(data.slots)
+                        ? data.slots
+                        : [];
+
+
+            /*
+             * Locker is considered RESERVED
+             * if there is at least one booking
+             * on the selected date.
+             */
+
+            if (slots.length > 0) {
+
+                lockerBookedStatus[locker] = true;
+
+            }
+
+
+            /*
+             * Show reservations
+             */
+
+            slots.forEach(slot => {
+
+                totalReservations++;
+
+
+                if (!reservedList) {
+                    return;
+                }
+
+
+                const item =
+                    document.createElement("div");
+
+
+                item.className =
+                    "booking-item";
+
+
+                const start =
+                    slot.start_time ||
+                    slot.start ||
+                    slot.time ||
+                    "--:--";
+
+
+                const end =
+                    slot.end_time ||
+                    slot.end ||
+                    "--:--";
+
+
+                item.dataset.locker =
+                    locker;
+
+
+                item.innerHTML = `
+                    <strong>Locker ${locker}</strong>
+                    <br>
+                    ${formatBookingTime(start)}
+                    - ${formatBookingTime(end)}
+                `;
+
+
+                reservedList.appendChild(item);
+
+            });
+
+        }
+
+
+        /*
+         * No reservations
+         */
+
+        if (
+            reservedList &&
+            totalReservations === 0
+        ) {
+
+            reservedList.innerHTML = `
+                <div class="empty-booking">
+                    No reservations
+                </div>
+            `;
+
+        }
+
+
+        /*
+         * IMPORTANT:
+         * Refresh locker cards after
+         * booking status has been loaded.
+         */
+
+        updateLockerCards();
+
+
+        console.log(
+            "[LOCKER BOOKED STATUS]",
+            lockerBookedStatus
+        );
+
+
+    }
+    catch (err) {
+
+        console.error(
+            "[BOOKED SLOTS] ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FORMAT BOOKING TIME
+========================================================= */
+
+function formatBookingTime(time) {
+
+    if (!time) {
+        return "--:--";
+    }
+
+
+    /*
+     * If API returns HH:MM:SS
+     */
+
+    if (
+        typeof time === "string" &&
+        /^\d{2}:\d{2}/.test(time)
+    ) {
+
+        return formatTime(
+            time.substring(0, 5)
+        );
+
+    }
+
+
+    /*
+     * If already formatted,
+     * just return it.
+     */
+
+    return time;
+
+}
 
 /* =========================================================
    CALENDAR
@@ -1717,121 +1992,7 @@ function checkTimeConflict(){
 
 }
 
-/* =========================================================
-   LOAD BOOKED SLOTS
-========================================================= */
 
-function updateLockerCards() {
-
-    document.querySelectorAll(".locker-card").forEach(card => {
-
-        const lockerNumber = String(card.dataset.locker);
-
-        const statusElement =
-            card.querySelector(".locker-status");
-
-        if (!statusElement) {
-            return;
-        }
-
-        // REAL-TIME PHYSICAL STATUS
-        const physicalStatus =
-            String(
-                lockerPhysicalStatus[lockerNumber] ||
-                "AVAILABLE"
-            ).toUpperCase();
-
-        // BOOKING STATUS FOR SELECTED DATE
-        const hasBooking =
-            lockerBookedStatus[lockerNumber] === true;
-
-
-        let statusText = "Available";
-        let statusClass = "available";
-
-
-        /*
-         * PRIORITY:
-         *
-         * IN_USE
-         * OVERTIME
-         * RESERVED
-         * AVAILABLE
-         */
-
-        if (physicalStatus === "IN_USE") {
-
-            statusText = "In Use";
-            statusClass = "inuse";
-
-        }
-        else if (physicalStatus === "OVERTIME") {
-
-            statusText = "Overtime";
-            statusClass = "overtime";
-
-        }
-        else if (hasBooking) {
-
-            statusText = "Reserved";
-            statusClass = "reserved";
-
-        }
-
-
-        statusElement.textContent =
-            statusText;
-
-        statusElement.className =
-            `locker-status ${statusClass}`;
-
-
-        /*
-         * LOCKER SELECTION
-         */
-
-        if (
-            physicalStatus !== "AVAILABLE" ||
-            hasBooking
-        ) {
-
-            card.classList.add("disabled");
-
-        }
-        else {
-
-            card.classList.remove("disabled");
-
-        }
-
-
-        /*
-         * If selected locker becomes unavailable,
-         * remove active selection.
-         */
-
-        if (
-            selectedLocker === Number(lockerNumber) &&
-            (
-                physicalStatus !== "AVAILABLE" ||
-                hasBooking
-            )
-        ) {
-
-            card.classList.remove("active");
-
-            selectedLocker = null;
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   LOCKER STATUS
-========================================================= */
 /* =========================================================
    REAL-TIME LOCKER STATUS
 ========================================================= */
