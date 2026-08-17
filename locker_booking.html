@@ -1038,6 +1038,112 @@ function setProfile(){
 
 }
 
+function updateLockerCards() {
+
+    document.querySelectorAll(".locker-card").forEach(card => {
+
+        const lockerNumber = String(card.dataset.locker);
+
+        const statusElement =
+            card.querySelector(".locker-status");
+
+        if (!statusElement) {
+            return;
+        }
+
+        // REAL-TIME PHYSICAL STATUS
+        const physicalStatus =
+            String(
+                lockerPhysicalStatus[lockerNumber] ||
+                "AVAILABLE"
+            ).toUpperCase();
+
+        // BOOKING STATUS FOR SELECTED DATE
+        const hasBooking =
+            lockerBookedStatus[lockerNumber] === true;
+
+
+        let statusText = "Available";
+        let statusClass = "available";
+
+
+        /*
+         * PRIORITY:
+         *
+         * IN_USE
+         * OVERTIME
+         * RESERVED
+         * AVAILABLE
+         */
+
+        if (physicalStatus === "IN_USE") {
+
+            statusText = "In Use";
+            statusClass = "inuse";
+
+        }
+        else if (physicalStatus === "OVERTIME") {
+
+            statusText = "Overtime";
+            statusClass = "overtime";
+
+        }
+        else if (hasBooking) {
+
+            statusText = "Reserved";
+            statusClass = "reserved";
+
+        }
+
+
+        statusElement.textContent =
+            statusText;
+
+        statusElement.className =
+            `locker-status ${statusClass}`;
+
+
+        /*
+         * LOCKER SELECTION
+         */
+
+        if (
+            physicalStatus !== "AVAILABLE" ||
+            hasBooking
+        ) {
+
+            card.classList.add("disabled");
+
+        }
+        else {
+
+            card.classList.remove("disabled");
+
+        }
+
+
+        /*
+         * If selected locker becomes unavailable,
+         * remove active selection.
+         */
+
+        if (
+            selectedLocker === Number(lockerNumber) &&
+            (
+                physicalStatus !== "AVAILABLE" ||
+                hasBooking
+            )
+        ) {
+
+            card.classList.remove("active");
+
+            selectedLocker = null;
+
+        }
+
+    });
+
+}
 
 
 /* =========================================================
@@ -1049,13 +1155,11 @@ window.onload = async () => {
 
     renderCalendar();
 
-    selectToday();
+    await selectToday();
 
     await loadCurrentLockerStatus();
 
     await loadBookedSlots();
-
-    loadMessageCount();
 
 };
 
@@ -1610,144 +1714,117 @@ function checkTimeConflict(){
 
 }
 
-
-
 /* =========================================================
    LOAD BOOKED SLOTS
 ========================================================= */
 
-async function loadBookedSlots(){
+function updateLockerCards() {
 
-    try{
+    document.querySelectorAll(".locker-card").forEach(card => {
 
-        if(!selectedDate){
+        const lockerNumber = String(card.dataset.locker);
+
+        const statusElement =
+            card.querySelector(".locker-status");
+
+        if (!statusElement) {
             return;
         }
 
+        // REAL-TIME PHYSICAL STATUS
+        const physicalStatus =
+            String(
+                lockerPhysicalStatus[lockerNumber] ||
+                "AVAILABLE"
+            ).toUpperCase();
+
+        // BOOKING STATUS FOR SELECTED DATE
+        const hasBooking =
+            lockerBookedStatus[lockerNumber] === true;
+
+
+        let statusText = "Available";
+        let statusClass = "available";
+
 
         /*
-         * Check ALL lockers for the selected date.
+         * PRIORITY:
+         *
+         * IN_USE
+         * OVERTIME
+         * RESERVED
+         * AVAILABLE
          */
-        const lockers = [1, 2, 3];
 
-        lockerBookedStatus = {};
+        if (physicalStatus === "IN_USE") {
 
+            statusText = "In Use";
+            statusClass = "inuse";
 
-        for(const locker of lockers){
+        }
+        else if (physicalStatus === "OVERTIME") {
 
-            const res = await fetch(
-                `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
-                {
-                    cache: "no-store"
-                }
-            );
+            statusText = "Overtime";
+            statusClass = "overtime";
 
+        }
+        else if (hasBooking) {
 
-            if(!res.ok){
+            statusText = "Reserved";
+            statusClass = "reserved";
 
-                console.log(
-                    `[BOOKED SLOTS] Locker ${locker} HTTP ${res.status}`
-                );
-
-                lockerBookedStatus[locker] = false;
-
-                continue;
-
-            }
+        }
 
 
-            const data = await res.json();
+        statusElement.textContent =
+            statusText;
 
-            const slots =
-                Array.isArray(data.slots)
-                    ? data.slots
-                    : [];
-
-
-            console.log(
-                `[BOOKED SLOTS] Locker ${locker}:`,
-                data
-            );
+        statusElement.className =
+            `locker-status ${statusClass}`;
 
 
-            lockerBookedStatus[locker] =
-                slots.length > 0;
+        /*
+         * LOCKER SELECTION
+         */
 
+        if (
+            physicalStatus !== "AVAILABLE" ||
+            hasBooking
+        ) {
 
-            /*
-             * If this is the selected locker,
-             * update Reserved Slots panel.
-             */
-            if(
-                String(locker) ===
-                String(selectedLocker)
-            ){
+            card.classList.add("disabled");
 
-                const reservedList =
-                    document.getElementById(
-                        "reservedList"
-                    );
+        }
+        else {
 
-
-                if(reservedList){
-
-                    reservedList.innerHTML = "";
-
-
-                    if(slots.length === 0){
-
-                        reservedList.innerHTML = `
-
-                            <div class="empty-booking">
-                                No reservations
-                            </div>
-
-                        `;
-
-                    }
-
-                    else{
-
-                        slots.forEach(slot => {
-
-                            reservedList.innerHTML += `
-
-                                <div class="booking-item">
-                                    ${slot}
-                                </div>
-
-                            `;
-
-                        });
-
-                    }
-
-                }
-
-            }
+            card.classList.remove("disabled");
 
         }
 
 
         /*
-         * IMPORTANT:
-         * Apply booking status AFTER
-         * all API results are loaded.
+         * If selected locker becomes unavailable,
+         * remove active selection.
          */
-        updateLockerCards();
 
-    }
+        if (
+            selectedLocker === Number(lockerNumber) &&
+            (
+                physicalStatus !== "AVAILABLE" ||
+                hasBooking
+            )
+        ) {
 
-    catch(err){
+            card.classList.remove("active");
 
-        console.log(
-            "BOOKED SLOT ERROR:",
-            err
-        );
+            selectedLocker = null;
 
-    }
+        }
+
+    });
 
 }
+
 
 /* =========================================================
    LOCKER STATUS
