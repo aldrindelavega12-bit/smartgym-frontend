@@ -1673,30 +1673,26 @@ async function loadBookedSlots(){
 
             else {
 
-        bookedSlots.forEach(slot => {
+                bookedSlots.forEach(slot => {
 
-            const item =
-                document.createElement("div");
+                    const item =
+                        document.createElement("div");
 
-            item.className =
-                "booking-item";
+                    item.className =
+                        "booking-item";
 
-            item.innerText =
-                slot;
+                    item.innerText =
+                        slot;
 
-            reservedList.appendChild(item);
+                    reservedList.appendChild(item);
 
-        });
+                });
 
+            }
+
+                
     }
-
         
-    }
-        
-
-
-    
-
     catch(err){
 
         console.log(
