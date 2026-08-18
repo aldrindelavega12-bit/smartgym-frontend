@@ -210,13 +210,14 @@ body {
    ========================================================= */
 
 .pre-member-grid {
+
     display: grid;
 
     grid-template-columns:
         minmax(0, 1fr)
         minmax(0, 1fr);
 
-    gap: 24px;
+    gap: 20px;
 
     width: 100%;
 }
@@ -227,18 +228,20 @@ body {
    ========================================================= */
 
 .dashboard-card {
+
     background: #ffffff;
 
     border: 1px solid #dfe9e3;
 
-    border-radius: 20px;
+    border-radius: 16px;
 
-    padding: 26px;
+    padding: 20px;
 
     box-shadow:
         0 3px 14px rgba(20, 60, 40, .04);
-}
 
+    overflow: hidden;
+}
 
 /* =========================================================
    CARD HEADER
@@ -249,12 +252,12 @@ body {
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
 }
 
 .card-icon {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
 
     border-radius: 50%;
 
@@ -272,7 +275,7 @@ body {
 
     color: #101a16;
 
-    font-size: 20px;
+    font-size: 19px;
 
     font-weight: 700;
 }
@@ -281,7 +284,7 @@ body {
     width: 100%;
     height: 1px;
 
-    margin: 18px 0;
+    margin: 14px 0;
 
     background: #dfe9e3;
 }
@@ -292,22 +295,22 @@ body {
    ========================================================= */
 
 .next-step-description {
-    margin: 0 0 20px;
+    margin: 0 0 12px;
 
     color: #4e655a;
 
-    font-size: 16px;
+    font-size: 15px;
 
-    line-height: 1.55;
+    line-height: 1.45;
 }
 
 .enrollment-step {
-    min-height: 62px;
+    min-height: 52px;
 
     display: flex;
     align-items: center;
 
-    gap: 13px;
+    gap: 11px;
 
     border-bottom: 1px solid #dfe9e3;
 }
@@ -315,13 +318,13 @@ body {
 .enrollment-step i {
     color: #07883f;
 
-    font-size: 23px;
+    font-size: 21px;
 }
 
 .enrollment-step strong {
     color: #101a16;
 
-    font-size: 16px;
+    font-size: 15px;
 
     font-weight: 700;
 }
@@ -378,13 +381,13 @@ body {
    ========================================================= */
 
 .gym-info-row {
-    min-height: 64px;
+    min-height: 54px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 15px;
 
     border-bottom: 1px solid #dfe9e3;
 }
@@ -397,18 +400,18 @@ body {
     display: flex;
     align-items: center;
 
-    gap: 13px;
+    gap: 10px;
 }
 
 .gym-info-left strong {
     color: #101a16;
 
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .gym-info-icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
 
     flex-shrink: 0;
 
@@ -426,9 +429,9 @@ body {
 .gym-info-value {
     color: #4d6258;
 
-    font-size: 14px;
+    font-size: 13px;
 
-    line-height: 1.4;
+    line-height: 1.3;
 
     text-align: right;
 }
@@ -1270,4 +1273,13 @@ body {
 .profile-dropdown .dropdown-logout i {
 
     color: #b42318 !important;
+}
+
+.navbar .menu a.active {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+.navbar .menu a.active i {
+    color: #087c3d;
 }
