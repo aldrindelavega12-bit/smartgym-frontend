@@ -2,59 +2,427 @@
 <html>
 <head>
     <title>Staff Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/staff-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
 
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="navbar">
-    <h2>SMART GYM</h2>
+
+    <!-- BRAND -->
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <div class="brand-text">
+
+            <strong>SMART GYM</strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
     <div class="menu" id="menu"></div>
-    <button onclick="logout()">Logout</button>
+
+
+    <!-- MOTIVATIONAL CARD -->
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <h3>Keep Pushing</h3>
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 </div>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <div class="layout">
-<div class="main">
 
-    <div class="hero">
-        <h1>STAFF DASHBOARD</h1>
-        <p>Monitoring system</p>
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+            <div class="top-right">
+
+                <div class="staff-profile" onclick="toggleStaffMenu()">
+
+                    <div class="staff-avatar">
+                        S
+                    </div>
+
+                    <div class="staff-info">
+
+                        <strong>Staff</strong>
+
+                        <small>Staff</small>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+                    <!-- STAFF DROPDOWN -->
+                    <div id="staffDropdown" class="staff-profile-dropdown">
+
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <h1>
+                    STAFF DASHBOARD
+                </h1>
+
+                <p>
+                    Monitoring system
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+        ================================================== -->
+
+        <div class="summary-cards">
+
+            <!-- TOTAL ATTENDANCE -->
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        Total Attendance
+                    </span>
+
+                    <strong id="totalAttendance">
+                        0
+                    </strong>
+
+                    <small>
+                        Attendance recorded today
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOCKERS IN USE -->
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        Lockers In Use
+                    </span>
+
+                    <strong id="lockersInUse">
+                        0
+                    </strong>
+
+                    <small>
+                        Active locker sessions today
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- CURRENT OCCUPANCY -->
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    <i class="fa-solid fa-user-group"></i>
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        Current Occupancy
+                    </span>
+
+                    <strong id="currentOccupancy">
+                        0
+                    </strong>
+
+                    <small>
+                        Members currently inside
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             QUICK ACTION CARDS
+        ================================================== -->
+
+        <div class="cards">
+
+
+            <!-- MESSAGES -->
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+
+                <h3>
+                    Messages
+                </h3>
+
+                <p>
+                    View and manage<br>
+                    system messages
+                </p>
+
+                <button
+                    onclick="go('messages.html')">
+
+                    View
+                    <span>→</span>
+
+                </button>
+
+            </div>
+
+
+            <!-- ATTENDANCE -->
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+
+                <h3>
+                    Attendance
+                </h3>
+
+                <p>
+                    View and monitor<br>
+                    attendance logs
+                </p>
+
+                <button
+                    onclick="go('attendance.html')">
+
+                    View
+                    <span>→</span>
+
+                </button>
+
+            </div>
+
+
+            <!-- LOCKER -->
+            <div class="card">
+
+                <div class="card-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <h3>
+                    Locker
+                </h3>
+
+                <p>
+                    View and monitor<br>
+                    locker activity
+                </p>
+
+                <button
+                    onclick="go('locker.html')">
+
+                    View
+                    <span>→</span>
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
     </div>
 
-    <div class="cards">
-        <div class="card">
-            <h3>Messages</h3>
-            <button onclick="go('messages.html')">View →</button>
-        </div>
+</div>
 
-        <div class="card">
-            <h3>Attendance</h3>
-            <button onclick="go('attendance.html')">View →</button>
-        </div>
 
-        <div class="card">
-            <h3>Locker</h3>
-            <button onclick="go('locker.html')">View →</button>
-        </div>
-    </div>
+<!-- =====================================================
+     NOTIFICATION POPUP
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
 
 </div>
-</div>
-<div id="notifPopup" class="notif-popup">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
-</div>
+
 
 <audio id="notifSound">
-    <source src="notif.mp3" type="audio/mpeg">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
 </audio>
 
-<!-- SOCKET -->
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 <script>
+
+// ================= DASHBOARD DATA =================
+
+async function loadDashboard(){
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/dashboard`
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                `Dashboard API error: ${response.status}`
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        console.log(
+            "STAFF DASHBOARD DATA:",
+            data
+        );
+
+
+        // TOTAL ATTENDANCE
+        document.getElementById(
+            "totalAttendance"
+        ).innerText =
+            data.total_attendance || 0;
+
+
+        // LOCKERS IN USE
+        document.getElementById(
+            "lockersInUse"
+        ).innerText =
+            data.active_lockers || 0;
+
+
+        // CURRENT OCCUPANCY
+        document.getElementById(
+            "currentOccupancy"
+        ).innerText =
+            data.active_users || 0;
+
+
+    }catch(error){
+
+        console.error(
+            "STAFF DASHBOARD ERROR:",
+            error
+        );
+
+    }
+
+}
+
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 // 🔒 USER CHECK
@@ -73,7 +441,7 @@ document.getElementById("menu").innerHTML = `
 
     <a href="messages.html" class="msg-link">
 
-        <i class="fa-regular fa-comment"></i>
+        <i class="fa-regular fa-envelope"></i>
 
         Messages
 
@@ -105,6 +473,10 @@ const socket = io("https://smartgym-api-ia2e.onrender.com", {
 socket.on("connect", () => {
     console.log("CONNECTED 🔥");
 });
+
+socket.on("attendance_update", loadDashboard);
+
+socket.on("locker_update", loadDashboard);
 
 socket.onAny((event, data) => {
     console.log("EVENT:", event);
@@ -365,6 +737,49 @@ socket.on("priority_alert", () => {
     loadMessages();
     loadMessageCount();
 });
+
+// ================= STAFF PROFILE DROPDOWN =================
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(".staff-profile");
+
+    const dropdown =
+        document.getElementById("staffDropdown");
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+}
+
+
+// CLOSE WHEN CLICKING OUTSIDE
+
+window.addEventListener("click", function(e){
+
+    if(!e.target.closest(".staff-profile")){
+
+        const profile =
+            document.querySelector(".staff-profile");
+
+        const dropdown =
+            document.getElementById("staffDropdown");
+
+        if(profile) {
+            profile.classList.remove("active");
+        }
+
+        if(dropdown) {
+            dropdown.classList.remove("show");
+        }
+
+    }
+
+});
+
+loadDashboard();
+
 </script>
 
 </body>
