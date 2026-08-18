@@ -2331,6 +2331,43 @@ setInterval(
     color: #68736d !important;
 }
 
+/* =========================================================
+   MESSAGE LIST — INTERNAL SCROLL ONLY
+   ========================================================= */
+
+#message-list {
+    max-height: 380px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding-right: 8px;
+}
+
+
+/* CUSTOM SCROLLBAR */
+
+#message-list::-webkit-scrollbar {
+    width: 7px;
+}
+
+#message-list::-webkit-scrollbar-track {
+    background: #f1f6f3;
+    border-radius: 10px;
+}
+
+#message-list::-webkit-scrollbar-thumb {
+    background: #c5d8ce;
+    border-radius: 10px;
+}
+
+#message-list::-webkit-scrollbar-thumb:hover {
+    background: #9fb9aa;
+}
+
 </style>
 
 </body>
