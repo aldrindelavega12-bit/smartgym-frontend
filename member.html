@@ -494,6 +494,7 @@ if (!user || user.role !== "member") {
 
 </div>
 
+
 <div id="notifPopup" class="notif-popup" onclick="goMessages()">
     <b id="notifTitle">New Message</b>
     <p id="notifText">You have a new message</p>
@@ -656,7 +657,7 @@ async function changePassword(){
             await fetch(
                 `${API_URL}/api/change_password`,
                 {
-                    method: "PUT",
+                    method: "POST",
 
                     headers: {
                         "Content-Type":
