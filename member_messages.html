@@ -176,7 +176,7 @@ if(!user || user.role !== "member"){
                  class="profile-dropdown">
 
                 <button
-                    onclick="event.stopPropagation();">
+                    onclick="event.stopPropagation(); openChangePassword();">
 
                     <i class="fa-solid fa-key"></i>
                     Change Password
@@ -285,6 +285,129 @@ if(!user || user.role !== "member"){
     </section>
 
 </main>
+</div>
+<!-- ================= CHANGE PASSWORD MODAL ================= -->
+
+<div id="changePasswordModal" class="edit-profile-overlay">
+
+    <div class="edit-profile-modal">
+
+        <div class="edit-profile-header">
+
+            <div>
+                <span>Account Security</span>
+                <h2>Change Password</h2>
+            </div>
+
+            <button
+                class="edit-close"
+                onclick="closeChangePassword()">
+                &times;
+            </button>
+
+        </div>
+
+        <div class="edit-profile-body">
+
+            <div class="profile-avatar-large">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <!-- CURRENT PASSWORD -->
+            <div class="profile-field">
+
+                <label>Current Password</label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeCurrentPassword"
+                        placeholder="Current password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('changeCurrentPassword', this)">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- NEW PASSWORD -->
+            <div class="profile-field">
+
+                <label>New Password</label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeNewPassword"
+                        placeholder="New password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('changeNewPassword', this)">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="profile-field">
+
+                <label>Confirm New Password</label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="changeConfirmPassword"
+                        placeholder="Confirm new password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('changeConfirmPassword', this)">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="edit-profile-footer">
+
+            <button
+                class="cancel-profile"
+                onclick="closeChangePassword()">
+                Cancel
+            </button>
+
+            <button
+                class="save-profile"
+                onclick="changePassword()">
+                Change Password
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
 <!-- ================= NOTIFICATION POPUP ================= -->
@@ -824,6 +947,210 @@ window.addEventListener("click", function(event){
 
 });
 
+// ================= CHANGE PASSWORD =================
+
+function openChangePassword(){
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    const profile =
+        document.querySelector(".user-profile");
+
+    // Close profile dropdown
+    if(dropdown){
+        dropdown.classList.remove("show");
+    }
+
+    if(profile){
+        profile.classList.remove("active");
+    }
+
+    // Clear fields
+    document.getElementById(
+        "changeCurrentPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changeNewPassword"
+    ).value = "";
+
+    document.getElementById(
+        "changeConfirmPassword"
+    ).value = "";
+
+    // Open modal
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.add("show");
+}
+
+
+function closeChangePassword(){
+
+    document.getElementById(
+        "changePasswordModal"
+    ).classList.remove("show");
+}
+
+
+function togglePassword(inputId, button){
+
+    const input =
+        document.getElementById(inputId);
+
+    const icon =
+        button.querySelector("i");
+
+    if(input.type === "password"){
+
+        input.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    }else{
+
+        input.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+    }
+}
+
+
+async function changePassword(){
+
+    const currentPassword =
+        document.getElementById(
+            "changeCurrentPassword"
+        ).value;
+
+    const newPassword =
+        document.getElementById(
+            "changeNewPassword"
+        ).value;
+
+    const confirmPassword =
+        document.getElementById(
+            "changeConfirmPassword"
+        ).value;
+
+
+    if(!currentPassword){
+
+        alert("Enter your current password.");
+        return;
+
+    }
+
+
+    if(!newPassword){
+
+        alert("Enter your new password.");
+        return;
+
+    }
+
+
+    if(newPassword.length < 8){
+
+        alert(
+            "New password must be at least 8 characters."
+        );
+
+        return;
+
+    }
+
+
+    if(newPassword !== confirmPassword){
+
+        alert(
+            "New passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/change_password`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        id:
+                            user.id,
+
+                        username:
+                            user.username,
+
+                        phone_number:
+                            user.phone_number,
+
+                        current_password:
+                            currentPassword,
+
+                        new_password:
+                            newPassword,
+
+                        confirm_password:
+                            confirmPassword
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok || !result.success){
+
+            alert(
+                result.message ||
+                "Failed to change password."
+            );
+
+            return;
+
+        }
+
+
+        closeChangePassword();
+
+        alert(
+            "Password changed successfully."
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "CHANGE PASSWORD ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to connect to the server."
+        );
+
+    }
+
+}
 
 function logout(){
 
