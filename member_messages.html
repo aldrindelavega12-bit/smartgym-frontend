@@ -328,8 +328,9 @@ const memberId =
     user.user_id ||
     user.member_id ||
     user.id;
-
 const messageUserId =
+    user.user_id ||
+    user.member_id ||
     user.id;
 
 console.log("MEMBER ID:", memberId);
