@@ -1356,3 +1356,343 @@ body {
 
     color: #b42318;
 }
+
+/* =========================================================
+   ATTENDANCE PAGE
+========================================================= */
+
+.page-header {
+    margin-bottom: 22px;
+}
+
+.page-header h1 {
+    margin: 0;
+
+    font-size: 38px;
+    font-weight: 700;
+
+    letter-spacing: -1px;
+
+    color: var(--text);
+}
+
+.page-header p {
+    margin: 7px 0 0;
+
+    color: var(--muted);
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   ATTENDANCE CARD
+========================================================= */
+
+.attendance-card {
+
+    width: 100%;
+
+    padding: 20px 22px 28px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow: var(--shadow);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.attendance-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 0 2px 17px;
+}
+
+.attendance-icon {
+
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: var(--green-light);
+
+    color: var(--green);
+
+    font-size: 24px;
+}
+
+.attendance-card-header h2 {
+
+    margin: 0;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    color: var(--text);
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.attendance-divider {
+
+    height: 1px;
+
+    width: 100%;
+
+    background: var(--border);
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.attendance-filter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+}
+
+.attendance-filter input {
+
+    width: 225px;
+
+    height: 43px;
+
+    padding: 0 14px;
+
+    border: 1px solid #dfe8e3;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: #4e5a53;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.attendance-filter input:focus {
+
+    border-color: var(--green);
+}
+
+
+.attendance-filter button {
+
+    height: 43px;
+
+    padding: 0 25px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: var(--green);
+
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background .2s ease;
+}
+
+.attendance-filter button:hover {
+
+    background: var(--green-dark);
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.attendance-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+}
+
+.attendance-table-wrapper table {
+
+    width: 100%;
+
+    min-width: 700px;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    background: #ffffff;
+}
+
+
+.attendance-table-wrapper th {
+
+    padding: 17px 22px;
+
+    background: #f2faf5;
+
+    color: #26312b;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+
+    white-space: nowrap;
+}
+
+
+.attendance-table-wrapper td {
+
+    padding: 16px 22px;
+
+    color: #3e4943;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #edf2ef;
+
+    white-space: nowrap;
+}
+
+
+.attendance-table-wrapper tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+.attendance-table-wrapper tbody tr:hover {
+
+    background: #f8fcf9;
+}
+
+
+/* =========================================================
+   REMARK COLORS
+========================================================= */
+
+.attendance-table-wrapper td.blue {
+
+    color: #087c3d;
+
+    font-weight: 600;
+}
+
+.attendance-table-wrapper td.green {
+
+    color: #087c3d;
+
+    font-weight: 600;
+}
+
+.attendance-table-wrapper td.red {
+
+    color: #c62828;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   EMPTY RECORD
+========================================================= */
+
+.attendance-table-wrapper td[colspan] {
+
+    padding: 28px;
+
+    text-align: left;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   ATTENDANCE RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .page-header h1 {
+
+        font-size: 32px;
+    }
+
+    .page-header p {
+
+        font-size: 14px;
+    }
+
+    .attendance-card {
+
+        padding: 17px;
+    }
+
+    .attendance-filter {
+
+        flex-wrap: wrap;
+    }
+
+    .attendance-filter input {
+
+        width: 100%;
+    }
+
+    .attendance-filter button {
+
+        width: 100%;
+    }
+
+}

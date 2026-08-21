@@ -1,66 +1,333 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Attendance</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- USE STAFF DASHBOARD CSS -->
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/staff-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
 </head>
+
 <body>
 
-<!-- 🔒 ROLE PROTECTION -->
+
+<!-- =====================================================
+     ROLE PROTECTION
+===================================================== -->
+
 <script>
-const user = JSON.parse(localStorage.getItem("user"));
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
 
 if (!user) {
-    window.location.href = "index.html";
+
+    window.location.href =
+        "index.html";
+
 }
+
 </script>
 
-<!-- NAVBAR -->
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="navbar">
-    <h2>SMART GYM</h2>
-    <div class="menu" id="menu"></div>
-</div>
 
-<!-- MAIN -->
-<div class="layout">
-<div class="main">
 
-<div class="section">
-    <h2>Attendance Log</h2>
+    <!-- BRAND -->
 
-    <!-- DATE FILTER -->
-    <div style="margin-bottom:15px;">
-        <input type="date" id="dateFilter">
-        <button onclick="loadAttendance()">Filter</button>
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Time In</th>
-                <th>Time Out</th>
-                <th>Remarks</th>
-            </tr>
-        </thead>
 
-        <tbody id="attendance-body"></tbody>
-    </table>
-</div>
+    <!-- MENU -->
+
+    <div
+        class="menu"
+        id="menu">
+    </div>
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Keep Pushing
+        </h3>
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 
 </div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="layout">
+
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================= -->
+
+        <div class="top-header">
+
+            <div class="top-right">
+
+                <div class="staff-profile" onclick="toggleStaffMenu()">
+
+                    <div class="staff-avatar">
+                        S
+                    </div>
+
+                    <div class="staff-info">
+
+                        <strong>
+                            Staff
+                        </strong>
+
+                        <small>
+                            Staff
+                        </small>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+
+                    <!-- PROFILE DROPDOWN -->
+                    <div id="staffDropdown"
+                        class="staff-profile-dropdown">
+
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================= -->
+
+        <div class="page-header">
+
+            <h1>
+                Attendance
+            </h1>
+
+            <p>
+                View and monitor attendance logs.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ATTENDANCE CARD
+        ================================================= -->
+
+        <div class="attendance-card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="attendance-card-header">
+
+                <div class="attendance-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Attendance Log
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIVIDER -->
+
+            <div class="attendance-divider"></div>
+
+
+            <!-- FILTER -->
+
+            <div class="attendance-filter">
+
+                <input
+                    type="date"
+                    id="dateFilter">
+
+                <button
+                    onclick="loadAttendance()">
+
+                    Filter
+
+                </button>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="attendance-table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Time In
+                            </th>
+
+                            <th>
+                                Time Out
+                            </th>
+
+                            <th>
+                                Remarks
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="attendance-body">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
 </div>
-<div id="notifPopup" class="notif-popup">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
+
+
+
+<!-- =====================================================
+     NOTIFICATION
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
 </div>
+
 
 <audio id="notifSound">
-    <source src="notif.mp3" type="audio/mpeg">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
 </audio>
 
 <!-- SOCKET -->
@@ -240,48 +507,84 @@ async function loadMessageCount(){
         ? "flex"
         : "none";
 }
-// ================= LOAD =================
+
+// ================= LOAD ATTENDANCE =================
 async function loadAttendance(){
     try{
         const date = document.getElementById("dateFilter").value;
 
         let url = `${API_URL}/api/attendance`;
+
         if(date){
             url += `?date=${date}`;
         }
 
+        console.log("Loading attendance:", url);
+
         const res = await fetch(url);
+
+        if(!res.ok){
+            throw new Error(`HTTP Error: ${res.status}`);
+        }
+
         const result = await res.json();
-        const data = result.data;
+
+        console.log("Attendance API:", result);
+
+        const data = result.data || [];
 
         const table = document.getElementById("attendance-body");
+
         table.innerHTML = "";
 
-        if(!data || data.length === 0){
+        if(data.length === 0){
             table.innerHTML = `
                 <tr>
-                    <td colspan="6">No records found</td>
+                    <td colspan="5">No records found</td>
                 </tr>
             `;
             return;
         }
 
         data.forEach(row => {
+
             const tr = document.createElement("tr");
 
             tr.innerHTML = `
-                <td>${row.name}</td>
-                <td>${row.type}</td>
-                <td>${row.time_in}</td>
-                <td>${row.time_out}</td>
-                <td class="${getColor(row.remarks)}">${row.remarks}</td>
+                <td>${row.name || "-"}</td>
+
+                <td>
+                    ${row.type
+                        ? row.type.charAt(0).toUpperCase() + row.type.slice(1)
+                        : "-"
+                    }
+                </td>
+
+                <td>${row.time_in || "-"}</td>
+
+                <td>${row.time_out || "-"}</td>
+
+                <td class="${getColor(row.remarks)}">
+                    ${row.remarks || "-"}
+                </td>
             `;
 
             table.appendChild(tr);
         });
 
     }catch(err){
+
         console.error("Attendance error:", err);
+
+        const table = document.getElementById("attendance-body");
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    Unable to connect to attendance server.
+                </td>
+            </tr>
+        `;
     }
 }
 
@@ -293,22 +596,36 @@ function getColor(status){
     return "";
 }
 
-function formatTime(dt){
-    if(!dt || dt === "-") return "-";
+function formatAttendanceTime(dt){
+
+    if(!dt || dt === "-"){
+        return "-";
+    }
 
     try{
-        const d = new Date(dt);
-        return d.toLocaleString([], {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }catch{
+
+        const d =
+            new Date(dt);
+
+        if(isNaN(d.getTime())){
+            return dt;
+        }
+
+        return d.toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+    }
+    catch{
         return dt;
     }
+
 }
+
 function showNotifPopup(title,text){
 
     const popup =
@@ -336,6 +653,59 @@ function showNotifPopup(title,text){
 
     },4000);
 }
+
+// ================= STAFF PROFILE DROPDOWN =================
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(".staff-profile");
+
+    const dropdown =
+        document.getElementById("staffDropdown");
+
+    if(!profile || !dropdown) return;
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+}
+
+
+// ================= CLOSE DROPDOWN =================
+
+window.addEventListener("click", function(e){
+
+    if(!e.target.closest(".staff-profile")){
+
+        const profile =
+            document.querySelector(".staff-profile");
+
+        const dropdown =
+            document.getElementById("staffDropdown");
+
+        if(profile){
+            profile.classList.remove("active");
+        }
+
+        if(dropdown){
+            dropdown.classList.remove("show");
+        }
+
+    }
+
+});
+
+
+// ================= LOGOUT =================
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href = "index.html";
+}
+
 // ================= INIT =================
 window.onload = () => {
     const today = new Date().toISOString().split("T")[0];
