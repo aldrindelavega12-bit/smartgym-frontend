@@ -82,8 +82,6 @@ if (!user) {
 
 </div>
 
-
-
 <!-- =================================================
      MAIN LAYOUT
 ================================================= -->
@@ -91,7 +89,6 @@ if (!user) {
 <div class="layout">
 
     <div class="main">
-
 
         <!-- =================================================
              TOP HEADER / PROFILE
@@ -595,7 +592,52 @@ if(user.role === "admin"){
         </a>
     `;
 }
+// ================= FORCE ACTIVE SIDEBAR =================
 
+document.querySelectorAll("#menu a").forEach(link => {
+    link.classList.remove("active");
+});
+
+// LOCKER PAGE = LOCKER ACTIVE
+const lockerLink = document.querySelector(
+    '#menu a[href="locker.html"]'
+);
+
+const homeLink = document.querySelector(
+    '#menu a[href="staff.html"]'
+);
+
+if (homeLink) {
+    homeLink.classList.remove("active");
+
+    homeLink.style.setProperty(
+        "background",
+        "transparent",
+        "important"
+    );
+
+    homeLink.style.setProperty(
+        "color",
+        "#172033",
+        "important"
+    );
+}
+
+if (lockerLink) {
+    lockerLink.classList.add("active");
+
+    lockerLink.style.setProperty(
+        "background",
+        "#eaf7f0",
+        "important"
+    );
+
+    lockerLink.style.setProperty(
+        "color",
+        "#078a43",
+        "important"
+    );
+}
 // ================= SOCKET =================
 const socket = io(API_URL, {
     transports: ["websocket"],
@@ -1130,6 +1172,59 @@ lockerTabs.forEach(tab => {
     });
 
 });
+
+// ================= STAFF PROFILE DROPDOWN =================
+
+function toggleStaffMenu() {
+
+    const profile =
+        document.querySelector(".staff-profile");
+
+    const dropdown =
+        document.getElementById("staffDropdown");
+
+    if (!profile || !dropdown) return;
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+}
+
+
+// ================= CLOSE DROPDOWN =================
+
+window.addEventListener("click", function(e) {
+
+    if (!e.target.closest(".staff-profile")) {
+
+        const profile =
+            document.querySelector(".staff-profile");
+
+        const dropdown =
+            document.getElementById("staffDropdown");
+
+        if (profile) {
+            profile.classList.remove("active");
+        }
+
+        if (dropdown) {
+            dropdown.classList.remove("show");
+        }
+
+    }
+
+});
+
+
+// ================= LOGOUT =================
+
+function logout() {
+
+    localStorage.clear();
+
+    window.location.href = "index.html";
+
+}
 
 // fallback refresh
 setInterval(loadLockers, 10000);

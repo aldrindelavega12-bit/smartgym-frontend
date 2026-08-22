@@ -1828,29 +1828,93 @@ body {
     border-bottom: none;
 }
 
+/* =========================================================
+   CURRENT TABLE - 4 COLUMNS
+========================================================= */
+
+#current-view .locker-table th:nth-child(1),
+#current-view .locker-table td:nth-child(1) {
+    width: 25%;
+}
+
+#current-view .locker-table th:nth-child(2),
+#current-view .locker-table td:nth-child(2) {
+    width: 25%;
+}
+
+#current-view .locker-table th:nth-child(3),
+#current-view .locker-table td:nth-child(3) {
+    width: 25%;
+}
+
+#current-view .locker-table th:nth-child(4),
+#current-view .locker-table td:nth-child(4) {
+    width: 25%;
+}
+
 
 /* =========================================================
-   LOCKER COLUMN WIDTHS
-   ========================================================= */
+   HISTORY TABLE - 4 COLUMNS
+========================================================= */
 
-.locker-table th:nth-child(1),
-.locker-table td:nth-child(1) {
+#history-view .locker-table th:nth-child(1),
+#history-view .locker-table td:nth-child(1) {
     width: 25%;
 }
 
-.locker-table th:nth-child(2),
-.locker-table td:nth-child(2) {
+#history-view .locker-table th:nth-child(2),
+#history-view .locker-table td:nth-child(2) {
     width: 25%;
 }
 
-.locker-table th:nth-child(3),
-.locker-table td:nth-child(3) {
+#history-view .locker-table th:nth-child(3),
+#history-view .locker-table td:nth-child(3) {
     width: 25%;
 }
 
-.locker-table th:nth-child(4),
-.locker-table td:nth-child(4) {
+#history-view .locker-table th:nth-child(4),
+#history-view .locker-table td:nth-child(4) {
     width: 25%;
+}
+
+
+/* =========================================================
+   REQUESTS TABLE - 6 COLUMNS
+========================================================= */
+
+#approval-view .locker-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#approval-view .locker-table th:nth-child(1),
+#approval-view .locker-table td:nth-child(1) {
+    width: 18%;
+}
+
+#approval-view .locker-table th:nth-child(2),
+#approval-view .locker-table td:nth-child(2) {
+    width: 17%;
+}
+
+#approval-view .locker-table th:nth-child(3),
+#approval-view .locker-table td:nth-child(3) {
+    width: 17%;
+}
+
+#approval-view .locker-table th:nth-child(4),
+#approval-view .locker-table td:nth-child(4) {
+    width: 18%;
+}
+
+#approval-view .locker-table th:nth-child(5),
+#approval-view .locker-table td:nth-child(5) {
+    width: 15%;
+}
+
+#approval-view .locker-table th:nth-child(6),
+#approval-view .locker-table td:nth-child(6) {
+    width: 15%;
 }
 
 
@@ -2234,3 +2298,17 @@ body {
     background: #079447;
 }
 
+/* =========================================================
+   LOCKER PAGE - ACTIVE SIDEBAR
+========================================================= */
+
+.navbar .menu a[href="locker.html"].active,
+.navbar .menu a[href="locker_staff.html"].active {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+.navbar .menu a[href="locker.html"].active i,
+.navbar .menu a[href="locker_staff.html"].active i {
+    color: #087c3d;
+}
