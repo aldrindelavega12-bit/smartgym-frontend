@@ -32,10 +32,13 @@ const user = JSON.parse(localStorage.getItem("user"));
 if (!user) {
     window.location.href = "index.html";
 }
-
 </script>
 
-<<!-- NAVBAR -->
+
+<!-- =================================================
+     NAVBAR
+================================================= -->
+
 <div class="navbar">
 
     <div class="brand">
@@ -58,13 +61,16 @@ if (!user) {
 
     <div class="menu" id="menu"></div>
 
+
     <div class="sidebar-message">
 
         <div class="sidebar-message-icon">
             <i class="fa-solid fa-dumbbell"></i>
         </div>
 
-        <h3>Keep Pushing</h3>
+        <h3>
+            Keep Pushing
+        </h3>
 
         <p>
             Small steps every day lead to big results.
@@ -76,18 +82,29 @@ if (!user) {
 
 </div>
 
+
+
+<!-- =================================================
+     MAIN LAYOUT
+================================================= -->
+
 <div class="layout">
 
     <div class="main">
 
+
         <!-- =================================================
-            TOP HEADER / STAFF PROFILE
+             TOP HEADER / PROFILE
         ================================================= -->
+
         <div class="top-header">
 
             <div class="top-right">
 
-                <div class="staff-profile" onclick="toggleStaffMenu()">
+                <div
+                    class="staff-profile"
+                    onclick="toggleStaffMenu()"
+                >
 
                     <div class="staff-avatar">
                         S
@@ -105,18 +122,24 @@ if (!user) {
 
                     </div>
 
-                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+                    <i
+                        class="fa-solid fa-chevron-down staff-profile-chevron"
+                    ></i>
 
 
-                    <!-- PROFILE DROPDOWN -->
-                    <div id="staffDropdown"
-                        class="staff-profile-dropdown">
+                    <div
+                        id="staffDropdown"
+                        class="staff-profile-dropdown"
+                    >
 
                         <button
                             onclick="logout(); event.stopPropagation();"
-                            class="staff-dropdown-logout">
+                            class="staff-dropdown-logout"
+                        >
 
-                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <i
+                                class="fa-solid fa-right-from-bracket"
+                            ></i>
 
                             Log Out
 
@@ -131,10 +154,16 @@ if (!user) {
         </div>
 
 
-        <!-- PAGE HEADER -->
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================= -->
+
         <div class="page-header">
 
-            <h1>Locker</h1>
+            <h1>
+                Locker
+            </h1>
 
             <p>
                 Manage and monitor locker usage and requests.
@@ -143,74 +172,113 @@ if (!user) {
         </div>
 
 
-        <!-- LOCKER CARD -->
+
+        <!-- =================================================
+             LOCKER ACTIVITY CARD
+        ================================================= -->
+
         <div class="attendance-card">
 
+
             <!-- CARD HEADER -->
+
             <div class="attendance-card-header">
 
                 <div class="attendance-icon">
+
                     <i class="fa-solid fa-lock"></i>
+
                 </div>
 
                 <div>
-                    <h2>Locker Activity</h2>
+
+                    <h2>
+                        Locker Activity
+                    </h2>
+
                 </div>
 
             </div>
 
 
+
             <!-- DIVIDER -->
+
             <div class="attendance-divider"></div>
 
 
-            <!-- TABS -->
+
+            <!-- =================================================
+                 TABS
+            ================================================= -->
+
             <div class="locker-tabs">
 
                 <button
                     type="button"
                     class="locker-tab active"
-                    onclick="showTab('current')">
+                    data-view="current-view">
                     Current
                 </button>
 
                 <button
                     type="button"
                     class="locker-tab"
-                    onclick="showTab('history')">
+                    data-view="history-view">
                     History
                 </button>
 
                 <button
                     type="button"
                     class="locker-tab"
-                    onclick="showTab('approval')">
-                    Approval
+                    data-view="approval-view">
+                    Requests
                 </button>
 
             </div>
 
 
-            <!-- ================= CURRENT ================= -->
+
+            <!-- =================================================
+                 CURRENT
+            ================================================= -->
 
             <div
                 id="current-view"
-                class="locker-view">
+                class="locker-view"
+            >
 
                 <div class="locker-table-wrapper">
 
                     <table class="locker-table">
 
                         <thead>
+
                             <tr>
-                                <th>Locker No.</th>
-                                <th>User</th>
-                                <th>Time Start</th>
-                                <th>Status</th>
+
+                                <th>
+                                    Locker No.
+                                </th>
+
+                                <th>
+                                    User
+                                </th>
+
+                                <th>
+                                    Time Start
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
                             </tr>
+
                         </thead>
 
+
                         <tbody id="locker-body">
+
                         </tbody>
 
                     </table>
@@ -220,22 +288,28 @@ if (!user) {
             </div>
 
 
-            <!-- ================= HISTORY ================= -->
+
+            <!-- =================================================
+                 HISTORY
+            ================================================= -->
 
             <div
                 id="history-view"
                 class="locker-view"
-                style="display:none;">
+                style="display:none;"
+            >
 
                 <div class="locker-filter">
 
                     <input
                         type="date"
-                        id="dateFilter">
+                        id="dateFilter"
+                    >
 
                     <button
                         type="button"
-                        onclick="loadHistory()">
+                        onclick="loadHistory()"
+                    >
                         Filter
                     </button>
 
@@ -247,15 +321,32 @@ if (!user) {
                     <table class="locker-table">
 
                         <thead>
+
                             <tr>
-                                <th>Locker No.</th>
-                                <th>User</th>
-                                <th>Time Start</th>
-                                <th>Time End</th>
+
+                                <th>
+                                    Locker No.
+                                </th>
+
+                                <th>
+                                    User
+                                </th>
+
+                                <th>
+                                    Time Start
+                                </th>
+
+                                <th>
+                                    Time End
+                                </th>
+
                             </tr>
+
                         </thead>
 
+
                         <tbody id="history-body">
+
                         </tbody>
 
                     </table>
@@ -265,23 +356,26 @@ if (!user) {
             </div>
 
 
-            <!-- ================= APPROVAL ================= -->
+
+            <!-- =================================================
+                 APPROVAL
+            ================================================= -->
 
             <div
                 id="approval-view"
                 class="locker-view"
-                style="display:none;">
+                style="display:none;"
+            >
 
-                <h3 class="approval-title">
-                    Locker Booking Requests
-                </h3>
 
 
                 <div class="locker-filter">
 
                     <input
                         type="date"
-                        id="approvalDate">
+                        id="approvalDate"
+                    >
+
 
                     <select id="approvalStatus">
 
@@ -303,9 +397,11 @@ if (!user) {
 
                     </select>
 
+
                     <button
                         type="button"
-                        onclick="loadApproval()">
+                        onclick="loadApproval()"
+                    >
                         Filter
                     </button>
 
@@ -317,17 +413,40 @@ if (!user) {
                     <table class="locker-table approval-table">
 
                         <thead>
+
                             <tr>
-                                <th>User</th>
-                                <th>Locker No.</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                                <th>Action</th>
+
+                                <th>
+                                    User
+                                </th>
+
+                                <th>
+                                    Locker No.
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Time
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
                             </tr>
+
                         </thead>
 
+
                         <tbody id="approval-body">
+
                         </tbody>
 
                     </table>
@@ -336,11 +455,48 @@ if (!user) {
 
             </div>
 
-        </div>
-    
-     </div>
 
-</div>    
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =================================================
+     NOTIFICATION
+================================================= -->
+
+<div
+    id="notifPopup"
+    class="notif-popup"
+>
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
+<audio id="notifSound">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg"
+    >
+
+</audio>
+
+
+<!-- SOCKET -->
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 
 <div id="notifPopup" class="notif-popup">
@@ -937,6 +1093,43 @@ window.onload = () => {
     document.getElementById("dateFilter").value = today;
     document.getElementById("approvalDate").value = today;
 };
+
+const lockerTabs = document.querySelectorAll(".locker-tab");
+
+const lockerViews = {
+    "current-view": document.getElementById("current-view"),
+    "history-view": document.getElementById("history-view"),
+    "approval-view": document.getElementById("approval-view")
+};
+
+lockerTabs.forEach(tab => {
+
+    tab.addEventListener("click", function () {
+
+        // Remove active from all tabs
+        lockerTabs.forEach(t => {
+            t.classList.remove("active");
+        });
+
+        // Add active to clicked tab
+        this.classList.add("active");
+
+        // Hide all views
+        Object.values(lockerViews).forEach(view => {
+            if (view) {
+                view.style.display = "none";
+            }
+        });
+
+        // Show selected view
+        const selectedView = lockerViews[this.dataset.view];
+
+        if (selectedView) {
+            selectedView.style.display = "block";
+        }
+    });
+
+});
 
 // fallback refresh
 setInterval(loadLockers, 10000);
