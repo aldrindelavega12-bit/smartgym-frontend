@@ -2,10 +2,26 @@
 <html>
 <head>
     <title>Locker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+        <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- USE STAFF DASHBOARD CSS -->
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/staff-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
 </head>
 <body>
 
@@ -19,147 +35,314 @@ if (!user) {
 
 </script>
 
-<!-- NAVBAR -->
+<<!-- NAVBAR -->
 <div class="navbar">
-    <h2>SMART GYM</h2>
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <div class="brand-text">
+
+            <strong>SMART GYM</strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
     <div class="menu" id="menu"></div>
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <h3>Keep Pushing</h3>
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 </div>
 
-<!-- MAIN -->
 <div class="layout">
-<div class="main">
 
-<div class="section">
-    <h2>Locker</h2>
+    <div class="main">
 
-    <!-- TABS -->
-    <div style="margin-bottom:15px;">
-        <button onclick="showTab('current')">Current</button>
-        <button onclick="showTab('history')">History</button>
-        <button onclick="showTab('approval')">Approval</button>
-    </div>
+        <!-- =================================================
+            TOP HEADER / STAFF PROFILE
+        ================================================= -->
+        <div class="top-header">
 
-    <!-- ================= CURRENT ================= -->
-    <div id="current-view">
-        <table>
-            <thead>
-                <tr>
-                    <th>Locker No.</th>
-                    <th>User</th>
-                    <th>Time Start</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="locker-body"></tbody>
-        </table>
-    </div>
+            <div class="top-right">
 
-    <!-- ================= HISTORY ================= -->
-    <div id="history-view" style="display:none;">
+                <div class="staff-profile" onclick="toggleStaffMenu()">
 
-        <div style="margin-bottom:10px;">
-            <input type="date" id="dateFilter">
-            <button onclick="loadHistory()">Filter</button>
-        </div>
+                    <div class="staff-avatar">
+                        S
+                    </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Locker</th>
-                    <th>User</th>
-                    <th>Time Start</th>
-                    <th>Time End</th>
-                </tr>
-            </thead>
-            <tbody id="history-body"></tbody>
-        </table>
+                    <div class="staff-info">
 
-    </div>
+                        <strong>
+                            Staff
+                        </strong>
 
-    <!-- ================= APPROVAL ================= -->
-    <div id="approval-view" style="display:none;">
+                        <small>
+                            Staff
+                        </small>
 
-        <h3>Locker Booking Requests</h3>
+                    </div>
 
-        <!-- FILTER -->
-        <div
-            style="
-                margin-bottom:10px;
-                display:flex;
-                gap:10px;
-                align-items:center;
-                flex-wrap:wrap;
-            "
-        >
+                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
 
-            <input
-                type="date"
-                id="approvalDate"
 
-            >
+                    <!-- PROFILE DROPDOWN -->
+                    <div id="staffDropdown"
+                        class="staff-profile-dropdown">
 
-            <select
-                id="approvalStatus"
-                style="
-                    height:28px;
-                    padding:0 6px;
-                    border:1px solid #ccc;
-                    border-radius:2px;
-                    font-size:14px;
-                "
-            >
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
 
-                <option value="">
-                    All Status
-                </option>
+                            <i class="fa-solid fa-right-from-bracket"></i>
 
-                <option value="PENDING">
-                    Pending
-                </option>
+                            Log Out
 
-                <option value="APPROVED">
-                    Approved
-                </option>
+                        </button>
 
-                <option value="DECLINED">
-                    Declined
-                </option>
+                    </div>
 
-            </select>
+                </div>
 
-            <button onclick="loadApproval()">
-                Filter
-            </button>
-
-        </div>
-        
-
-        <!-- TABLE -->
-        <div style="overflow-x:auto;">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Locker</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody id="approval-body"></tbody>
-
-            </table>
+            </div>
 
         </div>
 
-    </div>
 
-</div>
-</div>
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+
+            <h1>Locker</h1>
+
+            <p>
+                Manage and monitor locker usage and requests.
+            </p>
+
+        </div>
+
+
+        <!-- LOCKER CARD -->
+        <div class="attendance-card">
+
+            <!-- CARD HEADER -->
+            <div class="attendance-card-header">
+
+                <div class="attendance-icon">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+
+                <div>
+                    <h2>Locker Activity</h2>
+                </div>
+
+            </div>
+
+
+            <!-- DIVIDER -->
+            <div class="attendance-divider"></div>
+
+
+            <!-- TABS -->
+            <div class="locker-tabs">
+
+                <button
+                    type="button"
+                    class="locker-tab active"
+                    onclick="showTab('current')">
+                    Current
+                </button>
+
+                <button
+                    type="button"
+                    class="locker-tab"
+                    onclick="showTab('history')">
+                    History
+                </button>
+
+                <button
+                    type="button"
+                    class="locker-tab"
+                    onclick="showTab('approval')">
+                    Approval
+                </button>
+
+            </div>
+
+
+            <!-- ================= CURRENT ================= -->
+
+            <div
+                id="current-view"
+                class="locker-view">
+
+                <div class="locker-table-wrapper">
+
+                    <table class="locker-table">
+
+                        <thead>
+                            <tr>
+                                <th>Locker No.</th>
+                                <th>User</th>
+                                <th>Time Start</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="locker-body">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= HISTORY ================= -->
+
+            <div
+                id="history-view"
+                class="locker-view"
+                style="display:none;">
+
+                <div class="locker-filter">
+
+                    <input
+                        type="date"
+                        id="dateFilter">
+
+                    <button
+                        type="button"
+                        onclick="loadHistory()">
+                        Filter
+                    </button>
+
+                </div>
+
+
+                <div class="locker-table-wrapper">
+
+                    <table class="locker-table">
+
+                        <thead>
+                            <tr>
+                                <th>Locker No.</th>
+                                <th>User</th>
+                                <th>Time Start</th>
+                                <th>Time End</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="history-body">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= APPROVAL ================= -->
+
+            <div
+                id="approval-view"
+                class="locker-view"
+                style="display:none;">
+
+                <h3 class="approval-title">
+                    Locker Booking Requests
+                </h3>
+
+
+                <div class="locker-filter">
+
+                    <input
+                        type="date"
+                        id="approvalDate">
+
+                    <select id="approvalStatus">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="PENDING">
+                            Pending
+                        </option>
+
+                        <option value="APPROVED">
+                            Approved
+                        </option>
+
+                        <option value="REJECTED">
+                            Rejected
+                        </option>
+
+                    </select>
+
+                    <button
+                        type="button"
+                        onclick="loadApproval()">
+                        Filter
+                    </button>
+
+                </div>
+
+
+                <div class="locker-table-wrapper">
+
+                    <table class="locker-table approval-table">
+
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Locker No.</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="approval-body">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    
+     </div>
+
+</div>    
+
+
 <div id="notifPopup" class="notif-popup">
     <b id="notifTitle">New Message</b>
     <p id="notifText">You have a new message</p>

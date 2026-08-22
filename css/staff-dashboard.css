@@ -1696,3 +1696,34 @@ body {
     }
 
 }
+
+/* ================================
+   ATTENDANCE TABLE INTERNAL SCROLL
+================================ */
+
+.attendance-table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+/* Vertical scrollbar */
+.attendance-table-wrapper::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+.attendance-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f7f4;
+    border-radius: 10px;
+}
+
+.attendance-table-wrapper::-webkit-scrollbar-thumb {
+    background: #b8d5c6;
+    border-radius: 10px;
+}
+
+.attendance-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #8fbaa4;
+}
