@@ -2312,3 +2312,39 @@ body {
 .navbar .menu a[href="locker_staff.html"].active i {
     color: #087c3d;
 }
+
+/* ===============================
+   SIDEBAR ACTIVE PAGE
+=============================== */
+
+.menu a.active {
+    background: #eaf7f0 !important;
+    color: #078a43 !important;
+}
+
+.menu a.active i {
+    color: #078a43 !important;
+}
+
+/* =========================================
+   SIDEBAR ACTIVE PAGE
+   ONLY CURRENT PAGE IS ACTIVE
+========================================= */
+
+.menu a {
+    background: transparent;
+    color: #172033;
+}
+
+.menu a i {
+    color: #34443d;
+}
+
+.menu a.active {
+    background: #eaf7f0 !important;
+    color: #078a43 !important;
+}
+
+.menu a.active i {
+    color: #078a43 !important;
+}

@@ -369,7 +369,7 @@ if(user.role === "admin"){
 
         <a href="messages.html" class="msg-link">
 
-            <i class="fa-regular fa-comment"></i>
+            <i class="fa-regular fa-envelope"></i>
 
             Messages
 
@@ -392,6 +392,55 @@ if(user.role === "admin"){
         </a>
     `;
 }
+
+// ================= FORCE ACTIVE SIDEBAR =================
+
+document.querySelectorAll("#menu a").forEach(link => {
+    link.classList.remove("active");
+});
+
+const attendanceLink = document.querySelector(
+    '#menu a[href="attendance.html"]'
+);
+
+const homeLink = document.querySelector(
+    '#menu a[href="staff.html"]'
+);
+
+if (homeLink) {
+
+    homeLink.classList.remove("active");
+
+    homeLink.style.setProperty(
+        "background",
+        "transparent",
+        "important"
+    );
+
+    homeLink.style.setProperty(
+        "color",
+        "#172033",
+        "important"
+    );
+}
+
+if (attendanceLink) {
+
+    attendanceLink.classList.add("active");
+
+    attendanceLink.style.setProperty(
+        "background",
+        "#eaf7f0",
+        "important"
+    );
+
+    attendanceLink.style.setProperty(
+        "color",
+        "#078a43",
+        "important"
+    );
+}
+
 let lastUnread = 0;
 
 function showNotifPopup(title,text){
