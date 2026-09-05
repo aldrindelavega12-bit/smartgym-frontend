@@ -613,27 +613,53 @@
             line-height: 1.5;
         }
 
+        /* =========================================================
+        MESSAGES PAGE — ACTIVE SIDEBAR
+        ========================================================= */
 
-        .messages-page .menu a[href="messages.html"] {
+        /* FORCE MESSAGES TO ACTIVE */
+        body .navbar .menu a[href="messages.html"] {
             background: #eaf6ee !important;
             color: #087c3d !important;
         }
 
-        .messages-page .menu a[href="messages.html"] i {
+        body .navbar .menu a[href="messages.html"] i {
             color: #087c3d !important;
         }
 
-        .messages-page .menu a[href="staff.html"],
-        .messages-page .menu a[href="admin.html"] {
+
+        /* FORCE HOME TO INACTIVE */
+        body .navbar .menu a[href="staff.html"],
+        body .navbar .menu a[href="admin.html"] {
             background: transparent !important;
             color: #56635b !important;
         }
 
-        .messages-page .menu a[href="staff.html"] i,
-        .messages-page .menu a[href="admin.html"] i {
+        body .navbar .menu a[href="staff.html"] i,
+        body .navbar .menu a[href="admin.html"] i {
+            background: transparent !important;
             color: #56635b !important;
         }
 
+
+        /* OTHER LINKS INACTIVE */
+        body .navbar .menu a[href="attendance.html"],
+        body .navbar .menu a[href="locker.html"],
+        body .navbar .menu a[href="members.html"],
+        body .navbar .menu a[href="staff_manage.html"],
+        body .navbar .menu a[href="create_account.html"] {
+            background: transparent !important;
+            color: #56635b !important;
+        }
+
+        body .navbar .menu a[href="attendance.html"] i,
+        body .navbar .menu a[href="locker.html"] i,
+        body .navbar .menu a[href="members.html"] i,
+        body .navbar .menu a[href="staff_manage.html"] i,
+        body .navbar .menu a[href="create_account.html"] i {
+            color: #56635b !important;
+        }
+        
 
         /* =========================================================
            RESPONSIVE
