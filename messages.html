@@ -1399,9 +1399,14 @@ socket.on("connect", () => {
         "Messages page connected"
     );
 });
-
 loadMessages();
 loadMessageCount();
+
+setInterval(
+    loadMessageCount,
+    3000
+);
+
 
 </script>
 
