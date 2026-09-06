@@ -233,10 +233,10 @@ body {
 
 
 /* =========================================================
-   ADMIN HOME ACTIVE
+   ACTIVE MENU
 ========================================================= */
 
-.menu a[href="admin.html"] {
+.menu a.active {
 
     background:
         var(--green-light) !important;
@@ -249,7 +249,7 @@ body {
 }
 
 
-.menu a[href="admin.html"] i {
+.menu a.active i {
 
     color:
         var(--green) !important;
@@ -1696,30 +1696,4 @@ body {
 .page-dots {
     color: #56665f;
     padding: 0 1px;
-}
-
-
-/* =====================================================
-   MEMBERS ACTIVE SIDEBAR
-===================================================== */
-
-body .navbar .menu a[href="members.html"] {
-    background: #e8f6ee !important;
-    color: #078344 !important;
-}
-
-body .navbar .menu a[href="members.html"] i {
-    color: #078344 !important;
-}
-
-
-/* REMOVE HOME ACTIVE ON MEMBERS PAGE */
-
-body .navbar .menu a[href="admin.html"] {
-    background: transparent !important;
-    color: #56635b !important;
-}
-
-body .navbar .menu a[href="admin.html"] i {
-    color: #56635b !important;
 }
