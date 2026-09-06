@@ -1,299 +1,1455 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Members</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- NEW ADMIN STYLE -->
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
 </head>
+
 <body>
 
-<!-- 🔒 PROTECT -->
+
+<!-- =====================================================
+     PROTECT
+===================================================== -->
+
 <script>
-const user = JSON.parse(localStorage.getItem("user"));
-if (!user) {
-    window.location.href = "index.html";
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+if(!user){
+
+    window.location.href =
+        "index.html";
+
 }
+
 </script>
 
-<!-- ✅ NAVBAR (SAME SA ATTENDANCE) -->
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="navbar">
-    <h2>SMART GYM</h2>
-    <div class="menu" id="menu"></div>
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MENU -->
+
+    <div
+        class="menu"
+        id="menu">
+    </div>
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Lead the Change
+        </h3>
+
+        <p>
+            Better management<br>
+            builds a stronger gym.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 </div>
 
-<!-- MAIN -->
+<!-- =====================================================
+     MAIN LAYOUT
+===================================================== -->
+
 <div class="layout">
-<div class="main">
 
-<div class="section">
-    <h2>Member List</h2>
+    <div class="main">
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Membership Expire</th>
-                <th>Membership Status</th>
 
-                <th>Monthly Expire</th>
-                <th>Monthly Status</th>
-            </tr>
-        </thead>
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
 
-        <tbody id="members-body"></tbody>
-    </table>
+        <div class="top-header">
+
+            <div class="top-right">
+
+                <div
+                    class="staff-profile"
+                    onclick="toggleStaffMenu()">
+
+                    <div class="staff-avatar">
+                        A
+                    </div>
+
+                    <div class="staff-info">
+
+                        <strong>
+                            Aldrin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+
+
+                    <!-- DROPDOWN -->
+
+                    <div
+                        id="staffDropdown"
+                        class="staff-profile-dropdown">
+
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="page-header">
+
+            <h1>
+                Members
+            </h1>
+
+            <p>
+                View and manage all registered gym members.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MEMBERS PANEL
+        ================================================== -->
+
+        <div class="members-panel">
+
+
+            <!-- =================================================
+                 SEARCH / FILTER
+            ================================================== -->
+
+            <div class="members-toolbar">
+
+
+                <!-- SEARCH -->
+
+                <div class="member-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="memberSearch"
+                        placeholder="Search member name, ID, or contact...">
+
+                </div>
+
+
+
+                <!-- MEMBERSHIP TYPE -->
+
+                <select
+                    id="membershipFilter"
+                    class="member-filter">
+
+                    <option value="">
+                        All Membership Types
+                    </option>
+
+                    <option value="MONTHLY">
+                        Monthly
+                    </option>
+
+                    <option value="DAILY">
+                        Daily
+                    </option>
+
+                </select>
+
+
+
+                <!-- STATUS -->
+
+                <select
+                    id="statusFilter"
+                    class="member-filter">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="ACTIVE">
+                        Active
+                    </option>
+
+                    <option value="EXPIRED">
+                        Expired
+                    </option>
+
+                </select>
+
+
+
+                <!-- SORT -->
+
+                <select
+                    id="sortFilter"
+                    class="member-filter">
+
+                    <option value="">
+                        Sort by
+                    </option>
+
+                    <option value="name">
+                        Name
+                    </option>
+
+                    <option value="id">
+                        Member ID
+                    </option>
+
+                    <option value="membership">
+                        Membership Expire
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="members-table-wrapper">
+
+                <table class="members-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Contact
+                            </th>
+
+                            <th>
+                                Membership Type
+                            </th>
+
+                            <th>
+                                Membership Expire
+                            </th>
+
+                            <th>
+                                Monthly Expire
+                            </th>
+
+                            <th>
+                                Monthly Status
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="members-body">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TABLE FOOTER
+            ================================================== -->
+
+            <div class="members-footer">
+
+
+                <div
+                    id="members-count"
+                    class="members-count">
+
+                    Showing 0 members
+
+                </div>
+
+
+
+                <div
+                    class="pagination"
+                    id="pagination">
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
 </div>
 
+
+
+<!-- =====================================================
+     NOTIFICATION POPUP
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
 </div>
-</div>
-<div id="notifPopup" class="notif-popup">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
-</div>
+
+
 
 <audio id="notifSound">
-    <source src="notif.mp3" type="audio/mpeg">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
 </audio>
 
-<!-- SCRIPT -->
+
+
+<!-- =====================================================
+     SOCKET.IO
+===================================================== -->
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+
+
+<!-- =====================================================
+     EXISTING JAVASCRIPT
+     KEEP YOUR CURRENT JS HERE
+===================================================== -->
+
 <script>
 
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
 
-// ================= MENU (EXACT COPY) =================
-const menu = document.getElementById("menu");
+
+// ================= MENU =================
+
+const menu =
+    document.getElementById("menu");
+
 
 if(user.role === "admin"){
+
     menu.innerHTML = `
-    <a href="admin.html">
-        <i class="fa-solid fa-house"></i>
-        Home
-    </a>
 
-    <a href="messages.html" class="msg-link">
+        <a href="admin.html">
 
-        <i class="fa-regular fa-comment"></i>
+            <i class="fa-solid fa-house"></i>
 
-        Messages
+            Home
 
-        <span
-            id="msg-count"
-            class="msg-count">
-            0
-        </span>
+        </a>
 
-    </a>
 
-    <a href="attendance.html">
-        <i class="fa-regular fa-calendar-check"></i>
-        Attendance
-    </a>
+        <a href="messages.html"
+           class="msg-link">
 
-    <a href="locker.html">
-        <i class="fa-solid fa-lock"></i>
-        Locker
-    </a>
-
-    <a href="members.html">
-        <i class="fa-solid fa-users"></i>
-        Members
-    </a>
-
-    <a href="staff_manage.html">
-        <i class="fa-regular fa-user"></i>
-        Staff
-    </a>
-
-    <a href="create_account.html">
-        <i class="fa-solid fa-user-plus"></i>
-        Create Account
-    </a>
-`;
-}else{
-    menu.innerHTML = `
-        <a href="staff.html">Home</a>
-        <a href="messages.html" class="msg-link">
-
-            <i class="fa-regular fa-comment"></i>
+            <i class="fa-regular fa-envelope"></i>
 
             Messages
 
             <span
                 id="msg-count"
                 class="msg-count">
+
                 0
+
             </span>
 
         </a>
-        <a href="attendance.html">Attendance</a>
-        <a href="locker.html">Locker</a>
+
+
+        <a href="reports.html">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            Reports
+
+        </a>
+
+
+        <a href="members.html"
+           class="active">
+
+            <i class="fa-solid fa-users"></i>
+
+            Members
+
+        </a>
+
+
+        <a href="walkin.html">
+
+            <i class="fa-solid fa-person-walking"></i>
+
+            Walk-ins
+
+        </a>
+
+
+        <a href="staff_manage.html">
+
+            <i class="fa-regular fa-user"></i>
+
+            Staff
+
+        </a>
+
     `;
+
+}
+else{
+
+    menu.innerHTML = `
+
+        <a href="staff.html">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </a>
+
+
+        <a href="messages.html"
+           class="msg-link">
+
+            <i class="fa-regular fa-envelope"></i>
+
+            Messages
+
+            <span
+                id="msg-count"
+                class="msg-count">
+
+                0
+
+            </span>
+
+        </a>
+
+
+        <a href="attendance.html">
+
+            <i class="fa-regular fa-calendar-check"></i>
+
+            Attendance
+
+        </a>
+
+
+        <a href="locker.html">
+
+            <i class="fa-solid fa-lock"></i>
+
+            Locker
+
+        </a>
+
+    `;
+
 }
 
-// ================= LOAD MEMBERS =================
-async function loadMessageCount(){
+// =====================================================
+// APPLY SEARCH + FILTER + SORT
+// =====================================================
 
-    const res = await fetch(
-        `${API_URL}/api/admin_messages`
-    );
+function applyMemberFilters(){
 
-    const data = await res.json();
-
-    if(
-        lastUnread !== 0 &&
-        unread > lastUnread
-    ){
-
-        document
-            .getElementById(
-                "notifSound"
-            )
-            ?.play();
-
-        showNotifPopup(
-            "New Message",
-            `${unread - lastUnread} new notification`
-        );
-    }
-
-    lastUnread = unread;
-
-    const badge =
+    const searchInput =
         document.getElementById(
-            "msg-count"
+            "memberSearch"
         );
 
-    if(!badge) return;
+    const membershipFilter =
+        document.getElementById(
+            "membershipFilter"
+        );
 
-    badge.innerText =
-        unread > 99
-        ? "99+"
-        : unread;
+    const statusFilter =
+        document.getElementById(
+            "statusFilter"
+        );
 
-    badge.style.display =
-        unread > 0
-        ? "flex"
-        : "none";
-}
-async function loadMembers(){
-    try{
-        const res = await fetch(`${API_URL}/api/members_list`);
-        const data = await res.json();
+    const sortFilter =
+        document.getElementById(
+            "sortFilter"
+        );
 
-        const table = document.getElementById("members-body");
-        table.innerHTML = "";
 
-        if(!data || data.length === 0){
-            table.innerHTML = `
-                <tr>
-                    <td colspan="6">No members</td>
-                </tr>
-            `;
-            return;
-        }
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
 
-        data.forEach(row => {
-            const membershipColor =
-                row.membership_status === "ACTIVE"
-                ? "green"
-                : "red";
 
-            const monthlyColor =
-                row.monthly_status === "ACTIVE"
-                ? "green"
-                : "red";
+    const membership =
+        membershipFilter.value
+            .toUpperCase();
 
-            const tr = document.createElement("tr");
 
-            tr.innerHTML = `
+    const status =
+        statusFilter.value
+            .toUpperCase();
 
-                <td>${row.id}</td>
 
-                <td>${row.name}</td>
+    // =========================
+    // FILTER
+    // =========================
 
-                <td>${cleanType(row.type)}</td>
+    filteredMembers =
+        allMembers.filter(member => {
 
-                <td>${row.membership_expires || "N/A"}</td>
 
-                <td style="
-                    color:${membershipColor};
-                    font-weight:bold;
-                ">
-                    ${row.membership_status}
-                </td>
+            // SEARCH
 
-                <td>${row.monthly_expires || "N/A"}</td>
+            const id =
+                String(
+                    member.id || ""
+                ).toLowerCase();
 
-                <td style="
-                    color:${monthlyColor};
-                    font-weight:bold;
-                ">
-                    ${row.monthly_status}
-                </td>
 
-            `;
+            const name =
+                String(
+                    member.name || ""
+                ).toLowerCase();
 
-            table.appendChild(tr);
+
+            const contact =
+                String(
+                    member.contact ||
+                    member.phone ||
+                    member.contact_number ||
+                    ""
+                ).toLowerCase();
+
+
+            const matchesSearch =
+                !search ||
+                id.includes(search) ||
+                name.includes(search) ||
+                contact.includes(search);
+
+
+            if(!matchesSearch)
+                return false;
+
+
+            // MEMBERSHIP TYPE
+
+            const type =
+                cleanType(
+                    member.type
+                ).toUpperCase();
+
+
+            if(
+                membership &&
+                type !== membership
+            ){
+
+                return false;
+
+            }
+
+
+            // STATUS
+
+            const memberStatus =
+                String(
+                    member.membership_status ||
+                    ""
+                ).toUpperCase();
+
+
+            if(
+                status &&
+                memberStatus !== status
+            ){
+
+                return false;
+
+            }
+
+
+            return true;
+
         });
 
-    }catch(err){
-        console.error("Members error:", err);
+
+    // =========================
+    // SORT
+    // =========================
+
+    const sort =
+        sortFilter.value;
+
+
+    if(sort === "name"){
+
+        filteredMembers.sort(
+            (a,b) =>
+                String(a.name || "")
+                .localeCompare(
+                    String(b.name || "")
+                )
+        );
+
     }
+
+
+    else if(sort === "id"){
+
+        filteredMembers.sort(
+            (a,b) =>
+                String(a.id || "")
+                .localeCompare(
+                    String(b.id || ""),
+                    undefined,
+                    {
+                        numeric: true
+                    }
+                )
+        );
+
+    }
+
+
+    else if(sort === "membership"){
+
+        filteredMembers.sort(
+            (a,b) =>
+                String(
+                    a.membership_expires || ""
+                ).localeCompare(
+                    String(
+                        b.membership_expires || ""
+                    )
+                )
+        );
+
+    }
+
+
+    // =========================
+    // RESET PAGE
+    // =========================
+
+    currentPage = 1;
+
+
+    renderMembers();
+
 }
 
-// ================= HELPERS =================
-function cleanType(type){
-    if(!type) return "N/A";
-    return type.replace("membership-", "").toUpperCase();
+// =====================================================
+// RENDER MEMBERS
+// =====================================================
+
+function renderMembers(){
+
+    const table =
+        document.getElementById(
+            "members-body"
+        );
+
+
+    table.innerHTML = "";
+
+
+    // =========================
+    // NO RESULTS
+    // =========================
+
+    if(
+        filteredMembers.length === 0
+    ){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    style="text-align:center; padding:30px;">
+
+                    No members found
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        updateMembersCount();
+
+        renderPagination();
+
+        return;
+
+    }
+
+
+    // =========================
+    // PAGINATION
+    // =========================
+
+    const startIndex =
+        (currentPage - 1)
+        * membersPerPage;
+
+
+    const endIndex =
+        startIndex
+        + membersPerPage;
+
+
+    const pageMembers =
+        filteredMembers.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    // =========================
+    // DISPLAY ROWS
+    // =========================
+
+    pageMembers.forEach(row => {
+
+
+        const membershipColor =
+            row.membership_status === "ACTIVE"
+            ? "green"
+            : "red";
+
+
+        const monthlyColor =
+            row.monthly_status === "ACTIVE"
+            ? "green"
+            : "red";
+
+
+        const contact =
+            row.contact ||
+            row.phone ||
+            row.contact_number ||
+            "N/A";
+
+
+        const tr =
+            document.createElement(
+                "tr"
+            );
+
+
+        tr.innerHTML = `
+
+            <td>
+                ${row.id || "N/A"}
+            </td>
+
+
+            <td>
+                ${row.name || "N/A"}
+            </td>
+
+
+            <td>
+                ${contact}
+            </td>
+
+
+            <td>
+                ${cleanType(row.type)}
+            </td>
+
+
+            <td>
+                ${row.membership_expires || "N/A"}
+            </td>
+
+
+            <td>
+                ${row.monthly_expires || "N/A"}
+            </td>
+
+
+            <td>
+
+                <span
+                    class="status-badge ${monthlyColor}">
+
+                    ${row.monthly_status || "N/A"}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span
+                    class="status-badge ${membershipColor}">
+
+                    ${row.membership_status || "N/A"}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <button
+                    class="action-btn"
+                    title="Member Actions">
+
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(tr);
+
+    });
+
+
+    updateMembersCount();
+
+    renderPagination();
+
 }
+
+// =====================================================
+// MEMBER COUNT
+// =====================================================
+
+function updateMembersCount(){
+
+    const count =
+        document.getElementById(
+            "members-count"
+        );
+
+
+    if(!count)
+        return;
+
+
+    const total =
+        filteredMembers.length;
+
+
+    if(total === 0){
+
+        count.innerText =
+            "Showing 0 members";
+
+        return;
+
+    }
+
+
+    const start =
+        (currentPage - 1)
+        * membersPerPage
+        + 1;
+
+
+    const end =
+        Math.min(
+            currentPage * membersPerPage,
+            total
+        );
+
+
+    count.innerText =
+        `Showing ${start} to ${end} of ${total} members`;
+
+}
+
+// =====================================================
+// PAGINATION
+// =====================================================
+
+function renderPagination(){
+
+    const pagination =
+        document.getElementById(
+            "pagination"
+        );
+
+
+    if(!pagination)
+        return;
+
+
+    pagination.innerHTML = "";
+
+
+    const totalPages =
+        Math.ceil(
+            filteredMembers.length
+            / membersPerPage
+        );
+
+
+    if(totalPages <= 1)
+        return;
+
+
+    // =========================
+    // PREVIOUS
+    // =========================
+
+    const prev =
+        document.createElement(
+            "button"
+        );
+
+
+    prev.className =
+        "page-btn";
+
+
+    prev.innerHTML =
+        `<i class="fa-solid fa-chevron-left"></i>`;
+
+
+    prev.disabled =
+        currentPage === 1;
+
+
+    prev.onclick = () => {
+
+        if(currentPage > 1){
+
+            currentPage--;
+
+            renderMembers();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        prev
+    );
+
+
+    // =========================
+    // PAGE NUMBERS
+    // =========================
+
+    for(
+        let page = 1;
+        page <= totalPages;
+        page++
+    ){
+
+        // Show:
+        // 1 2 3 ... last
+
+        if(
+            totalPages > 6 &&
+            page > 3 &&
+            page < totalPages
+        ){
+
+            if(page === 4){
+
+                const dots =
+                    document.createElement(
+                        "span"
+                    );
+
+                dots.className =
+                    "page-dots";
+
+                dots.innerText =
+                    "...";
+
+                pagination.appendChild(
+                    dots
+                );
+
+            }
+
+            continue;
+
+        }
+
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "page-btn";
+
+
+        if(
+            page === currentPage
+        ){
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+
+        button.innerText =
+            page;
+
+
+        button.onclick = () => {
+
+            currentPage =
+                page;
+
+            renderMembers();
+
+        };
+
+
+        pagination.appendChild(
+            button
+        );
+
+    }
+
+
+    // =========================
+    // NEXT
+    // =========================
+
+    const next =
+        document.createElement(
+            "button"
+        );
+
+
+    next.className =
+        "page-btn";
+
+
+    next.innerHTML =
+        `<i class="fa-solid fa-chevron-right"></i>`;
+
+
+    next.disabled =
+        currentPage === totalPages;
+
+
+    next.onclick = () => {
+
+        if(
+            currentPage < totalPages
+        ){
+
+            currentPage++;
+
+            renderMembers();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        next
+    );
+
+}
+
+// ================= MEMBERS DATA =================
+
+let allMembers = [];
+
+let filteredMembers = [];
+
+let currentPage = 1;
+
+const membersPerPage = 8;
+
+
+// ================= LOAD MEMBERS =================
+
+async function loadMembers(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/members_list`
+            );
+
+        const data =
+            await res.json();
+
+
+        allMembers =
+            Array.isArray(data)
+            ? data
+            : [];
+
+
+        filteredMembers =
+            [...allMembers];
+
+
+        currentPage = 1;
+
+
+        applyMemberFilters();
+
+
+    }
+    catch(err){
+
+        console.error(
+            "Members error:",
+            err
+        );
+
+    }
+
+}
+// ================= HELPERS =================
+
+function cleanType(type){
+
+    if(!type)
+        return "N/A";
+
+    return type
+        .replace("membership-", "")
+        .toUpperCase();
+
+}
+
+
+// ================= MESSAGE COUNT =================
+
 let lastUnread = 0;
 
-function showNotifPopup(title,text){
 
-    const popup =
-        document.getElementById(
-            "notifPopup"
+async function loadMessageCount(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/admin_messages`
+            );
+
+        const data =
+            await res.json();
+
+
+        const unread =
+            data.filter(
+                m => m.is_read == 0
+            ).length;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge)
+            return;
+
+
+        badge.innerText =
+            unread > 99
+            ? "99+"
+            : unread;
+
+
+        badge.style.display =
+            unread > 0
+            ? "flex"
+            : "none";
+
+
+        lastUnread =
+            unread;
+
+    }
+    catch(error){
+
+        console.error(
+            "Message count error:",
+            error
         );
 
-    document.getElementById(
-        "notifTitle"
-    ).innerText = title;
+    }
 
-    document.getElementById(
-        "notifText"
-    ).innerText = text;
-
-    popup.classList.add("show");
-
-    setTimeout(() => {
-
-        popup.classList.remove(
-            "show"
-        );
-
-    },4000);
 }
+
+
+// ================= PROFILE =================
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(
+            ".staff-profile"
+        );
+
+    const dropdown =
+        document.getElementById(
+            "staffDropdown"
+        );
+
+
+    if(!dropdown)
+        return;
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".staff-profile"
+            )
+        ){
+
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
+
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
+
+
+            if(profile)
+                profile.classList.remove(
+                    "active"
+                );
+
+
+            if(dropdown)
+                dropdown.classList.remove(
+                    "show"
+                );
+
+        }
+
+    }
+);
+
+
+// ================= LOGOUT =================
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+// =====================================================
+// SEARCH / FILTER EVENTS
+// =====================================================
+
+document
+    .getElementById("memberSearch")
+    .addEventListener(
+        "input",
+        applyMemberFilters
+    );
+
+
+document
+    .getElementById("membershipFilter")
+    .addEventListener(
+        "change",
+        applyMemberFilters
+    );
+
+
+document
+    .getElementById("statusFilter")
+    .addEventListener(
+        "change",
+        applyMemberFilters
+    );
+
+
+document
+    .getElementById("sortFilter")
+    .addEventListener(
+        "change",
+        applyMemberFilters
+    );
+
 // ================= INIT =================
+
 window.onload = () => {
+
     loadMembers();
+
+    loadMessageCount();
+
 };
-loadMessageCount();
-socket.on("new_message", () => {
 
-    loadMessages();
-    loadMessageCount();
-});
-
-socket.on("priority_alert", () => {
-
-    loadMessages();
-    loadMessageCount();
-});
 </script>
+
 
 </body>
 </html>
