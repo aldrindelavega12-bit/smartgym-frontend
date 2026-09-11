@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Walk-ins</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="navbar">
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div
+        class="menu"
+        id="menu">
+
+    </div>
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+         <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Lead the Change
+        </h3>
+
+        <p>
+            Better management<br>
+            builds a stronger gym.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="layout">
+
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+            <div class="top-right">
+
+                <div
+                    class="staff-profile"
+                    onclick="toggleStaffMenu()">
+
+                    <div class="staff-avatar">
+                        A
+                    </div>
+
+                    <div class="staff-info">
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+
+                    <!-- DROPDOWN -->
+
+                    <div
+                        id="staffDropdown"
+                        class="staff-profile-dropdown">
+
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="page-header">
+
+            <h1>
+                Walk-ins
+            </h1>
+
+            <p>
+                View and manage all walk-in records.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             WALK-IN PANEL
+        ================================================== -->
+
+        <div class="walkin-panel">
+
+
+            <!-- =================================================
+                 SEARCH + SORT
+            ================================================== -->
+
+            <div class="walkin-toolbar">
+
+
+                <!-- SEARCH -->
+
+                <div class="walkin-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="walkinSearch"
+                        placeholder="Search name, ID, or phone number...">
+
+                </div>
+
+
+                <!-- SORT -->
+
+                <select
+                    id="walkinSort"
+                    class="walkin-sort">
+
+                    <option value="">
+                        Sort by
+                    </option>
+
+                    <option value="name">
+                        Name
+                    </option>
+
+                    <option value="id">
+                        ID
+                    </option>
+
+                    <option value="visit_date">
+                        Visit Date
+                    </option>
+
+                    <option value="total_visit">
+                        Total Visit
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="walkin-table-wrapper">
+
+                <table class="walkin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Phone Number
+                            </th>
+
+                            <th>
+                                Visit Date
+                            </th>
+
+                            <th>
+                                Total Visit
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="walkins-body">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <div class="walkin-footer">
+
+
+                <div
+                    id="walkin-count"
+                    class="walkin-count">
+
+                    Showing 0 walk-ins
+
+                </div>
+
+
+                <div
+                    id="walkin-pagination"
+                    class="pagination">
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     NOTIFICATION POPUP
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
+<audio id="notifSound">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+
+<!-- SOCKET.IO -->
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+
+
+<!-- =====================================================
+     BASIC PAGE SCRIPT
+     FUNCTIONALITY NEXT
+===================================================== -->
+
+<script>
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+if(
+    !user ||
+    user.role !== "admin"
+){
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+const menu =
+    document.getElementById("menu");
+
+
+menu.innerHTML = `
+
+    <a href="admin.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        Home
+
+    </a>
+
+
+    <a href="messages.html"
+       class="msg-link">
+
+        <i class="fa-regular fa-envelope"></i>
+
+        Messages
+
+        <span
+            id="msg-count"
+            class="msg-count">
+
+            0
+
+        </span>
+
+    </a>
+
+
+    <a href="reports.html">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Reports
+
+    </a>
+
+
+    <a href="members.html">
+
+        <i class="fa-solid fa-users"></i>
+
+        Members
+
+    </a>
+
+
+    <a href="walkin.html"
+       class="active">
+
+        <i class="fa-solid fa-person-walking"></i>
+
+        Walk-ins
+
+    </a>
+
+
+    <a href="staff_manage.html">
+
+        <i class="fa-regular fa-user"></i>
+
+        Staff
+
+    </a>
+
+`;
+
+
+
+/* =====================================================
+   PROFILE DROPDOWN
+===================================================== */
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(
+            ".staff-profile"
+        );
+
+    const dropdown =
+        document.getElementById(
+            "staffDropdown"
+        );
+
+
+    if(!dropdown)
+        return;
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".staff-profile"
+            )
+        ){
+
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
+
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
+
+
+            if(profile)
+                profile.classList.remove(
+                    "active"
+                );
+
+
+            if(dropdown)
+                dropdown.classList.remove(
+                    "show"
+                );
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+/* =========================================================
+   WALK-IN DATA
+========================================================= */
+
+let allWalkins = [];
+
+let filteredWalkins = [];
+
+let currentWalkinPage = 1;
+
+const walkinsPerPage = 8;
+
+
+/* =========================================================
+   LOAD WALK-INS
+========================================================= */
+
+async function loadWalkins(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/website_walkins`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if(!res.ok){
+
+            throw new Error(
+                `HTTP ${res.status}`
+            );
+
+        }
+
+
+        const result =
+            await res.json();
+
+
+        if(!result.success){
+
+            throw new Error(
+                result.error ||
+                "Failed to load walk-ins."
+            );
+
+        }
+
+
+        allWalkins =
+            Array.isArray(result.data)
+            ? result.data
+            : [];
+
+
+        applyWalkinFilters();
+
+
+    }
+    catch(error){
+
+        console.error(
+            "WALK-IN LOAD ERROR:",
+            error
+        );
+
+
+        allWalkins = [];
+
+        filteredWalkins = [];
+
+        renderWalkins();
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH + SORT
+========================================================= */
+
+function applyWalkinFilters(){
+
+    const searchInput =
+        document.getElementById(
+            "walkinSearch"
+        );
+
+    const sortFilter =
+        document.getElementById(
+            "walkinSort"
+        );
+
+
+    const search =
+        searchInput
+        ? searchInput.value
+            .trim()
+            .toLowerCase()
+        : "";
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    filteredWalkins =
+        allWalkins.filter(walkin => {
+
+            const id =
+                String(
+                    walkin.id || ""
+                ).toLowerCase();
+
+
+            const name =
+                String(
+                    walkin.name || ""
+                ).toLowerCase();
+
+
+            const phone =
+                String(
+                    walkin.phone || ""
+                ).toLowerCase();
+
+
+            return (
+                !search ||
+                id.includes(search) ||
+                name.includes(search) ||
+                phone.includes(search)
+            );
+
+        });
+
+
+    /* =========================
+       SORT
+    ========================= */
+
+    const sort =
+        sortFilter
+        ? sortFilter.value
+        : "";
+
+
+    if(sort === "name"){
+
+        filteredWalkins.sort(
+            (a,b) =>
+                String(a.name || "")
+                .localeCompare(
+                    String(b.name || "")
+                )
+        );
+
+    }
+
+
+    else if(sort === "id"){
+
+        filteredWalkins.sort(
+            (a,b) =>
+                String(a.id || "")
+                .localeCompare(
+                    String(b.id || ""),
+                    undefined,
+                    {
+                        numeric: true
+                    }
+                )
+        );
+
+    }
+
+
+    else if(sort === "visit_date"){
+
+        filteredWalkins.sort(
+            (a,b) =>
+                String(
+                    b.visit_date || ""
+                ).localeCompare(
+                    String(
+                        a.visit_date || ""
+                    )
+                )
+        );
+
+    }
+
+
+    else if(sort === "total_visit"){
+
+        filteredWalkins.sort(
+            (a,b) =>
+                Number(
+                    b.total_visit || 0
+                ) -
+                Number(
+                    a.total_visit || 0
+                )
+        );
+
+    }
+
+
+    currentWalkinPage = 1;
+
+    renderWalkins();
+
+}
+
+async function loadMessageCount(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/admin_messages`
+        );
+
+        if(!res.ok){
+
+            throw new Error(
+                `Messages API error: ${res.status}`
+            );
+
+        }
+
+        const data = await res.json();
+
+        const unread =
+            data.filter(
+                message => message.is_read == 0
+            ).length;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge)
+            return;
+
+
+        badge.innerText =
+            unread > 99
+            ? "99+"
+            : unread;
+
+
+        badge.style.display =
+            unread > 0
+            ? "flex"
+            : "none";
+
+
+    }
+    catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+/* =========================================================
+   RENDER TABLE
+========================================================= */
+
+function renderWalkins(){
+
+    const table =
+        document.getElementById(
+            "walkins-body"
+        );
+
+
+    const count =
+        document.getElementById(
+            "walkin-count"
+        );
+
+
+    if(!table)
+        return;
+
+
+    table.innerHTML = "";
+
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    if(
+        filteredWalkins.length === 0
+    ){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        padding:25px;
+                        color:#7a8982;
+                    "
+                >
+
+                    No walk-in records found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        if(count){
+
+            count.innerText =
+                "Showing 0 walk-ins";
+
+        }
+
+
+        renderWalkinPagination();
+
+        return;
+
+    }
+
+
+    /* =========================
+       PAGINATION
+    ========================= */
+
+    const start =
+        (
+            currentWalkinPage - 1
+        ) * walkinsPerPage;
+
+
+    const end =
+        start + walkinsPerPage;
+
+
+    const pageData =
+        filteredWalkins.slice(
+            start,
+            end
+        );
+
+
+    /* =========================
+       TABLE ROWS
+    ========================= */
+
+    pageData.forEach(walkin => {
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+                ${walkin.id || "-"}
+            </td>
+
+
+            <td>
+                ${walkin.name || "-"}
+            </td>
+
+
+            <td>
+                ${walkin.phone || "-"}
+            </td>
+
+
+            <td>
+                ${walkin.visit_date || "-"}
+            </td>
+
+
+            <td>
+                ${walkin.total_visit || 0}
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+
+    /* =========================
+       COUNT
+    ========================= */
+
+    if(count){
+
+        const showingStart =
+            start + 1;
+
+
+        const showingEnd =
+            Math.min(
+                end,
+                filteredWalkins.length
+            );
+
+
+        count.innerText =
+            `Showing ${showingStart}-${showingEnd} of ${filteredWalkins.length} walk-ins`;
+
+    }
+
+
+    renderWalkinPagination();
+
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function renderWalkinPagination(){
+
+    const pagination =
+        document.getElementById(
+            "walkin-pagination"
+        );
+
+
+    if(!pagination)
+        return;
+
+
+    pagination.innerHTML = "";
+
+
+    const totalPages =
+        Math.ceil(
+            filteredWalkins.length /
+            walkinsPerPage
+        );
+
+
+    if(totalPages <= 1)
+        return;
+
+
+    /* =========================
+       PREVIOUS
+    ========================= */
+
+    const previous =
+        document.createElement(
+            "button"
+        );
+
+
+    previous.className =
+        "page-btn";
+
+
+    previous.innerHTML =
+        `<i class="fa-solid fa-chevron-left"></i>`;
+
+
+    previous.disabled =
+        currentWalkinPage === 1;
+
+
+    previous.onclick = () => {
+
+        if(
+            currentWalkinPage > 1
+        ){
+
+            currentWalkinPage--;
+
+            renderWalkins();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        previous
+    );
+
+
+    /* =========================
+       PAGE NUMBERS
+    ========================= */
+
+    for(
+        let page = 1;
+        page <= totalPages;
+        page++
+    ){
+
+        if(
+            totalPages > 6 &&
+            page > 3 &&
+            page < totalPages
+        ){
+
+            if(page === 4){
+
+                const dots =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                dots.className =
+                    "page-dots";
+
+
+                dots.innerText =
+                    "...";
+
+
+                pagination.appendChild(
+                    dots
+                );
+
+            }
+
+            continue;
+
+        }
+
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "page-btn";
+
+
+        if(
+            page ===
+            currentWalkinPage
+        ){
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+
+        button.innerText =
+            page;
+
+
+        button.onclick = () => {
+
+            currentWalkinPage =
+                page;
+
+
+            renderWalkins();
+
+        };
+
+
+        pagination.appendChild(
+            button
+        );
+
+    }
+
+
+    /* =========================
+       NEXT
+    ========================= */
+
+    const next =
+        document.createElement(
+            "button"
+        );
+
+
+    next.className =
+        "page-btn";
+
+
+    next.innerHTML =
+        `<i class="fa-solid fa-chevron-right"></i>`;
+
+
+    next.disabled =
+        currentWalkinPage === totalPages;
+
+
+    next.onclick = () => {
+
+        if(
+            currentWalkinPage <
+            totalPages
+        ){
+
+            currentWalkinPage++;
+
+            renderWalkins();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        next
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH EVENT
+========================================================= */
+
+document
+    .getElementById(
+        "walkinSearch"
+    )
+    .addEventListener(
+        "input",
+        applyWalkinFilters
+    );
+
+
+/* =========================================================
+   SORT EVENT
+========================================================= */
+
+document
+    .getElementById(
+        "walkinSort"
+    )
+    .addEventListener(
+        "change",
+        applyWalkinFilters
+    );
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+loadWalkins();
+loadMessageCount();
+
+</script>
+
+
+</body>
+</html>

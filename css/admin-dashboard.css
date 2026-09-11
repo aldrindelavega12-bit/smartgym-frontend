@@ -1697,3 +1697,864 @@ body {
     color: #56665f;
     padding: 0 1px;
 }
+
+/* =====================================================
+   WALK-INS PAGE
+===================================================== */
+
+.walkin-panel {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 14px 14px 12px;
+    box-shadow: 0 5px 18px rgba(30, 80, 55, 0.05);
+    border: 1px solid #e6eee9;
+}
+
+
+/* =====================================================
+   WALK-IN TOOLBAR
+===================================================== */
+
+.walkin-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 11px;
+}
+
+.walkin-search {
+    position: relative;
+    flex: 1;
+}
+
+.walkin-search i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #65756e;
+    font-size: 14px;
+}
+
+.walkin-search input {
+    width: 100%;
+    height: 36px;
+    box-sizing: border-box;
+    padding: 0 12px 0 35px;
+    border: 1px solid #dce5e0;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    color: #26352f;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+}
+
+.walkin-search input:focus {
+    border-color: #0b8f4d;
+}
+
+.walkin-sort {
+    width: 230px;
+    height: 36px;
+    padding: 0 11px;
+    border: 1px solid #dce5e0;
+    border-radius: 7px;
+    background: #fff;
+    color: #26352f;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    outline: none;
+}
+
+.walkin-sort:focus {
+    border-color: #0b8f4d;
+}
+
+
+/* =====================================================
+   WALK-IN TABLE
+===================================================== */
+
+.walkin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.walkin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Inter", sans-serif;
+}
+
+.walkin-table thead tr {
+    background: #edf8f2;
+}
+
+.walkin-table th {
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #385248;
+    white-space: nowrap;
+}
+
+.walkin-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #edf1ef;
+    font-size: 12px;
+    color: #40534b;
+    white-space: nowrap;
+}
+
+.walkin-table tbody tr {
+    height: 42px;
+}
+
+.walkin-table tbody tr:hover {
+    background: #fafdfb;
+}
+
+
+/* =====================================================
+   WALK-IN FOOTER
+===================================================== */
+
+.walkin-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 0 5px;
+}
+
+.walkin-count {
+    font-size: 12px;
+    color: #50645a;
+}
+
+/* =========================================================
+   STAFF MANAGEMENT PAGE
+========================================================= */
+
+.staff-page-panel {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px;
+
+    box-shadow:
+        0 4px 18px rgba(20, 60, 45, 0.06);
+}
+
+
+/* =========================================================
+   STAFF TOOLBAR
+========================================================= */
+
+.staff-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.staff-search {
+    position: relative;
+    flex: 1;
+}
+
+.staff-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    color: #20385f;
+    font-size: 15px;
+}
+
+.staff-search input {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+
+    border: 1px solid #dfe5ec;
+    border-radius: 8px;
+
+    padding: 0 13px 0 40px;
+
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+
+    color: #24395f;
+    outline: none;
+    background: #fff;
+}
+
+.staff-search input:focus {
+    border-color: #0aae67;
+
+    box-shadow:
+        0 0 0 3px rgba(10,174,103,.08);
+}
+
+
+.staff-sort {
+    width: 205px;
+    height: 42px;
+
+    border: 1px solid #dfe5ec;
+    border-radius: 8px;
+
+    padding: 0 13px;
+
+    background: white;
+    color: #20385f;
+
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+
+    outline: none;
+}
+
+
+.add-staff-btn {
+    height: 42px;
+    min-width: 145px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #09ad65;
+    color: white;
+
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.add-staff-btn:hover {
+    background: #079657;
+}
+
+
+/* =========================================================
+   STAFF TABLE
+   COMPACT — SAME STYLE AS ADMIN DASHBOARD
+========================================================= */
+
+.staff-table-wrapper {
+    overflow-x: auto;
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.staff-table thead {
+    background: #edf9f4;
+}
+
+.staff-table th {
+    text-align: left;
+
+    padding: 9px 10px;
+
+    color: #385248;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.staff-table td {
+    padding: 7px 10px;
+
+    border-bottom: 1px solid #edf1ef;
+
+    color: #40534b;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+.staff-table tbody tr {
+    height: 40px;
+}
+
+.staff-table tbody tr:hover {
+    background: #fafdfb;
+}
+
+
+/* =========================================================
+   ROLE BADGES
+========================================================= */
+
+.staff-table .role-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 10px;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.staff-table .role-frontdesk {
+    background: #e5f3fc;
+    color: #0879d8;
+}
+
+.staff-table .role-trainer {
+    background: #e4f6ed;
+    color: #16834c;
+}
+
+.staff-table .role-admin {
+    background: #eeeafc;
+    color: #6744c5;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.staff-table .action-cell {
+    text-align: right !important;
+}
+
+.staff-table .action-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.staff-table .action-btn {
+    width: 36px;
+    height: 34px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #f5f7f9;
+    color: #19355c;
+
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.staff-table .action-btn:hover {
+    background: #edf2f5;
+}
+
+
+/* =========================================================
+   ACTION MENU
+========================================================= */
+
+.staff-table .action-menu {
+    display: none;
+
+    position: absolute;
+
+    right: 0;
+    top: 39px;
+
+    width: 135px;
+
+    background: white;
+
+    border: 1px solid #e5e9ee;
+    border-radius: 8px;
+
+    box-shadow:
+        0 8px 24px rgba(20,40,60,.12);
+
+    z-index: 20;
+
+    padding: 4px;
+}
+
+.staff-table .action-menu.show {
+    display: block;
+}
+
+.staff-table .action-menu button {
+    width: 100%;
+
+    border: none;
+    background: transparent;
+
+    padding: 8px 10px;
+
+    text-align: left;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+}
+
+.staff-table .action-menu button:hover {
+    background: #f5f7f9;
+}
+
+.staff-table .action-menu .delete-option {
+    color: #d93636;
+}
+
+
+/* =========================================================
+   STAFF FOOTER
+========================================================= */
+
+.staff-footer {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 10px;
+}
+
+.staff-count {
+    color: #5f7294;
+    font-size: 12px;
+}
+
+.staff-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.staff-pagination .page-btn {
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #f5f7f9;
+    color: #8a9ab5;
+
+    cursor: pointer;
+
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.staff-pagination .page-btn.active {
+    background: #09ad65;
+    color: white;
+}
+
+.staff-pagination .page-btn:disabled {
+    opacity: .55;
+    cursor: default;
+}
+
+.staff-pagination .page-dots {
+    color: #8a9ab5;
+    padding: 0 2px;
+}
+
+
+/* =========================================================
+   ADD STAFF MODAL
+========================================================= */
+
+.staff-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(18, 35, 55, .42);
+
+    z-index: 9999;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.staff-modal.show {
+    display: flex;
+}
+
+.staff-modal-box {
+    width: 430px;
+    max-width: calc(100% - 30px);
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 15px 50px rgba(20,40,60,.18);
+}
+
+.staff-modal-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+.staff-modal-header h2 {
+    margin: 0;
+
+    color: #162d52;
+    font-size: 21px;
+}
+
+.close-modal {
+    border: none;
+    background: transparent;
+
+    font-size: 22px;
+
+    color: #7c8da6;
+
+    cursor: pointer;
+}
+
+.staff-form-group {
+    margin-bottom: 15px;
+}
+
+.staff-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #294264;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.staff-form-group input,
+.staff-form-group select {
+    width: 100%;
+    height: 44px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dce3ea;
+    border-radius: 8px;
+
+    padding: 0 12px;
+
+    font-family: Inter, sans-serif;
+
+    outline: none;
+}
+
+.staff-form-group input:focus,
+.staff-form-group select:focus {
+    border-color: #09ad65;
+}
+
+.create-staff-submit {
+    width: 100%;
+    height: 45px;
+
+    margin-top: 5px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #09ad65;
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   STAFF RESPONSIVE
+========================================================= */
+
+@media(max-width: 900px) {
+
+    .staff-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .staff-search {
+        flex-basis: 100%;
+    }
+
+    .staff-sort {
+        flex: 1;
+    }
+
+}
+
+/* =========================================================
+   SUCCESS MODAL
+========================================================= */
+
+.success-modal {
+
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(18, 35, 55, 0.42);
+
+    z-index: 10000;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.success-modal.show {
+    display: flex;
+}
+
+.success-modal-box {
+
+    width: 390px;
+    max-width: calc(100% - 30px);
+
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 50px rgba(20, 40, 60, 0.18);
+}
+
+.success-icon {
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 16px;
+
+    border-radius: 50%;
+
+    background: #e4f7ed;
+
+    color: #09ad65;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+.success-modal-box h2 {
+
+    margin: 0 0 8px;
+
+    color: #162d52;
+
+    font-size: 21px;
+}
+
+.success-modal-box p {
+
+    margin: 0 0 22px;
+
+    color: #71809a;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.success-ok-btn {
+
+    width: 100%;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #09ad65;
+
+    color: white;
+
+    font-family: Inter, sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.success-ok-btn:hover {
+
+    background: #079657;
+}
+
+/* =========================================================
+   DELETE CONFIRMATION MODAL
+========================================================= */
+
+.delete-modal {
+
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(18, 35, 55, 0.42);
+
+    z-index: 10001;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-modal.show {
+    display: flex;
+}
+
+.delete-modal-box {
+
+    width: 390px;
+    max-width: calc(100% - 30px);
+
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 50px rgba(20, 40, 60, 0.18);
+}
+
+.delete-icon {
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 16px;
+
+    border-radius: 50%;
+
+    background: #fdeaea;
+
+    color: #d93636;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+}
+
+.delete-modal-box h2 {
+
+    margin: 0 0 8px;
+
+    color: #162d52;
+
+    font-size: 21px;
+}
+
+.delete-modal-box p {
+
+    margin: 0 0 22px;
+
+    color: #71809a;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.delete-modal-actions {
+
+    display: flex;
+
+    gap: 10px;
+}
+
+.delete-cancel-btn,
+.delete-confirm-btn {
+
+    flex: 1;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-family: Inter, sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.delete-cancel-btn {
+
+    background: #f1f4f6;
+
+    color: #53657e;
+}
+
+.delete-cancel-btn:hover {
+
+    background: #e8ecef;
+}
+
+.delete-confirm-btn {
+
+    background: #d93636;
+
+    color: #ffffff;
+}
+
+.delete-confirm-btn:hover {
+
+    background: #c52d2d;
+}

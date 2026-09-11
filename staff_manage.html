@@ -1,280 +1,1392 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Staff Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
 </head>
+
+
 <body>
 
-<!-- 🔒 ADMIN ONLY -->
-<script>
-const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user) {
-    window.location.href = "index.html";
+<!-- =====================================================
+     ADMIN PROTECTION
+===================================================== -->
+
+<script>
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+if(
+    !user ||
+    user.role !== "admin"
+){
+
+    window.location.href =
+        "index.html";
+
 }
+
 </script>
 
-<!-- NAVBAR -->
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="navbar">
-    <h2>SMART GYM</h2>
-    <div class="menu" id="menu"></div>
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MENU -->
+
+    <div
+        class="menu"
+        id="menu">
+    </div>
+
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+         <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Lead the Change
+        </h3>
+
+        <p>
+            Better management<br>
+            builds a stronger gym.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 </div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <div class="layout">
+
 <div class="main">
 
-<h2>Staff Management</h2>
 
-<div style="margin-bottom:15px;">
-    <input type="text" id="fullname" placeholder="Full Name">
 
-    <select id="role">
-        <option value="staff">Desk Staff</option>
-        <option value="trainer">Trainer</option>
-    </select>
+    <!-- =================================================
+         TOP HEADER
+    ================================================== -->
 
-    <input type="text" id="username" placeholder="Username">
+    <div class="top-header">
 
-    <input type="password" id="password" placeholder="Password">
+        <div class="top-right">
 
-    <button onclick="createAccount()">
-        Create Account
-    </button>
+            <div
+                class="staff-profile"
+                onclick="toggleStaffMenu()">
+
+
+                <div class="staff-avatar">
+                    A
+                </div>
+
+
+                <div class="staff-info">
+
+                    <strong>
+                        Admin
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+
+
+                <!-- DROPDOWN -->
+
+                <div
+                    id="staffDropdown"
+                    class="staff-profile-dropdown">
+
+                    <button
+                        onclick="logout(); event.stopPropagation();"
+                        class="staff-dropdown-logout">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Log Out
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="page-header">
+
+        <h1>
+            Staff Management
+        </h1>
+
+        <p>
+            View and manage all system staff accounts.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STAFF PANEL
+    ================================================== -->
+
+    <div class="staff-page-panel">
+
+
+        <!-- =================================================
+             TOOLBAR
+        ================================================== -->
+
+        <div class="staff-toolbar">
+
+
+            <!-- SEARCH -->
+
+            <div class="staff-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="staffSearch"
+                    placeholder="Search name or username...">
+
+            </div>
+
+
+
+            <!-- ADD -->
+
+            <button
+                class="add-staff-btn"
+                onclick="openStaffModal()">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Staff
+
+            </button>
+
+
+
+            <!-- SORT -->
+
+            <select
+                id="staffSort"
+                class="staff-sort">
+
+                <option value="">
+                    Sort by
+                </option>
+
+                <option value="name">
+                    Name
+                </option>
+
+                <option value="username">
+                    Username
+                </option>
+
+                <option value="role">
+                    Role
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="staff-table-wrapper">
+
+            <table class="staff-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Username
+                        </th>
+
+                        <th>
+                            Role
+                        </th>
+
+                        <th class="action-cell">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="staff-body">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <div class="staff-footer">
+
+
+            <div
+                id="staff-count"
+                class="staff-count">
+
+                Showing 0 staff
+
+            </div>
+
+
+            <div
+                id="staff-pagination"
+                class="staff-pagination">
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
 </div>
 
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Role</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody id="staff-body"></tbody>
-</table>
+</div>
+
+
+
+<!-- =====================================================
+     ADD STAFF MODAL
+===================================================== -->
+
+<div
+    id="staffModal"
+    class="staff-modal">
+
+
+    <div class="staff-modal-box">
+
+
+        <div class="staff-modal-header">
+
+            <h2>
+                Add Staff
+            </h2>
+
+            <button
+                class="close-modal"
+                onclick="closeStaffModal()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+
+        <div class="staff-form-group">
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="fullname"
+                placeholder="Enter full name">
+
+        </div>
+
+
+        <div class="staff-form-group">
+
+            <label>
+                Role
+            </label>
+
+            <select id="role">
+
+                <option value="staff">
+                    Front Desk
+                </option>
+
+                <option value="trainer">
+                    Trainer
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="staff-form-group">
+
+            <label>
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter username">
+
+        </div>
+
+
+        <div class="staff-form-group">
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password">
+
+        </div>
+
+
+        <div class="staff-form-group">
+
+            <label>
+                Confirm Password
+            </label>
+
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm password">
+
+        </div>
+
+
+        <button
+            class="create-staff-submit"
+            onclick="createAccount()">
+
+            Create Staff Account
+
+        </button>
+
+
+    </div>
 
 </div>
+
+
+<!-- DELETE CONFIRMATION MODAL -->
+<div id="deleteModal" class="delete-modal">
+
+    <div class="delete-modal-box">
+
+        <div class="delete-icon">
+            <i class="fa-solid fa-trash"></i>
+        </div>
+
+        <h2>Delete Staff Account?</h2>
+
+        <p>
+            Are you sure you want to delete this staff account?
+            This action cannot be undone.
+        </p>
+
+        <div class="delete-modal-actions">
+
+            <button
+                class="delete-cancel-btn"
+                onclick="closeDeleteModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                class="delete-confirm-btn"
+                onclick="confirmDeleteStaff()">
+
+                Delete
+
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
-<div id="notifPopup" class="notif-popup">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
+
+<div id="successModal" class="success-modal">
+
+    <div class="success-modal-box">
+
+        <div class="success-icon">
+            <i class="fa-solid fa-check"></i>
+        </div>
+
+        <h2 id="successTitle">
+            Successfully Created!
+        </h2>
+
+        <p id="successText">
+            The staff account has been successfully created.
+        </p>
+
+        <button
+            class="success-ok-btn"
+            onclick="closeSuccessModal()">
+
+            OK
+
+        </button>
+
+    </div>
+
 </div>
+
+<!-- =====================================================
+     NOTIFICATION
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
 
 <audio id="notifSound">
-    <source src="notif.mp3" type="audio/mpeg">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
 </audio>
 
+
+
+<!-- =====================================================
+     SOCKET.IO
+===================================================== -->
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+
+
 <script>
+
+/* =====================================================
+   API
+===================================================== */
+
 const API_URL =
-"https://smartgym-api-ia2e.onrender.com";
-// 🔥 MENU
-const menu = document.getElementById("menu");
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+const menu =
+    document.getElementById("menu");
+
+
 menu.innerHTML = `
+
     <a href="admin.html">
+
         <i class="fa-solid fa-house"></i>
+
         Home
+
     </a>
 
-    <a href="messages.html" class="msg-link">
 
-        <i class="fa-regular fa-comment"></i>
+    <a href="messages.html"
+       class="msg-link">
+
+        <i class="fa-regular fa-envelope"></i>
 
         Messages
 
         <span
             id="msg-count"
             class="msg-count">
+
             0
+
         </span>
 
     </a>
 
-    <a href="attendance.html">
-        <i class="fa-regular fa-calendar-check"></i>
-        Attendance
+
+    <a href="reports.html">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Reports
+
     </a>
 
-    <a href="locker.html">
-        <i class="fa-solid fa-lock"></i>
-        Locker
-    </a>
 
     <a href="members.html">
+
         <i class="fa-solid fa-users"></i>
+
         Members
+
     </a>
 
-    <a href="staff_manage.html">
+
+    <a href="walkin.html">
+
+        <i class="fa-solid fa-person-walking"></i>
+
+        Walk-ins
+
+    </a>
+
+
+    <a href="staff_manage.html"
+       class="active">
+
         <i class="fa-regular fa-user"></i>
+
         Staff
+
     </a>
 
-    <a href="create_account.html">
-        <i class="fa-solid fa-user-plus"></i>
-        Create Account
-    </a>
 `;
 
-// ===== LOAD =====
+/* =====================================================
+   STAFF DATA
+===================================================== */
+
+let allStaff = [];
+
+let filteredStaff = [];
+
+let currentStaffPage = 1;
+
+const staffPerPage = 5;
+
+
+
+/* =====================================================
+   LOAD STAFF
+===================================================== */
+
 async function loadStaff(){
 
-    const res = await fetch(
-        `${API_URL}/api/staff_accounts`
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/staff_accounts`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if(!res.ok){
+
+            throw new Error(
+                `HTTP ${res.status}`
+            );
+
+        }
+
+
+        const data =
+            await res.json();
+
+
+        allStaff =
+            Array.isArray(data)
+            ? data
+            : [];
+
+
+        applyStaffFilters();
+
+
+    }
+    catch(error){
+
+        console.error(
+            "STAFF LOAD ERROR:",
+            error
+        );
+
+        allStaff = [];
+
+        filteredStaff = [];
+
+        renderStaff();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SEARCH + SORT
+===================================================== */
+
+function applyStaffFilters(){
+
+    const search =
+        document
+        .getElementById("staffSearch")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const sort =
+        document
+        .getElementById("staffSort")
+        .value;
+
+
+    filteredStaff =
+        allStaff.filter(staff => {
+
+            const name =
+                String(
+                    staff.fullname || ""
+                ).toLowerCase();
+
+
+            const username =
+                String(
+                    staff.username || ""
+                ).toLowerCase();
+
+
+            return (
+                !search ||
+                name.includes(search) ||
+                username.includes(search)
+            );
+
+        });
+
+
+    if(sort === "name"){
+
+        filteredStaff.sort(
+            (a,b) =>
+                String(
+                    a.fullname || ""
+                ).localeCompare(
+                    String(
+                        b.fullname || ""
+                    )
+                )
+        );
+
+    }
+
+
+    else if(sort === "username"){
+
+        filteredStaff.sort(
+            (a,b) =>
+                String(
+                    a.username || ""
+                ).localeCompare(
+                    String(
+                        b.username || ""
+                    )
+                )
+        );
+
+    }
+
+
+    else if(sort === "role"){
+
+        filteredStaff.sort(
+            (a,b) =>
+                String(
+                    a.role || ""
+                ).localeCompare(
+                    String(
+                        b.role || ""
+                    )
+                )
+        );
+
+    }
+
+
+    currentStaffPage = 1;
+
+    renderStaff();
+
+}
+
+
+
+/* =====================================================
+   ROLE
+===================================================== */
+
+function getRoleBadge(role){
+
+    const r =
+        String(
+            role || ""
+        ).toLowerCase();
+
+
+    if(
+        r === "trainer"
+    ){
+
+        return `
+            <span class="role-badge role-trainer">
+                Trainer
+            </span>
+        `;
+
+    }
+
+
+    if(
+        r === "admin" ||
+        r === "administrator"
+    ){
+
+        return `
+            <span class="role-badge role-admin">
+                Administrator
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span class="role-badge role-frontdesk">
+            Front Desk
+        </span>
+    `;
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
     );
 
-    const data = await res.json();
+}
+
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderStaff(){
 
     const table =
         document.getElementById(
             "staff-body"
         );
 
+
+    const count =
+        document.getElementById(
+            "staff-count"
+        );
+
+
     table.innerHTML = "";
 
-    if(data.length === 0){
 
-        table.innerHTML = `
-            <tr>
-                <td colspan="3">
-                    No staff
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-    data.forEach(s => {
-
-        table.innerHTML += `
-        <tr>
-            <td>${s.fullname}</td>
-            <td>${s.role}</td>
-            <td>
-                <button onclick="removeStaff('${s.user_id}')">
-                    Remove
-                </button>
-            </td>
-        </tr>
-        `;
-    });
-}
-async function loadMessageCount(){
-
-    const res = await fetch(
-        `${API_URL}/api/admin_messages`
-    );
-
-    const data = await res.json();
-
-    const unread =
-        data.filter(
-            m => m.is_read == 0
-        ).length;
     if(
-        lastUnread !== 0 &&
-        unread > lastUnread
+        filteredStaff.length === 0
     ){
 
-        document
-            .getElementById(
-                "notifSound"
-            )
-            ?.play();
+        table.innerHTML = `
 
-        showNotifPopup(
-            "New Message",
-            `${unread - lastUnread} new notification`
-        );
-    }
+            <tr>
 
-    lastUnread = unread;
+                <td
+                    colspan="4"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                        color:#7b8ca5;
+                    "
+                >
 
-    const badge =
-        document.getElementById(
-            "msg-count"
-        );
+                    No staff accounts found.
 
-    if(!badge) return;
+                </td>
 
-    badge.innerText =
-        unread > 99
-        ? "99+"
-        : unread;
+            </tr>
 
-    badge.style.display =
-        unread > 0
-        ? "flex"
-        : "none";
-}
-// ===== ADD =====
-function addStaff(){
-    const name = document.getElementById("name").value.trim();
-    const role = document.getElementById("roleInput").value.trim();
+        `;
 
-    if(!name || !role){
-        alert("Fill all fields");
+
+        count.innerText =
+            "Showing 0 staff";
+
+
+        renderStaffPagination();
+
         return;
+
     }
 
-    let staff = JSON.parse(localStorage.getItem("staff")) || [];
 
-    staff.push({name, role});
 
-    localStorage.setItem("staff", JSON.stringify(staff));
+    const start =
+        (
+            currentStaffPage - 1
+        ) * staffPerPage;
 
-    document.getElementById("name").value = "";
-    document.getElementById("roleInput").value = "";
 
-    loadStaff();
+    const end =
+        start + staffPerPage;
+
+
+    const pageData =
+        filteredStaff.slice(
+            start,
+            end
+        );
+
+
+
+    pageData.forEach(
+        (staff,index) => {
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        staff.fullname || "-"
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        staff.username || "-"
+                    )}
+                </td>
+
+
+                <td>
+                    ${getRoleBadge(
+                        staff.role
+                    )}
+                </td>
+
+
+                <td class="action-cell">
+
+                    <div class="action-wrapper">
+
+                        <button
+                            class="action-btn"
+                            onclick="toggleActionMenu(${index})">
+
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+
+                        </button>
+
+
+                        <div
+                            id="action-menu-${index}"
+                            class="action-menu">
+
+                            <button
+                                class="delete-option"
+                                onclick="removeStaff('${escapeHtml(staff.user_id)}')">
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Delete
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+
+
+    const showingStart =
+        start + 1;
+
+
+    const showingEnd =
+        Math.min(
+            end,
+            filteredStaff.length
+        );
+
+
+    count.innerText =
+        `Showing ${showingStart} to ${showingEnd} of ${filteredStaff.length} staff`;
+
+
+    renderStaffPagination();
+
 }
+
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+function renderStaffPagination(){
+
+    const pagination =
+        document.getElementById(
+            "staff-pagination"
+        );
+
+
+    pagination.innerHTML = "";
+
+
+    const totalPages =
+        Math.ceil(
+            filteredStaff.length /
+            staffPerPage
+        );
+
+
+    if(totalPages <= 1)
+        return;
+
+
+
+    const previous =
+        document.createElement(
+            "button"
+        );
+
+
+    previous.className =
+        "page-btn";
+
+
+    previous.innerHTML =
+        `<i class="fa-solid fa-chevron-left"></i>`;
+
+
+    previous.disabled =
+        currentStaffPage === 1;
+
+
+    previous.onclick = () => {
+
+        if(
+            currentStaffPage > 1
+        ){
+
+            currentStaffPage--;
+
+            renderStaff();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        previous
+    );
+
+
+
+    for(
+        let page = 1;
+        page <= totalPages;
+        page++
+    ){
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "page-btn";
+
+
+        if(
+            page ===
+            currentStaffPage
+        ){
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+
+        button.innerText =
+            page;
+
+
+        button.onclick = () => {
+
+            currentStaffPage =
+                page;
+
+            renderStaff();
+
+        };
+
+
+        pagination.appendChild(
+            button
+        );
+
+    }
+
+
+
+    const next =
+        document.createElement(
+            "button"
+        );
+
+
+    next.className =
+        "page-btn";
+
+
+    next.innerHTML =
+        `<i class="fa-solid fa-chevron-right"></i>`;
+
+
+    next.disabled =
+        currentStaffPage === totalPages;
+
+
+    next.onclick = () => {
+
+        if(
+            currentStaffPage <
+            totalPages
+        ){
+
+            currentStaffPage++;
+
+            renderStaff();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        next
+    );
+
+}
+
+
+
+/* =====================================================
+   ACTION MENU
+===================================================== */
+
+function toggleActionMenu(index){
+
+    document
+        .querySelectorAll(
+            ".action-menu"
+        )
+        .forEach(
+            menu => {
+                menu.classList.remove(
+                    "show"
+                );
+            }
+        );
+
+
+    const menu =
+        document.getElementById(
+            `action-menu-${index}`
+        );
+
+
+    if(menu){
+
+        menu.classList.add(
+            "show"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   ADD STAFF MODAL
+===================================================== */
+
+function openStaffModal(){
+
+    document
+        .getElementById(
+            "staffModal"
+        )
+        .classList.add(
+            "show"
+        );
+
+}
+
+
+function closeStaffModal(){
+
+    document
+        .getElementById(
+            "staffModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+
+/* =====================================================
+   CREATE STAFF
+===================================================== */
+
 async function createAccount(){
 
     const fullname =
-        document.getElementById(
-            "fullname"
-        ).value.trim();
+        document.getElementById("fullname").value.trim();
 
     const role =
-        document.getElementById(
-            "role"
-        ).value;
+        document.getElementById("role").value;
 
     const username =
-        document.getElementById(
-            "username"
-        ).value.trim();
+        document.getElementById("username").value.trim();
 
     const password =
-        document.getElementById(
-            "password"
-        ).value.trim();
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
 
     if(
         !fullname ||
         !username ||
-        !password
+        !password ||
+        !confirmPassword
     ){
-        alert(
-            "Complete all fields"
-        );
+
+        alert("Complete all fields.");
         return;
+
     }
+
+
+    if(password !== confirmPassword){
+
+        alert("Passwords do not match.");
+        return;
+
+    }
+
 
     try{
 
         const res = await fetch(
             `${API_URL}/api/create_staff_account`,
             {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
                 },
-                body:JSON.stringify({
+
+                body: JSON.stringify({
                     fullname,
                     role,
                     username,
@@ -283,26 +1395,36 @@ async function createAccount(){
             }
         );
 
-        const data =
-            await res.json();
 
-        alert(
-            data.message ||
-            data.status
+        const data = await res.json();
+
+
+        if(data.status !== "success"){
+
+            alert(
+                data.message ||
+                "Failed to create staff account."
+            );
+
+            return;
+
+        }
+
+
+        showSuccessModal(
+            "Successfully Created!",
+            "The staff account has been successfully created."
         );
 
-        if(data.status === "success"){
-
-            loadStaff();
-
-            document.getElementById("fullname").value = "";
-            document.getElementById("username").value = "";
-            document.getElementById("password").value = "";
-        }
+        // CLEAR FORM
 
         document.getElementById(
             "fullname"
         ).value = "";
+
+        document.getElementById(
+            "role"
+        ).value = "staff";
 
         document.getElementById(
             "username"
@@ -312,101 +1434,520 @@ async function createAccount(){
             "password"
         ).value = "";
 
-    }catch(err){
+        document.getElementById(
+            "confirmPassword"
+        ).value = "";
 
-        console.log(err);
+
+        // CLOSE MODAL
+
+        closeStaffModal();
+
+
+        // RELOAD FROM DATABASE
+
+        await loadStaff();
+
+    }
+    catch(error){
+
+        console.error(
+            "CREATE STAFF ERROR:",
+            error
+        );
 
         alert(
             "Server Error"
         );
+
     }
+
 }
+
+/* =====================================================
+   DELETE STAFF
+===================================================== */
+let staffToDelete = null;
+
+
+function removeStaff(userId){
+
+    staffToDelete = userId;
+
+    document
+        .getElementById("deleteModal")
+        .classList.add("show");
+
+}
+
+
+function closeDeleteModal(){
+
+    staffToDelete = null;
+
+    document
+        .getElementById("deleteModal")
+        .classList.remove("show");
+
+}
+
+async function confirmDeleteStaff(){
+
+    if(!staffToDelete)
+        return;
+
+
+    const userId =
+        staffToDelete;
+
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/delete_staff/${userId}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await res.json();
+
+
+        if(!res.ok){
+
+            alert(
+                data.message ||
+                "Failed to delete staff account."
+            );
+
+            return;
+
+        }
+
+
+        closeDeleteModal();
+
+        await loadStaff();
+
+
+        showSuccessModal(
+            "Successfully Deleted!",
+            "The staff account has been successfully deleted."
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "DELETE STAFF ERROR:",
+            error
+        );
+
+        alert(
+            "Server Error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   MESSAGE COUNT
+===================================================== */
+
 let lastUnread = 0;
 
-function showNotifPopup(title,text){
+
+async function loadMessageCount(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/admin_messages`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if(!res.ok)
+            return;
+
+
+        const data =
+            await res.json();
+
+
+        const messages =
+            Array.isArray(data)
+            ? data
+            : [];
+
+
+        const unread =
+            messages.filter(
+                message =>
+                    message.is_read == 0
+            ).length;
+
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge)
+            return;
+
+
+        badge.innerText =
+            unread > 99
+            ? "99+"
+            : unread;
+
+
+        badge.style.display =
+            unread > 0
+            ? "flex"
+            : "none";
+
+
+        if(
+            lastUnread !== 0 &&
+            unread > lastUnread
+        ){
+
+            document
+                .getElementById(
+                    "notifSound"
+                )
+                ?.play()
+                .catch(
+                    () => {}
+                );
+
+
+            showNotifPopup(
+                "New Message",
+                `${unread - lastUnread} new notification`
+            );
+
+        }
+
+
+        lastUnread =
+            unread;
+
+    }
+    catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
+
+function showNotifPopup(
+    title,
+    text
+){
 
     const popup =
         document.getElementById(
             "notifPopup"
         );
 
+
+    if(!popup)
+        return;
+
+
     document.getElementById(
         "notifTitle"
-    ).innerText = title;
+    ).innerText =
+        title;
+
 
     document.getElementById(
         "notifText"
-    ).innerText = text;
+    ).innerText =
+        text;
 
-    popup.classList.add("show");
 
-    setTimeout(() => {
+    popup.classList.add(
+        "show"
+    );
 
-        popup.classList.remove(
-            "show"
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(
+            ".staff-profile"
         );
 
-    },4000);
-}
-// ===== REMOVE =====
-async function removeStaff(userId){
 
-    if(!confirm(
-        "Delete account?"
-    )){
+    const dropdown =
+        document.getElementById(
+            "staffDropdown"
+        );
+
+
+    if(!dropdown)
         return;
-    }
 
-    await fetch(
-        `${API_URL}/api/delete_staff/${userId}`,
-        {
-            method:"DELETE"
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+function showSuccessModal(title, text){
+
+    document.getElementById(
+        "successTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "successText"
+    ).innerText = text;
+
+    document
+        .getElementById("successModal")
+        .classList.add("show");
+
+}
+
+
+function closeSuccessModal(){
+
+    document
+        .getElementById("successModal")
+        .classList.remove("show");
+
+}
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   OUTSIDE CLICK
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".action-wrapper"
+            )
+        ){
+
+            document
+                .querySelectorAll(
+                    ".action-menu"
+                )
+                .forEach(
+                    menu => {
+
+                        menu.classList.remove(
+                            "show"
+                        );
+
+                    }
+                );
+
+        }
+
+
+        if(
+            !e.target.closest(
+                ".staff-profile"
+            )
+        ){
+
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
+
+
+            if(profile){
+
+                profile.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            if(dropdown){
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+    .getElementById(
+        "staffSearch"
+    )
+    .addEventListener(
+        "input",
+        applyStaffFilters
+    );
+
+
+
+/* =====================================================
+   SORT
+===================================================== */
+
+document
+    .getElementById(
+        "staffSort"
+    )
+    .addEventListener(
+        "change",
+        applyStaffFilters
+    );
+
+
+
+/* =====================================================
+   MODAL OUTSIDE CLICK
+===================================================== */
+
+document
+    .getElementById(
+        "staffModal"
+    )
+    .addEventListener(
+        "click",
+        function(e){
+
+            if(
+                e.target === this
+            ){
+
+                closeStaffModal();
+
+            }
+
         }
     );
 
-    loadStaff();
-}
-function showNotifPopup(title,text){
 
-    const popup =
-        document.getElementById(
-            "notifPopup"
-        );
 
-    if(!popup) return;
+/* =====================================================
+   SOCKET
+===================================================== */
 
-    document.getElementById(
-        "notifTitle"
-    ).innerText = title;
+const socket =
+    io(API_URL);
 
-    document.getElementById(
-        "notifText"
-    ).innerText = text;
 
-    popup.classList.add("show");
+socket.on(
+    "new_message",
+    () => {
 
-    setTimeout(() => {
+        loadMessageCount();
 
-        popup.classList.remove(
-            "show"
-        );
+    }
+);
 
-    },4000);
-}
+
+socket.on(
+    "priority_alert",
+    () => {
+
+        loadMessageCount();
+
+    }
+);
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
 
 loadStaff();
+
 loadMessageCount();
-socket.on("new_message", () => {
 
-    loadMessages();
-    loadMessageCount();
-});
-
-socket.on("priority_alert", () => {
-
-    loadMessages();
-    loadMessageCount();
-});
 </script>
 
 </body>
