@@ -519,32 +519,293 @@ if(
 
         </div>
 
-
-
         <!-- =================================================
-             LOCKER CONTENT
-        ================================================== -->
+            LOCKER REPORT
+        ================================================= -->
 
         <div
             id="lockerReport"
-            class="locker-report-placeholder">
+            class="locker-report"
+            style="display:none;">
 
-            <div class="locker-placeholder-icon">
 
-                <i class="fa-solid fa-lock"></i>
+            <!-- FILTER BAR -->
+
+            <div class="report-filter-bar">
+
+                <div class="date-range-group">
+
+                    <label>
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                        Date Range
+
+                    </label>
+
+
+                    <div class="date-inputs">
+
+                        <input
+                            type="date"
+                            id="lockerStartDate">
+
+                        <span>
+                            –
+                        </span>
+
+                        <input
+                            type="date"
+                            id="lockerEndDate">
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-date-buttons">
+
+                    <button
+                        onclick="setLockerToday()">
+
+                        Today
+
+                    </button>
+
+
+                    <button
+                        onclick="setLockerThisWeek()">
+
+                        This Week
+
+                    </button>
+
+
+                    <button
+                        onclick="setLockerThisMonth()">
+
+                        This Month
+
+                    </button>
+
+                </div>
 
             </div>
 
-            <h2>
-                Locker Report
-            </h2>
 
-            <p>
-                Locker usage reports will be available here.
-            </p>
+
+            <!-- SUMMARY -->
+
+            <div class="report-summary-grid">
+
+
+                <!-- TOTAL LOCKER USAGE -->
+
+                <div class="report-summary-card entry-card">
+
+                    <div class="summary-icon">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Locker
+                        </span>
+
+                        <strong id="totalLockerUsage">
+                            0
+                        </strong>
+
+                        <small>
+                            Total locker Usage
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MEMBERS -->
+
+                <div class="report-summary-card member-card">
+
+                    <div class="summary-icon">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Members
+                        </span>
+
+                        <strong id="totalLockerMembers">
+                            0
+                        </strong>
+
+                        <small>
+                            Member locker usage
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- WALK-INS -->
+
+                <div class="report-summary-card walkin-card">
+
+                    <div class="summary-icon">
+
+                        <i class="fa-solid fa-person-walking"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Walk-ins
+                        </span>
+
+                        <strong id="totalLockerWalkins">
+                            0
+                        </strong>
+
+                        <small>
+                            Walk-in locker usage
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RECORDS HEADER -->
+
+            <div class="records-header">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                        Locker Sessions
+
+                    </h2>
+
+
+                    <p>
+                        List of all locker usage records.
+                    </p>
+
+                </div>
+
+
+                <div class="report-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="lockerSearch"
+                        placeholder="Search locker #, name, or type...">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TABLE -->
+
+            <div class="report-table-wrapper">
+
+                <table class="report-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Locker #
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Start Time
+                            </th>
+
+                            <th>
+                                End Time
+                            </th>
+
+                            <th>
+                                Duration
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Visit Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="lockerBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- FOOTER -->
+
+            <div class="report-footer">
+
+                <span id="lockerCount">
+                    Showing 0 records
+                </span>
+
+
+                <div
+                    id="lockerPagination"
+                    class="report-pagination">
+
+                </div>
+
+            </div>
 
         </div>
-
 
     </div>
 
@@ -720,7 +981,7 @@ let filteredAttendance = [];
 
 let currentPage = 1;
 
-const recordsPerPage = 10;
+const recordsPerPage = 8;
 
 
 /* =====================================================
@@ -1696,13 +1957,873 @@ function renderPagination(){
 
 }
 
+/* =====================================================
+   LOCKER REPORT DATA
+===================================================== */
 
+let lockerData = [];
+
+let filteredLocker = [];
+
+let lockerCurrentPage = 1;
+
+const lockerRecordsPerPage = 8;
+
+
+/* =====================================================
+   LOCKER DATE DEFAULT
+===================================================== */
+
+function setLockerDefaultDates(){
+
+    const today =
+        new Date();
+
+
+    const todayValue =
+        formatDateInput(today);
+
+
+    document.getElementById(
+        "lockerStartDate"
+    ).value = todayValue;
+
+
+    document.getElementById(
+        "lockerEndDate"
+    ).value = todayValue;
+
+}
+
+
+/* =====================================================
+   LOCKER TODAY
+===================================================== */
+
+function setLockerToday(){
+
+    const today =
+        formatDateInput(
+            new Date()
+        );
+
+
+    document.getElementById(
+        "lockerStartDate"
+    ).value = today;
+
+
+    document.getElementById(
+        "lockerEndDate"
+    ).value = today;
+
+
+    loadLockerReport();
+
+}
+
+
+/* =====================================================
+   LOCKER THIS WEEK
+===================================================== */
+
+function setLockerThisWeek(){
+
+    const today =
+        new Date();
+
+
+    const day =
+        today.getDay();
+
+
+    const diff =
+        day === 0
+            ? 6
+            : day - 1;
+
+
+    const monday =
+        new Date(today);
+
+
+    monday.setDate(
+        today.getDate() - diff
+    );
+
+
+    document.getElementById(
+        "lockerStartDate"
+    ).value =
+        formatDateInput(monday);
+
+
+    document.getElementById(
+        "lockerEndDate"
+    ).value =
+        formatDateInput(today);
+
+
+    loadLockerReport();
+
+}
+
+
+/* =====================================================
+   LOCKER THIS MONTH
+===================================================== */
+
+function setLockerThisMonth(){
+
+    const today =
+        new Date();
+
+
+    const firstDay =
+        new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            1
+        );
+
+
+    document.getElementById(
+        "lockerStartDate"
+    ).value =
+        formatDateInput(firstDay);
+
+
+    document.getElementById(
+        "lockerEndDate"
+    ).value =
+        formatDateInput(today);
+
+
+    loadLockerReport();
+
+}
+
+
+/* =====================================================
+   LOAD LOCKER REPORT
+===================================================== */
+
+async function loadLockerReport(){
+
+    const startDate =
+        document.getElementById(
+            "lockerStartDate"
+        ).value;
+
+
+    const endDate =
+        document.getElementById(
+            "lockerEndDate"
+        ).value;
+
+
+    if(!startDate || !endDate){
+
+        return;
+
+    }
+
+
+    if(startDate > endDate){
+
+        alert(
+            "Start date cannot be later than end date."
+        );
+
+        return;
+
+    }
+
+
+    const table =
+        document.getElementById(
+            "lockerBody"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="8"
+                class="report-loading">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                Loading locker records...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try{
+
+        const url =
+            `${API_URL}/api/reports/locker` +
+            `?start_date=${encodeURIComponent(startDate)}` +
+            `&end_date=${encodeURIComponent(endDate)}`;
+
+
+        console.log(
+            "LOCKER REPORT API:",
+            url
+        );
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "LOCKER REPORT RESULT:",
+            result
+        );
+
+
+        if(!result.success){
+
+            throw new Error(
+                result.message ||
+                "Failed to load locker report."
+            );
+
+        }
+
+
+        lockerData =
+            Array.isArray(result.data)
+                ? result.data
+                : [];
+
+
+        filteredLocker =
+            [...lockerData];
+
+
+        lockerCurrentPage = 1;
+
+
+        updateLockerSummary();
+
+        applyLockerSearch();
+
+    }
+    catch(error){
+
+        console.error(
+            "LOCKER REPORT ERROR:",
+            error
+        );
+
+
+        lockerData = [];
+
+        filteredLocker = [];
+
+        lockerCurrentPage = 1;
+
+
+        updateLockerSummary();
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="report-empty">
+
+                    Unable to load locker records.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOCKER SUMMARY
+===================================================== */
+
+function updateLockerSummary(){
+
+    document.getElementById(
+        "totalLockerUsage"
+    ).innerText =
+        lockerData.length;
+
+
+    const members =
+        lockerData.filter(
+            record => {
+
+                const type =
+                    String(
+                        record.type || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                return type === "member";
+
+            }
+        ).length;
+
+
+    const walkins =
+        lockerData.filter(
+            record => {
+
+                const type =
+                    String(
+                        record.type || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                return (
+                    type === "walk-in" ||
+                    type === "walkin"
+                );
+
+            }
+        ).length;
+
+
+    document.getElementById(
+        "totalLockerMembers"
+    ).innerText =
+        members;
+
+
+    document.getElementById(
+        "totalLockerWalkins"
+    ).innerText =
+        walkins;
+
+}
+
+
+/* =====================================================
+   LOCKER SEARCH
+===================================================== */
+
+function applyLockerSearch(){
+
+    const input =
+        document.getElementById(
+            "lockerSearch"
+        );
+
+
+    const search =
+        input
+            ? input.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    filteredLocker =
+        lockerData.filter(
+            record => {
+
+                const locker =
+                    String(
+                        record.locker_number || ""
+                    )
+                    .toLowerCase();
+
+
+                const name =
+                    String(
+                        record.name || ""
+                    )
+                    .toLowerCase();
+
+
+                const type =
+                    String(
+                        record.type || ""
+                    )
+                    .toLowerCase();
+
+
+                return (
+                    !search ||
+
+                    locker.includes(search) ||
+
+                    name.includes(search) ||
+
+                    type.includes(search)
+
+                );
+
+            }
+        );
+
+
+    lockerCurrentPage = 1;
+
+
+    renderLocker();
+
+}
+
+
+/* =====================================================
+   LOCKER TYPE BADGE
+===================================================== */
+
+function getLockerTypeBadge(type){
+
+    const value =
+        String(
+            type || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if(value === "member"){
+
+        return `
+            <span class="report-type member">
+                Member
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span class="report-type walkin">
+            Walk-in
+        </span>
+    `;
+
+}
+
+
+/* =====================================================
+   LOCKER STATUS BADGE
+===================================================== */
+
+function getLockerStatusBadge(status){
+
+    const value =
+        String(
+            status || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if(value === "active"){
+
+        return `
+            <span class="report-status active">
+                Active
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span class="report-status completed">
+            Completed
+        </span>
+    `;
+
+}
+
+
+/* =====================================================
+   RENDER LOCKER
+===================================================== */
+
+function renderLocker(){
+
+    const table =
+        document.getElementById(
+            "lockerBody"
+        );
+
+
+    const count =
+        document.getElementById(
+            "lockerCount"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if(filteredLocker.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="report-empty">
+
+                    No locker records found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        count.innerText =
+            "Showing 0 records";
+
+
+        renderLockerPagination();
+
+        return;
+
+    }
+
+
+    const start =
+        (
+            lockerCurrentPage - 1
+        ) * lockerRecordsPerPage;
+
+
+    const end =
+        start + lockerRecordsPerPage;
+
+
+    const pageData =
+        filteredLocker.slice(
+            start,
+            end
+        );
+
+
+    pageData.forEach(
+        record => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        record.locker_number ?? "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.name || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${getLockerTypeBadge(
+                        record.type
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.start_time || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.end_time || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.duration || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${getLockerStatusBadge(
+                        record.status
+                    )}
+                </td>
+
+                <td>
+                    ${formatVisitDate(
+                        record.visit_date
+                    )}
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+
+    count.innerText =
+        `Showing ${start + 1} to ${Math.min(
+            end,
+            filteredLocker.length
+        )} of ${filteredLocker.length} records`;
+
+
+    renderLockerPagination();
+
+}
+
+
+/* =====================================================
+   LOCKER PAGINATION
+===================================================== */
+
+function renderLockerPagination(){
+
+    const pagination =
+        document.getElementById(
+            "lockerPagination"
+        );
+
+
+    pagination.innerHTML = "";
+
+
+    const totalPages =
+        Math.ceil(
+            filteredLocker.length /
+            lockerRecordsPerPage
+        );
+
+
+    if(totalPages <= 1)
+        return;
+
+
+    const previous =
+        document.createElement(
+            "button"
+        );
+
+
+    previous.className =
+        "report-page-btn";
+
+
+    previous.innerHTML =
+        `<i class="fa-solid fa-chevron-left"></i>`;
+
+
+    previous.disabled =
+        lockerCurrentPage === 1;
+
+
+    previous.onclick = () => {
+
+        if(lockerCurrentPage > 1){
+
+            lockerCurrentPage--;
+
+            renderLocker();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        previous
+    );
+
+
+    for(
+        let page = 1;
+        page <= totalPages;
+        page++
+    ){
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "report-page-btn";
+
+
+        if(
+            page === lockerCurrentPage
+        ){
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+
+        button.innerText =
+            page;
+
+
+        button.onclick = () => {
+
+            lockerCurrentPage =
+                page;
+
+            renderLocker();
+
+        };
+
+
+        pagination.appendChild(
+            button
+        );
+
+    }
+
+
+    const next =
+        document.createElement(
+            "button"
+        );
+
+
+    next.className =
+        "report-page-btn";
+
+
+    next.innerHTML =
+        `<i class="fa-solid fa-chevron-right"></i>`;
+
+
+    next.disabled =
+        lockerCurrentPage === totalPages;
+
+
+    next.onclick = () => {
+
+        if(
+            lockerCurrentPage < totalPages
+        ){
+
+            lockerCurrentPage++;
+
+            renderLocker();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        next
+    );
+
+}
+
+
+/* =====================================================
+   LOCKER DATE CHANGE
+===================================================== */
+
+document
+    .getElementById("lockerStartDate")
+    .addEventListener(
+        "change",
+        loadLockerReport
+    );
+
+
+document
+    .getElementById("lockerEndDate")
+    .addEventListener(
+        "change",
+        loadLockerReport
+    );
+
+
+/* =====================================================
+   LOCKER SEARCH EVENT
+===================================================== */
+
+document
+    .getElementById("lockerSearch")
+    .addEventListener(
+        "input",
+        applyLockerSearch
+    );
 
 /* =====================================================
    REPORT TABS
 ===================================================== */
 
 function showAttendanceReport(){
+
+    document.querySelector(
+        ".report-title-area h2"
+    ).innerText = "Attendance Report";
+
+    document.querySelector(
+        ".report-title-area p"
+    ).innerText =
+        "View member and walk-in attendance records.";
+
+    document.querySelector(
+        ".report-main-icon i"
+    ).className =
+        "fa-solid fa-users";
+
 
     document
         .getElementById("attendanceTab")
@@ -1723,8 +2844,22 @@ function showAttendanceReport(){
 
 }
 
-
 function showLockerReport(){
+
+    document.querySelector(
+        ".report-title-area h2"
+    ).innerText = "Locker Report";
+
+    document.querySelector(
+        ".report-title-area p"
+    ).innerText =
+        "View locker usage and session records.";
+
+    document.querySelector(
+        ".report-main-icon i"
+    ).className =
+        "fa-solid fa-lock";
+
 
     document
         .getElementById("attendanceTab")
@@ -1741,11 +2876,14 @@ function showLockerReport(){
 
     document
         .getElementById("lockerReport")
-        .style.display = "flex";
+        .style.display = "block";
+
+
+    setLockerDefaultDates();
+
+    loadLockerReport();
 
 }
-
-
 
 /* =====================================================
    PROFILE
