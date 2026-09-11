@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Reports</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ADMIN PROTECTION
+===================================================== -->
+
+<script>
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+if(
+    !user ||
+    user.role !== "admin"
+){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="menu"
+        id="menu">
+
+    </div>
+
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Lead the Change
+        </h3>
+
+        <p>
+            Better management<br>
+            builds a stronger gym.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="layout">
+
+<div class="main">
+
+
+    <!-- =================================================
+         TOP HEADER
+    ================================================== -->
+
+    <div class="top-header">
+
+        <div class="top-right">
+
+            <div
+                class="staff-profile"
+                onclick="toggleStaffMenu()">
+
+                <div class="staff-avatar">
+                    A
+                </div>
+
+                <div class="staff-info">
+
+                    <strong>
+                        Admin
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+
+                <div
+                    id="staffDropdown"
+                    class="staff-profile-dropdown">
+
+                    <button
+                        onclick="logout(); event.stopPropagation();"
+                        class="staff-dropdown-logout">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Log Out
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="page-header reports-page-header">
+
+        <div>
+
+            <h1>
+                Reports
+            </h1>
+
+            <p>
+                View and analyze gym activity reports.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         REPORT PANEL
+    ================================================== -->
+
+    <div class="reports-panel">
+
+
+        <!-- REPORT HEADER -->
+
+        <div class="report-main-header">
+
+            <div class="report-title-area">
+
+                <div class="report-main-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Attendance Report
+                    </h2>
+
+                    <p>
+                        View member and walk-in attendance records.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ATTENDANCE / LOCKER -->
+
+            <div class="report-switch">
+
+                <button
+                    id="attendanceTab"
+                    class="report-tab active"
+                    onclick="showAttendanceReport()">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    Attendance
+
+                </button>
+
+
+                <button
+                    id="lockerTab"
+                    class="report-tab"
+                    onclick="showLockerReport()">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Locker
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ATTENDANCE CONTENT
+        ================================================== -->
+
+        <div
+            id="attendanceReport"
+            class="attendance-report">
+
+
+            <!-- FILTER BAR -->
+
+            <div class="report-filter-bar">
+
+                <div class="date-range-group">
+
+                    <label>
+                        <i class="fa-regular fa-calendar"></i>
+                        Date Range
+                    </label>
+
+                    <div class="date-inputs">
+
+                        <input
+                            type="date"
+                            id="startDate">
+
+                        <span>
+                            –
+                        </span>
+
+                        <input
+                            type="date"
+                            id="endDate">
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-date-buttons">
+
+                    <button
+                        onclick="setToday()">
+                        Today
+                    </button>
+
+                    <button
+                        onclick="setThisWeek()">
+                        This Week
+                    </button>
+
+                    <button
+                        onclick="setThisMonth()">
+                        This Month
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUMMARY CARDS
+            ================================================== -->
+
+            <div class="report-summary-grid">
+
+                <div class="report-summary-card entry-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Attendance
+                        </span>
+
+                        <strong id="totalAttendance">
+                            0
+                        </strong>
+
+                        <small>
+                            Total attendance records
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="report-summary-card member-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Members
+                        </span>
+
+                        <strong id="totalMembers">
+                            0
+                        </strong>
+
+                        <small>
+                            Member attendance
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="report-summary-card walkin-card">
+
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-person-walking"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Walk-ins
+                        </span>
+
+                        <strong id="totalWalkins">
+                            0
+                        </strong>
+
+                        <small>
+                            Walk-in attendance
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RECORDS HEADER
+            ================================================== -->
+
+            <div class="records-header">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                        Attendance Records
+
+                    </h2>
+
+                    <p>
+                        List of all time-in and time-out logs for members and walk-ins.
+                    </p>
+
+                </div>
+
+
+                <div class="report-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="reportSearch"
+                        placeholder="Search name, ID, or type...">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="report-table-wrapper">
+
+                <table class="report-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Time In
+                            </th>
+
+                            <th>
+                                Time Out
+                            </th>
+
+                            <th>
+                                Duration
+                            </th>
+
+                            <th>
+                                Visit Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="attendanceBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="report-footer">
+
+                <span id="reportCount">
+                    Showing 0 records
+                </span>
+
+                <div
+                    id="reportPagination"
+                    class="report-pagination">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             LOCKER CONTENT
+        ================================================== -->
+
+        <div
+            id="lockerReport"
+            class="locker-report-placeholder">
+
+            <div class="locker-placeholder-icon">
+
+                <i class="fa-solid fa-lock"></i>
+
+            </div>
+
+            <h2>
+                Locker Report
+            </h2>
+
+            <p>
+                Locker usage reports will be available here.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<script>
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+// ================= MESSAGE COUNT =================
+
+async function loadMessageCount(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/admin_messages`
+        );
+
+        if(!res.ok){
+
+            throw new Error(
+                `Message API error: ${res.status}`
+            );
+
+        }
+
+        const data =
+            await res.json();
+
+
+        const unread =
+            data.filter(
+                m => m.is_read == 0
+            ).length;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge) return;
+
+
+        badge.innerText =
+            unread > 99
+                ? "99+"
+                : unread;
+
+
+        badge.style.display =
+            unread > 0
+                ? "flex"
+                : "none";
+
+
+    }
+    catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+
+const socket = io(API_URL);
+
+socket.on("new_message", () => {
+
+    loadMessageCount();
+
+});
+
+socket.on("priority_alert", () => {
+
+    loadMessageCount();
+
+});
+/* =====================================================
+   MENU
+===================================================== */
+
+const menu =
+    document.getElementById("menu");
+
+menu.innerHTML = `
+
+    <a href="admin.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        Home
+
+    </a>
+
+
+    <a href="messages.html"
+       class="msg-link">
+
+        <i class="fa-regular fa-envelope"></i>
+
+        Messages
+
+        <span
+            id="msg-count"
+            class="msg-count">
+
+            0
+
+        </span>
+
+    </a>
+
+
+    <a href="reports.html"
+       class="active">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Reports
+
+    </a>
+
+
+    <a href="members.html">
+
+        <i class="fa-solid fa-users"></i>
+
+        Members
+
+    </a>
+
+
+    <a href="walkin.html">
+
+        <i class="fa-solid fa-person-walking"></i>
+
+        Walk-ins
+
+    </a>
+
+
+    <a href="staff_manage.html">
+
+        <i class="fa-regular fa-user"></i>
+
+        Staff
+
+    </a>
+
+
+`;
+
+/* =====================================================
+   ATTENDANCE DATA
+===================================================== */
+
+let attendanceData = [];
+
+let filteredAttendance = [];
+
+let currentPage = 1;
+
+const recordsPerPage = 10;
+
+
+/* =====================================================
+   DATE HELPERS
+===================================================== */
+
+function formatDateInput(date){
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+function parseLocalDate(dateString){
+
+    const parts =
+        dateString
+            .split("-")
+            .map(Number);
+
+    return new Date(
+        parts[0],
+        parts[1] - 1,
+        parts[2]
+    );
+
+}
+
+
+/* =====================================================
+   DEFAULT DATE
+===================================================== */
+
+function setDefaultDates(){
+
+    const today =
+        new Date();
+
+    const todayValue =
+        formatDateInput(today);
+
+
+    document.getElementById(
+        "startDate"
+    ).value = todayValue;
+
+
+    document.getElementById(
+        "endDate"
+    ).value = todayValue;
+
+}
+
+
+/* =====================================================
+   TODAY
+===================================================== */
+
+function setToday(){
+
+    const today =
+        formatDateInput(
+            new Date()
+        );
+
+
+    document.getElementById(
+        "startDate"
+    ).value = today;
+
+
+    document.getElementById(
+        "endDate"
+    ).value = today;
+
+
+    generateReport();
+
+}
+
+
+/* =====================================================
+   THIS WEEK
+===================================================== */
+
+function setThisWeek(){
+
+    const today =
+        new Date();
+
+
+    const day =
+        today.getDay();
+
+
+    const diff =
+        day === 0
+        ? 6
+        : day - 1;
+
+
+    const monday =
+        new Date(today);
+
+
+    monday.setDate(
+        today.getDate() - diff
+    );
+
+
+    document.getElementById(
+        "startDate"
+    ).value =
+        formatDateInput(monday);
+
+
+    document.getElementById(
+        "endDate"
+    ).value =
+        formatDateInput(today);
+
+
+    generateReport();
+
+}
+
+
+/* =====================================================
+   THIS MONTH
+===================================================== */
+
+function setThisMonth(){
+
+    const today =
+        new Date();
+
+
+    const firstDay =
+        new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            1
+        );
+
+
+    document.getElementById(
+        "startDate"
+    ).value =
+        formatDateInput(firstDay);
+
+
+    document.getElementById(
+        "endDate"
+    ).value =
+        formatDateInput(today);
+
+
+    generateReport();
+
+}
+
+
+/* =====================================================
+   DATE RANGE
+===================================================== */
+
+function getDateRange(
+    startDate,
+    endDate
+){
+
+    const dates = [];
+
+
+    let current =
+        parseLocalDate(startDate);
+
+
+    const end =
+        parseLocalDate(endDate);
+
+
+    while(current <= end){
+
+        dates.push(
+            formatDateInput(current)
+        );
+
+
+        current.setDate(
+            current.getDate() + 1
+        );
+
+    }
+
+
+    return dates;
+
+}
+
+
+/* =====================================================
+   LOAD ATTENDANCE
+===================================================== */
+
+async function generateReport(){
+
+    const startDate =
+        document.getElementById(
+            "startDate"
+        ).value;
+
+
+    const endDate =
+        document.getElementById(
+            "endDate"
+        ).value;
+
+
+    if(!startDate || !endDate){
+
+        alert(
+            "Please select a date range."
+        );
+
+        return;
+
+    }
+
+
+    if(startDate > endDate){
+
+        alert(
+            "Start date cannot be later than end date."
+        );
+
+        return;
+
+    }
+
+
+    const table =
+        document.getElementById(
+            "attendanceBody"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="7"
+                class="report-loading">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                Loading attendance records...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try{
+
+        // ========================================
+        // NEW REPORTS ATTENDANCE API
+        // ========================================
+
+        const url =
+            `${API_URL}/api/reports/attendance` +
+            `?start_date=${encodeURIComponent(startDate)}` +
+            `&end_date=${encodeURIComponent(endDate)}`;
+
+
+        console.log(
+            "REPORTS ATTENDANCE API:",
+            url
+        );
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "REPORTS ATTENDANCE RESULT:",
+            result
+        );
+
+
+        if(!result.success){
+
+            throw new Error(
+                result.message ||
+                "Failed to load attendance report."
+            );
+
+        }
+
+
+        // ========================================
+        // STORE DATA
+        // ========================================
+
+        attendanceData =
+            Array.isArray(result.data)
+                ? result.data
+                : [];
+
+
+        filteredAttendance =
+            [...attendanceData];
+
+
+        currentPage = 1;
+
+
+        // ========================================
+        // UPDATE REPORT
+        // ========================================
+
+        updateSummary();
+
+        applyReportSearch();
+
+
+    }
+    catch(error){
+
+        console.error(
+            "ATTENDANCE REPORT ERROR:",
+            error
+        );
+
+
+        attendanceData = [];
+
+        filteredAttendance = [];
+
+
+        currentPage = 1;
+
+
+        updateSummary();
+
+        renderAttendance();
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="report-empty">
+
+                    Unable to load attendance records.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   ATTENDANCE SUMMARY
+===================================================== */
+
+function updateSummary(){
+
+    /*
+     * Total attendance
+     */
+
+    const totalAttendance =
+        attendanceData.length;
+
+
+    /*
+     * Member attendance
+     */
+
+    const totalMembers =
+        attendanceData.filter(
+            record => {
+
+                const type =
+                    String(
+                        record.type || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                return type === "member";
+
+            }
+        ).length;
+
+
+    /*
+     * Walk-in attendance
+     */
+
+    const totalWalkins =
+        attendanceData.filter(
+            record => {
+
+                const type =
+                    String(
+                        record.type || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                return (
+                    type === "walk-in" ||
+                    type === "walkin"
+                );
+
+            }
+        ).length;
+
+
+    document.getElementById(
+        "totalAttendance"
+    ).innerText =
+        totalAttendance;
+
+
+    document.getElementById(
+        "totalMembers"
+    ).innerText =
+        totalMembers;
+
+
+    document.getElementById(
+        "totalWalkins"
+    ).innerText =
+        totalWalkins;
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function applyReportSearch(){
+
+    const search =
+        document.getElementById(
+            "reportSearch"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    filteredAttendance =
+        attendanceData.filter(
+            record => {
+
+                const id =
+                    String(
+                        record.member_id || ""
+                    )
+                    .toLowerCase();
+
+
+                const name =
+                    String(
+                        record.name || ""
+                    )
+                    .toLowerCase();
+
+
+                const type =
+                    String(
+                        record.type || ""
+                    )
+                    .toLowerCase();
+
+
+                return (
+                    !search ||
+
+                    id.includes(search) ||
+
+                    name.includes(search) ||
+
+                    type.includes(search)
+                );
+
+            }
+        );
+
+
+    currentPage = 1;
+
+
+    renderAttendance();
+
+}
+
+
+/* =====================================================
+   FORMAT TIME
+===================================================== */
+
+function formatTime(value){
+
+    if(!value)
+        return "—";
+
+    return value;
+
+}
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatVisitDate(value){
+
+    if(!value)
+        return "—";
+
+
+    const parts =
+        value.split("-");
+
+
+    if(parts.length !== 3)
+        return value;
+
+
+    const date =
+        new Date(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+        );
+
+
+    if(isNaN(date.getTime()))
+        return value;
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
+
+/* =====================================================
+   DURATION
+===================================================== */
+
+function getDuration(
+    timeIn,
+    timeOut,
+    duration
+){
+
+    if(duration){
+
+        return duration;
+
+    }
+
+
+    if(!timeIn || !timeOut){
+
+        return "—";
+
+    }
+
+
+    return "—";
+
+}
+
+/* =====================================================
+   TYPE BADGE
+===================================================== */
+
+function getTypeBadge(type){
+
+    const value =
+        String(
+            type || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if(value === "member"){
+
+        return `
+            <span class="report-type member">
+                Member
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span class="report-type walkin">
+            Walk-in
+        </span>
+    `;
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   RENDER ATTENDANCE
+===================================================== */
+
+function renderAttendance(){
+
+    const table =
+        document.getElementById(
+            "attendanceBody"
+        );
+
+
+    const count =
+        document.getElementById(
+            "reportCount"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if(
+        filteredAttendance.length === 0
+    ){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="report-empty">
+
+                    No attendance records found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        count.innerText =
+            "Showing 0 records";
+
+
+        renderPagination();
+
+        return;
+
+    }
+
+
+    const start =
+        (
+            currentPage - 1
+        ) * recordsPerPage;
+
+
+    const end =
+        start + recordsPerPage;
+
+
+    const pageData =
+        filteredAttendance.slice(
+            start,
+            end
+        );
+
+
+    pageData.forEach(
+        record => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+            
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        record.id || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        record.name || "—"
+                    )}
+                </td>
+
+                <td>
+                    ${getTypeBadge(
+                        record.type
+                    )}
+                </td>
+
+                <td>
+                    ${formatTime(
+                        record.time_in
+                    )}
+                </td>
+
+                <td>
+                    ${formatTime(
+                        record.time_out
+                    )}
+                </td>
+
+                <td>
+                    ${getDuration(
+                        record.time_in,
+                        record.time_out,
+                        record.duration
+                    )}
+                </td>
+
+                <td>
+                    ${formatVisitDate(
+                        record.visit_date
+                    )}
+                </td>
+
+            `;
+
+
+            
+
+            
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+
+    count.innerText =
+        `Showing ${start + 1} to ${Math.min(
+            end,
+            filteredAttendance.length
+        )} of ${filteredAttendance.length} records`;
+
+
+    renderPagination();
+
+}
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+function renderPagination(){
+
+    const pagination =
+        document.getElementById(
+            "reportPagination"
+        );
+
+
+    pagination.innerHTML = "";
+
+
+    const totalPages =
+        Math.ceil(
+            filteredAttendance.length /
+            recordsPerPage
+        );
+
+
+    if(totalPages <= 1)
+        return;
+
+
+    const previous =
+        document.createElement(
+            "button"
+        );
+
+
+    previous.className =
+        "report-page-btn";
+
+
+    previous.innerHTML =
+        `<i class="fa-solid fa-chevron-left"></i>`;
+
+
+    previous.disabled =
+        currentPage === 1;
+
+
+    previous.onclick = () => {
+
+        if(currentPage > 1){
+
+            currentPage--;
+
+            renderAttendance();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        previous
+    );
+
+
+    for(
+        let page = 1;
+        page <= totalPages;
+        page++
+    ){
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "report-page-btn";
+
+
+        if(page === currentPage){
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+
+        button.innerText =
+            page;
+
+
+        button.onclick = () => {
+
+            currentPage =
+                page;
+
+            renderAttendance();
+
+        };
+
+
+        pagination.appendChild(
+            button
+        );
+
+    }
+
+
+    const next =
+        document.createElement(
+            "button"
+        );
+
+
+    next.className =
+        "report-page-btn";
+
+
+    next.innerHTML =
+        `<i class="fa-solid fa-chevron-right"></i>`;
+
+
+    next.disabled =
+        currentPage === totalPages;
+
+
+    next.onclick = () => {
+
+        if(currentPage < totalPages){
+
+            currentPage++;
+
+            renderAttendance();
+
+        }
+
+    };
+
+
+    pagination.appendChild(
+        next
+    );
+
+}
+
+
+
+/* =====================================================
+   REPORT TABS
+===================================================== */
+
+function showAttendanceReport(){
+
+    document
+        .getElementById("attendanceTab")
+        .classList.add("active");
+
+    document
+        .getElementById("lockerTab")
+        .classList.remove("active");
+
+
+    document
+        .getElementById("attendanceReport")
+        .style.display = "block";
+
+    document
+        .getElementById("lockerReport")
+        .style.display = "none";
+
+}
+
+
+function showLockerReport(){
+
+    document
+        .getElementById("attendanceTab")
+        .classList.remove("active");
+
+    document
+        .getElementById("lockerTab")
+        .classList.add("active");
+
+
+    document
+        .getElementById("attendanceReport")
+        .style.display = "none";
+
+    document
+        .getElementById("lockerReport")
+        .style.display = "flex";
+
+}
+
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(
+            ".staff-profile"
+        );
+
+    const dropdown =
+        document.getElementById(
+            "staffDropdown"
+        );
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================================================
+   SEARCH EVENT
+===================================================== */
+
+document
+    .getElementById("reportSearch")
+    .addEventListener(
+        "input",
+        applyReportSearch
+    );
+
+
+
+/* =====================================================
+   OUTSIDE CLICK
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".staff-profile"
+            )
+        ){
+
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
+
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
+
+
+            if(profile)
+                profile.classList.remove("active");
+
+            if(dropdown)
+                dropdown.classList.remove("show");
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+setDefaultDates();
+
+generateReport();
+
+loadMessageCount();
+
+</script>
+
+</body>
+</html>
