@@ -1,166 +1,827 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Trainer Dashboard</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
-          href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/trainer-dashboard.css">
 
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
 </head>
+
+
 <body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
 <div class="navbar">
 
-    <h2>SMART GYM</h2>
 
-    <div class="menu" id="menu"></div>
+    <!-- BRAND -->
 
-    <button onclick="logout()">
-        Logout
-    </button>
+    <div class="brand">
 
-</div>
+        <div class="brand-icon">
 
-<div class="layout">
-<div class="main">
+            <i class="fa-solid fa-dumbbell"></i>
 
-    <div class="hero">
+        </div>
 
-        <h1>TRAINER DASHBOARD</h1>
+
+        <div class="brand-text">
+
+            <strong>SMART GYM</strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="menu">
+
+        <a
+            href="trainer.html"
+            class="active">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </a>
+
+
+        <a
+            href="messages.html"
+            class="msg-link">
+
+            <i class="fa-regular fa-envelope"></i>
+
+            Messages
+
+            <span
+                id="msg-count"
+                class="msg-count">
+
+                0
+
+            </span>
+
+        </a>
+
+
+        <a href="schedule.html">
+
+            <i class="fa-regular fa-calendar-check"></i>
+
+            Schedule
+
+        </a>
+
+
+        <a href="trainee.html">
+
+            <i class="fa-solid fa-users"></i>
+
+            Trainee
+
+        </a>
+
+    </div>
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <h3>
+            Train. Guide.<br>
+            Make a Difference.
+        </h3>
+
 
         <p>
-            Monitor assigned members
+            Every workout counts.
         </p>
 
-    </div>
 
-    <div class="cards">
-
-        <div class="card">
-
-            <div class="card-left">
-
-                <div class="icon blue">
-                    👥
-                </div>
-
-                <div>
-                    <h3>Assigned Members</h3>
-                </div>
-
-            </div>
-
-            <h1 id="members">
-                0
-            </h1>
-
-        </div>
-
-        <div class="card">
-
-            <div class="card-left">
-
-                <div class="icon green">
-                    📅
-                </div>
-
-                <div>
-                    <h3>Today's Attendance</h3>
-                </div>
-
-            </div>
-
-            <h1 id="attendance">
-                0
-            </h1>
-
-        </div>
-
-        <div class="card">
-
-            <div class="card-left">
-
-                <div class="icon purple">
-                    💬
-                </div>
-
-                <div>
-                    <h3>Unread Messages</h3>
-                </div>
-
-            </div>
-
-            <h1 id="messages">
-                0
-            </h1>
-
-        </div>
+        <div class="message-line"></div>
 
     </div>
 
 </div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="layout">
+
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+            <div class="trainer-profile"
+                 onclick="toggleTrainerMenu()">
+
+
+                <div class="trainer-avatar">
+
+                    T
+
+                </div>
+
+
+                <div class="trainer-info">
+
+                    <strong>
+                        Trainer
+                    </strong>
+
+                    <small>
+                        Gym Trainer
+                    </small>
+
+                </div>
+
+
+                <i
+                    class="fa-solid fa-chevron-down trainer-profile-chevron">
+                </i>
+
+
+                <!-- DROPDOWN -->
+
+                <div
+                    id="trainerDropdown"
+                    class="trainer-profile-dropdown">
+
+
+                    <button
+                        onclick="logout(); event.stopPropagation();">
+
+                        <i
+                            class="fa-solid fa-right-from-bracket">
+                        </i>
+
+                        Log Out
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <div class="hero">
+
+
+            <div class="hero-content">
+
+                <h1>
+                    TRAINER
+                </h1>
+
+
+                <p>
+                    Inspire. Guide. Transform.
+                </p>
+
+            </div>
+
+
+            <div class="hero-quote">
+
+                <strong>
+                    “A STRONGER<br>
+                    TOMORROW<br>
+                    STARTS TODAY.”
+                </strong>
+
+
+                <div class="hero-line"></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+        ================================================== -->
+
+        <div class="summary-cards">
+
+
+            <!-- MY TRAINEES -->
+
+            <div class="summary-card">
+
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+
+                <div class="summary-content">
+
+                    <span>
+                        My Trainees
+                    </span>
+
+
+                    <strong id="myTrainees">
+                        0
+                    </strong>
+
+
+                    <small>
+                        Active trainees
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TODAY'S SESSIONS -->
+
+            <div class="summary-card">
+
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+
+                <div class="summary-content">
+
+                    <span>
+                        Today's Sessions
+                    </span>
+
+
+                    <strong id="todaySessions">
+                        0
+                    </strong>
+
+
+                    <small>
+                        Scheduled for today
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- UPCOMING SESSIONS -->
+
+            <div class="summary-card">
+
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-dumbbell"></i>
+
+                </div>
+
+
+                <div class="summary-content">
+
+                    <span>
+                        Upcoming Sessions
+                    </span>
+
+
+                    <strong id="upcomingSessions">
+                        0
+                    </strong>
+
+
+                    <small>
+                        Later this week
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             QUICK ACTION CARDS
+        ================================================== -->
+
+        <div class="cards">
+
+
+            <!-- MESSAGES -->
+
+            <div class="card">
+
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                </div>
+
+
+                <h3>
+                    Messages
+                </h3>
+
+
+                <p>
+                    View and manage<br>
+                    messages from your trainees<br>
+                    and staff.
+                </p>
+
+
+                <button
+                    onclick="go('messages.html')">
+
+                    View
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- SCHEDULE -->
+
+            <div class="card">
+
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+
+                <h3>
+                    Schedule
+                </h3>
+
+
+                <p>
+                    View and manage your<br>
+                    training schedule.
+                </p>
+
+
+                <button
+                    onclick="go('schedule.html')">
+
+                    View
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- TRAINEE -->
+
+            <div class="card">
+
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+
+                <h3>
+                    Trainee
+                </h3>
+
+
+                <p>
+                    View and manage<br>
+                    your assigned trainees.
+                </p>
+
+
+                <button
+                    onclick="go('trainee.html')">
+
+                    View
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
 </div>
+
+
+
+<!-- =====================================================
+     NOTIFICATION
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
 
 <script>
 
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+// =====================================================
+// USER CHECK
+// =====================================================
+
 const user =
-JSON.parse(
-    localStorage.getItem("user")
-);
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
 
 if(
     !user ||
     user.role !== "trainer"
 ){
+
     window.location.href =
-    "index.html";
+        "index.html";
+
 }
 
-document.getElementById(
-    "menu"
-).innerHTML = `
 
-<a href="trainer.html">
-    <i class="fa-solid fa-house"></i>
-    Home
-</a>
+// =====================================================
+// MESSAGE COUNT
+// =====================================================
 
-<a href="trainer_members.html">
-    <i class="fa-solid fa-users"></i>
-    My Members
-</a>
+let lastUnread = 0;
 
-<a href="attendance.html">
-    <i class="fa-regular fa-calendar-check"></i>
-    Attendance
-</a>
 
-<a href="messages.html">
-    <i class="fa-regular fa-comment"></i>
-    Messages
-</a>
+async function loadMessageCount(){
 
-<a href="profile.html">
-    <i class="fa-solid fa-user"></i>
-    Profile
-</a>
+    try{
 
-`;
+        const res =
+            await fetch(
+                `${API_URL}/api/admin_messages`
+            );
+
+
+        const data =
+            await res.json();
+
+
+        const unread =
+            data.filter(
+                m => m.is_read == 0
+            ).length;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge)
+            return;
+
+
+        badge.innerText =
+            unread > 99
+                ? "99+"
+                : unread;
+
+
+        badge.style.display =
+            unread > 0
+                ? "flex"
+                : "none";
+
+
+        if(
+            lastUnread !== 0 &&
+            unread > lastUnread
+        ){
+
+            showNotifPopup(
+                "New Message",
+                `${unread - lastUnread} new notification`
+            );
+
+        }
+
+
+        lastUnread = unread;
+
+    }
+    catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// TRAINER DASHBOARD
+// =====================================================
+
+async function loadTrainerDashboard(){
+
+    /*
+       TEMPORARY VALUES
+
+       These IDs are ready for the future
+       trainer dashboard API.
+    */
+
+    document.getElementById(
+        "myTrainees"
+    ).innerText = 0;
+
+
+    document.getElementById(
+        "todaySessions"
+    ).innerText = 0;
+
+
+    document.getElementById(
+        "upcomingSessions"
+    ).innerText = 0;
+
+}
+
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+
+function go(page){
+
+    window.location.href =
+        page;
+
+}
+
+
+// =====================================================
+// NOTIFICATION
+// =====================================================
+
+function showNotifPopup(
+    title,
+    text
+){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+
+    if(!popup)
+        return;
+
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText =
+        title;
+
+
+    document.getElementById(
+        "notifText"
+    ).innerText =
+        text;
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+// =====================================================
+// PROFILE DROPDOWN
+// =====================================================
+
+function toggleTrainerMenu(){
+
+    const profile =
+        document.querySelector(
+            ".trainer-profile"
+        );
+
+
+    const dropdown =
+        document.getElementById(
+            "trainerDropdown"
+        );
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".trainer-profile"
+            )
+        ){
+
+            const profile =
+                document.querySelector(
+                    ".trainer-profile"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "trainerDropdown"
+                );
+
+
+            if(profile){
+
+                profile.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            if(dropdown){
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
 
 function logout(){
 
     localStorage.clear();
 
     window.location.href =
-    "index.html";
+        "index.html";
+
 }
 
+
+// =====================================================
+// INITIAL LOAD
+// =====================================================
+
+loadMessageCount();
+
+loadTrainerDashboard();
+
+
+// Refresh message count
+
+setInterval(
+    loadMessageCount,
+    10000
+);
+
 </script>
+
 
 </body>
 </html>
