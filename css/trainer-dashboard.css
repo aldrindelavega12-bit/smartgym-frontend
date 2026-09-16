@@ -628,14 +628,14 @@ body {
 
     position: relative;
 
-    height: 264px;
+    height: 238px;
 
-    min-height: 264px;
+    min-height: 238px;
 
     margin-bottom: 20px;
 
     padding:
-        38px 50px;
+        38px;
 
     border-radius: 20px;
 
@@ -689,7 +689,7 @@ body {
     color:
         var(--text);
 
-    font-size: 54px;
+    font-size: 48px;
 
     line-height: 1;
 
@@ -706,12 +706,12 @@ body {
 
     display: block;
 
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 
     color:
         var(--green);
 
-    font-size: 20px;
+    font-size: 18px;
 
     line-height: 1;
 
@@ -729,7 +729,7 @@ body {
     color:
         #38443d;
 
-    font-size: 19px;
+    font-size: 17px;
 
     font-weight: 400;
 }
@@ -787,6 +787,7 @@ body {
 
 /* =========================================================
    SUMMARY CARDS
+   SAME SIZE AS STAFF DASHBOARD
 ========================================================= */
 
 .summary-cards {
@@ -798,21 +799,21 @@ body {
 
     gap: 12px;
 
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 
 .summary-card {
 
-    min-height: 130px;
+    min-height: 118px;
 
     padding:
-        22px;
+        18px;
 
     border:
         1px solid var(--border);
 
-    border-radius: 16px;
+    border-radius: 14px;
 
     background:
         linear-gradient(
@@ -828,14 +829,29 @@ body {
 
     align-items: center;
 
-    gap: 16px;
+    gap: 14px;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.summary-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(18,70,40,.09);
 }
 
 
 .summary-icon {
 
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
 
     flex-shrink: 0;
 
@@ -852,11 +868,13 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-size: 24px;
+    font-size: 21px;
 }
 
 
 .summary-content {
+
+    min-width: 0;
 
     display: flex;
 
@@ -869,9 +887,11 @@ body {
     color:
         #52645b;
 
-    font-size: 15px;
+    font-size: 12px;
 
     font-weight: 500;
+
+    white-space: nowrap;
 }
 
 
@@ -882,7 +902,7 @@ body {
     color:
         var(--green);
 
-    font-size: 42px;
+    font-size: 28px;
 
     line-height: 1;
 
@@ -892,17 +912,20 @@ body {
 
 .summary-content small {
 
-    margin-top: 5px;
+    margin-top: 7px;
 
     color:
         #65736b;
 
-    font-size: 14px;
+    font-size: 10px;
+
+    line-height: 1.3;
 }
 
 
 /* =========================================================
    QUICK CARDS
+   SAME SIZE AS STAFF DASHBOARD
 ========================================================= */
 
 .cards {
@@ -912,7 +935,7 @@ body {
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
 
-    gap: 14px;
+    gap: 12px;
 }
 
 
@@ -920,15 +943,15 @@ body {
 
     position: relative;
 
-    min-height: 235px;
+    min-height: 185px;
 
     padding:
-        24px;
+        20px;
 
     border:
         1px solid var(--border);
 
-    border-radius: 16px;
+    border-radius: 14px;
 
     background:
         #ffffff;
@@ -961,10 +984,10 @@ body {
 
 .card-icon {
 
-    width: 58px;
-    height: 58px;
+    width: 48px;
+    height: 48px;
 
-    margin-bottom: 16px;
+    margin-bottom: 15px;
 
     border-radius: 50%;
 
@@ -979,19 +1002,19 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-size: 23px;
+    font-size: 19px;
 }
 
 
 .card h3 {
 
     margin:
-        0 0 8px;
+        0 0 7px;
 
     color:
         var(--text);
 
-    font-size: 24px;
+    font-size: 17px;
 
     line-height: 1.2;
 
@@ -1006,9 +1029,9 @@ body {
     color:
         #64716a;
 
-    font-size: 15px;
+    font-size: 13px;
 
-    line-height: 1.5;
+    line-height: 1.45;
 }
 
 
@@ -1032,7 +1055,7 @@ body {
         "Inter",
         sans-serif;
 
-    font-size: 15px;
+    font-size: 13px;
 
     font-weight: 700;
 
@@ -1042,9 +1065,9 @@ body {
 
 .card button span {
 
-    margin-left: 5px;
+    margin-left: 4px;
 
-    font-size: 19px;
+    font-size: 17px;
 }
 
 
@@ -1143,28 +1166,34 @@ body {
 @media (max-width: 1200px) {
 
     .navbar {
+
         width: 230px;
     }
 
 
     .layout {
+
         margin-left: 230px;
     }
 
 
     .main {
+
         padding:
             20px 28px 40px;
     }
 
 
     .hero {
+
         height: 235px;
+
         min-height: 235px;
     }
 
 
     .hero h1 {
+
         font-size: 46px;
     }
 
@@ -1178,11 +1207,11 @@ body {
 
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
-
     }
 
 
     .hero-quote {
+
         display: none;
     }
 
@@ -1211,6 +1240,7 @@ body {
 
 
     .brand {
+
         padding-bottom: 20px;
     }
 
@@ -1234,17 +1264,21 @@ body {
 
 
     .sidebar-message {
+
         display: none;
     }
 
 
     .layout {
+
         margin-left: 0;
     }
 
 
     .main {
-        padding: 20px;
+
+        padding:
+            20px;
     }
 
 
@@ -1259,6 +1293,7 @@ body {
 
 
     .hero h1 {
+
         font-size: 38px;
     }
 
@@ -1268,7 +1303,6 @@ body {
 
         grid-template-columns:
             1fr;
-
     }
 
 }
@@ -1277,7 +1311,9 @@ body {
 @media (max-width: 500px) {
 
     .main {
-        padding: 14px;
+
+        padding:
+            14px;
     }
 
 
@@ -1300,43 +1336,54 @@ body {
 
 
     .hero p {
+
         font-size: 15px;
     }
 
 
     .summary-card {
 
-        min-height: 110px;
+        min-height: 105px;
 
-        padding: 16px;
+        padding: 15px;
     }
 
 
     .summary-icon {
 
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
 
-        font-size: 19px;
+        font-size: 18px;
     }
 
 
     .summary-content strong {
 
-        font-size: 30px;
+        font-size: 24px;
     }
 
 
     .card {
 
-        min-height: 190px;
+        min-height: 165px;
 
-        padding: 20px;
+        padding: 18px;
+    }
+
+
+    .card-icon {
+
+        width: 44px;
+        height: 44px;
+
+        font-size: 18px;
     }
 
 
     .card h3 {
-        font-size: 21px;
+
+        font-size: 17px;
     }
 
 
