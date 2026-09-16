@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Get Trainer | Smart Gym</title>
+
+    <!-- MEMBER DASHBOARD BASE -->
+    <link
+        rel="stylesheet"
+        href="css/member-dashboard.css">
+
+    <!-- GET TRAINER PAGE -->
+    <link
+        rel="stylesheet"
+        href="css/get-trainer.css">
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- INTER -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ROLE PROTECTION
+========================================================= -->
+
+<script>
+
+const user =
+    JSON.parse(localStorage.getItem("user"));
+
+if (!user || user.role !== "member") {
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<div class="navbar">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <div class="brand-text">
+
+            <strong>SMART GYM</strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="menu">
+
+
+        <!-- HOME -->
+
+        <a href="member.html">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </a>
+
+
+        <!-- MESSAGES -->
+
+        <a
+            href="member_messages.html"
+            class="msg-link">
+
+            <i class="fa-solid fa-envelope"></i>
+
+            Messages
+
+            <span
+                id="msg-count"
+                class="msg-count">
+                0
+            </span>
+
+        </a>
+
+
+        <!-- GET TRAINER -->
+
+        <a
+            href="get_trainer.html"
+            class="active">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+            Get Trainer
+
+        </a>
+
+
+        <!-- BOOK LOCKER -->
+
+        <a href="locker_booking.html">
+
+            <i class="fa-solid fa-lock"></i>
+
+            Book Locker
+
+        </a>
+
+
+        <!-- MEMBERSHIP -->
+
+        <a href="membership.html">
+
+            <i class="fa-solid fa-id-card"></i>
+
+            Membership
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOTIVATIONAL CARD
+    ====================================================== -->
+
+    <div class="sidebar-message">
+
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <h3>
+            Keep Pushing
+        </h3>
+
+
+        <p>
+            Small steps every day lead to big results.
+        </p>
+
+
+        <div class="message-line"></div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN LAYOUT
+========================================================= -->
+
+<div class="layout">
+
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+            <div class="top-right">
+
+
+                <div
+                    class="user-profile"
+                    onclick="toggleMenu()">
+
+
+                    <div
+                        class="user-avatar"
+                        id="profileInitial">
+
+                        A
+
+                    </div>
+
+
+                    <div class="user-info">
+
+                        <strong id="profile-name">
+                            Member
+                        </strong>
+
+                        <small>
+                            Member
+                        </small>
+
+                    </div>
+
+
+                    <i
+                        class="fa-solid fa-chevron-down profile-chevron">
+                    </i>
+
+
+                    <!-- DROPDOWN -->
+
+                    <div
+                        id="dropdown"
+                        class="profile-dropdown">
+
+
+                        <button
+                            onclick="event.stopPropagation(); logout();">
+
+                            <i
+                                class="fa-solid fa-right-from-bracket">
+                            </i>
+
+                            Log Out
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="trainer-page-header">
+
+            <h1>
+                Get Trainer
+            </h1>
+
+            <p>
+                Choose your training plan and trainer to get started.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TRAINER CONTENT
+        ================================================== -->
+
+        <div class="trainer-layout">
+
+
+            <!-- =================================================
+                 LEFT SIDE
+            ================================================== -->
+
+            <div class="trainer-left">
+
+
+                <!-- =================================================
+                     SELECT DURATION
+                ================================================== -->
+
+                <section class="trainer-panel">
+
+
+                    <div class="section-header">
+
+                        <h2>
+                            Select Duration
+                        </h2>
+
+                        <p>
+                            Choose how long you want a personal trainer.
+                        </p>
+
+                    </div>
+
+
+                    <div class="duration-options">
+
+
+                        <!-- 1 DAY -->
+
+                        <div
+                            class="duration-card selected"
+                            data-duration="1 Day"
+                            data-duration-value="1"
+                            onclick="selectDuration(this)">
+
+
+                            <div class="duration-icon">
+
+                                <i
+                                    class="fa-regular fa-calendar-days">
+                                </i>
+
+                                <span>
+                                    1
+                                </span>
+
+                            </div>
+
+
+                            <h3>
+                                1 Day
+                            </h3>
+
+
+                            <p>
+                                Get a trainer for<br>
+                                one day.
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- 1 WEEK -->
+
+                        <div
+                            class="duration-card"
+                            data-duration="1 Week"
+                            data-duration-value="7"
+                            onclick="selectDuration(this)">
+
+
+                            <div class="duration-icon">
+
+                                <i
+                                    class="fa-regular fa-calendar-days">
+                                </i>
+
+                                <span>
+                                    7
+                                </span>
+
+                            </div>
+
+
+                            <h3>
+                                1 Week
+                            </h3>
+
+
+                            <p>
+                                Get a trainer for<br>
+                                seven days.
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- 1 MONTH -->
+
+                        <div
+                            class="duration-card"
+                            data-duration="1 Month"
+                            data-duration-value="30"
+                            onclick="selectDuration(this)">
+
+
+                            <div class="duration-icon">
+
+                                <i
+                                    class="fa-regular fa-calendar-days">
+                                </i>
+
+                                <span>
+                                    30
+                                </span>
+
+                            </div>
+
+
+                            <h3>
+                                1 Month
+                            </h3>
+
+
+                            <p>
+                                Get a trainer for<br>
+                                thirty days.
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CHOOSE TRAINER
+                ================================================== -->
+
+                <section class="trainer-panel">
+
+
+                    <div class="section-header">
+
+                        <h2>
+                            Choose Trainer
+                        </h2>
+
+                        <p>
+                            Select a trainer based on your preference.
+                        </p>
+
+                    </div>
+
+
+                    <div class="trainer-options">
+
+
+                        <!-- MARK -->
+
+                        <div
+                            class="trainer-card selected"
+                            data-name="Mark Santos"
+                            data-specialty="Strength Training"
+                            onclick="selectTrainer(this)">
+
+
+                            <div class="trainer-avatar">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+
+
+                            <h3>
+                                Mark Santos
+                            </h3>
+
+
+                            <p>
+                                Strength Training
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- LISA -->
+
+                        <div
+                            class="trainer-card"
+                            data-name="Lisa Reyes"
+                            data-specialty="Weight Loss"
+                            onclick="selectTrainer(this)">
+
+
+                            <div class="trainer-avatar">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+
+
+                            <h3>
+                                Lisa Reyes
+                            </h3>
+
+
+                            <p>
+                                Weight Loss
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- CARLO -->
+
+                        <div
+                            class="trainer-card"
+                            data-name="Carlo Mendoza"
+                            data-specialty="Muscle Gain"
+                            onclick="selectTrainer(this)">
+
+
+                            <div class="trainer-avatar">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+
+
+                            <h3>
+                                Carlo Mendoza
+                            </h3>
+
+
+                            <p>
+                                Muscle Gain
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ANGELA -->
+
+                        <div
+                            class="trainer-card"
+                            data-name="Angela Cruz"
+                            data-specialty="Functional Training"
+                            onclick="selectTrainer(this)">
+
+
+                            <div class="trainer-avatar">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+
+
+                            <h3>
+                                Angela Cruz
+                            </h3>
+
+
+                            <p>
+                                Functional Training
+                            </p>
+
+
+                            <div class="radio-circle">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RIGHT SIDE — YOUR SELECTION
+            ================================================== -->
+
+            <aside class="selection-panel">
+
+
+                <h2>
+                    Your Selection
+                </h2>
+
+
+                <!-- =================================================
+                     DURATION SUMMARY
+                ================================================== -->
+
+                <div class="selection-item">
+
+
+                    <div class="selection-icon">
+
+                        <i class="fa-regular fa-calendar-days"></i>
+
+                    </div>
+
+
+                    <div class="selection-details">
+
+                        <span>
+                            Duration
+                        </span>
+
+                        <strong id="selectedDuration">
+                            1 Day
+                        </strong>
+
+                        <small>
+                            Personal Trainer Access
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TRAINER SUMMARY
+                ================================================== -->
+
+                <div class="selection-item">
+
+
+                    <div class="selection-icon trainer-selection-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                    <div class="selection-details">
+
+                        <span>
+                            Trainer
+                        </span>
+
+                        <strong id="selectedTrainer">
+                            Mark Santos
+                        </strong>
+
+                        <small id="selectedSpecialty">
+                            Strength Training
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DETAILS
+                ================================================== -->
+
+                <div class="selection-details-box">
+
+
+                    <h3>
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        Details
+                    </h3>
+
+
+                    <div class="detail-row">
+
+                        <i
+                            class="fa-regular fa-calendar-days">
+                        </i>
+
+                        <span>
+                            Duration:
+                        </span>
+
+                        <strong id="detailDuration">
+                            1 Day
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <i
+                            class="fa-solid fa-user">
+                        </i>
+
+                        <span>
+                            Trainer:
+                        </span>
+
+                        <strong id="detailTrainer">
+                            Mark Santos
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-row">
+
+                        <i
+                            class="fa-solid fa-clock">
+                        </i>
+
+                        <span>
+                            Schedule:
+                        </span>
+
+                        <strong>
+                            To be assigned
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     INFORMATION
+                ================================================== -->
+
+                <div class="trainer-info-box">
+
+                    <div class="info-icon">
+
+                        <i class="fa-solid fa-info"></i>
+
+                    </div>
+
+
+                    <p>
+                        A trainer will be assigned based on availability.
+                        You will be notified after your request is confirmed.
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SEND REQUEST
+                ================================================== -->
+
+                <button
+                    class="send-request-btn"
+                    onclick="sendTrainerRequest()">
+
+                    <span>
+                        Send Request
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+
+            </aside>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     NOTIFICATION
+========================================================= -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        Notification
+    </b>
+
+    <p id="notifText">
+        Notification message
+    </p>
+
+</div>
+
+
+
+<!-- =========================================================
+     SCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   USER
+========================================================= */
+
+const userData =
+    JSON.parse(
+        localStorage.getItem("user")
+    ) || {};
+
+
+const profileData =
+    JSON.parse(
+        localStorage.getItem("profile")
+    ) || {};
+
+
+const displayName =
+    profileData.name ||
+    userData.fullname ||
+    userData.username ||
+    "Member";
+
+
+document.getElementById(
+    "profile-name"
+).innerText =
+    displayName;
+
+
+document.getElementById(
+    "profileInitial"
+).innerText =
+    displayName
+        .trim()
+        .charAt(0)
+        .toUpperCase();
+
+
+
+/* =========================================================
+   SELECTION DATA
+========================================================= */
+
+let selectedDuration =
+    "1 Day";
+
+
+let selectedTrainer =
+    "Mark Santos";
+
+
+let selectedSpecialty =
+    "Strength Training";
+
+
+
+/* =========================================================
+   SELECT DURATION
+========================================================= */
+
+function selectDuration(card) {
+
+
+    document
+        .querySelectorAll(".duration-card")
+        .forEach(item => {
+
+            item.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    card.classList.add(
+        "selected"
+    );
+
+
+    selectedDuration =
+        card.dataset.duration;
+
+
+    document.getElementById(
+        "selectedDuration"
+    ).innerText =
+        selectedDuration;
+
+
+    document.getElementById(
+        "detailDuration"
+    ).innerText =
+        selectedDuration;
+
+}
+
+
+
+/* =========================================================
+   SELECT TRAINER
+========================================================= */
+
+function selectTrainer(card) {
+
+
+    document
+        .querySelectorAll(".trainer-card")
+        .forEach(item => {
+
+            item.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    card.classList.add(
+        "selected"
+    );
+
+
+    selectedTrainer =
+        card.dataset.name;
+
+
+    selectedSpecialty =
+        card.dataset.specialty;
+
+
+    document.getElementById(
+        "selectedTrainer"
+    ).innerText =
+        selectedTrainer;
+
+
+    document.getElementById(
+        "selectedSpecialty"
+    ).innerText =
+        selectedSpecialty;
+
+
+    document.getElementById(
+        "detailTrainer"
+    ).innerText =
+        selectedTrainer;
+
+}
+
+
+
+/* =========================================================
+   SEND REQUEST
+========================================================= */
+
+function sendTrainerRequest() {
+
+
+    console.log(
+        "TRAINER REQUEST",
+        {
+            duration:
+                selectedDuration,
+
+            trainer:
+                selectedTrainer,
+
+            specialty:
+                selectedSpecialty
+        }
+    );
+
+
+    showNotifPopup(
+        "Request Submitted",
+        `Your request for ${selectedTrainer} (${selectedDuration}) has been submitted.`
+    );
+
+}
+
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+function showNotifPopup(
+    title,
+    text
+) {
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText =
+        title;
+
+
+    document.getElementById(
+        "notifText"
+    ).innerText =
+        text;
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+function toggleMenu() {
+
+
+    const profile =
+        document.querySelector(
+            ".user-profile"
+        );
+
+
+    const dropdown =
+        document.getElementById(
+            "dropdown"
+        );
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+
+/* =========================================================
+   CLICK OUTSIDE
+========================================================= */
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+
+        if (
+            !event.target.closest(
+                ".user-profile"
+            )
+        ) {
+
+            const profile =
+                document.querySelector(
+                    ".user-profile"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "dropdown"
+                );
+
+
+            profile.classList.remove(
+                "active"
+            );
+
+
+            dropdown.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
