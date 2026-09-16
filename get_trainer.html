@@ -33,6 +33,10 @@
 
     <link
         rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
         href="https://fonts.gstatic.com"
         crossorigin>
 
@@ -334,12 +338,15 @@ if (!user || user.role !== "member") {
                     <div class="duration-options">
 
 
-                        <!-- 1 DAY -->
+                        <!-- =================================================
+                             1 DAY — ₱100
+                        ================================================== -->
 
                         <div
                             class="duration-card selected"
                             data-duration="1 Day"
                             data-duration-value="1"
+                            data-price="100"
                             onclick="selectDuration(this)">
 
 
@@ -377,12 +384,15 @@ if (!user || user.role !== "member") {
 
 
 
-                        <!-- 1 WEEK -->
+                        <!-- =================================================
+                             1 WEEK — ₱500
+                        ================================================== -->
 
                         <div
                             class="duration-card"
                             data-duration="1 Week"
                             data-duration-value="7"
+                            data-price="500"
                             onclick="selectDuration(this)">
 
 
@@ -420,12 +430,15 @@ if (!user || user.role !== "member") {
 
 
 
-                        <!-- 1 MONTH -->
+                        <!-- =================================================
+                             1 MONTH — ₱1,500
+                        ================================================== -->
 
                         <div
                             class="duration-card"
                             data-duration="1 Month"
                             data-duration-value="30"
+                            data-price="1500"
                             onclick="selectDuration(this)">
 
 
@@ -736,6 +749,8 @@ if (!user || user.role !== "member") {
                     </h3>
 
 
+                    <!-- DURATION -->
+
                     <div class="detail-row">
 
                         <i
@@ -752,6 +767,8 @@ if (!user || user.role !== "member") {
 
                     </div>
 
+
+                    <!-- TRAINER -->
 
                     <div class="detail-row">
 
@@ -770,6 +787,8 @@ if (!user || user.role !== "member") {
                     </div>
 
 
+                    <!-- SCHEDULE -->
+
                     <div class="detail-row">
 
                         <i
@@ -782,6 +801,25 @@ if (!user || user.role !== "member") {
 
                         <strong>
                             To be assigned
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="detail-row">
+
+                        <i
+                            class="fa-solid fa-peso-sign">
+                        </i>
+
+                        <span>
+                            Price:
+                        </span>
+
+                        <strong id="detailPrice">
+                            ₱100
                         </strong>
 
                     </div>
@@ -915,6 +953,10 @@ let selectedDuration =
     "1 Day";
 
 
+let selectedPrice =
+    100;
+
+
 let selectedTrainer =
     "Mark Santos";
 
@@ -951,6 +993,12 @@ function selectDuration(card) {
         card.dataset.duration;
 
 
+    selectedPrice =
+        Number(
+            card.dataset.price
+        );
+
+
     document.getElementById(
         "selectedDuration"
     ).innerText =
@@ -961,6 +1009,15 @@ function selectDuration(card) {
         "detailDuration"
     ).innerText =
         selectedDuration;
+
+
+    document.getElementById(
+        "detailPrice"
+    ).innerText =
+        "₱" +
+        selectedPrice.toLocaleString(
+            "en-PH"
+        );
 
 }
 
@@ -1030,6 +1087,9 @@ function sendTrainerRequest() {
         {
             duration:
                 selectedDuration,
+
+            price:
+                selectedPrice,
 
             trainer:
                 selectedTrainer,
