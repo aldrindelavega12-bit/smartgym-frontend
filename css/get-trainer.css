@@ -1,0 +1,1335 @@
+/* =========================================================
+   SMART GYM — GET TRAINER PAGE
+   ========================================================= */
+
+:root {
+    --green: #087c3d;
+    --green-dark: #075d2e;
+    --green-light: #eaf6ee;
+    --green-soft: #f2faf5;
+
+    --text: #17211b;
+    --muted: #66756d;
+
+    --white: #ffffff;
+    --bg: #f7faf8;
+
+    --border: #e2ebe6;
+
+    --purple: #6d28d9;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.navbar {
+    position: fixed;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 270px;
+
+    padding: 32px 22px;
+
+    background: #ffffff;
+
+    border-right: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px 8px 35px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--green);
+
+    font-size: 30px;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-text strong {
+    color: var(--green);
+
+    font-size: 24px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: -0.8px;
+}
+
+.brand-text span {
+    margin-top: 5px;
+
+    color: #69756e;
+
+    font-size: 7px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+.navbar .menu {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    width: 100%;
+}
+
+.navbar .menu a {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    width: 100%;
+    min-height: 50px;
+
+    padding: 0 17px;
+
+    border-radius: 13px;
+
+    color: #26312b;
+
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.navbar .menu a i {
+    width: 22px;
+
+    text-align: center;
+
+    color: #56635b;
+
+    font-size: 18px;
+
+    transition: color .2s ease;
+}
+
+
+/* ACTIVE */
+
+.navbar .menu a.active {
+    background: var(--green-light);
+
+    color: var(--green);
+
+    font-weight: 700;
+}
+
+.navbar .menu a.active i {
+    color: var(--green);
+}
+
+
+/* HOVER */
+
+.navbar .menu a:hover {
+    background: #f0f8f3;
+
+    color: var(--green);
+}
+
+.navbar .menu a:hover i {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   MESSAGE BADGE
+   ========================================================= */
+
+.msg-link {
+    position: relative;
+}
+
+.msg-count {
+    position: absolute;
+
+    right: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    min-width: 21px;
+    height: 21px;
+
+    padding: 0 6px;
+
+    border-radius: 50px;
+
+    background: #e53935;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   SIDEBAR MOTIVATIONAL CARD
+   ========================================================= */
+
+.sidebar-message {
+    margin-top: auto;
+    margin-bottom: 16px;
+
+    padding: 18px 16px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f3faf5,
+            #eaf6ee
+        );
+
+    border: 1px solid #e2eee6;
+
+    text-align: center;
+}
+
+.sidebar-message-icon {
+    width: 50px;
+    height: 50px;
+
+    margin: 0 auto 10px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #dff2e5;
+
+    color: var(--green);
+
+    font-size: 22px;
+}
+
+.sidebar-message h3 {
+    margin: 0 0 7px;
+
+    color: var(--text);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.sidebar-message p {
+    margin: 0;
+
+    color: #66716b;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.message-line {
+    width: 38px;
+    height: 4px;
+
+    margin: 13px auto 0;
+
+    border-radius: 10px;
+
+    background: var(--green);
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.layout {
+    margin-left: 270px;
+
+    min-height: 100vh;
+}
+
+.main {
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 14px 38px 40px;
+}
+
+
+/* =========================================================
+   TOP HEADER
+   ========================================================= */
+
+.top-header {
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-bottom: 20px;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   USER PROFILE
+   ========================================================= */
+
+.user-profile {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1.15;
+}
+
+.user-info strong {
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-info small {
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.user-profile > i {
+    margin-left: 5px;
+
+    color: var(--text);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   DROPDOWN
+   ========================================================= */
+
+.profile-dropdown {
+    position: absolute;
+
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 190px;
+
+    padding: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 30px rgba(18, 70, 40, .12);
+
+    display: none;
+
+    z-index: 2000;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+.profile-dropdown button {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+    background: var(--green-light);
+}
+
+.profile-dropdown button i {
+    width: 18px;
+
+    color: var(--green);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.trainer-page-header {
+    margin-bottom: 20px;
+}
+
+.trainer-page-header h1 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 34px;
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+}
+
+.trainer-page-header p {
+    margin: 8px 0 0;
+
+    color: var(--muted);
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   TRAINER LAYOUT
+   ========================================================= */
+
+.trainer-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        390px;
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   LEFT PANELS
+   ========================================================= */
+
+.trainer-left {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+.trainer-panel {
+    padding: 16px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px rgba(18, 70, 40, .05);
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+   .section-header {
+    margin-bottom: 11px;
+}
+
+.section-header h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.section-header p {
+    margin: 4px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   DURATION OPTIONS
+   ========================================================= */
+
+.duration-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+
+
+.duration-card:hover {
+    border-color: #58b982;
+
+    background: #fbfefc;
+}
+
+.duration-card {
+    position: relative;
+
+    height: 178px;
+    min-height: 178px;
+
+    padding: 14px 10px 12px;
+
+    border: 1px solid #dfe9e4;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.duration-card.selected {
+    border: 2px solid #0aa54f;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f2faf5,
+            #eaf6ee
+        );
+}
+
+
+/* =========================================================
+   DURATION ICON
+   ========================================================= */
+
+.duration-icon {
+    position: relative;
+
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--green);
+
+    font-size: 32px;
+}
+
+.duration-icon span {
+    position: absolute;
+
+    top: 12px;
+    left: 0;
+    right: 0;
+
+    color: var(--green);
+
+    font-size: 15px;
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   DURATION TEXT
+   ========================================================= */
+
+.duration-card h3 {
+    margin: 0 0 5px;
+
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.duration-card p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   RADIO
+   ========================================================= */
+
+.radio-circle {
+    width: 24px;
+    height: 24px;
+
+    margin-top: auto;
+
+    border: 2px solid #87938d;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: transparent;
+}
+
+.radio-circle i {
+    font-size: 12px;
+}
+
+.duration-card.selected .radio-circle,
+.trainer-card.selected .radio-circle {
+    border-color: #0aa54f;
+
+    color: #0aa54f;
+}
+
+
+/* =========================================================
+   TRAINER OPTIONS
+   ========================================================= */
+
+.trainer-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+.trainer-card {
+    position: relative;
+
+    height: 178px;
+    min-height: 178px;
+
+    padding: 12px 10px;
+
+    border: 1px solid #dfe9e4;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease;
+}
+
+.trainer-card.selected {
+    border: 2px solid #0aa54f;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f2faf5,
+            #eaf6ee
+        );
+}
+
+.trainer-card:hover {
+    border-color: #58b982;
+
+    background: #fbfefc;
+}
+
+
+
+
+/* =========================================================
+   TRAINER AVATAR
+   ========================================================= */
+
+.trainer-avatar {
+    width: 54px;
+    height: 54px;
+
+    margin-bottom: 8px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eaf7ef,
+            #e0f3e7
+        );
+
+    color: var(--green);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+}
+
+.trainer-card h3 {
+    margin: 0 0 4px;
+
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.trainer-card p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   RIGHT — YOUR SELECTION
+   ========================================================= */
+
+.selection-panel {
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px rgba(18, 70, 40, .05);
+}
+
+.selection-panel > h2 {
+    margin: 0 0 14px;
+
+    color: var(--text);
+
+    font-size: 21px;
+    font-weight: 700;
+
+    letter-spacing: -.4px;
+}
+
+
+/* =========================================================
+   SELECTION ITEMS
+   ========================================================= */
+
+.selection-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #e8efeb;
+}
+
+.selection-icon {
+    width: 50px;
+    height: 50px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--green);
+
+    font-size: 30px;
+}
+
+.trainer-selection-icon {
+    font-size: 32px;
+}
+
+.selection-details {
+    display: flex;
+
+    flex-direction: column;
+}
+
+.selection-details span {
+    margin-bottom: 3px;
+
+    color: var(--text);
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.selection-details strong {
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.selection-details small {
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   DETAILS BOX
+   ========================================================= */
+
+.selection-details-box {
+    padding: 16px 0;
+
+    border-bottom: 1px solid #e8efeb;
+}
+
+.selection-details-box h3 {
+    margin: 0 0 12px;
+
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.selection-details-box h3 i {
+    margin-right: 7px;
+
+    color: var(--green);
+}
+
+.detail-row {
+    display: grid;
+
+    grid-template-columns:
+        20px 1fr auto;
+
+    gap: 8px;
+
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-row i {
+    color: #65736c;
+
+    font-size: 13px;
+}
+
+.detail-row span {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.detail-row strong {
+    color: var(--text);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   INFO BOX
+   ========================================================= */
+
+.trainer-info-box {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-top: 14px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: #e7f4fd;
+
+    color: #1769aa;
+}
+
+.info-icon {
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #1687d4;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.trainer-info-box p {
+    margin: 0;
+
+    color: #1769aa;
+
+    font-size: 11px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   SEND REQUEST
+   ========================================================= */
+
+.send-request-btn {
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 14px;
+
+    padding: 0 18px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: #079447;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    font-family: inherit;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.send-request-btn:hover {
+    background: var(--green-dark);
+
+    transform: translateY(-1px);
+}
+
+.send-request-btn i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   NOTIFICATION
+   ========================================================= */
+
+.notif-popup {
+    position: fixed;
+
+    top: 25px;
+    right: 25px;
+
+    width: 300px;
+
+    padding: 16px 18px;
+
+    border-left: 5px solid var(--green);
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.12);
+
+    z-index: 99999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateX(120%);
+
+    transition:
+        opacity .3s ease,
+        transform .3s ease,
+        visibility .3s ease;
+
+    cursor: pointer;
+}
+
+.notif-popup.show {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateX(0);
+}
+
+.notif-popup b {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--green);
+
+    font-size: 14px;
+}
+
+.notif-popup p {
+    margin: 0;
+
+    color: #59645e;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .navbar {
+        width: 230px;
+    }
+
+    .layout {
+        margin-left: 230px;
+    }
+
+    .main {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .trainer-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            350px;
+    }
+
+    .trainer-options {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 950px) {
+
+    .trainer-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .selection-panel {
+        order: -1;
+    }
+
+    .duration-options {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .navbar {
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+
+        padding: 18px;
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+    .brand {
+        padding-bottom: 18px;
+    }
+
+    .navbar .menu {
+        flex-direction: row;
+
+        overflow-x: auto;
+
+        padding-bottom: 4px;
+    }
+
+    .navbar .menu a {
+        width: auto;
+
+        min-width: max-content;
+    }
+
+    .sidebar-message {
+        display: none;
+    }
+
+    .layout {
+        margin-left: 0;
+    }
+
+    .main {
+        padding: 20px;
+    }
+
+    .trainer-page-header h1 {
+        font-size: 30px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .main {
+        padding: 16px;
+    }
+
+    .duration-options {
+        grid-template-columns: 1fr;
+    }
+
+    .trainer-options {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .selection-panel {
+        padding: 16px;
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .trainer-options {
+        grid-template-columns: 1fr;
+    }
+
+    .trainer-page-header h1 {
+        font-size: 27px;
+    }
+
+    .trainer-page-header p {
+        font-size: 13px;
+    }
+
+}
