@@ -1335,39 +1335,51 @@ body {
 }
 
 /* =========================================================
-   GET TRAINER — ACTIVE SIDEBAR LINK
+   GET TRAINER PAGE — SIDEBAR ACTIVE OVERRIDE
 ========================================================= */
 
-/* Normal sidebar links */
-.navbar .menu a {
-    background: transparent;
-    color: #111827;
+/* RESET ALL SIDEBAR LINKS */
+body .navbar .menu a {
+    background: transparent !important;
+    color: #26312b !important;
+    font-weight: 600 !important;
 }
 
-/* Normal icons */
-.navbar .menu a i {
-    color: #52616b;
+body .navbar .menu a i {
+    color: #56635b !important;
 }
 
-/* ONLY the current page */
-.navbar .menu a.active {
-    background: #eaf7f0;
-    color: #078b48;
-    font-weight: 700;
+
+/* GET TRAINER ONLY */
+body .navbar .menu a[href="get_trainer.html"] {
+    background: #eaf6ee !important;
+    color: #087c3d !important;
+    font-weight: 700 !important;
 }
 
-/* Active icon */
-.navbar .menu a.active i {
-    color: #078b48;
+body .navbar .menu a[href="get_trainer.html"] i {
+    color: #087c3d !important;
 }
 
-/* Hover other links */
-.navbar .menu a:not(.active):hover {
-    background: #f4f8f6;
-    color: #078b48;
+
+/* HOVER — NON ACTIVE */
+body .navbar .menu a:not([href="get_trainer.html"]):hover {
+    background: #f4f8f6 !important;
+    color: #087c3d !important;
 }
 
-/* Hover icon */
-.navbar .menu a:not(.active):hover i {
-    color: #078b48;
+body .navbar .menu a:not([href="get_trainer.html"]):hover i {
+    color: #087c3d !important;
+}
+
+
+/* GET TRAINER HOVER — KEEP ACTIVE */
+body .navbar .menu a[href="get_trainer.html"]:hover {
+    background: #eaf6ee !important;
+    color: #087c3d !important;
+    transform: none !important;
+}
+
+body .navbar .menu a[href="get_trainer.html"]:hover i {
+    color: #087c3d !important;
 }
