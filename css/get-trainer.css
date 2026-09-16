@@ -1333,3 +1333,41 @@ body {
     }
 
 }
+
+/* =========================================================
+   GET TRAINER — ACTIVE SIDEBAR LINK
+========================================================= */
+
+/* Normal sidebar links */
+.navbar .menu a {
+    background: transparent;
+    color: #111827;
+}
+
+/* Normal icons */
+.navbar .menu a i {
+    color: #52616b;
+}
+
+/* ONLY the current page */
+.navbar .menu a.active {
+    background: #eaf7f0;
+    color: #078b48;
+    font-weight: 700;
+}
+
+/* Active icon */
+.navbar .menu a.active i {
+    color: #078b48;
+}
+
+/* Hover other links */
+.navbar .menu a:not(.active):hover {
+    background: #f4f8f6;
+    color: #078b48;
+}
+
+/* Hover icon */
+.navbar .menu a:not(.active):hover i {
+    color: #078b48;
+}
