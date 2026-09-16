@@ -806,21 +806,16 @@ body {
 .summary-card {
 
     min-height: 118px;
+    height: 118px;
 
-    padding:
-        18px;
+    padding: 16px 18px;
 
     border:
         1px solid var(--border);
 
     border-radius: 14px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #f0faf4,
-            #e8f6ed
-        );
+    background: #ffffff;
 
     box-shadow:
         var(--shadow);
@@ -830,12 +825,7 @@ body {
     align-items: center;
 
     gap: 14px;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
 }
-
 
 .summary-card:hover {
 
@@ -850,15 +840,15 @@ body {
 
 .summary-icon {
 
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
 
     flex-shrink: 0;
 
     border-radius: 50%;
 
     background:
-        #dff2e5;
+        var(--green-light);
 
     color:
         var(--green);
@@ -868,13 +858,11 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-size: 21px;
+    font-size: 19px;
 }
 
 
 .summary-content {
-
-    min-width: 0;
 
     display: flex;
 
@@ -885,13 +873,11 @@ body {
 .summary-content span {
 
     color:
-        #52645b;
+        var(--muted);
 
-    font-size: 12px;
+    font-size: 11px;
 
     font-weight: 500;
-
-    white-space: nowrap;
 }
 
 
@@ -902,7 +888,7 @@ body {
     color:
         var(--green);
 
-    font-size: 28px;
+    font-size: 27px;
 
     line-height: 1;
 
@@ -912,14 +898,12 @@ body {
 
 .summary-content small {
 
-    margin-top: 7px;
+    margin-top: 6px;
 
     color:
-        #65736b;
+        var(--muted);
 
     font-size: 10px;
-
-    line-height: 1.3;
 }
 
 
