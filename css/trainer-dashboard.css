@@ -1382,3 +1382,792 @@ body {
     }
 
 }
+
+/* =========================================================
+   CLIENT REQUESTS
+========================================================= */
+
+.page-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin:
+        30px 0 22px;
+}
+
+
+.page-title span {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        var(--green);
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+.page-title h1 {
+
+    margin: 0;
+
+    color:
+        var(--text);
+
+    font-size: 42px;
+
+    line-height: 1.1;
+
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+
+.page-title p {
+
+    margin:
+        10px 0 0;
+
+    color:
+        var(--muted);
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box {
+
+    width: 325px;
+
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 4px 15px
+        rgba(18,70,40,.04);
+}
+
+
+.search-box i {
+
+    color:
+        #65736b;
+
+    font-size: 16px;
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    border: 0;
+
+    outline: 0;
+
+    background:
+        transparent;
+
+    color:
+        var(--text);
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 13px;
+}
+
+
+.search-box input::placeholder {
+
+    color:
+        #8b9690;
+}
+
+
+/* =========================================================
+   REQUEST CONTAINER
+========================================================= */
+
+.request-container {
+
+    overflow: hidden;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+.request-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.request-table {
+
+    width: 100%;
+
+    min-width: 1050px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+.request-table thead {
+
+    background:
+        #f1f8f4;
+}
+
+
+.request-table th {
+
+    height: 54px;
+
+    padding:
+        0 18px;
+
+    color:
+        #53625a;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+
+.request-table td {
+
+    height: 91px;
+
+    padding:
+        12px 18px;
+
+    border-top:
+        1px solid #edf1ee;
+
+    vertical-align: middle;
+}
+
+
+.request-table tbody tr {
+
+    transition:
+        background .2s ease;
+}
+
+
+.request-table tbody tr:hover {
+
+    background:
+        #fbfdfc;
+}
+
+
+/* =========================================================
+   MEMBER
+========================================================= */
+
+.member-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.member-avatar {
+
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+
+    font-size: 20px;
+}
+
+
+.member-info > div:last-child {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.member-info strong {
+
+    color:
+        var(--text);
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.member-info small {
+
+    color:
+        var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PLAN
+========================================================= */
+
+.plan-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.plan-info strong {
+
+    color:
+        var(--text);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.plan-info small {
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   DURATION
+========================================================= */
+
+.duration-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 72px;
+
+    padding:
+        8px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.duration-badge.green {
+
+    background:
+        #e8f7ee;
+
+    color:
+        #087c3d;
+}
+
+
+.duration-badge.blue {
+
+    background:
+        #e9f2ff;
+
+    color:
+        #1264c5;
+}
+
+
+.duration-badge.purple {
+
+    background:
+        #f0eaff;
+
+    color:
+        #6336d8;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.price {
+
+    color:
+        var(--text);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.date-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.date-info strong {
+
+    color:
+        #4c5952;
+
+    font-size: 12px;
+
+    font-weight: 500;
+}
+
+
+.date-info small {
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-buttons {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.accept-btn,
+.reject-btn {
+
+    height: 40px;
+
+    padding:
+        0 15px;
+
+    border-radius: 7px;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        .2s ease;
+
+    white-space: nowrap;
+}
+
+
+.accept-btn {
+
+    border:
+        1px solid var(--green);
+
+    background:
+        var(--green);
+
+    color:
+        #ffffff;
+}
+
+
+.accept-btn:hover {
+
+    background:
+        var(--green-dark);
+
+    border-color:
+        var(--green-dark);
+}
+
+
+.reject-btn {
+
+    border:
+        1px solid #f3a4a4;
+
+    background:
+        #fff6f6;
+
+    color:
+        #d92929;
+}
+
+
+.reject-btn:hover {
+
+    background:
+        #ffecec;
+
+    border-color:
+        #e87979;
+}
+
+
+.accept-btn i,
+.reject-btn i {
+
+    margin-right: 6px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   REQUEST FOOTER
+========================================================= */
+
+.request-footer {
+
+    min-height: 65px;
+
+    padding:
+        0 18px 0 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-top:
+        1px solid #edf1ee;
+
+    color:
+        var(--muted);
+
+    font-size: 12px;
+}
+
+
+.pagination {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.pagination button {
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 8px;
+
+    background:
+        #ffffff;
+
+    color:
+        #69756e;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+
+.pagination button:hover:not(:disabled) {
+
+    border-color:
+        #b9d9c5;
+
+    background:
+        var(--green-soft);
+
+    color:
+        var(--green);
+}
+
+
+.pagination button.current-page {
+
+    border-color:
+        var(--green);
+
+    background:
+        var(--green);
+
+    color:
+        #ffffff;
+
+    font-weight: 700;
+}
+
+
+.pagination button:disabled {
+
+    opacity:
+        .45;
+
+    cursor:
+        default;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+    display: none;
+
+    padding:
+        60px 20px;
+
+    text-align: center;
+}
+
+
+.empty-state.show {
+
+    display: block;
+}
+
+
+.empty-icon {
+
+    width: 58px;
+    height: 58px;
+
+    margin:
+        0 auto 15px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+
+    font-size: 22px;
+}
+
+
+.empty-state h3 {
+
+    margin:
+        0 0 6px;
+
+    color:
+        var(--text);
+
+    font-size: 17px;
+}
+
+
+.empty-state p {
+
+    margin: 0;
+
+    color:
+        var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CLIENT REQUESTS RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .page-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .search-box {
+
+        width: 100%;
+
+        max-width: 400px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .page-title h1 {
+
+        font-size: 36px;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .page-header {
+
+        margin-top:
+            20px;
+    }
+
+
+    .page-title h1 {
+
+        font-size: 32px;
+    }
+
+
+    .page-title p {
+
+        font-size: 14px;
+    }
+
+
+    .search-box {
+
+        max-width: none;
+    }
+
+
+    .request-container {
+
+        border-radius: 12px;
+    }
+
+
+    .request-footer {
+
+        padding:
+            0 14px;
+
+    }
+
+}
