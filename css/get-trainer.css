@@ -1383,3 +1383,29 @@ body .navbar .menu a[href="get_trainer.html"]:hover {
 body .navbar .menu a[href="get_trainer.html"]:hover i {
     color: #087c3d !important;
 }
+
+/* =========================================================
+   LOCKED TRAINER SELECTION
+========================================================= */
+
+.duration-card.locked,
+.trainer-card.locked {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+
+}
+
+
+.send-request-btn.locked {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+
+}

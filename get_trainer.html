@@ -704,6 +704,10 @@ let selectedTrainerId = null;
 
 let selectedPrice = 0;
 
+let trainerLocked = false;
+
+let existingTrainer = null;
+
 
 /* =========================================================
    LOAD TRAINER PLANS
@@ -769,13 +773,25 @@ async function loadTrainerPlans(){
 
         buildTrainerData();
 
+        const hasExistingTrainer =
+            await checkExistingTrainer();
+
         renderDurations();
 
         renderTrainers();
 
-        selectDefaultDuration();
+        if(hasExistingTrainer){
 
-        selectDefaultTrainer();
+            lockTrainerSelection();
+
+        }
+        else{
+
+            selectDefaultDuration();
+
+            selectDefaultTrainer();
+
+        }
 
     }
     catch(error){
@@ -807,7 +823,93 @@ async function loadTrainerPlans(){
 
 }
 
+/* =========================================================
+   CHECK EXISTING TRAINER
+========================================================= */
 
+async function checkExistingTrainer(){
+
+    const memberId =
+        userData.user_id ||
+        userData.id;
+
+    if(!memberId){
+
+        console.error(
+            "MEMBER ID NOT FOUND"
+        );
+
+        return false;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/trainer-status/${memberId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        if(result.has_trainer){
+
+            trainerLocked = true;
+
+            existingTrainer =
+                result.trainer;
+
+            return true;
+
+        }
+
+
+        trainerLocked = false;
+
+        existingTrainer = null;
+
+        return false;
+
+    }
+    catch(error){
+
+        console.error(
+            "CHECK EXISTING TRAINER ERROR:",
+            error
+        );
+
+        /*
+           Fail closed:
+           kapag hindi natin ma-verify,
+           huwag muna payagan ang bagong request.
+        */
+
+        trainerLocked = true;
+
+        existingTrainer = null;
+
+        return false;
+
+    }
+
+}
 /* =========================================================
    BUILD TRAINER DATA
 ========================================================= */
@@ -1183,12 +1285,125 @@ function selectDefaultTrainer(){
 
 }
 
+/* =========================================================
+   LOCK TRAINER SELECTION
+========================================================= */
 
+function lockTrainerSelection(){
+
+    document
+        .querySelectorAll(
+            ".duration-card"
+        )
+        .forEach(
+            card => {
+
+                card.classList.add(
+                    "locked"
+                );
+
+                card.onclick = null;
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".trainer-card"
+        )
+        .forEach(
+            card => {
+
+                card.classList.add(
+                    "locked"
+                );
+
+                card.onclick = null;
+
+            }
+        );
+
+
+    const sendButton =
+        document.querySelector(
+            ".send-request-btn"
+        );
+
+
+    if(sendButton){
+
+        sendButton.disabled = true;
+
+        sendButton.classList.add(
+            "locked"
+        );
+
+        sendButton.querySelector(
+            "span"
+        ).innerText =
+            "Trainer Already Assigned";
+
+    }
+
+
+    if(existingTrainer){
+
+        document.getElementById(
+            "selectedTrainer"
+        ).innerText =
+            existingTrainer.trainer_name ||
+            "-";
+
+
+        document.getElementById(
+            "detailTrainer"
+        ).innerText =
+            existingTrainer.trainer_name ||
+            "-";
+
+
+        document.getElementById(
+            "selectedDuration"
+        ).innerText =
+            existingTrainer.plan_name ||
+            "-";
+
+
+        document.getElementById(
+            "detailDuration"
+        ).innerText =
+            existingTrainer.plan_name ||
+            "-";
+
+
+        document.getElementById(
+            "detailPrice"
+        ).innerText =
+            "₱" +
+            Number(
+                existingTrainer.price || 0
+            ).toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+}
 /* =========================================================
    SELECT DURATION
 ========================================================= */
-
 function selectDuration(card){
+
+    if(trainerLocked){
+
+        return;
+
+    }
 
     document
         .querySelectorAll(
@@ -1204,32 +1419,33 @@ function selectDuration(card){
             }
         );
 
-
     card.classList.add(
         "selected"
     );
 
-
     selectedDuration =
         card.dataset.duration;
-
 
     selectedDurationValue =
         Number(
             card.dataset.durationValue
         );
 
-
     updateSelection();
 
 }
-
 
 /* =========================================================
    SELECT TRAINER
 ========================================================= */
 
 function selectTrainer(card){
+
+    if(trainerLocked){
+
+        return;
+
+    }
 
     document
         .querySelectorAll(
@@ -1245,24 +1461,19 @@ function selectTrainer(card){
             }
         );
 
-
     card.classList.add(
         "selected"
     );
 
-
     selectedTrainerId =
         card.dataset.id;
-
 
     selectedTrainer =
         card.dataset.name;
 
-
     updateSelection();
 
 }
-
 
 /* =========================================================
    GET PRICE
@@ -1404,6 +1615,17 @@ function escapeHtml(value){
 
 async function sendTrainerRequest(){
 
+    if(trainerLocked){
+
+        showNotifPopup(
+            "Trainer Already Assigned",
+            "You already have a trainer for the current date."
+        );
+
+        return;
+
+    }
+
     if(!selectedTrainerId){
 
         showNotifPopup(
@@ -1537,6 +1759,23 @@ async function sendTrainerRequest(){
             "Request Submitted",
             `Your request for ${selectedTrainer} (${selectedDuration}) has been submitted.`
         );
+
+        trainerLocked = true;
+
+        existingTrainer = {
+
+            trainer_name:
+                selectedTrainer,
+
+            plan_name:
+                selectedDuration,
+
+            price:
+                selectedPrice
+
+        };
+
+        lockTrainerSelection();
 
 
         console.log(
