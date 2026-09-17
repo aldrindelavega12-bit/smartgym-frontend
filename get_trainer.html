@@ -871,6 +871,9 @@ function buildTrainerData(){
 
             trainer.plans.push({
 
+                id:
+                    plan.id,
+
                 planName:
                     plan.plan_name,
 
@@ -1399,38 +1402,165 @@ function escapeHtml(value){
    SEND REQUEST
 ========================================================= */
 
-function sendTrainerRequest(){
+async function sendTrainerRequest(){
 
-    console.log(
-        "TRAINER REQUEST",
-        {
+    if(!selectedTrainerId){
 
-            trainer_id:
-                selectedTrainerId,
+        showNotifPopup(
+            "Request Failed",
+            "Please select a trainer."
+        );
 
-            trainer:
-                selectedTrainer,
+        return;
 
-            duration:
-                selectedDuration,
+    }
 
-            duration_days:
-                selectedDurationValue,
 
-            price:
-                selectedPrice
+    if(!selectedDurationValue){
+
+        showNotifPopup(
+            "Request Failed",
+            "Please select a duration."
+        );
+
+        return;
+
+    }
+
+
+    const memberId =
+        userData.user_id ||
+        userData.id;
+
+
+    if(!memberId){
+
+        showNotifPopup(
+            "Request Failed",
+            "Member account information not found."
+        );
+
+        return;
+
+    }
+
+
+    const trainer =
+        trainers.find(
+            item =>
+                item.id === selectedTrainerId
+        );
+
+
+    if(!trainer){
+
+        showNotifPopup(
+            "Request Failed",
+            "Selected trainer not found."
+        );
+
+        return;
+
+    }
+
+
+    const plan =
+        trainer.plans.find(
+            item =>
+                item.durationDays ===
+                    selectedDurationValue &&
+                item.active === 1
+        );
+
+
+    if(!plan){
+
+        showNotifPopup(
+            "Request Failed",
+            "Selected trainer plan is not available."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/request`,
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        member_id:
+                            memberId,
+
+                        trainer_id:
+                            selectedTrainerId,
+
+                        plan_id:
+                            plan.id
+
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            showNotifPopup(
+                "Request Failed",
+                result.message ||
+                "Unable to submit trainer request."
+            );
+
+            return;
 
         }
-    );
 
 
-    showNotifPopup(
-        "Request Submitted",
-        `Your request for ${selectedTrainer} (${selectedDuration}) has been submitted.`
-    );
+        showNotifPopup(
+            "Request Submitted",
+            `Your request for ${selectedTrainer} (${selectedDuration}) has been submitted.`
+        );
+
+
+        console.log(
+            "TRAINER REQUEST SUCCESS:",
+            result
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "TRAINER REQUEST ERROR:",
+            error
+        );
+
+
+        showNotifPopup(
+            "Request Failed",
+            "Unable to connect to the server."
+        );
+
+    }
 
 }
-
 
 /* =========================================================
    LOAD TRAINERS
