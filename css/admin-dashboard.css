@@ -3241,4 +3241,10 @@ body {
         width:100%;
     }
 
+}.trainer-pricing-fields {
+    display: none;
+}
+
+.trainer-pricing-fields.show {
+    display: block;
 }
