@@ -1208,107 +1208,247 @@ function searchRequests(){
    ACCEPT REQUEST
 ===================================================== */
 
-function acceptRequest(
-    button
-){
+async function acceptRequest(button){
 
     const row =
-        button.closest(
-            "tr"
-        );
-
+        button.closest("tr");
 
     if(!row)
         return;
 
 
+    const requestId =
+        row.dataset.requestId;
+
     const memberName =
         row.dataset.name;
 
 
-    /*
-       TEMPORARY UI ONLY
-
-       Actual API will be added next.
-    */
-
-    row.remove();
+    const trainerId =
+        user.user_id;
 
 
-    clientRequests =
-        clientRequests.filter(
-            request =>
-                String(request.id) !==
-                String(row.dataset.requestId)
+    if(!requestId){
+
+        showNotifPopup(
+            "Request Failed",
+            "Request ID not found."
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Accepting...
+    `;
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/request/${requestId}/accept`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        trainer_id:
+                            trainerId
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                "Unable to accept request."
+            );
+
+        }
+
+
+        showNotifPopup(
+            "Request Accepted",
+            `${memberName} has been added to your trainees.`
         );
 
 
-    updateRequestCount(
-        clientRequests.length
-    );
+        /*
+            Reload from database.
+            Since the request is now ACTIVE,
+            it will no longer appear here.
+        */
+
+        await loadClientRequests();
 
 
-    showNotifPopup(
-        "Request Accepted",
-        `${memberName} has been added to your trainees.`
-    );
+    }
+    catch(error){
+
+        console.error(
+            "ACCEPT REQUEST ERROR:",
+            error
+        );
+
+
+        button.disabled = false;
+
+        button.innerHTML = `
+            <i class="fa-solid fa-check"></i>
+            Accept
+        `;
+
+
+        showNotifPopup(
+            "Request Failed",
+            error.message ||
+            "Unable to accept request."
+        );
+
+    }
 
 }
-
-
 
 /* =====================================================
    REJECT REQUEST
 ===================================================== */
 
-function rejectRequest(
-    button
-){
+async function rejectRequest(button){
 
     const row =
-        button.closest(
-            "tr"
-        );
-
+        button.closest("tr");
 
     if(!row)
         return;
 
 
+    const requestId =
+        row.dataset.requestId;
+
     const memberName =
         row.dataset.name;
 
 
-    /*
-       TEMPORARY UI ONLY
-
-       Actual API will be added next.
-    */
-
-    row.remove();
+    const trainerId =
+        user.user_id;
 
 
-    clientRequests =
-        clientRequests.filter(
-            request =>
-                String(request.id) !==
-                String(row.dataset.requestId)
+    if(!requestId){
+
+        showNotifPopup(
+            "Request Failed",
+            "Request ID not found."
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Rejecting...
+    `;
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/request/${requestId}/reject`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        trainer_id:
+                            trainerId
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                "Unable to reject request."
+            );
+
+        }
+
+
+        showNotifPopup(
+            "Request Rejected",
+            `${memberName}'s request has been rejected.`
         );
 
 
-    updateRequestCount(
-        clientRequests.length
-    );
+        /*
+            Reload from database.
+            Since the request is now CANCELLED,
+            it will no longer appear here.
+        */
+
+        await loadClientRequests();
 
 
-    showNotifPopup(
-        "Request Rejected",
-        `${memberName}'s request has been rejected.`
-    );
+    }
+    catch(error){
+
+        console.error(
+            "REJECT REQUEST ERROR:",
+            error
+        );
+
+
+        button.disabled = false;
+
+        button.innerHTML = `
+            <i class="fa-solid fa-xmark"></i>
+            Reject
+        `;
+
+
+        showNotifPopup(
+            "Request Failed",
+            error.message ||
+            "Unable to reject request."
+        );
+
+    }
 
 }
-
-
 
 /* =====================================================
    ESCAPE HTML
