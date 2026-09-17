@@ -2432,3 +2432,12 @@ body {
     font-weight: 600;
     color: #18221e;
 }
+
+.status-badge.completed {
+    background: #f1f3f2;
+    color: #66756e;
+}
+
+.status-badge.completed .status-dot {
+    background: #98a39e;
+}

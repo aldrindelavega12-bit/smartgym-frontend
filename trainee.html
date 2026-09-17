@@ -693,6 +693,10 @@ function renderTrainees(
    CREATE TRAINEE ROW
 ===================================================== */
 
+/* =====================================================
+   CREATE TRAINEE ROW
+===================================================== */
+
 function createTraineeRow(
     trainee
 ){
@@ -719,17 +723,44 @@ function createTraineeRow(
         );
 
 
-    const durationClass =
-        getDurationClass(
-            durationDays
-        );
-
-
     const trainingPeriod =
         formatTrainingPeriod(
             trainee.start_date,
             trainee.end_date
         );
+
+
+    /*
+     * =================================================
+     * STATUS
+     * =================================================
+     */
+
+    const traineeStatus =
+        String(
+            trainee.status || ""
+        ).toLowerCase();
+
+
+    let statusText =
+        "Active";
+
+
+    let statusClass =
+        "active";
+
+
+    if(
+        traineeStatus === "completed"
+    ){
+
+        statusText =
+            "Completed";
+
+        statusClass =
+            "completed";
+
+    }
 
 
     row.innerHTML = `
@@ -811,6 +842,7 @@ function createTraineeRow(
         </td>
 
 
+
         <td>
 
             <div class="training-period">
@@ -831,11 +863,14 @@ function createTraineeRow(
 
         <td>
 
-            <span class="status-badge">
+            <span
+                class="status-badge ${statusClass}">
 
-                <span class="status-dot"></span>
+                <span
+                    class="status-dot">
+                </span>
 
-                Active
+                ${statusText}
 
             </span>
 
@@ -847,8 +882,6 @@ function createTraineeRow(
     return row;
 
 }
-
-
 
 /* =====================================================
    DURATION TEXT
