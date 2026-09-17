@@ -128,7 +128,9 @@ if (!user || user.role !== "member") {
             <span
                 id="msg-count"
                 class="msg-count">
+
                 0
+
             </span>
 
         </a>
@@ -335,147 +337,17 @@ if (!user || user.role !== "member") {
                     </div>
 
 
-                    <div class="duration-options">
+                    <!--
+                        DURATION CARDS WILL BE
+                        LOADED FROM THE API
+                    -->
 
-
-                        <!-- =================================================
-                             1 DAY — ₱100
-                        ================================================== -->
-
-                        <div
-                            class="duration-card selected"
-                            data-duration="1 Day"
-                            data-duration-value="1"
-                            data-price="100"
-                            onclick="selectDuration(this)">
-
-
-                            <div class="duration-icon">
-
-                                <i
-                                    class="fa-regular fa-calendar-days">
-                                </i>
-
-                                <span>
-                                    1
-                                </span>
-
-                            </div>
-
-
-                            <h3>
-                                1 Day
-                            </h3>
-
-
-                            <p>
-                                Get a trainer for<br>
-                                one day.
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- =================================================
-                             1 WEEK — ₱500
-                        ================================================== -->
-
-                        <div
-                            class="duration-card"
-                            data-duration="1 Week"
-                            data-duration-value="7"
-                            data-price="500"
-                            onclick="selectDuration(this)">
-
-
-                            <div class="duration-icon">
-
-                                <i
-                                    class="fa-regular fa-calendar-days">
-                                </i>
-
-                                <span>
-                                    7
-                                </span>
-
-                            </div>
-
-
-                            <h3>
-                                1 Week
-                            </h3>
-
-
-                            <p>
-                                Get a trainer for<br>
-                                seven days.
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- =================================================
-                             1 MONTH — ₱1,500
-                        ================================================== -->
-
-                        <div
-                            class="duration-card"
-                            data-duration="1 Month"
-                            data-duration-value="30"
-                            data-price="1500"
-                            onclick="selectDuration(this)">
-
-
-                            <div class="duration-icon">
-
-                                <i
-                                    class="fa-regular fa-calendar-days">
-                                </i>
-
-                                <span>
-                                    30
-                                </span>
-
-                            </div>
-
-
-                            <h3>
-                                1 Month
-                            </h3>
-
-
-                            <p>
-                                Get a trainer for<br>
-                                thirty days.
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
+                    <div
+                        class="duration-options"
+                        id="durationOptions">
 
                     </div>
+
 
                 </section>
 
@@ -501,153 +373,17 @@ if (!user || user.role !== "member") {
                     </div>
 
 
-                    <div class="trainer-options">
-
-
-                        <!-- MARK -->
-
-                        <div
-                            class="trainer-card selected"
-                            data-name="Mark Santos"
-                            data-specialty="Strength Training"
-                            onclick="selectTrainer(this)">
-
-
-                            <div class="trainer-avatar">
-
-                                <i class="fa-solid fa-user"></i>
-
-                            </div>
-
-
-                            <h3>
-                                Mark Santos
-                            </h3>
-
-
-                            <p>
-                                Strength Training
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- LISA -->
-
-                        <div
-                            class="trainer-card"
-                            data-name="Lisa Reyes"
-                            data-specialty="Weight Loss"
-                            onclick="selectTrainer(this)">
-
-
-                            <div class="trainer-avatar">
-
-                                <i class="fa-solid fa-user"></i>
-
-                            </div>
-
-
-                            <h3>
-                                Lisa Reyes
-                            </h3>
-
-
-                            <p>
-                                Weight Loss
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- CARLO -->
-
-                        <div
-                            class="trainer-card"
-                            data-name="Carlo Mendoza"
-                            data-specialty="Muscle Gain"
-                            onclick="selectTrainer(this)">
-
-
-                            <div class="trainer-avatar">
-
-                                <i class="fa-solid fa-user"></i>
-
-                            </div>
-
-
-                            <h3>
-                                Carlo Mendoza
-                            </h3>
-
-
-                            <p>
-                                Muscle Gain
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- ANGELA -->
-
-                        <div
-                            class="trainer-card"
-                            data-name="Angela Cruz"
-                            data-specialty="Functional Training"
-                            onclick="selectTrainer(this)">
-
-
-                            <div class="trainer-avatar">
-
-                                <i class="fa-solid fa-user"></i>
-
-                            </div>
-
-
-                            <h3>
-                                Angela Cruz
-                            </h3>
-
-
-                            <p>
-                                Functional Training
-                            </p>
-
-
-                            <div class="radio-circle">
-
-                                <i class="fa-solid fa-circle"></i>
-
-                            </div>
-
-                        </div>
-
+                    <!--
+                        TRAINER CARDS WILL BE
+                        LOADED FROM THE API
+                    -->
+
+                    <div
+                        class="trainer-options"
+                        id="trainerOptions">
 
                     </div>
+
 
                 </section>
 
@@ -689,7 +425,7 @@ if (!user || user.role !== "member") {
                         </span>
 
                         <strong id="selectedDuration">
-                            1 Day
+                            -
                         </strong>
 
                         <small>
@@ -709,7 +445,8 @@ if (!user || user.role !== "member") {
                 <div class="selection-item">
 
 
-                    <div class="selection-icon trainer-selection-icon">
+                    <div
+                        class="selection-icon trainer-selection-icon">
 
                         <i class="fa-solid fa-user"></i>
 
@@ -723,11 +460,11 @@ if (!user || user.role !== "member") {
                         </span>
 
                         <strong id="selectedTrainer">
-                            Mark Santos
+                            -
                         </strong>
 
-                        <small id="selectedSpecialty">
-                            Strength Training
+                        <small>
+                            Personal Trainer
                         </small>
 
                     </div>
@@ -744,8 +481,11 @@ if (!user || user.role !== "member") {
 
 
                     <h3>
+
                         <i class="fa-solid fa-clipboard-list"></i>
+
                         Details
+
                     </h3>
 
 
@@ -762,7 +502,7 @@ if (!user || user.role !== "member") {
                         </span>
 
                         <strong id="detailDuration">
-                            1 Day
+                            -
                         </strong>
 
                     </div>
@@ -781,7 +521,7 @@ if (!user || user.role !== "member") {
                         </span>
 
                         <strong id="detailTrainer">
-                            Mark Santos
+                            -
                         </strong>
 
                     </div>
@@ -819,7 +559,7 @@ if (!user || user.role !== "member") {
                         </span>
 
                         <strong id="detailPrice">
-                            ₱100
+                            ₱0.00
                         </strong>
 
                     </div>
@@ -897,15 +637,7 @@ if (!user || user.role !== "member") {
 
 </div>
 
-
-
-<!-- =========================================================
-     SCRIPT
-========================================================= -->
-
 <script>
-
-
 /* =========================================================
    USER
 ========================================================= */
