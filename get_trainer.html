@@ -390,6 +390,55 @@ if (!user || user.role !== "member") {
 
             </div>
 
+            <!-- =================================================
+                SELECT TRAINING START DATE
+            ================================================== -->
+
+            <section class="trainer-panel">
+
+                <div class="section-header">
+
+                    <h2>
+                        Select Training Start Date
+                    </h2>
+
+                    <p>
+                        Choose when you want your training to start.
+                    </p>
+
+                </div>
+
+
+                <div class="start-date-wrapper">
+
+                    <div class="start-date-input">
+
+                        <i class="fa-regular fa-calendar-days"></i>
+
+                        <input
+                            type="date"
+                            id="startDate"
+                            onchange="selectStartDate()">
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="training-date-info"
+                    id="trainingDateInfo">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <span>
+                        Select a start date to see your training period.
+                    </span>
+
+                </div>
+
+            </section>
+
 
 
             <!-- =================================================
@@ -521,6 +570,43 @@ if (!user || user.role !== "member") {
                         </span>
 
                         <strong id="detailTrainer">
+                            -
+                        </strong>
+
+                    </div>
+
+                    <!-- START DATE -->
+
+                    <div class="detail-row">
+
+                        <i
+                            class="fa-regular fa-calendar-days">
+                        </i>
+
+                        <span>
+                            Start Date:
+                        </span>
+
+                        <strong id="detailStartDate">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <!-- END DATE -->
+
+                    <div class="detail-row">
+
+                        <i
+                            class="fa-regular fa-calendar-days">
+                        </i>
+
+                        <span>
+                            End Date:
+                        </span>
+
+                        <strong id="detailEndDate">
                             -
                         </strong>
 
@@ -684,10 +770,13 @@ let selectedTrainerId = null;
 
 let selectedPrice = 0;
 
+let selectedStartDate = null;
+
+let selectedEndDate = null;
+
 let trainerLocked = false;
 
 let existingTrainer = null;
-
 
 /* =========================================================
    LOAD TRAINER PLANS
@@ -1219,6 +1308,228 @@ function renderTrainers(){
 
 }
 
+/* =========================================================
+   TRAINING DATES
+========================================================= */
+
+function getTodayDate(){
+
+    const today =
+        new Date();
+
+    const year =
+        today.getFullYear();
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
+function formatDate(dateString){
+
+    if(!dateString){
+
+        return "-";
+
+    }
+
+    const date =
+        new Date(
+            `${dateString}T00:00:00`
+        );
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CALCULATE END DATE
+========================================================= */
+
+function calculateEndDate(){
+
+    if(
+        !selectedStartDate ||
+        !selectedDurationValue
+    ){
+
+        selectedEndDate = null;
+
+        return;
+
+    }
+
+
+    const date =
+        new Date(
+            `${selectedStartDate}T00:00:00`
+        );
+
+
+    date.setDate(
+        date.getDate() +
+        selectedDurationValue -
+        1
+    );
+
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    selectedEndDate =
+        `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   SELECT START DATE
+========================================================= */
+
+function selectStartDate(){
+
+    if(trainerLocked){
+
+        return;
+
+    }
+
+
+    const input =
+        document.getElementById(
+            "startDate"
+        );
+
+
+    selectedStartDate =
+        input.value || null;
+
+
+    calculateEndDate();
+
+    updateTrainingDateInfo();
+
+    updateSelection();
+
+}
+
+
+/* =========================================================
+   UPDATE DATE INFO
+========================================================= */
+
+function updateTrainingDateInfo(){
+
+    const info =
+        document.getElementById(
+            "trainingDateInfo"
+        );
+
+
+    if(
+        !selectedStartDate
+    ){
+
+        info.innerHTML = `
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            <span>
+                Select a start date to see your training period.
+            </span>
+
+        `;
+
+        return;
+
+    }
+
+
+    if(
+        !selectedDurationValue
+    ){
+
+        info.innerHTML = `
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            <span>
+                Select a duration to calculate your training period.
+            </span>
+
+        `;
+
+        return;
+
+    }
+
+
+    calculateEndDate();
+
+
+    info.innerHTML = `
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        <span>
+            Your training will run from
+            <strong>
+                ${formatDate(selectedStartDate)}
+            </strong>
+            to
+            <strong>
+                ${formatDate(selectedEndDate)}
+            </strong>.
+        </span>
+
+    `;
+
+}
 
 /* =========================================================
    DEFAULT DURATION
@@ -1371,7 +1682,61 @@ function lockTrainerSelection(){
                 }
             );
 
+        selectedStartDate =
+            existingTrainer.start_date ||
+            null;
+
+        selectedEndDate =
+            existingTrainer.end_date ||
+            null;
+
+
+        const startDateInput =
+            document.getElementById(
+                "startDate"
+            );
+
+
+        if(startDateInput){
+
+            startDateInput.value =
+                selectedStartDate || "";
+
+        }
+
+
+        document.getElementById(
+            "detailStartDate"
+        ).innerText =
+            formatDate(
+                selectedStartDate
+            );
+
+
+        document.getElementById(
+            "detailEndDate"
+        ).innerText =
+            formatDate(
+                selectedEndDate
+            );
+
     }
+
+}
+
+const startDateInput =
+    document.getElementById(
+        "startDate"
+    );
+
+
+if(startDateInput){
+
+    startDateInput.disabled = true;
+
+    startDateInput.classList.add(
+        "locked"
+    );
 
 }
 /* =========================================================
@@ -1411,9 +1776,14 @@ function selectDuration(card){
             card.dataset.durationValue
         );
 
+    calculateEndDate();
+
+    updateTrainingDateInfo();
+
     updateSelection();
 
 }
+
 
 /* =========================================================
    SELECT TRAINER
@@ -1539,6 +1909,21 @@ function updateSelection(){
         "detailTrainer"
     ).innerText =
         selectedTrainer || "-";
+
+    document.getElementById(
+        "detailStartDate"
+    ).innerText =
+        formatDate(
+            selectedStartDate
+        );
+
+
+    document.getElementById(
+        "detailEndDate"
+    ).innerText =
+        formatDate(
+            selectedEndDate
+        );
 
 
     document.getElementById(
