@@ -1395,10 +1395,10 @@ body {
 
     justify-content: space-between;
 
-    gap: 30px;
+    gap: 25px;
 
     margin:
-        30px 0 22px;
+        28px 0 18px;
 }
 
 
@@ -1406,12 +1406,12 @@ body {
 
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 
     color:
         var(--green);
 
-    font-size: 15px;
+    font-size: 14px;
 
     font-weight: 700;
 }
@@ -1424,27 +1424,27 @@ body {
     color:
         var(--text);
 
-    font-size: 42px;
+    font-size: 38px;
 
     line-height: 1.1;
 
     font-weight: 700;
 
-    letter-spacing: -1.5px;
+    letter-spacing: -1.3px;
 }
 
 
 .page-title p {
 
     margin:
-        10px 0 0;
+        8px 0 0;
 
     color:
         var(--muted);
 
-    font-size: 15px;
+    font-size: 14px;
 
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 
@@ -1454,9 +1454,9 @@ body {
 
 .search-box {
 
-    width: 325px;
+    width: 300px;
 
-    height: 48px;
+    height: 44px;
 
     flex-shrink: 0;
 
@@ -1464,10 +1464,10 @@ body {
 
     align-items: center;
 
-    gap: 11px;
+    gap: 10px;
 
     padding:
-        0 15px;
+        0 14px;
 
     border:
         1px solid var(--border);
@@ -1488,7 +1488,7 @@ body {
     color:
         #65736b;
 
-    font-size: 16px;
+    font-size: 15px;
 }
 
 
@@ -1510,7 +1510,7 @@ body {
         "Inter",
         sans-serif;
 
-    font-size: 13px;
+    font-size: 12px;
 }
 
 
@@ -1532,7 +1532,7 @@ body {
     border:
         1px solid var(--border);
 
-    border-radius: 16px;
+    border-radius: 15px;
 
     background:
         #ffffff;
@@ -1554,13 +1554,63 @@ body {
 
     width: 100%;
 
-    min-width: 1050px;
+    min-width: 950px;
 
     border-collapse: collapse;
 
     table-layout: fixed;
 }
 
+
+/* =========================================================
+   COLUMN WIDTHS
+========================================================= */
+
+.request-table th:nth-child(1),
+.request-table td:nth-child(1) {
+
+    width: 20%;
+}
+
+
+.request-table th:nth-child(2),
+.request-table td:nth-child(2) {
+
+    width: 19%;
+}
+
+
+.request-table th:nth-child(3),
+.request-table td:nth-child(3) {
+
+    width: 10%;
+}
+
+
+.request-table th:nth-child(4),
+.request-table td:nth-child(4) {
+
+    width: 9%;
+}
+
+
+.request-table th:nth-child(5),
+.request-table td:nth-child(5) {
+
+    width: 15%;
+}
+
+
+.request-table th:nth-child(6),
+.request-table td:nth-child(6) {
+
+    width: 27%;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
 
 .request-table thead {
 
@@ -1571,15 +1621,15 @@ body {
 
 .request-table th {
 
-    height: 54px;
+    height: 48px;
 
     padding:
-        0 18px;
+        0 14px;
 
     color:
         #53625a;
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 700;
 
@@ -1589,12 +1639,16 @@ body {
 }
 
 
+/* =========================================================
+   TABLE ROW
+========================================================= */
+
 .request-table td {
 
-    height: 91px;
+    height: 78px;
 
     padding:
-        12px 18px;
+        9px 14px;
 
     border-top:
         1px solid #edf1ee;
@@ -1627,14 +1681,14 @@ body {
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
 }
 
 
 .member-avatar {
 
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
 
     flex-shrink: 0;
 
@@ -1651,17 +1705,19 @@ body {
     color:
         var(--green);
 
-    font-size: 20px;
+    font-size: 17px;
 }
 
 
 .member-info > div:last-child {
 
+    min-width: 0;
+
     display: flex;
 
     flex-direction: column;
 
-    gap: 4px;
+    gap: 3px;
 }
 
 
@@ -1670,9 +1726,11 @@ body {
     color:
         var(--text);
 
-    font-size: 14px;
+    font-size: 13px;
 
     font-weight: 600;
+
+    line-height: 1.25;
 }
 
 
@@ -1681,7 +1739,7 @@ body {
     color:
         var(--muted);
 
-    font-size: 12px;
+    font-size: 11px;
 }
 
 
@@ -1695,7 +1753,7 @@ body {
 
     flex-direction: column;
 
-    gap: 5px;
+    gap: 3px;
 }
 
 
@@ -1704,9 +1762,11 @@ body {
     color:
         var(--text);
 
-    font-size: 13px;
+    font-size: 12px;
 
     font-weight: 600;
+
+    line-height: 1.25;
 }
 
 
@@ -1715,7 +1775,9 @@ body {
     color:
         var(--muted);
 
-    font-size: 11px;
+    font-size: 10px;
+
+    line-height: 1.25;
 }
 
 
@@ -1731,14 +1793,14 @@ body {
 
     justify-content: center;
 
-    min-width: 72px;
+    min-width: 65px;
 
     padding:
-        8px 12px;
+        7px 10px;
 
     border-radius: 20px;
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 700;
 }
@@ -1783,7 +1845,7 @@ body {
     color:
         var(--text);
 
-    font-size: 14px;
+    font-size: 13px;
 
     font-weight: 700;
 
@@ -1801,7 +1863,7 @@ body {
 
     flex-direction: column;
 
-    gap: 4px;
+    gap: 3px;
 }
 
 
@@ -1810,9 +1872,11 @@ body {
     color:
         #4c5952;
 
-    font-size: 12px;
+    font-size: 11px;
 
     font-weight: 500;
+
+    white-space: nowrap;
 }
 
 
@@ -1821,7 +1885,7 @@ body {
     color:
         var(--muted);
 
-    font-size: 11px;
+    font-size: 10px;
 }
 
 
@@ -1835,17 +1899,19 @@ body {
 
     align-items: center;
 
-    gap: 10px;
+    gap: 7px;
+
+    white-space: nowrap;
 }
 
 
 .accept-btn,
 .reject-btn {
 
-    height: 40px;
+    height: 34px;
 
     padding:
-        0 15px;
+        0 11px;
 
     border-radius: 7px;
 
@@ -1853,7 +1919,7 @@ body {
         "Inter",
         sans-serif;
 
-    font-size: 12px;
+    font-size: 11px;
 
     font-weight: 700;
 
@@ -1915,9 +1981,9 @@ body {
 .accept-btn i,
 .reject-btn i {
 
-    margin-right: 6px;
+    margin-right: 4px;
 
-    font-size: 12px;
+    font-size: 10px;
 }
 
 
@@ -1927,10 +1993,10 @@ body {
 
 .request-footer {
 
-    min-height: 65px;
+    min-height: 56px;
 
     padding:
-        0 18px 0 20px;
+        0 16px;
 
     display: flex;
 
@@ -1944,7 +2010,7 @@ body {
     color:
         var(--muted);
 
-    font-size: 12px;
+    font-size: 11px;
 }
 
 
@@ -1954,14 +2020,14 @@ body {
 
     align-items: center;
 
-    gap: 7px;
+    gap: 6px;
 }
 
 
 .pagination button {
 
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
 
     display: flex;
 
@@ -1971,7 +2037,7 @@ body {
     border:
         1px solid var(--border);
 
-    border-radius: 8px;
+    border-radius: 7px;
 
     background:
         #ffffff;
@@ -1983,7 +2049,7 @@ body {
         "Inter",
         sans-serif;
 
-    font-size: 12px;
+    font-size: 11px;
 
     cursor: pointer;
 }
@@ -2036,7 +2102,7 @@ body {
     display: none;
 
     padding:
-        60px 20px;
+        50px 20px;
 
     text-align: center;
 }
@@ -2050,11 +2116,11 @@ body {
 
 .empty-icon {
 
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
 
     margin:
-        0 auto 15px;
+        0 auto 12px;
 
     border-radius: 50%;
 
@@ -2069,19 +2135,19 @@ body {
     color:
         var(--green);
 
-    font-size: 22px;
+    font-size: 20px;
 }
 
 
 .empty-state h3 {
 
     margin:
-        0 0 6px;
+        0 0 5px;
 
     color:
         var(--text);
 
-    font-size: 17px;
+    font-size: 16px;
 }
 
 
@@ -2092,12 +2158,12 @@ body {
     color:
         var(--muted);
 
-    font-size: 13px;
+    font-size: 12px;
 }
 
 
 /* =========================================================
-   CLIENT REQUESTS RESPONSIVE
+   RESPONSIVE
 ========================================================= */
 
 @media (max-width: 1200px) {
@@ -2114,7 +2180,13 @@ body {
 
         width: 100%;
 
-        max-width: 400px;
+        max-width: 360px;
+    }
+
+
+    .request-table {
+
+        min-width: 950px;
     }
 
 }
@@ -2124,7 +2196,7 @@ body {
 
     .page-title h1 {
 
-        font-size: 36px;
+        font-size: 34px;
     }
 
 }
@@ -2141,13 +2213,13 @@ body {
 
     .page-title h1 {
 
-        font-size: 32px;
+        font-size: 30px;
     }
 
 
     .page-title p {
 
-        font-size: 14px;
+        font-size: 13px;
     }
 
 
@@ -2166,8 +2238,7 @@ body {
     .request-footer {
 
         padding:
-            0 14px;
-
+            0 12px;
     }
 
 }
