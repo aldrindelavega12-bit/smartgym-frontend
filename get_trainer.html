@@ -830,16 +830,15 @@ async function loadTrainerPlans(){
 
         buildTrainerData();
 
-        const hasExistingTrainer =
-            await checkExistingTrainer();
+        await checkExistingTrainer();
 
         renderDurations();
 
         renderTrainers();
 
-        if(hasExistingTrainer){
+        if(existingTrainer){
 
-            lockTrainerSelection();
+            showExistingTrainerInfo();
 
         }
 
@@ -877,6 +876,10 @@ async function loadTrainerPlans(){
    CHECK EXISTING TRAINER
 ========================================================= */
 
+/* =========================================================
+   CHECK EXISTING TRAINER
+========================================================= */
+
 async function checkExistingTrainer(){
 
     const memberId =
@@ -893,7 +896,6 @@ async function checkExistingTrainer(){
 
     }
 
-
     try{
 
         const response =
@@ -904,10 +906,8 @@ async function checkExistingTrainer(){
                 }
             );
 
-
         const result =
             await response.json();
-
 
         if(!response.ok){
 
@@ -918,18 +918,48 @@ async function checkExistingTrainer(){
 
         }
 
-
         if(result.has_trainer){
-
-            trainerLocked = true;
 
             existingTrainer =
                 result.trainer;
 
-            return true;
+            /*
+             * May current active/pending trainer.
+             * I-lock lang natin kung covered pa
+             * ng current training period ang TODAY.
+             *
+             * Kapag future renewal na,
+             * papayagan pa rin pumili.
+             */
+
+            const today =
+                getTodayDate();
+
+            const existingEnd =
+                existingTrainer.end_date ||
+                null;
+
+            if(
+                existingEnd &&
+                existingEnd >= today
+            ){
+
+                trainerLocked = true;
+
+                return true;
+
+            }
+
+            /*
+             * Expired na ang previous training.
+             * Puwede nang mag-renew o magpalit ng trainer.
+             */
+
+            trainerLocked = false;
+
+            return false;
 
         }
-
 
         trainerLocked = false;
 
@@ -945,12 +975,6 @@ async function checkExistingTrainer(){
             error
         );
 
-        /*
-           Fail closed:
-           kapag hindi natin ma-verify,
-           huwag muna payagan ang bagong request.
-        */
-
         trainerLocked = true;
 
         existingTrainer = null;
@@ -960,6 +984,7 @@ async function checkExistingTrainer(){
     }
 
 }
+
 /* =========================================================
    BUILD TRAINER DATA
 ========================================================= */
@@ -1557,6 +1582,41 @@ function selectDefaultTrainer(){
 
 }
 
+
+/* =========================================================
+   SHOW EXISTING TRAINER INFO
+========================================================= */
+
+function showExistingTrainerInfo(){
+
+    if(!existingTrainer){
+
+        return;
+
+    }
+
+    /*
+     * Ipakita lang ang current trainer information.
+     * Hindi muna bina-block ang selection.
+     *
+     * Kapag pumili ang member ng bagong dates,
+     * saka natin malalaman kung renewal/change trainer
+     * at backend ang magde-decide ng action.
+     */
+
+    document.getElementById(
+        "selectedTrainer"
+    ).innerText =
+        existingTrainer.trainer_name ||
+        "-";
+
+    document.getElementById(
+        "detailTrainer"
+    ).innerText =
+        existingTrainer.trainer_name ||
+        "-";
+
+}
 /* =========================================================
    LOCK TRAINER SELECTION
 ========================================================= */
@@ -1611,13 +1671,54 @@ function lockTrainerSelection(){
             "locked"
         );
 
-        sendButton.querySelector(
-            "span"
-        ).innerText =
-            "Trainer Already Assigned";
+
+        /*
+         * ============================================
+         * BUTTON TEXT BASED ON TRAINER STATUS
+         * ============================================
+         */
+
+        if(
+            existingTrainer &&
+            existingTrainer.status === "pending"
+        ){
+
+            sendButton.querySelector(
+                "span"
+            ).innerText =
+                "Request Pending";
+
+        }
+
+        else if(
+            existingTrainer &&
+            existingTrainer.status === "active"
+        ){
+
+            sendButton.querySelector(
+                "span"
+            ).innerText =
+                "Trainer Active";
+
+        }
+
+        else{
+
+            sendButton.querySelector(
+                "span"
+            ).innerText =
+                "Trainer Already Assigned";
+
+        }
 
     }
 
+
+    /*
+     * ============================================
+     * DISPLAY EXISTING TRAINER
+     * ============================================
+     */
 
     if(existingTrainer){
 
@@ -1649,6 +1750,12 @@ function lockTrainerSelection(){
             "-";
 
 
+        /*
+         * ============================================
+         * PRICE
+         * ============================================
+         */
+
         document.getElementById(
             "detailPrice"
         ).innerText =
@@ -1663,9 +1770,17 @@ function lockTrainerSelection(){
                 }
             );
 
+
+        /*
+         * ============================================
+         * TRAINING DATES
+         * ============================================
+         */
+
         selectedStartDate =
             existingTrainer.start_date ||
             null;
+
 
         selectedEndDate =
             existingTrainer.end_date ||
@@ -1701,9 +1816,52 @@ function lockTrainerSelection(){
                 selectedEndDate
             );
 
+
+        /*
+         * ============================================
+         * TRAINING DATE INFO
+         * ============================================
+         */
+
+        const info =
+            document.getElementById(
+                "trainingDateInfo"
+            );
+
+
+        if(
+            existingTrainer.start_date &&
+            existingTrainer.end_date
+        ){
+
+            info.innerHTML = `
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Your training runs from
+                    <strong>
+                        ${formatDate(
+                            existingTrainer.start_date
+                        )}
+                    </strong>
+                    to
+                    <strong>
+                        ${formatDate(
+                            existingTrainer.end_date
+                        )}
+                    </strong>.
+                </span>
+
+            `;
+
+        }
+
     }
 
 }
+
+
 
 /* =========================================================
    START DATE SETUP
@@ -1961,18 +2119,11 @@ function escapeHtml(value){
    SEND REQUEST
 ========================================================= */
 
+/* =========================================================
+   SEND REQUEST
+========================================================= */
+
 async function sendTrainerRequest(){
-
-    if(trainerLocked){
-
-        showNotifPopup(
-            "Trainer Already Assigned",
-            "You already have a trainer for the current date."
-        );
-
-        return;
-
-    }
 
     if(!selectedTrainerId){
 
@@ -1984,6 +2135,7 @@ async function sendTrainerRequest(){
         return;
 
     }
+
 
     if(!selectedStartDate){
 
@@ -2117,27 +2269,145 @@ async function sendTrainerRequest(){
         }
 
 
-        showNotifPopup(
-            "Request Submitted",
-            `Your request for ${selectedTrainer} (${selectedDuration}) has been submitted.`
-        );
+        /*
+         * =====================================================
+         * RENEWAL
+         * SAME TRAINER
+         * DIRECT ACTIVE
+         * =====================================================
+         */
 
-        trainerLocked = true;
+        if(result.action === "renewed"){
 
-        existingTrainer = {
+            trainerLocked = true;
 
-            trainer_name:
-                selectedTrainer,
+            existingTrainer = {
 
-            plan_name:
-                selectedDuration,
+                trainer_name:
+                    result.trainer_name,
 
-            price:
-                selectedPrice
+                plan_name:
+                    result.plan_name,
 
-        };
+                price:
+                    Number(result.price),
 
-        lockTrainerSelection();
+                start_date:
+                    result.start_date,
+
+                end_date:
+                    result.end_date,
+
+                status:
+                    "active"
+
+            };
+
+
+            showNotifPopup(
+                "Training Renewed",
+                "Your training has been renewed successfully."
+            );
+
+
+            lockTrainerSelection();
+
+
+        }
+
+
+        /*
+         * =====================================================
+         * CHANGE TRAINER
+         * PENDING
+         * =====================================================
+         */
+
+        else if(
+            result.action ===
+            "changed_trainer"
+        ){
+
+            trainerLocked = true;
+
+            existingTrainer = {
+
+                trainer_name:
+                    result.trainer_name,
+
+                plan_name:
+                    result.plan_name,
+
+                price:
+                    Number(result.price),
+
+                start_date:
+                    result.start_date,
+
+                end_date:
+                    result.end_date,
+
+                status:
+                    "pending"
+
+            };
+
+
+            showNotifPopup(
+                "Trainer Request Sent",
+                "Your request to change trainer has been submitted and is pending approval."
+            );
+
+
+            lockTrainerSelection();
+
+
+        }
+
+
+        /*
+         * =====================================================
+         * FIRST TRAINER REQUEST
+         * PENDING
+         * =====================================================
+         */
+
+        else{
+
+            trainerLocked = true;
+
+            existingTrainer = {
+
+                trainer_name:
+                    result.trainer_name,
+
+                plan_name:
+                    result.plan_name,
+
+                price:
+                    Number(result.price),
+
+                start_date:
+                    result.start_date,
+
+                end_date:
+                    result.end_date,
+
+                status:
+                    "pending"
+
+            };
+
+
+            showNotifPopup(
+                "Trainer Request Sent",
+                "Your trainer request has been submitted and is pending approval."
+            );
+
+
+            lockTrainerSelection();
+
+        }
 
 
         console.log(
