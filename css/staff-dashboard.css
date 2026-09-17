@@ -2356,3 +2356,24 @@ body {
 .trainer-pricing-fields.show {
     display: block;
 }
+
+.trainer-pricing-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.trainer-price-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.trainer-price-group label {
+    margin-bottom: 8px;
+}
+
+.trainer-price-group input {
+    width: 100%;
+    box-sizing: border-box;
+}
