@@ -311,18 +311,68 @@ if (!user || user.role !== "member") {
 
 
             <!-- =================================================
-                 LEFT SIDE
+                LEFT SIDE
             ================================================== -->
 
             <div class="trainer-left">
 
 
                 <!-- =================================================
-                     SELECT DURATION
+                    1. SELECT TRAINING START DATE
                 ================================================== -->
 
                 <section class="trainer-panel">
 
+                    <div class="section-header">
+
+                        <h2>
+                            Select Training Start Date
+                        </h2>
+
+                        <p>
+                            Choose when you want your training to start.
+                        </p>
+
+                    </div>
+
+
+                    <div class="start-date-wrapper">
+
+                        <div class="start-date-input">
+
+                            <i class="fa-regular fa-calendar-days"></i>
+
+                            <input
+                                type="date"
+                                id="startDate"
+                                onchange="selectStartDate()">
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="training-date-info"
+                        id="trainingDateInfo">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>
+                            Select a start date to see your training period.
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                    2. SELECT DURATION
+                ================================================== -->
+
+                <section class="trainer-panel">
 
                     <div class="section-header">
 
@@ -337,28 +387,21 @@ if (!user || user.role !== "member") {
                     </div>
 
 
-                    <!--
-                        DURATION CARDS WILL BE
-                        LOADED FROM THE API
-                    -->
-
                     <div
                         class="duration-options"
                         id="durationOptions">
 
                     </div>
 
-
                 </section>
 
 
 
                 <!-- =================================================
-                     CHOOSE TRAINER
+                    3. CHOOSE TRAINER
                 ================================================== -->
 
                 <section class="trainer-panel">
-
 
                     <div class="section-header">
 
@@ -373,71 +416,16 @@ if (!user || user.role !== "member") {
                     </div>
 
 
-                    <!--
-                        TRAINER CARDS WILL BE
-                        LOADED FROM THE API
-                    -->
-
                     <div
                         class="trainer-options"
                         id="trainerOptions">
 
                     </div>
 
-
                 </section>
 
 
             </div>
-
-            <!-- =================================================
-                SELECT TRAINING START DATE
-            ================================================== -->
-
-            <section class="trainer-panel">
-
-                <div class="section-header">
-
-                    <h2>
-                        Select Training Start Date
-                    </h2>
-
-                    <p>
-                        Choose when you want your training to start.
-                    </p>
-
-                </div>
-
-
-                <div class="start-date-wrapper">
-
-                    <div class="start-date-input">
-
-                        <i class="fa-regular fa-calendar-days"></i>
-
-                        <input
-                            type="date"
-                            id="startDate"
-                            onchange="selectStartDate()">
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="training-date-info"
-                    id="trainingDateInfo">
-
-                    <i class="fa-solid fa-circle-info"></i>
-
-                    <span>
-                        Select a start date to see your training period.
-                    </span>
-
-                </div>
-
-            </section>
 
 
 
@@ -852,13 +840,6 @@ async function loadTrainerPlans(){
         if(hasExistingTrainer){
 
             lockTrainerSelection();
-
-        }
-        else{
-
-            selectDefaultDuration();
-
-            selectDefaultTrainer();
 
         }
 
@@ -1724,6 +1705,10 @@ function lockTrainerSelection(){
 
 }
 
+/* =========================================================
+   START DATE SETUP
+========================================================= */
+
 const startDateInput =
     document.getElementById(
         "startDate"
@@ -1732,13 +1717,11 @@ const startDateInput =
 
 if(startDateInput){
 
-    startDateInput.disabled = true;
-
-    startDateInput.classList.add(
-        "locked"
-    );
+    startDateInput.min =
+        getTodayDate();
 
 }
+
 /* =========================================================
    SELECT DURATION
 ========================================================= */
@@ -2002,6 +1985,17 @@ async function sendTrainerRequest(){
 
     }
 
+    if(!selectedStartDate){
+
+        showNotifPopup(
+            "Request Failed",
+            "Please select a training start date."
+        );
+
+        return;
+
+    }
+
 
     if(!selectedDurationValue){
 
@@ -2095,7 +2089,10 @@ async function sendTrainerRequest(){
                             selectedTrainerId,
 
                         plan_id:
-                            plan.id
+                            plan.id,
+
+                        start_date:
+                            selectedStartDate
 
                     })
 

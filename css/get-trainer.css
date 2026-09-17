@@ -1409,3 +1409,111 @@ body .navbar .menu a[href="get_trainer.html"]:hover i {
     pointer-events: none;
 
 }
+
+/* =========================================================
+   TRAINING START DATE
+========================================================= */
+
+.start-date-wrapper {
+    width: 100%;
+}
+
+.start-date-input {
+    position: relative;
+
+    width: 100%;
+}
+
+.start-date-input i {
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--green);
+
+    font-size: 17px;
+
+    pointer-events: none;
+}
+
+.start-date-input input {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 14px 0 44px;
+
+    border: 1px solid #dfe9e4;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.start-date-input input:focus {
+    border-color: #0aa54f;
+
+    box-shadow:
+        0 0 0 3px rgba(10, 165, 79, .10);
+}
+
+
+/* =========================================================
+   TRAINING DATE INFO
+========================================================= */
+
+.training-date-info {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 10px;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    background: #e7f4fd;
+
+    color: #1769aa;
+
+    font-size: 11px;
+
+    line-height: 1.45;
+}
+
+.training-date-info i {
+    margin-top: 2px;
+
+    flex-shrink: 0;
+
+    color: #1687d4;
+}
+
+.training-date-info span {
+    color: #1769aa;
+}
+
+.training-date-info strong {
+    font-weight: 700;
+}
