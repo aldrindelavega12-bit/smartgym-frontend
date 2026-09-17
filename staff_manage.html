@@ -426,9 +426,12 @@ if(
 
         </div>
 
-        <div id="trainerPricingFields" class="trainer-pricing-fields">
+        <div
+            id="trainerPricingFields"
+            class="trainer-pricing-fields">
 
             <div class="staff-form-group">
+
                 <label>
                     Price Per Day
                 </label>
@@ -439,9 +442,12 @@ if(
                     placeholder="Enter price"
                     min="0"
                     step="0.01">
+
             </div>
 
+
             <div class="staff-form-group">
+
                 <label>
                     Price Per Week
                 </label>
@@ -452,9 +458,12 @@ if(
                     placeholder="Enter price"
                     min="0"
                     step="0.01">
+
             </div>
 
+
             <div class="staff-form-group">
+
                 <label>
                     Price Per Month
                 </label>
@@ -465,6 +474,7 @@ if(
                     placeholder="Enter price"
                     min="0"
                     step="0.01">
+
             </div>
 
         </div>
@@ -1341,27 +1351,7 @@ function toggleActionMenu(index){
 
 }
 
-const roleSelect = document.getElementById("role");
-const trainerPricingFields =
-    document.getElementById("trainerPricingFields");
 
-roleSelect.addEventListener("change", function () {
-
-    if (this.value === "trainer") {
-
-        trainerPricingFields.classList.add("show");
-
-    } else {
-
-        trainerPricingFields.classList.remove("show");
-
-        document.getElementById("priceDay").value = "";
-        document.getElementById("priceWeek").value = "";
-        document.getElementById("priceMonth").value = "";
-
-    }
-
-});
 
 /* =====================================================
    ADD STAFF MODAL
@@ -1392,7 +1382,56 @@ function closeStaffModal(){
 
 }
 
+/* =====================================================
+   TRAINER PRICING
+===================================================== */
 
+const roleSelect =
+    document.getElementById("role");
+
+const trainerPricingFields =
+    document.getElementById(
+        "trainerPricingFields"
+    );
+
+
+roleSelect.addEventListener(
+    "change",
+    function(){
+
+        if(this.value === "trainer"){
+
+            trainerPricingFields
+                .classList
+                .add("show");
+
+        }
+        else{
+
+            trainerPricingFields
+                .classList
+                .remove("show");
+
+            document.getElementById(
+                "priceDay"
+            ).value = "";
+
+            document.getElementById(
+                "priceWeek"
+            ).value = "";
+
+            document.getElementById(
+                "priceMonth"
+            ).value = "";
+
+        }
+
+    }
+);
+
+/* =====================================================
+   CREATE STAFF
+===================================================== */
 
 /* =====================================================
    CREATE STAFF
@@ -1401,20 +1440,57 @@ function closeStaffModal(){
 async function createAccount(){
 
     const fullname =
-        document.getElementById("fullname").value.trim();
+        document.getElementById(
+            "fullname"
+        ).value.trim();
+
 
     const role =
-        document.getElementById("role").value;
+        document.getElementById(
+            "role"
+        ).value;
+
 
     const username =
-        document.getElementById("username").value.trim();
+        document.getElementById(
+            "username"
+        ).value.trim();
+
 
     const password =
-        document.getElementById("password").value;
+        document.getElementById(
+            "password"
+        ).value;
+
 
     const confirmPassword =
-        document.getElementById("confirmPassword").value;
+        document.getElementById(
+            "confirmPassword"
+        ).value;
 
+
+    const priceDay =
+        document.getElementById(
+            "priceDay"
+        ).value;
+
+
+    const priceWeek =
+        document.getElementById(
+            "priceWeek"
+        ).value;
+
+
+    const priceMonth =
+        document.getElementById(
+            "priceMonth"
+        ).value;
+
+
+
+    /* =========================
+       REQUIRED FIELDS
+    ========================= */
 
     if(
         !fullname ||
@@ -1423,46 +1499,114 @@ async function createAccount(){
         !confirmPassword
     ){
 
-        alert("Complete all fields.");
+        alert(
+            "Complete all fields."
+        );
+
         return;
 
     }
 
 
-    if(password !== confirmPassword){
 
-        alert("Passwords do not match.");
+    /* =========================
+       PASSWORD
+    ========================= */
+
+    if(
+        password !== confirmPassword
+    ){
+
+        alert(
+            "Passwords do not match."
+        );
+
         return;
 
     }
+
+
+
+    /* =========================
+       TRAINER PRICES
+    ========================= */
+
+    if(role === "trainer"){
+
+        if(
+            priceDay === "" ||
+            priceWeek === "" ||
+            priceMonth === ""
+        ){
+
+            alert(
+                "Please enter all trainer prices."
+            );
+
+            return;
+
+        }
+
+    }
+
 
 
     try{
 
-        const res = await fetch(
-            `${API_URL}/api/create_staff_account`,
-            {
-                method: "POST",
+        const res =
+            await fetch(
+                `${API_URL}/api/create_staff_account`,
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
-                    fullname,
-                    role,
-                    username,
-                    password
-                })
-            }
-        );
+                    body: JSON.stringify({
+
+                        fullname,
+
+                        role,
+
+                        username,
+
+                        password,
+
+                        price_day:
+                            role === "trainer"
+                            ? Number(priceDay)
+                            : null,
+
+                        price_week:
+                            role === "trainer"
+                            ? Number(priceWeek)
+                            : null,
+
+                        price_month:
+                            role === "trainer"
+                            ? Number(priceMonth)
+                            : null
+
+                    })
+
+                }
+            );
 
 
-        const data = await res.json();
+        const data =
+            await res.json();
 
 
-        if(data.status !== "success"){
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        if(
+            data.status !== "success"
+        ){
 
             alert(
                 data.message ||
@@ -1474,40 +1618,84 @@ async function createAccount(){
         }
 
 
+
+        /* =========================
+           SUCCESS
+        ========================= */
+
         showSuccessModal(
+
             "Successfully Created!",
-            "The staff account has been successfully created."
+
+            role === "trainer"
+            ? "The trainer account and pricing have been successfully created."
+            : "The staff account has been successfully created."
+
         );
 
-        // CLEAR FORM
+
+
+        /* =========================
+           CLEAR FORM
+        ========================= */
 
         document.getElementById(
             "fullname"
         ).value = "";
 
+
         document.getElementById(
             "role"
         ).value = "staff";
+
 
         document.getElementById(
             "username"
         ).value = "";
 
+
         document.getElementById(
             "password"
         ).value = "";
+
 
         document.getElementById(
             "confirmPassword"
         ).value = "";
 
 
-        // CLOSE MODAL
+        document.getElementById(
+            "priceDay"
+        ).value = "";
+
+
+        document.getElementById(
+            "priceWeek"
+        ).value = "";
+
+
+        document.getElementById(
+            "priceMonth"
+        ).value = "";
+
+
+        trainerPricingFields
+            .classList
+            .remove("show");
+
+
+
+        /* =========================
+           CLOSE MODAL
+        ========================= */
 
         closeStaffModal();
 
 
-        // RELOAD FROM DATABASE
+
+        /* =========================
+           RELOAD DATABASE DATA
+        ========================= */
 
         await loadStaff();
 
