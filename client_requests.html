@@ -130,6 +130,14 @@
 
             Client Requests
 
+            <span
+                id="request-count"
+                class="msg-count">
+
+                0
+
+            </span>
+
         </a>
 
 
@@ -251,6 +259,12 @@
 
             <div class="page-title">
 
+
+                <span>
+                    CLIENT REQUESTS
+                </span>
+
+
                 <h1>
                     Client Requests
                 </h1>
@@ -335,647 +349,12 @@
 
 
 
+                    <!--
+                        REQUESTS WILL BE LOADED
+                        FROM THE API
+                    -->
+
                     <tbody id="requestTableBody">
-
-
-                        <!-- REQUEST 1 -->
-
-                        <tr data-name="Juan Dela Cruz">
-
-
-                            <td>
-
-                                <div class="member-info">
-
-
-                                    <div class="member-avatar">
-
-                                        <i class="fa-solid fa-user"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            Juan Dela Cruz
-                                        </strong>
-
-                                        <small>
-                                            M0001
-                                        </small>
-
-                                    </div>
-
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="plan-info">
-
-                                    <strong>
-                                        Personal Training
-                                    </strong>
-
-                                    <small>
-                                        General Fitness
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <span class="duration-badge green">
-                                    1 Week
-                                </span>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <strong class="price">
-                                    ₱300
-                                </strong>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="date-info">
-
-                                    <strong>
-                                        Sep 16, 2026
-                                    </strong>
-
-                                    <small>
-                                        10:24 AM
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="action-buttons">
-
-
-                                    <button
-                                        class="accept-btn"
-                                        onclick="acceptRequest(this)">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                        Accept
-
-                                    </button>
-
-
-                                    <button
-                                        class="reject-btn"
-                                        onclick="rejectRequest(this)">
-
-                                        <i class="fa-solid fa-xmark"></i>
-
-                                        Reject
-
-                                    </button>
-
-
-                                </div>
-
-                            </td>
-
-
-                        </tr>
-
-
-
-                        <!-- REQUEST 2 -->
-
-                        <tr data-name="Maria Santos">
-
-
-                            <td>
-
-                                <div class="member-info">
-
-
-                                    <div class="member-avatar">
-
-                                        <i class="fa-solid fa-user"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            Maria Santos
-                                        </strong>
-
-                                        <small>
-                                            M0002
-                                        </small>
-
-                                    </div>
-
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="plan-info">
-
-                                    <strong>
-                                        Weight Loss Program
-                                    </strong>
-
-                                    <small>
-                                        Lose Weight • Get Fit
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <span class="duration-badge blue">
-                                    1 Month
-                                </span>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <strong class="price">
-                                    ₱1,000
-                                </strong>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="date-info">
-
-                                    <strong>
-                                        Sep 15, 2026
-                                    </strong>
-
-                                    <small>
-                                        02:18 PM
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="action-buttons">
-
-
-                                    <button
-                                        class="accept-btn"
-                                        onclick="acceptRequest(this)">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                        Accept
-
-                                    </button>
-
-
-                                    <button
-                                        class="reject-btn"
-                                        onclick="rejectRequest(this)">
-
-                                        <i class="fa-solid fa-xmark"></i>
-
-                                        Reject
-
-                                    </button>
-
-
-                                </div>
-
-                            </td>
-
-
-                        </tr>
-
-
-
-                        <!-- REQUEST 3 -->
-
-                        <tr data-name="Carlos Reyes">
-
-
-                            <td>
-
-                                <div class="member-info">
-
-
-                                    <div class="member-avatar">
-
-                                        <i class="fa-solid fa-user"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            Carlos Reyes
-                                        </strong>
-
-                                        <small>
-                                            M0003
-                                        </small>
-
-                                    </div>
-
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="plan-info">
-
-                                    <strong>
-                                        Muscle Gain
-                                    </strong>
-
-                                    <small>
-                                        Strength & Conditioning
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <span class="duration-badge purple">
-                                    1 Day
-                                </span>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <strong class="price">
-                                    ₱150
-                                </strong>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="date-info">
-
-                                    <strong>
-                                        Sep 15, 2026
-                                    </strong>
-
-                                    <small>
-                                        11:05 AM
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="action-buttons">
-
-
-                                    <button
-                                        class="accept-btn"
-                                        onclick="acceptRequest(this)">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                        Accept
-
-                                    </button>
-
-
-                                    <button
-                                        class="reject-btn"
-                                        onclick="rejectRequest(this)">
-
-                                        <i class="fa-solid fa-xmark"></i>
-
-                                        Reject
-
-                                    </button>
-
-
-                                </div>
-
-                            </td>
-
-
-                        </tr>
-
-
-
-                        <!-- REQUEST 4 -->
-
-                        <tr data-name="Angelica Reyes">
-
-
-                            <td>
-
-                                <div class="member-info">
-
-
-                                    <div class="member-avatar">
-
-                                        <i class="fa-solid fa-user"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            Angelica Reyes
-                                        </strong>
-
-                                        <small>
-                                            M0004
-                                        </small>
-
-                                    </div>
-
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="plan-info">
-
-                                    <strong>
-                                        General Fitness
-                                    </strong>
-
-                                    <small>
-                                        Workout Guidance
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <span class="duration-badge green">
-                                    1 Week
-                                </span>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <strong class="price">
-                                    ₱300
-                                </strong>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="date-info">
-
-                                    <strong>
-                                        Sep 14, 2026
-                                    </strong>
-
-                                    <small>
-                                        04:32 PM
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="action-buttons">
-
-
-                                    <button
-                                        class="accept-btn"
-                                        onclick="acceptRequest(this)">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                        Accept
-
-                                    </button>
-
-
-                                    <button
-                                        class="reject-btn"
-                                        onclick="rejectRequest(this)">
-
-                                        <i class="fa-solid fa-xmark"></i>
-
-                                        Reject
-
-                                    </button>
-
-
-                                </div>
-
-                            </td>
-
-
-                        </tr>
-
-
-
-                        <!-- REQUEST 5 -->
-
-                        <tr data-name="Peter Lim">
-
-
-                            <td>
-
-                                <div class="member-info">
-
-
-                                    <div class="member-avatar">
-
-                                        <i class="fa-solid fa-user"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            Peter Lim
-                                        </strong>
-
-                                        <small>
-                                            M0005
-                                        </small>
-
-                                    </div>
-
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="plan-info">
-
-                                    <strong>
-                                        Body Toning
-                                    </strong>
-
-                                    <small>
-                                        Tone & Sculpt
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <span class="duration-badge blue">
-                                    1 Month
-                                </span>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <strong class="price">
-                                    ₱1,000
-                                </strong>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="date-info">
-
-                                    <strong>
-                                        Sep 13, 2026
-                                    </strong>
-
-                                    <small>
-                                        09:14 AM
-                                    </small>
-
-                                </div>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <div class="action-buttons">
-
-
-                                    <button
-                                        class="accept-btn"
-                                        onclick="acceptRequest(this)">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                        Accept
-
-                                    </button>
-
-
-                                    <button
-                                        class="reject-btn"
-                                        onclick="rejectRequest(this)">
-
-                                        <i class="fa-solid fa-xmark"></i>
-
-                                        Reject
-
-                                    </button>
-
-
-                                </div>
-
-                            </td>
-
-
-                        </tr>
-
 
                     </tbody>
 
@@ -983,7 +362,10 @@
                 </table>
 
 
-                <!-- EMPTY STATE -->
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
 
                 <div
                     id="emptyState"
@@ -1022,7 +404,7 @@
 
 
                 <span id="requestCount">
-                    Showing 1 to 5 of 5 requests
+                    Loading requests...
                 </span>
 
 
@@ -1030,19 +412,27 @@
                 <div class="pagination">
 
 
-                    <button disabled>
+                    <button
+                        id="prevPage"
+                        disabled>
 
                         <i class="fa-solid fa-chevron-left"></i>
 
                     </button>
 
 
-                    <button class="current-page">
+                    <button
+                        id="currentPage"
+                        class="current-page">
+
                         1
+
                     </button>
 
 
-                    <button disabled>
+                    <button
+                        id="nextPage"
+                        disabled>
 
                         <i class="fa-solid fa-chevron-right"></i>
 
@@ -1089,13 +479,18 @@
 
 <script>
 
+/* =====================================================
+   API
+===================================================== */
+
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-// =====================================================
-// USER CHECK
-// =====================================================
+
+/* =====================================================
+   USER
+===================================================== */
 
 const user =
     JSON.parse(
@@ -1114,9 +509,18 @@ if(
 }
 
 
-// =====================================================
-// MESSAGE COUNT
-// =====================================================
+
+/* =====================================================
+   DATA
+===================================================== */
+
+let clientRequests = [];
+
+
+
+/* =====================================================
+   MESSAGE COUNT
+===================================================== */
 
 async function loadMessageCount(){
 
@@ -1172,89 +576,515 @@ async function loadMessageCount(){
 }
 
 
-// =====================================================
-// ACCEPT REQUEST
-// =====================================================
 
-function acceptRequest(button){
+/* =====================================================
+   LOAD CLIENT REQUESTS
+===================================================== */
 
-    const row =
-        button.closest("tr");
+async function loadClientRequests(){
 
-
-    if(!row)
-        return;
-
-
-    const memberName =
-        row.dataset.name;
-
-
-    row.remove();
-
-
-    updateRequestCount();
-
-
-    showNotifPopup(
-        "Request Accepted",
-        `${memberName} has been added to your trainees.`
-    );
-
-}
-
-
-// =====================================================
-// REJECT REQUEST
-// =====================================================
-
-function rejectRequest(button){
-
-    const row =
-        button.closest("tr");
-
-
-    if(!row)
-        return;
-
-
-    const memberName =
-        row.dataset.name;
-
-
-    row.remove();
-
-
-    updateRequestCount();
-
-
-    showNotifPopup(
-        "Request Rejected",
-        `${memberName}'s request has been rejected.`
-    );
-
-}
-
-
-// =====================================================
-// REQUEST COUNT
-// =====================================================
-
-function updateRequestCount(){
-
-    const rows =
-        document.querySelectorAll(
-            "#requestTableBody tr"
+    const tableBody =
+        document.getElementById(
+            "requestTableBody"
         );
 
 
-    const count =
-        rows.length;
+    const emptyState =
+        document.getElementById(
+            "emptyState"
+        );
 
+
+    try{
+
+        const trainerId =
+            user.user_id;
+
+
+        if(!trainerId){
+
+            throw new Error(
+                "Trainer ID not found."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/requests/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        clientRequests =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        renderRequests(
+            clientRequests
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD CLIENT REQUESTS ERROR:",
+            error
+        );
+
+
+        clientRequests = [];
+
+
+        tableBody.innerHTML = "";
+
+
+        emptyState.classList.add(
+            "show"
+        );
+
+
+        document.getElementById(
+            "requestCount"
+        ).innerText =
+            "Unable to load requests.";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RENDER REQUESTS
+===================================================== */
+
+function renderRequests(
+    requests
+){
+
+    const tableBody =
+        document.getElementById(
+            "requestTableBody"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "emptyState"
+        );
+
+
+    tableBody.innerHTML = "";
+
+
+    if(
+        !requests ||
+        requests.length === 0
+    ){
+
+        emptyState.classList.add(
+            "show"
+        );
+
+
+        updateRequestCount(
+            0
+        );
+
+
+        return;
+
+    }
+
+
+    emptyState.classList.remove(
+        "show"
+    );
+
+
+    requests.forEach(
+        request => {
+
+            const row =
+                createRequestRow(
+                    request
+                );
+
+
+            tableBody.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    updateRequestCount(
+        requests.length
+    );
+
+}
+
+
+
+/* =====================================================
+   CREATE REQUEST ROW
+===================================================== */
+
+function createRequestRow(
+    request
+){
+
+    const row =
+        document.createElement(
+            "tr"
+        );
+
+
+    row.dataset.name =
+        request.full_name || "";
+
+
+    row.dataset.requestId =
+        request.id;
+
+
+    const durationDays =
+        Number(
+            request.duration_days || 0
+        );
+
+
+    const price =
+        Number(
+            request.price || 0
+        );
+
+
+    const durationText =
+        getDurationText(
+            durationDays
+        );
+
+
+    const durationClass =
+        getDurationClass(
+            durationDays
+        );
+
+
+    const requestedDate =
+        formatRequestDate(
+            request.created_at
+        );
+
+
+    row.innerHTML = `
+
+        <td>
+
+            <div class="member-info">
+
+                <div class="member-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${escapeHtml(
+                            request.full_name ||
+                            "Member"
+                        )}
+                    </strong>
+
+                    <small>
+                        ${escapeHtml(
+                            request.member_id ||
+                            "-"
+                        )}
+                    </small>
+
+                </div>
+
+            </div>
+
+        </td>
+
+
+        <td>
+
+            <div class="plan-info">
+
+                <strong>
+                    ${escapeHtml(
+                        request.plan_name ||
+                        "-"
+                    )}
+                </strong>
+
+                <small>
+                    Personal Training
+                </small>
+
+            </div>
+
+        </td>
+
+
+        <td>
+
+            <span
+                class="duration-badge ${durationClass}">
+
+                ${escapeHtml(
+                    durationText
+                )}
+
+            </span>
+
+        </td>
+
+
+        <td>
+
+            <strong class="price">
+
+                ₱${price.toLocaleString(
+                    "en-PH",
+                    {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2
+                    }
+                )}
+
+            </strong>
+
+        </td>
+
+
+        <td>
+
+            <div class="date-info">
+
+                <strong>
+                    ${requestedDate.date}
+                </strong>
+
+                <small>
+                    ${requestedDate.time}
+                </small>
+
+            </div>
+
+        </td>
+
+
+        <td>
+
+            <div class="action-buttons">
+
+                <button
+                    class="accept-btn"
+                    onclick="acceptRequest(this)">
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Accept
+
+                </button>
+
+
+                <button
+                    class="reject-btn"
+                    onclick="rejectRequest(this)">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Reject
+
+                </button>
+
+            </div>
+
+        </td>
+
+    `;
+
+
+    return row;
+
+}
+
+
+
+/* =====================================================
+   DURATION TEXT
+===================================================== */
+
+function getDurationText(
+    days
+){
+
+    if(days === 1)
+        return "1 Day";
+
+
+    if(days === 7)
+        return "1 Week";
+
+
+    if(days === 30)
+        return "1 Month";
+
+
+    return `${days} Days`;
+
+}
+
+
+
+/* =====================================================
+   DURATION COLOR
+===================================================== */
+
+function getDurationClass(
+    days
+){
+
+    if(days === 1)
+        return "purple";
+
+
+    if(days === 7)
+        return "green";
+
+
+    if(days === 30)
+        return "blue";
+
+
+    return "green";
+
+}
+
+
+
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatRequestDate(
+    value
+){
+
+    if(!value){
+
+        return {
+
+            date: "-",
+
+            time: "-"
+
+        };
+
+    }
+
+
+    const date =
+        new Date(
+            value.replace(
+                " ",
+                "T"
+            )
+        );
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return {
+
+            date: value,
+
+            time: ""
+
+        };
+
+    }
+
+
+    return {
+
+        date:
+            date.toLocaleDateString(
+                "en-US",
+                {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            ),
+
+        time:
+            date.toLocaleTimeString(
+                "en-US",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            )
+
+    };
+
+}
+
+
+
+/* =====================================================
+   REQUEST COUNT
+===================================================== */
+
+function updateRequestCount(
+    count
+){
 
     const countText =
         document.getElementById(
             "requestCount"
+        );
+
+
+    const requestBadge =
+        document.getElementById(
+            "request-count"
         );
 
 
@@ -1263,9 +1093,11 @@ function updateRequestCount(){
         countText.innerText =
             "No pending requests.";
 
-        document.getElementById(
-            "emptyState"
-        ).classList.add("show");
+        requestBadge.innerText =
+            "0";
+
+        requestBadge.style.display =
+            "none";
 
         return;
 
@@ -1275,19 +1107,31 @@ function updateRequestCount(){
     countText.innerText =
         `Showing 1 to ${count} of ${count} requests`;
 
+
+    requestBadge.innerText =
+        count > 99
+            ? "99+"
+            : count;
+
+
+    requestBadge.style.display =
+        "flex";
+
 }
 
 
-// =====================================================
-// SEARCH
-// =====================================================
+
+/* =====================================================
+   SEARCH
+===================================================== */
 
 function searchRequests(){
 
     const search =
         document.getElementById(
             "searchInput"
-        ).value
+        )
+        .value
         .toLowerCase()
         .trim();
 
@@ -1301,37 +1145,52 @@ function searchRequests(){
     let visibleCount = 0;
 
 
-    rows.forEach(row => {
+    rows.forEach(
+        row => {
 
-        const name =
-            row.dataset.name
-                .toLowerCase();
+            const name =
+                (
+                    row.dataset.name ||
+                    ""
+                ).toLowerCase();
 
 
-        if(
-            name.includes(search)
-        ){
+            if(
+                name.includes(search)
+            ){
 
-            row.style.display =
-                "";
+                row.style.display =
+                    "";
 
-            visibleCount++;
+                visibleCount++;
+
+            }
+            else{
+
+                row.style.display =
+                    "none";
+
+            }
 
         }
-        else{
-
-            row.style.display =
-                "none";
-
-        }
-
-    });
+    );
 
 
     const countText =
         document.getElementById(
             "requestCount"
         );
+
+
+    if(search === ""){
+
+        updateRequestCount(
+            clientRequests.length
+        );
+
+        return;
+
+    }
 
 
     if(visibleCount === 0){
@@ -1343,16 +1202,159 @@ function searchRequests(){
     else{
 
         countText.innerText =
-            `Showing ${visibleCount} of ${visibleCount} requests`;
+            `Showing ${visibleCount} of ${clientRequests.length} requests`;
 
     }
 
 }
 
 
-// =====================================================
-// NOTIFICATION
-// =====================================================
+
+/* =====================================================
+   ACCEPT REQUEST
+===================================================== */
+
+function acceptRequest(
+    button
+){
+
+    const row =
+        button.closest(
+            "tr"
+        );
+
+
+    if(!row)
+        return;
+
+
+    const memberName =
+        row.dataset.name;
+
+
+    /*
+       TEMPORARY UI ONLY
+
+       Actual API will be added next.
+    */
+
+    row.remove();
+
+
+    clientRequests =
+        clientRequests.filter(
+            request =>
+                String(request.id) !==
+                String(row.dataset.requestId)
+        );
+
+
+    updateRequestCount(
+        clientRequests.length
+    );
+
+
+    showNotifPopup(
+        "Request Accepted",
+        `${memberName} has been added to your trainees.`
+    );
+
+}
+
+
+
+/* =====================================================
+   REJECT REQUEST
+===================================================== */
+
+function rejectRequest(
+    button
+){
+
+    const row =
+        button.closest(
+            "tr"
+        );
+
+
+    if(!row)
+        return;
+
+
+    const memberName =
+        row.dataset.name;
+
+
+    /*
+       TEMPORARY UI ONLY
+
+       Actual API will be added next.
+    */
+
+    row.remove();
+
+
+    clientRequests =
+        clientRequests.filter(
+            request =>
+                String(request.id) !==
+                String(row.dataset.requestId)
+        );
+
+
+    updateRequestCount(
+        clientRequests.length
+    );
+
+
+    showNotifPopup(
+        "Request Rejected",
+        `${memberName}'s request has been rejected.`
+    );
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
 
 function showNotifPopup(
     title,
@@ -1396,9 +1398,10 @@ function showNotifPopup(
 }
 
 
-// =====================================================
-// PROFILE DROPDOWN
-// =====================================================
+
+/* =====================================================
+   PROFILE DROPDOWN
+===================================================== */
 
 function toggleTrainerMenu(){
 
@@ -1425,6 +1428,11 @@ function toggleTrainerMenu(){
 
 }
 
+
+
+/* =====================================================
+   CLICK OUTSIDE
+===================================================== */
 
 window.addEventListener(
     "click",
@@ -1471,9 +1479,10 @@ window.addEventListener(
 );
 
 
-// =====================================================
-// LOGOUT
-// =====================================================
+
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 function logout(){
 
@@ -1485,14 +1494,26 @@ function logout(){
 }
 
 
-// =====================================================
-// INITIAL LOAD
-// =====================================================
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
 
 loadMessageCount();
 
+loadClientRequests();
 
-// Refresh message count
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+setInterval(
+    loadClientRequests,
+    10000
+);
+
 
 setInterval(
     loadMessageCount,
