@@ -676,44 +676,530 @@ document.getElementById(
         .toUpperCase();
 
 
-
 /* =========================================================
-   SELECTION DATA
+   API
 ========================================================= */
 
-let selectedDuration =
-    "1 Day";
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
 
 
-let selectedPrice =
-    100;
+/* =========================================================
+   TRAINER DATA
+========================================================= */
+
+let trainerPlans = [];
+
+let trainers = [];
+
+let durations = [];
+
+let selectedDuration = null;
+
+let selectedDurationValue = null;
+
+let selectedTrainer = null;
+
+let selectedTrainerId = null;
+
+let selectedPrice = 0;
 
 
-let selectedTrainer =
-    "Mark Santos";
+/* =========================================================
+   LOAD TRAINER PLANS
+========================================================= */
+
+async function loadTrainerPlans(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/trainer_plans`,
+                {
+                    cache: "no-store"
+                }
+            );
 
 
-let selectedSpecialty =
-    "Strength Training";
+        if(!res.ok){
 
+            throw new Error(
+                `HTTP ${res.status}`
+            );
+
+        }
+
+
+        const data =
+            await res.json();
+
+
+        trainerPlans =
+            Array.isArray(data)
+            ? data
+            : [];
+
+
+        if(
+            trainerPlans.length === 0
+        ){
+
+            document.getElementById(
+                "durationOptions"
+            ).innerHTML = `
+                <p>
+                    No trainer plans available.
+                </p>
+            `;
+
+
+            document.getElementById(
+                "trainerOptions"
+            ).innerHTML = `
+                <p>
+                    No trainers available.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        buildTrainerData();
+
+        renderDurations();
+
+        renderTrainers();
+
+        selectDefaultDuration();
+
+        selectDefaultTrainer();
+
+    }
+    catch(error){
+
+        console.error(
+            "TRAINER PLANS LOAD ERROR:",
+            error
+        );
+
+
+        document.getElementById(
+            "durationOptions"
+        ).innerHTML = `
+            <p>
+                Failed to load trainer plans.
+            </p>
+        `;
+
+
+        document.getElementById(
+            "trainerOptions"
+        ).innerHTML = `
+            <p>
+                Failed to load trainers.
+            </p>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   BUILD TRAINER DATA
+========================================================= */
+
+function buildTrainerData(){
+
+    trainers = [];
+
+    durations = [];
+
+
+    trainerPlans.forEach(
+        plan => {
+
+            const trainerId =
+                String(
+                    plan.trainer_id
+                );
+
+
+            const durationDays =
+                Number(
+                    plan.duration_days
+                );
+
+
+            const price =
+                Number(
+                    plan.price
+                );
+
+
+            let trainer =
+                trainers.find(
+                    item =>
+                        item.id === trainerId
+                );
+
+
+            if(!trainer){
+
+                trainer = {
+
+                    id:
+                        trainerId,
+
+                    name:
+                        plan.fullname || "Trainer",
+
+                    plans: []
+
+                };
+
+
+                trainers.push(
+                    trainer
+                );
+
+            }
+
+
+            trainer.plans.push({
+
+                planName:
+                    plan.plan_name,
+
+                durationDays:
+                    durationDays,
+
+                price:
+                    price,
+
+                active:
+                    Number(
+                        plan.active
+                    )
+
+            });
+
+
+            const existingDuration =
+                durations.find(
+                    item =>
+                        item.days ===
+                        durationDays
+                );
+
+
+            if(
+                !existingDuration
+            ){
+
+                durations.push({
+
+                    name:
+                        plan.plan_name,
+
+                    days:
+                        durationDays
+
+                });
+
+            }
+
+        }
+    );
+
+
+    durations.sort(
+        (a,b) =>
+            a.days - b.days
+    );
+
+}
+
+
+/* =========================================================
+   RENDER DURATION
+========================================================= */
+
+function renderDurations(){
+
+    const container =
+        document.getElementById(
+            "durationOptions"
+        );
+
+
+    container.innerHTML = "";
+
+
+    durations.forEach(
+        duration => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "duration-card";
+
+
+            card.dataset.duration =
+                duration.name;
+
+
+            card.dataset.durationValue =
+                duration.days;
+
+
+            card.onclick =
+                function(){
+
+                    selectDuration(
+                        this
+                    );
+
+                };
+
+
+            card.innerHTML = `
+
+                <div class="duration-icon">
+
+                    <i class="fa-regular fa-calendar-days"></i>
+
+                    <span>
+                        ${duration.days}
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    ${escapeHtml(
+                        duration.name
+                    )}
+                </h3>
+
+
+                <p>
+                    Get a trainer for<br>
+                    ${getDurationText(
+                        duration.days
+                    )}
+                </p>
+
+
+                <div class="radio-circle">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DURATION TEXT
+========================================================= */
+
+function getDurationText(days){
+
+    if(days === 1){
+
+        return "one day.";
+
+    }
+
+
+    if(days === 7){
+
+        return "seven days.";
+
+    }
+
+
+    if(days === 30){
+
+        return "thirty days.";
+
+    }
+
+
+    return `${days} days.`;
+
+}
+
+
+/* =========================================================
+   RENDER TRAINERS
+========================================================= */
+
+function renderTrainers(){
+
+    const container =
+        document.getElementById(
+            "trainerOptions"
+        );
+
+
+    container.innerHTML = "";
+
+
+    trainers.forEach(
+        trainer => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "trainer-card";
+
+
+            card.dataset.id =
+                trainer.id;
+
+
+            card.dataset.name =
+                trainer.name;
+
+
+            card.onclick =
+                function(){
+
+                    selectTrainer(
+                        this
+                    );
+
+                };
+
+
+            card.innerHTML = `
+
+                <div class="trainer-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <h3>
+                    ${escapeHtml(
+                        trainer.name
+                    )}
+                </h3>
+
+
+                <p>
+                    Personal Trainer
+                </p>
+
+
+                <div class="radio-circle">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DEFAULT DURATION
+========================================================= */
+
+function selectDefaultDuration(){
+
+    const firstCard =
+        document.querySelector(
+            ".duration-card"
+        );
+
+
+    if(firstCard){
+
+        selectDuration(
+            firstCard
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DEFAULT TRAINER
+========================================================= */
+
+function selectDefaultTrainer(){
+
+    const firstCard =
+        document.querySelector(
+            ".trainer-card"
+        );
+
+
+    if(firstCard){
+
+        selectTrainer(
+            firstCard
+        );
+
+    }
+
+}
 
 
 /* =========================================================
    SELECT DURATION
 ========================================================= */
 
-function selectDuration(card) {
-
+function selectDuration(card){
 
     document
-        .querySelectorAll(".duration-card")
-        .forEach(item => {
+        .querySelectorAll(
+            ".duration-card"
+        )
+        .forEach(
+            item => {
 
-            item.classList.remove(
-                "selected"
-            );
+                item.classList.remove(
+                    "selected"
+                );
 
-        });
+            }
+        );
 
 
     card.classList.add(
@@ -725,52 +1211,36 @@ function selectDuration(card) {
         card.dataset.duration;
 
 
-    selectedPrice =
+    selectedDurationValue =
         Number(
-            card.dataset.price
+            card.dataset.durationValue
         );
 
 
-    document.getElementById(
-        "selectedDuration"
-    ).innerText =
-        selectedDuration;
-
-
-    document.getElementById(
-        "detailDuration"
-    ).innerText =
-        selectedDuration;
-
-
-    document.getElementById(
-        "detailPrice"
-    ).innerText =
-        "₱" +
-        selectedPrice.toLocaleString(
-            "en-PH"
-        );
+    updateSelection();
 
 }
-
 
 
 /* =========================================================
    SELECT TRAINER
 ========================================================= */
 
-function selectTrainer(card) {
-
+function selectTrainer(card){
 
     document
-        .querySelectorAll(".trainer-card")
-        .forEach(item => {
+        .querySelectorAll(
+            ".trainer-card"
+        )
+        .forEach(
+            item => {
 
-            item.classList.remove(
-                "selected"
-            );
+                item.classList.remove(
+                    "selected"
+                );
 
-        });
+            }
+        );
 
 
     card.classList.add(
@@ -778,56 +1248,178 @@ function selectTrainer(card) {
     );
 
 
+    selectedTrainerId =
+        card.dataset.id;
+
+
     selectedTrainer =
         card.dataset.name;
 
 
-    selectedSpecialty =
-        card.dataset.specialty;
+    updateSelection();
+
+}
+
+
+/* =========================================================
+   GET PRICE
+========================================================= */
+
+function getSelectedTrainerPrice(){
+
+    if(
+        !selectedTrainerId ||
+        !selectedDurationValue
+    ){
+
+        return 0;
+
+    }
+
+
+    const trainer =
+        trainers.find(
+            item =>
+                item.id ===
+                selectedTrainerId
+        );
+
+
+    if(!trainer){
+
+        return 0;
+
+    }
+
+
+    const plan =
+        trainer.plans.find(
+            item =>
+                item.durationDays ===
+                    selectedDurationValue &&
+                item.active === 1
+        );
+
+
+    if(!plan){
+
+        return 0;
+
+    }
+
+
+    return plan.price;
+
+}
+
+
+/* =========================================================
+   UPDATE SELECTION
+========================================================= */
+
+function updateSelection(){
+
+    selectedPrice =
+        getSelectedTrainerPrice();
+
+
+    document.getElementById(
+        "selectedDuration"
+    ).innerText =
+        selectedDuration || "-";
+
+
+    document.getElementById(
+        "detailDuration"
+    ).innerText =
+        selectedDuration || "-";
 
 
     document.getElementById(
         "selectedTrainer"
     ).innerText =
-        selectedTrainer;
-
-
-    document.getElementById(
-        "selectedSpecialty"
-    ).innerText =
-        selectedSpecialty;
+        selectedTrainer || "-";
 
 
     document.getElementById(
         "detailTrainer"
     ).innerText =
-        selectedTrainer;
+        selectedTrainer || "-";
+
+
+    document.getElementById(
+        "detailPrice"
+    ).innerText =
+        "₱" +
+        selectedPrice.toLocaleString(
+            "en-PH",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
 
 }
 
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
 
 
 /* =========================================================
    SEND REQUEST
 ========================================================= */
 
-function sendTrainerRequest() {
-
+function sendTrainerRequest(){
 
     console.log(
         "TRAINER REQUEST",
         {
-            duration:
-                selectedDuration,
 
-            price:
-                selectedPrice,
+            trainer_id:
+                selectedTrainerId,
 
             trainer:
                 selectedTrainer,
 
-            specialty:
-                selectedSpecialty
+            duration:
+                selectedDuration,
+
+            duration_days:
+                selectedDurationValue,
+
+            price:
+                selectedPrice
+
         }
     );
 
@@ -840,6 +1432,11 @@ function sendTrainerRequest() {
 }
 
 
+/* =========================================================
+   LOAD TRAINERS
+========================================================= */
+
+loadTrainerPlans();
 
 /* =========================================================
    NOTIFICATION
