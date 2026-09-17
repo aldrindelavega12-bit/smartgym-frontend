@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Trainee</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <link
+        rel="stylesheet"
+        href="css/trainer-dashboard.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="navbar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <div class="brand-text">
+
+            <strong>SMART GYM</strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="menu">
+
+
+        <a href="trainer.html">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </a>
+
+
+
+        <a
+            href="messages.html"
+            class="msg-link">
+
+            <i class="fa-regular fa-envelope"></i>
+
+            Messages
+
+            <span
+                id="msg-count"
+                class="msg-count">
+
+                0
+
+            </span>
+
+        </a>
+
+
+
+        <a href="schedule.html">
+
+            <i class="fa-regular fa-calendar-check"></i>
+
+            Schedule
+
+        </a>
+
+
+
+        <a
+            href="trainee.html"
+            class="active">
+
+            <i class="fa-solid fa-users"></i>
+
+            Trainee
+
+        </a>
+
+
+
+        <a href="client_requests.html">
+
+            <i class="fa-solid fa-user-clock"></i>
+
+            Client Requests
+
+            <span
+                id="request-count"
+                class="msg-count">
+
+                0
+
+            </span>
+
+        </a>
+
+
+    </div>
+
+
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <h3>
+            Train. Guide.<br>
+            Make a Difference.
+        </h3>
+
+
+        <p>
+            Every workout counts.
+        </p>
+
+
+        <div class="message-line"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="layout">
+
+
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+
+            <div
+                class="trainer-profile"
+                onclick="toggleTrainerMenu()">
+
+
+                <div class="trainer-avatar">
+
+                    T
+
+                </div>
+
+
+                <div class="trainer-info">
+
+                    <strong>
+                        Trainer
+                    </strong>
+
+                    <small>
+                        Gym Trainer
+                    </small>
+
+                </div>
+
+
+                <i
+                    class="fa-solid fa-chevron-down trainer-profile-chevron">
+                </i>
+
+
+
+                <div
+                    id="trainerDropdown"
+                    class="trainer-profile-dropdown">
+
+
+                    <button
+                        onclick="logout(); event.stopPropagation();">
+
+                        <i
+                            class="fa-solid fa-right-from-bracket">
+                        </i>
+
+                        Log Out
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="page-header">
+
+
+            <div class="page-title">
+
+                <h1>
+                    Trainee
+                </h1>
+
+
+                <p>
+                    View and manage members currently training with you.
+                </p>
+
+            </div>
+
+
+
+            <div class="search-box">
+
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search member name..."
+                    oninput="searchTrainees()">
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TRAINEE TABLE
+        ================================================== -->
+
+        <div class="trainee-container">
+
+
+            <div class="trainee-table-wrapper">
+
+
+                <table class="trainee-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                MEMBER
+                            </th>
+
+                            <th>
+                                PLAN
+                            </th>
+
+                            <th>
+                                DURATION
+                            </th>
+
+                            <th>
+                                TRAINING PERIOD
+                            </th>
+
+                            <th>
+                                STATUS
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody
+                        id="traineeTableBody">
+
+                    </tbody>
+
+
+                </table>
+
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
+
+                <div
+                    id="emptyState"
+                    class="empty-state">
+
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+
+                    <h3>
+                        No Trainees
+                    </h3>
+
+
+                    <p>
+                        You don't have any active trainees yet.
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <div class="trainee-footer">
+
+
+                <span id="traineeCount">
+
+                    Loading trainees...
+
+                </span>
+
+
+
+                <div class="pagination">
+
+
+                    <button disabled>
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                    </button>
+
+
+                    <button class="current-page">
+
+                        1
+
+                    </button>
+
+
+                    <button disabled>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   API
+===================================================== */
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+if(
+    !user ||
+    user.role !== "trainer"
+){
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   DATA
+===================================================== */
+
+let trainees = [];
+
+
+
+/* =====================================================
+   MESSAGE COUNT
+===================================================== */
+
+async function loadMessageCount(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/admin_messages`
+            );
+
+
+        const data =
+            await res.json();
+
+
+        const unread =
+            data.filter(
+                m => m.is_read == 0
+            ).length;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge)
+            return;
+
+
+        badge.innerText =
+            unread > 99
+                ? "99+"
+                : unread;
+
+
+        badge.style.display =
+            unread > 0
+                ? "flex"
+                : "none";
+
+    }
+    catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   LOAD TRAINEES
+===================================================== */
+
+async function loadTrainees(){
+
+    const tableBody =
+        document.getElementById(
+            "traineeTableBody"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "emptyState"
+        );
+
+
+    try{
+
+        const trainerId =
+            user.user_id;
+
+
+        if(!trainerId){
+
+            throw new Error(
+                "Trainer ID not found."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/trainees/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        trainees =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        renderTrainees(
+            trainees
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD TRAINEES ERROR:",
+            error
+        );
+
+
+        trainees = [];
+
+
+        tableBody.innerHTML = "";
+
+
+        emptyState.classList.add(
+            "show"
+        );
+
+
+        document.getElementById(
+            "traineeCount"
+        ).innerText =
+            "Unable to load trainees.";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RENDER TRAINEES
+===================================================== */
+
+function renderTrainees(
+    list
+){
+
+    const tableBody =
+        document.getElementById(
+            "traineeTableBody"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "emptyState"
+        );
+
+
+    tableBody.innerHTML = "";
+
+
+    if(
+        !list ||
+        list.length === 0
+    ){
+
+        emptyState.classList.add(
+            "show"
+        );
+
+
+        updateTraineeCount(
+            0
+        );
+
+
+        return;
+
+    }
+
+
+    emptyState.classList.remove(
+        "show"
+    );
+
+
+    list.forEach(
+        trainee => {
+
+            tableBody.appendChild(
+                createTraineeRow(
+                    trainee
+                )
+            );
+
+        }
+    );
+
+
+    updateTraineeCount(
+        list.length
+    );
+
+}
+
+
+
+/* =====================================================
+   CREATE TRAINEE ROW
+===================================================== */
+
+function createTraineeRow(
+    trainee
+){
+
+    const row =
+        document.createElement(
+            "tr"
+        );
+
+
+    row.dataset.name =
+        trainee.full_name || "";
+
+
+    const durationDays =
+        Number(
+            trainee.duration_days || 0
+        );
+
+
+    const durationText =
+        getDurationText(
+            durationDays
+        );
+
+
+    const durationClass =
+        getDurationClass(
+            durationDays
+        );
+
+
+    const trainingPeriod =
+        formatTrainingPeriod(
+            trainee.start_date,
+            trainee.end_date
+        );
+
+
+    row.innerHTML = `
+
+        <td>
+
+            <div class="member-info">
+
+                <div class="member-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        ${escapeHtml(
+                            trainee.full_name ||
+                            "Member"
+                        )}
+
+                    </strong>
+
+
+                    <small>
+
+                        ${escapeHtml(
+                            trainee.member_id ||
+                            "-"
+                        )}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </td>
+
+
+
+        <td>
+
+            <div class="plan-info">
+
+                <strong>
+
+                    ${escapeHtml(
+                        trainee.plan_name ||
+                        "-"
+                    )}
+
+                </strong>
+
+
+                <small>
+                    Personal Training
+                </small>
+
+            </div>
+
+        </td>
+
+
+
+        <td>
+
+            <span
+                class="duration-badge ${durationClass}">
+
+                ${escapeHtml(
+                    durationText
+                )}
+
+            </span>
+
+        </td>
+
+
+
+        <td>
+
+            <div class="training-period">
+
+                <strong>
+
+                    ${escapeHtml(
+                        trainingPeriod
+                    )}
+
+                </strong>
+
+            </div>
+
+        </td>
+
+
+
+        <td>
+
+            <span class="status-badge">
+
+                <span class="status-dot"></span>
+
+                Active
+
+            </span>
+
+        </td>
+
+    `;
+
+
+    return row;
+
+}
+
+
+
+/* =====================================================
+   DURATION TEXT
+===================================================== */
+
+function getDurationText(
+    days
+){
+
+    if(days === 1)
+        return "1 Day";
+
+
+    if(days === 7)
+        return "1 Week";
+
+
+    if(days === 30)
+        return "1 Month";
+
+
+    return `${days} Days`;
+
+}
+
+
+
+/* =====================================================
+   DURATION CLASS
+===================================================== */
+
+function getDurationClass(
+    days
+){
+
+    if(days === 1)
+        return "purple";
+
+
+    if(days === 7)
+        return "green";
+
+
+    if(days === 30)
+        return "blue";
+
+
+    return "green";
+
+}
+
+
+
+/* =====================================================
+   TRAINING PERIOD
+===================================================== */
+
+function formatTrainingPeriod(
+    startDate,
+    endDate
+){
+
+    if(
+        !startDate ||
+        !endDate
+    ){
+
+        return "-";
+
+    }
+
+
+    const start =
+        new Date(
+            `${startDate}T00:00:00`
+        );
+
+
+    const end =
+        new Date(
+            `${endDate}T00:00:00`
+        );
+
+
+    if(
+        isNaN(start.getTime()) ||
+        isNaN(end.getTime())
+    ){
+
+        return `${startDate} – ${endDate}`;
+
+    }
+
+
+    const startText =
+        start.toLocaleDateString(
+            "en-US",
+            {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+
+    const endText =
+        end.toLocaleDateString(
+            "en-US",
+            {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+
+    return `${startText} – ${endText}`;
+
+}
+
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function searchTrainees(){
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        )
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const rows =
+        document.querySelectorAll(
+            "#traineeTableBody tr"
+        );
+
+
+    let visibleCount = 0;
+
+
+    rows.forEach(
+        row => {
+
+            const name =
+                (
+                    row.dataset.name ||
+                    ""
+                ).toLowerCase();
+
+
+            if(
+                name.includes(search)
+            ){
+
+                row.style.display =
+                    "";
+
+                visibleCount++;
+
+            }
+            else{
+
+                row.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+
+    const countText =
+        document.getElementById(
+            "traineeCount"
+        );
+
+
+    if(search === ""){
+
+        updateTraineeCount(
+            trainees.length
+        );
+
+        return;
+
+    }
+
+
+    if(visibleCount === 0){
+
+        countText.innerText =
+            "No matching trainees.";
+
+    }
+    else{
+
+        countText.innerText =
+            `Showing ${visibleCount} of ${trainees.length} trainees`;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   TRAINEE COUNT
+===================================================== */
+
+function updateTraineeCount(
+    count
+){
+
+    const countText =
+        document.getElementById(
+            "traineeCount"
+        );
+
+
+    if(count === 0){
+
+        countText.innerText =
+            "No active trainees.";
+
+        return;
+
+    }
+
+
+    countText.innerText =
+        `Showing 1 to ${count} of ${count} trainees`;
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =====================================================
+   PROFILE DROPDOWN
+===================================================== */
+
+function toggleTrainerMenu(){
+
+    const profile =
+        document.querySelector(
+            ".trainer-profile"
+        );
+
+
+    const dropdown =
+        document.getElementById(
+            "trainerDropdown"
+        );
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   CLICK OUTSIDE
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".trainer-profile"
+            )
+        ){
+
+            const profile =
+                document.querySelector(
+                    ".trainer-profile"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "trainerDropdown"
+                );
+
+
+            if(profile){
+
+                profile.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            if(dropdown){
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadMessageCount();
+
+loadTrainees();
+
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+setInterval(
+    loadTrainees,
+    10000
+);
+
+
+setInterval(
+    loadMessageCount,
+    10000
+);
+
+</script>
+
+
+</body>
+</html>
