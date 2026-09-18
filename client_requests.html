@@ -746,6 +746,10 @@ function renderRequests(
    CREATE REQUEST ROW
 ===================================================== */
 
+/* =====================================================
+   CREATE REQUEST ROW
+===================================================== */
+
 function createRequestRow(
     request
 ){
@@ -796,6 +800,8 @@ function createRequestRow(
 
     row.innerHTML = `
 
+        <!-- FULL NAME -->
+
         <td>
 
             <div class="member-info">
@@ -816,13 +822,6 @@ function createRequestRow(
                         )}
                     </strong>
 
-                    <small>
-                        ${escapeHtml(
-                            request.member_id ||
-                            "-"
-                        )}
-                    </small>
-
                 </div>
 
             </div>
@@ -830,25 +829,25 @@ function createRequestRow(
         </td>
 
 
+
+        <!-- MEMBER ID -->
+
         <td>
 
-            <div class="plan-info">
+            <strong class="member-id">
 
-                <strong>
-                    ${escapeHtml(
-                        request.plan_name ||
-                        "-"
-                    )}
-                </strong>
+                ${escapeHtml(
+                    request.member_id ||
+                    "-"
+                )}
 
-                <small>
-                    Personal Training
-                </small>
-
-            </div>
+            </strong>
 
         </td>
 
+
+
+        <!-- DURATION -->
 
         <td>
 
@@ -863,6 +862,9 @@ function createRequestRow(
 
         </td>
 
+
+
+        <!-- PRICE -->
 
         <td>
 
@@ -881,6 +883,9 @@ function createRequestRow(
         </td>
 
 
+
+        <!-- DATE REQUESTED -->
+
         <td>
 
             <div class="date-info">
@@ -897,6 +902,9 @@ function createRequestRow(
 
         </td>
 
+
+
+        <!-- ACTION -->
 
         <td>
 
@@ -933,8 +941,6 @@ function createRequestRow(
     return row;
 
 }
-
-
 
 /* =====================================================
    DURATION TEXT
