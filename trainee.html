@@ -687,12 +687,6 @@ function renderTrainees(
 
 }
 
-
-
-/* =====================================================
-   CREATE TRAINEE ROW
-===================================================== */
-
 /* =====================================================
    CREATE TRAINEE ROW
 ===================================================== */
@@ -720,6 +714,13 @@ function createTraineeRow(
     const durationText =
         getDurationText(
             durationDays
+        );
+
+
+    const trainingPeriod =
+        formatTrainingPeriod(
+            trainee.start_date,
+            trainee.end_date
         );
 
 
@@ -845,25 +846,19 @@ function createTraineeRow(
 
 
 
-        <!-- TRAINING PLAN -->
+        <!-- TRAINING PERIOD -->
 
         <td>
 
-            <div class="plan-info">
+            <div class="training-period">
 
                 <strong>
 
                     ${escapeHtml(
-                        trainee.plan_name ||
-                        "-"
+                        trainingPeriod
                     )}
 
                 </strong>
-
-
-                <small>
-                    Personal Training
-                </small>
 
             </div>
 
