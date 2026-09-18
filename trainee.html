@@ -301,23 +301,23 @@
                         <tr>
 
                             <th>
-                                MEMBER
+                                Full Name
                             </th>
 
                             <th>
-                                PLAN
+                                Member ID
                             </th>
 
                             <th>
-                                DURATION
+                                Duration
                             </th>
 
                             <th>
-                                TRAINING PERIOD
+                                Training Period
                             </th>
 
                             <th>
-                                STATUS
+                                Status
                             </th>
 
                         </tr>
@@ -723,16 +723,9 @@ function createTraineeRow(
         );
 
 
-    const trainingPeriod =
-        formatTrainingPeriod(
-            trainee.start_date,
-            trainee.end_date
-        );
-
-
     /*
      * =================================================
-     * STATUS
+     * LAST STATUS
      * =================================================
      */
 
@@ -761,9 +754,33 @@ function createTraineeRow(
             "completed";
 
     }
+    else if(
+        traineeStatus === "cancelled"
+    ){
+
+        statusText =
+            "Cancelled";
+
+        statusClass =
+            "cancelled";
+
+    }
+    else if(
+        traineeStatus === "pending"
+    ){
+
+        statusText =
+            "Pending";
+
+        statusClass =
+            "pending";
+
+    }
 
 
     row.innerHTML = `
+
+        <!-- FULL NAME -->
 
         <td>
 
@@ -787,16 +804,6 @@ function createTraineeRow(
 
                     </strong>
 
-
-                    <small>
-
-                        ${escapeHtml(
-                            trainee.member_id ||
-                            "-"
-                        )}
-
-                    </small>
-
                 </div>
 
             </div>
@@ -804,6 +811,41 @@ function createTraineeRow(
         </td>
 
 
+
+        <!-- MEMBER ID -->
+
+        <td>
+
+            <strong>
+
+                ${escapeHtml(
+                    trainee.member_id ||
+                    "-"
+                )}
+
+            </strong>
+
+        </td>
+
+
+
+        <!-- DURATION -->
+
+        <td>
+
+            <strong class="trainee-duration">
+
+                ${escapeHtml(
+                    durationText
+                )}
+
+            </strong>
+
+        </td>
+
+
+
+        <!-- TRAINING PLAN -->
 
         <td>
 
@@ -829,37 +871,7 @@ function createTraineeRow(
 
 
 
-        <td>
-
-            <strong class="trainee-duration">
-
-                ${escapeHtml(
-                    durationText
-                )}
-
-            </strong>
-
-        </td>
-
-
-
-        <td>
-
-            <div class="training-period">
-
-                <strong>
-
-                    ${escapeHtml(
-                        trainingPeriod
-                    )}
-
-                </strong>
-
-            </div>
-
-        </td>
-
-
+        <!-- LAST STATUS -->
 
         <td>
 
@@ -882,6 +894,7 @@ function createTraineeRow(
     return row;
 
 }
+
 
 /* =====================================================
    DURATION TEXT
