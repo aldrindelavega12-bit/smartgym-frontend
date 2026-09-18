@@ -2441,3 +2441,8 @@ body {
 .status-badge.completed .status-dot {
     background: #98a39e;
 }
+
+.member-id {
+    font-size: 14px;
+    font-weight: 600;
+}
