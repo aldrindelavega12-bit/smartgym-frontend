@@ -1266,6 +1266,86 @@
             font-size: 11px;
         }
 
+        /* =========================================================
+        FIX MESSAGE HEADER ALIGNMENT
+        ========================================================= */
+
+        .messages-page .msg-card .msg-header {
+            width: 100% !important;
+
+            display: flex !important;
+            flex-direction: row !important;
+
+            align-items: flex-start !important;
+            justify-content: space-between !important;
+
+            gap: 12px !important;
+        }
+
+
+        /* MEMBER NAME + ID */
+
+        .messages-page .msg-card .member-info {
+            flex: 1 1 auto !important;
+
+            min-width: 0 !important;
+
+            display: flex !important;
+            flex-direction: column !important;
+
+            align-items: flex-start !important;
+        }
+
+
+        /* IMPORTANT:
+        Prevent old .msg-header b { flex: 1 }
+        from affecting the member name
+        */
+
+        .messages-page .msg-card .member-info b {
+            flex: none !important;
+
+            width: auto !important;
+
+            margin: 0 !important;
+        }
+
+
+        /* THREE DOT + NEW */
+
+        .messages-page .msg-card .msg-actions {
+            flex: 0 0 auto !important;
+
+            margin-left: auto !important;
+
+            display: flex !important;
+            flex-direction: row !important;
+
+            align-items: center !important;
+            justify-content: flex-end !important;
+
+            gap: 8px !important;
+
+            position: relative !important;
+        }
+
+
+        /* THREE DOT */
+
+        .messages-page .msg-card .msg-actions i {
+            flex: 0 0 24px !important;
+
+            width: 24px !important;
+            height: 24px !important;
+
+            margin: 0 !important;
+
+            display: flex !important;
+
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
         }
     </style>
 </head>
