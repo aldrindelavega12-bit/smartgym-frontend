@@ -990,30 +990,15 @@ async function loadApproval(){
         console.error("LOAD APPROVAL ERROR:", err);
     }
 }
-// ================= ACTION =================
-async function decline(id){
-
-    const reason = prompt("Reason:");
-
-    const user =
-        JSON.parse(localStorage.getItem("user"));
+async function approve(id){
+    const user = JSON.parse(localStorage.getItem("user"));
 
     await fetch(`${API_URL}/api/update_booking`, {
-
         method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
+        headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-
             id: id,
-
-            status:"REJECTED",
-
-            reason:reason,
-
+            status: "APPROVED",
             sender_id: user.user_id
         })
     });
@@ -1022,28 +1007,16 @@ async function decline(id){
 }
 
 async function decline(id){
-
     const reason = prompt("Reason:");
-
-    const user =
-        JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
 
     await fetch(`${API_URL}/api/update_booking`, {
-
         method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
+        headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-
             id: id,
-
-            status:"REJECTED",
-
-            reason:reason,
-
+            status: "REJECTED",
+            reason: reason,
             sender_id: user.user_id
         })
     });
