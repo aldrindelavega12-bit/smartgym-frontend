@@ -1738,7 +1738,10 @@ async function loadMessages(){
 
             card.innerHTML = `
 
-                <div class="msg-top">
+                <div
+                    class="msg-top"
+                    onclick='openMessage(${JSON.stringify(latestMessage)})'
+                >
 
                     <div class="sender-info">
 
@@ -1764,6 +1767,7 @@ async function loadMessages(){
 
                     </div>
 
+
                     <div
                         class="dots"
                         onclick="
@@ -1776,7 +1780,11 @@ async function loadMessages(){
 
                 </div>
 
-                <div class="msg-content">
+
+                <div
+                    class="msg-content"
+                    onclick='openMessage(${JSON.stringify(latestMessage)})'
+                >
 
                     <p class="msg-text">
                         ${latestMessage.message || ""}
@@ -1787,6 +1795,7 @@ async function loadMessages(){
                     </small>
 
                 </div>
+
 
                 <div
                     id="menu-${latestMessage.id}"
@@ -1823,27 +1832,6 @@ async function loadMessages(){
                 </div>
 
             `;
-
-
-            /* =========================
-               CLICK CARD → POPUP
-            ========================= */
-
-            card.addEventListener(
-                "click",
-                function(e){
-
-                    if(
-                        e.target.closest(".dots") ||
-                        e.target.closest(".msg-menu")
-                    ){
-                        return;
-                    }
-
-                    openMessage(latestMessage);
-
-                }
-            );
 
 
             /* =========================
@@ -1942,63 +1930,47 @@ async function loadMessages(){
 
 async function openMessage(msg){
 
-    document.getElementById(
-        "modalTitle"
-    ).innerText =
-        msg.title;
+    console.log("OPEN MESSAGE CLICKED", msg);
 
+    document.getElementById("modalTitle").innerText =
+        msg.title || "Message";
 
-    document.getElementById(
-        "modalMessage"
-    ).innerText =
-        msg.message;
+    document.getElementById("modalMessage").innerText =
+        msg.message || "";
 
+    document.getElementById("modalReason").innerText =
+        "Reason: " + (msg.reason || "-");
 
-    document.getElementById(
-        "modalReason"
-    ).innerText =
-        "Reason: " +
-        (msg.reason || "-");
+    document.getElementById("modalDate").innerText =
+        msg.created_at || "";
 
-
-    document.getElementById(
-        "modalDate"
-    ).innerText =
-        msg.created_at;
-
-
-    document.getElementById(
-        "messageModal"
-    ).style.display =
+    document.getElementById("messageModal").style.display =
         "flex";
 
+    if(Number(msg.is_read) === 0){
 
-    await fetch(
-        `${API_URL}/api/messages_read_single/${msg.id}`,
-        {
-            method: "POST"
-        }
-    );
+        await fetch(
+            `${API_URL}/api/messages_read_single/${msg.id}`,
+            {
+                method: "POST"
+            }
+        );
 
+        msg.is_read = 1;
 
-    loadMessageCount();
+        loadMessages();
+        loadMessageCount();
 
-    loadMessages();
+    }
 
 }
-
-/* =========================================================
-   CLOSE POPUP
-========================================================= */
 
 function closeMessage(){
 
-    document.getElementById(
-        "messageModal"
-    ).style.display = "none";
+    document.getElementById("messageModal").style.display =
+        "none";
 
 }
-
 // ================= CLEAR =================
 function clearMessages(){
 
