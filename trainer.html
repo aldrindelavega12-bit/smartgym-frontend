@@ -246,69 +246,62 @@
             SUMMARY CARDS
         ================================================= -->
 
-        <div class="summary-cards">
+        <div class="summary-card">
 
+            <div class="summary-icon">
 
-            <!-- MY TRAINEES -->
-
-            <div class="summary-card">
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-users"></i>
-
-                </div>
-
-                <div class="summary-content">
-
-                    <span>
-                        My Trainees
-                    </span>
-
-                    <strong id="myTrainees">
-                        0
-                    </strong>
-
-                    <small>
-                        Active trainees
-                    </small>
-
-                </div>
+                <i class="fa-solid fa-users"></i>
 
             </div>
 
+            <div class="summary-content">
 
+                <span>
+                    My Trainees
+                </span>
 
-            <!-- CLIENT REQUESTS -->
+                <strong id="myTrainees">
+                    0
+                </strong>
 
-            <div class="summary-card">
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-user-clock"></i>
-
-                </div>
-
-                <div class="summary-content">
-
-                    <span>
-                        Client Requests
-                    </span>
-
-                    <strong id="clientRequests">
-                        0
-                    </strong>
-
-                    <small>
-                        Pending requests
-                    </small>
-
-                </div>
+                <small>
+                    Active trainees
+                </small>
 
             </div>
-
 
         </div>
+
+
+        <!-- CLIENT REQUESTS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-user-clock"></i>
+
+            </div>
+
+            <div class="summary-content">
+
+                <span>
+                    Client Requests
+                </span>
+
+                <strong id="clientRequests">
+                    0
+                </strong>
+
+                <small>
+                    Pending requests
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
         
         <!-- =================================================
              QUICK ACTION CARDS
@@ -565,26 +558,126 @@ async function loadMessageCount(){
 // TRAINER DASHBOARD
 // =====================================================
 
+// =====================================================
+// TRAINER DASHBOARD
+// =====================================================
+
 async function loadTrainerDashboard(){
 
-    /*
-       TEMPORARY VALUES
+    try{
 
-       These IDs are ready for the future
-       trainer dashboard API.
-    */
-
-    document.getElementById(
-        "myTrainees"
-    ).innerText = 0;
+        const trainerId =
+            user.user_id;
 
 
-    document.getElementById(
-        "clientRequests"
-    ).innerText = 0;
+        if(!trainerId){
+
+            throw new Error(
+                "Trainer ID not found."
+            );
+
+        }
+
+
+        // =================================================
+        // MY TRAINEES
+        // =================================================
+
+        const traineeResponse =
+            await fetch(
+                `${API_URL}/api/trainer/trainees/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const traineeData =
+            await traineeResponse.json();
+
+
+        if(!traineeResponse.ok){
+
+            throw new Error(
+                traineeData.message ||
+                `HTTP ${traineeResponse.status}`
+            );
+
+        }
+
+
+        const trainees =
+            Array.isArray(traineeData)
+                ? traineeData
+                : [];
+
+
+        document.getElementById(
+            "myTrainees"
+        ).innerText =
+            trainees.length;
+
+
+        // =================================================
+        // CLIENT REQUESTS
+        // =================================================
+
+        const requestResponse =
+            await fetch(
+                `${API_URL}/api/trainer/requests/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const requestData =
+            await requestResponse.json();
+
+
+        if(!requestResponse.ok){
+
+            throw new Error(
+                requestData.message ||
+                `HTTP ${requestResponse.status}`
+            );
+
+        }
+
+
+        const requests =
+            Array.isArray(requestData)
+                ? requestData
+                : [];
+
+
+        document.getElementById(
+            "clientRequests"
+        ).innerText =
+            requests.length;
+
+
+    }
+    catch(error){
+
+        console.error(
+            "TRAINER DASHBOARD ERROR:",
+            error
+        );
+
+
+        document.getElementById(
+            "myTrainees"
+        ).innerText = 0;
+
+
+        document.getElementById(
+            "clientRequests"
+        ).innerText = 0;
+
+    }
 
 }
-
 
 // =====================================================
 // NAVIGATION
