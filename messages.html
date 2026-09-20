@@ -413,6 +413,205 @@
             z-index: 9999;
         }
 
+        /* =========================================================
+        FINAL — STAFF MESSAGE CARD
+        MATCH MEMBER MESSAGE CARD SIZE
+        ========================================================= */
+
+        .messages-page .messages-panel {
+            width: calc(100% - 40px) !important;
+
+            margin: 0 20px 60px !important;
+
+            padding: 28px !important;
+
+            box-sizing: border-box;
+        }
+
+
+        /* MESSAGE LIST */
+
+        .messages-page #messages-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+            width: 100%;
+
+            max-height: 380px;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding-right: 4px;
+
+            box-sizing: border-box;
+        }
+
+
+        /* MESSAGE CARD */
+
+        .messages-page .msg-card {
+            width: 100% !important;
+
+            box-sizing: border-box;
+
+            background: #f8fbf9;
+
+            border: 1px solid #e1ebe6;
+
+            border-radius: 10px;
+
+            padding: 14px 16px !important;
+
+            margin: 0;
+
+            min-height: auto !important;
+        }
+
+
+        /* UNREAD */
+
+        .messages-page .msg-card.unread {
+            border-left: 3px solid #008744;
+
+            padding-left: 13px !important;
+        }
+
+
+        /* MEMBER NAME */
+
+        .messages-page .msg-header b {
+            font-size: 15px !important;
+
+            line-height: 1.3;
+
+            font-weight: 700;
+        }
+
+
+        /* MEMBER ID */
+
+        .messages-page .msg-header small {
+            display: block;
+
+            margin-top: 2px;
+
+            color: #71817a;
+
+            font-size: 11px;
+        }
+
+
+        /* NEW BADGE */
+
+        .messages-page .unread-badge {
+            padding: 4px 9px;
+
+            border-radius: 12px;
+
+            font-size: 10px;
+        }
+
+
+        /* MESSAGE INSIDE CARD */
+
+        .messages-page .member-messages {
+            margin-top: 8px;
+        }
+
+
+        /* EACH MESSAGE */
+
+        .messages-page .member-message {
+            padding: 0;
+
+            margin: 0;
+
+            border: 0;
+        }
+
+
+        /* TITLE */
+
+        .messages-page .member-message .message-title {
+            margin: 0 0 4px;
+        }
+
+        .messages-page .member-message .message-title b {
+            color: #17231e;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        /* MESSAGE TEXT */
+
+        .messages-page .member-message p {
+            margin: 0 0 5px;
+
+            color: #17231e;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+        }
+
+
+        /* REASON */
+
+        .messages-page .member-message small {
+            display: block;
+
+            color: #71817a;
+
+            font-size: 11px;
+
+            line-height: 1.3;
+        }
+
+
+        /* MESSAGE INFO */
+
+        .messages-page .message-info {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-top: 5px;
+
+            color: #71817a;
+
+            font-size: 11px;
+        }
+
+
+        /* SCROLLBAR */
+
+        .messages-page #messages-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-page #messages-list::-webkit-scrollbar-track {
+            background: #f1f6f3;
+
+            border-radius: 10px;
+        }
+
+        .messages-page #messages-list::-webkit-scrollbar-thumb {
+            background: #c5d8ce;
+
+            border-radius: 10px;
+        }
+
 
         /* =========================================================
            SCROLLBAR
