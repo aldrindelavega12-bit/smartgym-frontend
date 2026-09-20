@@ -2349,3 +2349,138 @@ body {
     color: #078a43 !important;
 }
 
+/* =========================================================
+   BOOKING ACTION BUTTONS
+========================================================= */
+
+.booking-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BASE BUTTON
+========================================================= */
+
+.booking-actions button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    min-width: 82px;
+
+    height: 34px;
+
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        transform .15s ease,
+        box-shadow .2s ease;
+}
+
+
+.booking-actions button i {
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   APPROVE
+========================================================= */
+
+.booking-actions .approve-btn {
+
+    background: #008744;
+
+    border: 1px solid #008744;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(0,135,68,.12);
+}
+
+
+.booking-actions .approve-btn:hover {
+
+    background: #00763b;
+
+    border-color: #00763b;
+
+    box-shadow:
+        0 5px 12px rgba(0,135,68,.20);
+
+    transform: translateY(-1px);
+}
+
+
+.booking-actions .approve-btn:active {
+
+    transform: translateY(0);
+
+}
+
+
+/* =========================================================
+   DECLINE
+========================================================= */
+
+.booking-actions .decline-btn {
+
+    background: #fff5f4;
+
+    border: 1px solid #efc7c3;
+
+    color: #c0392b;
+}
+
+
+.booking-actions .decline-btn:hover {
+
+    background: #fde9e7;
+
+    border-color: #dca49f;
+
+    color: #a93226;
+
+    box-shadow:
+        0 5px 12px rgba(192,57,43,.10);
+
+    transform: translateY(-1px);
+}
+
+
+.booking-actions .decline-btn:active {
+
+    transform: translateY(0);
+
+}

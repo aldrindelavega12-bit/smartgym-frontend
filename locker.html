@@ -176,29 +176,6 @@ if (!user) {
 
         <div class="attendance-card">
 
-
-            <!-- CARD HEADER -->
-
-            <div class="attendance-card-header">
-
-                <div class="attendance-icon">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                </div>
-
-                <div>
-
-                    <h2>
-                        Locker Activity
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-
             <!-- DIVIDER -->
 
             <div class="attendance-divider"></div>
@@ -894,13 +871,27 @@ async function loadApproval(){
             if(b.status === "PENDING"){
 
                 actions = `
-                    <button onclick="approve(${b.id})">
-                        Approve
-                    </button>
+                    <div class="booking-actions">
 
-                    <button onclick="decline(${b.id})">
-                        Decline
-                    </button>
+                        <button
+                            type="button"
+                            class="approve-btn"
+                            onclick="approve(${b.id})"
+                        >
+                            <i class="fa-solid fa-check"></i>
+                            Approve
+                        </button>
+
+                        <button
+                            type="button"
+                            class="decline-btn"
+                            onclick="decline(${b.id})"
+                        >
+                            <i class="fa-solid fa-xmark"></i>
+                            Decline
+                        </button>
+
+                    </div>
                 `;
             }
 
@@ -1120,18 +1111,23 @@ function showNotifPopup(title,text){
 }
 // ================= INIT =================
 window.onload = () => {
-    showTab("current");
 
     const now = new Date();
 
     const today =
         `${now.getFullYear()}-${
-            String(now.getMonth()+1).padStart(2,'0')
+            String(now.getMonth() + 1).padStart(2, "0")
         }-${
-            String(now.getDate()).padStart(2,'0')
+            String(now.getDate()).padStart(2, "0")
         }`;
+
     document.getElementById("dateFilter").value = today;
+
     document.getElementById("approvalDate").value = today;
+
+    // Current tab muna
+    loadLockers();
+
 };
 
 const lockerTabs = document.querySelectorAll(".locker-tab");
@@ -1156,17 +1152,98 @@ lockerTabs.forEach(tab => {
 
         // Hide all views
         Object.values(lockerViews).forEach(view => {
+
             if (view) {
                 view.style.display = "none";
             }
+
         });
 
-        // Show selected view
-        const selectedView = lockerViews[this.dataset.view];
+
+        // =========================
+        // SHOW SELECTED VIEW
+        // =========================
+
+        const selectedView =
+            lockerViews[this.dataset.view];
 
         if (selectedView) {
             selectedView.style.display = "block";
         }
+
+
+        // =========================
+        // CURRENT
+        // =========================
+
+        if(this.dataset.view === "current-view"){
+
+            loadLockers();
+
+        }
+
+
+        // =========================
+        // HISTORY
+        // =========================
+
+        if(this.dataset.view === "history-view"){
+
+            const dateFilter =
+                document.getElementById("dateFilter");
+
+            // Automatically set TODAY
+            if(!dateFilter.value){
+
+                const now = new Date();
+
+                const today =
+                    `${now.getFullYear()}-${
+                        String(now.getMonth() + 1).padStart(2, "0")
+                    }-${
+                        String(now.getDate()).padStart(2, "0")
+                    }`;
+
+                dateFilter.value = today;
+
+            }
+
+            // AUTOMATICALLY LOAD
+            loadHistory();
+
+        }
+
+
+        // =========================
+        // REQUESTS
+        // =========================
+
+        if(this.dataset.view === "approval-view"){
+
+            const approvalDate =
+                document.getElementById("approvalDate");
+
+            // Automatically set TODAY
+            if(!approvalDate.value){
+
+                const now = new Date();
+
+                const today =
+                    `${now.getFullYear()}-${
+                        String(now.getMonth() + 1).padStart(2, "0")
+                    }-${
+                        String(now.getDate()).padStart(2, "0")
+                    }`;
+
+                approvalDate.value = today;
+
+            }
+
+            // AUTOMATICALLY LOAD
+            loadApproval();
+
+        }
+
     });
 
 });

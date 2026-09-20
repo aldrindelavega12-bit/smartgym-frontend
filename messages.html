@@ -1486,38 +1486,37 @@ if (!user) {
 
         </section>
 
+        <!-- =====================================================
+             MESSAGE MODAL
+        ====================================================== -->
+
+        <div id="messageModal" class="modal">
+
+            <div class="modal-content">
+
+                <button
+                    class="close-btn"
+                    onclick="closeMessage()">
+                    ×
+                </button>
+
+                <h2 id="modalTitle"></h2>
+
+                <p id="modalMessage"></p>
+
+                <small id="modalDate"></small>
+
+            </div>
+
+        </div>
+
+
     </main>
 
 </div>
 
 
-<!-- =========================================================
-     MESSAGE MODAL
-========================================================= -->
 
-<div id="messageModal"
-     class="modal">
-
-    <div class="modal-content">
-
-        <button
-            class="close-btn"
-            onclick="closeMessage()">
-            ×
-        </button>
-
-        <h2 id="modalTitle"></h2>
-
-        <p id="modalMessage"></p>
-
-        <p id="modalReason"
-           class="reason"></p>
-
-        <small id="modalDate"></small>
-
-    </div>
-
-</div>
 <!-- =========================================================
      NOTIFICATION POPUP
 ========================================================= -->
@@ -1661,7 +1660,10 @@ async function loadMessages(){
 
         list.innerHTML = "";
 
-        if(!Array.isArray(data) || data.length === 0){
+        if(
+            !Array.isArray(data) ||
+            data.length === 0
+        ){
 
             list.innerHTML = `
                 <li class="msg-card">
@@ -1681,22 +1683,35 @@ async function loadMessages(){
 
         data.forEach(msg => {
 
-            const memberId = msg.user_id;
+            const memberId =
+                msg.user_id;
 
-            if(!memberId) return;
+            if(!memberId){
+                return;
+            }
+
 
             if(!grouped[memberId]){
 
                 grouped[memberId] = {
-                    user_id: memberId,
+
+                    user_id:
+                        memberId,
+
                     member_name:
-                        msg.member_name || "Member",
+                        msg.member_name ||
+                        "Member",
+
                     messages: []
+
                 };
 
             }
 
-            grouped[memberId].messages.push(msg);
+
+            grouped[memberId]
+                .messages
+                .push(msg);
 
         });
 
@@ -1706,13 +1721,18 @@ async function loadMessages(){
            LATEST MESSAGE ONLY
         ========================= */
 
-        Object.values(grouped).forEach(member => {
+        Object.values(grouped)
+        .forEach(member => {
 
-            /* SORT LATEST FIRST */
+
+            /* =========================
+               SORT LATEST MESSAGE FIRST
+            ========================= */
 
             member.messages.sort(
                 (a, b) =>
-                    Number(b.id) - Number(a.id)
+                    Number(b.id) -
+                    Number(a.id)
             );
 
 
@@ -1720,27 +1740,44 @@ async function loadMessages(){
                 member.messages[0];
 
 
+            /* =========================
+               CREATE CARD
+            ========================= */
+
             const card =
                 document.createElement("li");
+
 
             card.className =
                 "msg-card " +
                 (
-                    Number(latestMessage.is_read) === 0
-                        ? "unread"
-                        : ""
+                    Number(
+                        latestMessage.is_read
+                    ) === 0
+                    ? "unread"
+                    : ""
                 );
+
+
+            /* =========================
+               CARD CLICK
+               OPEN MESSAGE
+            ========================= */
 
             card.setAttribute(
                 "onclick",
                 `openMessage(${JSON.stringify(latestMessage)})`
             );
 
+
+            /* =========================
+               CARD HTML
+            ========================= */
+
             card.innerHTML = `
 
                 <div
                     class="msg-top"
-                    onclick='openMessage(${JSON.stringify(latestMessage)})'
                 >
 
                     <div class="sender-info">
@@ -1754,7 +1791,9 @@ async function loadMessages(){
                         </span>
 
                         ${
-                            Number(latestMessage.is_read) === 0
+                            Number(
+                                latestMessage.is_read
+                            ) === 0
                             ?
                             `
                             <span class="unread-badge">
@@ -1767,6 +1806,8 @@ async function loadMessages(){
 
                     </div>
 
+
+                    <!-- THREE DOT -->
 
                     <div
                         class="dots"
@@ -1781,9 +1822,10 @@ async function loadMessages(){
                 </div>
 
 
+                <!-- MESSAGE CONTENT -->
+
                 <div
                     class="msg-content"
-                    onclick='openMessage(${JSON.stringify(latestMessage)})'
                 >
 
                     <p class="msg-text">
@@ -1796,6 +1838,8 @@ async function loadMessages(){
 
                 </div>
 
+
+                <!-- THREE DOT MENU -->
 
                 <div
                     id="menu-${latestMessage.id}"
@@ -1811,6 +1855,7 @@ async function loadMessages(){
                         Delete
                     </button>
 
+
                     <button
                         onclick="
                             event.stopPropagation();
@@ -1819,6 +1864,7 @@ async function loadMessages(){
                     >
                         Mark as Read
                     </button>
+
 
                     <button
                         onclick="
@@ -1835,82 +1881,8 @@ async function loadMessages(){
 
 
             /* =========================
-               THREE DOT
+               APPEND CARD
             ========================= */
-
-            const dots =
-                card.querySelector(".dots");
-
-
-            dots.addEventListener(
-                "click",
-                function(e){
-
-                    e.stopPropagation();
-
-                    toggleMenu(
-                        latestMessage.id
-                    );
-
-                }
-            );
-
-
-            /* =========================
-               MENU BUTTONS
-            ========================= */
-
-            const msgMenu =
-                card.querySelector(
-                    `#menu-${latestMessage.id}`
-                );
-
-
-            const buttons =
-                msgMenu.querySelectorAll("button");
-
-
-            buttons[0].addEventListener(
-                "click",
-                function(e){
-
-                    e.stopPropagation();
-
-                    deleteMessage(
-                        latestMessage.id
-                    );
-
-                }
-            );
-
-
-            buttons[1].addEventListener(
-                "click",
-                function(e){
-
-                    e.stopPropagation();
-
-                    markRead(
-                        latestMessage.id
-                    );
-
-                }
-            );
-
-
-            buttons[2].addEventListener(
-                "click",
-                function(e){
-
-                    e.stopPropagation();
-
-                    markUnread(
-                        latestMessage.id
-                    );
-
-                }
-            );
-
 
             list.appendChild(card);
 
@@ -1928,6 +1900,7 @@ async function loadMessages(){
 
 }
 
+
 async function openMessage(msg){
 
     console.log("OPEN MESSAGE CLICKED", msg);
@@ -1938,28 +1911,68 @@ async function openMessage(msg){
     document.getElementById("modalMessage").innerText =
         msg.message || "";
 
-    document.getElementById("modalReason").innerText =
-        "Reason: " + (msg.reason || "-");
-
     document.getElementById("modalDate").innerText =
         msg.created_at || "";
 
     document.getElementById("messageModal").style.display =
         "flex";
 
-    if(Number(msg.is_read) === 0){
 
-        await fetch(
-            `${API_URL}/api/messages_read_single/${msg.id}`,
+    /* =========================================
+       MARK ALL UNREAD MESSAGES AS READ
+    ========================================= */
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/admin_messages`,
             {
-                method: "POST"
+                cache: "no-store"
             }
         );
 
-        msg.is_read = 1;
+        const messages = await res.json();
+
+
+        const unreadMessages =
+            messages.filter(
+                m => Number(m.is_read) === 0
+            );
+
+
+        /* MARK EACH UNREAD MESSAGE AS READ */
+
+        await Promise.all(
+
+            unreadMessages.map(
+                unreadMsg =>
+
+                    fetch(
+                        `${API_URL}/api/messages_read_single/${unreadMsg.id}`,
+                        {
+                            method: "POST"
+                        }
+                    )
+            )
+
+        );
+
+
+        /* =========================================
+           UPDATE UI
+        ========================================= */
 
         loadMessages();
+
         loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "MARK ALL MESSAGES READ ERROR:",
+            err
+        );
 
     }
 
@@ -2081,30 +2094,59 @@ async function markUnread(id){
     loadMessages();
 }
 
-
-
 function toggleMenu(id){
 
-    event.stopPropagation();
-
     document
-    .querySelectorAll(".msg-card")
-    .forEach(card=>{
-        card.classList.remove("menu-open");
-    });
+        .querySelectorAll(".msg-menu")
+        .forEach(menu => {
+
+            if(
+                menu.id !== `menu-${id}`
+            ){
+
+                menu.classList.remove(
+                    "show"
+                );
+
+            }
+
+        });
+
 
     const menu =
-        document.getElementById(`menu-${id}`);
+        document.getElementById(
+            `menu-${id}`
+        );
+
 
     const card =
-        menu.closest(".msg-card");
+        menu.closest(
+            ".msg-card"
+        );
 
-    if(!menu.classList.contains("show")){
-        card.classList.add("menu-open");
+
+    if(
+        menu.classList.contains("show")
+    ){
+
+        menu.classList.remove("show");
+
+        card.classList.remove(
+            "menu-open"
+        );
+
+    }else{
+
+        menu.classList.add("show");
+
+        card.classList.add(
+            "menu-open"
+        );
+
     }
 
-    menu.classList.toggle("show");
 }
+
 
 async function loadMessageCount(){
 
