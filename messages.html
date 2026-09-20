@@ -1504,21 +1504,9 @@ async function loadMessages(){
                             ${msg.message || ""}
                         </p>
 
-                        ${
-                            msg.reason
-                            ? `
-                            <small>
-                                Reason: ${msg.reason}
-                            </small>
-                            `
-                            : ""
-                        }
-
                         <div class="message-info">
 
-                            <span>
-                                ${msg.sender_name || ""}
-                            </span>
+                            <span></span>
 
                             <span>
                                 ${msg.created_at || ""}
