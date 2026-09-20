@@ -991,19 +991,12 @@ async function loadApproval(){
     }
 }
 // ================= ACTION =================
-async function approve(id){
-    await fetch(`${API_URL}/api/update_booking`, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ id:id, status:"APPROVED" })
-    });
-
-    loadApproval();
-}
-
 async function decline(id){
 
     const reason = prompt("Reason:");
+
+    const user =
+        JSON.parse(localStorage.getItem("user"));
 
     await fetch(`${API_URL}/api/update_booking`, {
 
@@ -1015,11 +1008,43 @@ async function decline(id){
 
         body: JSON.stringify({
 
-            id:id,
+            id: id,
 
             status:"REJECTED",
 
-            reason:reason
+            reason:reason,
+
+            sender_id: user.user_id
+        })
+    });
+
+    loadApproval();
+}
+
+async function decline(id){
+
+    const reason = prompt("Reason:");
+
+    const user =
+        JSON.parse(localStorage.getItem("user"));
+
+    await fetch(`${API_URL}/api/update_booking`, {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+
+            id: id,
+
+            status:"REJECTED",
+
+            reason:reason,
+
+            sender_id: user.user_id
         })
     });
 
