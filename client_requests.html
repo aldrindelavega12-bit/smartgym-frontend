@@ -118,14 +118,6 @@
 
             Client Requests
 
-            <span
-                id="request-count"
-                class="msg-count">
-
-                0
-
-            </span>
-
         </a>
 
 
@@ -1070,22 +1062,10 @@ function updateRequestCount(
         );
 
 
-    const requestBadge =
-        document.getElementById(
-            "request-count"
-        );
-
-
     if(count === 0){
 
         countText.innerText =
             "No pending requests.";
-
-        requestBadge.innerText =
-            "0";
-
-        requestBadge.style.display =
-            "none";
 
         return;
 
@@ -1095,19 +1075,7 @@ function updateRequestCount(
     countText.innerText =
         `Showing 1 to ${count} of ${count} requests`;
 
-
-    requestBadge.innerText =
-        count > 99
-            ? "99+"
-            : count;
-
-
-    requestBadge.style.display =
-        "flex";
-
 }
-
-
 
 /* =====================================================
    SEARCH
