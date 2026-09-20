@@ -1643,6 +1643,7 @@ if(user.role === "admin"){
 // ================= SOCKET =================
 const socket = io(API_URL, { transports: ["websocket"] });
 
+let currentMessages = [];
 
 async function loadMessages(){
 
@@ -1667,7 +1668,9 @@ async function loadMessages(){
         if(!Array.isArray(data) || data.length === 0){
 
             list.innerHTML = `
-                <li>No messages</li>
+                <li class="msg-card">
+                    No messages
+                </li>
             `;
 
             return;
@@ -1682,8 +1685,7 @@ async function loadMessages(){
 
         data.forEach(msg => {
 
-            const memberId =
-                msg.user_id;
+            const memberId = msg.user_id;
 
             if(!memberId) return;
 
@@ -1694,8 +1696,7 @@ async function loadMessages(){
                     user_id: memberId,
 
                     member_name:
-                        msg.member_name ||
-                        "Member",
+                        msg.member_name || "Member",
 
                     messages: []
 
@@ -1710,139 +1711,219 @@ async function loadMessages(){
 
         /* =========================
            ONE CARD PER MEMBER
+           RECENT MESSAGE ONLY
         ========================= */
 
         Object.values(grouped).forEach(member => {
 
+            /*
+             * Recent message
+             */
             const latestMessage =
                 member.messages[0];
 
 
-            const hasUnread =
-                member.messages.some(
-                    msg => Number(msg.is_read) === 0
-                );
+            const card =
+                document.createElement("li");
+
+            card.className =
+                "msg-card";
 
 
-            const unreadClass =
-                hasUnread
-                    ? "unread"
-                    : "";
+            if(Number(latestMessage.is_read) === 0){
+
+                card.classList.add("unread");
+
+            }
 
 
-            const unreadBadge =
-                hasUnread
-                    ? `
-                        <span class="unread-badge">
-                            NEW/UNREAD
+            /* =========================
+               CARD HTML
+            ========================= */
+
+            card.innerHTML = `
+
+                <div class="msg-top">
+
+                    <div class="sender-info">
+
+                        <h3>
+                            ${member.member_name}
+                        </h3>
+
+                        <span class="sender-role">
+                            ${member.user_id}
                         </span>
-                    `
-                    : "";
+
+                        ${
+                            Number(latestMessage.is_read) === 0
+                            ?
+                            `
+                            <span class="unread-badge">
+                                NEW / UNREAD
+                            </span>
+                            `
+                            :
+                            ""
+                        }
+
+                    </div>
 
 
-            const memberData =
-                encodeURIComponent(
-                    JSON.stringify(member)
-                );
+                    <div class="dots">
+                        ⋮
+                    </div>
+
+                </div>
 
 
-            list.innerHTML += `
+                <div class="msg-content">
 
-                <li
-                    class="msg-card ${unreadClass}"
-                    data-member="${memberData}"
-                    onclick="openMemberMessages(this)"
+                    <p class="msg-text">
+                        ${latestMessage.message || ""}
+                    </p>
+
+                    <small>
+                        ${latestMessage.created_at || ""}
+                    </small>
+
+                </div>
+
+
+                <div
+                    id="menu-${latestMessage.id}"
+                    class="msg-menu"
                 >
 
-                    <!-- SAME STRUCTURE AS MEMBER MESSAGES -->
+                    <button>
+                        Delete
+                    </button>
 
-                    <div class="msg-top">
+                    <button>
+                        Mark as Read
+                    </button>
 
-                        <div class="sender-info">
+                    <button>
+                        Mark as Unread
+                    </button>
 
-                            <h3>
-                                ${member.member_name}
-                            </h3>
-
-                            <span class="sender-role">
-                                ${member.user_id}
-                            </span>
-
-                            ${unreadBadge}
-
-                        </div>
-
-
-                        <!-- THREE DOT ONLY -->
-
-                        <div
-                            class="dots"
-                            onclick="
-                                event.stopPropagation();
-                                toggleMenu(${latestMessage.id})
-                            "
-                        >
-                            ⋮
-                        </div>
-
-                    </div>
-
-
-                    <!-- MENU -->
-
-                    <div
-                        id="menu-${latestMessage.id}"
-                        class="msg-menu"
-                    >
-
-                        <button
-                            onclick="
-                                event.stopPropagation();
-                                markRead(${latestMessage.id})
-                            "
-                        >
-                            Mark as Read
-                        </button>
-
-
-                        <button
-                            onclick="
-                                event.stopPropagation();
-                                markUnread(${latestMessage.id})
-                            "
-                        >
-                            Mark as Unread
-                        </button>
-
-
-                        <button
-                            onclick="
-                                event.stopPropagation();
-                                deleteMessage(${latestMessage.id})
-                            "
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                    <!-- LATEST MESSAGE -->
-
-                    <div class="msg-content">
-
-                        <p class="msg-text">
-                            ${latestMessage.message || ""}
-                        </p>
-
-                        <small>
-                            ${latestMessage.created_at || ""}
-                        </small>
-
-                    </div>
-
-                </li>
+                </div>
 
             `;
+
+
+            /* =========================
+               CLICK CARD
+               OPEN POPUP
+            ========================= */
+
+            card.addEventListener(
+                "click",
+                function(e){
+
+                    /*
+                     * If three dots was clicked,
+                     * do NOT open popup.
+                     */
+
+                    if(
+                        e.target.closest(".dots") ||
+                        e.target.closest(".msg-menu")
+                    ){
+
+                        return;
+
+                    }
+
+
+                    openMemberMessages(
+                        member,
+                        latestMessage
+                    );
+
+                }
+            );
+
+
+            /* =========================
+               THREE DOT
+            ========================= */
+
+            const dots =
+                card.querySelector(".dots");
+
+
+            dots.addEventListener(
+                "click",
+                function(e){
+
+                    e.stopPropagation();
+
+                    toggleMenu(
+                        latestMessage.id
+                    );
+
+                }
+            );
+
+
+            /* =========================
+               MENU BUTTONS
+            ========================= */
+
+            const menu =
+                card.querySelector(
+                    `#menu-${latestMessage.id}`
+                );
+
+
+            const buttons =
+                menu.querySelectorAll("button");
+
+
+            buttons[0].addEventListener(
+                "click",
+                function(e){
+
+                    e.stopPropagation();
+
+                    deleteMessage(
+                        latestMessage.id
+                    );
+
+                }
+            );
+
+
+            buttons[1].addEventListener(
+                "click",
+                function(e){
+
+                    e.stopPropagation();
+
+                    markRead(
+                        latestMessage.id
+                    );
+
+                }
+            );
+
+
+            buttons[2].addEventListener(
+                "click",
+                function(e){
+
+                    e.stopPropagation();
+
+                    markUnread(
+                        latestMessage.id
+                    );
+
+                }
+            );
+
+
+            list.appendChild(card);
 
         });
 
@@ -1858,33 +1939,22 @@ async function loadMessages(){
 
 }
 
-async function openMemberMessages(card){
-
-    const member =
-        JSON.parse(
-            decodeURIComponent(
-                card.dataset.member
-            )
-        );
-
+async function openMemberMessages(member, msg){
 
     const modal =
         document.getElementById(
             "messageModal"
         );
 
-
     const title =
         document.getElementById(
             "modalTitle"
         );
 
-
     const message =
         document.getElementById(
             "modalMessage"
         );
-
 
     const date =
         document.getElementById(
@@ -1892,102 +1962,109 @@ async function openMemberMessages(card){
         );
 
 
-    /*
-     * MEMBER NAME + ID
-     */
+    /* =========================
+       TITLE
+    ========================= */
 
     title.innerText =
-        `${member.member_name} (${member.user_id})`;
+        msg.title || "Message";
 
 
-    /*
-     * SHOW ALL MESSAGES INSIDE POPUP
-     */
+    /* =========================
+       MESSAGE
+    ========================= */
 
-    message.innerHTML =
-        member.messages.map(msg => {
+    message.innerHTML = `
 
-            return `
+        <p style="
+            margin:0 0 18px;
+            color:#17231e;
+            font-size:14px;
+            line-height:1.5;
+        ">
+            ${msg.message || ""}
+        </p>
 
-                <div class="popup-message">
+        ${
+            msg.reason
+            ?
+            `
+            <p style="
+                margin:0 0 18px;
+                color:#17231e;
+                font-size:14px;
+                line-height:1.5;
+            ">
+                <strong>Reason:</strong>
+                ${msg.reason}
+            </p>
+            `
+            :
+            ""
+        }
 
-                    <b>
-                        ${msg.title || ""}
-                    </b>
-
-                    <p>
-                        ${msg.message || ""}
-                    </p>
-
-                    <small>
-                        ${msg.created_at || ""}
-                    </small>
-
-                </div>
-
-            `;
-
-        }).join("");
-
-
-    date.innerText = "";
-
-
-    /*
-     * OPEN POPUP
-     */
-
-    modal.style.display =
-        "flex";
+    `;
 
 
-    /*
-     * MARK ALL MEMBER MESSAGES AS READ
-     */
+    /* =========================
+       DATE
+    ========================= */
 
-    try{
+    date.innerText =
+        msg.created_at || "";
 
-        const unreadMessages =
-            member.messages.filter(
-                msg => Number(msg.is_read) === 0
+
+    /* =========================
+       OPEN MODAL
+    ========================= */
+
+    modal.style.display = "flex";
+
+
+    /* =========================
+       MARK READ
+    ========================= */
+
+    if(Number(msg.is_read) === 0){
+
+        try{
+
+            await fetch(
+                `${API_URL}/api/messages_read_single/${msg.id}`,
+                {
+                    method: "POST"
+                }
             );
 
+            msg.is_read = 1;
 
-        await Promise.all(
+            loadMessages();
+            loadMessageCount();
 
-            unreadMessages.map(msg =>
+        }catch(error){
 
-                fetch(
-                    `${API_URL}/api/messages_read_single/${msg.id}`,
-                    {
-                        method: "POST"
-                    }
-                )
+            console.error(
+                "MARK MESSAGE READ ERROR:",
+                error
+            );
 
-            )
-
-        );
-
-
-        /*
-         * UPDATE CARD + MESSAGE COUNT
-         */
-
-        loadMessages();
-        loadMessageCount();
-
-
-    }catch(err){
-
-        console.error(
-            "MARK MEMBER MESSAGES READ ERROR:",
-            err
-        );
+        }
 
     }
 
 }
 
+/* =========================================================
+   CLOSE POPUP
+========================================================= */
+
+function closeMessage(){
+
+    document.getElementById(
+        "messageModal"
+    ).style.display = "none";
+
+}
 
 // ================= CLEAR =================
 function clearMessages(){
@@ -2048,43 +2125,6 @@ function logout(){
 }
 // ================= INIT =================
 loadMessages();
-
-let currentMessages = [];
-
-function openMessage(id){
-
-    const msg =
-        currentMessages.find(
-            m => m.id == id
-        );
-
-    if(!msg) return;
-
-    document.getElementById(
-        "modalTitle"
-    ).innerText = msg.title;
-
-    document.getElementById(
-        "modalMessage"
-    ).innerText = msg.message;
-
-    document.getElementById(
-        "modalDate"
-    ).innerText = msg.created_at;
-
-    document.getElementById(
-        "messageModal"
-    ).style.display = "flex";
-
-    markRead(id);
-}
-
-function closeMessage(){
-
-    document.getElementById(
-        "messageModal"
-    ).style.display = "none";
-}
 
 async function markRead(id){
 
