@@ -244,32 +244,7 @@ if(!user || user.role !== "member"){
 
     </div>
 
-
     <section class="messages-panel">
-
-        <div class="panel-header">
-
-            <div class="panel-icon">
-
-                <i class="fa-solid fa-envelope"></i>
-
-            </div>
-
-            <div>
-
-                <h2>Gym Messages</h2>
-
-                <p>
-                    Your latest notifications
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="message-divider"></div>
-
 
         <div id="message-list">
 
@@ -280,6 +255,7 @@ if(!user || user.role !== "member"){
         </div>
 
     </section>
+        
 
 </main>
 </div>
@@ -2934,6 +2910,215 @@ setInterval(
 .layout .main .messages-panel {
     margin-top: 0 !important;
 }
+
+/* =========================================================
+   FINAL MESSAGES PAGE DESIGN
+========================================================= */
+
+/* MAIN CONTENT */
+
+.layout .main {
+    padding-top: 0 !important;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.layout .main .page-header {
+
+    padding: 4px 20px 0 !important;
+
+    margin: 0 0 18px !important;
+}
+
+
+.layout .main .page-header h1 {
+
+    margin: 0 !important;
+
+    font-size: 30px !important;
+
+    font-weight: 800 !important;
+
+    color: #17231e !important;
+
+    line-height: 1.2 !important;
+}
+
+
+.layout .main .page-header p {
+
+    margin: 6px 0 0 !important;
+
+    color: #66776f !important;
+
+    font-size: 15px !important;
+}
+
+
+/* =========================================================
+   MESSAGE CONTAINER
+========================================================= */
+
+.layout .main .messages-panel {
+
+    width: calc(100% - 40px) !important;
+
+    margin: 0 20px 60px !important;
+
+    padding: 28px !important;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px rgba(18,70,40,.05);
+}
+
+
+/* =========================================================
+   REMOVE OLD PANEL HEADER
+========================================================= */
+
+.layout .main .panel-header,
+.layout .main .message-divider {
+
+    display: none !important;
+}
+
+
+/* =========================================================
+   MESSAGE LIST
+========================================================= */
+
+.layout .main #message-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    width: 100%;
+
+    max-height: 380px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding-right: 4px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   EMPTY MESSAGE
+========================================================= */
+
+.layout .main .empty-message {
+
+    margin: 0;
+
+    padding: 55px 20px;
+
+    text-align: center;
+
+    color: #71817a;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MESSAGE CARD
+========================================================= */
+
+.layout .main .msg-card {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #f8fbf9;
+
+    border: 1px solid #e1ebe6;
+
+    border-radius: 12px;
+
+    padding: 15px 17px;
+
+    min-height: auto;
+}
+
+
+.layout .main .msg-card.unread {
+
+    border-left: 3px solid #008744;
+
+    padding-left: 14px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .layout .main .page-header {
+
+        padding-left: 20px !important;
+
+        padding-right: 20px !important;
+    }
+
+
+    .layout .main .messages-panel {
+
+        width: calc(100% - 40px) !important;
+
+        margin-left: 20px !important;
+
+        margin-right: 20px !important;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .layout .main .page-header {
+
+        padding-left: 16px !important;
+
+        padding-right: 16px !important;
+    }
+
+
+    .layout .main .messages-panel {
+
+        width: calc(100% - 32px) !important;
+
+        margin-left: 16px !important;
+
+        margin-right: 16px !important;
+
+        padding: 18px !important;
+
+        border-radius: 16px;
+    }
+
+}
+
 </style>
 
 </body>
