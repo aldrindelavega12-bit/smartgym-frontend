@@ -241,12 +241,10 @@
             </div>
 
         </div>
-
-
-
+        
         <!-- =================================================
-             SUMMARY CARDS
-        ================================================== -->
+            SUMMARY CARDS
+        ================================================= -->
 
         <div class="summary-cards">
 
@@ -255,13 +253,11 @@
 
             <div class="summary-card">
 
-
                 <div class="summary-icon">
 
                     <i class="fa-solid fa-users"></i>
 
                 </div>
-
 
                 <div class="summary-content">
 
@@ -269,11 +265,9 @@
                         My Trainees
                     </span>
 
-
                     <strong id="myTrainees">
                         0
                     </strong>
-
 
                     <small>
                         Active trainees
@@ -285,76 +279,37 @@
 
 
 
-            <!-- TODAY'S SESSIONS -->
+            <!-- CLIENT REQUESTS -->
 
             <div class="summary-card">
 
-
                 <div class="summary-icon">
 
-                    <i class="fa-solid fa-calendar-check"></i>
+                    <i class="fa-solid fa-user-clock"></i>
 
                 </div>
-
 
                 <div class="summary-content">
 
                     <span>
-                        Today's Sessions
+                        Client Requests
                     </span>
 
-
-                    <strong id="todaySessions">
+                    <strong id="clientRequests">
                         0
                     </strong>
 
-
                     <small>
-                        Scheduled for today
+                        Pending requests
                     </small>
 
                 </div>
 
             </div>
 
-
-
-            <!-- UPCOMING SESSIONS -->
-
-            <div class="summary-card">
-
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-dumbbell"></i>
-
-                </div>
-
-
-                <div class="summary-content">
-
-                    <span>
-                        Upcoming Sessions
-                    </span>
-
-
-                    <strong id="upcomingSessions">
-                        0
-                    </strong>
-
-
-                    <small>
-                        Later this week
-                    </small>
-
-                </div>
-
-            </div>
 
         </div>
-
-
-
+        
         <!-- =================================================
              QUICK ACTION CARDS
         ================================================== -->
@@ -625,12 +580,7 @@ async function loadTrainerDashboard(){
 
 
     document.getElementById(
-        "todaySessions"
-    ).innerText = 0;
-
-
-    document.getElementById(
-        "upcomingSessions"
+        "clientRequests"
     ).innerText = 0;
 
 }
