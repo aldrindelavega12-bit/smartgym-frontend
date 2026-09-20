@@ -1495,33 +1495,29 @@ if (!user) {
      MESSAGE MODAL
 ========================================================= -->
 
-<div id="messageModal" class="modal">
+<div id="messageModal"
+     class="modal">
 
     <div class="modal-content">
 
         <button
             class="close-btn"
             onclick="closeMessage()">
-
             ×
-
         </button>
-
 
         <h2 id="modalTitle"></h2>
 
+        <p id="modalMessage"></p>
 
-        <div id="modalMessage"
-             class="modal-messages">
-        </div>
-
+        <p id="modalReason"
+           class="reason"></p>
 
         <small id="modalDate"></small>
 
     </div>
 
 </div>
-
 <!-- =========================================================
      NOTIFICATION POPUP
 ========================================================= -->
@@ -1692,14 +1688,10 @@ async function loadMessages(){
             if(!grouped[memberId]){
 
                 grouped[memberId] = {
-
                     user_id: memberId,
-
                     member_name:
                         msg.member_name || "Member",
-
                     messages: []
-
                 };
 
             }
@@ -1711,14 +1703,19 @@ async function loadMessages(){
 
         /* =========================
            ONE CARD PER MEMBER
-           RECENT MESSAGE ONLY
+           LATEST MESSAGE ONLY
         ========================= */
 
         Object.values(grouped).forEach(member => {
 
-            /*
-             * Recent message
-             */
+            /* SORT LATEST FIRST */
+
+            member.messages.sort(
+                (a, b) =>
+                    Number(b.id) - Number(a.id)
+            );
+
+
             const latestMessage =
                 member.messages[0];
 
@@ -1727,19 +1724,17 @@ async function loadMessages(){
                 document.createElement("li");
 
             card.className =
-                "msg-card";
+                "msg-card " +
+                (
+                    Number(latestMessage.is_read) === 0
+                        ? "unread"
+                        : ""
+                );
 
-
-            if(Number(latestMessage.is_read) === 0){
-
-                card.classList.add("unread");
-
-            }
-
-
-            /* =========================
-               CARD HTML
-            ========================= */
+            card.setAttribute(
+                "onclick",
+                `openMessage(${JSON.stringify(latestMessage)})`
+            );
 
             card.innerHTML = `
 
@@ -1769,13 +1764,17 @@ async function loadMessages(){
 
                     </div>
 
-
-                    <div class="dots">
+                    <div
+                        class="dots"
+                        onclick="
+                            event.stopPropagation();
+                            toggleMenu(${latestMessage.id})
+                        "
+                    >
                         ⋮
                     </div>
 
                 </div>
-
 
                 <div class="msg-content">
 
@@ -1789,21 +1788,35 @@ async function loadMessages(){
 
                 </div>
 
-
                 <div
                     id="menu-${latestMessage.id}"
                     class="msg-menu"
                 >
 
-                    <button>
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            deleteMessage(${latestMessage.id})
+                        "
+                    >
                         Delete
                     </button>
 
-                    <button>
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            markRead(${latestMessage.id})
+                        "
+                    >
                         Mark as Read
                     </button>
 
-                    <button>
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            markUnread(${latestMessage.id})
+                        "
+                    >
                         Mark as Unread
                     </button>
 
@@ -1813,33 +1826,21 @@ async function loadMessages(){
 
 
             /* =========================
-               CLICK CARD
-               OPEN POPUP
+               CLICK CARD → POPUP
             ========================= */
 
             card.addEventListener(
                 "click",
                 function(e){
 
-                    /*
-                     * If three dots was clicked,
-                     * do NOT open popup.
-                     */
-
                     if(
                         e.target.closest(".dots") ||
                         e.target.closest(".msg-menu")
                     ){
-
                         return;
-
                     }
 
-
-                    openMemberMessages(
-                        member,
-                        latestMessage
-                    );
+                    openMessage(latestMessage);
 
                 }
             );
@@ -1871,14 +1872,14 @@ async function loadMessages(){
                MENU BUTTONS
             ========================= */
 
-            const menu =
+            const msgMenu =
                 card.querySelector(
                     `#menu-${latestMessage.id}`
                 );
 
 
             const buttons =
-                menu.querySelectorAll("button");
+                msgMenu.querySelectorAll("button");
 
 
             buttons[0].addEventListener(
@@ -1939,118 +1940,50 @@ async function loadMessages(){
 
 }
 
-async function openMemberMessages(member, msg){
+async function openMessage(msg){
 
-    const modal =
-        document.getElementById(
-            "messageModal"
-        );
-
-    const title =
-        document.getElementById(
-            "modalTitle"
-        );
-
-    const message =
-        document.getElementById(
-            "modalMessage"
-        );
-
-    const date =
-        document.getElementById(
-            "modalDate"
-        );
+    document.getElementById(
+        "modalTitle"
+    ).innerText =
+        msg.title;
 
 
-    /* =========================
-       TITLE
-    ========================= */
-
-    title.innerText =
-        msg.title || "Message";
+    document.getElementById(
+        "modalMessage"
+    ).innerText =
+        msg.message;
 
 
-    /* =========================
-       MESSAGE
-    ========================= */
+    document.getElementById(
+        "modalReason"
+    ).innerText =
+        "Reason: " +
+        (msg.reason || "-");
 
-    message.innerHTML = `
 
-        <p style="
-            margin:0 0 18px;
-            color:#17231e;
-            font-size:14px;
-            line-height:1.5;
-        ">
-            ${msg.message || ""}
-        </p>
+    document.getElementById(
+        "modalDate"
+    ).innerText =
+        msg.created_at;
 
-        ${
-            msg.reason
-            ?
-            `
-            <p style="
-                margin:0 0 18px;
-                color:#17231e;
-                font-size:14px;
-                line-height:1.5;
-            ">
-                <strong>Reason:</strong>
-                ${msg.reason}
-            </p>
-            `
-            :
-            ""
+
+    document.getElementById(
+        "messageModal"
+    ).style.display =
+        "flex";
+
+
+    await fetch(
+        `${API_URL}/api/messages_read_single/${msg.id}`,
+        {
+            method: "POST"
         }
-
-    `;
-
-
-    /* =========================
-       DATE
-    ========================= */
-
-    date.innerText =
-        msg.created_at || "";
+    );
 
 
-    /* =========================
-       OPEN MODAL
-    ========================= */
+    loadMessageCount();
 
-    modal.style.display = "flex";
-
-
-    /* =========================
-       MARK READ
-    ========================= */
-
-    if(Number(msg.is_read) === 0){
-
-        try{
-
-            await fetch(
-                `${API_URL}/api/messages_read_single/${msg.id}`,
-                {
-                    method: "POST"
-                }
-            );
-
-            msg.is_read = 1;
-
-            loadMessages();
-            loadMessageCount();
-
-        }catch(error){
-
-            console.error(
-                "MARK MESSAGE READ ERROR:",
-                error
-            );
-
-        }
-
-    }
+    loadMessages();
 
 }
 
@@ -2123,8 +2056,6 @@ function logout(){
 
     window.location.href = "index.html";
 }
-// ================= INIT =================
-loadMessages();
 
 async function markRead(id){
 
