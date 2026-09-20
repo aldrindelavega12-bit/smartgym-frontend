@@ -454,7 +454,7 @@
 
             border-radius: 10px;
 
-            padding: 14px 16px !important;
+            padding: 10px 14px !important;
 
             margin: 0;
 
@@ -904,6 +904,7 @@
 
                 width: auto;
             }
+        }
 
         /* =========================================================
         STAFF PROFILE — EXACT HOMEPAGE STYLE
@@ -1087,186 +1088,6 @@
         }
 
         /* =========================================================
-        STAFF MEMBER MESSAGE CARD
-        MATCH MEMBER MESSAGE STYLE
-        ========================================================= */
-
-        .messages-page .msg-card {
-            cursor: pointer;
-        }
-
-
-        /* HEADER */
-
-        .messages-page .msg-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-
-        /* MEMBER INFO */
-
-        .messages-page .member-info {
-            flex: 1;
-            min-width: 0;
-
-            display: flex;
-            flex-direction: column;
-        }
-
-        .messages-page .member-info b {
-            color: #17231e;
-
-            font-size: 15px;
-            font-weight: 700;
-
-            line-height: 1.3;
-        }
-
-        .messages-page .msg-card.unread
-        .member-info b {
-            color: #008744;
-        }
-
-        .messages-page .member-info small {
-            margin-top: 2px;
-
-            color: #71817a;
-
-            font-size: 11px;
-        }
-
-
-        /* THREE DOTS */
-
-        .messages-page .msg-actions {
-            position: relative;
-
-            display: flex;
-            align-items: center;
-
-            gap: 8px;
-
-            flex-shrink: 0;
-        }
-
-        .messages-page .msg-actions i {
-            width: 24px;
-            height: 24px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #68736d;
-
-            font-size: 17px;
-
-            border-radius: 7px;
-
-            cursor: pointer;
-        }
-
-        .messages-page .msg-actions i:hover {
-            background: #eaf6ee;
-            color: #087c3d;
-        }
-
-
-        /* LATEST MESSAGE */
-
-        .messages-page .member-preview {
-            margin-top: 8px;
-        }
-
-        .messages-page .member-preview b {
-            display: block;
-
-            margin-bottom: 4px;
-
-            color: #17231e;
-
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .messages-page .member-preview p {
-            margin: 0 0 5px;
-
-            color: #17231e;
-
-            font-size: 13px;
-            line-height: 1.4;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .messages-page .member-preview small {
-            display: block;
-
-            color: #71817a;
-
-            font-size: 11px;
-        }
-
-
-        /* =========================================================
-        POPUP MESSAGES
-        ========================================================= */
-
-        .messages-page .modal-messages {
-            max-height: 350px;
-
-            overflow-y: auto;
-
-            display: flex;
-            flex-direction: column;
-
-            gap: 14px;
-        }
-
-        .messages-page .popup-message {
-            padding-bottom: 12px;
-
-            border-bottom: 1px solid #e7efeb;
-        }
-
-        .messages-page .popup-message:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .messages-page .popup-message b {
-            display: block;
-
-            margin-bottom: 6px;
-
-            color: #17231e;
-
-            font-size: 14px;
-        }
-
-        .messages-page .popup-message p {
-            margin: 0 0 7px;
-
-            color: #17231e;
-
-            font-size: 14px;
-
-            line-height: 1.5;
-        }
-
-        .messages-page .popup-message small {
-            color: #71817a;
-
-            font-size: 11px;
-        }
-
-        /* =========================================================
         FIX MESSAGE HEADER ALIGNMENT
         ========================================================= */
 
@@ -1346,7 +1167,93 @@
             justify-content: center !important;
         }
 
+        .messages-page .msg-actions {
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
         }
+
+        .messages-page .msg-actions i {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+
+            width: 24px !important;
+            height: 24px !important;
+
+            cursor: pointer !important;
+        }
+
+        /* THREE DOT — SAME PLACEMENT AS MEMBER PAGE */
+
+        .messages-page .msg-card .msg-header {
+            display: flex !important;
+            align-items: flex-start !important;
+            width: 100% !important;
+        }
+
+        .messages-page .msg-card .member-info {
+            flex: 1 !important;
+            min-width: 0 !important;
+        }
+
+        .messages-page .msg-card .msg-actions {
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* =========================================================
+        THREE DOT — EXACT MEMBER MESSAGE PLACEMENT
+        ========================================================= */
+
+        .messages-page .msg-top {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: flex-start !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+            width: 100% !important;
+        }
+
+        .messages-page .msg-top .dots {
+            width: 28px !important;
+            height: 28px !important;
+
+            flex-shrink: 0 !important;
+
+            display: flex !important;
+
+            align-items: center !important;
+            justify-content: center !important;
+
+            border-radius: 8px !important;
+
+            color: #17231e !important;
+
+            font-size: 21px !important;
+            line-height: 1 !important;
+
+            cursor: pointer !important;
+        }
+
+        .messages-page .msg-top .dots:hover {
+            background: #eaf6ee !important;
+            color: #008744 !important;
+        }
+
+        .messages-page .msg-content {
+            margin-top: 5px !important;
+        }
+
+        .messages-page .msg-content .msg-text {
+            margin: 3px 0 !important;
+        }
+
+        .messages-page .msg-content small {
+            display: block;
+            margin-top: 5px !important;
+        }
+
+        
     </style>
 </head>
 
@@ -1657,6 +1564,7 @@ if(user.role === "admin"){
 // ================= SOCKET =================
 const socket = io(API_URL, { transports: ["websocket"] });
 
+
 async function loadMessages(){
 
     try{
@@ -1727,11 +1635,6 @@ async function loadMessages(){
 
         Object.values(grouped).forEach(member => {
 
-            /*
-             * Since API is already ordered newest first,
-             * first message = latest message
-             */
-
             const latestMessage =
                 member.messages[0];
 
@@ -1758,11 +1661,6 @@ async function loadMessages(){
                     : "";
 
 
-            /*
-             * Store the whole member group
-             * so the popup can show the messages
-             */
-
             const memberData =
                 encodeURIComponent(
                     JSON.stringify(member)
@@ -1777,83 +1675,88 @@ async function loadMessages(){
                     onclick="openMemberMessages(this)"
                 >
 
-                    <div class="msg-header">
+                    <!-- SAME STRUCTURE AS MEMBER MESSAGES -->
 
-                        <div class="member-info">
+                    <div class="msg-top">
 
-                            <b>
+                        <div class="sender-info">
+
+                            <h3>
                                 ${member.member_name}
-                            </b>
+                            </h3>
 
-                            <small>
+                            <span class="sender-role">
                                 ${member.user_id}
-                            </small>
+                            </span>
+
+                            ${unreadBadge}
 
                         </div>
 
 
-                        <div class="msg-actions">
+                        <!-- THREE DOT ONLY -->
 
-                            ${unreadBadge}
-
-
-                            <i
-                                class="fa-solid fa-ellipsis-vertical"
-                                onclick="
-                                    event.stopPropagation();
-                                    toggleMenu('${latestMessage.id}')
-                                "
-                            ></i>
-
-
-                            <div
-                                id="menu-${latestMessage.id}"
-                                class="msg-menu"
-                            >
-
-                                <button
-                                    onclick="
-                                        event.stopPropagation();
-                                        markRead(${latestMessage.id})
-                                    "
-                                >
-                                    Mark as Read
-                                </button>
-
-
-                                <button
-                                    onclick="
-                                        event.stopPropagation();
-                                        markUnread(${latestMessage.id})
-                                    "
-                                >
-                                    Mark as Unread
-                                </button>
-
-
-                                <button
-                                    onclick="
-                                        event.stopPropagation();
-                                        deleteMessage(${latestMessage.id})
-                                    "
-                                >
-                                    Delete
-                                </button>
-
-                            </div>
-
+                        <div
+                            class="dots"
+                            onclick="
+                                event.stopPropagation();
+                                toggleMenu(${latestMessage.id})
+                            "
+                        >
+                            ⋮
                         </div>
 
                     </div>
 
 
-                    <div class="member-preview">
+                    <!-- MENU -->
 
-                        <b>
+                    <div
+                        id="menu-${latestMessage.id}"
+                        class="msg-menu"
+                    >
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markRead(${latestMessage.id})
+                            "
+                        >
+                            Mark as Read
+                        </button>
+
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markUnread(${latestMessage.id})
+                            "
+                        >
+                            Mark as Unread
+                        </button>
+
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                deleteMessage(${latestMessage.id})
+                            "
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+
+                    <!-- LATEST MESSAGE -->
+
+                    <div class="msg-content">
+
+                        <p class="msg-text">
                             ${latestMessage.title || ""}
-                        </b>
+                        </p>
 
-                        <p>
+                        <p class="msg-text">
                             ${latestMessage.message || ""}
                         </p>
 
