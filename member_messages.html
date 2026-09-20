@@ -474,11 +474,13 @@ async function loadMessages(){
     try{
 
         const res = await fetch(
-            `${API_URL}/api/messages/${messageUserId}`
+            `${API_URL}/api/messages/${messageUserId}`,
+            {
+                cache: "no-store"
+            }
         );
 
-        const data =
-            await res.json();
+        const data = await res.json();
 
         const container =
             document.getElementById("message-list");
@@ -498,6 +500,17 @@ async function loadMessages(){
 
         data.forEach(msg => {
 
+            const senderName =
+                msg.sender_name ||
+                "Smart Gym";
+
+            const senderRole =
+                msg.sender_role === "staff"
+                    ? "Front Desk"
+                    : msg.sender_role === "trainer"
+                        ? "Trainer"
+                        : msg.sender_role || "";
+
             container.innerHTML += `
 
                 <div
@@ -511,11 +524,15 @@ async function loadMessages(){
 
                     <div class="msg-top">
 
-                        <div>
+                        <div class="sender-info">
 
                             <h3>
-                                ${msg.title}
+                                ${senderName}
                             </h3>
+
+                            <span class="sender-role">
+                                ${senderRole}
+                            </span>
 
                             ${
                                 Number(msg.is_read) === 0
@@ -543,11 +560,6 @@ async function loadMessages(){
 
                         <p class="msg-text">
                             ${msg.message}
-                        </p>
-
-                        <p class="reason">
-                            <strong>Reason:</strong>
-                            ${msg.reason || "-"}
                         </p>
 
                         <small>
@@ -3117,6 +3129,47 @@ setInterval(
         border-radius: 16px;
     }
 
+}
+
+/* =========================================================
+   MESSAGE SENDER
+========================================================= */
+
+.sender-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sender-info h3 {
+    margin: 0 !important;
+
+    color: #17231e !important;
+
+    font-size: 15px !important;
+    font-weight: 700 !important;
+
+    line-height: 1.3 !important;
+}
+
+.msg-card.unread .sender-info h3 {
+    color: #008744 !important;
+}
+
+.sender-role {
+    margin-top: 2px;
+
+    color: #71817a;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    line-height: 1.3;
+}
+
+.sender-info .unread-badge {
+    margin-top: 6px;
 }
 
 </style>
