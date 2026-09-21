@@ -1774,11 +1774,6 @@ async function openMemberMessages(
 
 }
 
-
-/* =========================================================
-   MARK ALL MEMBER MESSAGES READ
-========================================================= */
-
 /* =========================================================
    MARK ALL MEMBER MESSAGES READ
 ========================================================= */
@@ -1795,108 +1790,150 @@ async function markMemberMessagesRead(memberId){
                 ) === memberId
         );
 
-    try{
 
-        await Promise.all(
+    if(memberMessages.length === 0){
+        return;
+    }
 
-            memberMessages.map(
-                async msg => {
 
-                    const res =
-                        await fetch(
-                            `${API_URL}/api/message_read/${msg.id}?t=${Date.now()}`,
-                            {
-                                method: "POST",
-                                cache: "no-store"
-                            }
-                        );
+    /* =====================================================
+       UPDATE DATABASE
+       SEND REQUESTS WITHOUT BLOCKING THE UI
+    ===================================================== */
 
-                    if(!res.ok){
+    memberMessages.forEach(msg => {
 
-                        throw new Error(
-                            `Message ${msg.id} failed: HTTP ${res.status}`
-                        );
+        fetch(
+            `${API_URL}/api/message_read/${msg.id}`,
+            {
+                method: "POST",
+                cache: "no-store"
+            }
+        )
+        .then(res => {
 
-                    }
+            if(!res.ok){
 
-                }
-            )
+                console.error(
+                    `Failed to mark message ${msg.id} as read`
+                );
 
+            }
+
+        })
+        .catch(err => {
+
+            console.error(
+                `MARK READ ERROR - Message ${msg.id}:`,
+                err
+            );
+
+        });
+
+    });
+
+
+    /* =====================================================
+       UPDATE LOCAL STATE IMMEDIATELY
+    ===================================================== */
+
+    currentMessages =
+        currentMessages.map(msg => {
+
+            const sameMember =
+                (
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name
+                ) === memberId;
+
+
+            if(sameMember){
+
+                return {
+                    ...msg,
+                    is_read: 1
+                };
+
+            }
+
+
+            return msg;
+
+        });
+
+
+    /* =====================================================
+       UPDATE CARD IMMEDIATELY
+    ===================================================== */
+
+    const menu =
+        document.getElementById(
+            `menu-${memberId}`
         );
 
 
-        /* UPDATE LOCAL DATA */
+    const card =
+        menu?.closest(
+            ".msg-card"
+        );
 
-        currentMessages =
-            currentMessages.map(
-                msg => {
 
-                    const sameMember =
-                        (
-                            msg.sender_id ||
-                            msg.member_id ||
-                            msg.member_name
-                        ) === memberId;
+    if(card){
 
-                    if(sameMember){
+        /* REMOVE UNREAD STYLE */
 
-                        return {
-                            ...msg,
-                            is_read: 1
-                        };
+        card.classList.remove(
+            "unread"
+        );
 
-                    }
 
-                    return msg;
+        /* REMOVE NEW / UNREAD BADGE */
 
-                }
+        const badge =
+            card.querySelector(
+                ".unread-badge"
             );
 
 
-        /* UPDATE CARD WITHOUT REFRESH */
+        if(badge){
 
-        const menu =
-            document.getElementById(
-                `menu-${memberId}`
-            );
-
-        const card =
-            menu?.closest(".msg-card");
-
-        if(card){
-
-            card.classList.remove("unread");
-
-            const badge =
-                card.querySelector(".unread-badge");
-
-            if(badge){
-                badge.remove();
-            }
-
-            const dots =
-                card.querySelector(".dots");
-
-            if(dots){
-                dots.click();
-            }
+            badge.remove();
 
         }
 
-        await loadMessageCountFromState();
+
+        /* CLOSE 3-DOT MENU */
+
+        const msgMenu =
+            card.querySelector(
+                ".msg-menu"
+            );
 
 
-    }catch(err){
+        if(msgMenu){
 
-        console.error(
-            "MARK MEMBER MESSAGES READ ERROR:",
-            err
+            msgMenu.classList.remove(
+                "show"
+            );
+
+        }
+
+
+        card.classList.remove(
+            "menu-open"
         );
 
     }
 
-}
 
+    /* =====================================================
+       UPDATE MESSAGE COUNT
+    ===================================================== */
+
+    await loadMessageCountFromState();
+
+}
 
 /* =========================================================
    MARK ALL MEMBER MESSAGES UNREAD
@@ -2251,120 +2288,6 @@ function logout(){
         "index.html";
 
 }
-
-
-/* =========================================================
-   MARK READ
-========================================================= */
-
-async function markRead(id){
-
-    try{
-
-        await fetch(
-            `${API_URL}/api/message_read/${id}`,
-            {
-                method:
-                    "POST"
-            }
-        );
-
-
-        await loadMessages();
-
-        await loadMessageCount();
-
-
-    }catch(err){
-
-        console.error(
-            "MARK READ ERROR:",
-            err
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-async function deleteMessage(id){
-
-    if(
-        !confirm(
-            "Delete this message?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    try{
-
-        await fetch(
-            `${API_URL}/api/delete_message/${id}`,
-            {
-                method:
-                    "DELETE"
-            }
-        );
-
-
-        loadMessages();
-
-        loadMessageCount();
-
-
-    }catch(err){
-
-        console.error(
-            "DELETE MESSAGE ERROR:",
-            err
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   MARK UNREAD
-========================================================= */
-
-async function markUnread(id){
-
-    try{
-
-        await fetch(
-            `${API_URL}/api/message_unread/${id}`,
-            {
-                method:
-                    "POST"
-            }
-        );
-
-
-        loadMessages();
-
-        loadMessageCount();
-
-
-    }catch(err){
-
-        console.error(
-            "MARK UNREAD ERROR:",
-            err
-        );
-
-    }
-
-}
-
 
 /* =========================================================
    THREE DOT MENU
