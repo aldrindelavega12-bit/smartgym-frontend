@@ -1936,7 +1936,7 @@ async function markMemberMessagesRead(memberId){
 }
 
 /* =========================================================
-   MARK ALL MEMBER MESSAGES UNREAD
+   MARK LATEST MEMBER MESSAGE UNREAD
 ========================================================= */
 
 async function markMemberMessagesUnread(memberId){
@@ -1951,37 +1951,84 @@ async function markMemberMessagesUnread(memberId){
                 ) === memberId
         );
 
+
+    if(memberMessages.length === 0){
+        return;
+    }
+
+
+    /* =====================================================
+       SORT LATEST FIRST
+    ===================================================== */
+
+    memberMessages.sort(
+        (a, b) =>
+            Number(b.id || 0) -
+            Number(a.id || 0)
+    );
+
+
+    /* =====================================================
+       LATEST MESSAGE ONLY
+    ===================================================== */
+
+    const latestMessage =
+        memberMessages[0];
+
+
     try{
+
+        /* =================================================
+           FIRST: MARK ALL MEMBER MESSAGES AS READ
+        ================================================= */
 
         await Promise.all(
 
-            memberMessages.map(
-                async msg => {
-
-                    const res =
-                        await fetch(
-                            `${API_URL}/api/message_unread/${msg.id}?t=${Date.now()}`,
+            memberMessages
+                .filter(
+                    msg =>
+                        Number(msg.is_read) === 0
+                )
+                .map(
+                    msg =>
+                        fetch(
+                            `${API_URL}/api/message_read/${msg.id}`,
                             {
                                 method: "POST",
                                 cache: "no-store"
                             }
-                        );
-
-                    if(!res.ok){
-
-                        throw new Error(
-                            `Message ${msg.id} failed: HTTP ${res.status}`
-                        );
-
-                    }
-
-                }
-            )
+                        )
+                )
 
         );
 
 
-        /* UPDATE LOCAL DATA */
+        /* =================================================
+           SECOND: MARK ONLY LATEST AS UNREAD
+        ================================================= */
+
+        const res =
+            await fetch(
+                `${API_URL}/api/message_unread/${latestMessage.id}?t=${Date.now()}`,
+                {
+                    method: "POST",
+                    cache: "no-store"
+                }
+            );
+
+
+        if(!res.ok){
+
+            throw new Error(
+                `Latest message failed: HTTP ${res.status}`
+            );
+
+        }
+
+
+        /* =================================================
+           UPDATE LOCAL STATE
+        ================================================= */
 
         currentMessages =
             currentMessages.map(
@@ -1994,7 +2041,18 @@ async function markMemberMessagesUnread(memberId){
                             msg.member_name
                         ) === memberId;
 
-                    if(sameMember){
+
+                    if(!sameMember){
+                        return msg;
+                    }
+
+
+                    /* ONLY LATEST = UNREAD */
+
+                    if(
+                        Number(msg.id) ===
+                        Number(latestMessage.id)
+                    ){
 
                         return {
                             ...msg,
@@ -2003,37 +2061,65 @@ async function markMemberMessagesUnread(memberId){
 
                     }
 
-                    return msg;
+
+                    /* ALL OLD = READ */
+
+                    return {
+                        ...msg,
+                        is_read: 1
+                    };
 
                 }
             );
 
 
-        /* UPDATE CARD WITHOUT REFRESH */
+        /* =================================================
+           UPDATE CARD
+        ================================================= */
 
         const menu =
             document.getElementById(
                 `menu-${memberId}`
             );
 
+
         const card =
-            menu?.closest(".msg-card");
+            menu?.closest(
+                ".msg-card"
+            );
+
 
         if(card){
 
-            card.classList.add("unread");
+            card.classList.add(
+                "unread"
+            );
+
+
+            /* REMOVE EXISTING BADGE */
+
+            const oldBadge =
+                card.querySelector(
+                    ".unread-badge"
+                );
+
+
+            if(oldBadge){
+
+                oldBadge.remove();
+
+            }
+
+
+            /* ADD ONE BADGE */
 
             const senderInfo =
                 card.querySelector(
                     ".sender-info"
                 );
 
-            if(
-                senderInfo &&
-                !senderInfo.querySelector(
-                    ".unread-badge"
-                )
-            ){
+
+            if(senderInfo){
 
                 const badge =
                     document.createElement(
@@ -2052,14 +2138,35 @@ async function markMemberMessagesUnread(memberId){
 
             }
 
-            const dots =
-                card.querySelector(".dots");
 
-            if(dots){
-                dots.click();
+            /* CLOSE MENU */
+
+            const msgMenu =
+                card.querySelector(
+                    ".msg-menu"
+                );
+
+
+            if(msgMenu){
+
+                msgMenu.classList.remove(
+                    "show"
+                );
+
             }
 
+
+            card.classList.remove(
+                "menu-open"
+            );
+
         }
+
+
+        /* =================================================
+           UPDATE COUNT
+           RESULT = +1 ONLY
+        ================================================= */
 
         await loadMessageCountFromState();
 
@@ -2067,14 +2174,13 @@ async function markMemberMessagesUnread(memberId){
     }catch(err){
 
         console.error(
-            "MARK MEMBER MESSAGES UNREAD ERROR:",
+            "MARK LATEST MEMBER MESSAGE UNREAD ERROR:",
             err
         );
 
     }
 
 }
-
 
 /* =========================================================
    DELETE ALL MEMBER MESSAGES
