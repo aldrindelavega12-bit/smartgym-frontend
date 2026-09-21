@@ -1252,6 +1252,7 @@ let lastUnread = 0;
 
 /* =========================================================
    LOAD TRAINER MESSAGES
+   ONE CARD PER MEMBER
 ========================================================= */
 
 async function loadMessages(){
@@ -1339,27 +1340,120 @@ async function loadMessages(){
 
 
         /* =================================================
+           GROUP MESSAGES BY MEMBER
+           ONE CARD PER MEMBER
+        ================================================= */
+
+        const grouped = {};
+
+
+        currentMessages.forEach(
+            msg => {
+
+                const memberId =
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name ||
+                    "unknown";
+
+
+                if(
+                    !grouped[memberId]
+                ){
+
+                    grouped[memberId] = {
+
+                        member_id:
+                            memberId,
+
+                        member_name:
+                            msg.member_name ||
+                            "Member",
+
+                        messages: []
+
+                    };
+
+                }
+
+
+                grouped[memberId]
+                    .messages
+                    .push(msg);
+
+            }
+        );
+
+
+        /* =================================================
+           SORT EACH MEMBER'S MESSAGES
            LATEST FIRST
         ================================================= */
 
-        currentMessages.sort(
+        const members =
+            Object.values(
+                grouped
+            );
+
+
+        members.forEach(
+            member => {
+
+                member.messages.sort(
+                    (a,b) =>
+                        Number(
+                            b.id || 0
+                        )
+                        -
+                        Number(
+                            a.id || 0
+                        )
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           SORT MEMBERS
+           LATEST ACTIVITY FIRST
+        ================================================= */
+
+        members.sort(
             (a,b) =>
                 Number(
-                    b.id || 0
+                    b.messages[0]?.id || 0
                 )
                 -
                 Number(
-                    a.id || 0
+                    a.messages[0]?.id || 0
                 )
         );
 
 
         /* =================================================
-           CREATE MESSAGE CARD
+           CREATE ONE CARD PER MEMBER
         ================================================= */
 
-        currentMessages.forEach(
-            msg => {
+        members.forEach(
+            member => {
+
+                const latestMessage =
+                    member.messages[0];
+
+
+                /* =================================================
+                   CHECK ALL MESSAGES FOR UNREAD
+                ================================================= */
+
+                const hasUnread =
+                    member.messages.some(
+                        msg =>
+                            Number(
+                                msg.is_read
+                            ) === 0
+                    );
+
 
                 const card =
                     document.createElement(
@@ -1367,27 +1461,29 @@ async function loadMessages(){
                     );
 
 
-                const isUnread =
-                    Number(
-                        msg.is_read
-                    ) === 0;
-
-
                 card.className =
                     "msg-card" +
                     (
-                        isUnread
+                        hasUnread
                         ? " unread"
                         : ""
                     );
 
 
+                /* =================================================
+                   CARD CLICK
+                ================================================= */
+
                 card.onclick =
                     () =>
-                        openMessage(
-                            msg
+                        openMemberMessages(
+                            member.member_id
                         );
 
+
+                /* =================================================
+                   CARD
+                ================================================= */
 
                 card.innerHTML = `
 
@@ -1402,8 +1498,7 @@ async function loadMessages(){
                             <h3>
 
                                 ${
-                                    msg.title ||
-                                    "Training Notification"
+                                    member.member_name
                                 }
 
                             </h3>
@@ -1414,21 +1509,22 @@ async function loadMessages(){
                             >
 
                                 ${
-                                    msg.member_name ||
-                                    "Member"
+                                    member.member_id
                                 }
 
                             </span>
 
 
                             ${
-                                isUnread
+                                hasUnread
                                 ?
                                 `
                                 <span
                                     class="unread-badge"
                                 >
+
                                     NEW / UNREAD
+
                                 </span>
                                 `
                                 :
@@ -1442,7 +1538,7 @@ async function loadMessages(){
                             class="dots"
                             onclick="
                                 event.stopPropagation();
-                                toggleMenu(${msg.id})
+                                toggleMenu('${member.member_id}')
                             "
                         >
 
@@ -1462,7 +1558,7 @@ async function loadMessages(){
                         >
 
                             ${
-                                msg.message ||
+                                latestMessage.message ||
                                 ""
                             }
 
@@ -1472,7 +1568,7 @@ async function loadMessages(){
                         <small>
 
                             ${
-                                msg.created_at ||
+                                latestMessage.created_at ||
                                 ""
                             }
 
@@ -1482,14 +1578,16 @@ async function loadMessages(){
 
 
                     <div
-                        id="menu-${msg.id}"
+                        id="menu-${member.member_id}"
                         class="msg-menu"
                     >
 
                         <button
                             onclick="
                                 event.stopPropagation();
-                                deleteMessage(${msg.id})
+                                deleteMemberMessages(
+                                    '${member.member_id}'
+                                )
                             "
                         >
 
@@ -1501,7 +1599,9 @@ async function loadMessages(){
                         <button
                             onclick="
                                 event.stopPropagation();
-                                markRead(${msg.id})
+                                markMemberMessagesRead(
+                                    '${member.member_id}'
+                                )
                             "
                         >
 
@@ -1513,7 +1613,9 @@ async function loadMessages(){
                         <button
                             onclick="
                                 event.stopPropagation();
-                                markUnread(${msg.id})
+                                markMemberMessagesUnread(
+                                    '${member.member_id}'
+                                )
                             "
                         >
 
@@ -1547,29 +1649,75 @@ async function loadMessages(){
 
 
 /* =========================================================
-   OPEN MESSAGE
+   OPEN MEMBER MESSAGE
 ========================================================= */
 
-async function openMessage(msg){
+async function openMemberMessages(
+    memberId
+){
+
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                (
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name
+                ) === memberId
+        );
+
+
+    if(
+        memberMessages.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    /* =================================================
+       SORT LATEST FIRST
+    ================================================= */
+
+    memberMessages.sort(
+        (a,b) =>
+            Number(
+                b.id || 0
+            )
+            -
+            Number(
+                a.id || 0
+            )
+    );
+
+
+    const latestMessage =
+        memberMessages[0];
+
+
+    /* =================================================
+       SHOW LATEST MESSAGE
+    ================================================= */
 
     document.getElementById(
         "modalTitle"
     ).innerText =
-        msg.title ||
+        latestMessage.title ||
         "Training Notification";
 
 
     document.getElementById(
         "modalMessage"
     ).innerText =
-        msg.message ||
+        latestMessage.message ||
         "";
 
 
     document.getElementById(
         "modalDate"
     ).innerText =
-        msg.created_at ||
+        latestMessage.created_at ||
         "";
 
 
@@ -1579,14 +1727,47 @@ async function openMessage(msg){
         "flex";
 
 
-    if(
-        Number(
-            msg.is_read
-        ) === 0
-    ){
+    /* =================================================
+       MARK ALL UNREAD FROM THIS MEMBER AS READ
+    ================================================= */
 
-        await markRead(
-            msg.id
+    try{
+
+        await Promise.all(
+
+            memberMessages
+                .filter(
+                    msg =>
+                        Number(
+                            msg.is_read
+                        ) === 0
+                )
+                .map(
+                    msg =>
+
+                        fetch(
+                            `${API_URL}/api/message_read/${msg.id}`,
+                            {
+                                method:
+                                    "POST"
+                            }
+                        )
+
+                )
+
+        );
+
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "MARK MEMBER MESSAGES READ ERROR:",
+            err
         );
 
     }
@@ -1595,18 +1776,182 @@ async function openMessage(msg){
 
 
 /* =========================================================
-   CLOSE MESSAGE
+   MARK ALL MEMBER MESSAGES READ
 ========================================================= */
 
-function closeMessage(){
+async function markMemberMessagesRead(
+    memberId
+){
 
-    document.getElementById(
-        "messageModal"
-    ).style.display =
-        "none";
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                (
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name
+                ) === memberId
+        );
+
+
+    try{
+
+        await Promise.all(
+
+            memberMessages.map(
+                msg =>
+
+                    fetch(
+                        `${API_URL}/api/message_read/${msg.id}`,
+                        {
+                            method:
+                                "POST"
+                        }
+                    )
+
+            )
+
+        );
+
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "MARK MEMBER MESSAGES READ ERROR:",
+            err
+        );
+
+    }
 
 }
 
+
+/* =========================================================
+   MARK ALL MEMBER MESSAGES UNREAD
+========================================================= */
+
+async function markMemberMessagesUnread(
+    memberId
+){
+
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                (
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name
+                ) === memberId
+        );
+
+
+    try{
+
+        await Promise.all(
+
+            memberMessages.map(
+                msg =>
+
+                    fetch(
+                        `${API_URL}/api/message_unread/${msg.id}`,
+                        {
+                            method:
+                                "POST"
+                        }
+                    )
+
+            )
+
+        );
+
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "MARK MEMBER MESSAGES UNREAD ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE ALL MEMBER MESSAGES
+========================================================= */
+
+async function deleteMemberMessages(
+    memberId
+){
+
+    if(
+        !confirm(
+            "Delete all messages from this member?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                (
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name
+                ) === memberId
+        );
+
+
+    try{
+
+        await Promise.all(
+
+            memberMessages.map(
+                msg =>
+
+                    fetch(
+                        `${API_URL}/api/delete_message/${msg.id}`,
+                        {
+                            method:
+                                "DELETE"
+                        }
+                    )
+
+            )
+
+        );
+
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "DELETE MEMBER MESSAGES ERROR:",
+            err
+        );
+
+    }
+
+}
 
 /* =========================================================
    CLEAR
