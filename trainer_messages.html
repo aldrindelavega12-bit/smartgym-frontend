@@ -1779,6 +1779,10 @@ async function openMemberMessages(
    MARK ALL MEMBER MESSAGES READ
 ========================================================= */
 
+/* =========================================================
+   MARK ALL MEMBER MESSAGES READ
+========================================================= */
+
 async function markMemberMessagesRead(memberId){
 
     const memberMessages =
@@ -1791,12 +1795,7 @@ async function markMemberMessagesRead(memberId){
                 ) === memberId
         );
 
-
     try{
-
-        /* =================================================
-           UPDATE DATABASE
-        ================================================= */
 
         await Promise.all(
 
@@ -1812,7 +1811,6 @@ async function markMemberMessagesRead(memberId){
                             }
                         );
 
-
                     if(!res.ok){
 
                         throw new Error(
@@ -1827,9 +1825,7 @@ async function markMemberMessagesRead(memberId){
         );
 
 
-        /* =================================================
-           UPDATE LOCAL STATE IMMEDIATELY
-        ================================================= */
+        /* UPDATE LOCAL DATA */
 
         currentMessages =
             currentMessages.map(
@@ -1842,7 +1838,6 @@ async function markMemberMessagesRead(memberId){
                             msg.member_name
                         ) === memberId;
 
-
                     if(sameMember){
 
                         return {
@@ -1852,20 +1847,43 @@ async function markMemberMessagesRead(memberId){
 
                     }
 
-
                     return msg;
 
                 }
             );
 
 
-        /* =================================================
-           REFRESH UI IMMEDIATELY
-        ================================================= */
+        /* UPDATE CARD WITHOUT REFRESH */
 
-        await loadMessages();
+        const menu =
+            document.getElementById(
+                `menu-${memberId}`
+            );
 
-        await loadMessageCount();
+        const card =
+            menu?.closest(".msg-card");
+
+        if(card){
+
+            card.classList.remove("unread");
+
+            const badge =
+                card.querySelector(".unread-badge");
+
+            if(badge){
+                badge.remove();
+            }
+
+            const dots =
+                card.querySelector(".dots");
+
+            if(dots){
+                dots.click();
+            }
+
+        }
+
+        await loadMessageCountFromState();
 
 
     }catch(err){
@@ -1878,6 +1896,8 @@ async function markMemberMessagesRead(memberId){
     }
 
 }
+
+
 /* =========================================================
    MARK ALL MEMBER MESSAGES UNREAD
 ========================================================= */
@@ -1894,12 +1914,7 @@ async function markMemberMessagesUnread(memberId){
                 ) === memberId
         );
 
-
     try{
-
-        /* =================================================
-           UPDATE DATABASE
-        ================================================= */
 
         await Promise.all(
 
@@ -1915,6 +1930,155 @@ async function markMemberMessagesUnread(memberId){
                             }
                         );
 
+                    if(!res.ok){
+
+                        throw new Error(
+                            `Message ${msg.id} failed: HTTP ${res.status}`
+                        );
+
+                    }
+
+                }
+            )
+
+        );
+
+
+        /* UPDATE LOCAL DATA */
+
+        currentMessages =
+            currentMessages.map(
+                msg => {
+
+                    const sameMember =
+                        (
+                            msg.sender_id ||
+                            msg.member_id ||
+                            msg.member_name
+                        ) === memberId;
+
+                    if(sameMember){
+
+                        return {
+                            ...msg,
+                            is_read: 0
+                        };
+
+                    }
+
+                    return msg;
+
+                }
+            );
+
+
+        /* UPDATE CARD WITHOUT REFRESH */
+
+        const menu =
+            document.getElementById(
+                `menu-${memberId}`
+            );
+
+        const card =
+            menu?.closest(".msg-card");
+
+        if(card){
+
+            card.classList.add("unread");
+
+            const senderInfo =
+                card.querySelector(
+                    ".sender-info"
+                );
+
+            if(
+                senderInfo &&
+                !senderInfo.querySelector(
+                    ".unread-badge"
+                )
+            ){
+
+                const badge =
+                    document.createElement(
+                        "span"
+                    );
+
+                badge.className =
+                    "unread-badge";
+
+                badge.innerText =
+                    "NEW / UNREAD";
+
+                senderInfo.appendChild(
+                    badge
+                );
+
+            }
+
+            const dots =
+                card.querySelector(".dots");
+
+            if(dots){
+                dots.click();
+            }
+
+        }
+
+        await loadMessageCountFromState();
+
+
+    }catch(err){
+
+        console.error(
+            "MARK MEMBER MESSAGES UNREAD ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE ALL MEMBER MESSAGES
+========================================================= */
+
+async function deleteMemberMessages(memberId){
+
+    if(
+        !confirm(
+            "Delete all messages from this member?"
+        )
+    ){
+
+        return;
+
+    }
+
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                (
+                    msg.sender_id ||
+                    msg.member_id ||
+                    msg.member_name
+                ) === memberId
+        );
+
+    try{
+
+        await Promise.all(
+
+            memberMessages.map(
+                async msg => {
+
+                    const res =
+                        await fetch(
+                            `${API_URL}/api/delete_message/${msg.id}`,
+                            {
+                                method: "DELETE"
+                            }
+                        );
 
                     if(!res.ok){
 
@@ -1930,110 +2094,34 @@ async function markMemberMessagesUnread(memberId){
         );
 
 
-        /* =================================================
-           UPDATE LOCAL STATE IMMEDIATELY
-        ================================================= */
+        /* REMOVE FROM LOCAL DATA */
 
         currentMessages =
-            currentMessages.map(
-                msg => {
-
-                    const sameMember =
-                        (
-                            msg.sender_id ||
-                            msg.member_id ||
-                            msg.member_name
-                        ) === memberId;
-
-
-                    if(sameMember){
-
-                        return {
-                            ...msg,
-                            is_read: 0
-                        };
-
-                    }
-
-
-                    return msg;
-
-                }
+            currentMessages.filter(
+                msg =>
+                    (
+                        msg.sender_id ||
+                        msg.member_id ||
+                        msg.member_name
+                    ) !== memberId
             );
 
 
-        /* =================================================
-           REFRESH UI IMMEDIATELY
-        ================================================= */
+        /* REMOVE CARD IMMEDIATELY */
 
-        await loadMessages();
+        const menu =
+            document.getElementById(
+                `menu-${memberId}`
+            );
 
-        await loadMessageCount();
+        const card =
+            menu?.closest(".msg-card");
 
+        if(card){
+            card.remove();
+        }
 
-    }catch(err){
-
-        console.error(
-            "MARK MEMBER MESSAGES UNREAD ERROR:",
-            err
-        );
-
-    }
-
-}
-/* =========================================================
-   DELETE ALL MEMBER MESSAGES
-========================================================= */
-
-async function deleteMemberMessages(
-    memberId
-){
-
-    if(
-        !confirm(
-            "Delete all messages from this member?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    const memberMessages =
-        currentMessages.filter(
-            msg =>
-                (
-                    msg.sender_id ||
-                    msg.member_id ||
-                    msg.member_name
-                ) === memberId
-        );
-
-
-    try{
-
-        await Promise.all(
-
-            memberMessages.map(
-                msg =>
-
-                    fetch(
-                        `${API_URL}/api/delete_message/${msg.id}`,
-                        {
-                            method:
-                                "DELETE"
-                        }
-                    )
-
-            )
-
-        );
-
-
-        await loadMessages();
-
-        await loadMessageCount();
+        await loadMessageCountFromState();
 
 
     }catch(err){
@@ -2047,6 +2135,48 @@ async function deleteMemberMessages(
 
 }
 
+
+/* =========================================================
+   MESSAGE COUNT FROM CURRENT STATE
+========================================================= */
+
+async function loadMessageCountFromState(){
+
+    const unread =
+        currentMessages.filter(
+            msg =>
+                Number(msg.is_read) === 0
+        ).length;
+
+    const badge =
+        document.getElementById(
+            "msg-count"
+        );
+
+    if(!badge){
+        return;
+    }
+
+    if(unread > 0){
+
+        badge.innerText =
+            unread > 99
+            ? "99+"
+            : unread;
+
+        badge.style.display =
+            "flex";
+
+    }else{
+
+        badge.style.display =
+            "none";
+
+    }
+
+    lastUnread = unread;
+
+}
 /* =========================================================
    CLEAR
 ========================================================= */
