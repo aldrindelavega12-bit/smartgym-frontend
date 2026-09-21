@@ -1779,9 +1779,7 @@ async function openMemberMessages(
    MARK ALL MEMBER MESSAGES READ
 ========================================================= */
 
-async function markMemberMessagesRead(
-    memberId
-){
+async function markMemberMessagesRead(memberId){
 
     const memberMessages =
         currentMessages.filter(
@@ -1796,23 +1794,74 @@ async function markMemberMessagesRead(
 
     try{
 
+        /* =================================================
+           UPDATE DATABASE
+        ================================================= */
+
         await Promise.all(
 
             memberMessages.map(
-                msg =>
+                async msg => {
 
-                    fetch(
-                        `${API_URL}/api/message_read/${msg.id}`,
-                        {
-                            method:
-                                "POST"
-                        }
-                    )
+                    const res =
+                        await fetch(
+                            `${API_URL}/api/message_read/${msg.id}?t=${Date.now()}`,
+                            {
+                                method: "POST",
+                                cache: "no-store"
+                            }
+                        );
 
+
+                    if(!res.ok){
+
+                        throw new Error(
+                            `Message ${msg.id} failed: HTTP ${res.status}`
+                        );
+
+                    }
+
+                }
             )
 
         );
 
+
+        /* =================================================
+           UPDATE LOCAL STATE IMMEDIATELY
+        ================================================= */
+
+        currentMessages =
+            currentMessages.map(
+                msg => {
+
+                    const sameMember =
+                        (
+                            msg.sender_id ||
+                            msg.member_id ||
+                            msg.member_name
+                        ) === memberId;
+
+
+                    if(sameMember){
+
+                        return {
+                            ...msg,
+                            is_read: 1
+                        };
+
+                    }
+
+
+                    return msg;
+
+                }
+            );
+
+
+        /* =================================================
+           REFRESH UI IMMEDIATELY
+        ================================================= */
 
         await loadMessages();
 
@@ -1829,15 +1878,11 @@ async function markMemberMessagesRead(
     }
 
 }
-
-
 /* =========================================================
    MARK ALL MEMBER MESSAGES UNREAD
 ========================================================= */
 
-async function markMemberMessagesUnread(
-    memberId
-){
+async function markMemberMessagesUnread(memberId){
 
     const memberMessages =
         currentMessages.filter(
@@ -1852,23 +1897,74 @@ async function markMemberMessagesUnread(
 
     try{
 
+        /* =================================================
+           UPDATE DATABASE
+        ================================================= */
+
         await Promise.all(
 
             memberMessages.map(
-                msg =>
+                async msg => {
 
-                    fetch(
-                        `${API_URL}/api/message_unread/${msg.id}`,
-                        {
-                            method:
-                                "POST"
-                        }
-                    )
+                    const res =
+                        await fetch(
+                            `${API_URL}/api/message_unread/${msg.id}?t=${Date.now()}`,
+                            {
+                                method: "POST",
+                                cache: "no-store"
+                            }
+                        );
 
+
+                    if(!res.ok){
+
+                        throw new Error(
+                            `Message ${msg.id} failed: HTTP ${res.status}`
+                        );
+
+                    }
+
+                }
             )
 
         );
 
+
+        /* =================================================
+           UPDATE LOCAL STATE IMMEDIATELY
+        ================================================= */
+
+        currentMessages =
+            currentMessages.map(
+                msg => {
+
+                    const sameMember =
+                        (
+                            msg.sender_id ||
+                            msg.member_id ||
+                            msg.member_name
+                        ) === memberId;
+
+
+                    if(sameMember){
+
+                        return {
+                            ...msg,
+                            is_read: 0
+                        };
+
+                    }
+
+
+                    return msg;
+
+                }
+            );
+
+
+        /* =================================================
+           REFRESH UI IMMEDIATELY
+        ================================================= */
 
         await loadMessages();
 
@@ -1885,8 +1981,6 @@ async function markMemberMessagesUnread(
     }
 
 }
-
-
 /* =========================================================
    DELETE ALL MEMBER MESSAGES
 ========================================================= */
