@@ -1415,13 +1415,13 @@ if (!user) {
                 <div class="staff-profile"
                     onclick="toggleStaffMenu()">
 
-                    <div class="staff-avatar">
+                    <div class="staff-avatar" id="staffAvatar">
                         S
                     </div>
 
                     <div class="staff-info">
 
-                        <strong>Staff</strong>
+                        <strong id="staffName">Staff</strong>
 
                         <small>Staff</small>
 
@@ -1555,6 +1555,31 @@ const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 // ================= MENU =================
 const menu = document.getElementById("menu");
+
+const staffName =
+    document.getElementById("staffName");
+
+const staffAvatar =
+    document.getElementById("staffAvatar");
+
+if(user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Staff";
+
+    if(staffName){
+        staffName.innerText = fullname;
+    }
+
+    if(staffAvatar){
+        staffAvatar.innerText =
+            fullname.charAt(0).toUpperCase();
+    }
+
+}
 
 if(user.role === "admin"){
    menu.innerHTML = `
