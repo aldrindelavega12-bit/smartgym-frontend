@@ -475,11 +475,31 @@ const trainerName =
     document.getElementById("trainerName");
 
 if(trainerName && user){
+
     trainerName.innerText =
+        user.fullname ||
         user.name ||
         user.full_name ||
-        user.username ||
         "Trainer";
+
+}
+
+const trainerAvatar =
+    document.querySelector(".trainer-avatar");
+
+if(trainerAvatar && user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Trainer";
+
+    trainerAvatar.innerText =
+        fullname
+            .charAt(0)
+            .toUpperCase();
+
 }
 
 if(
