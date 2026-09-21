@@ -471,7 +471,48 @@ const user =
     JSON.parse(
         localStorage.getItem("user")
     );
+/* =====================================================
+   TRAINER PROFILE
+===================================================== */
 
+const trainerName =
+    document.getElementById(
+        "trainerName"
+    );
+
+const trainerAvatar =
+    document.getElementById(
+        "trainerAvatar"
+    );
+
+
+if(user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Trainer";
+
+
+    if(trainerName){
+
+        trainerName.innerText =
+            fullname;
+
+    }
+
+
+    if(trainerAvatar){
+
+        trainerAvatar.innerText =
+            fullname
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
 
 if(
     !user ||
