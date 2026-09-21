@@ -1849,7 +1849,7 @@ async function loadMessages(){
                     <button
                         onclick="
                             event.stopPropagation();
-                            deleteMessage(${latestMessage.id})
+                            deleteMemberMessages('${member.user_id}')
                         "
                     >
                         Delete
@@ -2054,22 +2054,87 @@ async function markRead(id){
     loadMessages();
 }
 
-async function deleteMessage(id){
+async function deleteMemberMessages(memberId){
 
     if(
         !confirm(
-            "Delete this message?"
+            "Delete all messages from this member?"
         )
-    ) return;
+    ){
+        return;
+    }
 
-    await fetch(
-        `${API_URL}/api/delete_message/${id}`,
-        {
-            method:"DELETE"
-        }
-    );
 
-    loadMessages();
+    /* =========================================
+       GET ALL MESSAGES FROM THIS MEMBER
+    ========================================= */
+
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                String(msg.user_id) ===
+                String(memberId)
+        );
+
+
+    if(
+        memberMessages.length === 0
+    ){
+        return;
+    }
+
+
+    try{
+
+        /* =========================================
+           DELETE ALL MESSAGES
+        ========================================= */
+
+        await Promise.all(
+
+            memberMessages.map(
+                msg =>
+                    fetch(
+                        `${API_URL}/api/delete_message/${msg.id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    )
+            )
+
+        );
+
+
+        /* =========================================
+           REMOVE FROM LOCAL STATE
+        ========================================= */
+
+        currentMessages =
+            currentMessages.filter(
+                msg =>
+                    String(msg.user_id) !==
+                    String(memberId)
+            );
+
+
+        /* =========================================
+           REFRESH UI
+        ========================================= */
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "DELETE MEMBER MESSAGES ERROR:",
+            err
+        );
+
+    }
+
 }
 
 document.addEventListener("click", () => {
