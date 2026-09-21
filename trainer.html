@@ -178,12 +178,12 @@
 
                 <div class="trainer-info">
 
-                    <strong>
+                    <strong id="trainerName">
                         Trainer
                     </strong>
 
                     <small>
-                        Gym Trainer
+                        Trainer
                     </small>
 
                 </div>
@@ -471,7 +471,16 @@ const user =
     JSON.parse(
         localStorage.getItem("user")
     );
+const trainerName =
+    document.getElementById("trainerName");
 
+if(trainerName && user){
+    trainerName.innerText =
+        user.name ||
+        user.full_name ||
+        user.username ||
+        "Trainer";
+}
 
 if(
     !user ||
