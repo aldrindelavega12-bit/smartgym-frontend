@@ -180,21 +180,22 @@
                 onclick="toggleTrainerMenu()">
 
 
-                <div class="trainer-avatar">
-
+                <div
+                    class="trainer-avatar"
+                    id="trainerAvatar"
+                >
                     T
-
                 </div>
 
 
                 <div class="trainer-info">
 
-                    <strong>
+                    <strong id="trainerName">
                         Trainer
                     </strong>
 
                     <small>
-                        Gym Trainer
+                        Trainer
                     </small>
 
                 </div>
@@ -431,6 +432,48 @@ const user =
         localStorage.getItem("user")
     );
 
+/* =====================================================
+   TRAINER PROFILE
+===================================================== */
+
+const trainerName =
+    document.getElementById(
+        "trainerName"
+    );
+
+const trainerAvatar =
+    document.getElementById(
+        "trainerAvatar"
+    );
+
+
+if(user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Trainer";
+
+
+    if(trainerName){
+
+        trainerName.innerText =
+            fullname;
+
+    }
+
+
+    if(trainerAvatar){
+
+        trainerAvatar.innerText =
+            fullname
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
 
 if(
     !user ||
