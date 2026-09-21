@@ -132,19 +132,15 @@ if (!user) {
 
                 <div class="staff-profile" onclick="toggleStaffMenu()">
 
-                    <div class="staff-avatar">
+                    <div class="staff-avatar" id="staffAvatar">
                         S
                     </div>
 
                     <div class="staff-info">
 
-                        <strong>
-                            Staff
-                        </strong>
+                        <strong id="staffName">Staff</strong>
 
-                        <small>
-                            Staff
-                        </small>
+                        <small>Staff</small>
 
                     </div>
 
@@ -368,6 +364,30 @@ if(user.role === "admin"){
 }
 
 // ================= FORCE ACTIVE SIDEBAR =================
+const staffName =
+    document.getElementById("staffName");
+
+const staffAvatar =
+    document.getElementById("staffAvatar");
+
+if(user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Staff";
+
+    if(staffName){
+        staffName.innerText = fullname;
+    }
+
+    if(staffAvatar){
+        staffAvatar.innerText =
+            fullname.charAt(0).toUpperCase();
+    }
+
+}
 
 document.querySelectorAll("#menu a").forEach(link => {
     link.classList.remove("active");
