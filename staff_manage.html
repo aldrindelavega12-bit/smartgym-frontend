@@ -1899,61 +1899,36 @@ function backTrainerStep(){
 /* =====================================================
    CREATE STAFF
 ===================================================== */
-
 async function createAccount(){
 
     const fullname =
-        document.getElementById(
-            "fullname"
-        ).value.trim();
-
+        document.getElementById("fullname").value.trim();
 
     const role =
-        document.getElementById(
-            "role"
-        ).value;
-
+        document.getElementById("role").value;
 
     const username =
-        document.getElementById(
-            "username"
-        ).value.trim();
-
+        document.getElementById("username").value.trim();
 
     const password =
-        document.getElementById(
-            "password"
-        ).value;
-
+        document.getElementById("password").value;
 
     const confirmPassword =
-        document.getElementById(
-            "confirmPassword"
-        ).value;
-
+        document.getElementById("confirmPassword").value;
 
     const priceDay =
-        document.getElementById(
-            "priceDay"
-        ).value;
-
+        document.getElementById("priceDay").value;
 
     const priceWeek =
-        document.getElementById(
-            "priceWeek"
-        ).value;
-
+        document.getElementById("priceWeek").value;
 
     const priceMonth =
-        document.getElementById(
-            "priceMonth"
-        ).value;
+        document.getElementById("priceMonth").value;
 
 
-
-    /* =========================
-       REQUIRED FIELDS
-    ========================= */
+    // =========================
+    // REQUIRED FIELDS
+    // =========================
 
     if(
         !fullname ||
@@ -1962,56 +1937,27 @@ async function createAccount(){
         !confirmPassword
     ){
 
-        alert(
-            "Complete all fields."
-        );
+        alert("Complete all fields.");
 
         return;
-
     }
 
 
+    // =========================
+    // PASSWORD
+    // =========================
 
-    /* =========================
-       PASSWORD
-    ========================= */
+    if(password !== confirmPassword){
 
-    if(
-        password !== confirmPassword
-    ){
-
-        alert(
-            "Passwords do not match."
-        );
+        alert("Passwords do not match.");
 
         return;
-
     }
 
 
-
-    /* =========================
-       TRAINER PRICES
-    ========================= */
-
-    if(role === "trainer"){
-
-        if(
-            priceDay === "" ||
-            priceWeek === "" ||
-            priceMonth === ""
-        ){
-
-            alert(
-                "Please enter all trainer prices."
-            );
-
-            return;
-
-        }
-
-    }
-
+    // =========================
+    // TRAINER VALIDATION
+    // =========================
 
     if(role === "trainer"){
 
@@ -2022,8 +1968,8 @@ async function createAccount(){
             );
 
             return;
-
         }
+
 
         if(
             priceDay === "" ||
@@ -2036,13 +1982,16 @@ async function createAccount(){
             );
 
             return;
-
         }
 
     }
 
 
     try{
+
+        // =========================
+        // SEND DATA
+        // =========================
 
         const res =
             await fetch(
@@ -2080,19 +2029,17 @@ async function createAccount(){
                             ? Number(priceMonth)
                             : null,
 
+                        // IMPORTANT:
+                        // IDs ONLY
                         programs:
                             role === "trainer"
                             ? selectedPrograms.map(
-                                program => ({
-                                    program_id: program.id,
-                                    program_name: program.program_name,
-                                    duration_days: program.duration_days
-                                })
+                                program =>
+                                    Number(program.id)
                             )
                             : []
 
                     })
-
                 }
             );
 
@@ -2101,14 +2048,11 @@ async function createAccount(){
             await res.json();
 
 
+        // =========================
+        // ERROR
+        // =========================
 
-        /* =========================
-           ERROR
-        ========================= */
-
-        if(
-            data.status !== "success"
-        ){
+        if(data.status !== "success"){
 
             alert(
                 data.message ||
@@ -2116,88 +2060,105 @@ async function createAccount(){
             );
 
             return;
-
         }
 
 
-
-        /* =========================
-           SUCCESS
-        ========================= */
+        // =========================
+        // SUCCESS
+        // =========================
 
         showSuccessModal(
 
             "Successfully Created!",
 
             role === "trainer"
-            ? "The trainer account and pricing have been successfully created."
+            ? "The trainer account, pricing, and programs have been successfully created."
             : "The staff account has been successfully created."
 
         );
 
 
-
-        /* =========================
-           CLEAR FORM
-        ========================= */
+        // =========================
+        // CLEAR FORM
+        // =========================
 
         document.getElementById(
             "fullname"
         ).value = "";
 
-
         document.getElementById(
             "role"
         ).value = "staff";
-
 
         document.getElementById(
             "username"
         ).value = "";
 
-
         document.getElementById(
             "password"
         ).value = "";
-
 
         document.getElementById(
             "confirmPassword"
         ).value = "";
 
-
         document.getElementById(
             "priceDay"
         ).value = "";
 
-
         document.getElementById(
             "priceWeek"
         ).value = "";
-
 
         document.getElementById(
             "priceMonth"
         ).value = "";
 
 
-        trainerPricingFields
-            .classList
-            .remove("show");
+        selectedPrograms = [];
+
+        renderSelectedPrograms();
+
+        renderProgramOptions();
 
 
+        // =========================
+        // RESET STEP
+        // =========================
 
-        /* =========================
-           CLOSE MODAL
-        ========================= */
+        trainerStep = 1;
+
+        document.getElementById(
+            "trainerStep1"
+        ).style.display = "block";
+
+        document.getElementById(
+            "trainerStep2"
+        ).style.display = "none";
+
+        document.getElementById(
+            "staffModalTitle"
+        ).innerText = "Add Staff";
+
+        document.getElementById(
+            "createStaffBtn"
+        ).style.display = "block";
+
+        document.getElementById(
+            "trainerNextBtn"
+        ).style.display = "none";
+
+
+        // =========================
+        // CLOSE MODAL
+        // =========================
 
         closeStaffModal();
 
 
-
-        /* =========================
-           RELOAD DATABASE DATA
-        ========================= */
+        // =========================
+        // RELOAD STAFF
+        // =========================
 
         await loadStaff();
 
@@ -2216,6 +2177,7 @@ async function createAccount(){
     }
 
 }
+
 
 /* =====================================================
    DELETE STAFF
