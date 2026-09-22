@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Admin Messages</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   ADMIN MESSAGES PAGE
+========================================================= */
+
+.admin-messages-page{
+    min-height:100vh;
+    background:#f7faf8;
+}
+
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+.admin-messages-page .top-header{
+
+    height:42px !important;
+
+    padding:0 !important;
+
+    margin-bottom:0 !important;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+}
+
+
+.admin-messages-page .top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+}
+
+
+/* =========================================================
+   ADMIN PROFILE
+========================================================= */
+
+.admin-messages-page .admin-profile{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    cursor:pointer;
+}
+
+
+.admin-messages-page .admin-avatar{
+
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
+
+    background:#087c3d;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    flex-shrink:0;
+}
+
+
+.admin-messages-page .admin-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    line-height:1.15;
+}
+
+
+.admin-messages-page .admin-info strong{
+
+    color:#17231e;
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+
+.admin-messages-page .admin-info small{
+
+    margin-top:3px;
+
+    color:#71817a;
+
+    font-size:11px;
+}
+
+
+.admin-messages-page .admin-profile-chevron{
+
+    margin-left:3px;
+
+    color:#17231e;
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+.admin-messages-page .admin-profile-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    top:48px;
+
+    right:0;
+
+    width:160px;
+
+    padding:6px;
+
+    background:#fff;
+
+    border:1px solid #e1ebe6;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.10);
+
+    z-index:99999;
+}
+
+
+.admin-messages-page
+.admin-profile-dropdown.show{
+
+    display:block;
+}
+
+
+.admin-messages-page
+.admin-dropdown-logout{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:10px 12px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:transparent;
+
+    color:#17231e;
+
+    font-family:"Inter",sans-serif;
+
+    font-size:13px;
+
+    text-align:left;
+
+    cursor:pointer;
+}
+
+
+.admin-messages-page
+.admin-dropdown-logout:hover{
+
+    background:#eaf6ee;
+
+    color:#087c3d;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.admin-messages-page .page-header{
+
+    padding:4px 0 0 !important;
+
+    margin:0 0 18px !important;
+}
+
+
+.admin-messages-page .page-header h1{
+
+    margin:0 !important;
+
+    color:#17231e !important;
+
+    font-size:38px !important;
+
+    font-weight:700 !important;
+
+    line-height:1.2 !important;
+
+    letter-spacing:-1px !important;
+}
+
+
+.admin-messages-page .page-header p{
+
+    margin:7px 0 0 !important;
+
+    color:#68736d !important;
+
+    font-size:16px !important;
+
+    line-height:1.4 !important;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.admin-messages-page .main{
+
+    padding-left:38px !important;
+
+    padding-right:38px !important;
+}
+
+
+/* =========================================================
+   MESSAGE PANEL
+========================================================= */
+
+.admin-messages-page .messages-panel{
+
+    width:calc(100% - 40px) !important;
+
+    margin:0 20px 60px !important;
+
+    padding:28px !important;
+
+    box-sizing:border-box;
+
+    background:#fff;
+
+    border:1px solid #e1ebe6;
+
+    border-radius:20px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+}
+
+
+/* =========================================================
+   MESSAGE LIST
+========================================================= */
+
+.admin-messages-page #messages-list{
+
+    margin:0;
+
+    padding:0 4px 0 0;
+
+    list-style:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    width:100%;
+
+    max-height:500px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    box-sizing:border-box;
+}
+
+
+/* =========================================================
+   MESSAGE CARD
+========================================================= */
+
+.admin-messages-page .msg-card{
+
+    position:relative;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    background:#f8fbf9;
+
+    border:1px solid #e1ebe6;
+
+    border-radius:12px;
+
+    padding:15px 17px;
+
+    margin:0;
+
+    color:#17231e;
+
+    cursor:pointer;
+
+    transition:
+        box-shadow .2s ease,
+        transform .2s ease,
+        border-color .2s ease;
+}
+
+
+.admin-messages-page .msg-card:hover{
+
+    border-color:#cbded3;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,.04);
+}
+
+
+/* =========================================================
+   UNREAD
+========================================================= */
+
+.admin-messages-page .msg-card.unread{
+
+    border-left:3px solid #008744;
+
+    padding-left:14px;
+}
+
+
+/* =========================================================
+   MESSAGE TOP
+========================================================= */
+
+.admin-messages-page .msg-top{
+
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:8px;
+
+    width:100%;
+}
+
+
+/* =========================================================
+   SENDER INFO
+========================================================= */
+
+.admin-messages-page .sender-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    flex:1;
+
+    min-width:0;
+}
+
+
+.admin-messages-page .sender-info h3{
+
+    margin:0;
+
+    color:#17231e;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    line-height:1.3;
+}
+
+
+.admin-messages-page
+.msg-card.unread
+.sender-info h3{
+
+    color:#008744;
+}
+
+
+.admin-messages-page .sender-role{
+
+    margin-top:2px;
+
+    color:#71817a;
+
+    font-size:12px;
+
+    font-weight:500;
+
+    line-height:1.3;
+}
+
+
+/* =========================================================
+   UNREAD BADGE
+========================================================= */
+
+.admin-messages-page
+.sender-info .unread-badge{
+
+    margin-top:6px;
+
+    padding:5px 11px;
+
+    border-radius:20px;
+
+    background:#008744;
+
+    color:#fff;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    line-height:1;
+}
+
+
+/* =========================================================
+   THREE DOT
+========================================================= */
+
+.admin-messages-page .dots{
+
+    width:28px;
+
+    height:28px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:8px;
+
+    color:#17231e;
+
+    font-size:21px;
+
+    line-height:1;
+
+    cursor:pointer;
+}
+
+
+.admin-messages-page .dots:hover{
+
+    background:#eaf6ee;
+
+    color:#008744;
+}
+
+
+/* =========================================================
+   MESSAGE CONTENT
+========================================================= */
+
+.admin-messages-page .msg-content{
+
+    margin-top:12px;
+}
+
+
+.admin-messages-page
+.msg-content .msg-text{
+
+    margin:0 0 10px;
+
+    color:#17231e;
+
+    font-size:14px;
+
+    line-height:1.5;
+}
+
+
+.admin-messages-page
+.msg-content small{
+
+    display:block;
+
+    margin-top:0;
+
+    color:#71817a;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   THREE DOT MENU
+========================================================= */
+
+.admin-messages-page .msg-menu{
+
+    display:none;
+
+    position:absolute;
+
+    top:48px;
+
+    right:12px;
+
+    width:170px;
+
+    padding:5px;
+
+    background:#fff;
+
+    border:1px solid #e1ebe6;
+
+    border-radius:8px;
+
+    overflow:hidden;
+
+    z-index:99999;
+
+    box-shadow:
+        0 8px 20px rgba(18,70,40,.10);
+}
+
+
+.admin-messages-page
+.msg-menu.show{
+
+    display:block;
+}
+
+
+.admin-messages-page
+.msg-menu button{
+
+    width:100%;
+
+    padding:9px 10px;
+
+    border:0;
+
+    border-radius:6px;
+
+    background:transparent;
+
+    color:#17231e;
+
+    font-family:"Inter",sans-serif;
+
+    font-size:12px;
+
+    text-align:left;
+
+    cursor:pointer;
+}
+
+
+.admin-messages-page
+.msg-menu button:hover{
+
+    background:#eaf6ee;
+
+    color:#087c3d;
+}
+
+
+.admin-messages-page
+.msg-card.menu-open{
+
+    z-index:9999;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.admin-messages-page
+#messages-list::-webkit-scrollbar{
+
+    width:6px;
+}
+
+
+.admin-messages-page
+#messages-list::-webkit-scrollbar-track{
+
+    background:#f1f6f3;
+
+    border-radius:10px;
+}
+
+
+.admin-messages-page
+#messages-list::-webkit-scrollbar-thumb{
+
+    background:#c5d8ce;
+
+    border-radius:10px;
+}
+
+
+.admin-messages-page
+#messages-list::-webkit-scrollbar-thumb:hover{
+
+    background:#9fb9aa;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.admin-messages-page .modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    padding:20px;
+
+    background:rgba(15,25,19,.35);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+}
+
+
+.admin-messages-page .modal-content{
+
+    position:relative;
+
+    box-sizing:border-box;
+
+    width:100%;
+
+    max-width:520px;
+
+    padding:28px;
+
+    background:#fff;
+
+    border:1px solid #e1ebe6;
+
+    border-radius:18px;
+
+    color:#17231e;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.18);
+}
+
+
+.admin-messages-page #modalTitle{
+
+    margin:0 35px 14px 0;
+
+    color:#17231e;
+
+    font-size:22px;
+
+    font-weight:700;
+}
+
+
+.admin-messages-page #modalMessage{
+
+    margin:0 0 12px;
+
+    color:#17231e;
+
+    font-size:14px;
+
+    line-height:1.5;
+}
+
+
+.admin-messages-page #modalDate{
+
+    color:#71817a;
+
+    font-size:12px;
+}
+
+
+.admin-messages-page .close-btn{
+
+    position:absolute;
+
+    top:14px;
+
+    right:16px;
+
+    width:32px;
+
+    height:32px;
+
+    padding:0;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:#68736d;
+
+    font-size:24px;
+
+    line-height:1;
+
+    cursor:pointer;
+}
+
+
+.admin-messages-page
+.close-btn:hover{
+
+    background:#eaf6ee;
+
+    color:#087c3d;
+}
+
+
+/* =========================================================
+   NOTIFICATION POPUP
+========================================================= */
+
+.admin-messages-page .notif-popup{
+
+    position:fixed;
+
+    top:25px;
+
+    right:25px;
+
+    width:300px;
+
+    padding:17px 18px;
+
+    box-sizing:border-box;
+
+    border-left:5px solid #087c3d;
+
+    border-radius:13px;
+
+    background:#fff;
+
+    color:#17231e;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.12);
+
+    z-index:999999;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateX(120%);
+
+    transition:
+        opacity .3s ease,
+        transform .3s ease;
+
+    cursor:pointer;
+}
+
+
+.admin-messages-page
+.notif-popup.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateX(0);
+}
+
+
+.admin-messages-page
+.notif-popup b{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#087c3d;
+
+    font-size:14px;
+}
+
+
+.admin-messages-page
+.notif-popup p{
+
+    margin:0;
+
+    color:#59645e;
+
+    font-size:13px;
+
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   ACTIVE SIDEBAR
+========================================================= */
+
+body .navbar .menu
+a[href="admin_messages.html"]{
+
+    background:#eaf6ee !important;
+
+    color:#087c3d !important;
+}
+
+
+body .navbar .menu
+a[href="admin_messages.html"] i{
+
+    color:#087c3d !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+    .admin-messages-page .main{
+
+        padding-left:25px !important;
+
+        padding-right:25px !important;
+    }
+
+    .admin-messages-page
+    .messages-panel{
+
+        width:100% !important;
+
+        margin-left:0 !important;
+
+        margin-right:0 !important;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .admin-messages-page .main{
+
+        padding-left:20px !important;
+
+        padding-right:20px !important;
+    }
+
+    .admin-messages-page
+    .messages-panel{
+
+        padding:20px !important;
+
+        border-radius:16px;
+    }
+
+    .admin-messages-page
+    .page-header h1{
+
+        font-size:26px !important;
+    }
+
+    .admin-messages-page
+    .notif-popup{
+
+        left:15px;
+
+        right:15px;
+
+        width:auto;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<script>
+
+/* =========================================================
+   AUTH CHECK
+========================================================= */
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+if(
+    !user ||
+    user.role !== "admin"
+){
+
+    window.location.href =
+        "index.html";
+}
+
+</script>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<div class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="menu"
+        id="menu">
+    </div>
+
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+        </div>
+
+        <h3>
+            System Monitoring
+        </h3>
+
+        <p>
+            Monitor members, attendance, lockers, and gym operations.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<div class="layout admin-messages-page">
+
+    <main class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+            <div class="top-right">
+
+                <div
+                    class="admin-profile"
+                    onclick="toggleAdminMenu()"
+                >
+
+                    <div
+                        class="admin-avatar"
+                        id="adminAvatar"
+                    >
+                        A
+                    </div>
+
+
+                    <div class="admin-info">
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small>
+                            Admin
+                        </small>
+
+                    </div>
+
+
+                    <i
+                        class="fa-solid fa-chevron-down admin-profile-chevron">
+                    </i>
+
+
+                    <!-- DROPDOWN -->
+
+                    <div
+                        id="adminDropdown"
+                        class="admin-profile-dropdown"
+                    >
+
+                        <button
+                            onclick="
+                                logout();
+                                event.stopPropagation();
+                            "
+                            class="admin-dropdown-logout"
+                        >
+
+                            <i
+                                class="fa-solid fa-right-from-bracket">
+                            </i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="page-header">
+
+            <h1>
+                Messages
+            </h1>
+
+            <p>
+                View system notifications, member concerns, and alerts.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             MESSAGES
+        ================================================== -->
+
+        <section class="messages-panel">
+
+            <ul id="messages-list"></ul>
+
+        </section>
+
+
+        <!-- =================================================
+             MESSAGE MODAL
+        ================================================== -->
+
+        <div
+            id="messageModal"
+            class="modal"
+        >
+
+            <div class="modal-content">
+
+                <button
+                    class="close-btn"
+                    onclick="closeMessage()"
+                >
+                    ×
+                </button>
+
+
+                <h2 id="modalTitle"></h2>
+
+                <p id="modalMessage"></p>
+
+                <small id="modalDate"></small>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     NOTIFICATION POPUP
+========================================================= -->
+
+<div
+    id="notifPopup"
+    class="notif-popup"
+    onclick="goMessages()"
+>
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
+<audio id="notifSound">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+
+<script>
+
+/* =========================================================
+   API
+========================================================= */
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+/* =========================================================
+   ADMIN PROFILE NAME
+========================================================= */
+
+const adminName =
+    document.getElementById("adminName");
+
+const adminAvatar =
+    document.getElementById("adminAvatar");
+
+
+if(user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Admin";
+
+
+    if(adminName){
+
+        adminName.innerText =
+            fullname;
+
+    }
+
+
+    if(adminAvatar){
+
+        adminAvatar.innerText =
+            fullname
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
+
+
+/* =========================================================
+   ADMIN NAVBAR
+========================================================= */
+
+const menu =
+    document.getElementById("menu");
+
+
+menu.innerHTML = `
+
+    <a href="admin.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        Home
+
+    </a>
+
+
+    <a
+        href="admin_messages.html"
+        class="msg-link"
+    >
+
+        <i class="fa-solid fa-envelope"></i>
+
+        Messages
+
+        <span
+            id="msg-count"
+            class="msg-count"
+        >
+            0
+        </span>
+
+    </a>
+
+
+    <a href="reports.html">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Reports
+
+    </a>
+
+
+    <a href="members.html">
+
+        <i class="fa-solid fa-users"></i>
+
+        Members
+
+    </a>
+
+
+    <a href="walkin.html">
+
+        <i class="fa-solid fa-person-walking"></i>
+
+        Walk-ins
+
+    </a>
+
+
+    <a href="staff_manage.html">
+
+        <i class="fa-regular fa-user"></i>
+
+        Staff
+
+    </a>
+
+`;
+
+
+/* =========================================================
+   SOCKET
+========================================================= */
+
+const socket =
+    io(
+        API_URL,
+        {
+            transports:["websocket"]
+        }
+    );
+
+
+/* =========================================================
+   CURRENT MESSAGES
+========================================================= */
+
+let currentMessages = [];
+
+let lastUnread = 0;
+
+
+/* =========================================================
+   LOAD MESSAGES
+========================================================= */
+
+async function loadMessages(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/admin_messages`,
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        const data =
+            await res.json();
+
+
+        currentMessages =
+            Array.isArray(data)
+            ? data
+            : [];
+
+
+        const list =
+            document.getElementById(
+                "messages-list"
+            );
+
+
+        list.innerHTML = "";
+
+
+        if(
+            currentMessages.length === 0
+        ){
+
+            list.innerHTML = `
+
+                <li class="msg-card">
+
+                    No messages
+
+                </li>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* =================================================
+           GROUP BY MEMBER / USER
+        ================================================= */
+
+        const grouped = {};
+
+
+        currentMessages.forEach(
+            msg => {
+
+                const memberId =
+                    msg.user_id ||
+                    msg.member_id;
+
+
+                if(!memberId){
+                    return;
+                }
+
+
+                if(!grouped[memberId]){
+
+                    grouped[memberId] = {
+
+                        user_id:
+                            memberId,
+
+                        member_name:
+                            msg.member_name ||
+                            msg.sender_name ||
+                            msg.fullname ||
+                            "Member",
+
+                        messages:[]
+
+                    };
+
+                }
+
+
+                grouped[memberId]
+                    .messages
+                    .push(msg);
+
+            }
+        );
+
+
+        /* =================================================
+           CREATE ONE CARD PER MEMBER
+        ================================================= */
+
+        Object.values(grouped)
+        .forEach(
+            member => {
+
+
+                /* =========================================
+                   LATEST FIRST
+                ========================================= */
+
+                member.messages.sort(
+                    (a,b) =>
+                        Number(b.id) -
+                        Number(a.id)
+                );
+
+
+                const latestMessage =
+                    member.messages[0];
+
+
+                const card =
+                    document.createElement("li");
+
+
+                card.className =
+                    "msg-card " +
+                    (
+                        Number(
+                            latestMessage.is_read
+                        ) === 0
+                        ? "unread"
+                        : ""
+                    );
+
+
+                /* =========================================
+                   OPEN MESSAGE
+                ========================================= */
+
+                card.onclick = () => {
+
+                    openMessage(
+                        latestMessage
+                    );
+
+                };
+
+
+                /* =========================================
+                   CARD
+                ========================================= */
+
+                card.innerHTML = `
+
+                    <div class="msg-top">
+
+
+                        <div class="sender-info">
+
+                            <h3>
+                                ${escapeHTML(
+                                    member.member_name
+                                )}
+                            </h3>
+
+
+                            <span class="sender-role">
+
+                                ${escapeHTML(
+                                    member.user_id
+                                )}
+
+                            </span>
+
+
+                            ${
+                                Number(
+                                    latestMessage.is_read
+                                ) === 0
+                                ?
+                                `
+                                <span class="unread-badge">
+                                    NEW / UNREAD
+                                </span>
+                                `
+                                :
+                                ""
+                            }
+
+                        </div>
+
+
+                        <!-- THREE DOT -->
+
+                        <div
+                            class="dots"
+                            onclick="
+                                event.stopPropagation();
+                                toggleMenu(${latestMessage.id})
+                            "
+                        >
+                            ⋮
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="msg-content">
+
+                        <p class="msg-text">
+
+                            ${escapeHTML(
+                                latestMessage.message ||
+                                ""
+                            )}
+
+                        </p>
+
+
+                        <small>
+
+                            ${escapeHTML(
+                                latestMessage.created_at ||
+                                ""
+                            )}
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- MENU -->
+
+                    <div
+                        id="menu-${latestMessage.id}"
+                        class="msg-menu"
+                    >
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                deleteMemberMessages('${member.user_id}')
+                            "
+                        >
+
+                            Delete
+
+                        </button>
+
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markRead(${latestMessage.id})
+                            "
+                        >
+
+                            Mark as Read
+
+                        </button>
+
+
+                        <button
+                            onclick="
+                                event.stopPropagation();
+                                markUnread(${latestMessage.id})
+                            "
+                        >
+
+                            Mark as Unread
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(card);
+
+            }
+        );
+
+
+    }catch(err){
+
+        console.error(
+            "LOAD ADMIN MESSAGES ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   OPEN MESSAGE
+========================================================= */
+
+async function openMessage(msg){
+
+    document.getElementById(
+        "modalTitle"
+    ).innerText =
+        msg.title ||
+        "Message";
+
+
+    document.getElementById(
+        "modalMessage"
+    ).innerText =
+        msg.message ||
+        "";
+
+
+    document.getElementById(
+        "modalDate"
+    ).innerText =
+        msg.created_at ||
+        "";
+
+
+    document.getElementById(
+        "messageModal"
+    ).style.display =
+        "flex";
+
+
+    /* =========================================
+       MARK THIS MESSAGE AS READ
+    ========================================= */
+
+    if(
+        Number(msg.is_read) === 0
+    ){
+
+        try{
+
+            await fetch(
+                `${API_URL}/api/message_read/${msg.id}`,
+                {
+                    method:"POST"
+                }
+            );
+
+
+            msg.is_read = 1;
+
+
+            const local =
+                currentMessages.find(
+                    m =>
+                        Number(m.id) ===
+                        Number(msg.id)
+                );
+
+
+            if(local){
+                local.is_read = 1;
+            }
+
+
+            loadMessages();
+
+            loadMessageCount();
+
+
+        }catch(err){
+
+            console.error(
+                "MARK MESSAGE READ ERROR:",
+                err
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE MESSAGE
+========================================================= */
+
+function closeMessage(){
+
+    document.getElementById(
+        "messageModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   MARK READ
+========================================================= */
+
+async function markRead(id){
+
+    try{
+
+        await fetch(
+            `${API_URL}/api/message_read/${id}`,
+            {
+                method:"POST"
+            }
+        );
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+    }catch(err){
+
+        console.error(
+            "MARK READ ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   MARK UNREAD
+========================================================= */
+
+async function markUnread(id){
+
+    try{
+
+        await fetch(
+            `${API_URL}/api/message_unread/${id}`,
+            {
+                method:"POST"
+            }
+        );
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+    }catch(err){
+
+        console.error(
+            "MARK UNREAD ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE ALL MEMBER MESSAGES
+========================================================= */
+
+async function deleteMemberMessages(
+    memberId
+){
+
+    if(
+        !confirm(
+            "Delete all messages from this member?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const memberMessages =
+        currentMessages.filter(
+            msg =>
+                String(
+                    msg.user_id ||
+                    msg.member_id
+                ) ===
+                String(memberId)
+        );
+
+
+    if(
+        memberMessages.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await Promise.all(
+
+            memberMessages.map(
+                msg =>
+                    fetch(
+                        `${API_URL}/api/delete_message/${msg.id}`,
+                        {
+                            method:"DELETE"
+                        }
+                    )
+            )
+
+        );
+
+
+        currentMessages =
+            currentMessages.filter(
+                msg =>
+                    String(
+                        msg.user_id ||
+                        msg.member_id
+                    ) !==
+                    String(memberId)
+            );
+
+
+        await loadMessages();
+
+        await loadMessageCount();
+
+
+    }catch(err){
+
+        console.error(
+            "DELETE MEMBER MESSAGES ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   THREE DOT MENU
+========================================================= */
+
+function toggleMenu(id){
+
+    document
+        .querySelectorAll(".msg-menu")
+        .forEach(
+            menu => {
+
+                if(
+                    menu.id !==
+                    `menu-${id}`
+                ){
+
+                    menu.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+    const menu =
+        document.getElementById(
+            `menu-${id}`
+        );
+
+
+    if(!menu){
+        return;
+    }
+
+
+    const card =
+        menu.closest(
+            ".msg-card"
+        );
+
+
+    if(
+        menu.classList.contains(
+            "show"
+        )
+    ){
+
+        menu.classList.remove(
+            "show"
+        );
+
+        card?.classList.remove(
+            "menu-open"
+        );
+
+    }else{
+
+        menu.classList.add(
+            "show"
+        );
+
+        card?.classList.add(
+            "menu-open"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE MESSAGE MENUS
+========================================================= */
+
+document.addEventListener(
+    "click",
+    () => {
+
+        document
+            .querySelectorAll(
+                ".msg-menu"
+            )
+            .forEach(
+                menu =>
+                    menu.classList.remove(
+                        "show"
+                    )
+            );
+
+    }
+);
+
+
+/* =========================================================
+   MESSAGE COUNT
+========================================================= */
+
+async function loadMessageCount(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/admin_messages`,
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        const data =
+            await res.json();
+
+
+        const unread =
+            Array.isArray(data)
+            ?
+            data.filter(
+                m =>
+                    Number(m.is_read) === 0
+            ).length
+            :
+            0;
+
+
+        /* =========================================
+           NEW NOTIFICATION
+        ========================================= */
+
+        if(
+            lastUnread !== 0 &&
+            unread > lastUnread
+        ){
+
+            document
+                .getElementById(
+                    "notifSound"
+                )
+                ?.play()
+                .catch(
+                    () => {}
+                );
+
+
+            showNotifPopup(
+                "New Message",
+                `${unread - lastUnread} new notification`
+            );
+
+        }
+
+
+        lastUnread =
+            unread;
+
+
+        const badge =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(!badge){
+            return;
+        }
+
+
+        if(unread > 0){
+
+            badge.innerText =
+                unread > 99
+                ? "99+"
+                : unread;
+
+            badge.style.display =
+                "flex";
+
+        }else{
+
+            badge.style.display =
+                "none";
+
+        }
+
+
+    }catch(err){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            err
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NOTIFICATION POPUP
+========================================================= */
+
+function showNotifPopup(
+    title,
+    text
+){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText =
+        title;
+
+
+    document.getElementById(
+        "notifText"
+    ).innerText =
+        text;
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+/* =========================================================
+   GO TO MESSAGES
+========================================================= */
+
+function goMessages(){
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   ADMIN DROPDOWN
+========================================================= */
+
+function toggleAdminMenu(){
+
+    const dropdown =
+        document.getElementById(
+            "adminDropdown"
+        );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE ADMIN DROPDOWN
+========================================================= */
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(
+                ".admin-profile"
+            )
+        ){
+
+            const dropdown =
+                document.getElementById(
+                    "adminDropdown"
+                );
+
+
+            if(dropdown){
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================================
+   REALTIME
+========================================================= */
+
+socket.on(
+    "new_message",
+    () => {
+
+        console.log(
+            "NEW ADMIN MESSAGE RECEIVED"
+        );
+
+        loadMessages();
+
+        loadMessageCount();
+
+    }
+);
+
+
+socket.on(
+    "priority_alert",
+    data => {
+
+        console.log(
+            "PRIORITY ALERT RECEIVED",
+            data
+        );
+
+        loadMessages();
+
+        loadMessageCount();
+
+    }
+);
+
+
+socket.on(
+    "connect",
+    () => {
+
+        console.log(
+            "Admin Messages page connected"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+loadMessages();
+
+loadMessageCount();
+
+
+/* =========================================================
+   MESSAGE COUNT POLLING
+========================================================= */
+
+setInterval(
+    loadMessageCount,
+    3000
+);
+
+</script>
+
+</body>
+</html>
