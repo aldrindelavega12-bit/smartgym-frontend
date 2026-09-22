@@ -570,50 +570,57 @@ let selectedEndDate = null;
    LOAD PROGRAMS
 ========================================================= */
 
+
 async function loadPrograms(){
 
     try{
 
-        const response =
-            await fetch(
-                `${API_URL}/api/program_trainers`,
-                {
-                    cache: "no-store"
-                }
-            );
+        const response = await fetch(
+            `${API_URL}/api/program_trainers`,
+            {
+                cache: "no-store"
+            }
+        );
 
+        console.log("PROGRAM API STATUS:", response.status);
+
+        const data = await response.json();
+
+        console.log("PROGRAM API DATA:", data);
 
         if(!response.ok){
 
             throw new Error(
+                data.message ||
                 `HTTP ${response.status}`
             );
 
         }
 
+        if(!Array.isArray(data)){
 
-        const data =
-            await response.json();
+            throw new Error(
+                "Invalid program data received."
+            );
 
+        }
 
-        programTrainers =
-            Array.isArray(data)
-            ? data
-            : [];
-
+        programTrainers = data;
 
         buildPrograms();
+
+        console.log("PROGRAMS BUILT:", programs);
 
         renderPrograms();
 
     }
+
     catch(error){
 
         console.error(
             "PROGRAM LOAD ERROR:",
             error
         );
-
 
         document.getElementById(
             "programOptions"
