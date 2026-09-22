@@ -537,8 +537,8 @@ document.getElementById(
 // Membership API uses MEMBER ID e.g. M0012
 const memberId =
     userData.user_id ||
-    userData.member_id
-
+    userData.member_id ||
+    userData.id;
 
 // Message API uses numeric user ID e.g. 73
 const messageUserId =
@@ -562,263 +562,265 @@ async function loadMembership(){
 
     try{
 
-        const response =
-            await fetch(
-                `${API_URL}/api/membership/${memberId}`
-            );
+        console.log("USER DATA:", userData);
+        console.log("MEMBER ID:", memberId);
 
+        const response = await fetch(
+            `${API_URL}/api/membership/${memberId}`
+        );
+
+        console.log(
+            "MEMBERSHIP STATUS:",
+            response.status
+        );
+
+        const result = await response.json();
+
+        console.log(
+            "MEMBERSHIP RESULT:",
+            result
+        );
 
         if(!response.ok){
 
             throw new Error(
+                result.error ||
                 `Membership API error: ${response.status}`
             );
 
         }
 
+        if(!result.data){
 
-        const result =
-            await response.json();
+            console.log(
+                "NO MEMBERSHIP DATA FOUND"
+            );
 
+            return;
+        }
+
+        const membership = result.data;
 
         console.log(
-            "MEMBERSHIP DATA:",
-            result
+            "MEMBERSHIP:",
+            membership
         );
 
 
-        const membership =
-            result.data;
+        // =========================
+        // TYPE
+        // =========================
+
+        document.getElementById(
+            "membershipType"
+        ).innerText =
+            membership.membership_type ||
+            "Membership";
 
 
-        const table =
+        // =========================
+        // STATUS
+        // =========================
+
+        const statusElement =
             document.getElementById(
-                "membership-body"
+                "membershipStatus"
             );
 
+        if(
+            membership.membership_status ===
+            "ACTIVE"
+        ){
 
-        if(!membership){
+            statusElement.innerText =
+                "Active";
 
-            table.innerHTML = `
-                <tr>
-                    <td colspan="6"
-                        style="text-align:center;">
-                        No membership data found.
-                    </td>
-                </tr>
-            `;
+        }
+        else{
 
-            return;
+            statusElement.innerText =
+                "Expired";
 
         }
 
 
-        /* =========================
-           TYPE
-        ========================= */
+        // =========================
+        // VALID UNTIL
+        // =========================
 
-        let type =
-            membership.membership_type ||
-            "N/A";
+        const expiryDate =
+            membership.membership_validity;
 
+        if(expiryDate){
 
-        type =
-            type
-                .replace("membership-", "")
-                .toUpperCase();
-
-
-
-        /* =========================
-           MEMBERSHIP STATUS
-        ========================= */
-
-        const membershipStatus =
-            membership.membership_status ||
-            "N/A";
-
-
-        const membershipStatusClass =
-            membershipStatus === "ACTIVE"
-                ? "status-green"
-                : "status-red";
-
-
-
-        /* =========================
-           MONTHLY STATUS
-        ========================= */
-
-        const monthlyStatus =
-            membership.monthly_status ||
-            "N/A";
-
-
-        const monthlyStatusClass =
-            monthlyStatus === "PAID"
-                ? "status-green"
-                : "status-red";
-
-
-
-        /* =========================
-           FORMAT DATE
-        ========================= */
-
-        function formatMembershipDate(date){
-
-            if(!date)
-                return "-";
-
-
-            const d =
+            const date =
                 new Date(
-                    date + "T00:00:00"
+                    expiryDate + "T00:00:00"
                 );
 
-
-            if(isNaN(d.getTime()))
-                return date;
-
-
-            return d.toLocaleDateString(
-                "en-US",
-                {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                }
-            );
+            document.getElementById(
+                "membershipValidUntil"
+            ).innerText =
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
 
         }
 
 
+        // =========================
+        // DAYS REMAINING
+        // =========================
 
-        table.innerHTML = `
+        let daysRemaining = 0;
 
-            <div class="membership-field">
+        if(expiryDate){
 
-                <span>Name</span>
+            const today = new Date();
 
-                <strong>
-                    ${membership.full_name || displayName}
-                </strong>
+            today.setHours(
+                0,0,0,0
+            );
 
-            </div>
+            const expiry =
+                new Date(
+                    expiryDate + "T00:00:00"
+                );
 
+            const diff =
+                expiry.getTime() -
+                today.getTime();
 
-            <div class="membership-field">
+            daysRemaining =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        diff /
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        )
+                    )
+                );
 
-                <span>Membership Type</span>
-
-                <strong>
-                    ${type}
-                </strong>
-
-            </div>
-
-
-            <div class="membership-field">
-
-                <span>Membership Validity</span>
-
-                <strong>
-                    ${formatMembershipDate(
-                        membership.membership_validity
-                    )}
-                </strong>
-
-            </div>
-
-
-            <div class="membership-field">
-
-                <span>Membership Status</span>
-
-                <strong>
-
-                    <span class="${
-                        membershipStatus === "ACTIVE"
-                            ? "status-badge active"
-                            : "status-badge inactive"
-                    }">
-
-                        ${membershipStatus}
-
-                    </span>
-
-                </strong>
-
-            </div>
+        }
 
 
-            <div class="membership-field">
-
-                <span>Monthly Validity</span>
-
-                <strong>
-                    ${formatMembershipDate(
-                        membership.monthly_validity
-                    )}
-                </strong>
-
-            </div>
+        document.getElementById(
+            "daysRemaining"
+        ).innerText =
+            `${daysRemaining} days`;
 
 
-            <div class="membership-field">
-
-                <span>Monthly Status</span>
-
-                <strong>
-
-                    <span class="${
-                        monthlyStatus === "PAID"
-                            ? "status-badge active"
-                            : "status-badge inactive"
-                    }">
-
-                        ${monthlyStatus}
-
-                    </span>
-
-                </strong>
-
-            </div>
-
-        `;
+        document.getElementById(
+            "membershipRemaining"
+        ).innerText =
+            `${daysRemaining} days remaining`;
 
 
-    }catch(error){
+        // =========================
+        // PERCENTAGE
+        // =========================
+
+        if(expiryDate){
+
+            const expiry =
+                new Date(
+                    expiryDate + "T00:00:00"
+                );
+
+            const start =
+                new Date(expiry);
+
+            start.setFullYear(
+                start.getFullYear() - 1
+            );
+
+            const today =
+                new Date();
+
+            today.setHours(
+                0,0,0,0
+            );
+
+            const totalDays =
+                Math.ceil(
+                    (
+                        expiry.getTime() -
+                        start.getTime()
+                    ) /
+                    (
+                        1000 *
+                        60 *
+                        60 *
+                        24
+                    )
+                );
+
+            const remainingDays =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        (
+                            expiry.getTime() -
+                            today.getTime()
+                        ) /
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        )
+                    )
+                );
+
+            const percentage =
+                totalDays > 0
+                    ? Math.min(
+                        100,
+                        Math.max(
+                            0,
+                            Math.round(
+                                (
+                                    remainingDays /
+                                    totalDays
+                                ) * 100
+                            )
+                        )
+                    )
+                    : 0;
+
+            document.getElementById(
+                "membershipPercent"
+            ).innerText =
+                `${percentage}%`;
+
+            document.getElementById(
+                "membershipProgress"
+            ).style.width =
+                `${percentage}%`;
+
+        }
+
+    }
+
+    catch(error){
 
         console.error(
             "MEMBERSHIP ERROR:",
             error
         );
 
-
-        document.getElementById(
-            "membership-body"
-        ).innerHTML = `
-
-            <tr>
-
-                <td colspan="6"
-                    style="text-align:center;">
-
-                    Unable to load membership data.
-
-                </td>
-
-            </tr>
-
-        `;
-
     }
 
 }
-
-
-
 
 /* =========================================================
    NOTIFICATION POPUP
