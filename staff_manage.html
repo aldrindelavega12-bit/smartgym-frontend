@@ -1675,14 +1675,20 @@ function addSelectedProgram(){
 
 function addAnotherProgram(){
 
-    document
-        .getElementById(
-            "programSelect"
-        )
-        .focus();
+    const select =
+        document.getElementById("programSelect");
+
+    if(!select)
+        return;
+
+    select.focus();
+
+    select.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
 
 }
-
 
 /* =========================
    RENDER SELECTED
