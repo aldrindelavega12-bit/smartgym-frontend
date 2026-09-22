@@ -3415,3 +3415,23 @@ textarea {
     }
 
 }
+
+/* Remove active appearance from Home */
+.navbar .menu a[href="member.html"] {
+    background: transparent !important;
+    color: #17231e !important;
+}
+
+.navbar .menu a[href="member.html"] i {
+    color: #64756d !important;
+}
+
+/* Get Program is the ONLY active item */
+.navbar .menu a[href="get_program.html"] {
+    background: #eaf6ee !important;
+    color: #087c3d !important;
+}
+
+.navbar .menu a[href="get_program.html"] i {
+    color: #087c3d !important;
+}
