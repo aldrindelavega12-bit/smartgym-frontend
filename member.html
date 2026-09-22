@@ -1436,40 +1436,7 @@ function renderCalendar(){
 }
 
 
-// ==============================
-// MONTH NAVIGATION
-// ==============================
 
-document.getElementById(
-    "prevMonth"
-).addEventListener(
-    "click",
-    function(){
-
-        calendarDate.setMonth(
-            calendarDate.getMonth() - 1
-        );
-
-        renderCalendar();
-
-    }
-);
-
-
-document.getElementById(
-    "nextMonth"
-).addEventListener(
-    "click",
-    function(){
-
-        calendarDate.setMonth(
-            calendarDate.getMonth() + 1
-        );
-
-        renderCalendar();
-
-    }
-);
 
 
 // INITIAL LOAD
