@@ -358,25 +358,17 @@ if(
 
 </div>
 
-</div>
-
-
-
 <!-- =====================================================
      ADD STAFF MODAL
 ===================================================== -->
 
-<div
-    id="staffModal"
-    class="staff-modal">
-
+<div id="staffModal" class="staff-modal">
 
     <div class="staff-modal-box">
 
-
         <div class="staff-modal-header">
 
-            <h2>
+            <h2 id="staffModalTitle">
                 Add Staff
             </h2>
 
@@ -391,152 +383,241 @@ if(
         </div>
 
 
+        <!-- =========================
+             STEP 1
+        ========================== -->
 
-        <div class="staff-form-group">
+        <div id="trainerStep1">
 
-            <label>
-                Full Name
-            </label>
+            <div class="staff-form-group">
 
-            <input
-                type="text"
-                id="fullname"
-                placeholder="Enter full name">
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    id="fullname"
+                    placeholder="Enter full name">
+
+            </div>
+
+
+            <div class="staff-form-group">
+
+                <label>Role</label>
+
+                <select id="role">
+
+                    <option value="staff">
+                        Front Desk
+                    </option>
+
+                    <option value="trainer">
+                        Trainer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="staff-form-group">
+
+                <label>Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter username">
+
+            </div>
+
+
+            <div class="staff-form-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password">
+
+            </div>
+
+
+            <div class="staff-form-group">
+
+                <label>Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm password">
+
+            </div>
+
+
+            <!-- STAFF ONLY -->
+
+            <button
+                id="createStaffBtn"
+                class="create-staff-submit"
+                onclick="createAccount()">
+
+                Create Staff Account
+
+            </button>
+
+
+            <!-- TRAINER ONLY -->
+
+            <button
+                id="trainerNextBtn"
+                class="create-staff-submit"
+                onclick="nextTrainerStep()"
+                style="display:none;">
+
+                Next →
+
+            </button>
 
         </div>
 
 
-        <div class="staff-form-group">
 
-            <label>
-                Role
-            </label>
-
-            <select id="role">
-
-                <option value="staff">
-                    Front Desk
-                </option>
-
-                <option value="trainer">
-                    Trainer
-                </option>
-
-            </select>
-
-        </div>
+        <!-- =========================
+             STEP 2 - TRAINER
+        ========================== -->
 
         <div
-            id="trainerPricingFields"
-            class="trainer-pricing-fields">
+            id="trainerStep2"
+            style="display:none;">
 
-            <div class="trainer-pricing-row">
+            <div class="staff-form-group">
 
-                <div class="trainer-price-group">
+                <label>
+                    Programs Offered
+                </label>
 
-                    <label>
-                        Price Per Day
-                    </label>
+                <select
+                    id="programSelect"
+                    onchange="addSelectedProgram()">
 
-                    <input
-                        type="number"
-                        id="priceDay"
-                        placeholder="Enter price"
-                        min="0"
-                        step="1">
+                    <option value="">
+                        Select Program
+                    </option>
 
-                </div>
+                </select>
 
-
-                <div class="trainer-price-group">
-
-                    <label>
-                        Price Per Week
-                    </label>
-
-                    <input
-                        type="number"
-                        id="priceWeek"
-                        placeholder="Enter price"
-                        min="0"
-                        step="1">
-
-                </div>
+            </div>
 
 
-                <div class="trainer-price-group">
+            <div id="selectedPrograms"></div>
 
-                    <label>
-                        Price Per Month
-                    </label>
 
-                    <input
-                        type="number"
-                        id="priceMonth"
-                        placeholder="Enter price"
-                        min="0"
-                        step="1">
+            <button
+                type="button"
+                onclick="addAnotherProgram()"
+                class="add-staff-btn"
+                style="width:100%; margin-bottom:20px;">
+
+                + Add Program
+
+            </button>
+
+
+            <!-- TRAINER PRICING -->
+
+            <div class="trainer-pricing-fields show">
+
+                <div class="trainer-pricing-row">
+
+                    <div class="trainer-price-group">
+
+                        <label>
+                            Price Per Day
+                        </label>
+
+                        <input
+                            type="number"
+                            id="priceDay"
+                            placeholder="Enter price"
+                            min="0"
+                            step="1">
+
+                    </div>
+
+
+                    <div class="trainer-price-group">
+
+                        <label>
+                            Price Per Week
+                        </label>
+
+                        <input
+                            type="number"
+                            id="priceWeek"
+                            placeholder="Enter price"
+                            min="0"
+                            step="1">
+
+                    </div>
+
+
+                    <div class="trainer-price-group">
+
+                        <label>
+                            Price Per Month
+                        </label>
+
+                        <input
+                            type="number"
+                            id="priceMonth"
+                            placeholder="Enter price"
+                            min="0"
+                            step="1">
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
 
-        <div class="staff-form-group">
+            <div
+                style="
+                    display:flex;
+                    gap:10px;
+                    margin-top:20px;
+                ">
 
-            <label>
-                Username
-            </label>
+                <button
+                    type="button"
+                    onclick="backTrainerStep()"
+                    class="create-staff-submit"
+                    style="background:#eef2f0; color:#26352f;">
 
-            <input
-                type="text"
-                id="username"
-                placeholder="Enter username">
+                    ← Back
 
-        </div>
-
-
-        <div class="staff-form-group">
-
-            <label>
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter password">
-
-        </div>
+                </button>
 
 
-        <div class="staff-form-group">
+                <button
+                    type="button"
+                    onclick="createAccount()"
+                    class="create-staff-submit">
 
-            <label>
-                Confirm Password
-            </label>
+                    Create Trainer
 
-            <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm password">
+                </button>
+
+            </div>
 
         </div>
-
-
-        <button
-            class="create-staff-submit"
-            onclick="createAccount()">
-
-            Create Staff Account
-
-        </button>
-
 
     </div>
 
 </div>
+
 
 
 <!-- DELETE CONFIRMATION MODAL -->
@@ -1354,21 +1435,38 @@ function toggleActionMenu(index){
 
 }
 
-
-
-/* =====================================================
-   ADD STAFF MODAL
-===================================================== */
-
 function openStaffModal(){
 
+    trainerStep = 1;
+
+    selectedPrograms = [];
+
+    document.getElementById(
+        "trainerStep1"
+    ).style.display = "block";
+
+    document.getElementById(
+        "trainerStep2"
+    ).style.display = "none";
+
+    document.getElementById(
+        "staffModalTitle"
+    ).innerText =
+        "Add Staff";
+
+    document.getElementById(
+        "createStaffBtn"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "trainerNextBtn"
+    ).style.display =
+        "none";
+
     document
-        .getElementById(
-            "staffModal"
-        )
-        .classList.add(
-            "show"
-        );
+        .getElementById("staffModal")
+        .classList.add("show");
 
 }
 
@@ -1376,65 +1474,427 @@ function openStaffModal(){
 function closeStaffModal(){
 
     document
-        .getElementById(
-            "staffModal"
-        )
-        .classList.remove(
-            "show"
-        );
+        .getElementById("staffModal")
+        .classList.remove("show");
 
 }
 
+document
+    .getElementById("role")
+    .addEventListener(
+        "change",
+        function(){
+
+            const isTrainer =
+                this.value === "trainer";
+
+
+            document.getElementById(
+                "createStaffBtn"
+            ).style.display =
+                isTrainer
+                ? "none"
+                : "block";
+
+
+            document.getElementById(
+                "trainerNextBtn"
+            ).style.display =
+                isTrainer
+                ? "block"
+                : "none";
+
+
+            if(!isTrainer){
+
+                selectedPrograms = [];
+
+                backTrainerStep();
+
+            }
+
+        }
+    );
+
 /* =====================================================
-   TRAINER PRICING
+   TRAINER SETUP
 ===================================================== */
 
-const roleSelect =
-    document.getElementById("role");
+let trainerPrograms = [];
 
-const trainerPricingFields =
-    document.getElementById(
-        "trainerPricingFields"
+let selectedPrograms = [];
+
+let trainerStep = 1;
+
+
+/* =========================
+   LOAD PROGRAMS
+========================= */
+
+async function loadPrograms(){
+
+    try{
+
+        const res =
+            await fetch(
+                `${API_URL}/api/programs`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+        if(!res.ok)
+            throw new Error("Failed to load programs");
+
+        const data =
+            await res.json();
+
+        trainerPrograms =
+            Array.isArray(data)
+            ? data
+            : [];
+
+        renderProgramOptions();
+
+    }
+    catch(error){
+
+        console.error(
+            "PROGRAM LOAD ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================
+   PROGRAM DROPDOWN
+========================= */
+
+function renderProgramOptions(){
+
+    const select =
+        document.getElementById(
+            "programSelect"
+        );
+
+    if(!select)
+        return;
+
+    select.innerHTML = `
+        <option value="">
+            Select Program
+        </option>
+    `;
+
+    trainerPrograms.forEach(
+        program => {
+
+            if(
+                selectedPrograms.some(
+                    p =>
+                        Number(p.id) ===
+                        Number(program.id)
+                )
+            ){
+
+                return;
+
+            }
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                program.id;
+
+            option.textContent =
+                program.program_name;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   ADD SELECTED PROGRAM
+========================= */
+
+function addSelectedProgram(){
+
+    const select =
+        document.getElementById(
+            "programSelect"
+        );
+
+    const id =
+        select.value;
+
+    if(!id)
+        return;
+
+
+    const program =
+        trainerPrograms.find(
+            p =>
+                Number(p.id) ===
+                Number(id)
+        );
+
+
+    if(!program)
+        return;
+
+
+    selectedPrograms.push(
+        program
     );
 
 
-roleSelect.addEventListener(
-    "change",
-    function(){
+    renderSelectedPrograms();
 
-        if(this.value === "trainer"){
+    renderProgramOptions();
 
-            trainerPricingFields
-                .classList
-                .add("show");
+    select.value = "";
+
+}
+
+
+/* =========================
+   ADD ANOTHER PROGRAM
+========================= */
+
+function addAnotherProgram(){
+
+    document
+        .getElementById(
+            "programSelect"
+        )
+        .focus();
+
+}
+
+
+/* =========================
+   RENDER SELECTED
+========================= */
+
+function renderSelectedPrograms(){
+
+    const container =
+        document.getElementById(
+            "selectedPrograms"
+        );
+
+    container.innerHTML = "";
+
+
+    selectedPrograms.forEach(
+        program => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.style.cssText = `
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:12px 14px;
+                margin-bottom:8px;
+                border:1px solid #dce7e1;
+                border-radius:10px;
+                background:#f8fbf9;
+            `;
+
+
+            div.innerHTML = `
+
+                <div>
+
+                    <strong>
+                        ${escapeHtml(
+                            program.program_name
+                        )}
+                    </strong>
+
+                    <div
+                        style="
+                            font-size:12px;
+                            color:#7b8c83;
+                            margin-top:3px;
+                        "
+                    >
+                        Duration:
+                        ${program.duration_days} days
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    onclick="removeSelectedProgram(${program.id})"
+                    style="
+                        border:none;
+                        background:none;
+                        color:#d9534f;
+                        cursor:pointer;
+                        font-weight:600;
+                    "
+                >
+                    Remove
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                div
+            );
 
         }
-        else{
+    );
 
-            trainerPricingFields
-                .classList
-                .remove("show");
+}
 
-            document.getElementById(
-                "priceDay"
-            ).value = "";
 
-            document.getElementById(
-                "priceWeek"
-            ).value = "";
+/* =========================
+   REMOVE PROGRAM
+========================= */
 
-            document.getElementById(
-                "priceMonth"
-            ).value = "";
+function removeSelectedProgram(id){
 
-        }
+    selectedPrograms =
+        selectedPrograms.filter(
+            p =>
+                Number(p.id) !==
+                Number(id)
+        );
+
+
+    renderSelectedPrograms();
+
+    renderProgramOptions();
+
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+function nextTrainerStep(){
+
+    const fullname =
+        document.getElementById(
+            "fullname"
+        ).value.trim();
+
+    const username =
+        document.getElementById(
+            "username"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+    const confirmPassword =
+        document.getElementById(
+            "confirmPassword"
+        ).value;
+
+
+    if(
+        !fullname ||
+        !username ||
+        !password ||
+        !confirmPassword
+    ){
+
+        alert(
+            "Complete all fields."
+        );
+
+        return;
 
     }
-);
 
-/* =====================================================
-   CREATE STAFF
-===================================================== */
+
+    if(
+        password !== confirmPassword
+    ){
+
+        alert(
+            "Passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    trainerStep = 2;
+
+
+    document.getElementById(
+        "trainerStep1"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "trainerStep2"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "staffModalTitle"
+    ).innerText =
+        "Trainer Setup";
+
+
+    loadPrograms();
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function backTrainerStep(){
+
+    trainerStep = 1;
+
+
+    document.getElementById(
+        "trainerStep2"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "trainerStep1"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "staffModalTitle"
+    ).innerText =
+        "Add Staff";
+
+}
 
 /* =====================================================
    CREATE STAFF
@@ -1553,6 +2013,34 @@ async function createAccount(){
     }
 
 
+    if(role === "trainer"){
+
+        if(selectedPrograms.length === 0){
+
+            alert(
+                "Please select at least one program."
+            );
+
+            return;
+
+        }
+
+        if(
+            priceDay === "" ||
+            priceWeek === "" ||
+            priceMonth === ""
+        ){
+
+            alert(
+                "Please enter all trainer prices."
+            );
+
+            return;
+
+        }
+
+    }
+
 
     try{
 
@@ -1590,7 +2078,18 @@ async function createAccount(){
                         price_month:
                             role === "trainer"
                             ? Number(priceMonth)
-                            : null
+                            : null,
+
+                        programs:
+                            role === "trainer"
+                            ? selectedPrograms.map(
+                                program => ({
+                                    program_id: program.id,
+                                    program_name: program.program_name,
+                                    duration_days: program.duration_days
+                                })
+                            )
+                            : []
 
                     })
 

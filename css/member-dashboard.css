@@ -762,23 +762,7 @@ textarea {
 
     font-size: 17px;
 }
-/* ICON CIRCLE */
 
-.card:nth-child(1)::after {
-    content: "\f0e0";
-}
-
-.card:nth-child(2)::after {
-    content: "\f44b";
-}
-
-.card:nth-child(3)::after {
-    content: "\f023";
-}
-
-.card:nth-child(4)::after {
-    content: "\f2bb";
-}
 
 
 /* TITLE */
@@ -786,7 +770,7 @@ textarea {
     position: relative;
     z-index: 2;
 
-    margin: 52px 0 4px;
+    margin: 0 0 4px;
 
     color: var(--text);
 
@@ -2699,6 +2683,735 @@ textarea {
 
         padding: 20px;
 
+    }
+
+}
+
+/* =========================================================
+   PROGRAM PROGRESS
+   ========================================================= */
+
+.program-progress {
+    padding: 16px;
+    border-radius: 12px;
+    background: #f5faf7;
+    border: 1px solid #e2eee7;
+}
+
+.program-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.program-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.program-header h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.program-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #e1f3e7;
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.program-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.program-info div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.program-info span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.program-info strong {
+    color: var(--text);
+    font-size: 13px;
+}
+
+.program-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.program-progress-bar {
+    flex: 1;
+    height: 7px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #d7e5dc;
+}
+
+.program-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: 20px;
+    background: var(--green);
+    transition: width .3s ease;
+}
+
+.program-progress-row strong {
+    color: var(--green);
+    font-size: 11px;
+}
+
+.program-remaining {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 9px;
+}
+
+/* =========================================================
+   PROGRAM PROGRESS
+   ========================================================= */
+
+.program-panel {
+    padding: 16px;
+}
+
+
+/* TITLE */
+
+.program-title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+.program-title h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.program-title span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.program-title > strong {
+    color: var(--green);
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* WEEKLY SCHEDULE */
+
+.weekly-schedule {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 5px;
+
+    margin-bottom: 13px;
+}
+
+
+.program-day {
+    min-height: 78px;
+
+    padding: 9px 5px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    text-align: center;
+}
+
+
+.program-day span {
+    color: #66736c;
+
+    font-size: 9px;
+
+    font-weight: 500;
+}
+
+
+.program-day strong {
+    color: var(--text);
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.program-day small {
+    padding: 4px 7px;
+
+    border-radius: 6px;
+
+    background: #eef2f0;
+
+    color: #78847e;
+
+    font-size: 8px;
+
+    font-weight: 600;
+}
+
+
+/* TODAY */
+
+.program-day.today {
+    background: #eef9f2;
+
+    border-color: #d5eadc;
+}
+
+
+.program-day.today span {
+    color: #60736a;
+}
+
+
+.program-day.today small {
+    background: #c8f1d8;
+
+    color: var(--green);
+}
+
+
+/* WEEKLY PROGRESS */
+
+.weekly-progress {
+    width: 100%;
+}
+
+
+.progress-heading {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+
+    padding: 0 3px;
+}
+
+
+.progress-heading span {
+    color: #66736c;
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+
+.progress-heading strong {
+    color: #66736c;
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+
+.weekly-progress-bar {
+    width: 100%;
+
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #dce8e1;
+}
+
+
+.weekly-progress-fill {
+    width: 14.28%;
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    background: var(--green);
+
+    transition: width .3s ease;
+}
+
+
+.weekly-progress p {
+    margin: 5px 3px 0;
+
+    color: #718079;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   GET PROGRAM PAGE
+========================================================= */
+
+.program-page {
+    padding: 15px 0 45px;
+}
+
+.program-page-header {
+    margin-bottom: 22px;
+}
+
+.program-page-header h1 {
+    margin: 0 0 6px;
+    font-size: 32px;
+    font-weight: 800;
+    color: #10231a;
+}
+
+.program-page-header p {
+    margin: 0;
+    color: #66736c;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.program-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 390px;
+    gap: 20px;
+    align-items: start;
+}
+
+.program-left {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.program-panel {
+    background: #fff;
+    border: 1px solid #dfe9e3;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 25px rgba(30, 80, 50, .04);
+}
+
+.section-header {
+    margin-bottom: 16px;
+}
+
+.section-header h2 {
+    margin: 0 0 5px;
+    font-size: 20px;
+    color: #14251d;
+}
+
+.section-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #718079;
+}
+
+
+/* =========================================================
+   PROGRAM CARDS
+========================================================= */
+
+.program-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.program-card {
+    border: 1px solid #dce6e0;
+    border-radius: 11px;
+    padding: 15px;
+    cursor: pointer;
+    transition: .2s;
+    background: #fff;
+}
+
+.program-card:hover {
+    border-color: #0b9146;
+}
+
+.program-card.selected {
+    border: 2px solid #0b9146;
+    background: #f0faf4;
+}
+
+.program-card h3 {
+    margin: 0 0 7px;
+    font-size: 14px;
+    color: #14251d;
+}
+
+.program-card p {
+    margin: 0 0 16px;
+    color: #718079;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.program-goal {
+    border-top: 1px solid #e4ebe7;
+    padding-top: 10px;
+}
+
+.program-goal span {
+    display: block;
+    color: #718079;
+    font-size: 10px;
+    margin-bottom: 4px;
+}
+
+.program-goal strong {
+    color: #079447;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TRAINERS
+========================================================= */
+
+.trainer-card {
+    border: 1px solid #dce6e0;
+    border-radius: 11px;
+    margin-bottom: 9px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.trainer-card.open {
+    border-color: #63c28b;
+    background: #f5fcf7;
+}
+
+.trainer-header {
+    min-height: 70px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.trainer-header h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: #14251d;
+}
+
+.trainer-header p {
+    margin: 0;
+    font-size: 11px;
+    color: #718079;
+}
+
+.trainer-header > span {
+    color: #079447;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PRICING
+========================================================= */
+
+.trainer-pricing {
+    display: none;
+    padding: 0 16px 15px;
+}
+
+.trainer-card.open .trainer-pricing {
+    display: block;
+}
+
+.payment-title {
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1b2b23;
+}
+
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+}
+
+.payment-card {
+    border: 1px solid #dce6e0;
+    background: #fff;
+    border-radius: 9px;
+    padding: 11px 12px;
+    cursor: pointer;
+}
+
+.payment-card:hover {
+    border-color: #43ae70;
+}
+
+.payment-card.selected {
+    border: 2px solid #079447;
+    background: #eefaf2;
+}
+
+.payment-card span {
+    display: block;
+    color: #56635c;
+    font-size: 11px;
+    margin-bottom: 3px;
+}
+
+.payment-card strong {
+    color: #16251e;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RIGHT SELECTION
+========================================================= */
+
+.selection-panel {
+    background: #fff;
+    border: 1px solid #dfe9e3;
+    border-radius: 15px;
+    padding: 21px;
+    box-shadow: 0 8px 25px rgba(30, 80, 50, .04);
+
+    position: sticky;
+    top: 25px;
+}
+
+.selection-panel h2 {
+    margin: 0 0 18px;
+    font-size: 20px;
+    color: #14251d;
+}
+
+.selection-block {
+    padding: 14px 0;
+    border-bottom: 1px solid #e4ebe7;
+}
+
+.selection-block span {
+    display: block;
+    color: #718079;
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.selection-block strong {
+    display: block;
+    color: #14251d;
+    font-size: 15px;
+}
+
+.selection-block small {
+    display: block;
+    margin-top: 3px;
+    color: #718079;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.selection-details-box {
+    padding: 16px 0;
+}
+
+.selection-details-box h3 {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: #14251d;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.detail-row span {
+    color: #718079;
+    font-size: 11px;
+}
+
+.detail-row strong {
+    color: #26342d;
+    font-size: 11px;
+    text-align: right;
+}
+
+
+/* =========================================================
+   SEND
+========================================================= */
+
+.send-request-btn {
+    width: 100%;
+    height: 52px;
+    border: 0;
+    border-radius: 10px;
+    background: #079947;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.send-request-btn:hover {
+    background: #07863f;
+}
+
+.send-request-btn i {
+    margin-left: 8px;
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.notif-popup {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 320px;
+    padding: 15px 17px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #dce6e0;
+    box-shadow: 0 10px 35px rgba(0,0,0,.12);
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s;
+    z-index: 9999;
+}
+
+.notif-popup.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notif-popup b {
+    display: block;
+    margin-bottom: 4px;
+    color: #14251d;
+    font-size: 13px;
+}
+
+.notif-popup p {
+    margin: 0;
+    color: #718079;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .program-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .selection-panel {
+        position: static;
+    }
+
+}
+
+@media (max-width: 850px) {
+
+    .program-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .program-page {
+        padding: 25px 0 35px;
+    }
+
+    .program-options {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-options {
+        grid-template-columns: 1fr;
     }
 
 }

@@ -7,15 +7,24 @@
           content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="css/member-dashboard.css">
+
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    </head>
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
 <body>
 
-<!-- 🔒 ROLE PROTECTION -->
+<!-- ROLE PROTECTION -->
 <script>
 
 const user =
@@ -24,21 +33,25 @@ const user =
 if (!user || user.role !== "member") {
 
     window.location.href = "index.html";
+
 }
 
 </script>
+
+
 <div class="navbar">
 
     <!-- BRAND -->
     <div class="brand">
 
-        <div class="brand-icon">
-            <i class="fa-solid fa-dumbbell"></i>
-        </div>
-
         <div class="brand-text">
+
             <strong>SMART GYM</strong>
-            <span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
         </div>
 
     </div>
@@ -48,87 +61,92 @@ if (!user || user.role !== "member") {
     <div class="menu">
 
         <a href="member.html">
-            <i class="fa-solid fa-house"></i>
             Home
         </a>
 
-        <a href="member_messages.html" class="msg-link">
-            <i class="fa-solid fa-envelope"></i>
+        <a href="member_messages.html"
+           class="msg-link">
+
             Messages
-            <span id="msg-count" class="msg-count">0</span>
+
+            <span id="msg-count"
+                  class="msg-count">
+                0
+            </span>
+
         </a>
 
         <a href="get_trainer.html">
-            <i class="fa-solid fa-dumbbell"></i>
             Get Trainer
         </a>
 
         <a href="locker_booking.html">
-            <i class="fa-solid fa-lock"></i>
             Book Locker
         </a>
 
         <a href="membership.html">
-            <i class="fa-solid fa-id-card"></i>
             Membership
         </a>
 
     </div>
 
-
-    <!-- MOTIVATIONAL CARD -->
-    <div class="sidebar-message">
-
-        <div class="sidebar-message-icon">
-            <i class="fa-solid fa-dumbbell"></i>
-        </div>
-
-        <h3>Keep Pushing</h3>
-
-        <p>
-            Small steps every day lead to big results.
-        </p>
-
-        <div class="message-line"></div>
-
-    </div>
-
 </div>
+
 
 <!-- MAIN -->
 <div class="layout">
+
 <div class="main">
+
 
     <!-- TOP HEADER -->
     <div class="top-header">
 
         <div class="top-right">
 
-            <div class="user-profile" onclick="toggleMenu()">
+            <!-- PROFILE TOGGLE - KEPT -->
+            <div class="user-profile"
+                 onclick="toggleMenu()">
 
-                <div class="user-avatar" id="profileInitial">
+                <div class="user-avatar"
+                     id="profileInitial">
                     A
                 </div>
 
                 <div class="user-info">
-                    <strong id="profile-name">Aldrin</strong>
-                    <small>Member</small>
+
+                    <strong id="profile-name">
+                        Aldrin
+                    </strong>
+
+                    <small>
+                        Member
+                    </small>
+
                 </div>
 
                 <i class="fa-solid fa-chevron-down profile-chevron"></i>
 
-                <div id="dropdown" class="profile-dropdown">
 
-                    <button onclick="openChangePassword(); event.stopPropagation();">
-                        <i class="fa-solid fa-key"></i>
+                <!-- PROFILE DROPDOWN - KEPT -->
+                <div id="dropdown"
+                     class="profile-dropdown">
+
+                    <button
+                        onclick="openChangePassword(); event.stopPropagation();">
+
                         Change Password
+
                     </button>
 
                     <div class="dropdown-divider"></div>
 
-                    <button onclick="logout(); event.stopPropagation();" class="dropdown-logout">
-                        <i class="fa-solid fa-right-from-bracket"></i>
+                    <button
+                        onclick="logout(); event.stopPropagation();"
+                        class="dropdown-logout">
+
                         Log Out
+
                     </button>
 
                 </div>
@@ -139,10 +157,12 @@ if (!user || user.role !== "member") {
 
     </div>
 
+
+    <!-- HERO -->
     <div class="hero">
 
         <h1 id="welcome">
-            WELCOME 💪
+            WELCOME
         </h1>
 
         <p>
@@ -151,12 +171,17 @@ if (!user || user.role !== "member") {
 
     </div>
 
+
+    <!-- CARDS -->
     <div class="cards">
+
 
         <!-- MESSAGES -->
         <div class="card">
 
-            <h3>Messages</h3>
+            <h3>
+                Messages
+            </h3>
 
             <p>
                 View your<br>
@@ -170,9 +195,12 @@ if (!user || user.role !== "member") {
         </div>
 
 
+        <!-- GET TRAINER -->
         <div class="card">
 
-            <h3>Get Trainer</h3>
+            <h3>
+                Get Trainer
+            </h3>
 
             <p>
                 Choose and get<br>
@@ -186,9 +214,12 @@ if (!user || user.role !== "member") {
         </div>
 
 
+        <!-- BOOK LOCKER -->
         <div class="card">
 
-            <h3>Book Locker</h3>
+            <h3>
+                Book Locker
+            </h3>
 
             <p>
                 Reserve a locker<br>
@@ -202,9 +233,12 @@ if (!user || user.role !== "member") {
         </div>
 
 
+        <!-- MEMBERSHIP -->
         <div class="card">
 
-            <h3>Membership Details</h3>
+            <h3>
+                Membership Details
+            </h3>
 
             <p>
                 View your membership<br>
@@ -217,173 +251,309 @@ if (!user || user.role !== "member") {
 
         </div>
 
+
     </div>
 
 </div>
+
+
 <!-- DASHBOARD INFO -->
 <div class="dashboard-info">
 
-    <!-- ATTENDANCE CALENDAR -->
-    <div class="dashboard-panel">
+    <!-- PROGRAM PROGRESS -->
+    <div class="dashboard-panel program-panel">
 
-        <div class="panel-title">
-            <i class="fa-solid fa-calendar-days"></i>
-            <h2>Attendance Calendar</h2>
+        <div class="program-title">
+
+            <div>
+                <h2>Program Progress</h2>
+
+                <span>
+                    Your Weekly Training Schedule
+                </span>
+            </div>
+
+            <strong id="programName">
+                Body Building Program
+            </strong>
+
         </div>
 
-        <div class="attendance-content">
 
-            <div class="calendar">
+        <!-- WEEKLY SCHEDULE -->
+        <div class="weekly-schedule">
 
-                <div class="calendar-head">
+            <div class="program-day today">
 
-                    <button type="button" id="prevMonth">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
+                <span>Monday</span>
 
-                    <span id="calendarMonth"></span>
+                <strong>
+                    Chest
+                </strong>
 
-                    <button type="button" id="nextMonth">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-
-                </div>
-
-                <div class="weekdays">
-                    <span>SUN</span>
-                    <span>MON</span>
-                    <span>TUE</span>
-                    <span>WED</span>
-                    <span>THU</span>
-                    <span>FRI</span>
-                    <span>SAT</span>
-                </div>
-
-                <div class="calendar-days" id="calendarDays"></div>
+                <small>
+                    Today
+                </small>
 
             </div>
 
-            <!-- USAGE -->
-            <div class="usage-stats">
 
-                <div class="usage-item">
+            <div class="program-day">
 
-                    <div class="usage-icon">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
+                <span>Tuesday</span>
 
-                    <div>
-                        <span>Times Used 
-                            this month
-                        </span>
-                        <strong id="monthlyUses">0</strong>
-                    </div>
+                <strong>
+                    Back
+                </strong>
 
-                </div>
+                <small>
+                    Upcoming
+                </small>
 
-                <div class="usage-item">
+            </div>
 
-                    <div class="usage-icon">
-                        <i class="fa-solid fa-calendar-check"></i>
-                    </div>
 
-                    <div>
-                        <span>Total Uses 
-                            all time
-                        </span>
-                        <strong id="totalUses">0</strong>
-                    </div>
+            <div class="program-day">
 
+                <span>Wednesday</span>
+
+                <strong>
+                    Rest
+                </strong>
+
+                <small>
+                    Upcoming
+                </small>
+
+            </div>
+
+
+            <div class="program-day">
+
+                <span>Thursday</span>
+
+                <strong>
+                    Shoulders
+                </strong>
+
+                <small>
+                    Upcoming
+                </small>
+
+            </div>
+
+
+            <div class="program-day">
+
+                <span>Friday</span>
+
+                <strong>
+                    Legs
+                </strong>
+
+                <small>
+                    Upcoming
+                </small>
+
+            </div>
+
+
+            <div class="program-day">
+
+                <span>Saturday</span>
+
+                <strong>
+                    Arms
+                </strong>
+
+                <small>
+                    Upcoming
+                </small>
+
+            </div>
+
+
+            <div class="program-day">
+
+                <span>Sunday</span>
+
+                <strong>
+                    Rest
+                </strong>
+
+                <small>
+                    Upcoming
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- WEEKLY PROGRESS -->
+        <div class="weekly-progress">
+
+            <div class="progress-heading">
+
+                <span>
+                    Weekly Progress
+                </span>
+
+                <strong id="weeklyProgressText">
+                    1 / 7 Completed
+                </strong>
+
+            </div>
+
+
+            <div class="weekly-progress-bar">
+
+                <div
+                    class="weekly-progress-fill"
+                    id="weeklyProgressFill">
                 </div>
 
             </div>
+
+
+            <p>
+                Stay consistent to reach your goals!
+            </p>
 
         </div>
 
     </div>
+
+    
 
 
     <!-- MEMBERSHIP -->
     <div class="dashboard-panel">
 
         <div class="panel-title">
-            <i class="fa-solid fa-crown"></i>
-            <h2>Membership Status</h2>
+
+            <h2>
+                Membership Status
+            </h2>
+
         </div>
+
 
         <div class="membership-box">
 
             <div class="membership-top">
 
-                <div class="membership-icon">
-                    <i class="fa-solid fa-crown"></i>
-                </div>
-
                 <div>
 
-                    <div class="membership-name" id="membershipType">
+                    <div
+                        class="membership-name"
+                        id="membershipType">
+
                         Membership
+
                     </div>
 
-                    <span class="status" id="membershipStatus">
+                    <span
+                        class="status"
+                        id="membershipStatus">
+
                         Active
+
                     </span>
 
                 </div>
 
             </div>
 
+
             <div class="membership-info">
 
-                <span>Valid Until</span>
-                <strong id="membershipValidUntil">-</strong>
+                <span>
+                    Valid Until
+                </span>
 
-                <span>Days Remaining</span>
-                <strong id="daysRemaining">0 days</strong>
+                <strong id="membershipValidUntil">
+                    -
+                </strong>
+
+
+                <span>
+                    Days Remaining
+                </span>
+
+                <strong id="daysRemaining">
+                    0 days
+                </strong>
 
             </div>
+
 
             <div class="progress-row">
 
                 <div class="progress">
+
                     <div
                         class="progress-fill"
                         id="membershipProgress">
                     </div>
+
                 </div>
 
-                <strong id="membershipPercent">0%</strong>
+                <strong id="membershipPercent">
+                    0%
+                </strong>
 
             </div>
+
 
             <div
                 class="remaining"
                 id="membershipRemaining">
+
                 0 days remaining
+
             </div>
 
         </div>
 
     </div>
 
+
 </div>
-<!-- EDIT PROFILE MODAL -->
+
+
+</div>
+
+
 <!-- CHANGE PASSWORD MODAL -->
-<div id="changePasswordModal" class="edit-profile-overlay">
+<div
+    id="changePasswordModal"
+    class="edit-profile-overlay">
 
     <div class="edit-profile-modal">
+
 
         <div class="edit-profile-header">
 
             <div>
-                <span>Account Security</span>
-                <h2>Change Password</h2>
+
+                <span>
+                    Account Security
+                </span>
+
+                <h2>
+                    Change Password
+                </h2>
+
             </div>
+
 
             <button
                 class="edit-close"
                 onclick="closeChangePassword()">
+
                 &times;
+
             </button>
 
         </div>
@@ -391,15 +561,13 @@ if (!user || user.role !== "member") {
 
         <div class="edit-profile-body">
 
-            <div class="profile-avatar-large">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-
 
             <!-- CURRENT PASSWORD -->
             <div class="profile-field">
 
-                <label>Current Password</label>
+                <label>
+                    Current Password
+                </label>
 
                 <div class="password-wrapper">
 
@@ -413,7 +581,7 @@ if (!user || user.role !== "member") {
                         class="password-toggle"
                         onclick="togglePassword('changeCurrentPassword', this)">
 
-                        <i class="fa-regular fa-eye"></i>
+                        Show
 
                     </button>
 
@@ -425,7 +593,9 @@ if (!user || user.role !== "member") {
             <!-- NEW PASSWORD -->
             <div class="profile-field">
 
-                <label>New Password</label>
+                <label>
+                    New Password
+                </label>
 
                 <div class="password-wrapper">
 
@@ -439,7 +609,7 @@ if (!user || user.role !== "member") {
                         class="password-toggle"
                         onclick="togglePassword('changeNewPassword', this)">
 
-                        <i class="fa-regular fa-eye"></i>
+                        Show
 
                     </button>
 
@@ -451,7 +621,9 @@ if (!user || user.role !== "member") {
             <!-- CONFIRM PASSWORD -->
             <div class="profile-field">
 
-                <label>Confirm New Password</label>
+                <label>
+                    Confirm New Password
+                </label>
 
                 <div class="password-wrapper">
 
@@ -465,7 +637,7 @@ if (!user || user.role !== "member") {
                         class="password-toggle"
                         onclick="togglePassword('changeConfirmPassword', this)">
 
-                        <i class="fa-regular fa-eye"></i>
+                        Show
 
                     </button>
 
@@ -481,13 +653,17 @@ if (!user || user.role !== "member") {
             <button
                 class="cancel-profile"
                 onclick="closeChangePassword()">
+
                 Cancel
+
             </button>
 
             <button
                 class="save-profile"
                 onclick="changePassword()">
+
                 Change Password
+
             </button>
 
         </div>
@@ -497,10 +673,22 @@ if (!user || user.role !== "member") {
 </div>
 
 
-<div id="notifPopup" class="notif-popup" onclick="goMessages()">
-    <b id="notifTitle">New Message</b>
-    <p id="notifText">You have a new message</p>
+<!-- NOTIFICATION -->
+<div
+    id="notifPopup"
+    class="notif-popup"
+    onclick="goMessages()">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
 </div>
+
 
 <!-- SCRIPT -->
 <script>
@@ -508,71 +696,122 @@ if (!user || user.role !== "member") {
 const API_URL =
 "https://smartgym-api-ia2e.onrender.com";
 
-// 🔥 LOAD USER
+
+// ==============================
+// LOAD USER
+// ==============================
+
 const userData =
-    JSON.parse(localStorage.getItem("user"));
+    JSON.parse(
+        localStorage.getItem("user")
+    );
 
 const profile =
-    JSON.parse(localStorage.getItem("profile")) || {};
+    JSON.parse(
+        localStorage.getItem("profile")
+    ) || {};
 
-// 👉 PRIORITY:
-// nickname → fallback real name
 const displayName =
     profile.name ||
     userData.fullname ||
     userData.username;
 
 const firstLetter =
-    displayName.trim().charAt(0).toUpperCase();
+    displayName
+        .trim()
+        .charAt(0)
+        .toUpperCase();
 
-document.getElementById("profileInitial").innerText =
-    firstLetter;  
-// 👉 UPDATE NAME
-document.getElementById("welcome").innerText =
+document.getElementById(
+    "profileInitial"
+).innerText =
+    firstLetter;
+
+document.getElementById(
+    "welcome"
+).innerText =
     displayName;
 
-document.getElementById("profile-name").innerText =
+document.getElementById(
+    "profile-name"
+).innerText =
     displayName;
 
-// ================= NAVIGATION =================
+
+// ==============================
+// NAVIGATION
+// ==============================
+
 function go(page){
 
-    window.location.href = page;
+    window.location.href =
+        page;
+
 }
 
-function togglePassword(inputId, button) {
 
-    const input = document.getElementById(inputId);
-    const icon = button.querySelector("i");
+// ==============================
+// PASSWORD TOGGLE
+// ==============================
 
-    if (input.type === "password") {
+function togglePassword(
+    inputId,
+    button
+){
 
-        input.type = "text";
+    const input =
+        document.getElementById(
+            inputId
+        );
 
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
+    if(
+        input.type === "password"
+    ){
 
-    } else {
+        input.type =
+            "text";
 
-        input.type = "password";
+        button.innerText =
+            "Hide";
 
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
     }
+
+    else{
+
+        input.type =
+            "password";
+
+        button.innerText =
+            "Show";
+
+    }
+
 }
-// ================= CHANGE PASSWORD =================
+
+
+// ==============================
+// CHANGE PASSWORD
+// ==============================
 
 function openChangePassword(){
 
     const dropdown =
-        document.getElementById("dropdown");
+        document.getElementById(
+            "dropdown"
+        );
 
     const profile =
-        document.querySelector(".user-profile");
+        document.querySelector(
+            ".user-profile"
+        );
 
-    dropdown.classList.remove("show");
-    profile.classList.remove("active");
+    dropdown.classList.remove(
+        "show"
+    );
 
+    profile.classList.remove(
+        "active"
+    );
 
     document.getElementById(
         "changeCurrentPassword"
@@ -586,10 +825,12 @@ function openChangePassword(){
         "changeConfirmPassword"
     ).value = "";
 
-
     document.getElementById(
         "changePasswordModal"
-    ).classList.add("show");
+    ).classList.add(
+        "show"
+    );
+
 }
 
 
@@ -597,7 +838,10 @@ function closeChangePassword(){
 
     document.getElementById(
         "changePasswordModal"
-    ).classList.remove("show");
+    ).classList.remove(
+        "show"
+    );
+
 }
 
 
@@ -621,15 +865,23 @@ async function changePassword(){
 
     if(!currentPassword){
 
-        alert("Enter your current password.");
+        alert(
+            "Enter your current password."
+        );
+
         return;
+
     }
 
 
     if(!newPassword){
 
-        alert("Enter your new password.");
+        alert(
+            "Enter your new password."
+        );
+
         return;
+
     }
 
 
@@ -640,16 +892,21 @@ async function changePassword(){
         );
 
         return;
+
     }
 
 
-    if(newPassword !== confirmPassword){
+    if(
+        newPassword !==
+        confirmPassword
+    ){
 
         alert(
             "New passwords do not match."
         );
 
         return;
+
     }
 
 
@@ -659,34 +916,40 @@ async function changePassword(){
             await fetch(
                 `${API_URL}/api/change_password`,
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        id:
-                            userData.id,
+                            id:
+                                userData.id,
 
-                        username:
-                            userData.username,
+                            username:
+                                userData.username,
 
-                        phone_number:
-                            userData.phone_number,
+                            phone_number:
+                                userData.phone_number,
 
-                        current_password:
-                            currentPassword,
+                            current_password:
+                                currentPassword,
 
-                        new_password:
-                            newPassword,
+                            new_password:
+                                newPassword,
 
-                        confirm_password:
-                            confirmPassword
+                            confirm_password:
+                                confirmPassword
 
-                    })
+                        })
+
                 }
             );
 
@@ -695,7 +958,10 @@ async function changePassword(){
             await response.json();
 
 
-        if(!response.ok || !result.success){
+        if(
+            !response.ok ||
+            !result.success
+        ){
 
             alert(
                 result.message ||
@@ -703,10 +969,12 @@ async function changePassword(){
             );
 
             return;
+
         }
 
 
         closeChangePassword();
+
 
         alert(
             "Password changed successfully."
@@ -724,47 +992,88 @@ async function changePassword(){
         alert(
             "Unable to connect to the server."
         );
+
     }
 
 }
-// ================= LOGOUT =================
+
+
+// ==============================
+// LOGOUT
+// ==============================
+
 function logout(){
 
     localStorage.clear();
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
+
 }
 
 
-// ================= DROPDOWN =================
+// ==============================
+// PROFILE DROPDOWN
+// ==============================
 
 function toggleMenu(){
 
     const profile =
-        document.querySelector(".user-profile");
+        document.querySelector(
+            ".user-profile"
+        );
 
     const dropdown =
-        document.getElementById("dropdown");
+        document.getElementById(
+            "dropdown"
+        );
 
-    profile.classList.toggle("active");
-    dropdown.classList.toggle("show");
+    profile.classList.toggle(
+        "active"
+    );
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
 }
 
-// ================= CLICK OUTSIDE =================
-window.onclick = function(e){
 
-    if(!e.target.closest(".user-profile")){
+// ==============================
+// CLICK OUTSIDE
+// ==============================
+
+window.onclick =
+function(e){
+
+    if(
+        !e.target.closest(
+            ".user-profile"
+        )
+    ){
 
         const profile =
-            document.querySelector(".user-profile");
+            document.querySelector(
+                ".user-profile"
+            );
 
         const dropdown =
-            document.getElementById("dropdown");
+            document.getElementById(
+                "dropdown"
+            );
 
-        profile.classList.remove("active");
-        dropdown.classList.remove("show");
+        profile.classList.remove(
+            "active"
+        );
+
+        dropdown.classList.remove(
+            "show"
+        );
+
     }
+
 };
+
 
 const memberId =
     userData.user_id ||
@@ -772,57 +1081,103 @@ const memberId =
     userData.id;
 
 
+// ==============================
+// ATTENDANCE
+// ==============================
 
-// ================= ATTENDANCE CALENDAR =================
+let calendarDate =
+    new Date();
 
-let calendarDate = new Date();
-let attendanceDates = new Set();
+let attendanceDates =
+    new Set();
 
 
-// FORMAT DATE
-function formatDate(year, month, day){
+function formatDate(
+    year,
+    month,
+    day
+){
 
-    return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    return `${year}-${String(
+        month + 1
+    ).padStart(
+        2,
+        "0"
+    )}-${String(
+        day
+    ).padStart(
+        2,
+        "0"
+    )}`;
 
 }
 
 
-// ================= LOAD ATTENDANCE =================
+// ==============================
+// LOAD ATTENDANCE
+// ==============================
 
 async function loadAttendance(){
 
     try{
 
-        const response = await fetch(
-            `${API_URL}/api/member/attendance/${memberId}`
-        );
+        const response =
+            await fetch(
+                `${API_URL}/api/member/attendance/${memberId}`
+            );
+
 
         if(!response.ok){
 
             throw new Error(
                 `Attendance API error: ${response.status}`
             );
+
         }
 
-        const data = await response.json();
 
-        console.log("ATTENDANCE MEMBER ID:", memberId);
-        console.log("ATTENDANCE DATA:", data);
+        const data =
+            await response.json();
 
-        attendanceDates = new Set(
-            (data.dates || []).map(date =>
-                String(date).substring(0, 10)
-            )
+
+        console.log(
+            "ATTENDANCE MEMBER ID:",
+            memberId
         );
+
+
+        console.log(
+            "ATTENDANCE DATA:",
+            data
+        );
+
+
+        attendanceDates =
+            new Set(
+                (data.dates || [])
+                    .map(
+                        date =>
+                            String(date)
+                                .substring(
+                                    0,
+                                    10
+                                )
+                    )
+            );
+
 
         document.getElementById(
             "totalUses"
         ).innerText =
-            data.total ?? attendanceDates.size;
+            data.total ??
+            attendanceDates.size;
+
 
         renderCalendar();
 
-    }catch(error){
+    }
+
+    catch(error){
 
         console.error(
             "ATTENDANCE ERROR:",
@@ -832,11 +1187,15 @@ async function loadAttendance(){
         attendanceDates.clear();
 
         renderCalendar();
+
     }
+
 }
 
 
-// ================= CALENDAR =================
+// ==============================
+// CALENDAR
+// ==============================
 
 function renderCalendar(){
 
@@ -858,10 +1217,9 @@ function renderCalendar(){
         );
 
 
-    calendarDays.innerHTML = "";
+    calendarDays.innerHTML =
+        "";
 
-
-    // MONTH NAME
 
     calendarMonth.innerText =
         new Date(
@@ -871,13 +1229,16 @@ function renderCalendar(){
         ).toLocaleDateString(
             "en-US",
             {
-                month: "long",
-                year: "numeric"
+
+                month:
+                    "long",
+
+                year:
+                    "numeric"
+
             }
         );
 
-
-    // FIRST DAY OF MONTH
 
     const firstDay =
         new Date(
@@ -887,8 +1248,6 @@ function renderCalendar(){
         ).getDay();
 
 
-    // NUMBER OF DAYS
-
     const daysInMonth =
         new Date(
             year,
@@ -896,8 +1255,6 @@ function renderCalendar(){
             0
         ).getDate();
 
-
-    // PREVIOUS MONTH DAYS
 
     const previousMonthDays =
         new Date(
@@ -916,24 +1273,30 @@ function renderCalendar(){
         const dayNumber =
             previousMonthDays - i;
 
+
         const day =
             document.createElement(
                 "span"
             );
 
+
         day.className =
             "day muted";
+
 
         day.innerText =
             dayNumber;
 
-        calendarDays.appendChild(day);
+
+        calendarDays.appendChild(
+            day
+        );
+
     }
 
 
-    // CURRENT MONTH
-
-    let monthlyCount = 0;
+    let monthlyCount =
+        0;
 
 
     const today =
@@ -951,8 +1314,10 @@ function renderCalendar(){
                 "span"
             );
 
+
         day.className =
             "day";
+
 
         day.innerText =
             dayNumber;
@@ -966,57 +1331,60 @@ function renderCalendar(){
             );
 
 
-        // =========================
-        // ATTENDED
-        // =========================
+        if(
+            attendanceDates.has(
+                dateKey
+            )
+        ){
 
-        if (
-            attendanceDates.has(dateKey)
-        ) {
+            day.classList.add(
+                "attended"
+            );
 
-            day.classList.add("attended");
-
-            day.innerHTML =
-                `<i class="fa-solid fa-check"></i>`;
+            day.innerText =
+                "✓";
 
             monthlyCount++;
+
         }
 
 
-        // =========================
-        // TODAY
-        // =========================
-
         if(
-            dayNumber === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear()
+            dayNumber ===
+                today.getDate() &&
+
+            month ===
+                today.getMonth() &&
+
+            year ===
+                today.getFullYear()
         ){
 
             day.classList.add(
                 "today"
             );
+
         }
 
 
-        calendarDays.appendChild(day);
+        calendarDays.appendChild(
+            day
+        );
+
     }
 
-
-    // =========================
-    // MONTHLY USES
-    // =========================
 
     document.getElementById(
         "monthlyUses"
     ).innerText =
         monthlyCount;
+
 }
 
 
-// =========================
+// ==============================
 // MONTH NAVIGATION
-// =========================
+// ==============================
 
 document.getElementById(
     "prevMonth"
@@ -1051,50 +1419,71 @@ document.getElementById(
 
 
 // INITIAL LOAD
+
 renderCalendar();
 
 loadAttendance();
 
 loadMembership();
-// ==============================
-// MESSAGES NOTIFICATION
-// ==============================
 
+
+// ==============================
+// MESSAGES
+// ==============================
 
 const messageUserId =
     userData.id ||
     userData.user_id;
 
-let lastMessageCount = 0;
-let firstMessageCheck = true;
+let lastMessageCount =
+    0;
+
+let firstMessageCheck =
+    true;
+
+
 // ==============================
-// UPDATE SIDEBAR BADGE
+// MESSAGE BADGE
 // ==============================
 
-function updateMessageBadge(count){
+function updateMessageBadge(
+    count
+){
 
     const badge =
-        document.getElementById("msg-count");
+        document.getElementById(
+            "msg-count"
+        );
 
-    if(!badge) return;
+    if(!badge)
+        return;
 
 
     if(count > 0){
 
-        badge.style.display = "flex";
-        badge.innerText = count;
+        badge.style.display =
+            "flex";
 
-    }else{
-
-        badge.style.display = "none";
-        badge.innerText = "0";
+        badge.innerText =
+            count;
 
     }
+
+    else{
+
+        badge.style.display =
+            "none";
+
+        badge.innerText =
+            "0";
+
+    }
+
 }
 
 
 // ==============================
-// CHECK UNREAD MESSAGES
+// CHECK MESSAGES
 // ==============================
 
 async function checkNewMessage(){
@@ -1106,44 +1495,73 @@ async function checkNewMessage(){
                 `${API_URL}/api/messages_count/${messageUserId}`
             );
 
+
         if(!response.ok){
+
             throw new Error(
                 `Message API error: ${response.status}`
             );
+
         }
+
 
         const data =
             await response.json();
 
+
         const count =
-            Number(data.count || 0);
+            Number(
+                data.count || 0
+            );
 
-        updateMessageBadge(count);
 
-        if(firstMessageCheck){
+        updateMessageBadge(
+            count
+        );
 
-            lastMessageCount = count;
-            firstMessageCheck = false;
+
+        if(
+            firstMessageCheck
+        ){
+
+            lastMessageCount =
+                count;
+
+            firstMessageCheck =
+                false;
 
             return;
+
         }
 
-        if(count > lastMessageCount){
+
+        if(
+            count >
+            lastMessageCount
+        ){
 
             const newMessages =
-                count - lastMessageCount;
+                count -
+                lastMessageCount;
+
 
             showNotifPopup(
                 "New Message",
+
                 newMessages === 1
                     ? "You received a new message."
                     : `You received ${newMessages} new messages.`
             );
+
         }
 
-        lastMessageCount = count;
 
-    }catch(error){
+        lastMessageCount =
+            count;
+
+    }
+
+    catch(error){
 
         console.error(
             "MESSAGE NOTIFICATION ERROR:",
@@ -1151,13 +1569,18 @@ async function checkNewMessage(){
         );
 
     }
+
 }
+
 
 // ==============================
 // NOTIFICATION POPUP
 // ==============================
 
-function showNotifPopup(title, text){
+function showNotifPopup(
+    title,
+    text
+){
 
     const popup =
         document.getElementById(
@@ -1177,14 +1600,21 @@ function showNotifPopup(title, text){
         text;
 
 
-    popup.classList.add("show");
+    popup.classList.add(
+        "show"
+    );
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        popup.classList.remove("show");
+            popup.classList.remove(
+                "show"
+            );
 
-    }, 4000);
+        },
+        4000
+    );
 
 }
 
@@ -1202,7 +1632,7 @@ function goMessages(){
 
 
 // ==============================
-// START
+// MESSAGE CHECK
 // ==============================
 
 checkNewMessage();
@@ -1211,80 +1641,95 @@ setInterval(
     checkNewMessage,
     3000
 );
+
+
 // ==============================
-// MEMBERSHIP STATUS
+// MEMBERSHIP
 // ==============================
 
-async function loadMembership() {
+async function loadMembership(){
 
-    try {
+    try{
 
-        const response = await fetch(
-            `${API_URL}/api/membership/${memberId}`
-        );
+        const response =
+            await fetch(
+                `${API_URL}/api/membership/${memberId}`
+            );
 
-        if (!response.ok) {
+
+        if(!response.ok){
+
             throw new Error(
                 `Membership API error: ${response.status}`
             );
+
         }
 
-        const result = await response.json();
 
-        console.log("MEMBERSHIP DATA:", result);
+        const result =
+            await response.json();
 
-        if (!result.data) {
+
+        console.log(
+            "MEMBERSHIP DATA:",
+            result
+        );
+
+
+        if(!result.data){
+
             return;
+
         }
 
-        const membership = result.data;
 
+        const membership =
+            result.data;
 
-        // =========================
-        // MEMBERSHIP TYPE
-        // =========================
 
         document.getElementById(
             "membershipType"
         ).innerText =
-            membership.membership_type || "Membership";
+            membership.membership_type ||
+            "Membership";
 
-
-        // =========================
-        // STATUS
-        // =========================
 
         const statusElement =
             document.getElementById(
                 "membershipStatus"
             );
 
-        if (
-            membership.membership_status === "ACTIVE"
-        ) {
 
-            statusElement.innerText = "Active";
+        if(
+            membership.membership_status ===
+            "ACTIVE"
+        ){
 
-        } else {
+            statusElement.innerText =
+                "Active";
 
-            statusElement.innerText = "Expired";
+        }
+
+        else{
+
+            statusElement.innerText =
+                "Expired";
 
         }
 
 
-        // =========================
-        // VALID UNTIL
-        // =========================
-
         const expiryDate =
             membership.membership_validity;
 
-        if (expiryDate) {
+
+        if(expiryDate){
 
             const date =
                 new Date(
-                    expiryDate + "T00:00:00"
+                    expiryDate +
+                    "T00:00:00"
                 );
+
 
             document.getElementById(
                 "membershipValidUntil"
@@ -1292,30 +1737,40 @@ async function loadMembership() {
                 date.toLocaleDateString(
                     "en-US",
                     {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric"
+
+                        month:
+                            "long",
+
+                        day:
+                            "numeric",
+
+                        year:
+                            "numeric"
+
                     }
                 );
 
-        } else {
+        }
+
+        else{
 
             document.getElementById(
                 "membershipValidUntil"
-            ).innerText = "-";
+            ).innerText =
+                "-";
 
         }
 
 
-        // =========================
-        // DAYS REMAINING
-        // =========================
+        let daysRemaining =
+            0;
 
-        let daysRemaining = 0;
 
-        if (expiryDate) {
+        if(expiryDate){
 
-            const today = new Date();
+            const today =
+                new Date();
+
 
             today.setHours(
                 0,
@@ -1324,21 +1779,30 @@ async function loadMembership() {
                 0
             );
 
+
             const expiry =
                 new Date(
-                    expiryDate + "T00:00:00"
+                    expiryDate +
+                    "T00:00:00"
                 );
+
 
             const diff =
                 expiry.getTime() -
                 today.getTime();
+
 
             daysRemaining =
                 Math.max(
                     0,
                     Math.ceil(
                         diff /
-                        (1000 * 60 * 60 * 24)
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        )
                     )
                 );
 
@@ -1357,27 +1821,29 @@ async function loadMembership() {
             `${daysRemaining} days remaining`;
 
 
-        // =========================
-        // MEMBERSHIP PROGRESS
-        // =========================
-
-        if (expiryDate) {
+        if(expiryDate){
 
             const expiry =
                 new Date(
-                    expiryDate + "T00:00:00"
+                    expiryDate +
+                    "T00:00:00"
                 );
 
-            const start =
-                new Date(expiry);
 
-            // Membership validity = 1 year
+            const start =
+                new Date(
+                    expiry
+                );
+
+
             start.setFullYear(
                 start.getFullYear() - 1
             );
 
+
             const today =
                 new Date();
+
 
             today.setHours(
                 0,
@@ -1387,18 +1853,21 @@ async function loadMembership() {
             );
 
 
-            // Total days in the 1-year membership
             const totalDays =
                 Math.ceil(
                     (
                         expiry.getTime() -
                         start.getTime()
                     ) /
-                    (1000 * 60 * 60 * 24)
+                    (
+                        1000 *
+                        60 *
+                        60 *
+                        24
+                    )
                 );
 
 
-            // Remaining days
             const remainingDays =
                 Math.max(
                     0,
@@ -1407,12 +1876,16 @@ async function loadMembership() {
                             expiry.getTime() -
                             today.getTime()
                         ) /
-                        (1000 * 60 * 60 * 24)
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        )
                     )
                 );
 
 
-            // Remaining percentage
             const percentage =
                 totalDays > 0
                     ? Math.min(
@@ -1430,14 +1903,12 @@ async function loadMembership() {
                     : 0;
 
 
-            // Percentage text
             document.getElementById(
                 "membershipPercent"
             ).innerText =
                 `${percentage}%`;
 
 
-            // Progress bar
             document.getElementById(
                 "membershipProgress"
             ).style.width =
@@ -1445,7 +1916,9 @@ async function loadMembership() {
 
         }
 
-    } catch (error) {
+    }
+
+    catch(error){
 
         console.error(
             "MEMBERSHIP ERROR:",
@@ -1453,11 +1926,10 @@ async function loadMembership() {
         );
 
     }
+
 }
 
-checkNewMessage();
-
-setInterval(checkNewMessage, 3000);
 </script>
+
 </body>
 </html>
