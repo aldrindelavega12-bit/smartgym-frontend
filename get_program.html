@@ -549,10 +549,8 @@ const API_URL =
    DATA
 ========================================================= */
 
-let trainerPlans = [];
-
+let programTrainers = [];
 let programs = [];
-
 let trainers = [];
 
 let selectedProgram = null;
@@ -578,7 +576,7 @@ async function loadPrograms(){
 
         const response =
             await fetch(
-                `${API_URL}/api/trainer_plans`,
+                `${API_URL}/api/program_trainers`,
                 {
                     cache: "no-store"
                 }
@@ -598,7 +596,7 @@ async function loadPrograms(){
             await response.json();
 
 
-        trainerPlans =
+        programTrainers =
             Array.isArray(data)
             ? data
             : [];
@@ -631,7 +629,6 @@ async function loadPrograms(){
 
 }
 
-
 /* =========================================================
    BUILD PROGRAMS
 ========================================================= */
@@ -640,26 +637,14 @@ function buildPrograms(){
 
     programs = [];
 
-
-    trainerPlans.forEach(
-        plan => {
-
-            if(
-                Number(plan.active) !== 1
-            ){
-                return;
-            }
-
+    programTrainers.forEach(
+        item => {
 
             const exists =
                 programs.find(
-                    item =>
-                        item.name ===
-                        plan.plan_name &&
-                        item.days ===
-                        Number(
-                            plan.duration_days
-                        )
+                    program =>
+                        Number(program.id) ===
+                        Number(item.program_id)
                 );
 
 
@@ -667,13 +652,14 @@ function buildPrograms(){
 
                 programs.push({
 
+                    id:
+                        item.program_id,
+
                     name:
-                        plan.plan_name,
+                        item.program_name,
 
                     days:
-                        Number(
-                            plan.duration_days
-                        )
+                        Number(item.duration_days)
 
                 });
 
@@ -689,7 +675,6 @@ function buildPrograms(){
     );
 
 }
-
 
 /* =========================================================
    RENDER PROGRAMS
@@ -878,78 +863,33 @@ function loadTrainersForProgram(){
     trainers = [];
 
 
-    trainerPlans.forEach(
-        plan => {
-
-            if(
-                plan.plan_name !==
-                selectedProgram.name
-            ){
-                return;
-            }
+    const matching =
+        programTrainers.filter(
+            item =>
+                Number(item.program_id) ===
+                Number(selectedProgram.id)
+        );
 
 
-            if(
-                Number(plan.duration_days) !==
-                selectedProgram.days
-            ){
-                return;
-            }
+    matching.forEach(
+        item => {
 
+            trainers.push({
 
-            if(
-                Number(plan.active) !== 1
-            ){
-                return;
-            }
+                id:
+                    String(item.trainer_id),
 
+                name:
+                    item.trainer_name,
 
-            const trainerId =
-                String(
-                    plan.trainer_id
-                );
+                priceDay:
+                    Number(item.price_day || 0),
 
+                priceWeek:
+                    Number(item.price_week || 0),
 
-            let trainer =
-                trainers.find(
-                    item =>
-                        item.id ===
-                        trainerId
-                );
-
-
-            if(!trainer){
-
-                trainer = {
-
-                    id:
-                        trainerId,
-
-                    name:
-                        plan.fullname ||
-                        "Trainer",
-
-                    plans: []
-
-                };
-
-
-                trainers.push(
-                    trainer
-                );
-
-            }
-
-
-            trainer.plans.push({
-
-                planId:
-                    plan.id,
-
-                price:
-                    Number(
-                        plan.price
-                    )
+                priceMonth:
+                    Number(item.price_month || 0)
 
             });
 
@@ -971,12 +911,13 @@ function loadTrainersForProgram(){
     ).innerText =
         `These trainers offer the ${
             selectedProgram.name
-        } program (${getDurationText(
-            selectedProgram.days
-        )}).`;
+        } program (${
+            getDurationText(
+                selectedProgram.days
+            )
+        }).`;
 
 }
-
 
 /* =========================================================
    RENDER TRAINERS
@@ -1248,35 +1189,21 @@ function selectPayment(
 
 function getMonthlyPrice(trainer){
 
-    return trainer.plans[0]?.price || 0;
+    return trainer.priceMonth || 0;
 
 }
 
 
 function getWeeklyPrice(trainer){
 
-    const monthly =
-        getMonthlyPrice(
-            trainer
-        );
-
-    return monthly > 0
-        ? monthly / 4
-        : 0;
+    return trainer.priceWeek || 0;
 
 }
 
 
 function getDailyPrice(trainer){
 
-    const monthly =
-        getMonthlyPrice(
-            trainer
-        );
-
-    return monthly > 0
-        ? monthly / 30
-        : 0;
+    return trainer.priceDay || 0;
 
 }
 
