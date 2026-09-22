@@ -73,8 +73,12 @@ if (!user || user.role !== "member") {
             </span>
         </a>
 
-        <a href="get_trainer.html">
-            Get Trainer
+        <a href="program.html">
+            Program
+        </a>
+
+        <a href="get_program.html">
+            Get Program
         </a>
 
         <a href="locker_booking.html">
@@ -170,22 +174,87 @@ if (!user || user.role !== "member") {
 
 
     <!-- CARDS -->
-    <div class="card">
+    <div class="cards">
 
-        <h3>
-            Program
-        </h3>
 
-        <p>
-            View your<br>
-            training program
-        </p>
+        <!-- MESSAGES -->
+        <div class="card">
 
-        <button onclick="go('program.html')">
-            View
-        </button>
+            <h3>
+                Messages
+            </h3>
+
+            <p>
+                View your<br>
+                messages
+            </p>
+
+            <button onclick="go('member_messages.html')">
+                Open
+            </button>
+
+        </div>
+
+
+        <!-- GET TRAINER -->
+        <div class="card">
+
+            <h3>
+                Get Trainer
+            </h3>
+
+            <p>
+                Choose and get<br>
+                a personal trainer
+            </p>
+
+            <button onclick="go('get_program.html')">
+                Open
+            </button>
+
+        </div>
+
+
+        <!-- BOOK LOCKER -->
+        <div class="card">
+
+            <h3>
+                Book Locker
+            </h3>
+
+            <p>
+                Reserve a locker<br>
+                for your items
+            </p>
+
+            <button onclick="go('locker_booking.html')">
+                Book Now
+            </button>
+
+        </div>
+
+
+        <!-- MEMBERSHIP -->
+        <div class="card">
+
+            <h3>
+                Membership Details
+            </h3>
+
+            <p>
+                View your membership<br>
+                information
+            </p>
+
+            <button onclick="go('membership.html')">
+                View
+            </button>
+
+        </div>
+
 
     </div>
+
 </div>
 
 
