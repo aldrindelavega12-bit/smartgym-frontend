@@ -745,8 +745,14 @@ const API_URL =
 async function loadMyProgram(){
 
     const memberId =
+    user?.member_id ||
         user?.user_id ||
         user?.id;
+
+    console.log(
+        "MY PROGRAM MEMBER ID:",
+        memberId
+    );
 
     if(!memberId){
 
@@ -1136,16 +1142,87 @@ function logout(){
 let calendarDate = new Date();
 
 
-const workoutSchedule = {
-    0: "Rest",       // Sunday
-    1: "Chest",      // Monday
-    2: "Back",       // Tuesday
-    3: "Rest",       // Wednesday
-    4: "Shoulders",  // Thursday
-    5: "Legs",       // Friday
-    6: "Arms"        // Saturday
-};
+let workoutSchedule = {};
+async function loadTrainingSchedule(){
 
+    const memberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+    console.log(
+        "PROGRAM MEMBER ID:",
+        memberId
+    );
+
+    if(!memberId){
+
+        console.error(
+            "MEMBER ID NOT FOUND"
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/workout-schedule/${memberId}`,
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        workoutSchedule = {};
+
+
+        (result.workouts || []).forEach(
+            workout => {
+
+                workoutSchedule[
+                    workout.workout_date
+                ] = workout;
+
+            }
+        );
+
+
+        renderTrainingCalendar();
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD TRAINING SCHEDULE ERROR:",
+            error
+        );
+
+
+        workoutSchedule = {};
+
+
+        renderTrainingCalendar();
+
+    }
+
+}
 
 function renderTrainingCalendar(){
 
@@ -1302,27 +1379,55 @@ function renderTrainingCalendar(){
         }
 
 
+        const dateKey =
+            `${year}-${String(month + 1).padStart(2, "0")}-${String(dayNumber).padStart(2, "0")}`;
+
+
         const workout =
             workoutSchedule[
-                date.getDay()
+                dateKey
             ];
 
 
-        let status = "Upcoming";
+        let workoutName =
+            "Rest";
 
 
-        if(
-            workout === "Rest"
-        ){
+        let status =
+            "Rest";
 
-            status = "Rest";
 
-        }
-        else if(
-            date < today
-        ){
+        if(workout){
 
-            status = "Completed";
+            workoutName =
+                workout.workout_name ||
+                "Workout";
+
+
+            if(
+                workout.status ===
+                "completed"
+            ){
+
+                status =
+                    "Completed";
+
+            }
+            else if(
+                workout.status ===
+                "missed"
+            ){
+
+                status =
+                    "Missed";
+
+            }
+            else{
+
+                status =
+                    "Upcoming";
+
+            }
 
         }
 
@@ -1348,7 +1453,6 @@ function renderTrainingCalendar(){
 
         }
 
-
         day.innerHTML = `
 
             <div class="calendar-date">
@@ -1357,7 +1461,7 @@ function renderTrainingCalendar(){
 
             <div class="calendar-workout ${workoutClass}">
 
-                ${workout}
+                ${workoutName}
 
                 <span class="calendar-status">
                     ${status}
@@ -1467,7 +1571,7 @@ document.addEventListener(
     "DOMContentLoaded",
     function(){
 
-        renderTrainingCalendar();
+        loadTrainingSchedule();
 
         loadMyProgram();
 
