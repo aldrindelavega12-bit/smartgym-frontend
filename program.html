@@ -230,7 +230,6 @@
 
             <div class="current-program-card">
 
-
                 <!-- LEFT SIDE -->
 
                 <div class="program-main-info">
@@ -240,16 +239,16 @@
                     </span>
 
 
-                    <h2>
-                        Body Building Program
+                    <h2 id="programName">
+                        Loading...
                     </h2>
 
 
-                    <p class="program-description">
-
-                        A structured program focused on building
-                        strength, muscle mass, and overall fitness.
-
+                    <p
+                        class="program-description"
+                        id="programDescription"
+                    >
+                        Loading...
                     </p>
 
 
@@ -264,8 +263,8 @@
                                 Trainer
                             </span>
 
-                            <strong>
-                                Coach Mark
+                            <strong id="trainerName">
+                                Loading...
                             </strong>
 
                         </div>
@@ -277,8 +276,8 @@
                                 Started
                             </span>
 
-                            <strong>
-                                July 20, 2026
+                            <strong id="programStartDate">
+                                Loading...
                             </strong>
 
                         </div>
@@ -290,11 +289,12 @@
                                 Valid Until
                             </span>
 
-                            <strong>
-                                October 17, 2026
+                            <strong id="programEndDate">
+                                Loading...
                             </strong>
 
                         </div>
+
 
                     </div>
 
@@ -309,8 +309,11 @@
 
                     <div class="days-circle">
 
-                        <div class="days-number">
-                            24
+                        <div
+                            class="days-number"
+                            id="daysRemaining"
+                        >
+                            0
                         </div>
 
                         <span>
@@ -322,8 +325,8 @@
 
                     <div class="overall-completed">
 
-                        <strong>
-                            7%
+                        <strong id="programCompleted">
+                            0%
                         </strong>
 
                         <span>
@@ -332,7 +335,9 @@
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
@@ -729,7 +734,330 @@ if(user){
 
 }
 
+/* =========================================================
+   MY PROGRAM API
+========================================================= */
 
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+async function loadMyProgram(){
+
+    const memberId =
+        user?.user_id ||
+        user?.id;
+
+    if(!memberId){
+
+        console.error(
+            "MEMBER ID NOT FOUND"
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/trainer-status/${memberId}`,
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        /* =========================================
+           NO ACTIVE PROGRAM
+        ========================================= */
+
+        if(!result.has_trainer){
+
+            document.getElementById(
+                "programName"
+            ).innerText =
+                "No Active Program";
+
+
+            document.getElementById(
+                "programDescription"
+            ).innerText =
+                "You currently do not have an active training program.";
+
+
+            document.getElementById(
+                "trainerName"
+            ).innerText =
+                "-";
+
+
+            document.getElementById(
+                "programStartDate"
+            ).innerText =
+                "-";
+
+
+            document.getElementById(
+                "programEndDate"
+            ).innerText =
+                "-";
+
+
+            document.getElementById(
+                "daysRemaining"
+            ).innerText =
+                "0";
+
+
+            document.getElementById(
+                "programCompleted"
+            ).innerText =
+                "0%";
+
+
+            return;
+
+        }
+
+
+        /* =========================================
+           PROGRAM DATA
+        ========================================= */
+
+        const program =
+            result.trainer;
+
+
+        document.getElementById(
+            "programName"
+        ).innerText =
+            program.program_name ||
+            "Training Program";
+
+
+        document.getElementById(
+            "programDescription"
+        ).innerText =
+            program.program_description ||
+            "No program description available.";
+
+
+        document.getElementById(
+            "trainerName"
+        ).innerText =
+            program.trainer_name ||
+            "-";
+
+
+        document.getElementById(
+            "programStartDate"
+        ).innerText =
+            formatProgramDate(
+                program.start_date
+            );
+
+
+        document.getElementById(
+            "programEndDate"
+        ).innerText =
+            formatProgramDate(
+                program.end_date
+            );
+
+
+        /* =========================================
+           DAYS REMAINING / COMPLETION
+        ========================================= */
+
+        const startDate =
+            parseProgramDate(
+                program.start_date
+            );
+
+
+        const endDate =
+            parseProgramDate(
+                program.end_date
+            );
+
+
+        const today =
+            new Date();
+
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        if(startDate && endDate){
+
+            const totalDays =
+                Math.max(
+                    1,
+                    Math.round(
+                        (
+                            endDate -
+                            startDate
+                        ) /
+                        86400000
+                    ) + 1
+                );
+
+
+            const daysRemaining =
+                Math.max(
+                    0,
+                    Math.ceil(
+                        (
+                            endDate -
+                            today
+                        ) /
+                        86400000
+                    )
+                );
+
+
+            let completedPercent =
+                Math.round(
+                    (
+                        (
+                            today -
+                            startDate
+                        ) /
+                        86400000 + 1
+                    ) /
+                    totalDays *
+                    100
+                );
+
+
+            completedPercent =
+                Math.min(
+                    100,
+                    Math.max(
+                        0,
+                        completedPercent
+                    )
+                );
+
+
+            document.getElementById(
+                "daysRemaining"
+            ).innerText =
+                daysRemaining;
+
+
+            document.getElementById(
+                "programCompleted"
+            ).innerText =
+                `${completedPercent}%`;
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD MY PROGRAM ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+function parseProgramDate(
+    dateString
+){
+
+    if(!dateString){
+
+        return null;
+
+    }
+
+
+    const parts =
+        dateString.split("-");
+
+
+    if(parts.length !== 3){
+
+        return null;
+
+    }
+
+
+    const date =
+        new Date(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+        );
+
+
+    date.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    return date;
+
+}
+
+
+function formatProgramDate(
+    dateString
+){
+
+    const date =
+        parseProgramDate(
+            dateString
+        );
+
+
+    if(!date){
+
+        return "-";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month:"long",
+            day:"numeric",
+            year:"numeric"
+        }
+    );
+
+}
 /* =========================================================
    MEMBER PROFILE DROPDOWN
 ========================================================= */
@@ -1140,6 +1468,8 @@ document.addEventListener(
     function(){
 
         renderTrainingCalendar();
+
+        loadMyProgram();
 
     }
 );
