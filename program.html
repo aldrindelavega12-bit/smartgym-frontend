@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>My Program - Smart Gym</title>
+
+    <!-- MEMBER DASHBOARD CSS -->
+    <link
+        rel="stylesheet"
+        href="css/member-dashboard.css">
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- INTER FONT -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<div class="navbar">
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="menu">
+
+        <a href="member.html">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </a>
+
+
+        <a href="member_messages.html">
+
+            <i class="fa-solid fa-envelope"></i>
+
+            Messages
+
+        </a>
+
+
+        <a
+            href="member_program.html"
+            class="active">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+            Program
+
+        </a>
+
+
+        <a href="get_program.html">
+
+            <i class="fa-solid fa-clipboard-list"></i>
+
+            Get Program
+
+        </a>
+
+
+        <a href="member_locker.html">
+
+            <i class="fa-solid fa-lock"></i>
+
+            Book Locker
+
+        </a>
+
+
+        <a href="membership.html">
+
+            <i class="fa-solid fa-id-card"></i>
+
+            Membership
+
+        </a>
+
+    </div>
+
+
+    <!-- SIDEBAR BOTTOM -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-heart-pulse"></i>
+
+        </div>
+
+        <h3>
+            Stay Consistent
+        </h3>
+
+        <p>
+            Follow your training program and stay committed to your goals.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN LAYOUT
+========================================================= -->
+
+<div class="layout">
+
+    <main class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <!-- TOP HEADER -->
+    <div class="top-header">
+
+        <div class="top-right">
+
+            <!-- PROFILE TOGGLE - KEPT -->
+            <div class="user-profile"
+                 onclick="toggleMenu()">
+
+                <div class="user-avatar"
+                     id="profileInitial">
+                    A
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="profile-name">
+                        Aldrin
+                    </strong>
+
+                    <small>
+                        Member
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down profile-chevron"></i>
+
+
+                <!-- PROFILE DROPDOWN - KEPT -->
+                <div id="dropdown"
+                     class="profile-dropdown">
+
+                    <button
+                        onclick="openChangePassword(); event.stopPropagation();">
+
+                        Change Password
+
+                    </button>
+
+                    <div class="dropdown-divider"></div>
+
+                    <button
+                        onclick="logout(); event.stopPropagation();"
+                        class="dropdown-logout">
+
+                        Log Out
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+        <!-- =================================================
+             MY PROGRAM
+        ================================================== -->
+
+        <section
+            id="programSection"
+            class="member-program-page">
+
+
+            <!-- =================================================
+                 PAGE HEADER
+            ================================================== -->
+
+            <div class="program-page-header">
+
+                <h1>
+                    My Program
+                </h1>
+
+                <p>
+                    View your current training program, weekly schedule, and progress.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CURRENT PROGRAM
+            ================================================== -->
+
+            <div class="current-program-card">
+
+
+                <!-- LEFT SIDE -->
+
+                <div class="program-main-info">
+
+                    <span class="program-label">
+                        Current Program
+                    </span>
+
+
+                    <h2>
+                        Body Building Program
+                    </h2>
+
+
+                    <p class="program-description">
+
+                        A structured program focused on building
+                        strength, muscle mass, and overall fitness.
+
+                    </p>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="program-details">
+
+
+                        <div class="program-detail">
+
+                            <span>
+                                Trainer
+                            </span>
+
+                            <strong>
+                                Coach Mark
+                            </strong>
+
+                        </div>
+
+
+                        <div class="program-detail">
+
+                            <span>
+                                Started
+                            </span>
+
+                            <strong>
+                                July 20, 2026
+                            </strong>
+
+                        </div>
+
+
+                        <div class="program-detail">
+
+                            <span>
+                                Valid Until
+                            </span>
+
+                            <strong>
+                                October 17, 2026
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="program-summary">
+
+
+                    <div class="days-circle">
+
+                        <div class="days-number">
+                            24
+                        </div>
+
+                        <span>
+                            Days Remaining
+                        </span>
+
+                    </div>
+
+
+                    <div class="overall-completed">
+
+                        <strong>
+                            7%
+                        </strong>
+
+                        <span>
+                            Completed
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- =================================================
+                PROGRAM CONTENT
+            ================================================== -->
+
+            <div class="program-content-grid">
+
+                <!-- =================================================
+                    LEFT COLUMN — TRAINING CALENDAR
+                ================================================== -->
+
+                <div class="program-left-column">
+
+                    <div class="program-card calendar-card">
+
+                        <!-- CALENDAR HEADER -->
+                        <div class="calendar-header">
+
+                            <div class="calendar-title">
+
+                                <h3>
+                                    Training Calendar
+                                </h3>
+
+                                <p>
+                                    Your scheduled workouts and training progress.
+                                </p>
+
+                            </div>
+
+
+                            <div class="calendar-navigation">
+
+                                <button
+                                    type="button"
+                                    class="calendar-arrow"
+                                    onclick="previousCalendarMonth()">
+
+                                    ‹
+
+                                </button>
+
+
+                                <strong id="calendarMonthLabel">
+                                    September 2026
+                                </strong>
+
+
+                                <button
+                                    type="button"
+                                    class="calendar-arrow"
+                                    onclick="nextCalendarMonth()">
+
+                                    ›
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="calendar-today"
+                                    onclick="goToCalendarToday()">
+
+                                    Today
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- WEEK DAYS -->
+
+                        <div class="calendar-weekdays">
+
+                            <div class="calendar-weekday">
+                                Sun
+                            </div>
+
+                            <div class="calendar-weekday">
+                                Mon
+                            </div>
+
+                            <div class="calendar-weekday">
+                                Tue
+                            </div>
+
+                            <div class="calendar-weekday">
+                                Wed
+                            </div>
+
+                            <div class="calendar-weekday">
+                                Thu
+                            </div>
+
+                            <div class="calendar-weekday">
+                                Fri
+                            </div>
+
+                            <div class="calendar-weekday">
+                                Sat
+                            </div>
+
+                        </div>
+
+
+                        <!-- CALENDAR DATES -->
+
+                        <div
+                            class="calendar-grid"
+                            id="trainingCalendar">
+                        </div>
+
+
+                        <!-- LEGEND -->
+
+                        <div class="calendar-legend">
+
+                            <div class="legend-item">
+
+                                <span class="legend-dot completed"></span>
+
+                                <span>
+                                    Completed
+                                </span>
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+                                <span class="legend-dot upcoming"></span>
+
+                                <span>
+                                    Upcoming
+                                </span>
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+                                <span class="legend-dot rest"></span>
+
+                                <span>
+                                    Rest
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                    RIGHT COLUMN — PROGRAM PROGRESS
+                ================================================== -->
+
+                <div
+                    class="program-card program-progress-card">
+
+                    <!-- HEADER -->
+
+                    <div class="progress-header">
+
+                        <h3>
+                            Program Progress
+                        </h3>
+
+                        <p>
+                            Track your progress in this program.
+                        </p>
+
+                    </div>
+
+
+                    <!-- SUMMARY -->
+
+                    <div class="progress-summary">
+
+                        <strong>
+                            1 / 4 Weeks Completed
+                        </strong>
+
+                        <span>
+                            25%
+                        </span>
+
+                    </div>
+
+
+                    <!-- PROGRESS BAR -->
+
+                    <div class="program-progress-bar">
+
+                        <div
+                            class="program-progress-fill"
+                            style="width:25%;">
+                        </div>
+
+                    </div>
+
+
+                    <!-- WEEKS -->
+
+                    <div class="program-weeks">
+
+
+                        <!-- WEEK 1 -->
+
+                        <div class="program-week completed">
+
+                            <div class="week-status-circle">
+                                ✓
+                            </div>
+
+
+                            <div class="week-info">
+
+                                <strong>
+                                    Week 1
+                                </strong>
+
+                                <span>
+                                    Jul 20 – Jul 26, 2026
+                                </span>
+
+                            </div>
+
+
+                            <b>
+                                Completed
+                            </b>
+
+                        </div>
+
+
+                        <!-- WEEK 2 -->
+
+                        <div class="program-week">
+
+                            <div class="week-status-circle">
+                            </div>
+
+
+                            <div class="week-info">
+
+                                <strong>
+                                    Week 2
+                                </strong>
+
+                                <span>
+                                    Jul 27 – Aug 2, 2026
+                                </span>
+
+                            </div>
+
+
+                            <b>
+                                Upcoming
+                            </b>
+
+                        </div>
+
+
+                        <!-- WEEK 3 -->
+
+                        <div class="program-week">
+
+                            <div class="week-status-circle">
+                            </div>
+
+
+                            <div class="week-info">
+
+                                <strong>
+                                    Week 3
+                                </strong>
+
+                                <span>
+                                    Aug 3 – Aug 9, 2026
+                                </span>
+
+                            </div>
+
+
+                            <b>
+                                Upcoming
+                            </b>
+
+                        </div>
+
+
+                        <!-- WEEK 4 -->
+
+                        <div class="program-week">
+
+                            <div class="week-status-circle">
+                            </div>
+
+
+                            <div class="week-info">
+
+                                <strong>
+                                    Week 4
+                                </strong>
+
+                                <span>
+                                    Aug 10 – Aug 16, 2026
+                                </span>
+
+                            </div>
+
+
+                            <b>
+                                Upcoming
+                            </b>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   MEMBER PROFILE
+========================================================= */
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+if(user){
+
+    const fullname =
+        user.fullname ||
+        user.name ||
+        user.full_name ||
+        "Member";
+
+
+    const memberName =
+        document.getElementById(
+            "memberName"
+        );
+
+
+    const memberAvatar =
+        document.getElementById(
+            "memberAvatar"
+        );
+
+
+    if(memberName){
+
+        memberName.innerText =
+            fullname;
+
+    }
+
+
+    if(memberAvatar){
+
+        memberAvatar.innerText =
+            fullname
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
+
+
+/* =========================================================
+   MEMBER PROFILE DROPDOWN
+========================================================= */
+
+function toggleMemberMenu(){
+
+    const dropdown =
+        document.getElementById(
+            "memberDropdown"
+        );
+
+
+    if(dropdown){
+
+        dropdown.classList.toggle(
+            "show"
+        );
+
+    }
+
+}
+
+
+window.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            !event.target.closest(
+                ".member-profile"
+            )
+        ){
+
+            const dropdown =
+                document.getElementById(
+                    "memberDropdown"
+                );
+
+
+            if(dropdown){
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================================
+   PROGRAM WEEK NAVIGATION
+========================================================= */
+
+/* =========================================================
+   TRAINING CALENDAR
+========================================================= */
+
+let calendarDate = new Date();
+
+
+const workoutSchedule = {
+    0: "Rest",       // Sunday
+    1: "Chest",      // Monday
+    2: "Back",       // Tuesday
+    3: "Rest",       // Wednesday
+    4: "Shoulders",  // Thursday
+    5: "Legs",       // Friday
+    6: "Arms"        // Saturday
+};
+
+
+function renderTrainingCalendar(){
+
+    const calendar =
+        document.getElementById(
+            "trainingCalendar"
+        );
+
+    const monthLabel =
+        document.getElementById(
+            "calendarMonthLabel"
+        );
+
+
+    if(!calendar || !monthLabel){
+        return;
+    }
+
+
+    calendar.innerHTML = "";
+
+
+    const year =
+        calendarDate.getFullYear();
+
+    const month =
+        calendarDate.getMonth();
+
+
+    const monthName =
+        calendarDate.toLocaleString(
+            "default",
+            {
+                month: "long"
+            }
+        );
+
+
+    monthLabel.innerText =
+        `${monthName} ${year}`;
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    const previousMonthDays =
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
+
+
+    /* =====================================================
+       PREVIOUS MONTH DATES
+    ===================================================== */
+
+    for(
+        let i = firstDay - 1;
+        i >= 0;
+        i--
+    ){
+
+        const dayNumber =
+            previousMonthDays - i;
+
+
+        const day =
+            document.createElement(
+                "div"
+            );
+
+
+        day.className =
+            "calendar-day muted";
+
+
+        day.innerHTML = `
+            <div class="calendar-date">
+                ${dayNumber}
+            </div>
+        `;
+
+
+        calendar.appendChild(day);
+
+    }
+
+
+    /* =====================================================
+       CURRENT MONTH
+    ===================================================== */
+
+    const today =
+        new Date();
+
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    for(
+        let dayNumber = 1;
+        dayNumber <= daysInMonth;
+        dayNumber++
+    ){
+
+        const date =
+            new Date(
+                year,
+                month,
+                dayNumber
+            );
+
+
+        const day =
+            document.createElement(
+                "div"
+            );
+
+
+        day.className =
+            "calendar-day";
+
+
+        /* TODAY */
+
+        if(
+            date.getTime() ===
+            today.getTime()
+        ){
+
+            day.classList.add(
+                "today"
+            );
+
+        }
+
+
+        const workout =
+            workoutSchedule[
+                date.getDay()
+            ];
+
+
+        let status = "Upcoming";
+
+
+        if(
+            workout === "Rest"
+        ){
+
+            status = "Rest";
+
+        }
+        else if(
+            date < today
+        ){
+
+            status = "Completed";
+
+        }
+
+
+        let workoutClass =
+            "";
+
+
+        if(
+            status === "Completed"
+        ){
+
+            workoutClass =
+                "completed";
+
+        }
+        else if(
+            status === "Rest"
+        ){
+
+            workoutClass =
+                "rest";
+
+        }
+
+
+        day.innerHTML = `
+
+            <div class="calendar-date">
+                ${dayNumber}
+            </div>
+
+            <div class="calendar-workout ${workoutClass}">
+
+                ${workout}
+
+                <span class="calendar-status">
+                    ${status}
+                </span>
+
+            </div>
+
+        `;
+
+
+        calendar.appendChild(day);
+
+    }
+
+
+    /* =====================================================
+       NEXT MONTH DATES
+    ===================================================== */
+
+    const totalCells =
+        calendar.children.length;
+
+    const remainingCells =
+        totalCells % 7 === 0
+            ? 0
+            : 7 - (totalCells % 7);
+
+
+    for(
+        let dayNumber = 1;
+        dayNumber <= remainingCells;
+        dayNumber++
+    ){
+
+        const day =
+            document.createElement(
+                "div"
+            );
+
+        day.className =
+            "calendar-day muted";
+
+        day.innerHTML = `
+
+            <div class="calendar-date">
+                ${dayNumber}
+            </div>
+
+        `;
+
+        calendar.appendChild(day);
+
+    }
+
+}
+
+
+/* =========================================================
+   PREVIOUS MONTH
+========================================================= */
+
+function previousCalendarMonth(){
+
+    calendarDate.setMonth(
+        calendarDate.getMonth() - 1
+    );
+
+    renderTrainingCalendar();
+
+}
+
+
+/* =========================================================
+   NEXT MONTH
+========================================================= */
+
+function nextCalendarMonth(){
+
+    calendarDate.setMonth(
+        calendarDate.getMonth() + 1
+    );
+
+    renderTrainingCalendar();
+
+}
+
+
+/* =========================================================
+   TODAY
+========================================================= */
+
+function goToCalendarToday(){
+
+    calendarDate =
+        new Date();
+
+    renderTrainingCalendar();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        renderTrainingCalendar();
+
+    }
+);
+
+/* =========================================================
+   MESSAGE TRAINER
+========================================================= */
+
+function messageTrainer(){
+
+    /*
+        Connect this later to the
+        existing trainer messaging system.
+    */
+
+    console.log(
+        "Message Trainer clicked"
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

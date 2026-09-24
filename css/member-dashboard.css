@@ -3416,5 +3416,887 @@ textarea {
 
 }
 
+/* =========================================================
+   SMART GYM — MEMBER MY PROGRAM
+   ========================================================= */
+
+.member-program-page {
+    width: 100%;
+    box-sizing: border-box;
+    color: #17231e;
+}
 
 
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.member-program-page .program-page-header {
+    margin: 0 0 18px;
+    padding: 0;
+}
+
+.member-program-page .program-page-header h1 {
+    margin: 0;
+    color: #17231e;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.5px;
+}
+
+.member-program-page .program-page-header p {
+    margin: 5px 0 0;
+    color: #68736d;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   CURRENT PROGRAM
+   ========================================================= */
+
+.member-program-page .current-program-card {
+    width: 100%;
+    min-height: 190px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    background: #ffffff;
+    border: 1px solid #e1ebe6;
+    border-radius: 14px;
+
+    padding: 22px 25px;
+    margin-bottom: 18px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, .035);
+}
+
+
+/* LEFT */
+
+.member-program-page .program-main-info {
+    flex: 1;
+    min-width: 0;
+    padding-right: 25px;
+}
+
+.member-program-page .program-label {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #087c3d;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.member-program-page .program-main-info h2 {
+    margin: 0;
+
+    color: #087c3d;
+    font-size: 29px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -.5px;
+}
+
+.member-program-page .program-description {
+    max-width: 700px;
+
+    margin: 7px 0 18px;
+
+    color: #52645b;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+/* DETAILS */
+
+.member-program-page .program-details {
+    display: flex;
+    align-items: stretch;
+}
+
+.member-program-page .program-detail {
+    min-width: 145px;
+    padding: 0 25px;
+
+    border-left: 1px solid #dce7e1;
+}
+
+.member-program-page .program-detail:first-child {
+    padding-left: 0;
+    border-left: 0;
+}
+
+.member-program-page .program-detail span {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #68736d;
+    font-size: 11px;
+}
+
+.member-program-page .program-detail strong {
+    display: block;
+
+    color: #17231e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PROGRAM SUMMARY
+   ========================================================= */
+
+.member-program-page .program-summary {
+    width: 210px;
+    flex-shrink: 0;
+
+    border-left: 1px solid #dce7e1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* DAYS REMAINING */
+
+.member-program-page .days-circle {
+    width: 108px;
+    height: 108px;
+
+    position: relative;
+
+    border-radius: 50%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        conic-gradient(
+            #10a866 0deg 25deg,
+            #e2e8e5 25deg 360deg
+        );
+
+    margin-bottom: 6px;
+}
+
+.member-program-page .days-circle::before {
+    content: "";
+
+    position: absolute;
+
+    width: 88px;
+    height: 88px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+}
+
+.member-program-page .days-number {
+    position: relative;
+    z-index: 1;
+
+    color: #17231e;
+
+    font-size: 29px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.member-program-page .days-circle span {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 4px;
+
+    color: #68736d;
+    font-size: 10px;
+}
+
+
+/* COMPLETION */
+
+.member-program-page .overall-completed {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.member-program-page .overall-completed strong {
+    color: #008744;
+    font-size: 15px;
+}
+
+.member-program-page .overall-completed span {
+    color: #52645b;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   LOWER CONTENT
+   ========================================================= */
+
+.member-program-page .program-content-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(300px, .75fr);
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+.member-program-page .program-left-column {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   GENERAL CARD
+   ========================================================= */
+
+.member-program-page .program-card {
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, .035);
+}
+
+
+/* =========================================================
+   TRAINING CALENDAR
+   ========================================================= */
+
+.member-program-page .calendar-card {
+    padding: 20px;
+}
+
+
+/* CALENDAR HEADER */
+
+.member-program-page .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.member-program-page .calendar-title h3 {
+    margin: 0;
+
+    color: #17231e;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.member-program-page .calendar-title p {
+    margin: 4px 0 0;
+
+    color: #71817a;
+    font-size: 11px;
+}
+
+
+/* MONTH NAVIGATION */
+
+.member-program-page .calendar-navigation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.member-program-page .calendar-navigation strong {
+    min-width: 115px;
+
+    color: #17231e;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+.member-program-page .calendar-arrow {
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #f5f9f7;
+    color: #17231e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.member-program-page .calendar-arrow:hover {
+    background: #eaf6ee;
+    color: #087c3d;
+}
+
+
+/* TODAY BUTTON */
+
+.member-program-page .calendar-today {
+    height: 30px;
+
+    padding: 0 12px;
+
+    border: 1px solid #dce7e1;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #087c3d;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.member-program-page .calendar-today:hover {
+    background: #eaf6ee;
+}
+
+
+/* =========================================================
+   CALENDAR WEEKDAYS
+   ========================================================= */
+
+.member-program-page .calendar-weekdays {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    border-top: 1px solid #edf1ef;
+    border-left: 1px solid #edf1ef;
+}
+
+.member-program-page .calendar-weekday {
+    padding: 10px 5px;
+
+    border-right: 1px solid #edf1ef;
+    border-bottom: 1px solid #edf1ef;
+
+    color: #71817a;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   CALENDAR DAYS
+   ========================================================= */
+
+.member-program-page .calendar-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    border-left: 1px solid #edf1ef;
+}
+
+.member-program-page .calendar-day {
+    height: 72px;
+    min-height: 72px;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    border-right: 1px solid #edf1ef;
+    border-bottom: 1px solid #edf1ef;
+    background: #ffffff;
+    position: relative;
+}
+
+
+/* DATE NUMBER */
+
+.member-program-page .calendar-date {
+    width: 23px;
+    height: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3px;
+    color: #39483f;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 50%;
+}
+
+
+/* MUTED DAYS */
+
+.member-program-page .calendar-day.muted {
+    background: #fafcfb;
+}
+
+.member-program-page .calendar-day.muted
+.calendar-date {
+    color: #c4ccc7;
+}
+
+
+/* TODAY */
+
+.member-program-page .calendar-day.today {
+    background: #f2faf5;
+}
+
+.member-program-page .calendar-day.today
+.calendar-date {
+    background: #087c3d;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   WORKOUT INSIDE CALENDAR
+   ========================================================= */
+
+.member-program-page .calendar-workout {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 7px;
+    border-radius: 7px;
+    background: #eef8f2;
+    color: #087c3d;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.member-program-page .calendar-workout.rest {
+    background: #f3f5f4;
+    color: #78847e;
+}
+
+.member-program-page .calendar-workout.completed {
+    background: #d9f4e4;
+    color: #087c3d;
+}
+
+
+/* STATUS */
+
+.member-program-page .calendar-status {
+    display: block;
+    margin-top: 2px;
+    font-size: 8px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   CALENDAR LEGEND
+   ========================================================= */
+
+.member-program-page .calendar-legend {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 14px;
+}
+
+.member-program-page .legend-item {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #68736d;
+
+    font-size: 10px;
+}
+
+.member-program-page .legend-dot {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+}
+
+.member-program-page .legend-dot.completed {
+    background: #0aa461;
+}
+
+.member-program-page .legend-dot.upcoming {
+    background: #dcefe4;
+    border: 1px solid #bcdcca;
+}
+
+.member-program-page .legend-dot.rest {
+    background: #e8ecea;
+}
+
+
+/* =========================================================
+   PROGRAM PROGRESS
+   ========================================================= */
+
+.member-program-page .program-progress-card {
+    padding: 18px;
+
+    height: fit-content;
+}
+
+.member-program-page .progress-header h3 {
+    margin: 0;
+
+    color: #17231e;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.member-program-page .progress-header p {
+    margin: 4px 0 0;
+
+    color: #71817a;
+
+    font-size: 11px;
+}
+
+
+/* SUMMARY */
+
+.member-program-page .progress-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 20px;
+    margin-bottom: 7px;
+}
+
+.member-program-page .progress-summary strong {
+    color: #52645b;
+    font-size: 12px;
+}
+
+.member-program-page .progress-summary span {
+    color: #008744;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* PROGRESS BAR */
+
+.member-program-page .program-progress-bar {
+    width: 100%;
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #e3e9e6;
+}
+
+.member-program-page .program-progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #0aa461;
+
+    transition: width .3s ease;
+}
+
+
+/* =========================================================
+   PROGRAM WEEKS
+   ========================================================= */
+
+.member-program-page .program-weeks {
+    margin-top: 15px;
+}
+
+.member-program-page .program-week {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    min-height: 49px;
+
+    padding: 3px 0;
+}
+
+.member-program-page .week-status-circle {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #e4e9e7;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.member-program-page
+.program-week.completed
+.week-status-circle {
+    background: #0aa461;
+}
+
+.member-program-page .week-info {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.member-program-page .week-info strong {
+    color: #17231e;
+    font-size: 12px;
+}
+
+.member-program-page .week-info span {
+    margin-top: 2px;
+
+    color: #68736d;
+    font-size: 9px;
+}
+
+.member-program-page .program-week > b {
+    flex-shrink: 0;
+
+    color: #087c3d;
+
+    font-size: 9px;
+}
+
+.member-program-page
+.program-week:not(.completed)
+> b {
+    color: #71817a;
+}
+
+
+/* =========================================================
+   RESPONSIVE — 1200px
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .member-program-page .program-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .member-program-page .program-progress-card {
+        margin-bottom: 14px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — 1000px
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .member-program-page
+    .current-program-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .member-program-page
+    .program-main-info {
+        padding-right: 0;
+    }
+
+    .member-program-page
+    .program-summary {
+        width: 100%;
+
+        margin-top: 18px;
+        padding-top: 18px;
+
+        border-left: 0;
+        border-top: 1px solid #dce7e1;
+    }
+
+    .member-program-page
+    .calendar-day {
+        min-height: 80px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — 750px
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+    .member-program-page
+    .program-page-header h1 {
+        font-size: 27px;
+    }
+
+    .member-program-page
+    .program-main-info h2 {
+        font-size: 25px;
+    }
+
+    .member-program-page
+    .program-description {
+        font-size: 12px;
+    }
+
+    .member-program-page
+    .program-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .member-program-page
+    .program-detail {
+        padding: 0;
+        border-left: 0;
+    }
+
+    .member-program-page
+    .calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .member-program-page
+    .calendar-navigation {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .member-program-page
+    .calendar-day {
+        min-height: 70px;
+        padding: 5px;
+    }
+
+    .member-program-page
+    .calendar-workout {
+        font-size: 8px;
+        padding: 5px;
+    }
+
+    .member-program-page
+    .calendar-status {
+        font-size: 7px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — 500px
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .member-program-page
+    .current-program-card {
+        padding: 17px;
+    }
+
+    .member-program-page
+    .program-main-info h2 {
+        font-size: 22px;
+    }
+
+    .member-program-page
+    .program-description {
+        font-size: 11px;
+    }
+
+    .member-program-page
+    .calendar-card {
+        padding: 12px;
+    }
+
+    .member-program-page
+    .calendar-weekday {
+        font-size: 8px;
+        padding: 8px 2px;
+    }
+
+    .member-program-page
+    .calendar-day {
+        min-height: 60px;
+        padding: 4px;
+    }
+
+    .member-program-page
+    .calendar-date {
+        width: 22px;
+        height: 22px;
+
+        font-size: 9px;
+    }
+
+    .member-program-page
+    .calendar-workout {
+        font-size: 7px;
+        padding: 4px;
+    }
+
+    .member-program-page
+    .calendar-legend {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}
