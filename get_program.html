@@ -1325,7 +1325,7 @@ async function selectProgram(program){
     matching.forEach(
         item => {
 
-            trainers.push({
+           trainers.push({
 
                 id:
                     String(
@@ -1335,22 +1335,42 @@ async function selectProgram(program){
                 name:
                     item.trainer_name,
 
+                /* =========================
+                TRAINER RATE PLAN IDS
+                ========================= */
+
+                planIdDay:
+                    Number(
+                        item.plan_id_day || 0
+                    ),
+
+                planIdWeek:
+                    Number(
+                        item.plan_id_week || 0
+                    ),
+
+                planIdMonth:
+                    Number(
+                        item.plan_id_month || 0
+                    ),
+
+                /* =========================
+                TRAINER RATE PRICES
+                ========================= */
+
                 priceDay:
                     Number(
-                        item.price_day ||
-                        0
+                        item.price_day || 0
                     ),
 
                 priceWeek:
                     Number(
-                        item.price_week ||
-                        0
+                        item.price_week || 0
                     ),
 
                 priceMonth:
                     Number(
-                        item.price_month ||
-                        0
+                        item.price_month || 0
                     )
 
             });
