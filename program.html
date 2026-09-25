@@ -1515,7 +1515,7 @@ function getWorkoutForDate(
    GET STATUS
 ========================================================= */
 
-function getWorkoutStatus(workout, date){
+function getWorkoutStatus(workout){
 
     /*
     =====================================================
@@ -1595,59 +1595,19 @@ function getWorkoutStatus(workout, date){
 
     /*
     =====================================================
-    TODAY
-    =====================================================
-    */
-
-    if(date){
-
-        const today = new Date();
-
-        today.setHours(
-            0,
-            0,
-            0,
-            0
-        );
-
-        const scheduleDate = new Date(
-            date
-        );
-
-        scheduleDate.setHours(
-            0,
-            0,
-            0,
-            0
-        );
-
-        if(
-            scheduleDate.getTime() ===
-            today.getTime()
-        ){
-
-            return {
-                className: "today",
-                label: "Today"
-            };
-
-        }
-
-    }
-
-
-    /*
-    =====================================================
-    UPCOMING
+    SCHEDULED
+    No badge / no label
     =====================================================
     */
 
     return {
-        className: "upcoming",
-        label: "Upcoming"
+        className: "",
+        label: ""
     };
 
 }
+
+
 /* =========================================================
    RENDER 7-DAY SCHEDULE
 ========================================================= */
