@@ -2278,9 +2278,11 @@ let currentTrainerData = null;
 let selectedRenewPlan = null;
 let renewTrainerRates = null;
 
-
-
 async function renewTraining(){
+
+    /* =====================================================
+       CHECK CURRENT TRAINING INFORMATION
+       ===================================================== */
 
     if(!currentTrainerData){
 
@@ -2292,14 +2294,94 @@ async function renewTraining(){
     }
 
 
-    /*
-        CURRENT PROGRAM
-    */
+    /* =====================================================
+       CHECK RENEWAL ELIGIBILITY
+
+       > 3 days remaining = NOT ALLOWED
+       <= 3 days remaining = ALLOWED
+       ===================================================== */
+
+    const today =
+        new Date();
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    const currentEndDate =
+        new Date(
+            String(
+                currentTrainerData.end_date
+            ).substring(0, 10)
+            + "T00:00:00"
+        );
+
+
+    const millisecondsPerDay =
+        1000 * 60 * 60 * 24;
+
+
+    const daysRemaining =
+        Math.round(
+            (
+                currentEndDate.getTime() -
+                today.getTime()
+            ) / millisecondsPerDay
+        );
+
+
+    const isActive =
+        String(
+            currentTrainerData.status || ""
+        ).toLowerCase() === "active";
+
+
+    console.log(
+        "RENEW CHECK - TODAY:",
+        today
+    );
+
+    console.log(
+        "RENEW CHECK - END DATE:",
+        currentEndDate
+    );
+
+    console.log(
+        "RENEW CHECK - DAYS REMAINING:",
+        daysRemaining
+    );
+
+
+    /* =====================================================
+       BLOCK RENEWAL IF MORE THAN 3 DAYS REMAIN
+       ===================================================== */
+
+    if(
+        isActive &&
+        daysRemaining > 3
+    ){
+
+        alert(
+            `You cannot renew yet. Your trainer fee still has ${daysRemaining} days remaining. Renewal is available when 3 days or less remain.`
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       CURRENT PROGRAM
+       ===================================================== */
 
     document.getElementById(
         "renewProgramName"
     ).innerText =
-        currentTrainerData.program_name || "-";
+        currentTrainerData.program_name ||
+        "-";
 
 
     document.getElementById(
@@ -2319,69 +2401,84 @@ async function renewTraining(){
         "-";
 
 
-    /*
-        RESET
-    */
+    /* =====================================================
+       RESET
+       ===================================================== */
 
-    selectedRenewPlan = null;
-    renewTrainerRates = null;
+    selectedRenewPlan =
+        null;
+
+    renewTrainerRates =
+        null;
 
 
     document
         .querySelectorAll(
             ".renew-duration-option"
         )
-        .forEach(function(button){
+        .forEach(
+            function(button){
 
-            button.classList.remove(
-                "selected"
-            );
+                button.classList.remove(
+                    "selected"
+                );
 
-        });
+            }
+        );
 
 
     document.getElementById(
         "renewPriceDay"
-    ).innerText = "Loading...";
+    ).innerText =
+        "Loading...";
+
 
     document.getElementById(
         "renewPriceWeek"
-    ).innerText = "Loading...";
+    ).innerText =
+        "Loading...";
+
 
     document.getElementById(
         "renewPriceMonth"
-    ).innerText = "Loading...";
+    ).innerText =
+        "Loading...";
 
 
     document.getElementById(
         "renewStartDate"
-    ).innerText = "-";
+    ).innerText =
+        "-";
 
 
     document.getElementById(
         "renewEndDate"
-    ).innerText = "-";
+    ).innerText =
+        "-";
 
 
     document.getElementById(
         "renewConfirmButton"
-    ).disabled = true;
+    ).disabled =
+        true;
 
 
-    /*
-        OPEN MODAL FIRST
-    */
+    /* =====================================================
+       OPEN MODAL
+       ===================================================== */
 
     document
         .getElementById(
             "renewTrainingModal"
         )
-        .classList.add("show");
+        .classList.add(
+            "show"
+        );
 
 
-    /*
-        LOAD TRAINER RATES
-    */
+    /* =====================================================
+       LOAD TRAINER RATES
+       ===================================================== */
 
     try{
 
@@ -2408,9 +2505,9 @@ async function renewTraining(){
         }
 
 
-        /*
-            FIND CURRENT TRAINER
-        */
+        /* =================================================
+           FIND CURRENT TRAINER
+           ================================================= */
 
         const trainerId =
             String(
@@ -2425,17 +2522,23 @@ async function renewTraining(){
 
 
         const trainerData =
-            result.find(function(item){
+            result.find(
+                function(item){
 
-                return (
-                    String(item.trainer_id) ===
-                    trainerId
-                    &&
-                    String(item.program_id) ===
-                    programId
-                );
+                    return (
+                        String(
+                            item.trainer_id
+                        ) === trainerId
 
-            });
+                        &&
+
+                        String(
+                            item.program_id
+                        ) === programId
+                    );
+
+                }
+            );
 
 
         if(!trainerData){
@@ -2447,42 +2550,59 @@ async function renewTraining(){
         }
 
 
-        /*
-            SAVE RATES
-        */
+        /* =================================================
+           SAVE TRAINER RATES
+           ================================================= */
 
         renewTrainerRates = {
 
             "1 Day": {
+
                 plan_id:
                     trainerData.plan_id_day,
+
                 price:
                     trainerData.price_day,
-                duration_days: 1
+
+                duration_days:
+                    1
+
             },
+
 
             "1 Week": {
+
                 plan_id:
                     trainerData.plan_id_week,
+
                 price:
                     trainerData.price_week,
-                duration_days: 7
+
+                duration_days:
+                    7
+
             },
 
+
             "1 Month": {
+
                 plan_id:
                     trainerData.plan_id_month,
+
                 price:
                     trainerData.price_month,
-                duration_days: 30
+
+                duration_days:
+                    30
+
             }
 
         };
 
 
-        /*
-            DISPLAY PRICES
-        */
+        /* =================================================
+           DISPLAY PRICES
+           ================================================= */
 
         document.getElementById(
             "renewPriceDay"
@@ -2507,7 +2627,6 @@ async function renewTraining(){
                 trainerData.price_month
             );
 
-
     }
     catch(error){
 
@@ -2519,17 +2638,20 @@ async function renewTraining(){
 
         document.getElementById(
             "renewPriceDay"
-        ).innerText = "Unavailable";
+        ).innerText =
+            "Unavailable";
 
 
         document.getElementById(
             "renewPriceWeek"
-        ).innerText = "Unavailable";
+        ).innerText =
+            "Unavailable";
 
 
         document.getElementById(
             "renewPriceMonth"
-        ).innerText = "Unavailable";
+        ).innerText =
+            "Unavailable";
 
 
         alert(
@@ -2540,6 +2662,8 @@ async function renewTraining(){
     }
 
 }
+
+
 
 function closeRenewTraining(){
 
