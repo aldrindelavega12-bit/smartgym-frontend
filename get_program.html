@@ -37,7 +37,10 @@
     rel="stylesheet">
 
 </head>
+
+
 <style>
+
 /* =========================
    GET PROGRAM ACTIVE SIDEBAR
 ========================= */
@@ -61,7 +64,10 @@
 .navbar .menu a[href="get_program.html"] i {
     color: #087c3d !important;
 }
+
 </style>
+
+
 <body>
 
 
@@ -72,10 +78,15 @@
 <script>
 
 const user =
-    JSON.parse(localStorage.getItem("user"));
+    JSON.parse(
+        localStorage.getItem("user")
+    );
 
 if (!user || user.role !== "member") {
-    window.location.href = "index.html";
+
+    window.location.href =
+        "index.html";
+
 }
 
 </script>
@@ -90,12 +101,16 @@ if (!user || user.role !== "member") {
     <div class="brand">
 
         <div class="brand-icon">
+
             <i class="fa-solid fa-dumbbell"></i>
+
         </div>
 
         <div class="brand-text">
 
-            <strong>SMART GYM</strong>
+            <strong>
+                SMART GYM
+            </strong>
 
             <span>
                 STRONGER PEOPLE • A HEALTHIER TOMORROW
@@ -110,7 +125,6 @@ if (!user || user.role !== "member") {
 
         <a href="member.html">
             Home
-
         </a>
 
 
@@ -128,20 +142,22 @@ if (!user || user.role !== "member") {
 
         </a>
 
+
         <a href="program.html">
             Program
         </a>
 
 
-        <!-- GET PROGRAM -->
+        <a
+            href="get_program.html"
+            class="active">
 
-        <a href="get_program.html" class="active">
             Get Program
+
         </a>
 
 
         <a href="locker_booking.html">
-
 
             Book Locker
 
@@ -150,13 +166,11 @@ if (!user || user.role !== "member") {
 
         <a href="membership.html">
 
-
             Membership
 
         </a>
 
     </div>
-
 
 </div>
 
@@ -182,11 +196,15 @@ if (!user || user.role !== "member") {
             class="user-profile"
             onclick="toggleMenu()">
 
+
             <div
                 class="user-avatar"
                 id="profileInitial">
+
                 A
+
             </div>
+
 
             <div class="user-info">
 
@@ -200,6 +218,7 @@ if (!user || user.role !== "member") {
 
             </div>
 
+
             <i
                 class="fa-solid fa-chevron-down profile-chevron">
             </i>
@@ -212,7 +231,9 @@ if (!user || user.role !== "member") {
                 <button
                     onclick="event.stopPropagation(); logout();">
 
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <i
+                        class="fa-solid fa-right-from-bracket">
+                    </i>
 
                     Log Out
 
@@ -234,8 +255,6 @@ if (!user || user.role !== "member") {
 <div class="program-page">
 
 
-    <!-- HEADER -->
-
     <div class="program-page-header">
 
         <h1>
@@ -243,7 +262,8 @@ if (!user || user.role !== "member") {
         </h1>
 
         <p>
-            Choose a fitness program and trainer to get started.
+            Choose a fitness program, training plan, trainer,
+            and payment option to get started.
         </p>
 
     </div>
@@ -253,13 +273,15 @@ if (!user || user.role !== "member") {
 
 
         <!-- =================================================
-             LEFT
+             LEFT SIDE
         ================================================== -->
 
         <div class="program-left">
 
 
-            <!-- PROGRAM -->
+            <!-- =================================================
+                 PROGRAM
+            ================================================== -->
 
             <section class="program-panel">
 
@@ -279,13 +301,44 @@ if (!user || user.role !== "member") {
                 <div
                     class="program-options"
                     id="programOptions">
-
                 </div>
 
             </section>
 
 
-            <!-- TRAINERS -->
+            <!-- =================================================
+                 PLAN
+            ================================================== -->
+
+            <section
+                class="program-panel"
+                id="planPanel"
+                style="display:none;">
+
+                <div class="section-header">
+
+                    <h2>
+                        Select a Plan
+                    </h2>
+
+                    <p id="planSubtitle">
+                        Choose a training split for your selected program.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="plan-options"
+                    id="planOptions">
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TRAINER
+            ================================================== -->
 
             <section
                 class="program-panel"
@@ -295,11 +348,11 @@ if (!user || user.role !== "member") {
                 <div class="section-header">
 
                     <h2>
-                        Available Trainers
+                        Choose a Trainer
                     </h2>
 
-                    <p id="trainerSubtitle">
-                        Select a trainer for your program.
+                    <p>
+                        Select a trainer who offers this program.
                     </p>
 
                 </div>
@@ -308,6 +361,90 @@ if (!user || user.role !== "member") {
                 <div
                     class="trainer-options"
                     id="trainerOptions">
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYMENT
+                 HIDDEN UNTIL TRAINER IS CLICKED
+            ================================================== -->
+
+            <section
+                class="program-panel"
+                id="paymentPanel"
+                style="display:none;">
+
+                <div class="section-header">
+
+                    <h2>Trainer Rate</h2>
+
+                    <p>
+                        Choose a payment rate for your selected trainer.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="payment-options"
+                    id="paymentOptions">
+
+
+                    <!-- DAILY -->
+
+                    <button
+                        type="button"
+                        class="payment-card"
+                        onclick="selectPayment(this,'Daily',1)">
+
+                        <strong>
+                            Daily
+                        </strong>
+
+                        <span id="priceDaily">
+                            ₱0.00
+                        </span>
+
+                    </button>
+
+
+                    <!-- WEEKLY -->
+
+                    <button
+                        type="button"
+                        class="payment-card"
+                        onclick="selectPayment(this,'Weekly',7)">
+
+                        <strong>
+                            Weekly
+                        </strong>
+
+                        <span id="priceWeekly">
+                            ₱0.00
+                        </span>
+
+                    </button>
+
+
+                    <!-- MONTHLY -->
+
+                    <button
+                        type="button"
+                        class="payment-card"
+                        onclick="selectPayment(this,'Monthly',30)">
+
+                        <strong>
+                            Monthly
+                        </strong>
+
+                        <span id="priceMonthly">
+                            ₱0.00
+                        </span>
+
+                    </button>
+
 
                 </div>
 
@@ -318,184 +455,208 @@ if (!user || user.role !== "member") {
 
 
         <!-- =================================================
-             RIGHT — YOUR SELECTION
+             RIGHT SIDE
         ================================================== -->
 
-        <aside class="selection-panel">
-
-            <h2>
-                Your Selection
-            </h2>
+        <div class="right-column">
 
 
-            <!-- PROGRAM -->
+            <!-- =================================================
+                 STARTING DATE
+            ================================================== -->
 
-            <div class="selection-block">
+            <section class="date-panel">
 
-                <span>
-                    Program
-                </span>
+                <h2>
+                    Starting Date
+                </h2>
 
-                <strong id="selectedProgram">
-                    -
-                </strong>
-
-                <small id="selectedDuration">
-                    -
-                </small>
-
-            </div>
+                <p>
+                    Choose when you want to start your training program.
+                </p>
 
 
-            <!-- TRAINER -->
+                <div class="date-input-wrap">
 
-            <div class="selection-block">
+                    <input
+                        type="date"
+                        id="startDate"
+                        onchange="updateStartDate()">
 
-                <span>
-                    Trainer
-                </span>
-
-                <strong id="selectedTrainer">
-                    -
-                </strong>
-
-                <small>
-                    Personal Trainer
-                </small>
-
-            </div>
-
-
-            <!-- PAYMENT -->
-
-            <div class="selection-block">
-
-                <span>
-                    Payment Option
-                </span>
-
-                <strong id="selectedPayment">
-                    -
-                </strong>
-
-                <small id="selectedPrice">
-                    -
-                </small>
-
-            </div>
-
-
-            <!-- DETAILS -->
-
-            <div class="selection-details-box">
-
-                <h3>
-                    Details
-                </h3>
-
-
-                <div class="detail-row">
-
-                    <span>
-                        Program:
+                    <span class="calendar-symbol">
+                        ▣
                     </span>
-
-                    <strong id="detailProgram">
-                        -
-                    </strong>
 
                 </div>
 
+            </section>
 
-                <div class="detail-row">
 
-                    <span>
-                        Duration:
-                    </span>
+            <!-- =================================================
+                 YOUR SELECTION
+            ================================================== -->
 
-                    <strong id="detailDuration">
-                        -
-                    </strong>
+            <aside class="selection-panel">
+
+                <h2>
+                    Your Selection
+                </h2>
+
+
+                <p class="selection-subtitle">
+                    Review your training program details.
+                </p>
+
+
+                <div class="selection-inner">
+
+
+                    <!-- PROGRAM -->
+
+                    <div class="selection-block">
+
+                        <span>
+                            Program
+                        </span>
+
+                        <strong id="selectedProgram">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PLAN -->
+
+                    <div class="selection-block">
+
+                        <span>
+                            Plan
+                        </span>
+
+                        <strong id="selectedPlan">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TRAINER -->
+
+                    <div class="selection-block">
+
+                        <span>
+                            Trainer
+                        </span>
+
+
+                        <div class="selected-trainer-row">
+
+                            <div class="trainer-avatar">
+
+                                <span>
+                                    ●
+                                </span>
+
+                            </div>
+
+
+                            <div class="selected-trainer-text">
+
+                                <strong id="selectedTrainer">
+                                    -
+                                </strong>
+
+                                <small id="selectedTrainerRole">
+                                    Personal Trainer
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATS -->
+
+                    <div class="selection-stats">
+
+
+                        <div class="stat-box">
+
+                            <span>
+                                Duration
+                            </span>
+
+                            <strong id="selectedDuration">
+                                -
+                            </strong>
+
+                            <small id="selectedDurationPrice">
+                                ₱0.00
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-box">
+
+                            <span>
+                                Starting Date
+                            </span>
+
+                            <strong id="selectedStartDate">
+                                -
+                            </strong>
+
+                            <small id="selectedEndDate">
+                                End Date: -
+                            </small>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- TOTAL -->
+
+                    <div class="total-row">
+
+                        <span>
+                            Total Price
+                        </span>
+
+                        <strong id="detailPrice">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SEND -->
+
+                    <button
+                        type="button"
+                        class="send-request-btn"
+                        onclick="sendProgramRequest()">
+
+                        Send Request
+
+                    </button>
+
 
                 </div>
 
-
-                <div class="detail-row">
-
-                    <span>
-                        Trainer:
-                    </span>
-
-                    <strong id="detailTrainer">
-                        -
-                    </strong>
-
-                </div>
+            </aside>
 
 
-                <div class="detail-row">
-
-                    <span>
-                        Start Date:
-                    </span>
-
-                    <strong id="detailStartDate">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="detail-row">
-
-                    <span>
-                        End Date:
-                    </span>
-
-                    <strong id="detailEndDate">
-                        -
-                    </strong>
-
-                </div>
-
-
-                <div class="detail-row">
-
-                    <span>
-                        Price:
-                    </span>
-
-                    <strong id="detailPrice">
-                        ₱0.00
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <!-- SEND -->
-
-            <button
-                class="send-request-btn"
-                onclick="sendProgramRequest()">
-
-                <span>
-                    Send Request
-                </span>
-
-                <i class="fa-solid fa-arrow-right"></i>
-
-            </button>
-
-        </aside>
+        </div>
 
 
     </div>
 
-</div>
-
-</div>
 
 </div>
 
@@ -521,6 +682,7 @@ if (!user || user.role !== "member") {
 
 <script>
 
+
 /* =========================================================
    USER
 ========================================================= */
@@ -544,19 +706,35 @@ const displayName =
     "Member";
 
 
-document.getElementById(
-    "profile-name"
-).innerText =
-    displayName;
+const profileName =
+    document.getElementById(
+        "profile-name"
+    );
 
 
-document.getElementById(
-    "profileInitial"
-).innerText =
-    displayName
-        .trim()
-        .charAt(0)
-        .toUpperCase();
+const profileInitial =
+    document.getElementById(
+        "profileInitial"
+    );
+
+
+if(profileName){
+
+    profileName.innerText =
+        displayName;
+
+}
+
+
+if(profileInitial){
+
+    profileInitial.innerText =
+        displayName
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+}
 
 
 /* =========================================================
@@ -572,14 +750,20 @@ const API_URL =
 ========================================================= */
 
 let programTrainers = [];
+
 let programs = [];
+
 let trainers = [];
 
 let selectedProgram = null;
 
 let selectedTrainer = null;
 
-let selectedPayment = null;
+let selectedPlan = null;
+
+let selectedPaymentType = null;
+
+let selectedPaymentDays = 0;
 
 let selectedPrice = 0;
 
@@ -589,26 +773,72 @@ let selectedEndDate = null;
 
 
 /* =========================================================
-   LOAD PROGRAMS
+   DEFAULT DATE
 ========================================================= */
 
+function setDefaultDate(){
+
+    const input =
+        document.getElementById(
+            "startDate"
+        );
+
+
+    if(!input){
+
+        return;
+
+    }
+
+
+    const today =
+        new Date();
+
+
+    const value =
+        `${today.getFullYear()}-` +
+        `${String(
+            today.getMonth() + 1
+        ).padStart(2,"0")}-` +
+        `${String(
+            today.getDate()
+        ).padStart(2,"0")}`;
+
+
+    input.min =
+        value;
+
+
+    input.value =
+        value;
+
+
+    updateStartDate();
+
+}
+
+
+/* =========================================================
+   LOAD PROGRAMS
+========================================================= */
 
 async function loadPrograms(){
 
     try{
 
-        const response = await fetch(
-            `${API_URL}/api/program_trainers`,
-            {
-                cache: "no-store"
-            }
-        );
+        const response =
+            await fetch(
+                `${API_URL}/api/program_trainers`,
+                {
+                    cache:
+                        "no-store"
+                }
+            );
 
-        console.log("PROGRAM API STATUS:", response.status);
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        console.log("PROGRAM API DATA:", data);
 
         if(!response.ok){
 
@@ -619,6 +849,7 @@ async function loadPrograms(){
 
         }
 
+
         if(!Array.isArray(data)){
 
             throw new Error(
@@ -627,16 +858,17 @@ async function loadPrograms(){
 
         }
 
-        programTrainers = data;
+
+        programTrainers =
+            data;
+
 
         buildPrograms();
 
-        console.log("PROGRAMS BUILT:", programs);
-
         renderPrograms();
 
-    }
 
+    }
     catch(error){
 
         console.error(
@@ -644,11 +876,12 @@ async function loadPrograms(){
             error
         );
 
+
         document.getElementById(
             "programOptions"
         ).innerHTML = `
 
-            <p>
+            <p class="empty-message">
                 Failed to load programs.
             </p>
 
@@ -658,6 +891,7 @@ async function loadPrograms(){
 
 }
 
+
 /* =========================================================
    BUILD PROGRAMS
 ========================================================= */
@@ -666,14 +900,19 @@ function buildPrograms(){
 
     programs = [];
 
+
     programTrainers.forEach(
         item => {
 
             const exists =
-                programs.find(
+                programs.some(
                     program =>
-                        Number(program.id) ===
-                        Number(item.program_id)
+                        Number(
+                            program.id
+                        ) ===
+                        Number(
+                            item.program_id
+                        )
                 );
 
 
@@ -688,7 +927,10 @@ function buildPrograms(){
                         item.program_name,
 
                     days:
-                        Number(item.duration_days)
+                        Number(
+                            item.duration_days ||
+                            30
+                        )
 
                 });
 
@@ -705,6 +947,7 @@ function buildPrograms(){
 
 }
 
+
 /* =========================================================
    RENDER PROGRAMS
 ========================================================= */
@@ -717,7 +960,8 @@ function renderPrograms(){
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     programs.forEach(
@@ -725,9 +969,19 @@ function renderPrograms(){
 
             const card =
                 document.createElement(
-                    "div"
+                    "button"
                 );
 
+
+            card.type =
+                "button";
+
+
+            /*
+                IMPORTANT:
+                NO PROGRAM IS SELECTED
+                AUTOMATICALLY
+            */
 
             card.className =
                 "program-card";
@@ -735,29 +989,17 @@ function renderPrograms(){
 
             card.innerHTML = `
 
-                <h3>
+                <strong>
                     ${escapeHtml(
                         program.name
                     )}
-                </h3>
+                </strong>
 
-                <p>
-                    Personal training program
-                </p>
-
-                <div class="program-goal">
-
-                    <span>
-                        Program Goal
-                    </span>
-
-                    <strong>
-                        ${getDurationText(
-                            program.days
-                        )}
-                    </strong>
-
-                </div>
+                <span>
+                    ${getProgramSubtitle(
+                        program.name
+                    )}
+                </span>
 
             `;
 
@@ -765,9 +1007,25 @@ function renderPrograms(){
             card.onclick =
                 () => {
 
+                    document
+                        .querySelectorAll(
+                            ".program-card"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                    card.classList.add(
+                        "selected"
+                    );
+
+
                     selectProgram(
-                        program,
-                        card
+                        program
                     );
 
                 };
@@ -784,41 +1042,78 @@ function renderPrograms(){
 
 
 /* =========================================================
+   PROGRAM SUBTITLE
+========================================================= */
+
+function getProgramSubtitle(name){
+
+    const text =
+        String(
+            name || ""
+        ).toLowerCase();
+
+
+    if(
+        text.includes("weight")
+    ){
+
+        return "Burn calories";
+
+    }
+
+
+    if(
+        text.includes("muscle") ||
+        text.includes("build")
+    ){
+
+        return "Gain muscle";
+
+    }
+
+
+    if(
+        text.includes("strength")
+    ){
+
+        return "Increase strength";
+
+    }
+
+
+    return "Overall fitness";
+
+}
+
+
+/* =========================================================
    SELECT PROGRAM
 ========================================================= */
 
-function selectProgram(
-    program,
-    card
-){
-
-    document
-        .querySelectorAll(
-            ".program-card"
-        )
-        .forEach(
-            item =>
-                item.classList.remove(
-                    "selected"
-                )
-        );
-
-
-    card.classList.add(
-        "selected"
-    );
-
+async function selectProgram(program){
 
     selectedProgram =
         program;
 
+    selectedTrainer =
+        null;
 
-    selectedTrainer = null;
+    selectedPlan =
+        null;
 
-    selectedPayment = null;
+    selectedPaymentType =
+        null;
 
-    selectedPrice = 0;
+    selectedPaymentDays =
+        0;
 
+    selectedPrice =
+        0;
+
+
+    /* =========================
+       PROGRAM
+    ========================= */
 
     document.getElementById(
         "selectedProgram"
@@ -826,68 +1121,193 @@ function selectProgram(
         program.name;
 
 
-    document.getElementById(
-        "selectedDuration"
-    ).innerText =
-        getDurationText(
-            program.days
+    /* =========================
+       SHOW PLAN
+    ========================= */
+
+    const planPanel =
+        document.getElementById(
+            "planPanel"
         );
 
+    if(planPanel){
 
-    document.getElementById(
-        "detailProgram"
-    ).innerText =
-        program.name;
+        planPanel.style.display =
+            "block";
+
+    }
 
 
-    document.getElementById(
-        "detailDuration"
-    ).innerText =
-        getDurationText(
-            program.days
+    /* =========================
+       HIDE TRAINER
+    ========================= */
+
+    const trainerPanel =
+        document.getElementById(
+            "trainerPanel"
         );
 
+    if(trainerPanel){
+
+        trainerPanel.style.display =
+            "none";
+
+    }
+
+
+    /* =========================
+       HIDE PAYMENT
+    ========================= */
+
+    const paymentPanel =
+        document.getElementById(
+            "paymentPanel"
+        );
+
+    if(paymentPanel){
+
+        paymentPanel.style.display =
+            "none";
+
+    }
+
+
+    /* =========================
+       RESET PLAN
+    ========================= */
+
+    selectedPlan =
+        null;
+
+    document.getElementById(
+        "selectedPlan"
+    ).innerText =
+        "-";
+
+
+    /* =========================
+       RESET TRAINER
+    ========================= */
+
+    document.getElementById(
+        "trainerOptions"
+    ).innerHTML =
+        "";
 
     document.getElementById(
         "selectedTrainer"
     ).innerText =
         "-";
 
+    document.getElementById(
+        "selectedTrainerRole"
+    ).innerText =
+        "Personal Trainer";
+
+
+    /* =========================
+       RESET PAYMENT
+    ========================= */
+
+    resetPayment();
+
+
+    /* =========================
+       PLAN SUBTITLE
+    ========================= */
 
     document.getElementById(
-        "selectedPayment"
+        "planSubtitle"
     ).innerText =
-        "-";
+        `Choose a training split for ${program.name}.`;
 
 
-    document.getElementById(
-        "selectedPrice"
-    ).innerText =
-        "-";
+    /* =========================
+       LOAD PLANS FROM API
+    ========================= */
+
+    const planOptions =
+        document.getElementById(
+            "planOptions"
+        );
+
+    if(!planOptions){
+        return;
+    }
 
 
-    document.getElementById(
-        "detailTrainer"
-    ).innerText =
-        "-";
+    planOptions.innerHTML = `
+        <p class="empty-message">
+            Loading plans...
+        </p>
+    `;
 
 
-    document.getElementById(
-        "detailPrice"
-    ).innerText =
-        "₱0.00";
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/programs/${program.id}/plans`,
+                {
+                    cache:
+                        "no-store"
+                }
+            );
 
 
-    loadTrainersForProgram();
+        const data =
+            await response.json();
 
-}
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
 
 
-/* =========================================================
-   LOAD TRAINERS FOR PROGRAM
-========================================================= */
+        if(
+            !Array.isArray(
+                data.plans
+            )
+        ){
 
-function loadTrainersForProgram(){
+            throw new Error(
+                "Invalid plan data received."
+            );
+
+        }
+
+
+        renderPlans(
+            data.plans
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "PLAN LOAD ERROR:",
+            error
+        );
+
+
+        planOptions.innerHTML = `
+            <p class="empty-message">
+                Failed to load plans.
+            </p>
+        `;
+
+    }
+
+
+    /* =========================
+       LOAD TRAINERS
+       EXISTING API
+    ========================= */
 
     trainers = [];
 
@@ -895,8 +1315,12 @@ function loadTrainersForProgram(){
     const matching =
         programTrainers.filter(
             item =>
-                Number(item.program_id) ===
-                Number(selectedProgram.id)
+                Number(
+                    item.program_id
+                ) ===
+                Number(
+                    selectedProgram.id
+                )
         );
 
 
@@ -906,45 +1330,224 @@ function loadTrainersForProgram(){
             trainers.push({
 
                 id:
-                    String(item.trainer_id),
+                    String(
+                        item.trainer_id
+                    ),
 
                 name:
                     item.trainer_name,
 
                 priceDay:
-                    Number(item.price_day || 0),
+                    Number(
+                        item.price_day ||
+                        0
+                    ),
 
                 priceWeek:
-                    Number(item.price_week || 0),
+                    Number(
+                        item.price_week ||
+                        0
+                    ),
 
                 priceMonth:
-                    Number(item.price_month || 0)
+                    Number(
+                        item.price_month ||
+                        0
+                    )
 
             });
 
         }
     );
 
+}
+
+function renderPlans(plans){
+
+    const container =
+        document.getElementById(
+            "planOptions"
+        );
+
+
+    if(!container){
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    if(!plans.length){
+
+        container.innerHTML = `
+            <p class="empty-message">
+                No plans available for this program.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    plans.forEach(
+        plan => {
+
+            const card =
+                document.createElement(
+                    "button"
+                );
+
+
+            card.type =
+                "button";
+
+
+            card.className =
+                "plan-card";
+
+
+            card.innerHTML = `
+
+                <strong>
+                    ${escapeHtml(
+                        plan.plan_name
+                    )}
+                </strong>
+
+            `;
+
+
+            card.onclick =
+                () => {
+
+                    selectPlan(
+                        card,
+                        plan
+                    );
+
+                };
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+/* =========================================================
+   SELECT PLAN
+========================================================= */
+
+function selectPlan(
+    button,
+    plan
+){
+
+    /* =========================
+       SELECT PLAN CARD
+    ========================= */
+
+    document
+        .querySelectorAll(
+            ".plan-card"
+        )
+        .forEach(
+            item =>
+                item.classList.remove(
+                    "selected"
+                )
+        );
+
+
+    button.classList.add(
+        "selected"
+    );
+
+
+    /* =========================
+       SAVE SELECTED PLAN
+    ========================= */
+
+    selectedPlan =
+        plan;
+
+
+    document.getElementById(
+        "selectedPlan"
+    ).innerText =
+        plan.plan_name;
+
+
+    /* =========================
+       SHOW TRAINER
+    ========================= */
+
+    const trainerPanel =
+        document.getElementById(
+            "trainerPanel"
+        );
+
+    if(trainerPanel){
+
+        trainerPanel.style.display =
+            "block";
+
+    }
+
+
+    /* =========================
+       PAYMENT HIDDEN
+    ========================= */
+
+    const paymentPanel =
+        document.getElementById(
+            "paymentPanel"
+        );
+
+    if(paymentPanel){
+
+        paymentPanel.style.display =
+            "none";
+
+    }
+
+
+    /* =========================
+       RESET TRAINER
+    ========================= */
+
+    selectedTrainer =
+        null;
+
+
+    document.getElementById(
+        "selectedTrainer"
+    ).innerText =
+        "-";
+
+
+    document.getElementById(
+        "selectedTrainerRole"
+    ).innerText =
+        "Personal Trainer";
+
+
+    /* =========================
+       RESET PAYMENT
+    ========================= */
+
+    resetPayment();
+
+
+    /* =========================
+       SHOW TRAINERS
+    ========================= */
 
     renderTrainers();
-
-
-    document.getElementById(
-        "trainerPanel"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "trainerSubtitle"
-    ).innerText =
-        `These trainers offer the ${
-            selectedProgram.name
-        } program (${
-            getDurationText(
-                selectedProgram.days
-            )
-        }).`;
 
 }
 
@@ -960,20 +1563,24 @@ function renderTrainers(){
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
-    if(
-        trainers.length === 0
-    ){
+    if(!trainers.length){
+
+        selectedTrainer =
+            null;
+
 
         container.innerHTML = `
 
-            <p>
+            <p class="empty-message">
                 No trainers available for this program.
             </p>
 
         `;
+
 
         return;
 
@@ -985,122 +1592,134 @@ function renderTrainers(){
 
             const card =
                 document.createElement(
-                    "div"
+                    "button"
                 );
+
+
+            card.type =
+                "button";
 
 
             card.className =
                 "trainer-card";
 
 
+            /*
+                IMPORTANT:
+                NO PRICE HERE.
+
+                Daily / Weekly / Monthly
+                ONLY APPEAR IN PAYMENT
+                AFTER THIS CARD IS CLICKED.
+            */
+
             card.innerHTML = `
 
                 <div
-                    class="trainer-header"
-                    onclick="toggleTrainer(this)">
-
-                    <div>
-
-                        <h3>
-                            ${escapeHtml(
-                                trainer.name
-                            )}
-                        </h3>
-
-                        <p>
-                            ${escapeHtml(
-                                selectedProgram.name
-                            )} Specialist
-                        </p>
-
-                    </div>
+                    class="trainer-avatar-large">
 
                     <span>
-                        View Pricing
+                        ●
                     </span>
 
                 </div>
 
 
-                <div class="trainer-pricing">
+                <div class="trainer-main">
 
-                    <div class="payment-title">
-                        Select Payment Option
-                    </div>
+                    <strong>
+                        ${escapeHtml(
+                            trainer.name
+                        )}
+                    </strong>
 
-
-                    <div class="payment-options">
-
-                        <div
-                            class="payment-card"
-                            onclick="selectPayment(
-                                event,
-                                '${trainer.id}',
-                                'Daily',
-                                ${getDailyPrice(trainer)}
-                            )">
-
-                            <span>
-                                Daily
-                            </span>
-
-                            <strong>
-                                ₱${formatMoney(
-                                    getDailyPrice(trainer)
-                                )}
-                            </strong>
-
-                        </div>
-
-
-                        <div
-                            class="payment-card"
-                            onclick="selectPayment(
-                                event,
-                                '${trainer.id}',
-                                'Weekly',
-                                ${getWeeklyPrice(trainer)}
-                            )">
-
-                            <span>
-                                Weekly
-                            </span>
-
-                            <strong>
-                                ₱${formatMoney(
-                                    getWeeklyPrice(trainer)
-                                )}
-                            </strong>
-
-                        </div>
-
-
-                        <div
-                            class="payment-card"
-                            onclick="selectPayment(
-                                event,
-                                '${trainer.id}',
-                                'Monthly',
-                                ${getMonthlyPrice(trainer)}
-                            )">
-
-                            <span>
-                                Monthly
-                            </span>
-
-                            <strong>
-                                ₱${formatMoney(
-                                    getMonthlyPrice(trainer)
-                                )}
-                            </strong>
-
-                        </div>
-
-                    </div>
+                    <span>
+                        ${escapeHtml(
+                            selectedProgram.name
+                        )}
+                        Specialist
+                    </span>
 
                 </div>
 
+
+                <div class="trainer-arrow">
+                    ›
+                </div>
+
             `;
+
+
+            /*
+                TRAINER CLICK
+            */
+
+            card.onclick =
+                () => {
+
+                    /*
+                        REMOVE OTHER
+                        TRAINER SELECTIONS
+                    */
+
+                    document
+                        .querySelectorAll(
+                            ".trainer-card"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                    /*
+                        SELECT TRAINER
+                    */
+
+                    card.classList.add(
+                        "selected"
+                    );
+
+
+                    selectedTrainer =
+                        trainer;
+
+
+                    /*
+                        UPDATE RIGHT SIDE
+                    */
+
+                    updateTrainerSelection();
+
+
+                    /*
+                        NOW SHOW PAYMENT
+                    */
+
+                    const paymentPanel =
+                        document.getElementById(
+                            "paymentPanel"
+                        );
+
+
+                    if(paymentPanel){
+
+                        paymentPanel.style.display =
+                            "block";
+
+                    }
+
+
+                    /*
+                        LOAD TRAINER
+                        PAYMENT PRICES
+                    */
+
+                    updatePaymentPrices();
+
+                };
 
 
             container.appendChild(
@@ -1114,56 +1733,154 @@ function renderTrainers(){
 
 
 /* =========================================================
-   TRAINER DROPDOWN
+   TRAINER SELECTION
 ========================================================= */
 
-function toggleTrainer(header){
+function updateTrainerSelection(){
 
-    const card =
-        header.closest(
-            ".trainer-card"
-        );
-
-
-    document
-        .querySelectorAll(
-            ".trainer-card"
-        )
-        .forEach(
-            item => {
-
-                if(item !== card){
-
-                    item.classList.remove(
-                        "open"
-                    );
-
-                }
-
-            }
-        );
+    document.getElementById(
+        "selectedTrainer"
+    ).innerText =
+        selectedTrainer?.name ||
+        "-";
 
 
-    card.classList.toggle(
-        "open"
-    );
+    document.getElementById(
+        "selectedTrainerRole"
+    ).innerText =
+        selectedProgram
+            ? `${selectedProgram.name} Specialist`
+            : "Personal Trainer";
 
 }
 
 
 /* =========================================================
-   PAYMENT
+   UPDATE PAYMENT PRICES
+========================================================= */
+
+function updatePaymentPrices(){
+
+    if(!selectedTrainer){
+
+        resetPayment();
+
+        return;
+
+    }
+
+
+    /*
+        DAILY
+    */
+
+    document.getElementById(
+        "priceDaily"
+    ).innerText =
+        `₱${formatMoney(
+            selectedTrainer.priceDay
+        )}`;
+
+
+    /*
+        WEEKLY
+    */
+
+    document.getElementById(
+        "priceWeekly"
+    ).innerText =
+        `₱${formatMoney(
+            selectedTrainer.priceWeek
+        )}`;
+
+
+    /*
+        MONTHLY
+    */
+
+    document.getElementById(
+        "priceMonthly"
+    ).innerText =
+        `₱${formatMoney(
+            selectedTrainer.priceMonth
+        )}`;
+
+
+    /*
+        DO NOT AUTOMATICALLY
+        SELECT A PAYMENT
+    */
+
+    selectedPaymentType =
+        null;
+
+    selectedPaymentDays =
+        0;
+
+    selectedPrice =
+        0;
+
+
+    document
+        .querySelectorAll(
+            ".payment-card"
+        )
+        .forEach(
+            card =>
+                card.classList.remove(
+                    "selected"
+                )
+        );
+
+
+    document.getElementById(
+        "selectedDuration"
+    ).innerText =
+        "-";
+
+
+    document.getElementById(
+        "selectedDurationPrice"
+    ).innerText =
+        "₱0.00";
+
+
+    document.getElementById(
+        "detailPrice"
+    ).innerText =
+        "₱0.00";
+
+
+    updateStartDate();
+
+}
+
+
+/* =========================================================
+   SELECT PAYMENT
 ========================================================= */
 
 function selectPayment(
-    event,
-    trainerId,
-    type,
-    price
+    button,
+    label,
+    days
 ){
 
-    event.stopPropagation();
+    /*
+        SAFETY
+    */
 
+    if(!selectedTrainer){
+
+        return;
+
+    }
+
+
+    /*
+        REMOVE OTHER PAYMENT
+        SELECTIONS
+    */
 
     document
         .querySelectorAll(
@@ -1177,101 +1894,81 @@ function selectPayment(
         );
 
 
-    event.currentTarget.classList.add(
+    /*
+        SELECT PAYMENT
+    */
+
+    button.classList.add(
         "selected"
     );
 
 
-    selectedTrainer =
-        trainers.find(
-            item =>
-                item.id ===
-                String(trainerId)
+    selectedPaymentType =
+        label;
+
+
+    selectedPaymentDays =
+        Number(
+            days
         );
 
 
-    selectedPayment =
-        type;
+    /*
+        GET PRICE FROM
+        SELECTED TRAINER
+    */
+
+    if(label === "Daily"){
+
+        selectedPrice =
+            Number(
+                selectedTrainer.priceDay ||
+                0
+            );
+
+    }
+    else if(label === "Weekly"){
+
+        selectedPrice =
+            Number(
+                selectedTrainer.priceWeek ||
+                0
+            );
+
+    }
+    else if(label === "Monthly"){
+
+        selectedPrice =
+            Number(
+                selectedTrainer.priceMonth ||
+                0
+            );
+
+    }
+    else{
+
+        selectedPrice =
+            0;
+
+    }
 
 
-    selectedPrice =
-        Number(price);
-
-
-    updateSelection();
-
-}
-
-
-/* =========================================================
-   PRICES
-========================================================= */
-
-/*
- * TEMPORARY UI PRICE LOGIC
- *
- * Current trainer_plans table only has ONE price.
- * Once we add daily_price / weekly_price /
- * monthly_price to the database, these three
- * functions will read the real values.
- */
-
-function getMonthlyPrice(trainer){
-
-    return trainer.priceMonth || 0;
-
-}
-
-
-function getWeeklyPrice(trainer){
-
-    return trainer.priceWeek || 0;
-
-}
-
-
-function getDailyPrice(trainer){
-
-    return trainer.priceDay || 0;
-
-}
-
-
-/* =========================================================
-   UPDATE SELECTION
-========================================================= */
-
-function updateSelection(){
+    /*
+        RIGHT SIDE
+    */
 
     document.getElementById(
-        "selectedTrainer"
+        "selectedDuration"
     ).innerText =
-        selectedTrainer?.name ||
-        "-";
+        label;
 
 
     document.getElementById(
-        "selectedPayment"
+        "selectedDurationPrice"
     ).innerText =
-        selectedPayment ||
-        "-";
-
-
-    document.getElementById(
-        "selectedPrice"
-    ).innerText =
-        selectedPrice
-            ? `₱${formatMoney(
-                selectedPrice
-            )}`
-            : "-";
-
-
-    document.getElementById(
-        "detailTrainer"
-    ).innerText =
-        selectedTrainer?.name ||
-        "-";
+        `₱${formatMoney(
+            selectedPrice
+        )}`;
 
 
     document.getElementById(
@@ -1281,28 +1978,246 @@ function updateSelection(){
             selectedPrice
         )}`;
 
+
+    /*
+        UPDATE DATE
+    */
+
+    updateStartDate();
+
 }
 
 
 /* =========================================================
-   DURATION
+   RESET PAYMENT
 ========================================================= */
 
-function getDurationText(days){
+function resetPayment(){
 
-    if(days === 30)
-        return "1 Month";
+    selectedPaymentType =
+        null;
 
-    if(days === 60)
-        return "2 Months";
+    selectedPaymentDays =
+        0;
 
-    if(days === 90)
-        return "3 Months";
+    selectedPrice =
+        0;
 
-    if(days === 7)
-        return "1 Week";
 
-    return `${days} Days`;
+    /*
+        REMOVE SELECTED PAYMENT
+    */
+
+    document
+        .querySelectorAll(
+            ".payment-card"
+        )
+        .forEach(
+            card =>
+                card.classList.remove(
+                    "selected"
+                )
+        );
+
+
+    /*
+        RESET PRICES
+    */
+
+    const priceDaily =
+        document.getElementById(
+            "priceDaily"
+        );
+
+
+    const priceWeekly =
+        document.getElementById(
+            "priceWeekly"
+        );
+
+
+    const priceMonthly =
+        document.getElementById(
+            "priceMonthly"
+        );
+
+
+    if(priceDaily){
+
+        priceDaily.innerText =
+            "₱0.00";
+
+    }
+
+
+    if(priceWeekly){
+
+        priceWeekly.innerText =
+            "₱0.00";
+
+    }
+
+
+    if(priceMonthly){
+
+        priceMonthly.innerText =
+            "₱0.00";
+
+    }
+
+
+    /*
+        RESET SELECTION
+    */
+
+    document.getElementById(
+        "selectedDuration"
+    ).innerText =
+        "-";
+
+
+    document.getElementById(
+        "selectedDurationPrice"
+    ).innerText =
+        "₱0.00";
+
+
+    document.getElementById(
+        "detailPrice"
+    ).innerText =
+        "₱0.00";
+
+
+    document.getElementById(
+        "selectedEndDate"
+    ).innerText =
+        "End Date: -";
+
+}
+
+
+/* =========================================================
+   START DATE / END DATE
+========================================================= */
+
+function updateStartDate(){
+
+    const input =
+        document.getElementById(
+            "startDate"
+        );
+
+
+    if(
+        !input ||
+        !input.value
+    ){
+
+        return;
+
+    }
+
+
+    selectedStartDate =
+        new Date(
+            input.value +
+            "T00:00:00"
+        );
+
+
+    /*
+        ALWAYS SHOW START DATE
+    */
+
+    document.getElementById(
+        "selectedStartDate"
+    ).innerText =
+        formatDate(
+            selectedStartDate
+        );
+
+
+    /*
+        NO PAYMENT SELECTED
+        = NO END DATE
+    */
+
+    if(!selectedPaymentDays){
+
+        selectedEndDate =
+            null;
+
+
+        document.getElementById(
+            "selectedEndDate"
+        ).innerText =
+            "End Date: -";
+
+
+        return;
+
+    }
+
+
+    /*
+        CALCULATE END DATE
+    */
+
+    selectedEndDate =
+        new Date(
+            selectedStartDate
+        );
+
+
+    selectedEndDate.setDate(
+
+        selectedEndDate.getDate() +
+        selectedPaymentDays -
+        1
+
+    );
+
+
+    document.getElementById(
+        "selectedEndDate"
+    ).innerText =
+        `End Date: ${
+            formatDate(
+                selectedEndDate
+            )
+        }`;
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(
+    date
+){
+
+    if(!date){
+
+        return "-";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month:
+                "short",
+
+            day:
+                "numeric",
+
+            year:
+                "numeric"
+        }
+    );
 
 }
 
@@ -1311,15 +2226,20 @@ function getDurationText(days){
    MONEY
 ========================================================= */
 
-function formatMoney(value){
+function formatMoney(
+    value
+){
 
     return Number(
         value || 0
     ).toLocaleString(
         "en-PH",
         {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            minimumFractionDigits:
+                2,
+
+            maximumFractionDigits:
+                2
         }
     );
 
@@ -1331,6 +2251,10 @@ function formatMoney(value){
 ========================================================= */
 
 async function sendProgramRequest(){
+
+    /*
+        PROGRAM
+    */
 
     if(!selectedProgram){
 
@@ -1344,6 +2268,26 @@ async function sendProgramRequest(){
     }
 
 
+    /*
+        PLAN
+    */
+
+    if(!selectedPlan){
+
+        showNotifPopup(
+            "Request Failed",
+            "Please select a plan."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        TRAINER
+    */
+
     if(!selectedTrainer){
 
         showNotifPopup(
@@ -1356,7 +2300,11 @@ async function sendProgramRequest(){
     }
 
 
-    if(!selectedPayment){
+    /*
+        PAYMENT
+    */
+
+    if(!selectedPaymentType){
 
         showNotifPopup(
             "Request Failed",
@@ -1368,28 +2316,49 @@ async function sendProgramRequest(){
     }
 
 
+    /*
+        START DATE
+    */
+
+    if(!selectedStartDate){
+
+        showNotifPopup(
+            "Request Failed",
+            "Please select a starting date."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        PRICE
+    */
+
+    if(!selectedPrice){
+
+        showNotifPopup(
+            "Request Failed",
+            "Selected trainer has no price for this payment option."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        SUCCESS
+    */
+
     showNotifPopup(
+
         "Program Selected",
-        `${selectedProgram.name} with ${selectedTrainer.name} selected successfully.`
+
+        `${selectedProgram.name} — ${selectedPlan} with ${selectedTrainer.name} selected successfully.`
+
     );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(value){
-
-    return String(
-        value ?? ""
-    )
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 
 }
 
@@ -1427,13 +2396,10 @@ function showNotifPopup(
 
 
     setTimeout(
-        () => {
-
+        () =>
             popup.classList.remove(
                 "show"
-            );
-
-        },
+            ),
         4000
     );
 
@@ -1441,31 +2407,108 @@ function showNotifPopup(
 
 
 /* =========================================================
-   PROFILE
+   MESSAGE COUNT
+========================================================= */
+
+async function loadMessageCount(){
+
+    try{
+
+        const memberId =
+            userData.user_id ||
+            userData.member_id;
+
+
+        if(!memberId){
+
+            return;
+
+        }
+
+
+        const response =
+            await fetch(
+
+                `${API_URL}/api/member_messages?member_id=${
+                    encodeURIComponent(
+                        memberId
+                    )
+                }`,
+
+                {
+                    cache:
+                        "no-store"
+                }
+
+            );
+
+
+        if(!response.ok){
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(!Array.isArray(data)){
+
+            return;
+
+        }
+
+
+        const count =
+            data.filter(
+                item =>
+                    Number(
+                        item.is_read
+                    ) === 0
+            ).length;
+
+
+        const countElement =
+            document.getElementById(
+                "msg-count"
+            );
+
+
+        if(countElement){
+
+            countElement.innerText =
+                count;
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "MESSAGE COUNT ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PROFILE MENU
 ========================================================= */
 
 function toggleMenu(){
 
-    const profile =
-        document.querySelector(
-            ".user-profile"
-        );
-
-
-    const dropdown =
-        document.getElementById(
+    document
+        .getElementById(
             "dropdown"
+        )
+        .classList.toggle(
+            "show"
         );
-
-
-    profile.classList.toggle(
-        "active"
-    );
-
-
-    dropdown.classList.toggle(
-        "show"
-    );
 
 }
 
@@ -1479,15 +2522,6 @@ window.addEventListener(
                 ".user-profile"
             )
         ){
-
-            document
-                .querySelector(
-                    ".user-profile"
-                )
-                .classList.remove(
-                    "active"
-                );
-
 
             document
                 .getElementById(
@@ -1518,12 +2552,58 @@ function logout(){
 
 
 /* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
    START
 ========================================================= */
 
+setDefaultDate();
+
 loadPrograms();
+
+loadMessageCount();
 
 </script>
 
+
 </body>
+
 </html>

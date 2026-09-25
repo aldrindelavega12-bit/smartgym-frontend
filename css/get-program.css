@@ -1,0 +1,1710 @@
+/* =========================================================
+   SMART GYM — GET PROGRAM
+   COMPACT DESIGN
+   UPDATED SPACING + LIGHTER FONT
+========================================================= */
+
+:root {
+    --green: #079b4a;
+    --green-dark: #087f3d;
+    --green-light: #eaf8ef;
+
+    --text: #101827;
+    --muted: #71808f;
+
+    --border: #dfe7e3;
+    --soft: #f4f8f6;
+
+    --white: #ffffff;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+    font-family: "Inter", sans-serif;
+    background: #f7faf8;
+    color: var(--text);
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-text strong {
+    color: var(--green);
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.brand-text span {
+    margin-top: 2px;
+    color: #718079;
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: .1px;
+}
+
+.menu a {
+    color: #17202b;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.menu a.active {
+    background: #eaf7ef !important;
+    color: var(--green) !important;
+}
+
+.menu a.active:hover {
+    background: #eaf7ef !important;
+    color: var(--green) !important;
+}
+
+.msg-count {
+    background: var(--green);
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   TOP PROFILE
+========================================================= */
+
+.top-header {
+    background: transparent;
+    border: 0;
+}
+
+.top-right {
+    padding-right: 28px;
+}
+
+.user-avatar {
+    width: 47px;
+    height: 47px;
+    background: var(--green);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.user-info strong {
+    color: #101827;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.user-info small {
+    color: #77818e;
+    font-size: 11px;
+}
+
+.profile-chevron {
+    color: #101827;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.program-page {
+    width: 100%;
+    max-width: 1420px;
+
+    padding:
+        0
+        12px
+        35px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.program-page-header {
+    margin:
+        0
+        0
+        15px;
+}
+
+.program-page-header h1 {
+    margin: 0;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    font-size: 30px;
+
+    /*
+       SAME FONT STYLE AS MESSAGES
+    */
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    color: #17231e;
+
+    letter-spacing: 0;
+}
+
+.program-page-header p {
+    margin:
+        4px
+        0
+        0;
+
+    color: #687483;
+
+    font-size: 13px;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   MAIN TWO COLUMN
+========================================================= */
+
+.program-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        390px;
+
+    gap: 14px;
+
+    align-items: start;
+}
+
+.program-left {
+    min-width: 0;
+}
+
+.right-column {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   ALL PANELS
+========================================================= */
+
+.program-panel,
+.date-panel,
+.selection-panel {
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(
+            31,
+            73,
+            49,
+            .025
+        );
+}
+
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+
+.program-panel {
+    padding:
+        16px
+        18px;
+
+    margin-bottom:
+        10px;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+    margin-bottom:
+        9px;
+}
+
+.section-header h2,
+.date-panel h2,
+.selection-panel h2 {
+    margin: 0;
+
+    color:
+        #101827;
+
+    font-size:
+        18px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        -.35px;
+
+    line-height:
+        1.2;
+}
+
+.section-header p,
+.date-panel p {
+    margin:
+        3px
+        0
+        0;
+
+    color:
+        #71808f;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.35;
+}
+
+
+/* =========================================================
+   SELECT PROGRAM
+========================================================= */
+
+.program-options {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        7px;
+}
+
+.program-card {
+    width:
+        100%;
+
+    min-height:
+        70px;
+
+    padding:
+        11px
+        12px;
+
+    border:
+        1px solid
+        #dce5e1;
+
+    border-radius:
+        8px;
+
+    background:
+        #ffffff;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    transition:
+        .15s ease;
+}
+
+.program-card:hover {
+    border-color:
+        #4abb7d;
+}
+
+.program-card.selected {
+    border:
+        1.5px solid
+        var(--green);
+
+    background:
+        #eefaf3;
+}
+
+.program-card strong {
+    display:
+        block;
+
+    color:
+        #101827;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.2;
+}
+
+.program-card span {
+    display:
+        block;
+
+    margin-top:
+        5px;
+
+    color:
+        #71808f;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.25;
+}
+
+
+/* =========================================================
+   SELECT PLAN
+========================================================= */
+
+.plan-options {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        7px;
+}
+
+.plan-card {
+    min-height:
+        54px;
+
+    padding:
+        10px
+        13px;
+
+    border:
+        1px solid
+        #dce5e1;
+
+    border-radius:
+        8px;
+
+    background:
+        #ffffff;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    transition:
+        .15s ease;
+}
+
+.plan-card:hover {
+    border-color:
+        #42b875;
+}
+
+.plan-card.selected {
+    border:
+        1.5px solid
+        var(--green);
+
+    background:
+        #eefaf3;
+}
+
+.plan-card strong {
+    color:
+        #101827;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   TRAINER
+========================================================= */
+
+.trainer-options {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        7px;
+}
+
+.trainer-card {
+    width:
+        100%;
+
+    min-height:
+        65px;
+
+    padding:
+        8px
+        9px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    border:
+        1px solid
+        #dce5e1;
+
+    border-radius:
+        8px;
+
+    background:
+        #ffffff;
+
+    cursor:
+        pointer;
+
+    text-align:
+        left;
+
+    transition:
+        .15s ease;
+}
+
+.trainer-card:hover {
+    border-color:
+        #48b879;
+}
+
+.trainer-card.selected {
+    border:
+        1.5px solid
+        var(--green);
+
+    background:
+        #eefaf3;
+}
+
+
+/* =========================================================
+   TRAINER AVATAR
+========================================================= */
+
+.trainer-avatar-large {
+    width:
+        39px;
+
+    height:
+        39px;
+
+    flex:
+        0 0 39px;
+
+    border-radius:
+        50%;
+
+    background:
+        #edf0f0;
+
+    color:
+        #aeb5b7;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+}
+
+.trainer-avatar-large span {
+    font-size:
+        16px;
+}
+
+
+/* =========================================================
+   TRAINER TEXT
+========================================================= */
+
+.trainer-main {
+    min-width:
+        0;
+
+    flex:
+        1;
+}
+
+.trainer-main strong {
+    display:
+        block;
+
+    overflow:
+        hidden;
+
+    color:
+        #101827;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+}
+
+.trainer-main span {
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    overflow:
+        hidden;
+
+    color:
+        #71808f;
+
+    font-size:
+        8px;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+}
+
+.trainer-arrow {
+    color:
+        #75808b;
+
+    font-size:
+        17px;
+
+    flex:
+        0 0 auto;
+}
+
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+
+.payment-options {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        7px;
+}
+
+.payment-card {
+    min-height:
+        54px;
+
+    padding:
+        9px
+        12px;
+
+    border:
+        1px solid
+        #dce5e1;
+
+    border-radius:
+        8px;
+
+    background:
+        #ffffff;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    transition:
+        .15s ease;
+}
+
+.payment-card:hover {
+    border-color:
+        #42b875;
+}
+
+.payment-card.selected {
+    border:
+        1.5px solid
+        var(--green);
+
+    background:
+        #eefaf3;
+}
+
+.payment-card strong {
+    display:
+        block;
+
+    color:
+        #101827;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+}
+
+.payment-card span {
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        var(--green);
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   STARTING DATE
+   COMPACT VERSION
+========================================================= */
+
+.date-panel {
+    padding:
+        14px
+        19px
+        16px;
+
+    margin-bottom:
+        10px;
+}
+
+.date-panel h2 {
+    margin:
+        0;
+
+    font-size:
+        18px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.2;
+}
+
+.date-panel p {
+    margin:
+        3px
+        0
+        0;
+
+    color:
+        #71808f;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.3;
+}
+
+.date-input-wrap {
+    position:
+        relative;
+
+    margin-top:
+        9px;
+}
+
+.date-input-wrap input {
+    width:
+        100%;
+
+    height:
+        42px;
+
+    padding:
+        0
+        40px
+        0
+        14px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        #ccd7d2;
+
+    border-radius:
+        8px;
+
+    background:
+        #fbfcfc;
+
+    color:
+        #17202b;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    font-size:
+        12px;
+
+    /*
+       LIGHT / NORMAL DATE FONT
+    */
+    font-weight:
+        400;
+
+    outline:
+        none;
+}
+
+.date-input-wrap input:focus {
+    border-color:
+        var(--green);
+
+    box-shadow:
+        0
+        0
+        0
+        3px
+        rgba(
+            7,
+            155,
+            74,
+            .07
+        );
+}
+
+.calendar-symbol {
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    right:
+        13px;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        #6d7884;
+
+    font-size:
+        15px;
+
+    pointer-events:
+        none;
+}
+
+
+/* =========================================================
+   YOUR SELECTION
+========================================================= */
+
+.selection-panel {
+    padding:
+        18px
+        19px
+        18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f0faf4 0%,
+            #ffffff 37%
+        );
+}
+
+.selection-subtitle {
+    margin:
+        3px
+        0
+        12px;
+
+    color:
+        #71808f;
+
+    font-size:
+        11px;
+}
+
+
+/* =========================================================
+   INNER SELECTION
+========================================================= */
+
+.selection-inner {
+    padding:
+        14px
+        15px
+        15px;
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .85
+        );
+}
+
+
+/* =========================================================
+   SELECTION BLOCK
+========================================================= */
+
+.selection-block {
+    padding-bottom:
+        9px;
+
+    margin-bottom:
+        9px;
+
+    border-bottom:
+        1px solid
+        #e5ebe8;
+}
+
+.selection-block > span {
+    display:
+        block;
+
+    margin-bottom:
+        3px;
+
+    color:
+        #71808f;
+
+    font-size:
+        9px;
+}
+
+.selection-block > strong {
+    display:
+        block;
+
+    color:
+        #101827;
+
+    font-size:
+        16px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.2;
+}
+
+
+/* =========================================================
+   SELECTED TRAINER
+========================================================= */
+
+.selected-trainer-row {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+}
+
+.selected-trainer-row .trainer-avatar {
+    width:
+        43px;
+
+    height:
+        43px;
+
+    flex:
+        0 0 43px;
+
+    border-radius:
+        50%;
+
+    background:
+        #edf0f0;
+
+    color:
+        #aeb5b7;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+}
+
+.selected-trainer-row .trainer-avatar span {
+    font-size:
+        18px;
+}
+
+.selected-trainer-text {
+    min-width:
+        0;
+}
+
+.selected-trainer-text strong {
+    display:
+        block;
+
+    color:
+        #101827;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+}
+
+.selected-trainer-text small {
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #71808f;
+
+    font-size:
+        9px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.selection-stats {
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:
+        7px;
+
+    margin-top:
+        2px;
+}
+
+.stat-box {
+    min-height:
+        70px;
+
+    padding:
+        9px
+        10px;
+
+    border-radius:
+        8px;
+
+    background:
+        #f5faf7;
+}
+
+.stat-box span {
+    display:
+        block;
+
+    color:
+        #71808f;
+
+    font-size:
+        9px;
+}
+
+.stat-box strong {
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #101827;
+
+    font-size:
+        14px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.2;
+}
+
+.stat-box small {
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #71808f;
+
+    font-size:
+        8px;
+}
+
+
+/* =========================================================
+   TOTAL PRICE
+========================================================= */
+
+.total-row {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        12px
+        0
+        10px;
+
+    margin-top:
+        9px;
+
+    border-top:
+        1px solid
+        #cbd8d2;
+}
+
+.total-row span {
+    color:
+        #29333d;
+
+    font-size:
+        11px;
+}
+
+.total-row strong {
+    color:
+        var(--green);
+
+    font-size:
+        21px;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   SEND REQUEST
+========================================================= */
+
+.send-request-btn {
+    width:
+        100%;
+
+    height:
+        45px;
+
+    border:
+        0;
+
+    border-radius:
+        8px;
+
+    background:
+        #079b4a;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        .15s ease;
+}
+
+.send-request-btn:hover {
+    background:
+        #07863f;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-message {
+    margin:
+        0;
+
+    padding:
+        9px
+        0;
+
+    color:
+        #71808f;
+
+    font-size:
+        10px;
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+.profile-dropdown {
+    position:
+        absolute;
+
+    top:
+        calc(
+            100% + 8px
+        );
+
+    right:
+        0;
+
+    min-width:
+        125px;
+
+    padding:
+        5px;
+
+    border:
+        1px solid
+        #e0e7e3;
+
+    border-radius:
+        8px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0
+        10px
+        25px
+        rgba(
+            0,
+            0,
+            0,
+            .10
+        );
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    transform:
+        translateY(-4px);
+
+    transition:
+        .16s ease;
+
+    z-index:
+        1000;
+}
+
+.profile-dropdown.show {
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    transform:
+        translateY(0);
+}
+
+.profile-dropdown button {
+    width:
+        100%;
+
+    padding:
+        8px
+        9px;
+
+    border:
+        0;
+
+    border-radius:
+        5px;
+
+    background:
+        transparent;
+
+    color:
+        #26312b;
+
+    text-align:
+        left;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    cursor:
+        pointer;
+}
+
+.profile-dropdown button:hover {
+    background:
+        #f0f5f2;
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.notif-popup {
+    position:
+        fixed;
+
+    right:
+        20px;
+
+    bottom:
+        20px;
+
+    width:
+        280px;
+
+    padding:
+        12px
+        14px;
+
+    border-radius:
+        9px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #dce6e0;
+
+    box-shadow:
+        0
+        8px
+        28px
+        rgba(
+            0,
+            0,
+            0,
+            .10
+        );
+
+    transform:
+        translateY(15px);
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transition:
+        .2s;
+
+    z-index:
+        9999;
+}
+
+.notif-popup.show {
+    transform:
+        translateY(0);
+
+    opacity:
+        1;
+}
+
+.notif-popup b {
+    display:
+        block;
+
+    margin-bottom:
+        3px;
+
+    color:
+        #14251d;
+
+    font-size:
+        12px;
+}
+
+.notif-popup p {
+    margin:
+        0;
+
+    color:
+        #718079;
+
+    font-size:
+        10px;
+}
+
+
+/* =========================================================
+   LARGE SCREEN
+========================================================= */
+
+@media (min-width: 1500px) {
+
+    .program-page {
+        max-width:
+            1450px;
+
+        padding-left:
+            10px;
+
+        padding-right:
+            15px;
+    }
+
+    .program-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            390px;
+    }
+
+}
+
+
+/* =========================================================
+   1250px
+========================================================= */
+
+@media (max-width: 1250px) {
+
+    .program-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            360px;
+    }
+
+    .program-options {
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+    }
+
+    .trainer-options {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+/* =========================================================
+   1050px
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .program-layout {
+        grid-template-columns:
+            1fr;
+    }
+
+    .right-column {
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr
+            1fr;
+
+        gap:
+            10px;
+    }
+
+    .date-panel,
+    .selection-panel {
+        margin-bottom:
+            0;
+    }
+
+}
+
+
+/* =========================================================
+   760px
+========================================================= */
+
+@media (max-width: 760px) {
+
+    .program-page {
+        padding:
+            8px
+            15px
+            30px;
+    }
+
+    .program-page-header h1 {
+        font-size:
+            30px;
+
+        font-weight:
+            800;
+    }
+
+    .program-page-header p {
+        font-size:
+            11px;
+    }
+
+    .right-column {
+        display:
+            block;
+    }
+
+    .date-panel {
+        margin-bottom:
+            10px;
+    }
+
+    .plan-options,
+    .payment-options {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+/* =========================================================
+   520px
+========================================================= */
+
+@media (max-width: 520px) {
+
+    .program-options {
+        grid-template-columns:
+            1fr;
+    }
+
+    .program-panel,
+    .date-panel,
+    .selection-panel {
+        padding:
+            14px;
+    }
+
+    .program-page-header h1 {
+        font-size:
+            27px;
+
+        font-weight:
+            800;
+    }
+
+    .selection-stats {
+        grid-template-columns:
+            1fr;
+    }
+
+    .total-row strong {
+        font-size:
+            18px;
+    }
+
+}
+
+/* =========================================================
+   TRAINER PRICE DROPDOWN
+========================================================= */
+
+.trainer-card {
+    position: relative;
+    align-items: flex-start;
+}
+
+.trainer-main {
+    flex: 1;
+}
+
+.trainer-price-dropdown {
+
+    display: none;
+
+    margin-top: 10px;
+
+    padding-top: 9px;
+
+    border-top:
+        1px solid
+        #dce8e1;
+}
+
+.trainer-card.selected
+.trainer-price-dropdown {
+
+    display: block;
+}
+
+.trainer-price-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 4px 0;
+}
+
+.trainer-price-row span {
+
+    color:
+        #71808f;
+
+    font-size:
+        9px;
+
+    font-weight:
+        500;
+}
+
+.trainer-price-row strong {
+
+    color:
+        #079b4a;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+}
+
+.trainer-arrow {
+
+    transition:
+        transform .2s ease;
+}
+
+.trainer-card.selected
+.trainer-arrow {
+
+    transform:
+        rotate(90deg);
+}
