@@ -552,9 +552,7 @@ if (!user || user.role !== "member") {
 
                             <div class="trainer-avatar">
 
-                                <span>
-                                    ●
-                                </span>
+                                <i class="fa-solid fa-user"></i>
 
                             </div>
 
@@ -999,8 +997,14 @@ function renderPrograms(){
                     )}
                 </span>
 
-            `;
+                <small class="recommended-duration">
+                    Recommended Duration:
+                    ${getRecommendedDuration(
+                        program.days
+                    )}
+                </small>
 
+            `;
 
             card.onclick =
                 () => {
@@ -1038,7 +1042,28 @@ function renderPrograms(){
 
 }
 
+function getRecommendedDuration(days){
 
+    days = Number(days || 0);
+
+    if(days === 60){
+        return "2 Months";
+    }
+
+    if(days === 90){
+        return "3 Months";
+    }
+
+    if(days === 120){
+        return "4 Months";
+    }
+
+    if(days > 0){
+        return `${days} Days`;
+    }
+
+    return "-";
+}
 /* =========================================================
    PROGRAM SUBTITLE
 ========================================================= */
@@ -1633,12 +1658,9 @@ function renderTrainers(){
 
             card.innerHTML = `
 
-                <div
-                    class="trainer-avatar-large">
+                <div class="trainer-avatar-large">
 
-                    <span>
-                        ●
-                    </span>
+                    <i class="fa-solid fa-user"></i>
 
                 </div>
 

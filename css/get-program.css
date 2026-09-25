@@ -598,7 +598,7 @@ body {
         #101827;
 
     font-size:
-        10px;
+        14px;
 
     font-weight:
         700;
@@ -624,7 +624,7 @@ body {
         #71808f;
 
     font-size:
-        8px;
+        12px;
 
     text-overflow:
         ellipsis;
@@ -1707,4 +1707,11 @@ body {
 
     transform:
         rotate(90deg);
+}
+.recommended-duration {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #087c3d;
 }
