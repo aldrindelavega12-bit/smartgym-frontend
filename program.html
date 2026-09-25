@@ -697,17 +697,7 @@ let workoutSchedule = {};
    Starts at TODAY.
 ========================================================= */
 
-let selectedScheduleDate =
-    new Date();
-
-
-selectedScheduleDate.setHours(
-    0,
-    0,
-    0,
-    0
-);
-
+let selectedScheduleDate = null;
 
 
 /* =========================================================
@@ -1103,6 +1093,30 @@ async function loadCurrentProgram(){
             formatProgramDate(
                 startDateValue
             );
+
+        /*
+        =====================================================
+        SCHEDULE START DATE
+
+        Training Schedule starts from the
+        actual training start date.
+        =====================================================
+        */
+
+        selectedScheduleDate =
+            new Date(
+                String(startDateValue).split(" ")[0] +
+                "T00:00:00"
+            );
+
+        selectedScheduleDate.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+        renderTrainingSchedule();
 
 
         /*
@@ -1591,6 +1605,10 @@ function getWorkoutStatus(
 ========================================================= */
 
 function renderTrainingSchedule(){
+
+    if(!selectedScheduleDate){
+        return;
+    }
 
     const container =
         document.getElementById(
