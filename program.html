@@ -1233,16 +1233,12 @@ function setCurrentProgramEmpty(){
 async function loadTrainingSchedule(){
 
     const memberId =
-        user?.member_id ||
-        user?.user_id ||
-        user?.id;
-
+        user?.member_id;
 
     console.log(
         "WORKOUT SCHEDULE MEMBER ID:",
         memberId
     );
-
 
     if(!memberId){
 
@@ -1255,7 +1251,6 @@ async function loadTrainingSchedule(){
         renderTrainingSchedule();
 
         return;
-
     }
 
 
@@ -1299,26 +1294,21 @@ async function loadTrainingSchedule(){
         workoutSchedule = {};
 
 
-
         /*
         =====================================================
-        STORE BY DATE
-
-        Example:
-
-        2026-09-25
-        2026-09-26
-        2026-09-28
+        STORE WORKOUTS BY DATE
         =====================================================
         */
 
-        (
-            result.workouts ||
-            []
-        ).forEach(
+        const workouts =
+            result.workouts || [];
+
+
+        workouts.forEach(
             function(workout){
 
                 if(
+                    !workout ||
                     !workout.workout_date
                 ){
 
@@ -1327,12 +1317,18 @@ async function loadTrainingSchedule(){
                 }
 
 
+                /*
+                API already returns:
+                YYYY-MM-DD
+                */
+
                 const dateKey =
                     String(
                         workout.workout_date
-                    ).split(
-                        " "
-                    )[0];
+                    ).substring(
+                        0,
+                        10
+                    );
 
 
                 workoutSchedule[
@@ -1343,8 +1339,16 @@ async function loadTrainingSchedule(){
         );
 
 
+        console.log(
+            "FINAL WORKOUT SCHEDULE:",
+            workoutSchedule
+        );
+
+
         /*
+        =====================================================
         RENDER
+        =====================================================
         */
 
         renderTrainingSchedule();
@@ -1357,16 +1361,13 @@ async function loadTrainingSchedule(){
             error
         );
 
-
         workoutSchedule = {};
-
 
         renderTrainingSchedule();
 
     }
 
 }
-
 
 
 /* =========================================================
