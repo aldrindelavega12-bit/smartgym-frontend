@@ -1360,21 +1360,14 @@ async function loadCurrentProgram(){
         =====================================================
         */
 
-        const endDate =
-            new Date(startDate);
-
-        endDate.setDate(
-            endDate.getDate() +
-            trainingDuration -
-            1
-        );
-
+        const endDateValue =
+            current.end_date;
 
         document.getElementById(
             "programEndDate"
         ).innerText =
             formatProgramDate(
-                getDateKey(endDate)
+                endDateValue
             );
 
     }
