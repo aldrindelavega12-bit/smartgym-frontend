@@ -1515,9 +1515,7 @@ function getWorkoutForDate(
    GET STATUS
 ========================================================= */
 
-function getWorkoutStatus(
-    workout
-){
+function getWorkoutStatus(workout, date){
 
     /*
     =====================================================
@@ -1528,11 +1526,8 @@ function getWorkoutStatus(
     if(!workout){
 
         return {
-
             className: "rest",
-
             label: "Rest"
-
         };
 
     }
@@ -1547,16 +1542,12 @@ function getWorkoutStatus(
     if(
         String(
             workout.workout_name || ""
-        ).trim().toLowerCase() ===
-        "rest"
+        ).trim().toLowerCase() === "rest"
     ){
 
         return {
-
             className: "rest",
-
             label: "Rest"
-
         };
 
     }
@@ -1571,16 +1562,12 @@ function getWorkoutStatus(
     if(
         String(
             workout.status || ""
-        ).toLowerCase() ===
-        "completed"
+        ).toLowerCase() === "completed"
     ){
 
         return {
-
             className: "completed",
-
             label: "Completed"
-
         };
 
     }
@@ -1595,16 +1582,12 @@ function getWorkoutStatus(
     if(
         String(
             workout.status || ""
-        ).toLowerCase() ===
-        "missed"
+        ).toLowerCase() === "missed"
     ){
 
         return {
-
             className: "missed",
-
             label: "Missed"
-
         };
 
     }
@@ -1612,21 +1595,59 @@ function getWorkoutStatus(
 
     /*
     =====================================================
-    SCHEDULED
+    TODAY
+    =====================================================
+    */
+
+    if(date){
+
+        const today = new Date();
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+        const scheduleDate = new Date(
+            date
+        );
+
+        scheduleDate.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+        if(
+            scheduleDate.getTime() ===
+            today.getTime()
+        ){
+
+            return {
+                className: "today",
+                label: "Today"
+            };
+
+        }
+
+    }
+
+
+    /*
+    =====================================================
+    UPCOMING
     =====================================================
     */
 
     return {
-
         className: "upcoming",
-
         label: "Upcoming"
-
     };
 
 }
-
-
 /* =========================================================
    RENDER 7-DAY SCHEDULE
 ========================================================= */
