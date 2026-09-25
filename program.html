@@ -2726,42 +2726,31 @@ function formatTrainerPrice(price){
         );
 }
 
-function selectRenewFee(
-    button,
-    duration
-){
+function selectRenewFee(button, duration){
 
-    /* =====================================================
-       REMOVE PREVIOUS SELECTION
-       ===================================================== */
+    /* REMOVE PREVIOUS SELECTION */
 
     document
         .querySelectorAll(
             ".renew-duration-option"
         )
-        .forEach(
-            function(card){
+        .forEach(function(card){
 
-                card.classList.remove(
-                    "selected"
-                );
+            card.classList.remove(
+                "selected"
+            );
 
-            }
-        );
+        });
 
 
-    /* =====================================================
-       SELECT CURRENT RATE
-       ===================================================== */
+    /* SELECT CURRENT RATE */
 
     button.classList.add(
         "selected"
     );
 
 
-    /* =====================================================
-       TRAINER RATES CHECK
-       ===================================================== */
+    /* CHECK TRAINER RATES */
 
     if(!renewTrainerRates){
 
@@ -2773,12 +2762,9 @@ function selectRenewFee(
     }
 
 
-    /* =====================================================
-       FIND SELECTED PLAN
-       ===================================================== */
+    /* GET SELECTED PLAN */
 
-    let selectedPlan =
-        null;
+    let selectedPlan = null;
 
 
     if(duration === 1){
@@ -2803,10 +2789,6 @@ function selectRenewFee(
     }
 
 
-    /* =====================================================
-       PLAN CHECK
-       ===================================================== */
-
     if(
         !selectedPlan ||
         !selectedPlan.plan_id
@@ -2820,48 +2802,16 @@ function selectRenewFee(
     }
 
 
-    /* =====================================================
-       SAVE SELECTED PLAN
-       ===================================================== */
-
     selectedRenewPlan =
         selectedPlan;
 
 
     /* =====================================================
-       CURRENT START DATE
-       
-       IMPORTANT:
-       START DATE WILL NOT CHANGE.
+       GET ACTUAL DATABASE END DATE
        ===================================================== */
 
     if(
         !currentTrainerData ||
-        !currentTrainerData.start_date
-    ){
-
-        console.error(
-            "Current trainer start date is missing."
-        );
-
-        return;
-    }
-
-
-    const originalStartDate =
-        new Date(
-            String(
-                currentTrainerData.start_date
-            ).substring(0, 10)
-            + "T00:00:00"
-        );
-
-
-    /* =====================================================
-       CURRENT END DATE
-       ===================================================== */
-
-    if(
         !currentTrainerData.end_date
     ){
 
@@ -2873,27 +2823,24 @@ function selectRenewFee(
     }
 
 
-    const currentEndDate =
+    const currentEnd =
         new Date(
             String(
                 currentTrainerData.end_date
-            ).substring(0, 10)
+            ).split(" ")[0]
             + "T00:00:00"
         );
 
 
     if(
         isNaN(
-            originalStartDate.getTime()
-        )
-        ||
-        isNaN(
-            currentEndDate.getTime()
+            currentEnd.getTime()
         )
     ){
 
         console.error(
-            "Invalid trainer dates."
+            "Invalid current end date:",
+            currentTrainerData.end_date
         );
 
         return;
@@ -2901,76 +2848,60 @@ function selectRenewFee(
 
 
     /* =====================================================
-       NEW START DATE
+       RENEWAL START
+       
+       CURRENT:
+       Sep 26 - Sep 29
 
-       DO NOT CHANGE IT.
-
-       It stays the ORIGINAL START DATE.
+       RENEWAL:
+       Sep 30 onwards
        ===================================================== */
 
     const newStart =
         new Date(
-            originalStartDate
+            currentEnd
         );
 
-
-    /* =====================================================
-       NEW END DATE
-
-       EXTEND FROM CURRENT END DATE.
-
-       Example:
-
-       Current:
-       Sep 25 -> Sep 29
-
-       1 Day:
-       Sep 25 -> Sep 30
-
-       1 Week:
-       Sep 25 -> Oct 6
-
-       1 Month:
-       Sep 25 -> Oct 29
-       ===================================================== */
-
-    const newEnd =
-        new Date(
-            currentEndDate
-        );
-
-
-    newEnd.setDate(
-        newEnd.getDate() +
-        duration
+    newStart.setDate(
+        newStart.getDate() + 1
     );
 
 
     /* =====================================================
-       DISPLAY NEW START
+       RENEWAL END
+       ===================================================== */
+
+    const newEnd =
+        new Date(
+            newStart
+        );
+
+    newEnd.setDate(
+        newEnd.getDate()
+        +
+        duration
+        -
+        1
+    );
+
+
+    /* =====================================================
+       DISPLAY
        ===================================================== */
 
     document.getElementById(
         "renewStartDate"
     ).innerText =
         formatProgramDate(
-            getDateKey(
-                newStart
-            )
+            getDateKey(newStart)
         );
 
-
-    /* =====================================================
-       DISPLAY NEW VALID UNTIL
-       ===================================================== */
 
     document.getElementById(
         "renewEndDate"
     ).innerText =
         formatProgramDate(
-            getDateKey(
-                newEnd
-            )
+            getDateKey(newEnd)
         );
 
 
@@ -2979,42 +2910,31 @@ function selectRenewFee(
        ===================================================== */
 
     console.log(
-        "RENEW ORIGINAL START:",
-        getDateKey(
-            originalStartDate
-        )
+        "CURRENT START:",
+        currentTrainerData.start_date
     );
 
     console.log(
-        "RENEW CURRENT END:",
-        getDateKey(
-            currentEndDate
-        )
+        "CURRENT END:",
+        currentTrainerData.end_date
     );
 
     console.log(
-        "RENEW NEW START:",
-        getDateKey(
-            newStart
-        )
+        "RENEWAL START:",
+        getDateKey(newStart)
     );
 
     console.log(
-        "RENEW NEW END:",
-        getDateKey(
-            newEnd
-        )
+        "RENEWAL END:",
+        getDateKey(newEnd)
     );
 
 
-    /* =====================================================
-       ENABLE CONFIRM
-       ===================================================== */
+    /* ENABLE CONFIRM */
 
     document.getElementById(
         "renewConfirmButton"
-    ).disabled =
-        false;
+    ).disabled = false;
 
 }
 
