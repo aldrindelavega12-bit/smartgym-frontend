@@ -2251,7 +2251,9 @@ function formatMoney(
 async function sendProgramRequest(){
 
     /*
-        PROGRAM
+    ========================================
+    VALIDATION
+    ========================================
     */
 
     if(!selectedProgram){
@@ -2262,13 +2264,8 @@ async function sendProgramRequest(){
         );
 
         return;
-
     }
 
-
-    /*
-        PLAN
-    */
 
     if(!selectedPlan){
 
@@ -2278,13 +2275,8 @@ async function sendProgramRequest(){
         );
 
         return;
-
     }
 
-
-    /*
-        TRAINER
-    */
 
     if(!selectedTrainer){
 
@@ -2294,13 +2286,8 @@ async function sendProgramRequest(){
         );
 
         return;
-
     }
 
-
-    /*
-        PAYMENT
-    */
 
     if(!selectedPaymentType){
 
@@ -2310,13 +2297,8 @@ async function sendProgramRequest(){
         );
 
         return;
-
     }
 
-
-    /*
-        START DATE
-    */
 
     if(!selectedStartDate){
 
@@ -2326,13 +2308,8 @@ async function sendProgramRequest(){
         );
 
         return;
-
     }
 
-
-    /*
-        PRICE
-    */
 
     if(!selectedPrice){
 
@@ -2342,21 +2319,251 @@ async function sendProgramRequest(){
         );
 
         return;
+    }
+
+
+    /*
+    ========================================
+    MEMBER ID
+    ========================================
+    */
+
+    const memberId =
+        userData.user_id ||
+        userData.member_id;
+
+
+    if(!memberId){
+
+        showNotifPopup(
+            "Request Failed",
+            "Member ID not found."
+        );
+
+        return;
+    }
+
+
+    /*
+    ========================================
+    TRAINER RATE PLAN ID
+    ========================================
+
+    IMPORTANT:
+
+    selectedPaymentType is the RATE:
+        Daily
+        Weekly
+        Monthly
+
+    This is NOT the program split.
+    */
+
+
+    let trainerRatePlanId = null;
+
+
+    if(
+        selectedTrainer.trainerPlans &&
+        Array.isArray(
+            selectedTrainer.trainerPlans
+        )
+    ){
+
+        const rate =
+            selectedTrainer.trainerPlans.find(
+                item =>
+                    String(
+                        item.plan_name
+                    ).toLowerCase() ===
+                    String(
+                        selectedPaymentType
+                    ).toLowerCase()
+            );
+
+        if(rate){
+
+            trainerRatePlanId =
+                rate.id;
+
+        }
 
     }
 
 
     /*
-        SUCCESS
+    ========================================
+    REQUEST DATA
+    ========================================
     */
 
-    showNotifPopup(
+    const requestData = {
 
-        "Program Selected",
+        member_id:
+            memberId,
 
-        `${selectedProgram.name} — ${selectedPlan} with ${selectedTrainer.name} selected successfully.`
+        trainer_id:
+            selectedTrainer.id,
 
+        /*
+        PROGRAM
+        */
+
+        program_id:
+            selectedProgram.id,
+
+        /*
+        PROGRAM SPLIT
+
+        Example:
+        PPL = 7
+        Arnold Split = 8
+        */
+
+        program_plan_id:
+            selectedPlan.id,
+
+        /*
+        TRAINER RATE
+
+        Daily / Weekly / Monthly
+
+        This remains separate from
+        program_plan_id.
+        */
+
+        plan_id:
+            trainerRatePlanId,
+
+        start_date:
+
+            selectedStartDate
+                .toISOString()
+                .split("T")[0]
+
+    };
+
+
+    console.log(
+        "TRAINER REQUEST DATA:",
+        requestData
     );
+
+
+    /*
+    ========================================
+    SEND TO API
+    ========================================
+    */
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/request`,
+                {
+
+                    method:
+                        "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            requestData
+                        )
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "TRAINER REQUEST RESPONSE:",
+            data
+        );
+
+
+        /*
+        ====================================
+        API ERROR
+        ====================================
+        */
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        /*
+        ====================================
+        SUCCESS
+        ====================================
+        */
+
+        showNotifPopup(
+
+            "Request Sent",
+
+            `${selectedProgram.name} — ${selectedPlan.plan_name} with ${selectedTrainer.name} has been submitted successfully.`
+
+        );
+
+
+        /*
+        ====================================
+        OPTIONAL:
+        DISABLE BUTTON TEMPORARILY
+        ====================================
+        */
+
+        const button =
+            document.querySelector(
+                ".send-request-btn"
+            );
+
+
+        if(button){
+
+            button.disabled =
+                true;
+
+            button.innerText =
+                "Request Sent";
+
+        }
+
+
+    }
+    catch(error){
+
+        console.error(
+            "TRAINER REQUEST ERROR:",
+            error
+        );
+
+
+        showNotifPopup(
+
+            "Request Failed",
+
+            error.message ||
+            "Failed to submit trainer request."
+
+        );
+
+    }
 
 }
 
