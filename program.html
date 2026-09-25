@@ -2058,25 +2058,21 @@ function changeProgram(){
 /* =========================================================
    INITIALIZE
 ========================================================= */
-
 document.addEventListener(
     "DOMContentLoaded",
-    function(){
+    async function(){
 
         /*
-        Load current program
-        from API
+        Load current program FIRST
+        so selectedScheduleDate is ready.
         */
-
-        loadCurrentProgram();
+        await loadCurrentProgram();
 
 
         /*
-        Load actual workouts
-        from API
+        Then load actual workouts.
         */
-
-        loadTrainingSchedule();
+        await loadTrainingSchedule();
 
     }
 );
