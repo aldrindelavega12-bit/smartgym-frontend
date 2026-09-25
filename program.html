@@ -719,7 +719,8 @@
                     type="button"
                     class="renew-duration-option"
                     data-plan="1 Day"
-                    onclick="selectRenewDuration(this)">
+                    onclick="selectRenewFee(this, 1)"
+                >
 
                     <strong>1 Day</strong>
 
@@ -736,7 +737,8 @@
                     type="button"
                     class="renew-duration-option"
                     data-plan="1 Week"
-                    onclick="selectRenewDuration(this)">
+                    onclick="selectRenewFee(this, 7)"
+                >
 
                     <strong>1 Week</strong>
 
@@ -753,7 +755,8 @@
                     type="button"
                     class="renew-duration-option"
                     data-plan="1 Month"
-                    onclick="selectRenewDuration(this)">
+                    onclick="selectRenewFee(this, 30)"
+                >
 
                     <strong>1 Month</strong>
 
@@ -2559,37 +2562,40 @@ function formatTrainerPrice(price){
         );
 }
 
-function selectRenewFee(
-    button,
-    duration
-){
+function selectRenewFee(button, duration){
 
-    /* ================================================
-       REMOVE PREVIOUS SELECTION
-    ================================================ */
+    /* REMOVE PREVIOUS SELECTION */
 
     document
         .querySelectorAll(
-            ".renew-fee-card"
+            ".renew-duration-option"
         )
-        .forEach(
-            card => {
+        .forEach(function(card){
 
-                card.classList.remove(
-                    "selected"
-                );
+            card.classList.remove(
+                "selected"
+            );
 
-            }
-        );
+        });
 
 
-    /* ================================================
-       SELECT CURRENT RATE
-    ================================================ */
+    /* SELECT CURRENT RATE */
 
     button.classList.add(
         "selected"
     );
+
+
+    /* GET TRAINER RATE */
+
+    if(!renewTrainerRates){
+
+        console.error(
+            "Trainer rates are not loaded."
+        );
+
+        return;
+    }
 
 
     let selectedPlan = null;
@@ -2598,67 +2604,48 @@ function selectRenewFee(
     if(duration === 1){
 
         selectedPlan =
-            renewTrainerPlans.day;
+            renewTrainerRates["1 Day"];
 
     }
 
     else if(duration === 7){
 
         selectedPlan =
-            renewTrainerPlans.week;
+            renewTrainerRates["1 Week"];
 
     }
 
     else if(duration === 30){
 
         selectedPlan =
-            renewTrainerPlans.month;
+            renewTrainerRates["1 Month"];
 
     }
 
 
     if(
         !selectedPlan ||
-        !selectedPlan.id
+        !selectedPlan.plan_id
     ){
 
         console.error(
-            "Trainer rate not found."
+            "Selected trainer rate not found."
         );
 
         return;
     }
 
 
-    /* ================================================
-       SAVE SELECTED RATE
-    ================================================ */
+    /* SAVE SELECTED PLAN */
 
-    selectedRenewFee = {
-
-        planId:
-            selectedPlan.id,
-
-        duration:
-            duration,
-
-        price:
-            selectedPlan.price
-
-    };
+    selectedRenewPlan = selectedPlan;
 
 
-    /* ================================================
-       GET CURRENT TRAINER FEE END DATE
-    ================================================ */
-
-    const trainer =
-        window.renewCurrentTrainer;
-
+    /* GET CURRENT END DATE */
 
     if(
-        !trainer ||
-        !trainer.end_date
+        !currentTrainerData ||
+        !currentTrainerData.end_date
     ){
 
         console.error(
@@ -2669,20 +2656,12 @@ function selectRenewFee(
     }
 
 
-    /*
-        IMPORTANT:
-
-        Current end date:
-        Sep 25, 2026
-
-        New start:
-        Sep 26, 2026
-    */
-
     const currentEnd =
         new Date(
-            trainer.end_date +
-            "T00:00:00"
+            String(
+                currentTrainerData.end_date
+            ).split(" ")[0]
+            + "T00:00:00"
         );
 
 
@@ -2693,38 +2672,32 @@ function selectRenewFee(
     ){
 
         console.error(
-            "Invalid trainer end date:",
-            trainer.end_date
+            "Invalid current end date:",
+            currentTrainerData.end_date
         );
 
         return;
     }
 
 
-    /* ================================================
-       NEW START DATE
-    ================================================ */
+    /* NEW START = DAY AFTER CURRENT END */
 
     const newStart =
         new Date(
             currentEnd
         );
 
-
     newStart.setDate(
         newStart.getDate() + 1
     );
 
 
-    /* ================================================
-       NEW END DATE
-    ================================================ */
+    /* NEW END = BASED ON TRAINER RATE */
 
     const newEnd =
         new Date(
             newStart
         );
-
 
     newEnd.setDate(
         newEnd.getDate()
@@ -2735,38 +2708,31 @@ function selectRenewFee(
     );
 
 
-    /* ================================================
-       SHOW DATES
-    ================================================ */
+    /* DISPLAY DATES */
 
     document.getElementById(
-        "renewNewStartDate"
+        "renewStartDate"
     ).innerText =
-        formatRenewDateObject(
-            newStart
+        formatProgramDate(
+            getDateKey(newStart)
         );
 
 
     document.getElementById(
-        "renewNewEndDate"
+        "renewEndDate"
     ).innerText =
-        formatRenewDateObject(
-            newEnd
+        formatProgramDate(
+            getDateKey(newEnd)
         );
 
 
-    /* ================================================
-       ENABLE CONFIRM
-    ================================================ */
+    /* ENABLE CONFIRM */
 
     document.getElementById(
         "renewConfirmButton"
-    ).disabled =
-        false;
+    ).disabled = false;
 
 }
-
-
 
 async function confirmRenewTraining(){
 
