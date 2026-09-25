@@ -1516,7 +1516,7 @@ function getWorkoutForDate(
    GET STATUS
 ========================================================= */
 
-function getWorkoutStatus(workout){
+function getWorkoutStatus(workout, date){
 
     /*
     =====================================================
@@ -1536,7 +1536,7 @@ function getWorkoutStatus(workout){
 
     /*
     =====================================================
-    REST DAY
+    REST
     =====================================================
     */
 
@@ -1597,8 +1597,7 @@ function getWorkoutStatus(workout){
     /*
     =====================================================
     SCHEDULED
-    No remark yet.
-    Trainer must mark it first.
+    NO REMARK YET
     =====================================================
     */
 
@@ -1608,7 +1607,6 @@ function getWorkoutStatus(workout){
     };
 
 }
-
 
 /* =========================================================
    RENDER 7-DAY SCHEDULE
@@ -1721,7 +1719,8 @@ function renderTrainingSchedule(){
 
             const status =
                 getWorkoutStatus(
-                    workout
+                    workout,
+                    date
                 );
 
 
