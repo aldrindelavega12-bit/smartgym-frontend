@@ -295,15 +295,19 @@
                         <tr>
 
                             <th>
-                                Full Name
+                                Member
                             </th>
 
                             <th>
-                                Member ID
+                                Program
                             </th>
 
                             <th>
-                                Duration
+                                Plan / Split
+                            </th>
+
+                            <th>
+                                Training Period
                             </th>
 
                             <th>
@@ -311,7 +315,7 @@
                             </th>
 
                             <th>
-                                Date Requested
+                                Start Training
                             </th>
 
                             <th>
@@ -772,6 +776,10 @@ function renderRequests(
    CREATE REQUEST ROW
 ===================================================== */
 
+/* =====================================================
+   CREATE REQUEST ROW
+===================================================== */
+
 function createRequestRow(
     request
 ){
@@ -790,39 +798,38 @@ function createRequestRow(
         request.id;
 
 
-    const durationDays =
-        Number(
-            request.duration_days || 0
-        );
-
-
     const price =
         Number(
             request.price || 0
         );
 
 
-    const durationText =
-        getDurationText(
-            durationDays
-        );
+    /*
+    ========================================
+    TRAINER RATE
+    ========================================
+    */
+
+    const trainingPeriod =
+        request.trainer_rate_name ||
+        "-";
 
 
-    const durationClass =
-        getDurationClass(
-            durationDays
-        );
+    /*
+    ========================================
+    START TRAINING
+    ========================================
+    */
 
-
-    const requestedDate =
-        formatRequestDate(
-            request.created_at
+    const startTraining =
+        formatStartTrainingDate(
+            request.start_date
         );
 
 
     row.innerHTML = `
 
-        <!-- FULL NAME -->
+        <!-- MEMBER -->
 
         <td>
 
@@ -838,11 +845,23 @@ function createRequestRow(
                 <div>
 
                     <strong>
+
                         ${escapeHtml(
                             request.full_name ||
                             "Member"
                         )}
+
                     </strong>
+
+
+                    <small class="member-id-sub">
+
+                        ${escapeHtml(
+                            request.member_id ||
+                            "-"
+                        )}
+
+                    </small>
 
                 </div>
 
@@ -851,15 +870,14 @@ function createRequestRow(
         </td>
 
 
-
-        <!-- MEMBER ID -->
+        <!-- PROGRAM -->
 
         <td>
 
-            <strong class="member-id">
+            <strong class="program-name">
 
                 ${escapeHtml(
-                    request.member_id ||
+                    request.program_name ||
                     "-"
                 )}
 
@@ -868,22 +886,35 @@ function createRequestRow(
         </td>
 
 
-
-        <!-- DURATION -->
+        <!-- PLAN / SPLIT -->
 
         <td>
 
-            <span
-                class="duration-badge ${durationClass}">
+            <strong class="plan-name">
 
                 ${escapeHtml(
-                    durationText
+                    request.program_plan_name ||
+                    "-"
+                )}
+
+            </strong>
+
+        </td>
+
+
+        <!-- TRAINING PERIOD -->
+
+        <td>
+
+            <span class="duration-badge">
+
+                ${escapeHtml(
+                    trainingPeriod
                 )}
 
             </span>
 
         </td>
-
 
 
         <!-- PRICE -->
@@ -905,25 +936,21 @@ function createRequestRow(
         </td>
 
 
-
-        <!-- DATE REQUESTED -->
+        <!-- START TRAINING -->
 
         <td>
 
             <div class="date-info">
 
                 <strong>
-                    ${requestedDate.date}
-                </strong>
 
-                <small>
-                    ${requestedDate.time}
-                </small>
+                    ${startTraining}
+
+                </strong>
 
             </div>
 
         </td>
-
 
 
         <!-- ACTION -->
@@ -934,7 +961,8 @@ function createRequestRow(
 
                 <button
                     class="accept-btn"
-                    onclick="acceptRequest(this)">
+                    onclick="acceptRequest(this)"
+                >
 
                     <i class="fa-solid fa-check"></i>
 
@@ -945,7 +973,8 @@ function createRequestRow(
 
                 <button
                     class="reject-btn"
-                    onclick="rejectRequest(this)">
+                    onclick="rejectRequest(this)"
+                >
 
                     <i class="fa-solid fa-xmark"></i>
 
@@ -963,6 +992,47 @@ function createRequestRow(
     return row;
 
 }
+
+
+function formatStartTrainingDate(
+    value
+){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+
+    const date =
+        new Date(
+            value + "T00:00:00"
+        );
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return value;
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
+
 
 /* =====================================================
    DURATION TEXT

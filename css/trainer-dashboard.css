@@ -1542,70 +1542,6 @@ body {
 }
 
 
-.request-table-wrapper {
-
-    width: 100%;
-
-    overflow-x: auto;
-}
-
-
-.request-table {
-
-    width: 100%;
-
-    min-width: 950px;
-
-    border-collapse: collapse;
-
-    table-layout: fixed;
-}
-
-
-/* =========================================================
-   COLUMN WIDTHS
-========================================================= */
-
-.request-table th:nth-child(1),
-.request-table td:nth-child(1) {
-
-    width: 19%;
-}
-
-
-.request-table th:nth-child(2),
-.request-table td:nth-child(2) {
-
-    width: 15%;
-}
-
-
-.request-table th:nth-child(3),
-.request-table td:nth-child(3) {
-
-    width: 14%;
-}
-
-
-.request-table th:nth-child(4),
-.request-table td:nth-child(4) {
-
-    width: 13%;
-}
-
-
-.request-table th:nth-child(5),
-.request-table td:nth-child(5) {
-
-    width: 17%;
-}
-
-
-.request-table th:nth-child(6),
-.request-table td:nth-child(6) {
-
-    width: 23%;
-}
 
 
 /* =========================================================
@@ -1618,43 +1554,6 @@ body {
         #f1f8f4;
 }
 
-
-.request-table th {
-
-    height: 48px;
-
-    padding:
-        0 14px;
-
-    color:
-        #53625a;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    text-align: left;
-
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   TABLE ROW
-========================================================= */
-
-.request-table td {
-
-    height: 78px;
-
-    padding:
-        9px 14px;
-
-    border-top:
-        1px solid #edf1ee;
-
-    vertical-align: middle;
-}
 
 
 .request-table tbody tr {
@@ -1709,39 +1608,6 @@ body {
 }
 
 
-.member-info > div:last-child {
-
-    min-width: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 3px;
-}
-
-
-.member-info strong {
-
-    color:
-        var(--text);
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    line-height: 1.25;
-}
-
-
-.member-info small {
-
-    color:
-        var(--muted);
-
-    font-size: 11px;
-}
-
 
 /* =========================================================
    PLAN
@@ -1785,26 +1651,6 @@ body {
    DURATION
 ========================================================= */
 
-.duration-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-width: 65px;
-
-    padding:
-        7px 10px;
-
-    border-radius: 20px;
-
-    font-size: 10px;
-
-    font-weight: 700;
-}
-
 
 .duration-badge.green {
 
@@ -1836,22 +1682,6 @@ body {
 }
 
 
-/* =========================================================
-   PRICE
-========================================================= */
-
-.price {
-
-    color:
-        var(--text);
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-}
-
 
 /* =========================================================
    DATE
@@ -1867,17 +1697,6 @@ body {
 }
 
 
-.date-info strong {
-
-    color:
-        #4c5952;
-
-    font-size: 11px;
-
-    font-weight: 500;
-
-    white-space: nowrap;
-}
 
 
 .date-info small {
@@ -1893,13 +1712,352 @@ body {
    ACTION BUTTONS
 ========================================================= */
 
+
+
+
+
+
+
+
+
+.accept-btn:hover {
+
+    background:
+        var(--green-dark);
+
+    border-color:
+        var(--green-dark);
+}
+
+
+
+
+
+.reject-btn:hover {
+
+    background:
+        #ffecec;
+
+    border-color:
+        #e87979;
+}
+
+
+/* =========================================================
+   CLIENT REQUESTS — COMPACT TABLE
+========================================================= */
+
+.request-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: hidden;
+}
+
+
+.request-table {
+
+    width: 100%;
+
+    min-width: 0;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+/* =========================================================
+   COLUMN WIDTHS
+========================================================= */
+
+.request-table th:nth-child(1),
+.request-table td:nth-child(1) {
+
+    width: 20%;
+}
+
+
+.request-table th:nth-child(2),
+.request-table td:nth-child(2) {
+
+    width: 16%;
+}
+
+
+.request-table th:nth-child(3),
+.request-table td:nth-child(3) {
+
+    width: 15%;
+}
+
+
+.request-table th:nth-child(4),
+.request-table td:nth-child(4) {
+
+    width: 13%;
+}
+
+
+.request-table th:nth-child(5),
+.request-table td:nth-child(5) {
+
+    width: 10%;
+}
+
+
+.request-table th:nth-child(6),
+.request-table td:nth-child(6) {
+
+    width: 12%;
+}
+
+
+.request-table th:nth-child(7),
+.request-table td:nth-child(7) {
+
+    width: 14%;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.request-table th {
+
+    height: 46px;
+
+    padding:
+        0 12px;
+
+    color:
+        #53625a;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ROW
+========================================================= */
+
+.request-table td {
+
+    height: 78px;
+
+    padding:
+        8px 12px;
+
+    border-top:
+        1px solid #edf1ee;
+
+    vertical-align: middle;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   MEMBER
+========================================================= */
+
+.member-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 0;
+}
+
+
+.member-avatar {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+
+    font-size: 15px;
+}
+
+
+.member-info > div:last-child {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.member-info strong {
+
+    color:
+        var(--text);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.member-info small {
+
+    color:
+        var(--muted);
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PROGRAM / PLAN
+========================================================= */
+
+.program-name,
+.plan-name {
+
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   TRAINING PERIOD
+========================================================= */
+
+.duration-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 58px;
+
+    padding:
+        6px 8px;
+
+    border-radius: 8px;
+
+    background:
+        #e8f7ee;
+
+    color:
+        #087c3d;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.price {
+
+    color:
+        var(--text);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   START TRAINING
+========================================================= */
+
+.date-info {
+
+    display: block;
+
+    white-space: nowrap;
+}
+
+
+.date-info strong {
+
+    color:
+        #4c5952;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
 .action-buttons {
 
     display: flex;
 
     align-items: center;
 
-    gap: 7px;
+    gap: 5px;
 
     white-space: nowrap;
 }
@@ -1908,25 +2066,22 @@ body {
 .accept-btn,
 .reject-btn {
 
-    height: 34px;
+    height: 30px;
 
     padding:
-        0 11px;
+        0 8px;
 
-    border-radius: 7px;
+    border-radius: 6px;
 
     font-family:
         "Inter",
         sans-serif;
 
-    font-size: 11px;
+    font-size: 9px;
 
     font-weight: 700;
 
     cursor: pointer;
-
-    transition:
-        .2s ease;
 
     white-space: nowrap;
 }
@@ -1945,16 +2100,6 @@ body {
 }
 
 
-.accept-btn:hover {
-
-    background:
-        var(--green-dark);
-
-    border-color:
-        var(--green-dark);
-}
-
-
 .reject-btn {
 
     border:
@@ -1968,25 +2113,13 @@ body {
 }
 
 
-.reject-btn:hover {
-
-    background:
-        #ffecec;
-
-    border-color:
-        #e87979;
-}
-
-
 .accept-btn i,
 .reject-btn i {
 
-    margin-right: 4px;
+    margin-right: 3px;
 
-    font-size: 10px;
+    font-size: 8px;
 }
-
-
 /* =========================================================
    REQUEST FOOTER
 ========================================================= */
@@ -2184,11 +2317,12 @@ body {
     }
 
 
-    .request-table {
+   .request-table {
 
-        min-width: 950px;
+        min-width: 0;
+
+        width: 100%;
     }
-
 }
 
 
