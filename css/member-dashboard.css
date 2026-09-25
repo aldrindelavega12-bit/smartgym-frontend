@@ -5563,3 +5563,9 @@ textarea {
     }
 
 }
+
+.program-action.renew:disabled{
+    opacity:0.55;
+    cursor:not-allowed;
+    pointer-events:none;
+}

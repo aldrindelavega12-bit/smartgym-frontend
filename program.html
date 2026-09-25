@@ -1153,6 +1153,63 @@ async function loadCurrentProgram(){
 
         currentTrainerData = current;
 
+        const renewButton =
+            document.querySelector(
+                ".program-action.renew"
+            );
+
+        if(renewButton){
+
+            const isActive =
+                String(
+                    current.status || ""
+                ).toLowerCase() === "active";
+
+
+            const currentEndDate =
+                new Date(
+                    String(
+                        current.end_date
+                    ).split(" ")[0] +
+                    "T00:00:00"
+                );
+
+
+            const today =
+                new Date();
+
+            today.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+
+            const trainingStillActive =
+                isActive &&
+                currentEndDate >= today;
+
+
+            renewButton.disabled =
+                trainingStillActive;
+
+
+            if(trainingStillActive){
+
+                renewButton.title =
+                    "You can renew after your current training ends.";
+
+            }
+            else{
+
+                renewButton.title =
+                    "Renew your training.";
+
+            }
+
+        }
+
 
         /*
         PROGRAM
