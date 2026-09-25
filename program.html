@@ -2476,6 +2476,31 @@ function closeRenewTraining(){
 
 }
 
+function formatTrainerPrice(price){
+
+    if(
+        price === null ||
+        price === undefined ||
+        price === ""
+    ){
+        return "₱0.00";
+    }
+
+    const amount = Number(price);
+
+    if(isNaN(amount)){
+        return "₱0.00";
+    }
+
+    return "₱" +
+        amount.toLocaleString(
+            "en-PH",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+}
 
 function selectRenewDuration(button){
 
