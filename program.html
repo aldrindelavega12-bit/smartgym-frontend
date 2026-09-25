@@ -674,8 +674,8 @@
 
         <div class="renew-modal-header">
             <div>
-                <h2>Renew Training</h2>
-                <p>Choose your new training duration.</p>
+                <h2>Renew Trainer Fee</h2>
+                <p>Choose a trainer rate for your renewal.</p>
             </div>
 
             <button
@@ -710,7 +710,7 @@
         <div class="renew-duration-section">
 
             <span class="renew-section-label">
-                Training Duration
+                Trainer Rate
             </span>
 
             <div class="renew-duration-options">
@@ -722,7 +722,12 @@
                     onclick="selectRenewDuration(this)">
 
                     <strong>1 Day</strong>
-                    <span>1 day training</span>
+
+                    <span
+                        class="renew-rate-price"
+                        id="renewPriceDay">
+                        Loading...
+                    </span>
 
                 </button>
 
@@ -734,7 +739,12 @@
                     onclick="selectRenewDuration(this)">
 
                     <strong>1 Week</strong>
-                    <span>7 days training</span>
+
+                    <span
+                        class="renew-rate-price"
+                        id="renewPriceWeek">
+                        Loading...
+                    </span>
 
                 </button>
 
@@ -746,7 +756,12 @@
                     onclick="selectRenewDuration(this)">
 
                     <strong>1 Month</strong>
-                    <span>30 days training</span>
+
+                    <span
+                        class="renew-rate-price"
+                        id="renewPriceMonth">
+                        Loading...
+                    </span>
 
                 </button>
 
