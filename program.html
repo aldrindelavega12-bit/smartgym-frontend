@@ -2559,150 +2559,193 @@ function formatTrainerPrice(price){
         );
 }
 
-function selectRenewDuration(button){
-
-    /*
-        REMOVE PREVIOUS SELECTION
-    */
+function selectRenewFee(
+    button,
+    duration
+){
 
     document
         .querySelectorAll(
-            ".renew-duration-option"
+            ".renew-fee-card"
         )
-        .forEach(function(item){
+        .forEach(
+            card => {
 
-            item.classList.remove(
-                "selected"
-            );
+                card.classList.remove(
+                    "selected"
+                );
 
-        });
+            }
+        );
 
-
-    /*
-        SELECT CURRENT OPTION
-    */
 
     button.classList.add(
         "selected"
     );
 
 
-    selectedRenewPlan =
-        button.dataset.plan;
+    let selectedPlan;
 
 
-    /*
-        GET CURRENT END DATE
-    */
+    if(duration === 1){
 
-    const currentEndDateValue =
-        currentTrainerData.end_date;
+        selectedPlan =
+            renewTrainerPlans.day;
+
+    }
+    else if(duration === 7){
+
+        selectedPlan =
+            renewTrainerPlans.week;
+
+    }
+    else if(duration === 30){
+
+        selectedPlan =
+            renewTrainerPlans.month;
+
+    }
 
 
-    if(!currentEndDateValue){
+    if(
+        !selectedPlan ||
+        !selectedPlan.id
+    ){
 
         return;
     }
 
 
-    const currentEndDate =
-        new Date(
-            String(
-                currentEndDateValue
-            ).split(" ")[0] +
-            "T00:00:00"
-        );
+    selectedRenewFee = {
+
+        planId:
+            selectedPlan.id,
+
+        duration:
+            duration,
+
+        price:
+            selectedPlan.price
+
+    };
 
 
-    /*
-        NEW START DATE
-        = CURRENT END DATE + 1 DAY
-    */
+    /* =================================================
+       GET CURRENT VALID UNTIL
+       DIRECTLY FROM CURRENT PROGRAM
+    ================================================= */
 
-    const newStartDate =
-        new Date(
-            currentEndDate
-        );
-
-
-    newStartDate.setDate(
-        newStartDate.getDate() + 1
-    );
-
-
-    /*
-        DURATION
-    */
-
-    let durationDays = 1;
+    const currentEndText =
+        document.getElementById(
+            "programEndDate"
+        ).innerText.trim();
 
 
     if(
-        selectedRenewPlan === "1 Week"
+        !currentEndText ||
+        currentEndText === "-"
     ){
 
-        durationDays = 7;
-
-    }
-    else if(
-        selectedRenewPlan === "1 Month"
-    ){
-
-        durationDays = 30;
-
+        return;
     }
 
 
     /*
-        NEW END DATE
+    Example:
+    Sep 25, 2026
     */
 
-    const newEndDate =
+    const currentEnd =
         new Date(
-            newStartDate
+            currentEndText
         );
 
 
-    newEndDate.setDate(
-        newEndDate.getDate() +
-        durationDays -
+    if(
+        isNaN(
+            currentEnd.getTime()
+        )
+    ){
+
+        console.error(
+            "Invalid current end date:",
+            currentEndText
+        );
+
+        return;
+    }
+
+
+    currentEnd.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    /* =================================================
+       NEW START
+       DAY AFTER CURRENT END
+    ================================================= */
+
+    const newStart =
+        new Date(
+            currentEnd
+        );
+
+
+    newStart.setDate(
+        newStart.getDate() + 1
+    );
+
+
+    /* =================================================
+       NEW END
+    ================================================= */
+
+    const newEnd =
+        new Date(
+            newStart
+        );
+
+
+    newEnd.setDate(
+        newEnd.getDate()
+        +
+        duration
+        -
         1
     );
 
 
-    /*
-        DISPLAY DATES
-    */
+    /* =================================================
+       DISPLAY
+    ================================================= */
 
     document.getElementById(
-        "renewStartDate"
+        "renewNewStartDate"
     ).innerText =
-        formatProgramDate(
-            getDateKey(
-                newStartDate
-            )
+        formatRenewDateObject(
+            newStart
         );
 
 
     document.getElementById(
-        "renewEndDate"
+        "renewNewEndDate"
     ).innerText =
-        formatProgramDate(
-            getDateKey(
-                newEndDate
-            )
+        formatRenewDateObject(
+            newEnd
         );
 
-
-    /*
-        ENABLE CONFIRM
-    */
 
     document.getElementById(
         "renewConfirmButton"
-    ).disabled = false;
+    ).disabled =
+        false;
 
 }
+
 
 
 async function confirmRenewTraining(){
