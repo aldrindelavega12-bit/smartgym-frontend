@@ -4300,3 +4300,1000 @@ textarea {
         flex-wrap: wrap;
     }
 }
+
+/* =========================================================
+   SMART GYM
+   MEMBER — MY PROGRAM
+   PROGRAM CONTENT ONLY
+   ========================================================= */
+
+
+/* =========================================================
+   MAIN PROGRAM PAGE
+   ========================================================= */
+
+.member-program-page {
+    width: 100%;
+    box-sizing: border-box;
+    color: #17231e;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.member-program-page .program-page-header {
+    margin: 0 0 20px;
+}
+
+.member-program-page .program-page-header h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.7px;
+}
+
+.member-program-page .program-page-header p {
+    margin: 5px 0 0;
+    color: #53657d;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   CURRENT PROGRAM CARD
+   ========================================================= */
+
+.member-program-page .current-program-card {
+    width: 100%;
+    min-height: 178px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe9e4;
+    border-radius: 15px;
+
+    padding: 23px 32px;
+
+    margin-bottom: 16px;
+
+    box-shadow: 0 5px 18px rgba(20, 55, 40, 0.045);
+}
+
+
+.member-program-page .program-main-info {
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   CURRENT PROGRAM TITLE
+   ========================================================= */
+
+.member-program-page .current-program-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 5px;
+}
+
+
+.member-program-page .program-label {
+    color: #17231e;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+.member-program-page .program-active {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 12px;
+
+    border-radius: 20px;
+
+    background: #dff6e9;
+    color: #078746;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PROGRAM NAME
+   ========================================================= */
+
+.member-program-page .program-main-info h2 {
+    margin: 0;
+
+    color: #078746;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    line-height: 1.15;
+    letter-spacing: -0.6px;
+}
+
+
+.member-program-page .program-main-info h3 {
+    margin: 5px 0 19px;
+
+    color: #53657d;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   PROGRAM DETAILS
+   ========================================================= */
+
+.member-program-page .program-details {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.member-program-page .program-detail {
+    position: relative;
+
+    min-width: 225px;
+
+    padding: 0 28px;
+
+    border-left: 1px solid #dce6e1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+.member-program-page .program-detail:first-child {
+    padding-left: 58px;
+    border-left: none;
+}
+
+
+/* TRAINER ICON */
+
+.member-program-page .program-detail:first-child::before {
+    content: "\f007";
+
+    position: absolute;
+
+    left: 8px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+
+    color: #111827;
+
+    font-size: 24px;
+}
+
+
+/* LABEL */
+
+.member-program-page .program-detail span {
+    display: block;
+
+    margin: 0 0 5px;
+
+    color: #53657d;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    line-height: 1.2;
+}
+
+
+/* VALUE */
+
+.member-program-page .program-detail strong {
+    display: block;
+
+    margin: 0;
+
+    color: #101820;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+
+
+/* =========================================================
+   PROGRAM ACTIONS
+   ========================================================= */
+
+.member-program-page .program-actions {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-bottom: 16px;
+}
+
+
+.member-program-page .program-action {
+    min-height: 104px;
+
+    box-sizing: border-box;
+
+    border-radius: 13px;
+
+    padding: 17px 18px 17px 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        background .15s ease;
+}
+
+
+.member-program-page .program-action:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 14px rgba(20, 55, 40, 0.07);
+}
+
+
+.member-program-page .program-action:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RENEW
+   ========================================================= */
+
+.member-program-page .program-action.renew {
+    border: 1px solid #ccecdf;
+
+    background: #eefaf4;
+    color: #087c48;
+}
+
+
+.member-program-page .program-action.renew strong {
+    color: #087c48;
+}
+
+
+/* =========================================================
+   CHANGE TRAINER
+   ========================================================= */
+
+.member-program-page .program-action.change-trainer {
+    border: 1px solid #cfe5fa;
+
+    background: #f0f8ff;
+    color: #0870e8;
+}
+
+
+.member-program-page .program-action.change-trainer strong {
+    color: #0870e8;
+}
+
+
+/* =========================================================
+   CHANGE PROGRAM
+   ========================================================= */
+
+.member-program-page .program-action.change-program {
+    border: 1px solid #f5d6d6;
+
+    background: #fff4f4;
+    color: #e22d2d;
+}
+
+
+.member-program-page .program-action.change-program strong {
+    color: #e22d2d;
+}
+
+
+/* =========================================================
+   ACTION CONTENT
+   ========================================================= */
+
+.member-program-page .action-content {
+    min-width: 0;
+    padding-right: 15px;
+}
+
+
+.member-program-page .action-content strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.member-program-page .action-content span {
+    display: block;
+
+    max-width: 310px;
+
+    font-size: 12px;
+    line-height: 1.45;
+
+    color: inherit;
+}
+
+
+.member-program-page .action-arrow {
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   TRAINING SCHEDULE CARD
+   ========================================================= */
+
+.member-program-page .training-schedule-card {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe9e4;
+    border-radius: 15px;
+
+    padding: 18px 20px 17px;
+
+    box-shadow:
+        0 5px 18px rgba(20, 55, 40, 0.045);
+}
+
+
+/* =========================================================
+   SCHEDULE HEADER
+   ========================================================= */
+
+.member-program-page .training-schedule-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+
+.member-program-page .schedule-heading h3 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.member-program-page .schedule-heading p {
+    margin: 4px 0 0;
+
+    color: #53657d;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   DATE NAVIGATION
+   ========================================================= */
+
+.member-program-page .schedule-navigation {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.member-program-page .schedule-arrow {
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #f2f6f4;
+
+    color: #17231e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+
+.member-program-page .schedule-arrow:hover {
+    background: #e7f5ed;
+    color: #078746;
+}
+
+
+/* =========================================================
+   DATE BUTTON
+   ========================================================= */
+
+.member-program-page .schedule-date-button {
+    height: 40px;
+
+    min-width: 265px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dce5e1;
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 11px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    box-shadow:
+        0 2px 5px rgba(20, 55, 40, 0.025);
+}
+
+
+.member-program-page .schedule-date-button:hover {
+    border-color: #bcd9ca;
+    background: #fbfdfc;
+}
+
+
+.member-program-page .schedule-date-button > i:first-child {
+    color: #17231e;
+    font-size: 15px;
+}
+
+
+.member-program-page .schedule-date-button strong {
+    min-width: 175px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+
+.member-program-page .schedule-date-button > i:last-child {
+    color: #17231e;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   HIDDEN DATE PICKER
+   ========================================================= */
+
+.member-program-page #scheduleDatePicker {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   7-DAY TRAINING CONTAINER
+   ========================================================= */
+
+.member-program-page .training-days {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    border: 1px solid #e0e9e5;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   INDIVIDUAL DAY
+   ========================================================= */
+
+.member-program-page .training-day {
+    min-width: 0;
+
+    min-height: 166px;
+
+    box-sizing: border-box;
+
+    border-right: 1px solid #e2ebe7;
+
+    background: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.member-program-page .training-day:last-child {
+    border-right: none;
+}
+
+
+/* =========================================================
+   DAY HEADER
+   ========================================================= */
+
+.member-program-page .schedule-day-header {
+    height: 68px;
+
+    box-sizing: border-box;
+
+    padding: 12px 8px 8px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #f5f9fb;
+
+    text-align: center;
+}
+
+
+.member-program-page .schedule-day-header strong {
+    color: #101820;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.member-program-page .schedule-day-header span {
+    margin-top: 6px;
+
+    color: #53657d;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   FIRST / SELECTED DAY
+   ========================================================= */
+
+.member-program-page .training-day:first-child {
+    background: #f7fcf9;
+
+    box-shadow:
+        inset 0 0 0 1px #d5f0e1;
+}
+
+
+.member-program-page .training-day:first-child
+.schedule-day-header {
+    background: #eaf9f1;
+}
+
+
+.member-program-page .training-day:first-child
+.schedule-day-header strong {
+    color: #078746;
+}
+
+
+.member-program-page .training-day:first-child
+.schedule-day-header span {
+    color: #078746;
+}
+
+
+/* =========================================================
+   WORKOUT
+   ========================================================= */
+
+.member-program-page .schedule-workout {
+    min-height: 55px;
+
+    padding: 13px 8px 7px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #17202a;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.member-program-page .day-status {
+    width: calc(100% - 18px);
+
+    min-height: 34px;
+
+    margin: 0 auto 10px;
+
+    box-sizing: border-box;
+
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   COMPLETED
+   ========================================================= */
+
+.member-program-page .day-status.completed {
+    background: #d9f5e5;
+    color: #087c48;
+}
+
+
+/* =========================================================
+   MISSED
+   ========================================================= */
+
+.member-program-page .day-status.missed {
+    background: #ffe0e2;
+    color: #ef4050;
+}
+
+
+/* =========================================================
+   UPCOMING
+   ========================================================= */
+
+.member-program-page .day-status.upcoming {
+    background: #dceeff;
+    color: #0875e8;
+}
+
+
+/* =========================================================
+   REST
+   ========================================================= */
+
+.member-program-page .day-status.rest {
+    background: #edf0f1;
+    color: #68788d;
+}
+
+
+/* =========================================================
+   REST DAY
+   ========================================================= */
+
+.member-program-page .training-day.rest {
+    background: #fcfdfd;
+}
+
+
+.member-program-page .training-day.rest
+.schedule-day-header {
+    background: #f7f9f9;
+}
+
+
+.member-program-page .training-day.rest
+.schedule-workout {
+    color: #3d4954;
+}
+
+
+/* =========================================================
+   SCHEDULE LEGEND
+   ========================================================= */
+
+.member-program-page .schedule-legend {
+    display: flex;
+    align-items: center;
+
+    gap: 21px;
+
+    margin-top: 15px;
+}
+
+
+.member-program-page .legend-item {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #53657d;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+.member-program-page .legend-dot {
+    width: 13px;
+    height: 13px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+
+.member-program-page .legend-dot.completed {
+    background: #10a866;
+}
+
+
+.member-program-page .legend-dot.missed {
+    background: #ff4b5c;
+}
+
+
+.member-program-page .legend-dot.upcoming {
+    background: #8fc5ff;
+}
+
+
+.member-program-page .legend-dot.rest {
+    background: #dfe5e8;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1250px) {
+
+    .member-program-page .program-actions {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .member-program-page .program-action {
+        padding-left: 18px;
+        padding-right: 14px;
+    }
+
+    .member-program-page .action-content span {
+        font-size: 11px;
+    }
+
+    .member-program-page .program-detail {
+        min-width: 190px;
+    }
+
+}
+
+
+@media (max-width: 1050px) {
+
+    .member-program-page .program-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .member-program-page .program-action {
+        min-height: 88px;
+    }
+
+    .member-program-page .training-days {
+        overflow-x: auto;
+        grid-template-columns:
+            repeat(7, minmax(125px, 1fr));
+    }
+
+    .member-program-page .training-schedule-card {
+        overflow: hidden;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .member-program-page .current-program-card {
+        padding: 20px;
+    }
+
+    .member-program-page .program-details {
+        flex-wrap: wrap;
+        gap: 15px 0;
+    }
+
+    .member-program-page .program-detail {
+        min-width: 50%;
+    }
+
+    .member-program-page .program-detail:nth-child(3) {
+        border-left: none;
+        padding-left: 0;
+    }
+
+    .member-program-page .training-schedule-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .member-program-page .schedule-navigation {
+        width: 100%;
+    }
+
+    .member-program-page .schedule-date-button {
+        flex: 1;
+        min-width: 0;
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .member-program-page .program-page-header h1 {
+        font-size: 26px;
+    }
+
+    .member-program-page .program-main-info h2 {
+        font-size: 26px;
+    }
+
+    .member-program-page .program-main-info h3 {
+        font-size: 17px;
+    }
+
+    .member-program-page .program-details {
+        flex-direction: column;
+    }
+
+    .member-program-page .program-detail {
+        width: 100%;
+        min-width: 0;
+
+        padding: 0;
+
+        border-left: none;
+    }
+
+    .member-program-page .schedule-navigation {
+        gap: 6px;
+    }
+
+    .member-program-page .schedule-arrow {
+        width: 36px;
+        height: 36px;
+    }
+
+    .member-program-page .schedule-date-button {
+        height: 36px;
+        padding: 0 8px;
+    }
+
+    .member-program-page .schedule-date-button strong {
+        min-width: 0;
+        font-size: 11px;
+    }
+
+    .member-program-page .schedule-legend {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+}
