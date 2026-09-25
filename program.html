@@ -11,18 +11,22 @@
 
     <title>My Program - Smart Gym</title>
 
+
     <!-- EXISTING MEMBER DASHBOARD CSS -->
     <link
         rel="stylesheet"
         href="css/member-dashboard.css">
-        <link
+
+    <link
         rel="stylesheet"
         href="css/get-program.css">
+
 
     <!-- FONT AWESOME -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 
     <!-- INTER FONT -->
     <link
@@ -61,6 +65,7 @@
 
         </div>
 
+
         <div class="brand-text">
 
             <strong>
@@ -80,6 +85,7 @@
     <!-- MENU -->
 
     <div class="menu">
+
 
         <a href="member.html">
             Home
@@ -114,29 +120,6 @@
             Membership
         </a>
 
-    </div>
-
-
-
-    <!-- SIDEBAR BOTTOM -->
-
-    <div class="sidebar-message">
-
-        <div class="sidebar-message-icon">
-
-            <i class="fa-solid fa-heart-pulse"></i>
-
-        </div>
-
-        <h3>
-            Stay Consistent
-        </h3>
-
-        <p>
-            Follow your training program and stay committed to your goals.
-        </p>
-
-        <div class="message-line"></div>
 
     </div>
 
@@ -183,7 +166,7 @@
                     <div class="user-info">
 
                         <strong id="profile-name">
-                            Aldrin
+                            Member
                         </strong>
 
                         <small>
@@ -227,6 +210,7 @@
 
                         </button>
 
+
                     </div>
 
                 </div>
@@ -248,17 +232,21 @@
 
             <!-- =================================================
                  PAGE HEADER
-            ================================================= -->
+            ================================================== -->
 
             <div class="program-page-header">
+
 
                 <h1>
                     My Program
                 </h1>
 
+
                 <p>
-                    View your current training program, weekly schedule, and progress.
+                    View your current training program,
+                    weekly schedule, and progress.
                 </p>
+
 
             </div>
 
@@ -266,7 +254,7 @@
 
             <!-- =================================================
                  CURRENT PROGRAM
-            ================================================= -->
+            ================================================== -->
 
             <div class="current-program-card">
 
@@ -278,6 +266,7 @@
 
                     <div class="current-program-title">
 
+
                         <span class="program-label">
                             Current Program
                         </span>
@@ -287,6 +276,7 @@
                             Active
                         </span>
 
+
                     </div>
 
 
@@ -294,7 +284,7 @@
                     <!-- PROGRAM NAME -->
 
                     <h2 id="currentProgramName">
-                        General Fitness
+                        Loading...
                     </h2>
 
 
@@ -302,7 +292,7 @@
                     <!-- PROGRAM PLAN -->
 
                     <h3 id="currentProgramPlan">
-                        Bro Split
+                        Loading...
                     </h3>
 
 
@@ -320,8 +310,9 @@
                                 Trainer
                             </span>
 
+
                             <strong id="currentTrainerName">
-                                Mark Santos
+                                Loading...
                             </strong>
 
                         </div>
@@ -336,8 +327,9 @@
                                 Started
                             </span>
 
+
                             <strong id="programStartDate">
-                                Sep 25, 2026
+                                Loading...
                             </strong>
 
                         </div>
@@ -352,11 +344,13 @@
                                 Valid Until
                             </span>
 
+
                             <strong id="programEndDate">
-                                Oct 22, 2026
+                                Loading...
                             </strong>
 
                         </div>
+
 
                     </div>
 
@@ -373,9 +367,7 @@
             <div class="program-actions">
 
 
-                <!-- =================================================
-                     RENEW TRAINING
-                ================================================== -->
+                <!-- RENEW TRAINING -->
 
                 <button
                     type="button"
@@ -385,14 +377,17 @@
 
                     <div class="action-content">
 
+
                         <strong>
                             Renew Training
                         </strong>
+
 
                         <span>
                             Extend your current training period
                             with the same program and trainer.
                         </span>
+
 
                     </div>
 
@@ -403,13 +398,12 @@
 
                     </span>
 
+
                 </button>
 
 
 
-                <!-- =================================================
-                     CHANGE TRAINER
-                ================================================== -->
+                <!-- CHANGE TRAINER -->
 
                 <button
                     type="button"
@@ -419,14 +413,17 @@
 
                     <div class="action-content">
 
+
                         <strong>
                             Change Trainer
                         </strong>
+
 
                         <span>
                             Keep your current program and split,
                             but select a different trainer.
                         </span>
+
 
                     </div>
 
@@ -437,13 +434,12 @@
 
                     </span>
 
+
                 </button>
 
 
 
-                <!-- =================================================
-                     CHANGE PROGRAM
-                ================================================== -->
+                <!-- CHANGE PROGRAM -->
 
                 <button
                     type="button"
@@ -453,14 +449,17 @@
 
                     <div class="action-content">
 
+
                         <strong>
                             Change Program
                         </strong>
+
 
                         <span>
                             Choose a new program, split, and trainer.
                             Your current program will be removed.
                         </span>
+
 
                     </div>
 
@@ -471,7 +470,9 @@
 
                     </span>
 
+
                 </button>
+
 
             </div>
 
@@ -484,35 +485,35 @@
             <div class="program-card training-schedule-card">
 
 
-                <!-- =================================================
-                     SCHEDULE HEADER
-                ================================================= -->
+                <!-- SCHEDULE HEADER -->
 
                 <div class="training-schedule-header">
 
 
                     <div class="schedule-heading">
 
+
                         <h3>
                             Training Schedule
                         </h3>
 
+
                         <p>
-                            Your 7-day training schedule starting from the selected date.
+                            Your 7-day training schedule starting
+                            from the selected date.
                         </p>
+
 
                     </div>
 
 
 
-                    <!-- =================================================
-                         DATE NAVIGATION
-                    ================================================= -->
+                    <!-- DATE NAVIGATION -->
 
                     <div class="schedule-navigation">
 
 
-                        <!-- PREVIOUS -->
+                        <!-- PREVIOUS DAY -->
 
                         <button
                             type="button"
@@ -525,7 +526,7 @@
 
 
 
-                        <!-- DATE -->
+                        <!-- SELECTED DATE -->
 
                         <button
                             type="button"
@@ -537,17 +538,18 @@
 
 
                             <strong id="scheduleDateLabel">
-                                September 25, 2026
+                                Loading...
                             </strong>
 
 
                             <i class="fa-solid fa-chevron-down"></i>
 
+
                         </button>
 
 
 
-                        <!-- NEXT -->
+                        <!-- NEXT DAY -->
 
                         <button
                             type="button"
@@ -565,8 +567,8 @@
                         <input
                             type="date"
                             id="scheduleDatePicker"
-                            value="2026-09-25"
                             onchange="changeScheduleDate(this.value)">
+
 
                     </div>
 
@@ -599,7 +601,9 @@
 
                     <div class="legend-item">
 
-                        <span class="legend-dot completed"></span>
+                        <span
+                            class="legend-dot completed">
+                        </span>
 
                         <span>
                             Completed
@@ -613,7 +617,9 @@
 
                     <div class="legend-item">
 
-                        <span class="legend-dot missed"></span>
+                        <span
+                            class="legend-dot missed">
+                        </span>
 
                         <span>
                             Missed
@@ -627,7 +633,9 @@
 
                     <div class="legend-item">
 
-                        <span class="legend-dot upcoming"></span>
+                        <span
+                            class="legend-dot upcoming">
+                        </span>
 
                         <span>
                             Upcoming
@@ -641,7 +649,9 @@
 
                     <div class="legend-item">
 
-                        <span class="legend-dot rest"></span>
+                        <span
+                            class="legend-dot rest">
+                        </span>
 
                         <span>
                             Rest
@@ -649,13 +659,18 @@
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
+
         </section>
 
+
     </main>
+
 
 </div>
 
@@ -669,7 +684,16 @@
 
 
 /* =========================================================
-   MEMBER PROFILE
+   API
+========================================================= */
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+
+/* =========================================================
+   USER
 ========================================================= */
 
 const user =
@@ -677,6 +701,38 @@ const user =
         localStorage.getItem("user")
     );
 
+
+
+/* =========================================================
+   WORKOUT DATA
+========================================================= */
+
+let workoutSchedule = {};
+
+
+
+/* =========================================================
+   SELECTED SCHEDULE DATE
+
+   Starts at TODAY.
+========================================================= */
+
+let selectedScheduleDate =
+    new Date();
+
+
+selectedScheduleDate.setHours(
+    0,
+    0,
+    0,
+    0
+);
+
+
+
+/* =========================================================
+   MEMBER PROFILE
+========================================================= */
 
 if(user){
 
@@ -807,85 +863,460 @@ function logout(){
 
 
 /* =========================================================
-   PROGRAM DATA
+   FORMAT PROGRAM DATE
 ========================================================= */
 
-const programData = {
+function formatProgramDate(
+    dateString
+){
 
-    program:
-        "General Fitness",
+    if(!dateString){
 
-    plan:
-        "Bro Split",
+        return "-";
 
-    trainer:
-        "Mark Santos",
-
-    startDate:
-        "Sep 25, 2026",
-
-    endDate:
-        "Oct 22, 2026"
-
-};
-
-
-
-/* =========================================================
-   TRAINING SCHEDULE DATA
-========================================================= */
-
-const trainingSchedule = {
-
-    0: {
-        name: "Rest Day",
-        status: "rest"
-    },
-
-    1: {
-        name: "Legs",
-        status: "upcoming"
-    },
-
-    2: {
-        name: "Shoulders & Abs",
-        status: "upcoming"
-    },
-
-    3: {
-        name: "Arms (Biceps & Triceps)",
-        status: "upcoming"
-    },
-
-    4: {
-        name: "Cardio",
-        status: "upcoming"
-    },
-
-    5: {
-        name: "Chest & Triceps",
-        status: "completed"
-    },
-
-    6: {
-        name: "Back & Biceps",
-        status: "upcoming"
     }
 
-};
+
+    /*
+       Supports:
+
+       YYYY-MM-DD
+       YYYY-MM-DD HH:MM:SS
+    */
+
+    const value =
+        String(
+            dateString
+        ).split(
+            " "
+        )[0];
+
+
+    const parts =
+        value.split(
+            "-"
+        );
+
+
+    if(parts.length !== 3){
+
+        return dateString;
+
+    }
+
+
+    const date =
+        new Date(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+        );
+
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+
+        return dateString;
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
 
 
 
 /* =========================================================
-   SELECTED SCHEDULE DATE
+   LOAD CURRENT PROGRAM
 ========================================================= */
 
-let selectedScheduleDate =
-    new Date(
-        2026,
-        8,
-        25
+async function loadCurrentProgram(){
+
+    const memberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+
+    console.log(
+        "CURRENT PROGRAM MEMBER ID:",
+        memberId
     );
+
+
+    if(!memberId){
+
+        console.error(
+            "MEMBER ID NOT FOUND"
+        );
+
+        setCurrentProgramEmpty();
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/trainer-status/${memberId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "CURRENT PROGRAM RESPONSE:",
+            result
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+
+        /*
+        =====================================================
+        NO ACTIVE PROGRAM
+        =====================================================
+        */
+
+        if(
+            result.has_trainer === false ||
+            !result.trainer
+        ){
+
+            setCurrentProgramEmpty();
+
+            return;
+
+        }
+
+
+
+        /*
+        =====================================================
+        CURRENT PROGRAM
+        =====================================================
+        */
+
+        const current =
+            result.trainer;
+
+
+
+        /*
+        PROGRAM
+        */
+
+        document.getElementById(
+            "currentProgramName"
+        ).innerText =
+            current.program_name ||
+            "-";
+
+
+
+        /*
+        PLAN / SPLIT
+
+        Supports both possible API names.
+        */
+
+        document.getElementById(
+            "currentProgramPlan"
+        ).innerText =
+            current.program_plan_name ||
+            current.plan_name ||
+            "-";
+
+
+
+        /*
+        TRAINER
+        */
+
+        document.getElementById(
+            "currentTrainerName"
+        ).innerText =
+            current.trainer_name ||
+            current.fullname ||
+            "-";
+
+
+
+        /*
+        START DATE
+        */
+
+        document.getElementById(
+            "programStartDate"
+        ).innerText =
+            formatProgramDate(
+                current.start_date
+            );
+
+
+
+        /*
+        END DATE
+        */
+
+        document.getElementById(
+            "programEndDate"
+        ).innerText =
+            formatProgramDate(
+                current.end_date
+            );
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD CURRENT PROGRAM ERROR:",
+            error
+        );
+
+
+        document.getElementById(
+            "currentProgramName"
+        ).innerText =
+            "Unable to load";
+
+
+        document.getElementById(
+            "currentProgramPlan"
+        ).innerText =
+            "-";
+
+
+        document.getElementById(
+            "currentTrainerName"
+        ).innerText =
+            "-";
+
+
+        document.getElementById(
+            "programStartDate"
+        ).innerText =
+            "-";
+
+
+        document.getElementById(
+            "programEndDate"
+        ).innerText =
+            "-";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   EMPTY PROGRAM
+========================================================= */
+
+function setCurrentProgramEmpty(){
+
+    document.getElementById(
+        "currentProgramName"
+    ).innerText =
+        "No Active Program";
+
+
+    document.getElementById(
+        "currentProgramPlan"
+    ).innerText =
+        "-";
+
+
+    document.getElementById(
+        "currentTrainerName"
+    ).innerText =
+        "-";
+
+
+    document.getElementById(
+        "programStartDate"
+    ).innerText =
+        "-";
+
+
+    document.getElementById(
+        "programEndDate"
+    ).innerText =
+        "-";
+
+}
+
+
+
+/* =========================================================
+   LOAD TRAINING SCHEDULE
+========================================================= */
+
+async function loadTrainingSchedule(){
+
+    const memberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+
+    console.log(
+        "WORKOUT SCHEDULE MEMBER ID:",
+        memberId
+    );
+
+
+    if(!memberId){
+
+        console.error(
+            "MEMBER ID NOT FOUND"
+        );
+
+        workoutSchedule = {};
+
+        renderTrainingSchedule();
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/workout-schedule/${memberId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "WORKOUT SCHEDULE RESPONSE:",
+            result
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        /*
+        =====================================================
+        RESET
+        =====================================================
+        */
+
+        workoutSchedule = {};
+
+
+
+        /*
+        =====================================================
+        STORE BY DATE
+
+        Example:
+
+        2026-09-25
+        2026-09-26
+        2026-09-28
+        =====================================================
+        */
+
+        (
+            result.workouts ||
+            []
+        ).forEach(
+            function(workout){
+
+                if(
+                    !workout.workout_date
+                ){
+
+                    return;
+
+                }
+
+
+                const dateKey =
+                    String(
+                        workout.workout_date
+                    ).split(
+                        " "
+                    )[0];
+
+
+                workoutSchedule[
+                    dateKey
+                ] = workout;
+
+            }
+        );
+
+
+        /*
+        RENDER
+        */
+
+        renderTrainingSchedule();
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD TRAINING SCHEDULE ERROR:",
+            error
+        );
+
+
+        workoutSchedule = {};
+
+
+        renderTrainingSchedule();
+
+    }
+
+}
 
 
 
@@ -893,19 +1324,16 @@ let selectedScheduleDate =
    FORMAT LONG DATE
 ========================================================= */
 
-function formatScheduleDate(date){
+function formatScheduleDate(
+    date
+){
 
     return date.toLocaleDateString(
         "en-US",
         {
-            month:
-                "long",
-
-            day:
-                "numeric",
-
-            year:
-                "numeric"
+            month: "long",
+            day: "numeric",
+            year: "numeric"
         }
     );
 
@@ -917,16 +1345,15 @@ function formatScheduleDate(date){
    FORMAT SHORT DATE
 ========================================================= */
 
-function formatShortDate(date){
+function formatShortDate(
+    date
+){
 
     return date.toLocaleDateString(
         "en-US",
         {
-            month:
-                "short",
-
-            day:
-                "numeric"
+            month: "short",
+            day: "numeric"
         }
     );
 
@@ -935,7 +1362,45 @@ function formatShortDate(date){
 
 
 /* =========================================================
+   GET DATE KEY
+========================================================= */
+
+function getDateKey(
+    date
+){
+
+    const year =
+        date.getFullYear();
+
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+
+/* =========================================================
    GET 7 DAYS
+
+   Selected date + next 6 days.
 ========================================================= */
 
 function getScheduleDays(
@@ -976,6 +1441,118 @@ function getScheduleDays(
 
 
 /* =========================================================
+   GET WORKOUT FOR DATE
+========================================================= */
+
+function getWorkoutForDate(
+    date
+){
+
+    const dateKey =
+        getDateKey(
+            date
+        );
+
+
+    return workoutSchedule[
+        dateKey
+    ] || null;
+
+}
+
+
+
+/* =========================================================
+   GET STATUS
+========================================================= */
+
+function getWorkoutStatus(
+    workout
+){
+
+    /*
+       No workout
+       = Rest
+    */
+
+    if(!workout){
+
+        return {
+
+            className: "rest",
+
+            label: "Rest"
+
+        };
+
+    }
+
+
+
+    /*
+       COMPLETED
+    */
+
+    if(
+        String(
+            workout.status
+        ).toLowerCase() ===
+        "completed"
+    ){
+
+        return {
+
+            className: "completed",
+
+            label: "Completed"
+
+        };
+
+    }
+
+
+
+    /*
+       MISSED
+    */
+
+    if(
+        String(
+            workout.status
+        ).toLowerCase() ===
+        "missed"
+    ){
+
+        return {
+
+            className: "missed",
+
+            label: "Missed"
+
+        };
+
+    }
+
+
+
+    /*
+       SCHEDULED
+       = UPCOMING
+    */
+
+    return {
+
+        className: "upcoming",
+
+        label: "Upcoming"
+
+    };
+
+}
+
+
+
+/* =========================================================
    RENDER 7-DAY SCHEDULE
 ========================================================= */
 
@@ -1007,7 +1584,11 @@ function renderTrainingSchedule(){
 
 
 
-    /* UPDATE DATE LABEL */
+    /*
+    =====================================================
+    DATE LABEL
+    =====================================================
+    */
 
     if(dateLabel){
 
@@ -1020,50 +1601,39 @@ function renderTrainingSchedule(){
 
 
 
-    /* UPDATE INPUT */
+    /*
+    =====================================================
+    DATE INPUT
+    =====================================================
+    */
 
     if(datePicker){
 
-        const year =
-            selectedScheduleDate
-                .getFullYear();
-
-
-        const month =
-            String(
-                selectedScheduleDate
-                    .getMonth() + 1
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const day =
-            String(
-                selectedScheduleDate
-                    .getDate()
-            ).padStart(
-                2,
-                "0"
-            );
-
-
         datePicker.value =
-            `${year}-${month}-${day}`;
+            getDateKey(
+                selectedScheduleDate
+            );
 
     }
 
 
 
-    /* CLEAR */
+    /*
+    =====================================================
+    CLEAR
+    =====================================================
+    */
 
     container.innerHTML =
         "";
 
 
 
-    /* GET 7 DAYS */
+    /*
+    =====================================================
+    GET 7 DAYS
+    =====================================================
+    */
 
     const days =
         getScheduleDays(
@@ -1072,20 +1642,25 @@ function renderTrainingSchedule(){
 
 
 
-    /* CREATE EACH DAY */
+    /*
+    =====================================================
+    CREATE EACH DAY
+    =====================================================
+    */
 
     days.forEach(
         function(date){
 
-            const dayIndex =
-                date.getDay();
-
-
             const workout =
-                trainingSchedule[
-                    dayIndex
-                ];
+                getWorkoutForDate(
+                    date
+                );
 
+
+            const status =
+                getWorkoutStatus(
+                    workout
+                );
 
 
             const dayCard =
@@ -1098,123 +1673,66 @@ function renderTrainingSchedule(){
                 "training-day";
 
 
+            /*
+            STATUS CLASS
+            */
 
-            /* STATUS CLASS */
-
-            if(
-                workout.status ===
-                "completed"
-            ){
-
-                dayCard.classList.add(
-                    "completed"
-                );
-
-            }
-
-
-            if(
-                workout.status ===
-                "missed"
-            ){
-
-                dayCard.classList.add(
-                    "missed"
-                );
-
-            }
-
-
-            if(
-                workout.status ===
-                "rest"
-            ){
-
-                dayCard.classList.add(
-                    "rest"
-                );
-
-            }
-
-
-            if(
-                workout.status ===
-                "upcoming"
-            ){
-
-                dayCard.classList.add(
-                    "upcoming"
-                );
-
-            }
+            dayCard.classList.add(
+                status.className
+            );
 
 
 
-            /* DAY NAME */
+            /*
+            DAY NAME
+            */
 
             const dayName =
                 date.toLocaleDateString(
                     "en-US",
                     {
-                        weekday:
-                            "short"
+                        weekday: "short"
                     }
                 );
 
 
 
-            /* STATUS TEXT */
+            /*
+            WORKOUT NAME
+            */
 
-            let statusText =
-                "Upcoming";
-
-
-            if(
-                workout.status ===
-                "completed"
-            ){
-
-                statusText =
-                    "Completed";
-
-            }
+            let workoutName =
+                "Rest Day";
 
 
-            if(
-                workout.status ===
-                "missed"
-            ){
+            if(workout){
 
-                statusText =
-                    "Missed";
-
-            }
-
-
-            if(
-                workout.status ===
-                "rest"
-            ){
-
-                statusText =
-                    "Rest";
+                workoutName =
+                    workout.workout_name ||
+                    "Workout";
 
             }
 
 
 
-            /* HTML */
+            /*
+            HTML
+            */
 
             dayCard.innerHTML = `
 
                 <div class="schedule-day-header">
 
                     <strong>
-                        ${dayName}
+                        ${escapeHtml(
+                            dayName
+                        )}
                     </strong>
 
                     <span>
-                        ${formatShortDate(date)}
+                        ${escapeHtml(
+                            formatShortDate(date)
+                        )}
                     </span>
 
                 </div>
@@ -1222,20 +1740,21 @@ function renderTrainingSchedule(){
 
                 <div class="schedule-workout">
 
-                    ${workout.name}
+                    ${escapeHtml(
+                        workoutName
+                    )}
 
                 </div>
 
 
                 <div
-                    class="day-status ${workout.status}">
+                    class="day-status ${status.className}">
 
-                    ${statusText}
+                    ${status.label}
 
                 </div>
 
             `;
-
 
 
             container.appendChild(
@@ -1250,7 +1769,50 @@ function renderTrainingSchedule(){
 
 
 /* =========================================================
-   PREVIOUS 7 DAYS
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =========================================================
+   PREVIOUS DAY
+
+   ONLY -1 DAY
 ========================================================= */
 
 function previousScheduleDate(){
@@ -1258,7 +1820,7 @@ function previousScheduleDate(){
     selectedScheduleDate.setDate(
 
         selectedScheduleDate.getDate()
-        - 7
+        - 1
 
     );
 
@@ -1270,7 +1832,9 @@ function previousScheduleDate(){
 
 
 /* =========================================================
-   NEXT 7 DAYS
+   NEXT DAY
+
+   ONLY +1 DAY
 ========================================================= */
 
 function nextScheduleDate(){
@@ -1278,7 +1842,7 @@ function nextScheduleDate(){
     selectedScheduleDate.setDate(
 
         selectedScheduleDate.getDate()
-        + 7
+        + 1
 
     );
 
@@ -1342,7 +1906,18 @@ function changeScheduleDate(
 
 
     const parts =
-        value.split("-");
+        value.split(
+            "-"
+        );
+
+
+    if(
+        parts.length !== 3
+    ){
+
+        return;
+
+    }
 
 
     selectedScheduleDate =
@@ -1361,6 +1936,14 @@ function changeScheduleDate(
             )
 
         );
+
+
+    selectedScheduleDate.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
 
     renderTrainingSchedule();
@@ -1419,10 +2002,24 @@ document.addEventListener(
     "DOMContentLoaded",
     function(){
 
-        renderTrainingSchedule();
+        /*
+        Load current program
+        from API
+        */
+
+        loadCurrentProgram();
+
+
+        /*
+        Load actual workouts
+        from API
+        */
+
+        loadTrainingSchedule();
 
     }
 );
+
 
 </script>
 
