@@ -1520,8 +1520,9 @@ function getWorkoutStatus(
 ){
 
     /*
-       No workout
-       = Rest
+    =====================================================
+    NO WORKOUT
+    =====================================================
     */
 
     if(!workout){
@@ -1537,14 +1538,39 @@ function getWorkoutStatus(
     }
 
 
-
     /*
-       COMPLETED
+    =====================================================
+    REST DAY
+    =====================================================
     */
 
     if(
         String(
-            workout.status
+            workout.workout_name || ""
+        ).trim().toLowerCase() ===
+        "rest"
+    ){
+
+        return {
+
+            className: "rest",
+
+            label: "Rest"
+
+        };
+
+    }
+
+
+    /*
+    =====================================================
+    COMPLETED
+    =====================================================
+    */
+
+    if(
+        String(
+            workout.status || ""
         ).toLowerCase() ===
         "completed"
     ){
@@ -1560,14 +1586,15 @@ function getWorkoutStatus(
     }
 
 
-
     /*
-       MISSED
+    =====================================================
+    MISSED
+    =====================================================
     */
 
     if(
         String(
-            workout.status
+            workout.status || ""
         ).toLowerCase() ===
         "missed"
     ){
@@ -1583,10 +1610,10 @@ function getWorkoutStatus(
     }
 
 
-
     /*
-       SCHEDULED
-       = UPCOMING
+    =====================================================
+    SCHEDULED
+    =====================================================
     */
 
     return {
@@ -1598,7 +1625,6 @@ function getWorkoutStatus(
     };
 
 }
-
 
 
 /* =========================================================
