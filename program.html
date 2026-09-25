@@ -2787,13 +2787,13 @@ async function confirmRenewTraining(){
                             "application/json"
                     },
 
-                    body: JSON.stringify({
+                   body: JSON.stringify({
 
                         member_id:
                             memberId,
 
-                        trainer_rate:
-                            selectedRenewPlan
+                        plan_id:
+                            selectedRenewPlan.plan_id
 
                     })
                 }
