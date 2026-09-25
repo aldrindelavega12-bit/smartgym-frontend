@@ -1189,27 +1189,47 @@ async function loadCurrentProgram(){
             );
 
 
-            const trainingStillActive =
-                isActive &&
-                currentEndDate >= today;
+            /* =====================================================
+                RENEWAL RULE
+
+                More than 3 days remaining = LOCKED
+                3 days or less remaining   = ENABLED
+                Expired/completed          = ENABLED
+                ===================================================== */
+
+                const millisecondsPerDay =
+                    1000 * 60 * 60 * 24;
+
+                const daysRemaining =
+                    Math.ceil(
+                        (
+                            currentEndDate.getTime() -
+                            today.getTime()
+                        ) / millisecondsPerDay
+                    );
 
 
-            renewButton.disabled =
-                trainingStillActive;
+                const renewalLocked =
+                    isActive &&
+                    daysRemaining > 3;
 
 
-            if(trainingStillActive){
+                renewButton.disabled =
+                    renewalLocked;
 
-                renewButton.title =
-                    "You can renew after your current training ends.";
 
-            }
-            else{
+                if(renewalLocked){
 
-                renewButton.title =
-                    "Renew your training.";
+                    renewButton.title =
+                        `You can renew when 3 days or less remain. ${daysRemaining} days remaining.`;
 
-            }
+                }
+                else{
+
+                    renewButton.title =
+                        "Renew your trainer fee.";
+
+                }
 
         }
 
