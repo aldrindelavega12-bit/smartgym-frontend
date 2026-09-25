@@ -843,7 +843,7 @@ const user =
    WORKOUT DATA
 ========================================================= */
 
-let workoutSchedule = {};
+let workoutSchedule = [];
 
 
 
@@ -1486,6 +1486,10 @@ function setCurrentProgramEmpty(){
    LOAD TRAINING SCHEDULE
 ========================================================= */
 
+/* =========================================================
+   LOAD TRAINING SCHEDULE
+   ========================================================= */
+
 async function loadTrainingSchedule(){
 
     const memberId =
@@ -1493,10 +1497,12 @@ async function loadTrainingSchedule(){
         user?.user_id ||
         user?.id;
 
+
     console.log(
         "WORKOUT SCHEDULE MEMBER ID:",
         memberId
     );
+
 
     if(!memberId){
 
@@ -1504,7 +1510,7 @@ async function loadTrainingSchedule(){
             "MEMBER ID NOT FOUND"
         );
 
-        workoutSchedule = {};
+        workoutSchedule = [];
 
         renderTrainingSchedule();
 
@@ -1549,56 +1555,84 @@ async function loadTrainingSchedule(){
         =====================================================
         */
 
-        workoutSchedule = {};
+        workoutSchedule = [];
 
 
         /*
         =====================================================
-        STORE WORKOUTS BY DATE
+        GET RECURRING PROGRAM PATTERN
+        =====================================================
+
+        Backend now returns:
+
+        schedule_pattern
+
+        Example:
+
+        [
+            {
+                day_number: 1,
+                workout_name: "Full Body"
+            },
+            {
+                day_number: 2,
+                workout_name: "Rest"
+            }
+        ]
+
+        This pattern is NOT limited by trainer fee.
+        */
+
+        const pattern =
+            result.schedule_pattern ||
+            result.workouts ||
+            [];
+
+
+        /*
+        =====================================================
+        SAVE PATTERN
         =====================================================
         */
 
-        const workouts =
-            result.workouts || [];
+        if(Array.isArray(pattern)){
+
+            workoutSchedule =
+                pattern.map(
+                    function(workout){
+
+                        return {
+
+                            day_number:
+                                workout.day_number,
+
+                            plan_day_id:
+                                workout.plan_day_id,
+
+                            day_name:
+                                workout.day_name,
+
+                            workout_name:
+                                workout.workout_name ||
+                                workout.day_name ||
+                                "Workout"
+
+                        };
+
+                    }
+                );
+
+        }
 
 
-        workouts.forEach(
-            function(workout){
-
-                if(
-                    !workout ||
-                    !workout.workout_date
-                ){
-
-                    return;
-
-                }
-
-
-                /*
-                API already returns:
-                YYYY-MM-DD
-                */
-
-                const dateKey =
-                    String(
-                        workout.workout_date
-                    ).substring(
-                        0,
-                        10
-                    );
-
-
-                workoutSchedule[
-                    dateKey
-                ] = workout;
-
-            }
-        );
-
+        /*
+        =====================================================
+        DEBUG
+        =====================================================
+        */
 
         console.log(
-            "FINAL WORKOUT SCHEDULE:",
+            "RECURRING WORKOUT PATTERN:",
             workoutSchedule
         );
 
@@ -1619,13 +1653,15 @@ async function loadTrainingSchedule(){
             error
         );
 
-        workoutSchedule = {};
+
+        workoutSchedule = [];
 
         renderTrainingSchedule();
 
     }
 
 }
+
 
 
 /* =========================================================
@@ -1751,20 +1787,242 @@ function getScheduleDays(
 /* =========================================================
    GET WORKOUT FOR DATE
 ========================================================= */
+/* =========================================================
+   GET WORKOUT FOR DATE
+   =========================================================
+
+   The selected program/split is a RECURRING pattern.
+
+   Example:
+
+   Full Body
+   Rest
+
+   becomes:
+
+   Full Body
+   Rest
+   Full Body
+   Rest
+   Full Body
+   Rest
+   ...
+
+   It is NOT limited by trainer fee end_date.
+   ========================================================= */
 
 function getWorkoutForDate(
     date
 ){
 
-    const dateKey =
-        getDateKey(
-            date
+    /*
+    =====================================================
+    NO PROGRAM PATTERN
+    =====================================================
+    */
+
+    if(
+        !Array.isArray(workoutSchedule) ||
+        workoutSchedule.length === 0
+    ){
+
+        return null;
+
+    }
+
+
+    /*
+    =====================================================
+    GET PROGRAM START DATE
+    =====================================================
+
+    The first day of the selected split is anchored
+    to the member's program start date.
+
+    Example:
+
+    Start = Sep 26
+
+    Pattern:
+
+    Day 1 = Full Body
+    Day 2 = Rest
+
+    Therefore:
+
+    Sep 26 = Full Body
+    Sep 27 = Rest
+    Sep 28 = Full Body
+    Sep 29 = Rest
+    ...
+    =====================================================
+    */
+
+    let programStartDate = null;
+
+
+    if(
+        currentTrainerData &&
+        currentTrainerData.start_date
+    ){
+
+        programStartDate =
+            new Date(
+                String(
+                    currentTrainerData.start_date
+                ).split(" ")[0]
+                + "T00:00:00"
+            );
+
+    }
+
+
+    /*
+    =====================================================
+    FALLBACK
+    =====================================================
+    */
+
+    if(
+        !programStartDate ||
+        isNaN(
+            programStartDate.getTime()
+        )
+    ){
+
+        programStartDate =
+            new Date(date);
+
+        programStartDate.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+    }
+
+
+    /*
+    =====================================================
+    NORMALIZE DATE
+    =====================================================
+    */
+
+    const targetDate =
+        new Date(date);
+
+    targetDate.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    programStartDate.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    /*
+    =====================================================
+    CALCULATE DAYS FROM PROGRAM START
+    =====================================================
+    */
+
+    const millisecondsPerDay =
+        1000 *
+        60 *
+        60 *
+        24;
+
+
+    const daysSinceStart =
+        Math.floor(
+            (
+                targetDate.getTime()
+                -
+                programStartDate.getTime()
+            )
+            /
+            millisecondsPerDay
         );
 
 
-    return workoutSchedule[
-        dateKey
-    ] || null;
+    /*
+    =====================================================
+    RECURRING INDEX
+    =====================================================
+
+    Example:
+
+    Pattern length = 2
+
+    Day 0 % 2 = 0 → Full Body
+    Day 1 % 2 = 1 → Rest
+    Day 2 % 2 = 0 → Full Body
+    Day 3 % 2 = 1 → Rest
+    =====================================================
+    */
+
+    let patternIndex =
+        daysSinceStart %
+        workoutSchedule.length;
+
+
+    /*
+    =====================================================
+    HANDLE DATES BEFORE PROGRAM START
+    =====================================================
+    */
+
+    if(patternIndex < 0){
+
+        patternIndex +=
+            workoutSchedule.length;
+
+    }
+
+
+    /*
+    =====================================================
+    GET RECURRING WORKOUT
+    =====================================================
+    */
+
+    const workout =
+        workoutSchedule[
+            patternIndex
+        ];
+
+
+    if(!workout){
+
+        return null;
+
+    }
+
+
+    /*
+    =====================================================
+    RETURN COPY
+    =====================================================
+    */
+
+    return {
+
+        ...workout,
+
+        status: null,
+
+        workout_date:
+            getDateKey(date)
+
+    };
 
 }
 
