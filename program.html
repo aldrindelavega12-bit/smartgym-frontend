@@ -261,26 +261,6 @@
 
                 <div class="program-main-info">
 
-
-                    <!-- TITLE -->
-
-                    <div class="current-program-title">
-
-
-                        <span class="program-label">
-                            Current Program
-                        </span>
-
-
-                        <span class="program-active">
-                            Active
-                        </span>
-
-
-                    </div>
-
-
-
                     <!-- PROGRAM NAME -->
 
                     <h2 id="currentProgramName">
@@ -1070,28 +1050,82 @@ async function loadCurrentProgram(){
 
 
 
+            /*
+        =====================================================
+        TRAINING PERIOD
+
+        Started = actual training start date
+
+        Valid Until = based on trainer rate duration
+        1 Day   = same day
+        1 Week  = +6 days
+        1 Month = +29 days
+        =====================================================
+        */
+
+        const startDateValue =
+            current.start_date;
+
+        const startDate =
+            new Date(
+                String(startDateValue).split(" ")[0] +
+                "T00:00:00"
+            );
+
+
         /*
-        START DATE
+            ACTUAL TRAINER RATE DURATION
+
+            Expected API field:
+            trainer_rate_duration_days
+
+            Fallback:
+            duration_days
+        */
+
+        const trainingDuration =
+            Number(
+                current.trainer_rate_duration_days ??
+                current.duration_days ??
+                1
+            );
+
+
+        /*
+        =====================================================
+        STARTED
+        =====================================================
         */
 
         document.getElementById(
             "programStartDate"
         ).innerText =
             formatProgramDate(
-                current.start_date
+                startDateValue
             );
 
 
-
         /*
-        END DATE
+        =====================================================
+        VALID UNTIL
+        =====================================================
         */
+
+        const endDate =
+            new Date(startDate);
+
+        endDate.setDate(
+            endDate.getDate() +
+            trainingDuration -
+            1
+        );
+
 
         document.getElementById(
             "programEndDate"
         ).innerText =
             formatProgramDate(
-                current.end_date
+                getDateKey(endDate)
             );
 
     }
