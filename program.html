@@ -664,7 +664,135 @@
 
 </div>
 
+<!-- =========================================================
+     RENEW TRAINING MODAL
+========================================================= -->
 
+<div id="renewTrainingModal" class="renew-modal">
+
+    <div class="renew-modal-content">
+
+        <div class="renew-modal-header">
+            <div>
+                <h2>Renew Training</h2>
+                <p>Choose your new training duration.</p>
+            </div>
+
+            <button
+                type="button"
+                class="renew-modal-close"
+                onclick="closeRenewTraining()">
+                &times;
+            </button>
+        </div>
+
+
+        <div class="renew-current-info">
+
+            <div>
+                <span>Program</span>
+                <strong id="renewProgramName">-</strong>
+            </div>
+
+            <div>
+                <span>Split</span>
+                <strong id="renewProgramPlan">-</strong>
+            </div>
+
+            <div>
+                <span>Trainer</span>
+                <strong id="renewTrainerName">-</strong>
+            </div>
+
+        </div>
+
+
+        <div class="renew-duration-section">
+
+            <span class="renew-section-label">
+                Training Duration
+            </span>
+
+            <div class="renew-duration-options">
+
+                <button
+                    type="button"
+                    class="renew-duration-option"
+                    data-plan="1 Day"
+                    onclick="selectRenewDuration(this)">
+
+                    <strong>1 Day</strong>
+                    <span>1 day training</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="renew-duration-option"
+                    data-plan="1 Week"
+                    onclick="selectRenewDuration(this)">
+
+                    <strong>1 Week</strong>
+                    <span>7 days training</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="renew-duration-option"
+                    data-plan="1 Month"
+                    onclick="selectRenewDuration(this)">
+
+                    <strong>1 Month</strong>
+                    <span>30 days training</span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="renew-date-preview">
+
+            <div>
+                <span>New Start Date</span>
+                <strong id="renewStartDate">-</strong>
+            </div>
+
+            <div>
+                <span>New Valid Until</span>
+                <strong id="renewEndDate">-</strong>
+            </div>
+
+        </div>
+
+
+        <div class="renew-modal-actions">
+
+            <button
+                type="button"
+                class="renew-cancel-btn"
+                onclick="closeRenewTraining()">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="renew-confirm-btn"
+                id="renewConfirmButton"
+                onclick="confirmRenewTraining()"
+                disabled>
+                Confirm Renewal
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- =========================================================
      JAVASCRIPT
@@ -2055,15 +2183,390 @@ function changeScheduleDate(
    RENEW TRAINING
 ========================================================= */
 
+/* =========================================================
+   RENEW TRAINING
+========================================================= */
+
+let currentTrainerData = null;
+let selectedRenewPlan = null;
+
+
 function renewTraining(){
 
-    console.log(
-        "Renew Training clicked"
-    );
+    if(!currentTrainerData){
+
+        alert(
+            "Current training information is not available."
+        );
+
+        return;
+    }
+
+
+    /*
+        CURRENT PROGRAM
+    */
+
+    document.getElementById(
+        "renewProgramName"
+    ).innerText =
+        currentTrainerData.program_name || "-";
+
+
+    document.getElementById(
+        "renewProgramPlan"
+    ).innerText =
+        currentTrainerData.program_plan_name ||
+        currentTrainerData.program_plan ||
+        currentTrainerData.split_name ||
+        "-";
+
+
+    document.getElementById(
+        "renewTrainerName"
+    ).innerText =
+        currentTrainerData.trainer_name ||
+        currentTrainerData.fullname ||
+        "-";
+
+
+    /*
+        RESET SELECTION
+    */
+
+    selectedRenewPlan = null;
+
+
+    document
+        .querySelectorAll(
+            ".renew-duration-option"
+        )
+        .forEach(function(button){
+
+            button.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    document.getElementById(
+        "renewStartDate"
+    ).innerText = "-";
+
+
+    document.getElementById(
+        "renewEndDate"
+    ).innerText = "-";
+
+
+    document.getElementById(
+        "renewConfirmButton"
+    ).disabled = true;
+
+
+    /*
+        OPEN MODAL
+    */
+
+    document
+        .getElementById(
+            "renewTrainingModal"
+        )
+        .classList.add("show");
 
 }
 
 
+function closeRenewTraining(){
+
+    document
+        .getElementById(
+            "renewTrainingModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+function selectRenewDuration(button){
+
+    /*
+        REMOVE PREVIOUS SELECTION
+    */
+
+    document
+        .querySelectorAll(
+            ".renew-duration-option"
+        )
+        .forEach(function(item){
+
+            item.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    /*
+        SELECT CURRENT OPTION
+    */
+
+    button.classList.add(
+        "selected"
+    );
+
+
+    selectedRenewPlan =
+        button.dataset.plan;
+
+
+    /*
+        GET CURRENT END DATE
+    */
+
+    const currentEndDateValue =
+        currentTrainerData.end_date;
+
+
+    if(!currentEndDateValue){
+
+        return;
+    }
+
+
+    const currentEndDate =
+        new Date(
+            String(
+                currentEndDateValue
+            ).split(" ")[0] +
+            "T00:00:00"
+        );
+
+
+    /*
+        NEW START DATE
+        = CURRENT END DATE + 1 DAY
+    */
+
+    const newStartDate =
+        new Date(
+            currentEndDate
+        );
+
+
+    newStartDate.setDate(
+        newStartDate.getDate() + 1
+    );
+
+
+    /*
+        DURATION
+    */
+
+    let durationDays = 1;
+
+
+    if(
+        selectedRenewPlan === "1 Week"
+    ){
+
+        durationDays = 7;
+
+    }
+    else if(
+        selectedRenewPlan === "1 Month"
+    ){
+
+        durationDays = 30;
+
+    }
+
+
+    /*
+        NEW END DATE
+    */
+
+    const newEndDate =
+        new Date(
+            newStartDate
+        );
+
+
+    newEndDate.setDate(
+        newEndDate.getDate() +
+        durationDays -
+        1
+    );
+
+
+    /*
+        DISPLAY DATES
+    */
+
+    document.getElementById(
+        "renewStartDate"
+    ).innerText =
+        formatProgramDate(
+            getDateKey(
+                newStartDate
+            )
+        );
+
+
+    document.getElementById(
+        "renewEndDate"
+    ).innerText =
+        formatProgramDate(
+            getDateKey(
+                newEndDate
+            )
+        );
+
+
+    /*
+        ENABLE CONFIRM
+    */
+
+    document.getElementById(
+        "renewConfirmButton"
+    ).disabled = false;
+
+}
+
+
+async function confirmRenewTraining(){
+
+    if(!selectedRenewPlan){
+
+        alert(
+            "Please select a training duration."
+        );
+
+        return;
+    }
+
+
+    const memberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+
+    if(!memberId){
+
+        alert(
+            "Member ID not found."
+        );
+
+        return;
+    }
+
+
+    const confirmButton =
+        document.getElementById(
+            "renewConfirmButton"
+        );
+
+
+    confirmButton.disabled = true;
+
+    confirmButton.innerText =
+        "Processing...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/program/renew`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        member_id:
+                            memberId,
+
+                        trainer_rate:
+                            selectedRenewPlan
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "RENEW RESPONSE:",
+            result
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                "Renewal failed."
+            );
+
+        }
+
+
+        alert(
+            "Training renewed successfully."
+        );
+
+
+        closeRenewTraining();
+
+
+        /*
+            RELOAD CURRENT PROGRAM
+        */
+
+        await loadCurrentProgram();
+
+
+        /*
+            RELOAD SCHEDULE
+        */
+
+        await loadTrainingSchedule();
+
+    }
+    catch(error){
+
+        console.error(
+            "RENEW TRAINING ERROR:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to renew training."
+        );
+
+    }
+    finally{
+
+        confirmButton.disabled = false;
+
+        confirmButton.innerText =
+            "Confirm Renewal";
+
+    }
+
+}
 
 /* =========================================================
    CHANGE TRAINER

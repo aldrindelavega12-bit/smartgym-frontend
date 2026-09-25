@@ -5297,3 +5297,269 @@ textarea {
     }
 
 }
+
+/* =========================================================
+   RENEW TRAINING MODAL
+========================================================= */
+
+.renew-modal{
+    position:fixed;
+    inset:0;
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(0,0,0,0.35);
+
+    z-index:9999;
+
+    padding:20px;
+}
+
+.renew-modal.show{
+    display:flex;
+}
+
+.renew-modal-content{
+    width:100%;
+    max-width:560px;
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.15);
+}
+
+.renew-modal-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+
+    margin-bottom:24px;
+}
+
+.renew-modal-header h2{
+    margin:0;
+
+    font-size:22px;
+    font-weight:700;
+
+    color:#26312b;
+}
+
+.renew-modal-header p{
+    margin:6px 0 0;
+
+    font-size:13px;
+
+    color:#718078;
+}
+
+.renew-modal-close{
+    border:none;
+    background:transparent;
+
+    font-size:26px;
+
+    color:#7b8780;
+
+    cursor:pointer;
+
+    line-height:1;
+}
+
+.renew-current-info{
+    display:grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:12px;
+
+    margin-bottom:24px;
+}
+
+.renew-current-info div{
+    background:#f7faf8;
+
+    border:1px solid #e5ebe7;
+
+    border-radius:10px;
+
+    padding:13px;
+}
+
+.renew-current-info span,
+.renew-date-preview span{
+    display:block;
+
+    font-size:11px;
+
+    color:#7a867f;
+
+    margin-bottom:5px;
+}
+
+.renew-current-info strong{
+    display:block;
+
+    font-size:13px;
+
+    color:#26312b;
+}
+
+.renew-section-label{
+    display:block;
+
+    font-size:13px;
+    font-weight:700;
+
+    color:#26312b;
+
+    margin-bottom:10px;
+}
+
+.renew-duration-options{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:10px;
+}
+
+.renew-duration-option{
+    border:1px solid #dce5df;
+
+    background:#ffffff;
+
+    border-radius:11px;
+
+    padding:16px 10px;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    transition:0.2s;
+}
+
+.renew-duration-option strong{
+    display:block;
+
+    font-size:14px;
+
+    color:#26312b;
+
+    margin-bottom:5px;
+}
+
+.renew-duration-option span{
+    display:block;
+
+    font-size:11px;
+
+    color:#7a867f;
+}
+
+.renew-duration-option:hover{
+    border-color:#087c3d;
+}
+
+.renew-duration-option.selected{
+    border-color:#087c3d;
+
+    background:#eaf6ee;
+
+    box-shadow:
+        0 0 0 1px #087c3d;
+}
+
+.renew-date-preview{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:12px;
+
+    margin-top:22px;
+}
+
+.renew-date-preview div{
+    border:1px solid #e5ebe7;
+
+    border-radius:10px;
+
+    padding:14px;
+
+    background:#ffffff;
+}
+
+.renew-date-preview strong{
+    font-size:14px;
+
+    color:#26312b;
+}
+
+.renew-modal-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:25px;
+}
+
+.renew-cancel-btn,
+.renew-confirm-btn{
+    border:none;
+
+    border-radius:9px;
+
+    padding:11px 18px;
+
+    font-size:13px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+.renew-cancel-btn{
+    background:#f1f4f2;
+
+    color:#46524b;
+}
+
+.renew-confirm-btn{
+    background:#087c3d;
+
+    color:#ffffff;
+}
+
+.renew-confirm-btn:disabled{
+    background:#b9c8bf;
+
+    cursor:not-allowed;
+}
+
+@media(max-width:600px){
+
+    .renew-current-info{
+        grid-template-columns:1fr;
+    }
+
+    .renew-duration-options{
+        grid-template-columns:1fr;
+    }
+
+    .renew-date-preview{
+        grid-template-columns:1fr;
+    }
+
+}
