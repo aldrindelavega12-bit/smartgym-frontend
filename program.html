@@ -2199,15 +2199,13 @@ function changeScheduleDate(
    RENEW TRAINING
 ========================================================= */
 
-/* =========================================================
-   RENEW TRAINING
-========================================================= */
-
 let currentTrainerData = null;
 let selectedRenewPlan = null;
+let renewTrainerRates = null;
 
 
-function renewTraining(){
+
+async function renewTraining(){
 
     if(!currentTrainerData){
 
@@ -2247,10 +2245,11 @@ function renewTraining(){
 
 
     /*
-        RESET SELECTION
+        RESET
     */
 
     selectedRenewPlan = null;
+    renewTrainerRates = null;
 
 
     document
@@ -2264,6 +2263,19 @@ function renewTraining(){
             );
 
         });
+
+
+    document.getElementById(
+        "renewPriceDay"
+    ).innerText = "Loading...";
+
+    document.getElementById(
+        "renewPriceWeek"
+    ).innerText = "Loading...";
+
+    document.getElementById(
+        "renewPriceMonth"
+    ).innerText = "Loading...";
 
 
     document.getElementById(
@@ -2282,7 +2294,7 @@ function renewTraining(){
 
 
     /*
-        OPEN MODAL
+        OPEN MODAL FIRST
     */
 
     document
@@ -2291,8 +2303,168 @@ function renewTraining(){
         )
         .classList.add("show");
 
-}
 
+    /*
+        LOAD TRAINER RATES
+    */
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/program_trainers`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        /*
+            FIND CURRENT TRAINER
+        */
+
+        const trainerId =
+            String(
+                currentTrainerData.trainer_id
+            );
+
+
+        const programId =
+            String(
+                currentTrainerData.program_id
+            );
+
+
+        const trainerData =
+            result.find(function(item){
+
+                return (
+                    String(item.trainer_id) ===
+                    trainerId
+                    &&
+                    String(item.program_id) ===
+                    programId
+                );
+
+            });
+
+
+        if(!trainerData){
+
+            throw new Error(
+                "Trainer rates not found."
+            );
+
+        }
+
+
+        /*
+            SAVE RATES
+        */
+
+        renewTrainerRates = {
+
+            "1 Day": {
+                plan_id:
+                    trainerData.plan_id_day,
+                price:
+                    trainerData.price_day,
+                duration_days: 1
+            },
+
+            "1 Week": {
+                plan_id:
+                    trainerData.plan_id_week,
+                price:
+                    trainerData.price_week,
+                duration_days: 7
+            },
+
+            "1 Month": {
+                plan_id:
+                    trainerData.plan_id_month,
+                price:
+                    trainerData.price_month,
+                duration_days: 30
+            }
+
+        };
+
+
+        /*
+            DISPLAY PRICES
+        */
+
+        document.getElementById(
+            "renewPriceDay"
+        ).innerText =
+            formatTrainerPrice(
+                trainerData.price_day
+            );
+
+
+        document.getElementById(
+            "renewPriceWeek"
+        ).innerText =
+            formatTrainerPrice(
+                trainerData.price_week
+            );
+
+
+        document.getElementById(
+            "renewPriceMonth"
+        ).innerText =
+            formatTrainerPrice(
+                trainerData.price_month
+            );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD RENEW TRAINER RATES ERROR:",
+            error
+        );
+
+
+        document.getElementById(
+            "renewPriceDay"
+        ).innerText = "Unavailable";
+
+
+        document.getElementById(
+            "renewPriceWeek"
+        ).innerText = "Unavailable";
+
+
+        document.getElementById(
+            "renewPriceMonth"
+        ).innerText = "Unavailable";
+
+
+        alert(
+            error.message ||
+            "Unable to load trainer rates."
+        );
+
+    }
+
+}
 
 function closeRenewTraining(){
 
