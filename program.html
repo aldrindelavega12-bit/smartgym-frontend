@@ -2728,7 +2728,9 @@ function formatTrainerPrice(price){
 
 function selectRenewFee(button, duration){
 
-    /* REMOVE PREVIOUS SELECTION */
+    /* =====================================================
+       REMOVE PREVIOUS SELECTION
+    ===================================================== */
 
     document
         .querySelectorAll(
@@ -2743,14 +2745,18 @@ function selectRenewFee(button, duration){
         });
 
 
-    /* SELECT CURRENT RATE */
+    /* =====================================================
+       SELECT CURRENT RATE
+    ===================================================== */
 
     button.classList.add(
         "selected"
     );
 
 
-    /* CHECK TRAINER RATES */
+    /* =====================================================
+       CHECK TRAINER RATES
+    ===================================================== */
 
     if(!renewTrainerRates){
 
@@ -2762,7 +2768,9 @@ function selectRenewFee(button, duration){
     }
 
 
-    /* GET SELECTED PLAN */
+    /* =====================================================
+       GET SELECTED PLAN
+    ===================================================== */
 
     let selectedPlan = null;
 
@@ -2807,21 +2815,45 @@ function selectRenewFee(button, duration){
 
 
     /* =====================================================
-       GET ACTUAL DATABASE END DATE
+       GET CURRENT DATABASE DATES
+       
+       IMPORTANT:
+       START DATE WILL NOT CHANGE.
+       ONLY VALID UNTIL WILL BE EXTENDED.
        ===================================================== */
 
     if(
         !currentTrainerData ||
+        !currentTrainerData.start_date ||
         !currentTrainerData.end_date
     ){
 
         console.error(
-            "Current trainer end date is missing."
+            "Current trainer dates are missing."
         );
 
         return;
     }
 
+
+    /* =====================================================
+       CURRENT START DATE
+       
+       THIS STAYS THE SAME.
+       ===================================================== */
+
+    const currentStart =
+        new Date(
+            String(
+                currentTrainerData.start_date
+            ).split(" ")[0]
+            + "T00:00:00"
+        );
+
+
+    /* =====================================================
+       CURRENT END DATE
+       ===================================================== */
 
     const currentEnd =
         new Date(
@@ -2833,13 +2865,13 @@ function selectRenewFee(button, duration){
 
 
     if(
-        isNaN(
-            currentEnd.getTime()
-        )
+        isNaN(currentStart.getTime()) ||
+        isNaN(currentEnd.getTime())
     ){
 
         console.error(
-            "Invalid current end date:",
+            "Invalid trainer dates:",
+            currentTrainerData.start_date,
             currentTrainerData.end_date
         );
 
@@ -2848,60 +2880,65 @@ function selectRenewFee(button, duration){
 
 
     /* =====================================================
-       RENEWAL START
+       NEW VALID UNTIL
        
-       CURRENT:
+       EXTEND CURRENT END DATE.
+       
+       Example:
+       
+       Current:
        Sep 26 - Sep 29
-
-       RENEWAL:
-       Sep 30 onwards
-       ===================================================== */
-
-    const newStart =
-        new Date(
-            currentEnd
-        );
-
-    newStart.setDate(
-        newStart.getDate() + 1
-    );
-
-
-    /* =====================================================
-       RENEWAL END
+       
+       1 Day:
+       Sep 26 - Sep 30
+       
+       1 Week:
+       Sep 26 - Oct 6
+       
+       1 Month:
+       Sep 26 - Oct 29
        ===================================================== */
 
     const newEnd =
         new Date(
-            newStart
+            currentEnd
         );
+
 
     newEnd.setDate(
         newEnd.getDate()
         +
         duration
-        -
-        1
     );
 
 
     /* =====================================================
-       DISPLAY
+       DISPLAY START DATE
+       
+       SAME AS CURRENT START DATE.
        ===================================================== */
 
     document.getElementById(
         "renewStartDate"
     ).innerText =
         formatProgramDate(
-            getDateKey(newStart)
+            getDateKey(
+                currentStart
+            )
         );
 
+
+    /* =====================================================
+       DISPLAY NEW VALID UNTIL
+       ===================================================== */
 
     document.getElementById(
         "renewEndDate"
     ).innerText =
         formatProgramDate(
-            getDateKey(newEnd)
+            getDateKey(
+                newEnd
+            )
         );
 
 
@@ -2921,16 +2958,27 @@ function selectRenewFee(button, duration){
 
     console.log(
         "RENEWAL START:",
-        getDateKey(newStart)
+        getDateKey(
+            currentStart
+        )
     );
 
     console.log(
-        "RENEWAL END:",
-        getDateKey(newEnd)
+        "NEW VALID UNTIL:",
+        getDateKey(
+            newEnd
+        )
+    );
+
+    console.log(
+        "DURATION:",
+        duration
     );
 
 
-    /* ENABLE CONFIRM */
+    /* =====================================================
+       ENABLE CONFIRM
+    ===================================================== */
 
     document.getElementById(
         "renewConfirmButton"
