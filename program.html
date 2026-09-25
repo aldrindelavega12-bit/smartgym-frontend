@@ -2564,6 +2564,10 @@ function selectRenewFee(
     duration
 ){
 
+    /* ================================================
+       REMOVE PREVIOUS SELECTION
+    ================================================ */
+
     document
         .querySelectorAll(
             ".renew-fee-card"
@@ -2579,12 +2583,16 @@ function selectRenewFee(
         );
 
 
+    /* ================================================
+       SELECT CURRENT RATE
+    ================================================ */
+
     button.classList.add(
         "selected"
     );
 
 
-    let selectedPlan;
+    let selectedPlan = null;
 
 
     if(duration === 1){
@@ -2593,12 +2601,14 @@ function selectRenewFee(
             renewTrainerPlans.day;
 
     }
+
     else if(duration === 7){
 
         selectedPlan =
             renewTrainerPlans.week;
 
     }
+
     else if(duration === 30){
 
         selectedPlan =
@@ -2612,9 +2622,17 @@ function selectRenewFee(
         !selectedPlan.id
     ){
 
+        console.error(
+            "Trainer rate not found."
+        );
+
         return;
     }
 
+
+    /* ================================================
+       SAVE SELECTED RATE
+    ================================================ */
 
     selectedRenewFee = {
 
@@ -2630,34 +2648,41 @@ function selectRenewFee(
     };
 
 
-    /* =================================================
-       GET CURRENT VALID UNTIL
-       DIRECTLY FROM CURRENT PROGRAM
-    ================================================= */
+    /* ================================================
+       GET CURRENT TRAINER FEE END DATE
+    ================================================ */
 
-    const currentEndText =
-        document.getElementById(
-            "programEndDate"
-        ).innerText.trim();
+    const trainer =
+        window.renewCurrentTrainer;
 
 
     if(
-        !currentEndText ||
-        currentEndText === "-"
+        !trainer ||
+        !trainer.end_date
     ){
+
+        console.error(
+            "Current trainer end date is missing."
+        );
 
         return;
     }
 
 
     /*
-    Example:
-    Sep 25, 2026
+        IMPORTANT:
+
+        Current end date:
+        Sep 25, 2026
+
+        New start:
+        Sep 26, 2026
     */
 
     const currentEnd =
         new Date(
-            currentEndText
+            trainer.end_date +
+            "T00:00:00"
         );
 
 
@@ -2668,26 +2693,17 @@ function selectRenewFee(
     ){
 
         console.error(
-            "Invalid current end date:",
-            currentEndText
+            "Invalid trainer end date:",
+            trainer.end_date
         );
 
         return;
     }
 
 
-    currentEnd.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    /* =================================================
-       NEW START
-       DAY AFTER CURRENT END
-    ================================================= */
+    /* ================================================
+       NEW START DATE
+    ================================================ */
 
     const newStart =
         new Date(
@@ -2700,9 +2716,9 @@ function selectRenewFee(
     );
 
 
-    /* =================================================
-       NEW END
-    ================================================= */
+    /* ================================================
+       NEW END DATE
+    ================================================ */
 
     const newEnd =
         new Date(
@@ -2719,9 +2735,9 @@ function selectRenewFee(
     );
 
 
-    /* =================================================
-       DISPLAY
-    ================================================= */
+    /* ================================================
+       SHOW DATES
+    ================================================ */
 
     document.getElementById(
         "renewNewStartDate"
@@ -2738,6 +2754,10 @@ function selectRenewFee(
             newEnd
         );
 
+
+    /* ================================================
+       ENABLE CONFIRM
+    ================================================ */
 
     document.getElementById(
         "renewConfirmButton"
