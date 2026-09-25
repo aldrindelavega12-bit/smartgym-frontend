@@ -1154,9 +1154,8 @@ async function loadCurrentProgram(){
         /* =====================================================
            RENEW BUTTON
            
-           RULE:
-           > 3 days remaining = LOCKED
-           <= 3 days remaining = ENABLED
+           > 3 DAYS = LOCKED
+           <= 3 DAYS = ENABLED
            ===================================================== */
 
         const renewButton =
@@ -1173,9 +1172,9 @@ async function loadCurrentProgram(){
                 ).toLowerCase() === "active";
 
 
-            /* =================================================
-               GET ACTUAL DATABASE END DATE
-               ================================================= */
+            /* ================================================
+               ACTUAL DATABASE END DATE
+               ================================================ */
 
             const currentEndDate =
                 new Date(
@@ -1186,9 +1185,9 @@ async function loadCurrentProgram(){
                 );
 
 
-            /* =================================================
+            /* ================================================
                TODAY
-               ================================================= */
+               ================================================ */
 
             const today =
                 new Date();
@@ -1201,14 +1200,9 @@ async function loadCurrentProgram(){
             );
 
 
-            /* =================================================
+            /* ================================================
                DAYS REMAINING
-
-               Example:
-
-               Sep 25 -> Sep 29 = 4 days
-               Sep 26 -> Sep 29 = 3 days
-               ================================================= */
+               ================================================ */
 
             const millisecondsPerDay =
                 1000 * 60 * 60 * 24;
@@ -1219,7 +1213,8 @@ async function loadCurrentProgram(){
                     (
                         currentEndDate.getTime() -
                         today.getTime()
-                    ) / millisecondsPerDay
+                    ) /
+                    millisecondsPerDay
                 );
 
 
@@ -1239,26 +1234,70 @@ async function loadCurrentProgram(){
             );
 
 
-            /* =================================================
-               LOCK ONLY IF MORE THAN 3 DAYS REMAIN
-               ================================================= */
+            /* ================================================
+               RENEWAL LOCK
+
+               More than 3 days = LOCKED
+               3 days or less = ENABLED
+               ================================================ */
 
             const renewalLocked =
                 isActive &&
                 daysRemaining > 3;
 
 
-            renewButton.disabled =
-                renewalLocked;
-
-
             if(renewalLocked){
+
+                /* Actual button disabled */
+                renewButton.disabled = true;
+
+
+                /* Completely block clicking */
+                renewButton.style.pointerEvents =
+                    "none";
+
+
+                /* Disabled appearance */
+                renewButton.style.opacity =
+                    "0.55";
+
+
+                renewButton.style.cursor =
+                    "not-allowed";
+
+
+                renewButton.classList.add(
+                    "renew-disabled"
+                );
+
 
                 renewButton.title =
                     `Renewal available when 3 days or less remain. ${daysRemaining} days remaining.`;
 
             }
             else{
+
+                /* Enable */
+                renewButton.disabled =
+                    false;
+
+
+                renewButton.style.pointerEvents =
+                    "auto";
+
+
+                renewButton.style.opacity =
+                    "1";
+
+
+                renewButton.style.cursor =
+                    "pointer";
+
+
+                renewButton.classList.remove(
+                    "renew-disabled"
+                );
+
 
                 renewButton.title =
                     "Renew your trainer fee.";
@@ -1312,15 +1351,6 @@ async function loadCurrentProgram(){
             current.start_date;
 
 
-        const startDate =
-            new Date(
-                String(
-                    startDateValue
-                ).split(" ")[0]
-                + "T00:00:00"
-            );
-
-
         document.getElementById(
             "programStartDate"
         ).innerText =
@@ -1356,11 +1386,7 @@ async function loadCurrentProgram(){
         /* =====================================================
            VALID UNTIL
 
-           IMPORTANT:
-           USE ACTUAL DATABASE end_date.
-
-           DO NOT RECALCULATE FROM
-           trainer_rate_duration_days.
+           USE ACTUAL DATABASE END DATE
            ===================================================== */
 
         const endDateValue =
@@ -1415,6 +1441,7 @@ async function loadCurrentProgram(){
     }
 
 }
+
 
 /* =========================================================
    EMPTY PROGRAM
@@ -2281,7 +2308,7 @@ let renewTrainerRates = null;
 async function renewTraining(){
 
     /* =====================================================
-       CHECK CURRENT TRAINING INFORMATION
+       CURRENT TRAINING CHECK
        ===================================================== */
 
     if(!currentTrainerData){
@@ -2297,8 +2324,8 @@ async function renewTraining(){
     /* =====================================================
        CHECK RENEWAL ELIGIBILITY
 
-       > 3 days remaining = NOT ALLOWED
-       <= 3 days remaining = ALLOWED
+       > 3 DAYS = BLOCK
+       <= 3 DAYS = ALLOW
        ===================================================== */
 
     const today =
@@ -2330,7 +2357,8 @@ async function renewTraining(){
             (
                 currentEndDate.getTime() -
                 today.getTime()
-            ) / millisecondsPerDay
+            ) /
+            millisecondsPerDay
         );
 
 
@@ -2346,18 +2374,18 @@ async function renewTraining(){
     );
 
     console.log(
-        "RENEW CHECK - END DATE:",
+        "RENEW CHECK - END:",
         currentEndDate
     );
 
     console.log(
-        "RENEW CHECK - DAYS REMAINING:",
+        "RENEW CHECK - DAYS:",
         daysRemaining
     );
 
 
     /* =====================================================
-       BLOCK RENEWAL IF MORE THAN 3 DAYS REMAIN
+       HARD BLOCK
        ===================================================== */
 
     if(
@@ -2374,7 +2402,7 @@ async function renewTraining(){
 
 
     /* =====================================================
-       CURRENT PROGRAM
+       CURRENT PROGRAM INFO
        ===================================================== */
 
     document.getElementById(
@@ -2569,7 +2597,6 @@ async function renewTraining(){
 
             },
 
-
             "1 Week": {
 
                 plan_id:
@@ -2582,7 +2609,6 @@ async function renewTraining(){
                     7
 
             },
-
 
             "1 Month": {
 
@@ -2664,7 +2690,6 @@ async function renewTraining(){
 }
 
 
-
 function closeRenewTraining(){
 
     document
@@ -2701,31 +2726,42 @@ function formatTrainerPrice(price){
         );
 }
 
-function selectRenewFee(button, duration){
+function selectRenewFee(
+    button,
+    duration
+){
 
-    /* REMOVE PREVIOUS SELECTION */
+    /* =====================================================
+       REMOVE PREVIOUS SELECTION
+       ===================================================== */
 
     document
         .querySelectorAll(
             ".renew-duration-option"
         )
-        .forEach(function(card){
+        .forEach(
+            function(card){
 
-            card.classList.remove(
-                "selected"
-            );
+                card.classList.remove(
+                    "selected"
+                );
 
-        });
+            }
+        );
 
 
-    /* SELECT CURRENT RATE */
+    /* =====================================================
+       SELECT CURRENT RATE
+       ===================================================== */
 
     button.classList.add(
         "selected"
     );
 
 
-    /* GET TRAINER RATE */
+    /* =====================================================
+       TRAINER RATES CHECK
+       ===================================================== */
 
     if(!renewTrainerRates){
 
@@ -2737,7 +2773,12 @@ function selectRenewFee(button, duration){
     }
 
 
-    let selectedPlan = null;
+    /* =====================================================
+       FIND SELECTED PLAN
+       ===================================================== */
+
+    let selectedPlan =
+        null;
 
 
     if(duration === 1){
@@ -2762,6 +2803,10 @@ function selectRenewFee(button, duration){
     }
 
 
+    /* =====================================================
+       PLAN CHECK
+       ===================================================== */
+
     if(
         !selectedPlan ||
         !selectedPlan.plan_id
@@ -2775,15 +2820,48 @@ function selectRenewFee(button, duration){
     }
 
 
-    /* SAVE SELECTED PLAN */
+    /* =====================================================
+       SAVE SELECTED PLAN
+       ===================================================== */
 
-    selectedRenewPlan = selectedPlan;
+    selectedRenewPlan =
+        selectedPlan;
 
 
-    /* GET CURRENT END DATE */
+    /* =====================================================
+       CURRENT START DATE
+       
+       IMPORTANT:
+       START DATE WILL NOT CHANGE.
+       ===================================================== */
 
     if(
         !currentTrainerData ||
+        !currentTrainerData.start_date
+    ){
+
+        console.error(
+            "Current trainer start date is missing."
+        );
+
+        return;
+    }
+
+
+    const originalStartDate =
+        new Date(
+            String(
+                currentTrainerData.start_date
+            ).substring(0, 10)
+            + "T00:00:00"
+        );
+
+
+    /* =====================================================
+       CURRENT END DATE
+       ===================================================== */
+
+    if(
         !currentTrainerData.end_date
     ){
 
@@ -2795,83 +2873,151 @@ function selectRenewFee(button, duration){
     }
 
 
-    const currentEnd =
+    const currentEndDate =
         new Date(
             String(
                 currentTrainerData.end_date
-            ).split(" ")[0]
+            ).substring(0, 10)
             + "T00:00:00"
         );
 
 
     if(
         isNaN(
-            currentEnd.getTime()
+            originalStartDate.getTime()
+        )
+        ||
+        isNaN(
+            currentEndDate.getTime()
         )
     ){
 
         console.error(
-            "Invalid current end date:",
-            currentTrainerData.end_date
+            "Invalid trainer dates."
         );
 
         return;
     }
 
 
-    /* NEW START = DAY AFTER CURRENT END */
+    /* =====================================================
+       NEW START DATE
+
+       DO NOT CHANGE IT.
+
+       It stays the ORIGINAL START DATE.
+       ===================================================== */
 
     const newStart =
         new Date(
-            currentEnd
+            originalStartDate
         );
 
-    newStart.setDate(
-        newStart.getDate() + 1
-    );
 
+    /* =====================================================
+       NEW END DATE
 
-    /* NEW END = BASED ON TRAINER RATE */
+       EXTEND FROM CURRENT END DATE.
+
+       Example:
+
+       Current:
+       Sep 25 -> Sep 29
+
+       1 Day:
+       Sep 25 -> Sep 30
+
+       1 Week:
+       Sep 25 -> Oct 6
+
+       1 Month:
+       Sep 25 -> Oct 29
+       ===================================================== */
 
     const newEnd =
         new Date(
-            newStart
+            currentEndDate
         );
 
+
     newEnd.setDate(
-        newEnd.getDate()
-        +
+        newEnd.getDate() +
         duration
-        -
-        1
     );
 
 
-    /* DISPLAY DATES */
+    /* =====================================================
+       DISPLAY NEW START
+       ===================================================== */
 
     document.getElementById(
         "renewStartDate"
     ).innerText =
         formatProgramDate(
-            getDateKey(newStart)
+            getDateKey(
+                newStart
+            )
         );
 
+
+    /* =====================================================
+       DISPLAY NEW VALID UNTIL
+       ===================================================== */
 
     document.getElementById(
         "renewEndDate"
     ).innerText =
         formatProgramDate(
-            getDateKey(newEnd)
+            getDateKey(
+                newEnd
+            )
         );
 
 
-    /* ENABLE CONFIRM */
+    /* =====================================================
+       DEBUG
+       ===================================================== */
+
+    console.log(
+        "RENEW ORIGINAL START:",
+        getDateKey(
+            originalStartDate
+        )
+    );
+
+    console.log(
+        "RENEW CURRENT END:",
+        getDateKey(
+            currentEndDate
+        )
+    );
+
+    console.log(
+        "RENEW NEW START:",
+        getDateKey(
+            newStart
+        )
+    );
+
+    console.log(
+        "RENEW NEW END:",
+        getDateKey(
+            newEnd
+        )
+    );
+
+
+    /* =====================================================
+       ENABLE CONFIRM
+       ===================================================== */
 
     document.getElementById(
         "renewConfirmButton"
-    ).disabled = false;
+    ).disabled =
+        false;
 
 }
+
 
 async function confirmRenewTraining(){
 
