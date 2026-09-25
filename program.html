@@ -1090,7 +1090,6 @@ async function loadCurrentProgram(){
         setCurrentProgramEmpty();
 
         return;
-
     }
 
 
@@ -1125,12 +1124,9 @@ async function loadCurrentProgram(){
         }
 
 
-
-        /*
-        =====================================================
-        NO ACTIVE PROGRAM
-        =====================================================
-        */
+        /* =====================================================
+           NO ACTIVE PROGRAM
+           ===================================================== */
 
         if(
             result.has_trainer === false ||
@@ -1144,22 +1140,30 @@ async function loadCurrentProgram(){
         }
 
 
-
-        /*
-        =====================================================
-        CURRENT PROGRAM
-        =====================================================
-        */
+        /* =====================================================
+           CURRENT PROGRAM
+           ===================================================== */
 
         const current =
             result.trainer;
 
-        currentTrainerData = current;
+        currentTrainerData =
+            current;
+
+
+        /* =====================================================
+           RENEW BUTTON
+           
+           RULE:
+           > 3 days remaining = LOCKED
+           <= 3 days remaining = ENABLED
+           ===================================================== */
 
         const renewButton =
             document.querySelector(
                 ".program-action.renew"
             );
+
 
         if(renewButton){
 
@@ -1169,14 +1173,22 @@ async function loadCurrentProgram(){
                 ).toLowerCase() === "active";
 
 
+            /* =================================================
+               GET ACTUAL DATABASE END DATE
+               ================================================= */
+
             const currentEndDate =
                 new Date(
                     String(
                         current.end_date
-                    ).split(" ")[0] +
-                    "T00:00:00"
+                    ).substring(0, 10)
+                    + "T00:00:00"
                 );
 
+
+            /* =================================================
+               TODAY
+               ================================================= */
 
             const today =
                 new Date();
@@ -1189,54 +1201,76 @@ async function loadCurrentProgram(){
             );
 
 
-            /* =====================================================
-                RENEWAL RULE
+            /* =================================================
+               DAYS REMAINING
 
-                More than 3 days remaining = LOCKED
-                3 days or less remaining   = ENABLED
-                Expired/completed          = ENABLED
-                ===================================================== */
+               Example:
 
-                const millisecondsPerDay =
-                    1000 * 60 * 60 * 24;
+               Sep 25 -> Sep 29 = 4 days
+               Sep 26 -> Sep 29 = 3 days
+               ================================================= */
 
-                const daysRemaining =
-                    Math.ceil(
-                        (
-                            currentEndDate.getTime() -
-                            today.getTime()
-                        ) / millisecondsPerDay
-                    );
+            const millisecondsPerDay =
+                1000 * 60 * 60 * 24;
 
 
-                const renewalLocked =
-                    isActive &&
-                    daysRemaining > 3;
+            const daysRemaining =
+                Math.round(
+                    (
+                        currentEndDate.getTime() -
+                        today.getTime()
+                    ) / millisecondsPerDay
+                );
 
 
-                renewButton.disabled =
-                    renewalLocked;
+            console.log(
+                "TODAY:",
+                today
+            );
+
+            console.log(
+                "CURRENT END DATE:",
+                currentEndDate
+            );
+
+            console.log(
+                "DAYS REMAINING:",
+                daysRemaining
+            );
 
 
-                if(renewalLocked){
+            /* =================================================
+               LOCK ONLY IF MORE THAN 3 DAYS REMAIN
+               ================================================= */
 
-                    renewButton.title =
-                        `You can renew when 3 days or less remain. ${daysRemaining} days remaining.`;
+            const renewalLocked =
+                isActive &&
+                daysRemaining > 3;
 
-                }
-                else{
 
-                    renewButton.title =
-                        "Renew your trainer fee.";
+            renewButton.disabled =
+                renewalLocked;
 
-                }
+
+            if(renewalLocked){
+
+                renewButton.title =
+                    `Renewal available when 3 days or less remain. ${daysRemaining} days remaining.`;
+
+            }
+            else{
+
+                renewButton.title =
+                    "Renew your trainer fee.";
+
+            }
 
         }
 
 
-        /*
-        PROGRAM
-        */
+        /* =====================================================
+           PROGRAM
+           ===================================================== */
 
         document.getElementById(
             "currentProgramName"
@@ -1245,12 +1279,9 @@ async function loadCurrentProgram(){
             "-";
 
 
-
-        /*
-        PLAN / SPLIT
-
-        Supports both possible API names.
-        */
+        /* =====================================================
+           PLAN / SPLIT
+           ===================================================== */
 
         document.getElementById(
             "currentProgramPlan"
@@ -1261,10 +1292,9 @@ async function loadCurrentProgram(){
             "-";
 
 
-
-        /*
-        TRAINER
-        */
+        /* =====================================================
+           TRAINER
+           ===================================================== */
 
         document.getElementById(
             "currentTrainerName"
@@ -1274,53 +1304,22 @@ async function loadCurrentProgram(){
             "-";
 
 
-
-            /*
-        =====================================================
-        TRAINING PERIOD
-
-        Started = actual training start date
-
-        Valid Until = based on trainer rate duration
-        1 Day   = same day
-        1 Week  = +6 days
-        1 Month = +29 days
-        =====================================================
-        */
+        /* =====================================================
+           START DATE
+           ===================================================== */
 
         const startDateValue =
             current.start_date;
 
+
         const startDate =
             new Date(
-                String(startDateValue).split(" ")[0] +
-                "T00:00:00"
+                String(
+                    startDateValue
+                ).split(" ")[0]
+                + "T00:00:00"
             );
 
-
-        /*
-            ACTUAL TRAINER RATE DURATION
-
-            Expected API field:
-            trainer_rate_duration_days
-
-            Fallback:
-            duration_days
-        */
-
-        const trainingDuration =
-            Number(
-                current.trainer_rate_duration_days ??
-                current.duration_days ??
-                1
-            );
-
-
-        /*
-        =====================================================
-        STARTED
-        =====================================================
-        */
 
         document.getElementById(
             "programStartDate"
@@ -1329,20 +1328,19 @@ async function loadCurrentProgram(){
                 startDateValue
             );
 
-        /*
-        =====================================================
-        SCHEDULE START DATE
 
-        Training Schedule starts from the
-        actual training start date.
-        =====================================================
-        */
+        /* =====================================================
+           SCHEDULE START DATE
+           ===================================================== */
 
         selectedScheduleDate =
             new Date(
-                String(startDateValue).split(" ")[0] +
-                "T00:00:00"
+                String(
+                    startDateValue
+                ).split(" ")[0]
+                + "T00:00:00"
             );
+
 
         selectedScheduleDate.setHours(
             0,
@@ -1351,17 +1349,23 @@ async function loadCurrentProgram(){
             0
         );
 
+
         renderTrainingSchedule();
 
 
-        /*
-        =====================================================
-        VALID UNTIL
-        =====================================================
-        */
+        /* =====================================================
+           VALID UNTIL
+
+           IMPORTANT:
+           USE ACTUAL DATABASE end_date.
+
+           DO NOT RECALCULATE FROM
+           trainer_rate_duration_days.
+           ===================================================== */
 
         const endDateValue =
             current.end_date;
+
 
         document.getElementById(
             "programEndDate"
@@ -1411,8 +1415,6 @@ async function loadCurrentProgram(){
     }
 
 }
-
-
 
 /* =========================================================
    EMPTY PROGRAM
