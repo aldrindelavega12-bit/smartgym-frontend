@@ -2270,11 +2270,9 @@ function formatMoney(
 
 async function sendProgramRequest(){
 
-    /*
-    ========================================
-    VALIDATION
-    ========================================
-    */
+    /* =========================
+       VALIDATION
+       ========================= */
 
     if(!selectedProgram){
 
@@ -2342,11 +2340,9 @@ async function sendProgramRequest(){
     }
 
 
-    /*
-    ========================================
-    MEMBER ID
-    ========================================
-    */
+    /* =========================
+       MEMBER ID
+       ========================= */
 
     const memberId =
         userData.user_id ||
@@ -2364,58 +2360,70 @@ async function sendProgramRequest(){
     }
 
 
-    /*
-    ========================================
-    TRAINER RATE PLAN ID
-    ========================================
-
-    IMPORTANT:
-
-    selectedPaymentType is the RATE:
-        Daily
-        Weekly
-        Monthly
-
-    This is NOT the program split.
-    */
-
+    /* =========================
+       GET TRAINER RATE PLAN ID
+       ========================= */
 
     let trainerRatePlanId = null;
 
 
-    if(
-        selectedTrainer.trainerPlans &&
-        Array.isArray(
-            selectedTrainer.trainerPlans
-        )
-    ){
+    if(selectedPaymentType === "Daily"){
 
-        const rate =
-            selectedTrainer.trainerPlans.find(
-                item =>
-                    String(
-                        item.plan_name
-                    ).toLowerCase() ===
-                    String(
-                        selectedPaymentType
-                    ).toLowerCase()
-            );
+        trainerRatePlanId =
+            selectedTrainer.planIdDay;
 
-        if(rate){
+    }
 
-            trainerRatePlanId =
-                rate.id;
+    else if(selectedPaymentType === "Weekly"){
 
-        }
+        trainerRatePlanId =
+            selectedTrainer.planIdWeek;
+
+    }
+
+    else if(selectedPaymentType === "Monthly"){
+
+        trainerRatePlanId =
+            selectedTrainer.planIdMonth;
 
     }
 
 
-    /*
-    ========================================
-    REQUEST DATA
-    ========================================
-    */
+    if(!trainerRatePlanId){
+
+        showNotifPopup(
+            "Request Failed",
+            "Trainer rate plan ID not found."
+        );
+
+        return;
+    }
+
+
+    /* =========================
+       START DATE
+       ========================= */
+
+    const startDate =
+        document.getElementById(
+            "startDate"
+        ).value;
+
+
+    if(!startDate){
+
+        showNotifPopup(
+            "Request Failed",
+            "Please select a starting date."
+        );
+
+        return;
+    }
+
+
+    /* =========================
+       REQUEST DATA
+       ========================= */
 
     const requestData = {
 
@@ -2425,41 +2433,17 @@ async function sendProgramRequest(){
         trainer_id:
             selectedTrainer.id,
 
-        /*
-        PROGRAM
-        */
-
         program_id:
             selectedProgram.id,
 
-        /*
-        PROGRAM SPLIT
-
-        Example:
-        PPL = 7
-        Arnold Split = 8
-        */
-
         program_plan_id:
             selectedPlan.id,
-
-        /*
-        TRAINER RATE
-
-        Daily / Weekly / Monthly
-
-        This remains separate from
-        program_plan_id.
-        */
 
         plan_id:
             trainerRatePlanId,
 
         start_date:
-
-            selectedStartDate
-                .toISOString()
-                .split("T")[0]
+            startDate
 
     };
 
@@ -2470,11 +2454,9 @@ async function sendProgramRequest(){
     );
 
 
-    /*
-    ========================================
-    SEND TO API
-    ========================================
-    */
+    /* =========================
+       SEND REQUEST
+       ========================= */
 
     try{
 
@@ -2482,7 +2464,6 @@ async function sendProgramRequest(){
             await fetch(
                 `${API_URL}/api/trainer/request`,
                 {
-
                     method:
                         "POST",
 
@@ -2495,7 +2476,6 @@ async function sendProgramRequest(){
                         JSON.stringify(
                             requestData
                         )
-
                 }
             );
 
@@ -2510,11 +2490,9 @@ async function sendProgramRequest(){
         );
 
 
-        /*
-        ====================================
-        API ERROR
-        ====================================
-        */
+        /* =========================
+           ERROR
+           ========================= */
 
         if(!response.ok){
 
@@ -2526,11 +2504,9 @@ async function sendProgramRequest(){
         }
 
 
-        /*
-        ====================================
-        SUCCESS
-        ====================================
-        */
+        /* =========================
+           SUCCESS
+           ========================= */
 
         showNotifPopup(
 
@@ -2541,12 +2517,9 @@ async function sendProgramRequest(){
         );
 
 
-        /*
-        ====================================
-        OPTIONAL:
-        DISABLE BUTTON TEMPORARILY
-        ====================================
-        */
+        /* =========================
+           DISABLE BUTTON
+           ========================= */
 
         const button =
             document.querySelector(
@@ -2586,7 +2559,6 @@ async function sendProgramRequest(){
     }
 
 }
-
 
 /* =========================================================
    NOTIFICATION
