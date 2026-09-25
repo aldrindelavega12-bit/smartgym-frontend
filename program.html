@@ -11,10 +11,13 @@
 
     <title>My Program - Smart Gym</title>
 
-    <!-- MEMBER DASHBOARD CSS -->
+    <!-- EXISTING MEMBER DASHBOARD CSS -->
     <link
         rel="stylesheet"
         href="css/member-dashboard.css">
+        <link
+        rel="stylesheet"
+        href="css/get-program.css">
 
     <!-- FONT AWESOME -->
     <link
@@ -47,6 +50,7 @@
 
 <div class="navbar">
 
+
     <!-- BRAND -->
 
     <div class="brand">
@@ -72,54 +76,75 @@
     </div>
 
 
+
     <!-- MENU -->
 
     <div class="menu">
 
         <a href="member.html">
-
             Home
-
         </a>
 
 
         <a href="member_messages.html">
-
             Messages
-
         </a>
 
 
         <a
-            href="program.html"
+            href="member_program.html"
             class="active">
 
-            Program
+            My Program
 
         </a>
 
 
         <a href="get_program.html">
-
             Get Program
-
         </a>
 
 
         <a href="member_locker.html">
-
             Book Locker
-
         </a>
 
 
         <a href="membership.html">
-
             Membership
+        </a>
 
+
+        <a href="member_profile.html">
+            Profile
         </a>
 
     </div>
+
+
+
+    <!-- SIDEBAR BOTTOM -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-heart-pulse"></i>
+
+        </div>
+
+        <h3>
+            Stay Consistent
+        </h3>
+
+        <p>
+            Follow your training program and stay committed to your goals.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
 </div>
 
 
@@ -130,6 +155,7 @@
 
 <div class="layout">
 
+
     <main class="main">
 
 
@@ -137,63 +163,82 @@
              TOP HEADER
         ================================================== -->
 
-        <!-- TOP HEADER -->
-    <div class="top-header">
-
-        <div class="top-right">
-
-            <!-- PROFILE TOGGLE - KEPT -->
-            <div class="user-profile"
-                 onclick="toggleMenu()">
-
-                <div class="user-avatar"
-                     id="profileInitial">
-                    A
-                </div>
-
-                <div class="user-info">
-
-                    <strong id="profile-name">
-                        Aldrin
-                    </strong>
-
-                    <small>
-                        Member
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-down profile-chevron"></i>
+        <div class="top-header">
 
 
-                <!-- PROFILE DROPDOWN - KEPT -->
-                <div id="dropdown"
-                     class="profile-dropdown">
+            <div class="top-right">
 
-                    <button
-                        onclick="openChangePassword(); event.stopPropagation();">
 
-                        Change Password
+                <!-- PROFILE -->
 
-                    </button>
+                <div
+                    class="user-profile"
+                    onclick="toggleMenu()">
 
-                    <div class="dropdown-divider"></div>
 
-                    <button
-                        onclick="logout(); event.stopPropagation();"
-                        class="dropdown-logout">
+                    <div
+                        class="user-avatar"
+                        id="profileInitial">
 
-                        Log Out
+                        A
 
-                    </button>
+                    </div>
+
+
+                    <div class="user-info">
+
+                        <strong id="profile-name">
+                            Aldrin
+                        </strong>
+
+                        <small>
+                            Member
+                        </small>
+
+                    </div>
+
+
+                    <i
+                        class="fa-solid fa-chevron-down profile-chevron">
+                    </i>
+
+
+
+                    <!-- PROFILE DROPDOWN -->
+
+                    <div
+                        id="dropdown"
+                        class="profile-dropdown">
+
+
+                        <button
+                            type="button"
+                            onclick="openChangePassword(); event.stopPropagation();">
+
+                            Change Password
+
+                        </button>
+
+
+                        <div class="dropdown-divider"></div>
+
+
+                        <button
+                            type="button"
+                            onclick="logout(); event.stopPropagation();"
+                            class="dropdown-logout">
+
+                            Log Out
+
+                        </button>
+
+                    </div>
 
                 </div>
 
             </div>
 
         </div>
-
-    </div>
 
 
 
@@ -208,7 +253,7 @@
 
             <!-- =================================================
                  PAGE HEADER
-            ================================================== -->
+            ================================================= -->
 
             <div class="program-page-header">
 
@@ -226,30 +271,45 @@
 
             <!-- =================================================
                  CURRENT PROGRAM
-            ================================================== -->
+            ================================================= -->
 
             <div class="current-program-card">
 
-                <!-- LEFT SIDE -->
 
                 <div class="program-main-info">
 
-                    <span class="program-label">
-                        Current Program
-                    </span>
+
+                    <!-- TITLE -->
+
+                    <div class="current-program-title">
+
+                        <span class="program-label">
+                            Current Program
+                        </span>
 
 
-                    <h2 id="programName">
-                        Loading...
+                        <span class="program-active">
+                            Active
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- PROGRAM NAME -->
+
+                    <h2 id="currentProgramName">
+                        General Fitness
                     </h2>
 
 
-                    <p
-                        class="program-description"
-                        id="programDescription"
-                    >
-                        Loading...
-                    </p>
+
+                    <!-- PROGRAM PLAN -->
+
+                    <h3 id="currentProgramPlan">
+                        Bro Split
+                    </h3>
+
 
 
                     <!-- DETAILS -->
@@ -257,18 +317,23 @@
                     <div class="program-details">
 
 
+                        <!-- TRAINER -->
+
                         <div class="program-detail">
 
                             <span>
                                 Trainer
                             </span>
 
-                            <strong id="trainerName">
-                                Loading...
+                            <strong id="currentTrainerName">
+                                Mark Santos
                             </strong>
 
                         </div>
 
+
+
+                        <!-- START DATE -->
 
                         <div class="program-detail">
 
@@ -277,11 +342,14 @@
                             </span>
 
                             <strong id="programStartDate">
-                                Loading...
+                                Sep 25, 2026
                             </strong>
 
                         </div>
 
+
+
+                        <!-- VALID UNTIL -->
 
                         <div class="program-detail">
 
@@ -290,11 +358,220 @@
                             </span>
 
                             <strong id="programEndDate">
-                                Loading...
+                                Oct 22, 2026
                             </strong>
 
                         </div>
 
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PROGRAM ACTIONS
+            ================================================== -->
+
+            <div class="program-actions">
+
+
+                <!-- =================================================
+                     RENEW TRAINING
+                ================================================== -->
+
+                <button
+                    type="button"
+                    class="program-action renew"
+                    onclick="renewTraining()">
+
+
+                    <div class="action-content">
+
+                        <strong>
+                            Renew Training
+                        </strong>
+
+                        <span>
+                            Extend your current training period
+                            with the same program and trainer.
+                        </span>
+
+                    </div>
+
+
+                    <span class="action-arrow">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </span>
+
+                </button>
+
+
+
+                <!-- =================================================
+                     CHANGE TRAINER
+                ================================================== -->
+
+                <button
+                    type="button"
+                    class="program-action change-trainer"
+                    onclick="changeTrainer()">
+
+
+                    <div class="action-content">
+
+                        <strong>
+                            Change Trainer
+                        </strong>
+
+                        <span>
+                            Keep your current program and split,
+                            but select a different trainer.
+                        </span>
+
+                    </div>
+
+
+                    <span class="action-arrow">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </span>
+
+                </button>
+
+
+
+                <!-- =================================================
+                     CHANGE PROGRAM
+                ================================================== -->
+
+                <button
+                    type="button"
+                    class="program-action change-program"
+                    onclick="changeProgram()">
+
+
+                    <div class="action-content">
+
+                        <strong>
+                            Change Program
+                        </strong>
+
+                        <span>
+                            Choose a new program, split, and trainer.
+                            Your current program will be removed.
+                        </span>
+
+                    </div>
+
+
+                    <span class="action-arrow">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TRAINING SCHEDULE
+            ================================================== -->
+
+            <div class="program-card training-schedule-card">
+
+
+                <!-- =================================================
+                     SCHEDULE HEADER
+                ================================================= -->
+
+                <div class="training-schedule-header">
+
+
+                    <div class="schedule-heading">
+
+                        <h3>
+                            Training Schedule
+                        </h3>
+
+                        <p>
+                            Your 7-day training schedule starting from the selected date.
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         DATE NAVIGATION
+                    ================================================= -->
+
+                    <div class="schedule-navigation">
+
+
+                        <!-- PREVIOUS -->
+
+                        <button
+                            type="button"
+                            class="schedule-arrow"
+                            onclick="previousScheduleDate()">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </button>
+
+
+
+                        <!-- DATE -->
+
+                        <button
+                            type="button"
+                            class="schedule-date-button"
+                            onclick="openScheduleDatePicker()">
+
+
+                            <i class="fa-regular fa-calendar"></i>
+
+
+                            <strong id="scheduleDateLabel">
+                                September 25, 2026
+                            </strong>
+
+
+                            <i class="fa-solid fa-chevron-down"></i>
+
+                        </button>
+
+
+
+                        <!-- NEXT -->
+
+                        <button
+                            type="button"
+                            class="schedule-arrow"
+                            onclick="nextScheduleDate()">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+
+
+                        <!-- HIDDEN DATE PICKER -->
+
+                        <input
+                            type="date"
+                            id="scheduleDatePicker"
+                            value="2026-09-25"
+                            onchange="changeScheduleDate(this.value)">
 
                     </div>
 
@@ -302,32 +579,32 @@
 
 
 
-                <!-- RIGHT SIDE -->
+                <!-- =================================================
+                     7 DAY TRAINING SCHEDULE
+                ================================================== -->
 
-                <div class="program-summary">
+                <div
+                    class="training-days"
+                    id="trainingDays">
 
+                    <!-- GENERATED BY JAVASCRIPT -->
 
-                    <div class="days-circle">
-
-                        <div
-                            class="days-number"
-                            id="daysRemaining"
-                        >
-                            0
-                        </div>
-
-                        <span>
-                            Days Remaining
-                        </span>
-
-                    </div>
+                </div>
 
 
-                    <div class="overall-completed">
 
-                        <strong id="programCompleted">
-                            0%
-                        </strong>
+                <!-- =================================================
+                     LEGEND
+                ================================================== -->
+
+                <div class="schedule-legend">
+
+
+                    <!-- COMPLETED -->
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot completed"></span>
 
                         <span>
                             Completed
@@ -336,333 +613,44 @@
                     </div>
 
 
-                </div>
 
+                    <!-- MISSED -->
 
-            </div>
+                    <div class="legend-item">
 
-            <!-- =================================================
-                PROGRAM CONTENT
-            ================================================== -->
-
-            <div class="program-content-grid">
-
-                <!-- =================================================
-                    LEFT COLUMN — TRAINING CALENDAR
-                ================================================== -->
-
-                <div class="program-left-column">
-
-                    <div class="program-card calendar-card">
-
-                        <!-- CALENDAR HEADER -->
-                        <div class="calendar-header">
-
-                            <div class="calendar-title">
-
-                                <h3>
-                                    Training Calendar
-                                </h3>
-
-                                <p>
-                                    Your scheduled workouts and training progress.
-                                </p>
-
-                            </div>
-
-
-                            <div class="calendar-navigation">
-
-                                <button
-                                    type="button"
-                                    class="calendar-arrow"
-                                    onclick="previousCalendarMonth()">
-
-                                    ‹
-
-                                </button>
-
-
-                                <strong id="calendarMonthLabel">
-                                    September 2026
-                                </strong>
-
-
-                                <button
-                                    type="button"
-                                    class="calendar-arrow"
-                                    onclick="nextCalendarMonth()">
-
-                                    ›
-
-                                </button>
-
-
-                                <button
-                                    type="button"
-                                    class="calendar-today"
-                                    onclick="goToCalendarToday()">
-
-                                    Today
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- WEEK DAYS -->
-
-                        <div class="calendar-weekdays">
-
-                            <div class="calendar-weekday">
-                                Sun
-                            </div>
-
-                            <div class="calendar-weekday">
-                                Mon
-                            </div>
-
-                            <div class="calendar-weekday">
-                                Tue
-                            </div>
-
-                            <div class="calendar-weekday">
-                                Wed
-                            </div>
-
-                            <div class="calendar-weekday">
-                                Thu
-                            </div>
-
-                            <div class="calendar-weekday">
-                                Fri
-                            </div>
-
-                            <div class="calendar-weekday">
-                                Sat
-                            </div>
-
-                        </div>
-
-
-                        <!-- CALENDAR DATES -->
-
-                        <div
-                            class="calendar-grid"
-                            id="trainingCalendar">
-                        </div>
-
-
-                        <!-- LEGEND -->
-
-                        <div class="calendar-legend">
-
-                            <div class="legend-item">
-
-                                <span class="legend-dot completed"></span>
-
-                                <span>
-                                    Completed
-                                </span>
-
-                            </div>
-
-
-                            <div class="legend-item">
-
-                                <span class="legend-dot upcoming"></span>
-
-                                <span>
-                                    Upcoming
-                                </span>
-
-                            </div>
-
-
-                            <div class="legend-item">
-
-                                <span class="legend-dot rest"></span>
-
-                                <span>
-                                    Rest
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                    RIGHT COLUMN — PROGRAM PROGRESS
-                ================================================== -->
-
-                <div
-                    class="program-card program-progress-card">
-
-                    <!-- HEADER -->
-
-                    <div class="progress-header">
-
-                        <h3>
-                            Program Progress
-                        </h3>
-
-                        <p>
-                            Track your progress in this program.
-                        </p>
-
-                    </div>
-
-
-                    <!-- SUMMARY -->
-
-                    <div class="progress-summary">
-
-                        <strong>
-                            1 / 4 Weeks Completed
-                        </strong>
+                        <span class="legend-dot missed"></span>
 
                         <span>
-                            25%
+                            Missed
                         </span>
 
                     </div>
 
 
-                    <!-- PROGRESS BAR -->
 
-                    <div class="program-progress-bar">
+                    <!-- UPCOMING -->
 
-                        <div
-                            class="program-progress-fill"
-                            style="width:25%;">
-                        </div>
+                    <div class="legend-item">
+
+                        <span class="legend-dot upcoming"></span>
+
+                        <span>
+                            Upcoming
+                        </span>
 
                     </div>
 
 
-                    <!-- WEEKS -->
 
-                    <div class="program-weeks">
+                    <!-- REST -->
 
+                    <div class="legend-item">
 
-                        <!-- WEEK 1 -->
+                        <span class="legend-dot rest"></span>
 
-                        <div class="program-week completed">
-
-                            <div class="week-status-circle">
-                                ✓
-                            </div>
-
-
-                            <div class="week-info">
-
-                                <strong>
-                                    Week 1
-                                </strong>
-
-                                <span>
-                                    Jul 20 – Jul 26, 2026
-                                </span>
-
-                            </div>
-
-
-                            <b>
-                                Completed
-                            </b>
-
-                        </div>
-
-
-                        <!-- WEEK 2 -->
-
-                        <div class="program-week">
-
-                            <div class="week-status-circle">
-                            </div>
-
-
-                            <div class="week-info">
-
-                                <strong>
-                                    Week 2
-                                </strong>
-
-                                <span>
-                                    Jul 27 – Aug 2, 2026
-                                </span>
-
-                            </div>
-
-
-                            <b>
-                                Upcoming
-                            </b>
-
-                        </div>
-
-
-                        <!-- WEEK 3 -->
-
-                        <div class="program-week">
-
-                            <div class="week-status-circle">
-                            </div>
-
-
-                            <div class="week-info">
-
-                                <strong>
-                                    Week 3
-                                </strong>
-
-                                <span>
-                                    Aug 3 – Aug 9, 2026
-                                </span>
-
-                            </div>
-
-
-                            <b>
-                                Upcoming
-                            </b>
-
-                        </div>
-
-
-                        <!-- WEEK 4 -->
-
-                        <div class="program-week">
-
-                            <div class="week-status-circle">
-                            </div>
-
-
-                            <div class="week-info">
-
-                                <strong>
-                                    Week 4
-                                </strong>
-
-                                <span>
-                                    Aug 10 – Aug 16, 2026
-                                </span>
-
-                            </div>
-
-
-                            <b>
-                                Upcoming
-                            </b>
-
-                        </div>
+                        <span>
+                            Rest
+                        </span>
 
                     </div>
 
@@ -684,6 +672,7 @@
 
 <script>
 
+
 /* =========================================================
    MEMBER PROFILE
 ========================================================= */
@@ -703,29 +692,29 @@ if(user){
         "Member";
 
 
-    const memberName =
+    const profileName =
         document.getElementById(
-            "memberName"
+            "profile-name"
         );
 
 
-    const memberAvatar =
+    const profileInitial =
         document.getElementById(
-            "memberAvatar"
+            "profileInitial"
         );
 
 
-    if(memberName){
+    if(profileName){
 
-        memberName.innerText =
+        profileName.innerText =
             fullname;
 
     }
 
 
-    if(memberAvatar){
+    if(profileInitial){
 
-        memberAvatar.innerText =
+        profileInitial.innerText =
             fullname
                 .charAt(0)
                 .toUpperCase();
@@ -734,345 +723,17 @@ if(user){
 
 }
 
+
+
 /* =========================================================
-   MY PROGRAM API
+   PROFILE DROPDOWN
 ========================================================= */
 
-const API_URL =
-    "https://smartgym-api-ia2e.onrender.com";
-
-
-async function loadMyProgram(){
-
-    const memberId =
-    user?.member_id ||
-        user?.user_id ||
-        user?.id;
-
-    console.log(
-        "MY PROGRAM MEMBER ID:",
-        memberId
-    );
-
-    if(!memberId){
-
-        console.error(
-            "MEMBER ID NOT FOUND"
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-        const response =
-            await fetch(
-                `${API_URL}/api/member/trainer-status/${memberId}`,
-                {
-                    cache:"no-store"
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                result.message ||
-                `HTTP ${response.status}`
-            );
-
-        }
-
-
-        /* =========================================
-           NO ACTIVE PROGRAM
-        ========================================= */
-
-        if(!result.has_trainer){
-
-            document.getElementById(
-                "programName"
-            ).innerText =
-                "No Active Program";
-
-
-            document.getElementById(
-                "programDescription"
-            ).innerText =
-                "You currently do not have an active training program.";
-
-
-            document.getElementById(
-                "trainerName"
-            ).innerText =
-                "-";
-
-
-            document.getElementById(
-                "programStartDate"
-            ).innerText =
-                "-";
-
-
-            document.getElementById(
-                "programEndDate"
-            ).innerText =
-                "-";
-
-
-            document.getElementById(
-                "daysRemaining"
-            ).innerText =
-                "0";
-
-
-            document.getElementById(
-                "programCompleted"
-            ).innerText =
-                "0%";
-
-
-            return;
-
-        }
-
-
-        /* =========================================
-           PROGRAM DATA
-        ========================================= */
-
-        const program =
-            result.trainer;
-
-
-        document.getElementById(
-            "programName"
-        ).innerText =
-            program.program_name ||
-            "Training Program";
-
-
-        document.getElementById(
-            "programDescription"
-        ).innerText =
-            program.program_description ||
-            "No program description available.";
-
-
-        document.getElementById(
-            "trainerName"
-        ).innerText =
-            program.trainer_name ||
-            "-";
-
-
-        document.getElementById(
-            "programStartDate"
-        ).innerText =
-            formatProgramDate(
-                program.start_date
-            );
-
-
-        document.getElementById(
-            "programEndDate"
-        ).innerText =
-            formatProgramDate(
-                program.end_date
-            );
-
-
-        /* =========================================
-           DAYS REMAINING / COMPLETION
-        ========================================= */
-
-        const startDate =
-            parseProgramDate(
-                program.start_date
-            );
-
-
-        const endDate =
-            parseProgramDate(
-                program.end_date
-            );
-
-
-        const today =
-            new Date();
-
-
-        today.setHours(
-            0,
-            0,
-            0,
-            0
-        );
-
-
-        if(startDate && endDate){
-
-            const totalDays =
-                Math.max(
-                    1,
-                    Math.round(
-                        (
-                            endDate -
-                            startDate
-                        ) /
-                        86400000
-                    ) + 1
-                );
-
-
-            const daysRemaining =
-                Math.max(
-                    0,
-                    Math.ceil(
-                        (
-                            endDate -
-                            today
-                        ) /
-                        86400000
-                    )
-                );
-
-
-            let completedPercent =
-                Math.round(
-                    (
-                        (
-                            today -
-                            startDate
-                        ) /
-                        86400000 + 1
-                    ) /
-                    totalDays *
-                    100
-                );
-
-
-            completedPercent =
-                Math.min(
-                    100,
-                    Math.max(
-                        0,
-                        completedPercent
-                    )
-                );
-
-
-            document.getElementById(
-                "daysRemaining"
-            ).innerText =
-                daysRemaining;
-
-
-            document.getElementById(
-                "programCompleted"
-            ).innerText =
-                `${completedPercent}%`;
-
-        }
-
-    }
-    catch(error){
-
-        console.error(
-            "LOAD MY PROGRAM ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
-function parseProgramDate(
-    dateString
-){
-
-    if(!dateString){
-
-        return null;
-
-    }
-
-
-    const parts =
-        dateString.split("-");
-
-
-    if(parts.length !== 3){
-
-        return null;
-
-    }
-
-
-    const date =
-        new Date(
-            Number(parts[0]),
-            Number(parts[1]) - 1,
-            Number(parts[2])
-        );
-
-
-    date.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    return date;
-
-}
-
-
-function formatProgramDate(
-    dateString
-){
-
-    const date =
-        parseProgramDate(
-            dateString
-        );
-
-
-    if(!date){
-
-        return "-";
-
-    }
-
-
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            month:"long",
-            day:"numeric",
-            year:"numeric"
-        }
-    );
-
-}
-/* =========================================================
-   MEMBER PROFILE DROPDOWN
-========================================================= */
-
-function toggleMemberMenu(){
+function toggleMenu(){
 
     const dropdown =
         document.getElementById(
-            "memberDropdown"
+            "dropdown"
         );
 
 
@@ -1087,19 +748,22 @@ function toggleMemberMenu(){
 }
 
 
+
 window.addEventListener(
     "click",
     function(event){
 
-        if(
-            !event.target.closest(
-                ".member-profile"
-            )
-        ){
+        const profile =
+            event.target.closest(
+                ".user-profile"
+            );
+
+
+        if(!profile){
 
             const dropdown =
                 document.getElementById(
-                    "memberDropdown"
+                    "dropdown"
                 );
 
 
@@ -1117,6 +781,21 @@ window.addEventListener(
 );
 
 
+
+/* =========================================================
+   CHANGE PASSWORD
+========================================================= */
+
+function openChangePassword(){
+
+    console.log(
+        "Change Password clicked"
+    );
+
+}
+
+
+
 /* =========================================================
    LOGOUT
 ========================================================= */
@@ -1131,277 +810,368 @@ function logout(){
 }
 
 
-/* =========================================================
-   PROGRAM WEEK NAVIGATION
-========================================================= */
 
 /* =========================================================
-   TRAINING CALENDAR
+   PROGRAM DATA
 ========================================================= */
 
-let calendarDate = new Date();
+const programData = {
+
+    program:
+        "General Fitness",
+
+    plan:
+        "Bro Split",
+
+    trainer:
+        "Mark Santos",
+
+    startDate:
+        "Sep 25, 2026",
+
+    endDate:
+        "Oct 22, 2026"
+
+};
 
 
-let workoutSchedule = {};
-async function loadTrainingSchedule(){
 
-    const memberId =
-        user?.member_id ||
-        user?.user_id ||
-        user?.id;
+/* =========================================================
+   TRAINING SCHEDULE DATA
+========================================================= */
 
-    console.log(
-        "PROGRAM MEMBER ID:",
-        memberId
+const trainingSchedule = {
+
+    0: {
+        name: "Rest Day",
+        status: "rest"
+    },
+
+    1: {
+        name: "Legs",
+        status: "upcoming"
+    },
+
+    2: {
+        name: "Shoulders & Abs",
+        status: "upcoming"
+    },
+
+    3: {
+        name: "Arms (Biceps & Triceps)",
+        status: "upcoming"
+    },
+
+    4: {
+        name: "Cardio",
+        status: "upcoming"
+    },
+
+    5: {
+        name: "Chest & Triceps",
+        status: "completed"
+    },
+
+    6: {
+        name: "Back & Biceps",
+        status: "upcoming"
+    }
+
+};
+
+
+
+/* =========================================================
+   SELECTED SCHEDULE DATE
+========================================================= */
+
+let selectedScheduleDate =
+    new Date(
+        2026,
+        8,
+        25
     );
 
-    if(!memberId){
-
-        console.error(
-            "MEMBER ID NOT FOUND"
-        );
-
-        return;
-
-    }
-
-    try{
-
-        const response =
-            await fetch(
-                `${API_URL}/api/member/workout-schedule/${memberId}`,
-                {
-                    cache:"no-store"
-                }
-            );
 
 
-        const result =
-            await response.json();
+/* =========================================================
+   FORMAT LONG DATE
+========================================================= */
 
+function formatScheduleDate(date){
 
-        if(!response.ok){
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month:
+                "long",
 
-            throw new Error(
-                result.message ||
-                `HTTP ${response.status}`
-            );
+            day:
+                "numeric",
 
+            year:
+                "numeric"
         }
-
-
-        workoutSchedule = {};
-
-
-        (result.workouts || []).forEach(
-            workout => {
-
-                workoutSchedule[
-                    workout.workout_date
-                ] = workout;
-
-            }
-        );
-
-
-        renderTrainingCalendar();
-
-    }
-    catch(error){
-
-        console.error(
-            "LOAD TRAINING SCHEDULE ERROR:",
-            error
-        );
-
-
-        workoutSchedule = {};
-
-
-        renderTrainingCalendar();
-
-    }
+    );
 
 }
 
-function renderTrainingCalendar(){
-
-    const calendar =
-        document.getElementById(
-            "trainingCalendar"
-        );
-
-    const monthLabel =
-        document.getElementById(
-            "calendarMonthLabel"
-        );
 
 
-    if(!calendar || !monthLabel){
-        return;
-    }
+/* =========================================================
+   FORMAT SHORT DATE
+========================================================= */
 
+function formatShortDate(date){
 
-    calendar.innerHTML = "";
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month:
+                "short",
 
-
-    const year =
-        calendarDate.getFullYear();
-
-    const month =
-        calendarDate.getMonth();
-
-
-    const monthName =
-        calendarDate.toLocaleString(
-            "default",
-            {
-                month: "long"
-            }
-        );
-
-
-    monthLabel.innerText =
-        `${monthName} ${year}`;
-
-
-    const firstDay =
-        new Date(
-            year,
-            month,
-            1
-        ).getDay();
-
-
-    const daysInMonth =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
-    const previousMonthDays =
-        new Date(
-            year,
-            month,
-            0
-        ).getDate();
-
-
-    /* =====================================================
-       PREVIOUS MONTH DATES
-    ===================================================== */
-
-    for(
-        let i = firstDay - 1;
-        i >= 0;
-        i--
-    ){
-
-        const dayNumber =
-            previousMonthDays - i;
-
-
-        const day =
-            document.createElement(
-                "div"
-            );
-
-
-        day.className =
-            "calendar-day muted";
-
-
-        day.innerHTML = `
-            <div class="calendar-date">
-                ${dayNumber}
-            </div>
-        `;
-
-
-        calendar.appendChild(day);
-
-    }
-
-
-    /* =====================================================
-       CURRENT MONTH
-    ===================================================== */
-
-    const today =
-        new Date();
-
-
-    today.setHours(
-        0,
-        0,
-        0,
-        0
+            day:
+                "numeric"
+        }
     );
 
+}
+
+
+
+/* =========================================================
+   GET 7 DAYS
+========================================================= */
+
+function getScheduleDays(
+    startDate
+){
+
+    const days = [];
+
 
     for(
-        let dayNumber = 1;
-        dayNumber <= daysInMonth;
-        dayNumber++
+        let i = 0;
+        i < 7;
+        i++
     ){
 
         const date =
             new Date(
-                year,
-                month,
-                dayNumber
+                startDate
+            );
+
+
+        date.setDate(
+            startDate.getDate() + i
+        );
+
+
+        days.push(
+            date
+        );
+
+    }
+
+
+    return days;
+
+}
+
+
+
+/* =========================================================
+   RENDER 7-DAY SCHEDULE
+========================================================= */
+
+function renderTrainingSchedule(){
+
+    const container =
+        document.getElementById(
+            "trainingDays"
+        );
+
+
+    const dateLabel =
+        document.getElementById(
+            "scheduleDateLabel"
+        );
+
+
+    const datePicker =
+        document.getElementById(
+            "scheduleDatePicker"
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+
+    /* UPDATE DATE LABEL */
+
+    if(dateLabel){
+
+        dateLabel.innerText =
+            formatScheduleDate(
+                selectedScheduleDate
+            );
+
+    }
+
+
+
+    /* UPDATE INPUT */
+
+    if(datePicker){
+
+        const year =
+            selectedScheduleDate
+                .getFullYear();
+
+
+        const month =
+            String(
+                selectedScheduleDate
+                    .getMonth() + 1
+            ).padStart(
+                2,
+                "0"
             );
 
 
         const day =
-            document.createElement(
-                "div"
+            String(
+                selectedScheduleDate
+                    .getDate()
+            ).padStart(
+                2,
+                "0"
             );
 
 
-        day.className =
-            "calendar-day";
+        datePicker.value =
+            `${year}-${month}-${day}`;
+
+    }
 
 
-        /* TODAY */
 
-        if(
-            date.getTime() ===
-            today.getTime()
-        ){
+    /* CLEAR */
 
-            day.classList.add(
-                "today"
-            );
-
-        }
+    container.innerHTML =
+        "";
 
 
-        const dateKey =
-            `${year}-${String(month + 1).padStart(2, "0")}-${String(dayNumber).padStart(2, "0")}`;
+
+    /* GET 7 DAYS */
+
+    const days =
+        getScheduleDays(
+            selectedScheduleDate
+        );
 
 
-        const workout =
-            workoutSchedule[
-                dateKey
-            ];
+
+    /* CREATE EACH DAY */
+
+    days.forEach(
+        function(date){
+
+            const dayIndex =
+                date.getDay();
 
 
-        let workoutName =
-            "Rest";
+            const workout =
+                trainingSchedule[
+                    dayIndex
+                ];
 
 
-        let status =
-            "Rest";
+
+            const dayCard =
+                document.createElement(
+                    "div"
+                );
 
 
-        if(workout){
+            dayCard.className =
+                "training-day";
 
-            workoutName =
-                workout.workout_name ||
-                "Workout";
+
+
+            /* STATUS CLASS */
+
+            if(
+                workout.status ===
+                "completed"
+            ){
+
+                dayCard.classList.add(
+                    "completed"
+                );
+
+            }
+
+
+            if(
+                workout.status ===
+                "missed"
+            ){
+
+                dayCard.classList.add(
+                    "missed"
+                );
+
+            }
+
+
+            if(
+                workout.status ===
+                "rest"
+            ){
+
+                dayCard.classList.add(
+                    "rest"
+                );
+
+            }
+
+
+            if(
+                workout.status ===
+                "upcoming"
+            ){
+
+                dayCard.classList.add(
+                    "upcoming"
+                );
+
+            }
+
+
+
+            /* DAY NAME */
+
+            const dayName =
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        weekday:
+                            "short"
+                    }
+                );
+
+
+
+            /* STATUS TEXT */
+
+            let statusText =
+                "Upcoming";
 
 
             if(
@@ -1409,158 +1179,241 @@ function renderTrainingCalendar(){
                 "completed"
             ){
 
-                status =
+                statusText =
                     "Completed";
 
             }
-            else if(
+
+
+            if(
                 workout.status ===
                 "missed"
             ){
 
-                status =
+                statusText =
                     "Missed";
 
             }
-            else{
 
-                status =
-                    "Upcoming";
+
+            if(
+                workout.status ===
+                "rest"
+            ){
+
+                statusText =
+                    "Rest";
 
             }
 
-        }
 
 
-        let workoutClass =
-            "";
+            /* HTML */
+
+            dayCard.innerHTML = `
+
+                <div class="schedule-day-header">
+
+                    <strong>
+                        ${dayName}
+                    </strong>
+
+                    <span>
+                        ${formatShortDate(date)}
+                    </span>
+
+                </div>
 
 
-        if(
-            status === "Completed"
-        ){
+                <div class="schedule-workout">
 
-            workoutClass =
-                "completed";
+                    ${workout.name}
 
-        }
-        else if(
-            status === "Rest"
-        ){
-
-            workoutClass =
-                "rest";
-
-        }
-
-        day.innerHTML = `
-
-            <div class="calendar-date">
-                ${dayNumber}
-            </div>
-
-            <div class="calendar-workout ${workoutClass}">
-
-                ${workoutName}
-
-                <span class="calendar-status">
-                    ${status}
-                </span>
-
-            </div>
-
-        `;
+                </div>
 
 
-        calendar.appendChild(day);
+                <div
+                    class="day-status ${workout.status}">
 
-    }
+                    ${statusText}
 
+                </div>
 
-    /* =====================================================
-       NEXT MONTH DATES
-    ===================================================== */
-
-    const totalCells =
-        calendar.children.length;
-
-    const remainingCells =
-        totalCells % 7 === 0
-            ? 0
-            : 7 - (totalCells % 7);
+            `;
 
 
-    for(
-        let dayNumber = 1;
-        dayNumber <= remainingCells;
-        dayNumber++
-    ){
 
-        const day =
-            document.createElement(
-                "div"
+            container.appendChild(
+                dayCard
             );
 
-        day.className =
-            "calendar-day muted";
+        }
+    );
 
-        day.innerHTML = `
+}
 
-            <div class="calendar-date">
-                ${dayNumber}
-            </div>
 
-        `;
 
-        calendar.appendChild(day);
+/* =========================================================
+   PREVIOUS 7 DAYS
+========================================================= */
+
+function previousScheduleDate(){
+
+    selectedScheduleDate.setDate(
+
+        selectedScheduleDate.getDate()
+        - 7
+
+    );
+
+
+    renderTrainingSchedule();
+
+}
+
+
+
+/* =========================================================
+   NEXT 7 DAYS
+========================================================= */
+
+function nextScheduleDate(){
+
+    selectedScheduleDate.setDate(
+
+        selectedScheduleDate.getDate()
+        + 7
+
+    );
+
+
+    renderTrainingSchedule();
+
+}
+
+
+
+/* =========================================================
+   OPEN DATE PICKER
+========================================================= */
+
+function openScheduleDatePicker(){
+
+    const picker =
+        document.getElementById(
+            "scheduleDatePicker"
+        );
+
+
+    if(!picker){
+
+        return;
+
+    }
+
+
+    if(
+        typeof picker.showPicker ===
+        "function"
+    ){
+
+        picker.showPicker();
+
+    }
+    else{
+
+        picker.click();
 
     }
 
 }
 
 
+
 /* =========================================================
-   PREVIOUS MONTH
+   CHANGE SELECTED DATE
 ========================================================= */
 
-function previousCalendarMonth(){
+function changeScheduleDate(
+    value
+){
 
-    calendarDate.setMonth(
-        calendarDate.getMonth() - 1
+    if(!value){
+
+        return;
+
+    }
+
+
+    const parts =
+        value.split("-");
+
+
+    selectedScheduleDate =
+        new Date(
+
+            Number(
+                parts[0]
+            ),
+
+            Number(
+                parts[1]
+            ) - 1,
+
+            Number(
+                parts[2]
+            )
+
+        );
+
+
+    renderTrainingSchedule();
+
+}
+
+
+
+/* =========================================================
+   RENEW TRAINING
+========================================================= */
+
+function renewTraining(){
+
+    console.log(
+        "Renew Training clicked"
     );
 
-    renderTrainingCalendar();
-
 }
 
 
+
 /* =========================================================
-   NEXT MONTH
+   CHANGE TRAINER
 ========================================================= */
 
-function nextCalendarMonth(){
+function changeTrainer(){
 
-    calendarDate.setMonth(
-        calendarDate.getMonth() + 1
+    console.log(
+        "Change Trainer clicked"
     );
 
-    renderTrainingCalendar();
-
 }
+
 
 
 /* =========================================================
-   TODAY
+   CHANGE PROGRAM
 ========================================================= */
 
-function goToCalendarToday(){
+function changeProgram(){
 
-    calendarDate =
-        new Date();
-
-    renderTrainingCalendar();
+    console.log(
+        "Change Program clicked"
+    );
 
 }
+
 
 
 /* =========================================================
@@ -1571,29 +1424,10 @@ document.addEventListener(
     "DOMContentLoaded",
     function(){
 
-        loadTrainingSchedule();
-
-        loadMyProgram();
+        renderTrainingSchedule();
 
     }
 );
-
-/* =========================================================
-   MESSAGE TRAINER
-========================================================= */
-
-function messageTrainer(){
-
-    /*
-        Connect this later to the
-        existing trainer messaging system.
-    */
-
-    console.log(
-        "Message Trainer clicked"
-    );
-
-}
 
 </script>
 
