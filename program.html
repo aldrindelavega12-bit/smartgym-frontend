@@ -1620,6 +1620,7 @@ function renderTrainingSchedule(){
         return;
     }
 
+
     const container =
         document.getElementById(
             "trainingDays"
@@ -1639,11 +1640,8 @@ function renderTrainingSchedule(){
 
 
     if(!container){
-
         return;
-
     }
-
 
 
     /*
@@ -1662,7 +1660,6 @@ function renderTrainingSchedule(){
     }
 
 
-
     /*
     =====================================================
     DATE INPUT
@@ -1679,7 +1676,6 @@ function renderTrainingSchedule(){
     }
 
 
-
     /*
     =====================================================
     CLEAR
@@ -1688,7 +1684,6 @@ function renderTrainingSchedule(){
 
     container.innerHTML =
         "";
-
 
 
     /*
@@ -1701,7 +1696,6 @@ function renderTrainingSchedule(){
         getScheduleDays(
             selectedScheduleDate
         );
-
 
 
     /*
@@ -1726,6 +1720,12 @@ function renderTrainingSchedule(){
                 );
 
 
+            /*
+            =================================================
+            DAY CARD
+            =================================================
+            */
+
             const dayCard =
                 document.createElement(
                     "div"
@@ -1737,17 +1737,30 @@ function renderTrainingSchedule(){
 
 
             /*
+            =================================================
             STATUS CLASS
+            =================================================
+
+            Only add the class if it has a value.
+
+            Prevents:
+            classList.add("")
+            =================================================
             */
 
-            dayCard.classList.add(
-                status.className
-            );
+            if(status.className){
 
+                dayCard.classList.add(
+                    status.className
+                );
+
+            }
 
 
             /*
+            =================================================
             DAY NAME
+            =================================================
             */
 
             const dayName =
@@ -1759,9 +1772,10 @@ function renderTrainingSchedule(){
                 );
 
 
-
             /*
+            =================================================
             WORKOUT NAME
+            =================================================
             */
 
             let workoutName =
@@ -1777,9 +1791,10 @@ function renderTrainingSchedule(){
             }
 
 
-
             /*
-            HTML
+            =================================================
+            BUILD CARD
+            =================================================
             */
 
             dayCard.innerHTML = `
@@ -1794,7 +1809,9 @@ function renderTrainingSchedule(){
 
                     <span>
                         ${escapeHtml(
-                            formatShortDate(date)
+                            formatShortDate(
+                                date
+                            )
                         )}
                     </span>
 
@@ -1810,15 +1827,26 @@ function renderTrainingSchedule(){
                 </div>
 
 
-                <div
-                    class="day-status ${status.className}">
-
-                    ${status.label}
-
-                </div>
+                ${
+                    status.label
+                        ? `
+                            <div class="day-status ${status.className}">
+                                ${escapeHtml(
+                                    status.label
+                                )}
+                            </div>
+                        `
+                        : ""
+                }
 
             `;
 
+
+            /*
+            =================================================
+            APPEND
+            =================================================
+            */
 
             container.appendChild(
                 dayCard
@@ -1828,8 +1856,6 @@ function renderTrainingSchedule(){
     );
 
 }
-
-
 
 /* =========================================================
    ESCAPE HTML
