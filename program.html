@@ -1233,7 +1233,9 @@ function setCurrentProgramEmpty(){
 async function loadTrainingSchedule(){
 
     const memberId =
-        user?.member_id;
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
 
     console.log(
         "WORKOUT SCHEDULE MEMBER ID:",
