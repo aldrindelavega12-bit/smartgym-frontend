@@ -427,15 +427,13 @@
 <script>
 
 // ================= DASHBOARD DATA =================
-
 async function loadDashboard(){
 
     try{
 
-        const response =
-            await fetch(
-                `${API_URL}/api/dashboard`
-            );
+        const response = await fetch(
+            `${API_URL}/api/dashboard`
+        );
 
         if(!response.ok){
 
@@ -445,20 +443,12 @@ async function loadDashboard(){
 
         }
 
-        const data =
-            await response.json();
+        const data = await response.json();
 
         console.log(
             "STAFF DASHBOARD DATA:",
             data
         );
-
-
-        // PENDING
-        document.getElementById(
-            "pending"
-        ).innerText =
-            data.pending || 0;
 
 
         // LOCKERS IN USE
