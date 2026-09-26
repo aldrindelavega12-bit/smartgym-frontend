@@ -1715,3 +1715,16 @@ body {
     font-weight: 600;
     color: #087c3d;
 }
+
+.program-card.program-disabled{
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.program-card.program-disabled:hover{
+    transform: none;
+}
+
+.program-card.program-disabled:active{
+    pointer-events: none;
+}

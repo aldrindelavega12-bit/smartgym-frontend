@@ -749,6 +749,8 @@ let programTrainers = [];
 
 let programs = [];
 
+let hasActiveProgram = false;
+
 let trainers = [];
 
 let selectedProgram = null;
@@ -822,6 +824,10 @@ async function loadPrograms(){
 
     try{
 
+        /* =================================================
+           LOAD PROGRAMS
+        ================================================= */
+
         const response =
             await fetch(
                 `${API_URL}/api/program_trainers`,
@@ -859,7 +865,80 @@ async function loadPrograms(){
             data;
 
 
+        /* =================================================
+           CHECK CURRENT MEMBER PROGRAM
+        ================================================= */
+
+        const memberId =
+            userData.user_id ||
+            userData.member_id;
+
+
+        hasActiveProgram =
+            false;
+
+
+        if(memberId){
+
+            try{
+
+                const statusResponse =
+                    await fetch(
+                        `${API_URL}/api/member/trainer-status/${memberId}`,
+                        {
+                            cache:
+                                "no-store"
+                        }
+                    );
+
+
+                const statusData =
+                    await statusResponse.json();
+
+
+                if(statusResponse.ok){
+
+                    hasActiveProgram =
+                        statusData?.has_trainer === true &&
+                        statusData?.trainer &&
+                        String(
+                            statusData.trainer.status || ""
+                        ).toLowerCase() === "active";
+
+                }
+
+
+                console.log(
+                    "HAS ACTIVE PROGRAM:",
+                    hasActiveProgram
+                );
+
+            }
+            catch(statusError){
+
+                console.error(
+                    "ACTIVE PROGRAM CHECK ERROR:",
+                    statusError
+                );
+
+                hasActiveProgram =
+                    false;
+
+            }
+
+        }
+
+
+        /* =================================================
+           BUILD PROGRAMS
+        ================================================= */
+
         buildPrograms();
+
+
+        /* =================================================
+           RENDER PROGRAMS
+        ================================================= */
 
         renderPrograms();
 
@@ -886,7 +965,6 @@ async function loadPrograms(){
     }
 
 }
-
 
 /* =========================================================
    BUILD PROGRAMS
@@ -974,9 +1052,9 @@ function renderPrograms(){
 
 
             /*
-                IMPORTANT:
-                NO PROGRAM IS SELECTED
-                AUTOMATICALLY
+            =================================================
+            PROGRAM CARD
+            =================================================
             */
 
             card.className =
@@ -1006,32 +1084,94 @@ function renderPrograms(){
 
             `;
 
-            card.onclick =
-                () => {
 
-                    document
-                        .querySelectorAll(
-                            ".program-card"
-                        )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "selected"
-                                )
+            /*
+            =================================================
+            ACTIVE PROGRAM
+            =================================================
+
+            If member already has an ACTIVE program:
+
+            - Still visible
+            - Cannot be clicked
+            - Cannot select another program
+            - Cannot proceed to plan/trainer/payment
+            */
+
+            if(hasActiveProgram){
+
+                card.disabled =
+                    true;
+
+
+                card.classList.add(
+                    "program-disabled"
+                );
+
+
+                card.title =
+                    "You already have an active program.";
+
+            }
+
+
+            /*
+            =================================================
+            NO ACTIVE PROGRAM
+            =================================================
+
+            Normal selection behavior.
+            */
+
+            else{
+
+                card.onclick =
+                    () => {
+
+                        /*
+                        REMOVE OTHER
+                        PROGRAM SELECTIONS
+                        */
+
+                        document
+                            .querySelectorAll(
+                                ".program-card"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "selected"
+                                    )
+                            );
+
+
+                        /*
+                        SELECT PROGRAM
+                        */
+
+                        card.classList.add(
+                            "selected"
                         );
 
 
-                    card.classList.add(
-                        "selected"
-                    );
+                        /*
+                        CONTINUE
+                        */
+
+                        selectProgram(
+                            program
+                        );
+
+                    };
+
+            }
 
 
-                    selectProgram(
-                        program
-                    );
-
-                };
-
+            /*
+            =================================================
+            ADD CARD
+            =================================================
+            */
 
             container.appendChild(
                 card
@@ -1041,6 +1181,7 @@ function renderPrograms(){
     );
 
 }
+
 
 function getRecommendedDuration(days){
 
