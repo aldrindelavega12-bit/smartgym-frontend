@@ -693,28 +693,19 @@ body {
 
 
 .summary-card {
-
     min-height: 118px;
 
-    padding:
-        18px;
+    padding: 20px 24px;
 
-    border:
-        1px solid var(--border);
-
+    border: 1px solid var(--border);
     border-radius: 14px;
 
-    background:
-        #ffffff;
+    background: #ffffff;
 
-    box-shadow:
-        var(--shadow);
+    box-shadow: var(--shadow);
 
     display: flex;
-
     align-items: center;
-
-    gap: 14px;
 
     transition:
         transform .2s ease,
@@ -758,14 +749,13 @@ body {
 
 
 .summary-content {
-
     min-width: 0;
 
     display: flex;
-
     flex-direction: column;
-}
 
+    padding: 2px 0;
+}
 
 .summary-content > span {
 
@@ -835,24 +825,18 @@ body {
 
 
 .card {
-
-    min-height: 185px;
+    min-height: 155px;
 
     padding: 20px;
 
-    border:
-        1px solid var(--border);
-
+    border: 1px solid var(--border);
     border-radius: 14px;
 
-    background:
-        #ffffff;
+    background: #ffffff;
 
-    box-shadow:
-        var(--shadow);
+    box-shadow: var(--shadow);
 
     display: flex;
-
     flex-direction: column;
 
     transition:
@@ -871,29 +855,6 @@ body {
         rgba(18,70,40,.10);
 }
 
-
-.card-icon {
-
-    width: 48px;
-    height: 48px;
-
-    margin-bottom: 15px;
-
-    border-radius: 50%;
-
-    background:
-        var(--green-light);
-
-    color:
-        var(--green);
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 19px;
-}
 
 
 .card h3 {
@@ -926,32 +887,24 @@ body {
 
 
 .card button {
-
-    margin-top: auto;
+    margin-top: 14px;
 
     align-self: flex-start;
 
     padding: 0;
 
     border: 0;
+    background: transparent;
 
-    background:
-        transparent;
+    color: var(--green);
 
-    color:
-        var(--green);
-
-    font-family:
-        "Inter",
-        sans-serif;
+    font-family: "Inter", sans-serif;
 
     font-size: 13px;
-
     font-weight: 700;
 
     cursor: pointer;
 }
-
 
 .card button span {
 
