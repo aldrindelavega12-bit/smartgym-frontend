@@ -820,20 +820,25 @@ function setDefaultDate(){
    LOAD PROGRAMS
 ========================================================= */
 
+/* =========================================================
+   LOAD PROGRAMS
+========================================================= */
+
 async function loadPrograms(){
 
     try{
 
-        /* =================================================
-           LOAD PROGRAMS
-        ================================================= */
+        /*
+        =====================================================
+        LOAD PROGRAMS
+        =====================================================
+        */
 
         const response =
             await fetch(
                 `${API_URL}/api/program_trainers`,
                 {
-                    cache:
-                        "no-store"
+                    cache: "no-store"
                 }
             );
 
@@ -865,83 +870,31 @@ async function loadPrograms(){
             data;
 
 
-        /* =================================================
-           CHECK CURRENT MEMBER PROGRAM
-        ================================================= */
+        /*
+        =====================================================
+        CHECK MEMBER ACTIVE PROGRAM
+        =====================================================
+        */
 
-        const memberId =
-            userData.user_id ||
-            userData.member_id;
-
-
-        hasActiveProgram =
-            false;
+        await checkActiveProgram();
 
 
-        if(memberId){
-
-            try{
-
-                const statusResponse =
-                    await fetch(
-                        `${API_URL}/api/member/trainer-status/${memberId}`,
-                        {
-                            cache:
-                                "no-store"
-                        }
-                    );
-
-
-                const statusData =
-                    await statusResponse.json();
-
-
-                if(statusResponse.ok){
-
-                    hasActiveProgram =
-                        statusData?.has_trainer === true &&
-                        statusData?.trainer &&
-                        String(
-                            statusData.trainer.status || ""
-                        ).toLowerCase() === "active";
-
-                }
-
-
-                console.log(
-                    "HAS ACTIVE PROGRAM:",
-                    hasActiveProgram
-                );
-
-            }
-            catch(statusError){
-
-                console.error(
-                    "ACTIVE PROGRAM CHECK ERROR:",
-                    statusError
-                );
-
-                hasActiveProgram =
-                    false;
-
-            }
-
-        }
-
-
-        /* =================================================
-           BUILD PROGRAMS
-        ================================================= */
+        /*
+        =====================================================
+        BUILD PROGRAMS
+        =====================================================
+        */
 
         buildPrograms();
 
 
-        /* =================================================
-           RENDER PROGRAMS
-        ================================================= */
+        /*
+        =====================================================
+        RENDER PROGRAMS
+        =====================================================
+        */
 
         renderPrograms();
-
 
     }
     catch(error){
@@ -965,6 +918,7 @@ async function loadPrograms(){
     }
 
 }
+
 
 /* =========================================================
    BUILD PROGRAMS
@@ -1026,6 +980,10 @@ function buildPrograms(){
    RENDER PROGRAMS
 ========================================================= */
 
+/* =========================================================
+   RENDER PROGRAMS
+========================================================= */
+
 function renderPrograms(){
 
     const container =
@@ -1034,8 +992,7 @@ function renderPrograms(){
         );
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     programs.forEach(
@@ -1050,12 +1007,6 @@ function renderPrograms(){
             card.type =
                 "button";
 
-
-            /*
-            =================================================
-            PROGRAM CARD
-            =================================================
-            */
 
             card.className =
                 "program-card";
@@ -1087,15 +1038,8 @@ function renderPrograms(){
 
             /*
             =================================================
-            ACTIVE PROGRAM
+            MEMBER ALREADY HAS ACTIVE PROGRAM
             =================================================
-
-            If member already has an ACTIVE program:
-
-            - Still visible
-            - Cannot be clicked
-            - Cannot select another program
-            - Cannot proceed to plan/trainer/payment
             */
 
             if(hasActiveProgram){
@@ -1117,21 +1061,14 @@ function renderPrograms(){
 
             /*
             =================================================
-            NO ACTIVE PROGRAM
+            MEMBER HAS NO ACTIVE PROGRAM
             =================================================
-
-            Normal selection behavior.
             */
 
             else{
 
                 card.onclick =
                     () => {
-
-                        /*
-                        REMOVE OTHER
-                        PROGRAM SELECTIONS
-                        */
 
                         document
                             .querySelectorAll(
@@ -1145,18 +1082,10 @@ function renderPrograms(){
                             );
 
 
-                        /*
-                        SELECT PROGRAM
-                        */
-
                         card.classList.add(
                             "selected"
                         );
 
-
-                        /*
-                        CONTINUE
-                        */
 
                         selectProgram(
                             program
@@ -1167,18 +1096,123 @@ function renderPrograms(){
             }
 
 
-            /*
-            =================================================
-            ADD CARD
-            =================================================
-            */
-
             container.appendChild(
                 card
             );
 
         }
     );
+
+}
+
+/* =========================================================
+   CHECK ACTIVE PROGRAM
+========================================================= */
+
+async function checkActiveProgram(){
+
+    const memberId =
+        userData.user_id ||
+        userData.member_id;
+
+
+    /*
+    =========================================================
+    DEFAULT
+    =========================================================
+    */
+
+    hasActiveProgram = false;
+
+
+    if(!memberId){
+        return;
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/trainer-status/${memberId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            console.warn(
+                "ACTIVE PROGRAM CHECK FAILED:",
+                data
+            );
+
+            return;
+        }
+
+
+        /*
+        =====================================================
+        ACTIVE PROGRAM RULE
+
+        Kapag ang accepted trainer request ay ACTIVE,
+        may active program ang member.
+
+        IMPORTANT:
+        HINDI natin chine-check ang:
+
+        - program_id
+        - trainer_id
+        - start_date
+        - end_date
+        - expiration date
+
+        Status "active" lang ang basis.
+        =====================================================
+        */
+
+        hasActiveProgram =
+            data?.trainer &&
+            String(
+                data.trainer.status || ""
+            ).toLowerCase() === "active";
+
+
+        console.log(
+            "MEMBER ID:",
+            memberId
+        );
+
+
+        console.log(
+            "TRAINER STATUS:",
+            data?.trainer?.status
+        );
+
+
+        console.log(
+            "HAS ACTIVE PROGRAM:",
+            hasActiveProgram
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "ACTIVE PROGRAM CHECK ERROR:",
+            error
+        );
+
+
+        hasActiveProgram =
+            false;
+
+    }
 
 }
 
