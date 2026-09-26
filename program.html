@@ -4803,6 +4803,9 @@ function closeChangeProgram(){
 /* =========================================================
    LOAD PROGRAMS
 ========================================================= */
+/* =========================================================
+   LOAD PROGRAMS
+========================================================= */
 
 async function loadChangeProgramOptions(){
 
@@ -4821,13 +4824,16 @@ async function loadChangeProgramOptions(){
                 }
             );
 
+
         const result =
             await response.json();
+
 
         console.log(
             "CHANGE PROGRAM OPTIONS:",
             result
         );
+
 
         if(!response.ok){
 
@@ -4838,6 +4844,7 @@ async function loadChangeProgramOptions(){
 
         }
 
+
         if(!Array.isArray(result)){
 
             throw new Error(
@@ -4846,9 +4853,14 @@ async function loadChangeProgramOptions(){
 
         }
 
-        /* GET UNIQUE PROGRAMS */
+
+        /* =================================================
+           GET UNIQUE PROGRAMS
+           CURRENT PROGRAM IS ALSO INCLUDED
+        ================================================= */
 
         const uniquePrograms = [];
+
 
         result.forEach(
             function(item){
@@ -4857,6 +4869,7 @@ async function loadChangeProgramOptions(){
                     String(
                         item.program_id
                     );
+
 
                 const exists =
                     uniquePrograms.some(
@@ -4868,6 +4881,7 @@ async function loadChangeProgramOptions(){
 
                         }
                     );
+
 
                 if(!exists){
 
@@ -4886,23 +4900,28 @@ async function loadChangeProgramOptions(){
             }
         );
 
-        /* REMOVE CURRENT PROGRAM */
 
-        const currentProgramId =
-            String(
-                currentTrainerData.program_id
-            );
+        /* =================================================
+           ALL PROGRAMS ARE AVAILABLE
+           
+           IMPORTANT:
+           DO NOT REMOVE CURRENT PROGRAM.
+           
+           This allows:
+           
+           Build Muscle → Build Muscle
+           
+           so the member can change only
+           the split/plan.
+        ================================================= */
 
         const availablePrograms =
-            uniquePrograms.filter(
-                function(program){
+            uniquePrograms;
 
-                    return String(
-                        program.program_id
-                    ) !== currentProgramId;
 
-                }
-            );
+        /* =================================================
+           CHECK PROGRAMS
+        ================================================= */
 
         if(
             availablePrograms.length === 0
@@ -4910,7 +4929,7 @@ async function loadChangeProgramOptions(){
 
             list.innerHTML = `
                 <div class="change-program-loading">
-                    No other programs are available.
+                    No programs are available.
                 </div>
             `;
 
@@ -4918,9 +4937,13 @@ async function loadChangeProgramOptions(){
 
         }
 
-        /* BUILD PROGRAM BUTTONS */
+
+        /* =================================================
+           BUILD PROGRAM BUTTONS
+        ================================================= */
 
         list.innerHTML = "";
+
 
         availablePrograms.forEach(
             function(program){
@@ -4930,10 +4953,14 @@ async function loadChangeProgramOptions(){
                         "button"
                     );
 
-                button.type = "button";
+
+                button.type =
+                    "button";
+
 
                 button.className =
                     "change-program-option";
+
 
                 button.innerHTML = `
                     <strong>
@@ -4947,6 +4974,7 @@ async function loadChangeProgramOptions(){
                     </span>
                 `;
 
+
                 button.onclick =
                     function(){
 
@@ -4956,6 +4984,7 @@ async function loadChangeProgramOptions(){
                         );
 
                     };
+
 
                 list.appendChild(
                     button
@@ -4972,11 +5001,13 @@ async function loadChangeProgramOptions(){
             error
         );
 
+
         list.innerHTML = `
             <div class="change-program-loading">
                 Unable to load programs.
             </div>
         `;
+
 
         alert(
             error.message ||
@@ -4986,6 +5017,7 @@ async function loadChangeProgramOptions(){
     }
 
 }
+
 
 /* =========================================================
    SELECT PROGRAM
