@@ -18,14 +18,16 @@
           href="https://fonts.googleapis.com">
 
     <link rel="preconnect"
-          href="https://fonts.gstatic.com"
+          href="https://fonts.googleapis.com"
           crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet">
+
 </head>
 
 <style>
+
 /* =========================================================
    LOCKER PAGE
    MATCH MEMBERSHIP / TARGET DESIGN
@@ -55,14 +57,20 @@
     color: #617681;
 }
 
+
 /* =========================================================
    MAIN BOOKING GRID
 ========================================================= */
 
 .locker-booking-container {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
     gap: 28px;
+
     align-items: start;
 }
 
@@ -79,31 +87,53 @@
 /* =========================================================
    LOCKER CARDS
 ========================================================= */
+
 .locker-cards {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0;
 
     width: 100%;
+
     margin: 0 0 24px;
+
+    border: 1px solid #dce8e1;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    background: #ffffff;
 }
 
-.locker-card {
-    height: 142px;
-    min-height: 142px;
 
-    padding: 18px;
+.locker-card {
+
+    height: 95px;
+
+    min-height: 95px;
+
+    padding: 15px 20px;
 
     box-sizing: border-box;
 
     background: #ffffff;
 
-    border: 1px solid #dce8e1;
-    border-radius: 16px;
+    border: none;
+
+    border-bottom: 1px solid #dce8e1;
+
+    border-radius: 0;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
@@ -115,40 +145,95 @@
     box-shadow: none;
 }
 
-.locker-card:hover {
-    transform: translateY(-1px);
-    border-color: #087c3d;
+
+/* Remove bottom border from last locker */
+
+.locker-card:last-child {
+    border-bottom: none;
 }
 
+
+/* =========================================================
+   LOCKER POSITION ORDER
+
+   TOP    = LOCKER 3
+   MIDDLE = LOCKER 2
+   BOTTOM = LOCKER 1
+========================================================= */
+
+.locker-card[data-locker="3"] {
+    order: 1;
+}
+
+.locker-card[data-locker="2"] {
+    order: 2;
+}
+
+.locker-card[data-locker="1"] {
+    order: 3;
+}
+
+
+.locker-card:hover {
+
+    background: #f7fbf9;
+
+    border-color: #dce8e1;
+
+    transform: none;
+}
+
+
 .locker-card.active {
-    border: 2px solid #087c3d;
+
+    border: none;
+
+    border-left: 4px solid #087c3d;
+
     background: #f0faf5;
 }
 
-.locker-card::before {
-    content: "\f49e";
 
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-
-    font-size: 25px;
-
-    color: #087c3d;
-
-    margin-bottom: 9px;
-}
+/* =========================================================
+   LOCKER TITLE
+========================================================= */
 
 .locker-card h3 {
-    margin: 0 0 6px;
 
-    font-size: 16px;
+    margin: 0 0 5px;
+
+    font-size: 17px;
+
     font-weight: 700;
 
     color: #102027;
 }
 
+
+/* =========================================================
+   LOCKER POSITION LABEL
+========================================================= */
+
+.locker-position {
+
+    margin-bottom: 5px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #617681;
+}
+
+
+/* =========================================================
+   LOCKER STATUS
+========================================================= */
+
 .locker-status {
+
     font-size: 14px;
+
     font-weight: 700;
 }
 
@@ -158,29 +243,40 @@
 ========================================================= */
 
 .locker-calendar-box {
+
     background: #ffffff;
 
     border: 1px solid #dce8e1;
+
     border-radius: 18px;
 
-    box-shadow: 0 8px 25px rgba(20,60,40,.04);
+    box-shadow:
+        0 8px 25px rgba(20,60,40,.04);
 
-    padding: 22px;
+    padding: 25px;
 }
+
 
 .calendar-header {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
+
 .calendar-header button {
+
     width: 38px;
+
     height: 38px;
 
     border: 0;
+
     border-radius: 10px;
 
     background: #f1f5f3;
@@ -192,153 +288,98 @@
     font-size: 16px;
 }
 
+
+.calendar-header button:hover {
+
+    background: #e9f7ef;
+
+    color: #087c3d;
+}
+
+
 .calendar-header h3 {
+
     margin: 0;
 
     font-size: 21px;
+
     font-weight: 700;
 
     color: #102027;
 }
 
+
 .days {
+
     display: grid;
 
     grid-template-columns:
         repeat(7, minmax(0, 1fr));
 
-    gap: 4px;
-
-    text-align: center;
-}
-
-.day-name {
-    padding: 7px 0;
-
-    font-size: 13px;
-    font-weight: 700;
-
-    color: #102027;
-}
-
-.locker-day {
-    min-height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 9px;
-
-    color: #17262c;
-
-    cursor: pointer;
-
-    font-size: 14px;
-}
-
-.locker-day:hover {
-    background: #e9f7ef;
-    color: #087c3d;
-}
-
-.selected-day {
-    background: #087c3d !important;
-    color: #ffffff !important;
-
-    font-weight: 700;
-}
-
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-.locker-calendar-box {
-    background: #ffffff;
-    border: 1px solid #dce8e1;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(20,60,40,.04);
-    padding: 25px;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.calendar-header button {
-    width: 38px;
-    height: 38px;
-
-    border: 0;
-    border-radius: 10px;
-
-    background: #f1f5f3;
-    color: #102027;
-
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.calendar-header button:hover {
-    background: #e9f7ef;
-    color: #087c3d;
-}
-
-.calendar-header h3 {
-    margin: 0;
-    font-size: 21px;
-    font-weight: 700;
-    color: #102027;
-}
-
-.days {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 5px;
+
     text-align: center;
 }
 
+
 .day-name {
+
     padding: 8px 0;
+
     font-size: 13px;
+
     font-weight: 700;
+
     color: #102027;
 }
 
+
 .locker-day {
+
     min-height: 43px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     border-radius: 9px;
 
     color: #17262c;
+
     cursor: pointer;
+
     font-size: 14px;
 }
 
+
 .locker-day:hover {
+
     background: #e9f7ef;
+
     color: #087c3d;
 }
 
+
 .selected-day {
+
     background: #087c3d !important;
+
     color: #ffffff !important;
+
     font-weight: 700;
 }
+
 
 /* =========================================================
    RIGHT COLUMN
 ========================================================= */
 
 .locker-time-section {
+
     display: flex;
+
     flex-direction: column;
 
     gap: 20px;
@@ -346,30 +387,40 @@
     min-width: 0;
 }
 
+
 .locker-time-box,
 .locker-existing-bookings {
+
     background: #ffffff;
 
     border: 1px solid #dce8e1;
+
     border-radius: 18px;
 
-    box-shadow: 0 8px 25px rgba(20,60,40,.04);
+    box-shadow:
+        0 8px 25px rgba(20,60,40,.04);
 
     padding: 22px;
 }
 
+
 .locker-time-box h3,
 .locker-existing-bookings h3 {
+
     margin: 0 0 20px;
 
     font-size: 20px;
+
     font-weight: 700;
 
     color: #102027;
 }
 
+
 .time-input {
+
     width: 100%;
+
     height: 52px;
 
     padding: 0 16px;
@@ -377,6 +428,7 @@
     box-sizing: border-box;
 
     border: 1px solid #d5e1dc;
+
     border-radius: 14px;
 
     background: #ffffff;
@@ -388,14 +440,19 @@
     outline: none;
 }
 
+
 .preview-box {
+
     margin-top: 18px;
 }
 
+
 .preview-row {
+
     display: flex;
 
     justify-content: space-between;
+
     align-items: center;
 
     padding: 6px 0;
@@ -403,20 +460,29 @@
     font-size: 15px;
 }
 
+
 .preview-row span:first-child {
+
     color: #617681;
 }
 
+
 .preview-row span:last-child {
+
     color: #102027;
+
     font-weight: 600;
 }
 
+
 .locker-existing-bookings {
+
     min-height: 122px;
 }
 
+
 .booking-item {
+
     background: #f7faf8;
 
     border: 1px solid #dce8e1;
@@ -432,13 +498,17 @@
     font-size: 14px;
 }
 
+
 .empty-booking {
+
     color: #617681;
 
     font-size: 14px;
 }
 
+
 .locker-rules {
+
     color: #617681;
 
     line-height: 1.9;
@@ -448,11 +518,15 @@
     padding: 0 2px;
 }
 
+
 .locker-rules b {
+
     color: #102027;
 }
 
+
 .locker-submit-btn {
+
     align-self: flex-start;
 
     background: #087c3d;
@@ -468,12 +542,16 @@
     cursor: pointer;
 
     font-size: 15px;
+
     font-weight: 700;
 }
 
+
 .locker-submit-btn:hover {
+
     background: #066c35;
 }
+
 
 /* =========================================================
    MESSAGE COUNT
@@ -481,19 +559,25 @@
 ========================================================= */
 
 .navbar .menu .msg-link {
+
     position: relative;
 }
 
+
 .navbar .menu .msg-count {
+
     position: absolute;
 
     right: 18px;
+
     top: 50%;
 
     transform: translateY(-50%);
 
     width: 24px;
+
     height: 24px;
+
     min-width: 24px;
 
     padding: 0;
@@ -501,15 +585,19 @@
     display: none;
 
     align-items: center;
+
     justify-content: center;
 
     background: #087c3d;
+
     color: #ffffff;
 
     border-radius: 50%;
 
     font-size: 12px;
+
     font-weight: 700;
+
     line-height: 1;
 }
 
@@ -521,94 +609,128 @@
 @media(max-width: 1000px) {
 
     .locker-booking-container {
+
         grid-template-columns: 1fr;
     }
 
 }
+
 
 @media(max-width: 700px) {
 
-    .locker-cards {
-        grid-template-columns: 1fr;
+    .locker-card {
+
+        height: 90px;
+
+        min-height: 90px;
     }
 
 }
+
 
 /* =========================================================
    REAL-TIME LOCKER STATUS
 ========================================================= */
 
 .locker-status.available {
+
     color: #087c3d;
 }
 
+
 .locker-status.inuse {
+
     color: #2563eb;
 }
 
+
 .locker-status.reserved {
+
     color: #d97706;
 }
 
+
 .locker-status.overtime {
+
     color: #dc2626;
 }
 
+
 .locker-status.unknown {
+
     color: #718096;
 }
 
 
-/* Locker is not currently available */
+/* =========================================================
+   LOCKER DISABLED
+========================================================= */
 
 .locker-card.disabled {
+
     cursor: not-allowed;
+
     opacity: 0.72;
 }
 
+
 .locker-card.disabled:hover {
+
     transform: none;
-    border-color: #dce8e1;
+
+    background: #ffffff;
 }
 
+
 .locker-card.disabled::after {
+
     content: none;
 }
 
 
-/* Active selection should only be possible
-   for available lockers */
-
 .locker-card.disabled.active {
-    border: 1px solid #dce8e1;
+
+    border-left: 1px solid #dce8e1;
+
     background: #ffffff;
 }
+
+
 /* =========================================================
    LOCKER PAGE - ACTIVE SIDEBAR
 ========================================================= */
-/* =========================================================
-   LOCKER PAGE - FORCE ONLY BOOK LOCKER ACTIVE
-========================================================= */
 
 /* Remove active appearance from Home */
+
 .navbar .menu a[href="member.html"] {
+
     background: transparent !important;
+
     color: #17231e !important;
 }
 
+
 .navbar .menu a[href="member.html"] i {
+
     color: #64756d !important;
 }
 
+
 /* Book Locker is the ONLY active item */
+
 .navbar .menu a[href="locker_booking.html"] {
+
     background: #eaf6ee !important;
+
     color: #087c3d !important;
 }
 
+
 .navbar .menu a[href="locker_booking.html"] i {
+
     color: #087c3d !important;
 }
+
 
 /* =========================================================
    PROFILE DROPDOWN
@@ -616,9 +738,11 @@
 ========================================================= */
 
 .profile-dropdown {
+
     position: absolute;
 
     top: calc(100% + 10px);
+
     right: 0;
 
     min-width: 210px;
@@ -626,6 +750,7 @@
     background: #ffffff;
 
     border: 1px solid #dce8e1;
+
     border-radius: 14px;
 
     box-shadow:
@@ -638,11 +763,15 @@
     z-index: 9999;
 }
 
+
 .profile-dropdown.show {
+
     display: block;
 }
 
+
 .profile-dropdown button {
+
     width: 100%;
 
     border: none;
@@ -672,25 +801,37 @@
     cursor: pointer;
 }
 
+
 .profile-dropdown button:hover {
+
     background: #eaf6ee;
+
     color: #087c3d;
 }
+
 
 .profile-dropdown button i {
+
     width: 18px;
+
     color: #087c3d;
 }
 
+
 .profile-dropdown .dropdown-logout {
+
     color: #c0392b;
 }
+
 
 .profile-dropdown .dropdown-logout i {
+
     color: #c0392b;
 }
 
+
 .dropdown-divider {
+
     height: 1px;
 
     background: #e8eeeb;
@@ -704,6 +845,7 @@
 ========================================================= */
 
 .edit-profile-overlay {
+
     position: fixed;
 
     inset: 0;
@@ -713,6 +855,7 @@
     display: none;
 
     align-items: center;
+
     justify-content: center;
 
     z-index: 10000;
@@ -720,11 +863,15 @@
     padding: 20px;
 }
 
+
 .edit-profile-overlay.show {
+
     display: flex;
 }
 
+
 .edit-profile-modal {
+
     width: min(480px, 100%);
 
     background: #ffffff;
@@ -737,7 +884,9 @@
     overflow: hidden;
 }
 
+
 .edit-profile-header {
+
     display: flex;
 
     justify-content: space-between;
@@ -749,7 +898,9 @@
     border-bottom: 1px solid #e5ece8;
 }
 
+
 .edit-profile-header span {
+
     color: #617681;
 
     font-size: 13px;
@@ -757,7 +908,9 @@
     font-weight: 600;
 }
 
+
 .edit-profile-header h2 {
+
     margin: 4px 0 0;
 
     font-size: 22px;
@@ -765,8 +918,11 @@
     color: #102027;
 }
 
+
 .edit-close {
+
     width: 34px;
+
     height: 34px;
 
     border: none;
@@ -782,17 +938,25 @@
     cursor: pointer;
 }
 
+
 .edit-close:hover {
+
     background: #eaf6ee;
+
     color: #087c3d;
 }
 
+
 .edit-profile-body {
+
     padding: 24px 26px;
 }
 
+
 .profile-avatar-large {
+
     width: 58px;
+
     height: 58px;
 
     margin: 0 auto 20px;
@@ -806,16 +970,21 @@
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     font-size: 22px;
 }
 
+
 .profile-field {
+
     margin-bottom: 16px;
 }
 
+
 .profile-field label {
+
     display: block;
 
     margin-bottom: 7px;
@@ -827,11 +996,15 @@
     color: #102027;
 }
 
+
 .password-wrapper {
+
     position: relative;
 }
 
+
 .password-wrapper input {
+
     width: 100%;
 
     height: 46px;
@@ -851,14 +1024,19 @@
     font-size: 14px;
 }
 
+
 .password-wrapper input:focus {
+
     border-color: #087c3d;
 }
 
+
 .password-toggle {
+
     position: absolute;
 
     right: 10px;
+
     top: 50%;
 
     transform: translateY(-50%);
@@ -872,7 +1050,9 @@
     cursor: pointer;
 }
 
+
 .edit-profile-footer {
+
     display: flex;
 
     justify-content: flex-end;
@@ -884,8 +1064,10 @@
     border-top: 1px solid #e5ece8;
 }
 
+
 .cancel-profile,
 .save-profile {
+
     border: none;
 
     border-radius: 9px;
@@ -899,20 +1081,30 @@
     cursor: pointer;
 }
 
+
 .cancel-profile {
+
     background: #f1f5f3;
+
     color: #17231e;
 }
 
+
 .save-profile {
+
     background: #087c3d;
+
     color: #ffffff;
 }
 
+
 .save-profile:hover {
+
     background: #066c35;
 }
+
 </style>
+
 <body>
 
 
@@ -923,14 +1115,23 @@
 <div class="navbar">
 
     <div class="brand">
+
         <div class="brand-icon">
             <i class="fa-solid fa-dumbbell"></i>
         </div>
+
         <div class="brand-text">
+
             <strong>SMART GYM</strong>
-            <span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
         </div>
+
     </div>
+
 
     <div class="menu">
 
@@ -938,24 +1139,37 @@
             Home
         </a>
 
-        <a href="member_messages.html" class="msg-link">
+
+        <a href="member_messages.html"
+           class="msg-link">
+
             Messages
-            <span id="msg-count" class="msg-count">0</span>
+
+            <span id="msg-count"
+                  class="msg-count">
+                0
+            </span>
+
         </a>
+
 
         <a href="program.html">
             Program
         </a>
 
 
-
         <a href="get_program.html">
             Get Program
         </a>
 
-        <a href="locker_booking.html" class="active">
+
+        <a href="locker_booking.html"
+           class="active">
+
             Book Locker
+
         </a>
+
 
         <a href="membership.html">
             Membership
@@ -965,6 +1179,7 @@
 
 </div>
 
+
 <!-- =========================================================
      TOP HEADER
 ========================================================= -->
@@ -973,9 +1188,14 @@
 
     <div class="top-right">
 
-        <div class="user-profile" onclick="toggleMenu()">
+        <div class="user-profile"
+             onclick="toggleMenu()">
 
-            <div class="user-avatar" id="profileInitial"></div>
+
+            <div class="user-avatar"
+                 id="profileInitial">
+            </div>
+
 
             <div class="user-info">
 
@@ -985,9 +1205,13 @@
 
             </div>
 
+
             <i class="fa-solid fa-chevron-down profile-chevron"></i>
 
-            <div id="dropdown" class="profile-dropdown">
+
+            <div id="dropdown"
+                 class="profile-dropdown">
+
 
                 <button
                     onclick="openChangePassword(); event.stopPropagation();">
@@ -998,7 +1222,9 @@
 
                 </button>
 
+
                 <div class="dropdown-divider"></div>
+
 
                 <button
                     onclick="logout(); event.stopPropagation();"
@@ -1010,15 +1236,15 @@
 
                 </button>
 
+
             </div>
 
         </div>
 
-           
-
     </div>
 
 </div>
+
 
 <!-- =========================================================
      CHANGE PASSWORD MODAL
@@ -1027,7 +1253,9 @@
 <div id="changePasswordModal"
      class="edit-profile-overlay">
 
+
     <div class="edit-profile-modal">
+
 
         <div class="edit-profile-header">
 
@@ -1043,6 +1271,7 @@
 
             </div>
 
+
             <button
                 class="edit-close"
                 onclick="closeChangePassword()">
@@ -1055,6 +1284,7 @@
 
 
         <div class="edit-profile-body">
+
 
             <div class="profile-avatar-large">
 
@@ -1071,12 +1301,14 @@
                     Current Password
                 </label>
 
+
                 <div class="password-wrapper">
 
                     <input
                         type="password"
                         id="changeCurrentPassword"
                         placeholder="Current password">
+
 
                     <button
                         type="button"
@@ -1103,12 +1335,14 @@
                     New Password
                 </label>
 
+
                 <div class="password-wrapper">
 
                     <input
                         type="password"
                         id="changeNewPassword"
                         placeholder="New password">
+
 
                     <button
                         type="button"
@@ -1135,12 +1369,14 @@
                     Confirm New Password
                 </label>
 
+
                 <div class="password-wrapper">
 
                     <input
                         type="password"
                         id="changeConfirmPassword"
                         placeholder="Confirm new password">
+
 
                     <button
                         type="button"
@@ -1171,6 +1407,7 @@
 
             </button>
 
+
             <button
                 class="save-profile"
                 onclick="changePassword()">
@@ -1185,6 +1422,7 @@
 
 </div>
 
+
 <!-- =========================================================
      MAIN
 ========================================================= -->
@@ -1195,14 +1433,15 @@
 
 <div class="locker-page-wrap">
 
+
     <h2>
         Book a Locker
     </h2>
 
+
     <p>
         Reserve an available locker for your gym session.
     </p>
-
 
 
 <!-- =====================================================
@@ -1211,62 +1450,102 @@
 
 <div class="locker-booking-container">
 
+
     <!-- =================================================
         LEFT COLUMN
     ================================================== -->
 
     <div class="locker-left-column">
 
+
         <div class="locker-calendar-box">
 
-            <!-- LOCKER CARDS -->
+
+            <!-- =================================================
+                 LOCKER LAYOUT
+            ================================================== -->
 
             <div class="locker-cards">
 
-                <div
-                    class="locker-card"
-                    data-locker="1"
-                    onclick="selectLocker(this, 1)"
-                >
-                    <h3>Locker 1</h3>
 
-                    <div class="locker-status available">
-                        Available
-                    </div>
-                </div>
-
-
-                <div
-                    class="locker-card"
-                    data-locker="2"
-                    onclick="selectLocker(this, 2)"
-                >
-                    <h3>Locker 2</h3>
-
-                    <div class="locker-status available">
-                        Available
-                    </div>
-                </div>
-
+                <!-- LOCKER 3 - UPPER -->
 
                 <div
                     class="locker-card"
                     data-locker="3"
                     onclick="selectLocker(this, 3)"
                 >
-                    <h3>Locker 3</h3>
+
+                    <h3>
+                        Locker 3
+                    </h3>
+
+                    <div class="locker-position">
+                        Upper Part
+                    </div>
 
                     <div class="locker-status available">
                         Available
                     </div>
+
                 </div>
+
+
+                <!-- LOCKER 2 - MIDDLE -->
+
+                <div
+                    class="locker-card"
+                    data-locker="2"
+                    onclick="selectLocker(this, 2)"
+                >
+
+                    <h3>
+                        Locker 2
+                    </h3>
+
+                    <div class="locker-position">
+                        Middle Part
+                    </div>
+
+                    <div class="locker-status available">
+                        Available
+                    </div>
+
+                </div>
+
+
+                <!-- LOCKER 1 - BOTTOM -->
+
+                <div
+                    class="locker-card"
+                    data-locker="1"
+                    onclick="selectLocker(this, 1)"
+                >
+
+                    <h3>
+                        Locker 1
+                    </h3>
+
+                    <div class="locker-position">
+                        Bottom Part
+                    </div>
+
+                    <div class="locker-status available">
+                        Available
+                    </div>
+
+                </div>
+
 
             </div>
 
 
-            <!-- CALENDAR -->
+            <!-- =================================================
+                 CALENDAR
+            ================================================== -->
 
             <div class="calendar-header">
+
 
                 <button
                     type="button"
@@ -1275,7 +1554,9 @@
                     ❮
                 </button>
 
+
                 <h3 id="monthYear"></h3>
+
 
                 <button
                     type="button"
@@ -1284,6 +1565,7 @@
                     ❯
                 </button>
 
+
             </div>
 
 
@@ -1291,6 +1573,7 @@
                 class="days"
                 id="calendarDays"
             ></div>
+
 
         </div>
 
@@ -1303,13 +1586,16 @@
 
     <div class="locker-time-section">
 
+
         <!-- SELECT START TIME -->
 
         <div class="locker-time-box">
 
+
             <h3>
                 Select Start Time
             </h3>
+
 
             <input
                 type="time"
@@ -1318,7 +1604,9 @@
                 onchange="updateTimePreview()"
             >
 
+
             <div class="preview-box">
+
 
                 <div class="preview-row">
 
@@ -1358,6 +1646,7 @@
 
                 </div>
 
+
             </div>
 
         </div>
@@ -1367,9 +1656,11 @@
 
         <div class="locker-existing-bookings">
 
+
             <h3>
                 Reserved Slots
             </h3>
+
 
             <div id="reservedList">
 
@@ -1379,6 +1670,7 @@
 
             </div>
 
+
         </div>
 
 
@@ -1386,18 +1678,26 @@
 
         <div class="locker-rules">
 
+
             ⚠ Max usage:
             <b>3 hours</b>
+
             <br>
+
 
             ⚠ Grace period:
             <b>20 minutes</b>
+
             <br>
+
 
             ⚠ Auto cancel if no show
+
             <br>
 
+
             ⚠ Needs admin approval
+
 
         </div>
 
@@ -1409,12 +1709,17 @@
             class="locker-submit-btn"
             onclick="submitBooking()"
         >
+
             Submit Booking
+
         </button>
+
 
     </div>
 
 </div>
+
+
 <!-- =========================================================
      NOTIFICATION POPUP
 ========================================================= -->
@@ -1424,17 +1729,18 @@
     class="notif-popup"
     onclick="goMessages()">
 
+
     <b id="notifTitle">
         New Message
     </b>
+
 
     <p id="notifText">
         You have a new message
     </p>
 
+
 </div>
-
-
 
 <script>
 
