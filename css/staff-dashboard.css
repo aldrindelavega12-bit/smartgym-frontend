@@ -2437,3 +2437,177 @@ body {
     transform: translateY(0);
 
 }
+
+/* ================================
+   DASHBOARD SUMMARY CLICK
+================================ */
+
+.summary-card {
+    cursor: pointer;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   DASHBOARD MODAL
+================================ */
+
+.dashboard-modal {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(15, 30, 22, 0.35);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    z-index: 9999;
+}
+
+.dashboard-modal.show {
+    display: flex;
+}
+
+
+.dashboard-modal-box {
+    width: 100%;
+    max-width: 650px;
+
+    max-height: 75vh;
+
+    padding: 26px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 60px rgba(18, 70, 40, .16);
+
+    position: relative;
+}
+
+
+.dashboard-modal-box h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+.dashboard-modal-box > p {
+    margin: 6px 0 18px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+.modal-close {
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #68736d;
+
+    font-size: 27px;
+    font-weight: 400;
+
+    cursor: pointer;
+
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--green);
+}
+
+
+/* ================================
+   MODAL TABLE
+================================ */
+
+.modal-table-wrapper {
+    width: 100%;
+
+    max-height: 420px;
+
+    overflow-y: auto;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+}
+
+
+.modal-table-wrapper table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+
+.modal-table-wrapper th {
+    padding: 12px 14px;
+
+    background: #f2faf5;
+
+    color: #26312b;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+
+    position: sticky;
+    top: 0;
+}
+
+
+.modal-table-wrapper td {
+    padding: 12px 14px;
+
+    color: #3e4943;
+
+    font-size: 13px;
+
+    border-bottom: 1px solid #edf2ef;
+}
+
+
+.modal-table-wrapper tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.modal-table-wrapper tbody tr:hover {
+    background: #f8fcf9;
+}
+
+
+.dashboard-modal-box .empty-row {
+    text-align: center;
+
+    padding: 25px;
+
+    color: var(--muted);
+}

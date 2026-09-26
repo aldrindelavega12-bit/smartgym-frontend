@@ -146,7 +146,7 @@
         <div class="summary-cards">
 
             <!-- CURRENT OCCUPANCY -->
-            <div class="summary-card">
+            <<div class="summary-card" onclick="openOccupancyModal()">
 
 
                 <div class="summary-content">
@@ -169,7 +169,7 @@
 
 
             <!-- LOCKERS IN USE -->
-            <div class="summary-card">
+            <div class="summary-card" onclick="openLockerModal()">
 
                 <div class="summary-content">
 
@@ -190,7 +190,7 @@
             </div>
 
             <!-- PRE-MEMBER -->
-            <div class="summary-card">
+            <div class="summary-card" onclick="openPendingModal()">
 
                 <div class="summary-content">
 
@@ -210,6 +210,92 @@
 
             </div>
 
+        </div>
+
+        <!-- CURRENT OCCUPANCY MODAL -->
+        <div id="occupancyModal" class="dashboard-modal">
+            <div class="dashboard-modal-box">
+
+                <button class="modal-close" onclick="closeDashboardModal('occupancyModal')">
+                    ×
+                </button>
+
+                <h2>Current Occupancy</h2>
+                <p>Members currently inside the gym</p>
+
+                <div class="modal-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Time In</th>
+                            </tr>
+                        </thead>
+                        <tbody id="occupancyList">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- LOCKERS IN USE MODAL -->
+        <div id="lockerModal" class="dashboard-modal">
+            <div class="dashboard-modal-box">
+
+                <button class="modal-close" onclick="closeDashboardModal('lockerModal')">
+                    ×
+                </button>
+
+                <h2>Lockers In Use</h2>
+                <p>Members currently using lockers</p>
+
+                <div class="modal-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Locker</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lockerList">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- PENDING MEMBERS MODAL -->
+        <div id="pendingModal" class="dashboard-modal">
+            <div class="dashboard-modal-box">
+
+                <button class="modal-close" onclick="closeDashboardModal('pendingModal')">
+                    ×
+                </button>
+
+                <h2>Pending Members</h2>
+                <p>Members registered through the website</p>
+
+                <div class="modal-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Date Registered</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingList">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
 
 
@@ -833,6 +919,304 @@ window.addEventListener("click", function(e){
     }
 
 });
+
+// ========================================
+// DASHBOARD SUMMARY MODALS
+// ========================================
+
+function openDashboardModal(id) {
+    document.getElementById(id).classList.add("show");
+}
+
+function closeDashboardModal(id) {
+    document.getElementById(id).classList.remove("show");
+}
+
+
+// ========================================
+// CURRENT OCCUPANCY
+// ========================================
+
+async function openOccupancyModal() {
+
+    const modal = document.getElementById("occupancyModal");
+    const list = document.getElementById("occupancyList");
+
+    list.innerHTML = `
+        <tr>
+            <td colspan="3" class="empty-row">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    openDashboardModal("occupancyModal");
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/attendance`
+        );
+
+        if (!response.ok) {
+            throw new Error("Attendance API error");
+        }
+
+        const result = await response.json();
+
+        const data = result.data || [];
+
+        const active = data.filter(
+            item =>
+                !item.time_out ||
+                item.time_out === null
+        );
+
+        if (active.length === 0) {
+
+            list.innerHTML = `
+                <tr>
+                    <td colspan="3" class="empty-row">
+                        No members currently inside
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        list.innerHTML = active.map((item, index) => {
+
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name || item.full_name || "-"}</td>
+                    <td>${formatTime(item.time_in)}</td>
+                </tr>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error("OCCUPANCY ERROR:", error);
+
+        list.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty-row">
+                    Failed to load occupancy
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+// ========================================
+// LOCKERS IN USE
+// ========================================
+
+async function openLockerModal() {
+
+    const list = document.getElementById("lockerList");
+
+    list.innerHTML = `
+        <tr>
+            <td colspan="3" class="empty-row">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    openDashboardModal("lockerModal");
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/locker_history`
+        );
+
+        if (!response.ok) {
+            throw new Error("Locker API error");
+        }
+
+        const result = await response.json();
+
+        const data = result.data || [];
+
+        const active = data.filter(
+            item =>
+                item.status &&
+                item.status.toLowerCase() === "active"
+        );
+
+        if (active.length === 0) {
+
+            list.innerHTML = `
+                <tr>
+                    <td colspan="3" class="empty-row">
+                        No lockers currently in use
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        list.innerHTML = active.map((item, index) => {
+
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.locker || "-"}</td>
+                    <td>${item.name || "-"}</td>
+                </tr>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error("LOCKER ERROR:", error);
+
+        list.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty-row">
+                    Failed to load locker data
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+// ========================================
+// PENDING MEMBERS
+// ========================================
+
+async function openPendingModal() {
+
+    const list = document.getElementById("pendingList");
+
+    list.innerHTML = `
+        <tr>
+            <td colspan="3" class="empty-row">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    openDashboardModal("pendingModal");
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/pending_members`
+        );
+
+        if (!response.ok) {
+            throw new Error("Pending Members API error");
+        }
+
+        const result = await response.json();
+
+        const data = result.data || [];
+
+        if (data.length === 0) {
+
+            list.innerHTML = `
+                <tr>
+                    <td colspan="3" class="empty-row">
+                        No pending members
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        list.innerHTML = data.map((item, index) => {
+
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.full_name || "-"}</td>
+                    <td>${formatDate(item.created_at)}</td>
+                </tr>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error("PENDING MEMBERS ERROR:", error);
+
+        list.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty-row">
+                    Failed to load pending members
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+// ========================================
+// DATE / TIME FORMAT
+// ========================================
+
+function formatTime(value) {
+
+    if (!value) return "-";
+
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+
+    return date.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+    });
+}
+
+
+function formatDate(value) {
+
+    if (!value) return "-";
+
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+
+    return date.toLocaleDateString([], {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+    });
+}
+
+
+// ========================================
+// CLOSE MODAL WHEN CLICKING OUTSIDE
+// ========================================
+
+document.querySelectorAll(".dashboard-modal").forEach(modal => {
+
+    modal.addEventListener("click", function(event) {
+
+        if (event.target === modal) {
+            modal.classList.remove("show");
+        }
+
+    });
+
+});
+
 
 loadDashboard();
 loadPendingMembers();
