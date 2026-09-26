@@ -3218,11 +3218,15 @@ function renderCalendar(){
                 );
 
 
-                selectedDate =
-                    fullDate;
+                selectedDate = fullDate;
 
+                updateBookingSummary();
 
-                loadBookedSlots();
+                if(selectedStart){
+
+                    loadAvailableLockers();
+
+                }
 
             };
 
@@ -3271,15 +3275,36 @@ function updateTimePreview(){
         ).value;
 
 
+    /*
+     * NO TIME SELECTED
+     */
+
     if(!input){
 
-        return;
+        selectedStart = null;
+        selectedEnd = null;
 
+        document
+            .getElementById("previewStart")
+            .innerText = "--:--";
+
+        document
+            .getElementById("previewEnd")
+            .innerText = "--:--";
+
+        hideAvailableLockers();
+
+        updateBookingSummary();
+
+        return;
     }
 
 
-    selectedStart =
-        input;
+    /*
+     * SAVE START TIME
+     */
+
+    selectedStart = input;
 
 
     const [hour, minute] =
@@ -3288,31 +3313,36 @@ function updateTimePreview(){
             .map(Number);
 
 
+    /*
+     * CREATE START DATE
+     */
+
     const startDate =
         new Date();
 
-
     startDate.setHours(
-        hour
+        hour,
+        minute,
+        0,
+        0
     );
 
 
-    startDate.setMinutes(
-        minute
-    );
-
+    /*
+     * 3 HOURS
+     */
 
     const endDate =
-        new Date(
-            startDate
-        );
-
+        new Date(startDate);
 
     endDate.setHours(
-        endDate.getHours()
-        + 3
+        endDate.getHours() + 3
     );
 
+
+    /*
+     * SAVE END TIME
+     */
 
     selectedEnd =
         endDate
@@ -3320,13 +3350,17 @@ function updateTimePreview(){
             .slice(0,5);
 
 
+    /*
+     * UPDATE PREVIEW
+     */
+
     document
         .getElementById(
             "previewStart"
         )
         .innerText =
         formatTime(
-            input
+            selectedStart
         );
 
 
@@ -3340,35 +3374,742 @@ function updateTimePreview(){
         );
 
 
-    const conflict =
-        checkTimeConflict();
+    /*
+     * UPDATE SUMMARY
+     */
+
+    updateBookingSummary();
 
 
-    if (conflict) {
+    /*
+     * DATE + TIME COMPLETE
+     * LOAD AVAILABLE LOCKERS
+     */
 
-        alert(
-            "❌ This locker is already reserved during the selected time."
-        );
+    if(
+        selectedDate &&
+        selectedStart &&
+        selectedEnd
+    ){
 
-        selectedStart = null;
-        selectedEnd = null;
-
-        document
-            .getElementById("startTime")
-            .value = "";
-
-        document
-            .getElementById("previewStart")
-            .innerText = "--:--";
-
-        document
-            .getElementById("previewEnd")
-            .innerText = "--:--";
+        loadAvailableLockers();
 
     }
 
 }
 
+/* =========================================================
+   SHOW AVAILABLE LOCKERS
+========================================================= */
+
+function showAvailableLockers(){
+
+    const box =
+        document.getElementById(
+            "availableLockersBox"
+        );
+
+    if(!box){
+        return;
+    }
+
+    box.classList.add("show");
+
+}
+
+
+/* =========================================================
+   HIDE AVAILABLE LOCKERS
+========================================================= */
+
+function hideAvailableLockers(){
+
+    const box =
+        document.getElementById(
+            "availableLockersBox"
+        );
+
+    if(!box){
+        return;
+    }
+
+    box.classList.remove("show");
+
+
+    /*
+     * Remove previous selection
+     */
+
+    document
+        .querySelectorAll(".locker-card")
+        .forEach(card => {
+
+            card.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    selectedLocker = null;
+
+}
+
+
+/* =========================================================
+   UPDATE BOOKING SUMMARY
+========================================================= */
+
+function updateBookingSummary(){
+
+    const dateElement =
+        document.getElementById(
+            "summaryDate"
+        );
+
+    const timeElement =
+        document.getElementById(
+            "summaryTime"
+        );
+
+    const durationElement =
+        document.getElementById(
+            "summaryDuration"
+        );
+
+
+    /*
+     * DATE
+     */
+
+    if(dateElement){
+
+        if(selectedDate){
+
+            const date =
+                new Date(
+                    selectedDate +
+                    "T00:00:00"
+                );
+
+            dateElement.innerText =
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+        }
+
+        else{
+
+            dateElement.innerText =
+                "--";
+
+        }
+
+    }
+
+
+    /*
+     * TIME
+     */
+
+    if(timeElement){
+
+        if(
+            selectedStart &&
+            selectedEnd
+        ){
+
+            timeElement.innerText =
+                `${formatTime(selectedStart)} - ${formatTime(selectedEnd)}`;
+
+        }
+
+        else{
+
+            timeElement.innerText =
+                "--";
+
+        }
+
+    }
+
+
+    /*
+     * DURATION
+     */
+
+    if(durationElement){
+
+        durationElement.innerText =
+            "3 Hours";
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE AVAILABLE LOCKER HEADER
+========================================================= */
+
+function updateAvailableLockerHeader(){
+
+    const dateElement =
+        document.getElementById(
+            "availableLockerDate"
+        );
+
+    const timeElement =
+        document.getElementById(
+            "availableLockerTime"
+        );
+
+
+    /*
+     * DATE
+     */
+
+    if(dateElement){
+
+        if(selectedDate){
+
+            const date =
+                new Date(
+                    selectedDate +
+                    "T00:00:00"
+                );
+
+            dateElement.innerText =
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+        }
+
+        else{
+
+            dateElement.innerText =
+                "--";
+
+        }
+
+    }
+
+
+    /*
+     * TIME
+     */
+
+    if(timeElement){
+
+        if(
+            selectedStart &&
+            selectedEnd
+        ){
+
+            timeElement.innerText =
+                `${formatTime(selectedStart)} - ${formatTime(selectedEnd)}`;
+
+        }
+
+        else{
+
+            timeElement.innerText =
+                "--";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD AVAILABLE LOCKERS
+========================================================= */
+
+async function loadAvailableLockers(){
+
+    /*
+     * MUST HAVE DATE + TIME
+     */
+
+    if(
+        !selectedDate ||
+        !selectedStart ||
+        !selectedEnd
+    ){
+
+        hideAvailableLockers();
+
+        return;
+    }
+
+
+    /*
+     * SHOW BOX
+     */
+
+    showAvailableLockers();
+
+
+    /*
+     * UPDATE HEADER
+     */
+
+    updateAvailableLockerHeader();
+
+
+    /*
+     * RESET LOCKERS
+     */
+
+    document
+        .querySelectorAll(".locker-card")
+        .forEach(card => {
+
+            card.classList.remove(
+                "active"
+            );
+
+            card.classList.remove(
+                "disabled"
+            );
+
+            const status =
+                card.querySelector(
+                    ".locker-status"
+                );
+
+            if(status){
+
+                status.innerText =
+                    "Checking...";
+
+                status.className =
+                    "locker-status";
+
+            }
+
+        });
+
+
+    const noAvailable =
+        document.getElementById(
+            "noAvailableLockers"
+        );
+
+    if(noAvailable){
+
+        noAvailable.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    /*
+     * FETCH ALL LOCKERS
+     */
+
+    const lockers =
+        [1, 2, 3];
+
+
+    let availableCount = 0;
+
+
+    await Promise.all(
+
+        lockers.map(
+            async locker => {
+
+                try{
+
+                    const response =
+                        await fetch(
+                            `${API_URL}/api/booked_slots?locker=${locker}&date=${selectedDate}`,
+                            {
+                                cache: "no-store"
+                            }
+                        );
+
+
+                    if(!response.ok){
+
+                        throw new Error(
+                            `HTTP ${response.status}`
+                        );
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    const slots =
+                        Array.isArray(data)
+                            ? data
+                            : Array.isArray(data.slots)
+                                ? data.slots
+                                : [];
+
+
+                    /*
+                     * CHECK IF SELECTED TIME
+                     * OVERLAPS A BOOKING
+                     */
+
+                    const conflict =
+                        slots.some(
+                            slot =>
+                                bookingOverlapsSelectedTime(
+                                    slot
+                                )
+                        );
+
+
+                    const card =
+                        document.querySelector(
+                            `.locker-card[data-locker="${locker}"]`
+                        );
+
+
+                    if(!card){
+
+                        return;
+
+                    }
+
+
+                    const status =
+                        card.querySelector(
+                            ".locker-status"
+                        );
+
+
+                    if(conflict){
+
+                        /*
+                         * NOT AVAILABLE
+                         */
+
+                        card.classList.add(
+                            "disabled"
+                        );
+
+
+                        card.classList.remove(
+                            "active"
+                        );
+
+
+                        if(status){
+
+                            status.innerText =
+                                "Reserved";
+
+                            status.className =
+                                "locker-status reserved";
+
+                        }
+
+
+                        if(
+                            selectedLocker ===
+                            Number(locker)
+                        ){
+
+                            selectedLocker =
+                                null;
+
+                        }
+
+                    }
+
+                    else{
+
+                        /*
+                         * AVAILABLE
+                         */
+
+                        availableCount++;
+
+
+                        if(status){
+
+                            status.innerText =
+                                "Available";
+
+                            status.className =
+                                "locker-status available";
+
+                        }
+
+
+                        card.classList.remove(
+                            "disabled"
+                        );
+
+                    }
+
+                }
+
+                catch(error){
+
+                    console.error(
+                        `[AVAILABLE LOCKER] Locker ${locker}:`,
+                        error
+                    );
+
+
+                    const card =
+                        document.querySelector(
+                            `.locker-card[data-locker="${locker}"]`
+                        );
+
+
+                    if(card){
+
+                        const status =
+                            card.querySelector(
+                                ".locker-status"
+                            );
+
+
+                        card.classList.remove(
+                            "disabled"
+                        );
+
+
+                        if(status){
+
+                            status.innerText =
+                                "Available";
+
+                            status.className =
+                                "locker-status available";
+
+                        }
+
+                    }
+
+
+                    availableCount++;
+
+                }
+
+            }
+        )
+
+    );
+
+
+    /*
+     * NOTHING AVAILABLE
+     */
+
+    if(
+        availableCount === 0
+    ){
+
+        if(noAvailable){
+
+            noAvailable.classList.add(
+                "show"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   CHECK BOOKING OVERLAP
+========================================================= */
+
+function bookingOverlapsSelectedTime(slot){
+
+    if(
+        !selectedStart ||
+        !selectedEnd
+    ){
+
+        return false;
+
+    }
+
+
+    let bookingStart = "";
+    let bookingEnd = "";
+
+
+    /*
+     * STRING FORMAT
+     *
+     * "2:43 PM - 5:43 PM"
+     */
+
+    if(
+        typeof slot === "string"
+    ){
+
+        const parts =
+            slot.split(
+                /\s*-\s*/
+            );
+
+
+        if(
+            parts.length >= 2
+        ){
+
+            bookingStart =
+                normalizeBookingTime(
+                    parts[0]
+                );
+
+            bookingEnd =
+                normalizeBookingTime(
+                    parts[1]
+                );
+
+        }
+
+    }
+
+
+    /*
+     * OBJECT FORMAT
+     */
+
+    else if(
+        slot &&
+        typeof slot === "object"
+    ){
+
+        const rawStart =
+            slot.start_time ??
+            slot.startTime ??
+            slot.start ??
+            slot.time ??
+            slot.booking_start ??
+            slot.booking_start_time ??
+            slot.from ??
+            "";
+
+        const rawEnd =
+            slot.end_time ??
+            slot.endTime ??
+            slot.end ??
+            slot.booking_end ??
+            slot.booking_end_time ??
+            slot.to ??
+            "";
+
+
+        bookingStart =
+            normalizeBookingTime(
+                rawStart
+            );
+
+        bookingEnd =
+            normalizeBookingTime(
+                rawEnd
+            );
+
+    }
+
+
+    if(
+        !bookingStart ||
+        !bookingEnd
+    ){
+
+        return false;
+
+    }
+
+
+    /*
+     * CONVERT TO MINUTES
+     */
+
+    let existingStart =
+        timeToMinutes(
+            bookingStart
+        );
+
+    let existingEnd =
+        timeToMinutes(
+            bookingEnd
+        );
+
+
+    let requestedStart =
+        timeToMinutes(
+            selectedStart
+        );
+
+    let requestedEnd =
+        timeToMinutes(
+            selectedEnd
+        );
+
+
+    /*
+     * HANDLE MIDNIGHT
+     *
+     * Example:
+     * 9:00 PM -> 12:00 AM
+     */
+
+    if(
+        existingEnd <= existingStart
+    ){
+
+        existingEnd += 1440;
+
+    }
+
+
+    if(
+        requestedEnd <= requestedStart
+    ){
+
+        requestedEnd += 1440;
+
+    }
+
+
+    /*
+     * OVERLAP FORMULA
+     *
+     * A.start < B.end
+     * AND
+     * A.end > B.start
+     */
+
+    return (
+        requestedStart < existingEnd &&
+        requestedEnd > existingStart
+    );
+
+}
 
 
 /* =========================================================
