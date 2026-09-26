@@ -1525,31 +1525,49 @@ async function loadCurrentProgram(){
 
 
         /* =====================================================
-           TRAINER
-           ===================================================== */
+        TRAINER
+        ===================================================== */
+
+        const currentStatus =
+            String(
+                current.status || ""
+            ).toLowerCase();
+
+        const isPending =
+            currentStatus === "pending";
+
+
+        /* =====================================================
+        TRAINER DISPLAY
+        ===================================================== */
 
         document.getElementById(
             "currentTrainerName"
         ).innerText =
-            current.trainer_name ||
-            current.fullname ||
-            "-";
+            isPending
+                ? ""
+                : (
+                    current.trainer_name ||
+                    current.fullname ||
+                    "-"
+                );
 
 
         /* =====================================================
-           START DATE
-           ===================================================== */
+        START DATE
+        ===================================================== */
 
         const startDateValue =
             current.start_date;
 
-
         document.getElementById(
             "programStartDate"
         ).innerText =
-            formatProgramDate(
-                startDateValue
-            );
+            isPending
+                ? ""
+                : formatProgramDate(
+                    startDateValue
+                );
 
 
         /* =====================================================
@@ -1577,21 +1595,20 @@ async function loadCurrentProgram(){
 
 
         /* =====================================================
-           VALID UNTIL
-
-           USE ACTUAL DATABASE END DATE
-           ===================================================== */
+        VALID UNTIL
+        ===================================================== */
 
         const endDateValue =
             current.end_date;
 
-
         document.getElementById(
             "programEndDate"
         ).innerText =
-            formatProgramDate(
-                endDateValue
-            );
+            isPending
+                ? ""
+                : formatProgramDate(
+                    endDateValue
+                );
 
     }
     catch(error){
