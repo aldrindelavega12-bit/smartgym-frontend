@@ -6239,3 +6239,53 @@ textarea {
     }
 
 }
+/* =========================================================
+   CHANGE PROGRAM MODAL - FORCE DISPLAY
+========================================================= */
+
+.change-program-modal {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    background: rgba(0, 0, 0, 0.45) !important;
+
+    z-index: 99999 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.change-program-modal.show {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.change-program-content {
+    position: relative !important;
+
+    width: min(700px, 95vw) !important;
+    max-height: 90vh !important;
+
+    overflow-y: auto !important;
+
+    background: #ffffff !important;
+
+    border-radius: 20px !important;
+
+    padding: 28px !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 100000 !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+}
