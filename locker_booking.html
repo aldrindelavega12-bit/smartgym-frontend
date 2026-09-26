@@ -2545,6 +2545,12 @@ function selectLocker(element, locker) {
    LOAD BOOKED SLOTS
 ========================================================= */
 
+/* =========================================================
+   LOAD BOOKED SLOTS
+   - ALL BOOKINGS are checked for locker availability
+   - ONLY CURRENT USER'S BOOKINGS are displayed
+========================================================= */
+
 async function loadBookedSlots() {
 
     if (!selectedDate) {
@@ -2562,6 +2568,10 @@ async function loadBookedSlots() {
         selectedDate
     );
 
+
+    /*
+     * RESET BOOKING STATUS
+     */
 
     lockerBookedStatus = {
         1: false,
@@ -2583,13 +2593,31 @@ async function loadBookedSlots() {
     }
 
 
+    /*
+     * CURRENT USER ID
+     */
+
+    const currentMemberId =
+        String(user.user_id);
+
+
+    console.log(
+        "[CURRENT USER ID]",
+        currentMemberId
+    );
+
+
     try {
 
-        const lockers = [1, 2, 3];
+        const lockers = [
+            1,
+            2,
+            3
+        ];
 
 
         /*
-         * FETCH ALL LOCKERS AT ONCE
+         * FETCH ALL LOCKERS
          */
 
         const results =
@@ -2616,7 +2644,7 @@ async function loadBookedSlots() {
                                 );
 
                                 return {
-                                    locker,
+                                    locker: locker,
                                     slots: []
                                 };
 
@@ -2633,20 +2661,37 @@ async function loadBookedSlots() {
                             );
 
 
-                            const slots =
+                            let slots = [];
+
+
+                            if (
                                 Array.isArray(data)
-                                    ? data
-                                    : Array.isArray(data.slots)
-                                        ? data.slots
-                                        : [];
+                            ) {
+
+                                slots = data;
+
+                            }
+
+                            else if (
+                                data &&
+                                Array.isArray(
+                                    data.slots
+                                )
+                            ) {
+
+                                slots =
+                                    data.slots;
+
+                            }
 
 
                             return {
-                                locker,
-                                slots
+                                locker: locker,
+                                slots: slots
                             };
 
                         }
+
 
                         catch (err) {
 
@@ -2657,7 +2702,7 @@ async function loadBookedSlots() {
 
 
                             return {
-                                locker,
+                                locker: locker,
                                 slots: []
                             };
 
@@ -2670,21 +2715,32 @@ async function loadBookedSlots() {
 
 
         /*
-         * PROCESS RESULTS
+         * NUMBER OF MY BOOKINGS
          */
 
-        let totalReservations = 0;
+        let myReservations = 0;
 
+
+        /*
+         * PROCESS EACH LOCKER
+         */
 
         results.forEach(
-            ({
-                locker,
-                slots
-            }) => {
+            result => {
+
+                const locker =
+                    result.locker;
+
+                const slots =
+                    result.slots;
 
 
                 /*
-                 * MARK RESERVED
+                 * =================================================
+                 * ANY BOOKING = LOCKER HAS BOOKING
+                 *
+                 * This is for availability checking.
+                 * =================================================
                  */
 
                 if (
@@ -2699,166 +2755,384 @@ async function loadBookedSlots() {
 
 
                 /*
-                 * DISPLAY BOOKINGS
+                 * =================================================
+                 * PROCESS BOOKINGS
+                 * =================================================
                  */
 
-                slots.forEach(slot => {
+                slots.forEach(
+                    slot => {
 
-                    totalReservations++;
-
-
-                    console.log(
-                        "[BOOKING SLOT RAW]",
-                        slot
-                    );
-
-
-                    let start = "";
-                    let end = "";
-
-
-                    /*
-                     * API CURRENT FORMAT:
-                     *
-                     * "2:43 PM - 5:43 PM"
-                     */
-
-                    if (
-                        typeof slot === "string"
-                    ) {
-
-                        const parts =
-                            slot.split(
-                                /\s*-\s*/
-                            );
-
-
-                        if (
-                            parts.length >= 2
-                        ) {
-
-                            start =
-                                parts[0].trim();
-
-                            end =
-                                parts[1].trim();
-
-                        }
-
-                    }
-
-
-                    /*
-                     * OBJECT FORMAT
-                     */
-
-                    else if (
-                        slot &&
-                        typeof slot === "object"
-                    ) {
-
-                        const rawStart =
-                            slot.start_time ??
-                            slot.startTime ??
-                            slot.start ??
-                            slot.time ??
-                            slot.booking_start ??
-                            slot.booking_start_time ??
-                            slot.from ??
-                            "";
-
-
-                        const rawEnd =
-                            slot.end_time ??
-                            slot.endTime ??
-                            slot.end ??
-                            slot.booking_end ??
-                            slot.booking_end_time ??
-                            slot.to ??
-                            "";
-
-
-                        start =
-                            normalizeBookingTime(
-                                rawStart
-                            );
-
-
-                        end =
-                            normalizeBookingTime(
-                                rawEnd
-                            );
-
-                    }
-
-
-                    console.log(
-                        `[BOOKING PARSED] Locker ${locker}:`,
-                        start,
-                        "-",
-                        end
-                    );
-
-
-                    if (!reservedList) {
-                        return;
-                    }
-
-
-                    const item =
-                        document.createElement(
-                            "div"
+                        console.log(
+                            "[BOOKING SLOT RAW]",
+                            slot
                         );
 
 
-                    item.className =
-                        "booking-item";
+                        /*
+                         * -----------------------------------------
+                         * GET BOOKING USER ID
+                         * -----------------------------------------
+                         */
+
+                        let bookingUserId =
+                            null;
 
 
-                    item.dataset.locker =
-                        locker;
+                        if (
+                            slot &&
+                            typeof slot === "object"
+                        ) {
+
+                            if (
+                                slot.user_id !== undefined &&
+                                slot.user_id !== null
+                            ) {
+
+                                bookingUserId =
+                                    slot.user_id;
+
+                            }
+
+                            else if (
+                                slot.userId !== undefined &&
+                                slot.userId !== null
+                            ) {
+
+                                bookingUserId =
+                                    slot.userId;
+
+                            }
+
+                            else if (
+                                slot.member_id !== undefined &&
+                                slot.member_id !== null
+                            ) {
+
+                                bookingUserId =
+                                    slot.member_id;
+
+                            }
+
+                            else if (
+                                slot.memberId !== undefined &&
+                                slot.memberId !== null
+                            ) {
+
+                                bookingUserId =
+                                    slot.memberId;
+
+                            }
+
+                        }
 
 
-                    item.dataset.start =
-                        start;
+                        /*
+                         * CONVERT TO STRING
+                         */
+
+                        if (
+                            bookingUserId !== null &&
+                            bookingUserId !== undefined
+                        ) {
+
+                            bookingUserId =
+                                String(
+                                    bookingUserId
+                                );
+
+                        }
 
 
-                    item.dataset.end =
-                        end;
+                        /*
+                         * CHECK OWNER
+                         */
+
+                        const isMyBooking =
+                            bookingUserId !== null &&
+                            bookingUserId ===
+                                currentMemberId;
 
 
-                    item.innerHTML = `
-                        <strong>
-                            Locker ${locker}
-                        </strong>
+                        console.log(
+                            "[BOOKING OWNER]",
+                            {
+                                locker: locker,
+                                bookingUserId:
+                                    bookingUserId,
+                                currentMemberId:
+                                    currentMemberId,
+                                isMyBooking:
+                                    isMyBooking
+                            }
+                        );
 
-                        <br>
 
-                        <span>
-                            ${start || "--:--"}
-                            -
-                            ${end || "--:--"}
-                        </span>
-                    `;
+                        /*
+                         * =================================================
+                         * OTHER MEMBER
+                         *
+                         * DO NOT DISPLAY
+                         * =================================================
+                         */
+
+                        if (
+                            !isMyBooking
+                        ) {
+
+                            return;
+
+                        }
 
 
-                    reservedList.appendChild(
-                        item
-                    );
+                        /*
+                         * =================================================
+                         * GET BOOKING TIME
+                         * =================================================
+                         */
 
-                });
+                        let start = "";
+
+                        let end = "";
+
+
+                        /*
+                         * STRING FORMAT
+                         *
+                         * Example:
+                         * "7:00 AM - 10:00 AM"
+                         */
+
+                        if (
+                            typeof slot === "string"
+                        ) {
+
+                            const parts =
+                                slot.split(
+                                    /\s*-\s*/
+                                );
+
+
+                            if (
+                                parts.length >= 2
+                            ) {
+
+                                start =
+                                    parts[0].trim();
+
+                                end =
+                                    parts[1].trim();
+
+                            }
+
+                        }
+
+
+                        /*
+                         * OBJECT FORMAT
+                         */
+
+                        else if (
+                            slot &&
+                            typeof slot === "object"
+                        ) {
+
+                            let rawStart =
+                                "";
+
+                            let rawEnd =
+                                "";
+
+
+                            if (
+                                slot.start_time !== undefined
+                            ) {
+
+                                rawStart =
+                                    slot.start_time;
+
+                            }
+
+                            else if (
+                                slot.startTime !== undefined
+                            ) {
+
+                                rawStart =
+                                    slot.startTime;
+
+                            }
+
+                            else if (
+                                slot.start !== undefined
+                            ) {
+
+                                rawStart =
+                                    slot.start;
+
+                            }
+
+                            else if (
+                                slot.booking_start !== undefined
+                            ) {
+
+                                rawStart =
+                                    slot.booking_start;
+
+                            }
+
+                            else if (
+                                slot.booking_start_time !== undefined
+                            ) {
+
+                                rawStart =
+                                    slot.booking_start_time;
+
+                            }
+
+
+                            if (
+                                slot.end_time !== undefined
+                            ) {
+
+                                rawEnd =
+                                    slot.end_time;
+
+                            }
+
+                            else if (
+                                slot.endTime !== undefined
+                            ) {
+
+                                rawEnd =
+                                    slot.endTime;
+
+                            }
+
+                            else if (
+                                slot.end !== undefined
+                            ) {
+
+                                rawEnd =
+                                    slot.end;
+
+                            }
+
+                            else if (
+                                slot.booking_end !== undefined
+                            ) {
+
+                                rawEnd =
+                                    slot.booking_end;
+
+                            }
+
+                            else if (
+                                slot.booking_end_time !== undefined
+                            ) {
+
+                                rawEnd =
+                                    slot.booking_end_time;
+
+                            }
+
+
+                            start =
+                                normalizeBookingTime(
+                                    rawStart
+                                );
+
+
+                            end =
+                                normalizeBookingTime(
+                                    rawEnd
+                                );
+
+                        }
+
+
+                        console.log(
+                            `[MY BOOKING] Locker ${locker}:`,
+                            start,
+                            "-",
+                            end
+                        );
+
+
+                        /*
+                         * =================================================
+                         * DISPLAY ONLY MY BOOKING
+                         * =================================================
+                         */
+
+                        if (
+                            !reservedList
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        item.className =
+                            "booking-item";
+
+
+                        item.dataset.locker =
+                            locker;
+
+
+                        item.dataset.start =
+                            start;
+
+
+                        item.dataset.end =
+                            end;
+
+
+                        item.innerHTML = `
+                            <strong>
+                                Locker ${locker}
+                            </strong>
+
+                            <br>
+
+                            <span>
+                                ${start || "--:--"}
+                                -
+                                ${end || "--:--"}
+                            </span>
+                        `;
+
+
+                        reservedList.appendChild(
+                            item
+                        );
+
+
+                        myReservations++;
+
+                    }
+                );
 
             }
         );
 
 
         /*
-         * NO RESERVATIONS
+         * =================================================
+         * NO BOOKINGS OF CURRENT USER
+         * =================================================
          */
 
         if (
             reservedList &&
-            totalReservations === 0
+            myReservations === 0
         ) {
 
             reservedList.innerHTML = `
@@ -2871,7 +3145,7 @@ async function loadBookedSlots() {
 
 
         /*
-         * UPDATE UI IMMEDIATELY
+         * UPDATE LOCKER UI
          */
 
         updateLockerCards();
@@ -2882,7 +3156,14 @@ async function loadBookedSlots() {
             lockerBookedStatus
         );
 
+
+        console.log(
+            "[MY RESERVATIONS]",
+            myReservations
+        );
+
     }
+
 
     catch (err) {
 
