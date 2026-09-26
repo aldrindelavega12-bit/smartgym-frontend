@@ -6968,3 +6968,109 @@ textarea {
     }
 
 }
+
+/* =========================================================
+   CHANGE PROGRAM CONFIRMATION MODAL
+========================================================= */
+
+.change-program-confirm-modal {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+}
+
+.change-program-confirm-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.change-program-confirm-content {
+    width: 430px;
+    max-width: 90%;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.18);
+
+    text-align: center;
+}
+
+.change-program-confirm-content h2 {
+    margin: 0 0 12px;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    color: #26312b;
+}
+
+.change-program-confirm-content p {
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    color: #68736d;
+}
+
+.change-program-confirm-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+.change-program-confirm-no,
+.change-program-confirm-yes {
+    min-width: 100px;
+
+    border: none;
+    border-radius: 9px;
+
+    padding: 11px 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.change-program-confirm-no {
+    background: #f1f4f2;
+    color: #46524b;
+}
+
+.change-program-confirm-no:hover {
+    background: #e5ebe7;
+}
+
+.change-program-confirm-yes {
+    background: #e22d2d;
+    color: #ffffff;
+}
+
+.change-program-confirm-yes:hover {
+    background: #c92323;
+}
