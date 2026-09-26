@@ -1728,3 +1728,18 @@ body {
 .program-card.program-disabled:active{
     pointer-events: none;
 }
+
+/* FIX NOTIFICATION POPUP SIZE */
+.notif-popup {
+    width: 280px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    padding: 12px 14px !important;
+
+    right: 20px !important;
+    bottom: 20px !important;
+
+    box-sizing: border-box !important;
+}
