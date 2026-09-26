@@ -214,8 +214,6 @@
 
             </div>
 
-
-            <!-- CURRENT OCCUPANCY -->
             <!-- PRE-MEMBER -->
             <div class="summary-card">
 
@@ -400,11 +398,11 @@ async function loadDashboard(){
         );
 
 
-        // TOTAL ATTENDANCE
+        // PENDING
         document.getElementById(
-            "totalAttendance"
+            "pending"
         ).innerText =
-            data.total_attendance || 0;
+            data.pending || 0;
 
 
         // LOCKERS IN USE
