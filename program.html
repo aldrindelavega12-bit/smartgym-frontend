@@ -1784,11 +1784,9 @@ async function loadCurrentProgram(){
         document.getElementById(
             "programStartDate"
         ).innerText =
-            isPending
-                ? ""
-                : formatProgramDate(
-                    startDateValue
-                );
+            formatProgramDate(
+                startDateValue
+            );
 
 
         /* =====================================================
@@ -1825,11 +1823,9 @@ async function loadCurrentProgram(){
         document.getElementById(
             "programEndDate"
         ).innerText =
-            isPending
-                ? ""
-                : formatProgramDate(
-                    endDateValue
-                );
+            formatProgramDate(
+                endDateValue
+            );
 
     }
     catch(error){
