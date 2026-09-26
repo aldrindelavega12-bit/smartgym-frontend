@@ -217,28 +217,23 @@
             <!-- PRE-MEMBER -->
             <div class="summary-card">
 
-                <div class="summary-icon">
-                    <i class="fa-solid fa-user-plus"></i>
-                </div>
-
                 <div class="summary-content">
 
                     <span>
-                        Pre-Member
+                        Pending Members
                     </span>
 
-                    <strong id="preMember">
+                    <strong id="pendingMembers">
                         0
                     </strong>
 
                     <small>
-                        Members registered through the website
+                        Registration requests waiting for approval
                     </small>
 
                 </div>
 
             </div>
-
 
         </div>
 
@@ -527,7 +522,48 @@ socket.onAny((event, data) => {
     console.log("EVENT:", event);
     console.log("DATA:", data);
 });
+async function loadPendingMembers(){
 
+    try{
+
+        const response = await fetch(
+            `${API_URL}/api/pending_members`
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                `Pending Members API error: ${response.status}`
+            );
+
+        }
+
+        const data = await response.json();
+
+        console.log(
+            "PENDING MEMBERS:",
+            data
+        );
+
+        const count =
+            data.data
+            ? data.data.length
+            : 0;
+
+        document.getElementById(
+            "pendingMembers"
+        ).innerText = count;
+
+    }catch(error){
+
+        console.error(
+            "PENDING MEMBERS ERROR:",
+            error
+        );
+
+    }
+
+}
 // ================= SOUND =================
 let audioCtx = null;
 
@@ -824,6 +860,7 @@ window.addEventListener("click", function(e){
 });
 
 loadDashboard();
+loadPendingMembers();
 
 </script>
 
