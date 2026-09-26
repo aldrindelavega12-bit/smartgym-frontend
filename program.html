@@ -1770,13 +1770,9 @@ async function loadCurrentProgram(){
         document.getElementById(
             "currentTrainerName"
         ).innerText =
-            isPending
-                ? ""
-                : (
-                    current.trainer_name ||
-                    current.fullname ||
-                    "-"
-                );
+            current.trainer_name ||
+            current.fullname ||
+            "-";
 
 
         /* =====================================================
