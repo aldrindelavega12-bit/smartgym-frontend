@@ -1731,29 +1731,32 @@ body {
 
 /* FIX NOTIFICATION POPUP SIZE */
 /* =========================
-   SMALL NOTIFICATION POPUP
+   NOTIFICATION POPUP - FIX
 ========================= */
 
 .notif-popup {
     position: fixed !important;
 
-    right: 20px !important;
+    top: auto !important;
     bottom: 20px !important;
 
-    width: fit-content !important;
+    left: auto !important;
+    right: 20px !important;
+
+    width: max-content !important;
     max-width: 320px !important;
 
     height: auto !important;
-    min-height: unset !important;
-    max-height: unset !important;
+    min-height: 0 !important;
+    max-height: none !important;
 
     padding: 12px 16px !important;
 
     box-sizing: border-box !important;
 
-    white-space: normal !important;
-
     display: block !important;
+
+    overflow: visible !important;
 }
 
 .notif-popup b {
