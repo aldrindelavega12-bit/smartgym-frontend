@@ -463,8 +463,8 @@
 
 
                         <span>
-                            Choose a new program, split, and trainer.
-                            Your current program will be removed.
+                            Choose a new program and split.
+                            Your current trainer will remain.
                         </span>
 
 
@@ -1005,6 +1005,39 @@
 <!-- =========================================================
      CHANGE PROGRAM MODAL
 ========================================================= -->
+<!-- CHANGE PROGRAM CONFIRMATION MODAL -->
+<div id="changeProgramConfirmModal" class="change-program-confirm-modal">
+    <div class="change-program-confirm-content">
+
+        <h2>Are you sure you want to change program?</h2>
+
+        <p>
+            All information and records related to your current program
+            will be deleted if the request is approved.
+        </p>
+
+        <div class="change-program-confirm-actions">
+
+            <button type="button"
+                    class="change-program-confirm-no"
+                    onclick="closeChangeProgramConfirmation()">
+                No
+            </button>
+
+            <button type="button"
+                    class="change-program-confirm-yes"
+                    onclick="proceedChangeProgram()">
+                Yes
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- =========================================================
+     CHANGE PROGRAM MODAL
+========================================================= -->
 
 <div
     id="changeProgramModal"
@@ -1023,7 +1056,7 @@
                 </h2>
 
                 <p>
-                    Choose a new program, split, and trainer.
+                    Choose a new program and split.
                 </p>
 
             </div>
@@ -1048,9 +1081,7 @@
                     Current Program
                 </span>
 
-                <strong
-                    id="changeProgramCurrentName"
-                >
+                <strong id="changeProgramCurrentName">
                     -
                 </strong>
 
@@ -1063,9 +1094,7 @@
                     Current Split
                 </span>
 
-                <strong
-                    id="changeProgramCurrentSplit"
-                >
+                <strong id="changeProgramCurrentSplit">
                     -
                 </strong>
 
@@ -1078,9 +1107,7 @@
                     Current Trainer
                 </span>
 
-                <strong
-                    id="changeProgramCurrentTrainer"
-                >
+                <strong id="changeProgramCurrentTrainer">
                     -
                 </strong>
 
@@ -1130,47 +1157,7 @@
         </div>
 
 
-        <!-- TRAINER -->
-        <div
-            id="changeProgramTrainerSection"
-            class="change-program-section"
-            style="display:none;"
-        >
-
-            <span class="change-program-label">
-                Trainer
-            </span>
-
-            <div
-                id="changeProgramTrainerList"
-                class="change-program-trainer-list"
-            >
-            </div>
-
-        </div>
-
-
-        <!-- TRAINER RATE -->
-        <div
-            id="changeProgramRateSection"
-            class="change-program-section"
-            style="display:none;"
-        >
-
-            <span class="change-program-label">
-                Trainer Rate
-            </span>
-
-            <div
-                id="changeProgramRateList"
-                class="change-program-rate-list"
-            >
-            </div>
-
-        </div>
-
-
-        <!-- PREVIEW -->
+        <!-- REVIEW -->
         <div
             id="changeProgramPreview"
             class="change-program-preview"
@@ -1183,9 +1170,7 @@
                     New Program
                 </span>
 
-                <strong
-                    id="changeProgramSelectedName"
-                >
+                <strong id="changeProgramSelectedName">
                     -
                 </strong>
 
@@ -1198,39 +1183,7 @@
                     New Split
                 </span>
 
-                <strong
-                    id="changeProgramSelectedSplit"
-                >
-                    -
-                </strong>
-
-            </div>
-
-
-            <div>
-
-                <span>
-                    Trainer
-                </span>
-
-                <strong
-                    id="changeProgramSelectedTrainer"
-                >
-                    -
-                </strong>
-
-            </div>
-
-
-            <div>
-
-                <span>
-                    Rate
-                </span>
-
-                <strong
-                    id="changeProgramSelectedRate"
-                >
+                <strong id="changeProgramSelectedSplit">
                     -
                 </strong>
 
@@ -1271,7 +1224,7 @@
                 onclick="confirmChangeProgram()"
                 disabled
             >
-                Confirm
+                Submit Request
             </button>
 
         </div>
@@ -4682,20 +4635,21 @@ async function confirmChangeTrainer(){
 /* =========================================================
    CHANGE PROGRAM
 ========================================================= */
-
-let changeProgramData = [];
+/* =========================================================
+   CHANGE PROGRAM
+========================================================= */
 
 let selectedChangeProgram = null;
 let selectedChangeProgramSplit = null;
-let selectedChangeProgramTrainer = null;
-let selectedChangeProgramRate = null;
 
 
 /* =========================================================
-   OPEN CHANGE PROGRAM
+   STEP 1
+   CLICK CHANGE PROGRAM
+   SHOW CONFIRMATION
 ========================================================= */
 
-async function changeProgram(){
+function changeProgram(){
 
     if(!currentTrainerData){
 
@@ -4707,71 +4661,123 @@ async function changeProgram(){
     }
 
 
-    /* =====================================================
-       CURRENT PROGRAM
-    ===================================================== */
+    document
+        .getElementById(
+            "changeProgramConfirmModal"
+        )
+        .classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE CONFIRMATION
+========================================================= */
+
+function closeChangeProgramConfirmation(){
+
+    document
+        .getElementById(
+            "changeProgramConfirmModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   STEP 2
+   YES
+========================================================= */
+
+async function proceedChangeProgram(){
+
+    closeChangeProgramConfirmation();
+
+    openChangeProgramModal();
+
+    await loadChangeProgramOptions();
+
+}
+
+
+/* =========================================================
+   OPEN MAIN MODAL
+========================================================= */
+
+function openChangeProgramModal(){
+
+    const modal =
+        document.getElementById(
+            "changeProgramModal"
+        );
+
+
+    if(!modal){
+
+        return;
+    }
+
+
+    /* CURRENT PROGRAM */
 
     document.getElementById(
         "changeProgramCurrentName"
     ).innerText =
-        currentTrainerData.program_name ||
+        currentTrainerData?.program_name ||
         "-";
 
+
+    /* CURRENT SPLIT */
 
     document.getElementById(
         "changeProgramCurrentSplit"
     ).innerText =
-        currentTrainerData.program_plan_name ||
-        currentTrainerData.program_plan ||
-        currentTrainerData.split_name ||
+        currentTrainerData?.program_plan_name ||
+        currentTrainerData?.program_plan ||
+        currentTrainerData?.split_name ||
         "-";
 
+
+    /* CURRENT TRAINER */
 
     document.getElementById(
         "changeProgramCurrentTrainer"
     ).innerText =
-        currentTrainerData.trainer_name ||
-        currentTrainerData.fullname ||
+        currentTrainerData?.trainer_name ||
+        currentTrainerData?.fullname ||
         "-";
 
 
-    /* =====================================================
-       RESET
-    ===================================================== */
+    /* RESET */
 
     selectedChangeProgram = null;
 
     selectedChangeProgramSplit = null;
 
-    selectedChangeProgramTrainer = null;
 
-    selectedChangeProgramRate = null;
-
+    /* HIDE SPLIT */
 
     document.getElementById(
         "changeProgramSplitSection"
     ).style.display = "none";
 
 
-    document.getElementById(
-        "changeProgramTrainerSection"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "changeProgramRateSection"
-    ).style.display = "none";
-
+    /* HIDE REVIEW */
 
     document.getElementById(
         "changeProgramPreview"
     ).style.display = "none";
 
 
+    /* DISABLE SUBMIT */
+
     document.getElementById(
         "changeProgramConfirmButton"
     ).disabled = true;
 
+
+    /* RESET PROGRAM LIST */
 
     document.getElementById(
         "changeProgramList"
@@ -4782,20 +4788,9 @@ async function changeProgram(){
     `;
 
 
-    /* =====================================================
-       OPEN MODAL
-    ===================================================== */
+    /* OPEN */
 
-    document.getElementById(
-        "changeProgramModal"
-    ).classList.add("show");
-
-
-    /* =====================================================
-       LOAD PROGRAMS
-    ===================================================== */
-
-    await loadChangeProgramOptions();
+    modal.classList.add("show");
 
 }
 
@@ -4806,236 +4801,17 @@ async function changeProgram(){
 
 function closeChangeProgram(){
 
-    document.getElementById(
-        "changeProgramModal"
-    ).classList.remove("show");
+    document
+        .getElementById(
+            "changeProgramModal"
+        )
+        .classList.remove("show");
 
 }
-
-
-/* =========================================================
-   LOAD PROGRAMS
-========================================================= */
-
-async function loadChangeProgramOptions(){
-
-    const list =
-        document.getElementById(
-            "changeProgramList"
-        );
-
-
-    try{
-
-        const response =
-            await fetch(
-                `${API_URL}/api/program_trainers`,
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        console.log(
-            "CHANGE PROGRAM OPTIONS:",
-            result
-        );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                result.message ||
-                `HTTP ${response.status}`
-            );
-
-        }
-
-
-        if(!Array.isArray(result)){
-
-            throw new Error(
-                "Invalid program data received."
-            );
-
-        }
-
-
-        changeProgramData =
-            result;
-
-
-        /* =================================================
-           GET UNIQUE PROGRAMS
-        ================================================= */
-
-        const uniquePrograms = [];
-
-
-        result.forEach(
-            function(item){
-
-                const programId =
-                    String(
-                        item.program_id
-                    );
-
-
-                const exists =
-                    uniquePrograms.some(
-                        function(program){
-
-                            return String(
-                                program.program_id
-                            ) === programId;
-
-                        }
-                    );
-
-
-                if(!exists){
-
-                    uniquePrograms.push({
-
-                        program_id:
-                            item.program_id,
-
-                        program_name:
-                            item.program_name
-
-                    });
-
-                }
-
-            }
-        );
-
-
-        /* =================================================
-           REMOVE CURRENT PROGRAM
-        ================================================= */
-
-        const currentProgramId =
-            String(
-                currentTrainerData.program_id
-            );
-
-
-        const availablePrograms =
-            uniquePrograms.filter(
-                function(program){
-
-                    return String(
-                        program.program_id
-                    ) !== currentProgramId;
-
-                }
-            );
-
-
-        if(
-            availablePrograms.length === 0
-        ){
-
-            list.innerHTML = `
-                <div class="change-program-loading">
-                    No other programs are available.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        /* =================================================
-           BUILD PROGRAM BUTTONS
-        ================================================= */
-
-        list.innerHTML = "";
-
-
-        availablePrograms.forEach(
-            function(program){
-
-                const button =
-                    document.createElement(
-                        "button"
-                    );
-
-
-                button.type = "button";
-
-
-                button.className =
-                    "change-program-option";
-
-
-                button.innerHTML = `
-                    <strong>
-                        ${escapeHtml(
-                            program.program_name
-                        )}
-                    </strong>
-
-                    <span>
-                        Choose this program
-                    </span>
-                `;
-
-
-                button.onclick =
-                    function(){
-
-                        selectChangeProgram(
-                            button,
-                            program
-                        );
-
-                    };
-
-
-                list.appendChild(
-                    button
-                );
-
-            }
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "LOAD CHANGE PROGRAM ERROR:",
-            error
-        );
-
-
-        list.innerHTML = `
-            <div class="change-program-loading">
-                Unable to load programs.
-            </div>
-        `;
-
-
-        alert(
-            error.message ||
-            "Unable to load programs."
-        );
-
-    }
-
-}
-
 
 /* =========================================================
    SELECT PROGRAM
 ========================================================= */
-
 async function selectChangeProgram(
     button,
     program
@@ -5068,31 +4844,17 @@ async function selectChangeProgram(
     selectedChangeProgramSplit =
         null;
 
-    selectedChangeProgramTrainer =
-        null;
-
-    selectedChangeProgramRate =
-        null;
-
-
-    document.getElementById(
-        "changeProgramTrainerSection"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "changeProgramRateSection"
-    ).style.display = "none";
-
 
     document.getElementById(
         "changeProgramPreview"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "changeProgramConfirmButton"
-    ).disabled = true;
+    ).disabled =
+        true;
 
 
     await loadChangeProgramSplits(
@@ -5266,7 +5028,6 @@ async function loadChangeProgramSplits(
 /* =========================================================
    SELECT SPLIT
 ========================================================= */
-
 function selectChangeProgramSplit(
     button,
     plan
@@ -5296,29 +5057,34 @@ function selectChangeProgramSplit(
         plan;
 
 
-    selectedChangeProgramTrainer =
-        null;
+    /* REVIEW */
 
-    selectedChangeProgramRate =
-        null;
+    document.getElementById(
+        "changeProgramSelectedName"
+    ).innerText =
+        selectedChangeProgram?.program_name ||
+        "-";
 
 
     document.getElementById(
-        "changeProgramRateSection"
-    ).style.display = "none";
+        "changeProgramSelectedSplit"
+    ).innerText =
+        selectedChangeProgramSplit?.plan_name ||
+        "-";
 
 
     document.getElementById(
         "changeProgramPreview"
-    ).style.display = "none";
+    ).style.display =
+        "grid";
 
+
+    /* ENABLE SUBMIT */
 
     document.getElementById(
         "changeProgramConfirmButton"
-    ).disabled = true;
-
-
-    loadChangeProgramTrainers();
+    ).disabled =
+        false;
 
 }
 
