@@ -960,16 +960,29 @@
      CHANGE TRAINER CONFIRMATION MODAL
 ========================================================= -->
 
+<!-- =========================================================
+     CHANGE TRAINER CONFIRMATION MODAL
+========================================================= -->
+
 <div
     id="changeTrainerConfirmModal"
     class="change-confirm-modal">
 
     <div class="change-confirm-content">
 
-        <h2>Are you sure?</h2>
+        <h2>Are you sure you want to change trainer?</h2>
 
         <p>
-            Are you sure you want to change trainer?
+            Your information with your current trainer will be removed.
+        </p>
+
+        <p>
+            Your current program and split will remain unchanged.
+        </p>
+
+        <p>
+            The new trainer will only become active after accepting
+            your request.
         </p>
 
         <div class="change-confirm-actions">
@@ -978,18 +991,14 @@
                 type="button"
                 class="change-confirm-no"
                 onclick="closeChangeTrainerConfirmation()">
-
                 No
-
             </button>
 
             <button
                 type="button"
                 class="change-confirm-yes"
                 onclick="proceedChangeTrainer()">
-
                 Yes
-
             </button>
 
         </div>
@@ -997,8 +1006,6 @@
     </div>
 
 </div>
-
-
 <!-- =========================================================
      JAVASCRIPT
 ========================================================= -->

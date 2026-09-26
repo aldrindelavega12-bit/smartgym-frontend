@@ -5595,7 +5595,9 @@ textarea {
 
     visibility: hidden;
 
-    transition: 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
 }
 
 
@@ -5629,7 +5631,7 @@ textarea {
     padding: 28px;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,0.15);
+        0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -5655,6 +5657,8 @@ textarea {
 
     font-size: 22px;
 
+    font-weight: 700;
+
     color: #26312b;
 }
 
@@ -5666,6 +5670,8 @@ textarea {
     color: #7a847d;
 
     font-size: 13px;
+
+    line-height: 1.5;
 }
 
 
@@ -5682,11 +5688,21 @@ textarea {
     color: #7a847d;
 
     line-height: 1;
+
+    padding: 0;
+
+    transition: color 0.2s ease;
+}
+
+
+.change-trainer-close:hover {
+
+    color: #26312b;
 }
 
 
 /* =========================================================
-   CURRENT INFO
+   CURRENT PROGRAM INFORMATION
 ========================================================= */
 
 .change-current-info {
@@ -5784,7 +5800,10 @@ textarea {
 
     text-align: left;
 
-    transition: 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
@@ -5801,6 +5820,9 @@ textarea {
     border-color: #087c3d;
 
     background: #eaf6ee;
+
+    box-shadow:
+        0 0 0 1px rgba(8, 124, 61, 0.08);
 }
 
 
@@ -5809,6 +5831,8 @@ textarea {
     display: block;
 
     font-size: 15px;
+
+    font-weight: 700;
 
     color: #26312b;
 }
@@ -5827,7 +5851,7 @@ textarea {
 
 
 /* =========================================================
-   RATE LIST
+   RATE SECTION
 ========================================================= */
 
 .change-rate-section {
@@ -5861,13 +5885,18 @@ textarea {
 
     text-align: center;
 
-    transition: 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
 .change-rate-option:hover {
 
     border-color: #087c3d;
+
+    background: #f7fcf9;
 }
 
 
@@ -5876,6 +5905,9 @@ textarea {
     border-color: #087c3d;
 
     background: #eaf6ee;
+
+    box-shadow:
+        0 0 0 1px rgba(8, 124, 61, 0.08);
 }
 
 
@@ -5884,6 +5916,8 @@ textarea {
     display: block;
 
     font-size: 14px;
+
+    font-weight: 700;
 
     color: #26312b;
 }
@@ -5927,7 +5961,7 @@ textarea {
 
 
 /* =========================================================
-   BUTTONS
+   MAIN MODAL BUTTONS
 ========================================================= */
 
 .change-trainer-actions {
@@ -5956,6 +5990,10 @@ textarea {
     font-weight: 700;
 
     cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        opacity 0.2s ease;
 }
 
 
@@ -5967,11 +6005,23 @@ textarea {
 }
 
 
+.change-cancel-btn:hover {
+
+    background: #e3e7e4;
+}
+
+
 .change-confirm-btn {
 
     background: #087c3d;
 
-    color: white;
+    color: #ffffff;
+}
+
+
+.change-confirm-btn:hover:not(:disabled) {
+
+    background: #066b34;
 }
 
 
@@ -5989,52 +6039,88 @@ textarea {
 
 .change-confirm-content {
 
-    width: 380px;
+    width: 430px;
 
     max-width: 90%;
 
-    background: white;
+    background: #ffffff;
 
-    border-radius: 16px;
+    border-radius: 18px;
 
-    padding: 28px;
-
-    text-align: center;
+    padding: 30px;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,0.15);
+        0 20px 60px rgba(0, 0, 0, 0.18);
+
+    text-align: left;
 }
 
+
+/* =========================================================
+   CONFIRMATION TITLE
+========================================================= */
 
 .change-confirm-content h2 {
 
-    margin: 0 0 8px;
-
-    color: #26312b;
+    margin: 0 0 18px;
 
     font-size: 21px;
+
+    line-height: 1.35;
+
+    font-weight: 700;
+
+    color: #26312b;
 }
 
+
+/* =========================================================
+   CONFIRMATION TEXT
+========================================================= */
 
 .change-confirm-content p {
 
-    margin: 0;
-
-    color: #737d77;
+    margin: 0 0 12px;
 
     font-size: 14px;
+
+    line-height: 1.6;
+
+    color: #68736c;
 }
 
+
+/* FIRST WARNING */
+
+.change-confirm-content p:first-of-type {
+
+    color: #4f5953;
+
+    font-weight: 600;
+}
+
+
+/* LAST INFORMATION */
+
+.change-confirm-content p:last-of-type {
+
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   CONFIRMATION BUTTONS
+========================================================= */
 
 .change-confirm-actions {
 
     display: flex;
 
-    justify-content: center;
+    justify-content: flex-end;
 
     gap: 10px;
 
-    margin-top: 24px;
+    margin-top: 26px;
 }
 
 
@@ -6045,13 +6131,21 @@ textarea {
 
     border-radius: 10px;
 
-    padding: 11px 25px;
+    padding: 11px 24px;
+
+    font-size: 13px;
 
     font-weight: 700;
 
     cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        opacity 0.2s ease;
 }
 
+
+/* NO */
 
 .change-confirm-no {
 
@@ -6061,11 +6155,25 @@ textarea {
 }
 
 
+.change-confirm-no:hover {
+
+    background: #e3e7e4;
+}
+
+
+/* YES */
+
 .change-confirm-yes {
 
     background: #087c3d;
 
-    color: white;
+    color: #ffffff;
+}
+
+
+.change-confirm-yes:hover {
+
+    background: #066b34;
 }
 
 
@@ -6089,27 +6197,45 @@ textarea {
    MOBILE
 ========================================================= */
 
-@media(max-width: 600px){
+@media (max-width: 600px) {
 
     .change-current-info,
     .change-trainer-preview {
 
         grid-template-columns: 1fr;
-
     }
 
 
     .change-rate-list {
 
         grid-template-columns: 1fr;
-
     }
 
 
     .change-trainer-content {
 
         padding: 20px;
+    }
 
+
+    .change-confirm-content {
+
+        padding: 24px;
+
+        width: 90%;
+    }
+
+
+    .change-confirm-actions {
+
+        flex-direction: column-reverse;
+    }
+
+
+    .change-confirm-no,
+    .change-confirm-yes {
+
+        width: 100%;
     }
 
 }
