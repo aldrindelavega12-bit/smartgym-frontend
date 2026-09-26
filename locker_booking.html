@@ -2,7 +2,7 @@
 <html>
 <head>
 
-    <title>Book Locker</title>
+    <title>Book a Locker</title>
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
@@ -30,7 +30,6 @@
 
 /* =========================================================
    LOCKER PAGE
-   MATCH MEMBERSHIP / TARGET DESIGN
 ========================================================= */
 
 .locker-page-wrap {
@@ -49,7 +48,7 @@
 }
 
 .locker-page-wrap > p {
-    margin: 0;
+    margin: 0 0 14px;
 
     font-size: 17px;
     line-height: 1.5;
@@ -63,6 +62,7 @@
 ========================================================= */
 
 .locker-booking-container {
+
     display: grid;
 
     grid-template-columns:
@@ -77,169 +77,23 @@
 
 /* =========================================================
    LEFT COLUMN
+   CALENDAR + TIME
 ========================================================= */
 
 .locker-left-column {
+
     min-width: 0;
-}
-
-
-/* =========================================================
-   LOCKER CARDS
-========================================================= */
-
-.locker-cards {
 
     display: flex;
 
     flex-direction: column;
 
     gap: 0;
-
-    width: 100%;
-
-    margin: 0 0 24px;
-
-    border: 1px solid #dce8e1;
-
-    border-radius: 16px;
-
-    overflow: hidden;
-
-    background: #ffffff;
-}
-
-
-.locker-card {
-
-    height: 95px;
-
-    min-height: 95px;
-
-    padding: 15px 20px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border: none;
-
-    border-bottom: 1px solid #dce8e1;
-
-    border-radius: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    cursor: pointer;
-
-    transition: .18s ease;
-
-    box-shadow: none;
-}
-
-
-/* Remove bottom border from last locker */
-
-.locker-card:last-child {
-    border-bottom: none;
 }
 
 
 /* =========================================================
-   LOCKER POSITION ORDER
-
-   TOP    = LOCKER 3
-   MIDDLE = LOCKER 2
-   BOTTOM = LOCKER 1
-========================================================= */
-
-.locker-card[data-locker="3"] {
-    order: 1;
-}
-
-.locker-card[data-locker="2"] {
-    order: 2;
-}
-
-.locker-card[data-locker="1"] {
-    order: 3;
-}
-
-
-.locker-card:hover {
-
-    background: #f7fbf9;
-
-    border-color: #dce8e1;
-
-    transform: none;
-}
-
-
-.locker-card.active {
-
-    border: none;
-
-    border-left: 4px solid #087c3d;
-
-    background: #f0faf5;
-}
-
-
-/* =========================================================
-   LOCKER TITLE
-========================================================= */
-
-.locker-card h3 {
-
-    margin: 0 0 5px;
-
-    font-size: 17px;
-
-    font-weight: 700;
-
-    color: #102027;
-}
-
-
-/* =========================================================
-   LOCKER POSITION LABEL
-========================================================= */
-
-.locker-position {
-
-    margin-bottom: 5px;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    color: #617681;
-}
-
-
-/* =========================================================
-   LOCKER STATUS
-========================================================= */
-
-.locker-status {
-
-    font-size: 14px;
-
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   CALENDAR
+   CALENDAR BOX
 ========================================================= */
 
 .locker-calendar-box {
@@ -253,9 +107,13 @@
     box-shadow:
         0 8px 25px rgba(20,60,40,.04);
 
-    padding: 25px;
+    padding: 22px;
 }
 
+
+/* =========================================================
+   CALENDAR HEADER
+========================================================= */
 
 .calendar-header {
 
@@ -265,15 +123,14 @@
 
     align-items: center;
 
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
-
 
 .calendar-header button {
 
-    width: 38px;
+    width: 40px;
 
-    height: 38px;
+    height: 40px;
 
     border: 0;
 
@@ -285,9 +142,8 @@
 
     cursor: pointer;
 
-    font-size: 16px;
+    font-size: 18px;
 }
-
 
 .calendar-header button:hover {
 
@@ -295,7 +151,6 @@
 
     color: #087c3d;
 }
-
 
 .calendar-header h3 {
 
@@ -309,6 +164,10 @@
 }
 
 
+/* =========================================================
+   CALENDAR DAYS
+========================================================= */
+
 .days {
 
     display: grid;
@@ -321,10 +180,9 @@
     text-align: center;
 }
 
-
 .day-name {
 
-    padding: 8px 0;
+    padding: 7px 0;
 
     font-size: 13px;
 
@@ -332,7 +190,6 @@
 
     color: #102027;
 }
-
 
 .locker-day {
 
@@ -353,14 +210,12 @@
     font-size: 14px;
 }
 
-
 .locker-day:hover {
 
     background: #e9f7ef;
 
     color: #087c3d;
 }
-
 
 .selected-day {
 
@@ -369,6 +224,98 @@
     color: #ffffff !important;
 
     font-weight: 700;
+}
+
+
+/* =========================================================
+   SELECT START TIME
+   BELOW CALENDAR
+========================================================= */
+
+.locker-time-box {
+
+    margin-top: 20px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #e5ece8;
+}
+
+.locker-time-box h3 {
+
+    margin: 0 0 14px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #102027;
+}
+
+.time-input {
+
+    width: 100%;
+
+    height: 52px;
+
+    padding: 0 16px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d5e1dc;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #102027;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.time-input:focus {
+
+    border-color: #087c3d;
+
+    box-shadow:
+        0 0 0 3px rgba(8,124,61,.08);
+}
+
+
+/* =========================================================
+   TIME PREVIEW
+========================================================= */
+
+.preview-box {
+
+    margin-top: 14px;
+}
+
+.preview-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 5px 0;
+
+    font-size: 15px;
+}
+
+.preview-row span:first-child {
+
+    color: #617681;
+}
+
+.preview-row span:last-child {
+
+    color: #102027;
+
+    font-weight: 600;
 }
 
 
@@ -388,8 +335,14 @@
 }
 
 
-.locker-time-box,
-.locker-existing-bookings {
+/* =========================================================
+   AVAILABLE LOCKERS
+   HIDDEN UNTIL DATE + TIME ARE SELECTED
+========================================================= */
+
+.available-lockers-box {
+
+    display: none;
 
     background: #ffffff;
 
@@ -404,12 +357,136 @@
 }
 
 
-.locker-time-box h3,
-.locker-existing-bookings h3 {
+/*
+   JavaScript will add .show when
+   date + start time are selected.
+*/
 
-    margin: 0 0 20px;
+.available-lockers-box.show {
 
-    font-size: 20px;
+    display: block;
+}
+
+
+/* =========================================================
+   AVAILABLE LOCKER HEADER
+========================================================= */
+
+.available-lockers-header {
+
+    margin-bottom: 16px;
+}
+
+.available-lockers-header h3 {
+
+    margin: 0 0 6px;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    color: #102027;
+}
+
+.available-lockers-header p {
+
+    margin: 0;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    color: #617681;
+}
+
+.available-lockers-header strong {
+
+    color: #087c3d;
+}
+
+
+/* =========================================================
+   LOCKER CARDS
+========================================================= */
+
+.locker-cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   INDIVIDUAL LOCKER
+========================================================= */
+
+.locker-card {
+
+    position: relative;
+
+    min-width: 0;
+
+    min-height: 170px;
+
+    padding: 22px 16px 16px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #dce8e1;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+
+    box-shadow: none;
+}
+
+.locker-card:hover {
+
+    border-color: #087c3d;
+
+    background: #fbfefc;
+
+    transform: translateY(-1px);
+}
+
+.locker-card.active {
+
+    border: 2px solid #087c3d;
+
+    background: #f0faf5;
+}
+
+
+/* =========================================================
+   LOCKER NAME
+========================================================= */
+
+.locker-card h3 {
+
+    margin: 0 0 10px;
+
+    font-size: 17px;
 
     font-weight: 700;
 
@@ -417,69 +494,191 @@
 }
 
 
-.time-input {
+/* =========================================================
+   POSITION LABEL
+========================================================= */
 
-    width: 100%;
+.locker-position {
 
-    height: 52px;
-
-    padding: 0 16px;
-
-    box-sizing: border-box;
-
-    border: 1px solid #d5e1dc;
-
-    border-radius: 14px;
-
-    background: #ffffff;
-
-    color: #102027;
-
-    font-size: 16px;
-
-    outline: none;
-}
-
-
-.preview-box {
-
-    margin-top: 18px;
-}
-
-
-.preview-row {
-
-    display: flex;
-
-    justify-content: space-between;
+    display: inline-flex;
 
     align-items: center;
 
-    padding: 6px 0;
+    justify-content: center;
 
-    font-size: 15px;
+    min-width: 125px;
+
+    padding: 7px 13px;
+
+    margin-bottom: 14px;
+
+    border-radius: 20px;
+
+    background: #e5f5ec;
+
+    color: #087c3d;
+
+    font-size: 13px;
+
+    font-weight: 700;
 }
 
 
-.preview-row span:first-child {
+/* =========================================================
+   SELECTION CIRCLE
+========================================================= */
+
+.locker-select-circle {
+
+    width: 24px;
+
+    height: 24px;
+
+    border: 2px solid #102027;
+
+    border-radius: 50%;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-top: 8px;
+
+    background: #ffffff;
+}
+
+.locker-card.active .locker-select-circle {
+
+    border: 2px solid #087c3d;
+}
+
+.locker-card.active .locker-select-circle::after {
+
+    content: "";
+
+    width: 12px;
+
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: #087c3d;
+}
+
+
+/* =========================================================
+   LOCKER STATUS
+========================================================= */
+
+.locker-status {
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.locker-status.available {
+
+    color: #087c3d;
+}
+
+.locker-status.inuse {
+
+    color: #2563eb;
+}
+
+.locker-status.reserved {
+
+    color: #d97706;
+}
+
+.locker-status.overtime {
+
+    color: #dc2626;
+}
+
+.locker-status.unknown {
+
+    color: #718096;
+}
+
+
+/* =========================================================
+   DISABLED LOCKER
+========================================================= */
+
+.locker-card.disabled {
+
+    cursor: not-allowed;
+
+    opacity: .65;
+}
+
+.locker-card.disabled:hover {
+
+    transform: none;
+
+    border-color: #dce8e1;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   NO AVAILABLE LOCKERS
+========================================================= */
+
+.no-available-lockers {
+
+    display: none;
+
+    padding: 25px 15px;
+
+    text-align: center;
 
     color: #617681;
+
+    font-size: 14px;
+}
+
+.no-available-lockers.show {
+
+    display: block;
 }
 
 
-.preview-row span:last-child {
-
-    color: #102027;
-
-    font-weight: 600;
-}
-
+/* =========================================================
+   RESERVED SLOTS
+========================================================= */
 
 .locker-existing-bookings {
 
-    min-height: 122px;
+    background: #ffffff;
+
+    border: 1px solid #dce8e1;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(20,60,40,.04);
+
+    padding: 22px;
 }
 
+.locker-existing-bookings h3 {
+
+    margin: 0 0 16px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #102027;
+}
 
 .booking-item {
 
@@ -498,54 +697,120 @@
     font-size: 14px;
 }
 
-
 .empty-booking {
 
+    min-height: 120px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    border: 1px solid #e3e9e6;
+
+    border-radius: 12px;
+
     color: #617681;
 
     font-size: 14px;
 }
 
 
-.locker-rules {
+/* =========================================================
+   BOOKING SUMMARY
+========================================================= */
 
-    color: #617681;
+.booking-summary {
 
-    line-height: 1.9;
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        auto
+        auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 16px 18px;
+
+    background: #eaf6ee;
+
+    border-radius: 14px;
+
+    border: 1px solid #dce8e1;
+}
+
+.summary-item {
+
+    min-width: 0;
+
+    padding-right: 18px;
+
+    border-right: 1px solid #b8d9c5;
+}
+
+.summary-item:last-of-type {
+
+    border-right: none;
+}
+
+.summary-label {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 12px;
+
+    color: #718096;
+}
+
+.summary-value {
+
+    display: block;
 
     font-size: 14px;
 
-    padding: 0 2px;
-}
-
-
-.locker-rules b {
+    font-weight: 700;
 
     color: #102027;
+
+    white-space: nowrap;
 }
 
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
 
 .locker-submit-btn {
 
-    align-self: flex-start;
+    min-height: 50px;
+
+    padding: 13px 26px;
+
+    border: none;
+
+    border-radius: 10px;
 
     background: #087c3d;
 
     color: #ffffff;
-
-    border: none;
-
-    padding: 13px 28px;
-
-    border-radius: 10px;
 
     cursor: pointer;
 
     font-size: 15px;
 
     font-weight: 700;
-}
 
+    white-space: nowrap;
+}
 
 .locker-submit-btn:hover {
 
@@ -554,15 +819,34 @@
 
 
 /* =========================================================
+   RULES
+========================================================= */
+
+.locker-rules {
+
+    color: #617681;
+
+    line-height: 1.8;
+
+    font-size: 13px;
+
+    padding: 0 2px;
+}
+
+.locker-rules b {
+
+    color: #102027;
+}
+
+
+/* =========================================================
    MESSAGE COUNT
-   SAME STYLE AS MEMBERSHIP
 ========================================================= */
 
 .navbar .menu .msg-link {
 
     position: relative;
 }
-
 
 .navbar .menu .msg-count {
 
@@ -603,104 +887,8 @@
 
 
 /* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width: 1000px) {
-
-    .locker-booking-container {
-
-        grid-template-columns: 1fr;
-    }
-
-}
-
-
-@media(max-width: 700px) {
-
-    .locker-card {
-
-        height: 90px;
-
-        min-height: 90px;
-    }
-
-}
-
-
-/* =========================================================
-   REAL-TIME LOCKER STATUS
-========================================================= */
-
-.locker-status.available {
-
-    color: #087c3d;
-}
-
-
-.locker-status.inuse {
-
-    color: #2563eb;
-}
-
-
-.locker-status.reserved {
-
-    color: #d97706;
-}
-
-
-.locker-status.overtime {
-
-    color: #dc2626;
-}
-
-
-.locker-status.unknown {
-
-    color: #718096;
-}
-
-
-/* =========================================================
-   LOCKER DISABLED
-========================================================= */
-
-.locker-card.disabled {
-
-    cursor: not-allowed;
-
-    opacity: 0.72;
-}
-
-
-.locker-card.disabled:hover {
-
-    transform: none;
-
-    background: #ffffff;
-}
-
-
-.locker-card.disabled::after {
-
-    content: none;
-}
-
-
-.locker-card.disabled.active {
-
-    border-left: 1px solid #dce8e1;
-
-    background: #ffffff;
-}
-
-
-/* =========================================================
    LOCKER PAGE - ACTIVE SIDEBAR
 ========================================================= */
-
-/* Remove active appearance from Home */
 
 .navbar .menu a[href="member.html"] {
 
@@ -709,14 +897,10 @@
     color: #17231e !important;
 }
 
-
 .navbar .menu a[href="member.html"] i {
 
     color: #64756d !important;
 }
-
-
-/* Book Locker is the ONLY active item */
 
 .navbar .menu a[href="locker_booking.html"] {
 
@@ -724,7 +908,6 @@
 
     color: #087c3d !important;
 }
-
 
 .navbar .menu a[href="locker_booking.html"] i {
 
@@ -734,7 +917,6 @@
 
 /* =========================================================
    PROFILE DROPDOWN
-   SAME AS MEMBERSHIP
 ========================================================= */
 
 .profile-dropdown {
@@ -763,12 +945,10 @@
     z-index: 9999;
 }
 
-
 .profile-dropdown.show {
 
     display: block;
 }
-
 
 .profile-dropdown button {
 
@@ -801,14 +981,12 @@
     cursor: pointer;
 }
 
-
 .profile-dropdown button:hover {
 
     background: #eaf6ee;
 
     color: #087c3d;
 }
-
 
 .profile-dropdown button i {
 
@@ -817,18 +995,15 @@
     color: #087c3d;
 }
 
-
 .profile-dropdown .dropdown-logout {
 
     color: #c0392b;
 }
 
-
 .profile-dropdown .dropdown-logout i {
 
     color: #c0392b;
 }
-
 
 .dropdown-divider {
 
@@ -863,12 +1038,10 @@
     padding: 20px;
 }
 
-
 .edit-profile-overlay.show {
 
     display: flex;
 }
-
 
 .edit-profile-modal {
 
@@ -884,7 +1057,6 @@
     overflow: hidden;
 }
 
-
 .edit-profile-header {
 
     display: flex;
@@ -898,7 +1070,6 @@
     border-bottom: 1px solid #e5ece8;
 }
 
-
 .edit-profile-header span {
 
     color: #617681;
@@ -908,7 +1079,6 @@
     font-weight: 600;
 }
 
-
 .edit-profile-header h2 {
 
     margin: 4px 0 0;
@@ -917,7 +1087,6 @@
 
     color: #102027;
 }
-
 
 .edit-close {
 
@@ -938,7 +1107,6 @@
     cursor: pointer;
 }
 
-
 .edit-close:hover {
 
     background: #eaf6ee;
@@ -946,12 +1114,10 @@
     color: #087c3d;
 }
 
-
 .edit-profile-body {
 
     padding: 24px 26px;
 }
-
 
 .profile-avatar-large {
 
@@ -976,12 +1142,10 @@
     font-size: 22px;
 }
 
-
 .profile-field {
 
     margin-bottom: 16px;
 }
-
 
 .profile-field label {
 
@@ -996,12 +1160,10 @@
     color: #102027;
 }
 
-
 .password-wrapper {
 
     position: relative;
 }
-
 
 .password-wrapper input {
 
@@ -1024,12 +1186,10 @@
     font-size: 14px;
 }
 
-
 .password-wrapper input:focus {
 
     border-color: #087c3d;
 }
-
 
 .password-toggle {
 
@@ -1050,7 +1210,6 @@
     cursor: pointer;
 }
 
-
 .edit-profile-footer {
 
     display: flex;
@@ -1063,7 +1222,6 @@
 
     border-top: 1px solid #e5ece8;
 }
-
 
 .cancel-profile,
 .save-profile {
@@ -1081,14 +1239,12 @@
     cursor: pointer;
 }
 
-
 .cancel-profile {
 
     background: #f1f5f3;
 
     color: #17231e;
 }
-
 
 .save-profile {
 
@@ -1097,10 +1253,55 @@
     color: #ffffff;
 }
 
-
 .save-profile:hover {
 
     background: #066c35;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 1000px) {
+
+    .locker-booking-container {
+
+        grid-template-columns: 1fr;
+    }
+
+    .locker-cards {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+@media(max-width: 700px) {
+
+    .locker-cards {
+
+        grid-template-columns: 1fr;
+    }
+
+    .booking-summary {
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .summary-item {
+
+        border-right: none;
+
+        padding-right: 0;
+    }
+
+    .locker-submit-btn {
+
+        width: 100%;
+    }
+
 }
 
 </style>
@@ -1444,305 +1645,466 @@
     </p>
 
 
-<!-- =====================================================
-     BOOKING AREA
-====================================================== -->
+    <!-- =====================================================
+         BOOKING AREA
+    ====================================================== -->
 
-<div class="locker-booking-container">
-
-
-    <!-- =================================================
-        LEFT COLUMN
-    ================================================== -->
-
-    <div class="locker-left-column">
+    <div class="locker-booking-container">
 
 
-        <div class="locker-calendar-box">
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================== -->
 
-
-            <!-- =================================================
-                 LOCKER LAYOUT
-            ================================================== -->
-
-            <div class="locker-cards">
-
-
-                <!-- LOCKER 3 - UPPER -->
-
-                <div
-                    class="locker-card"
-                    data-locker="3"
-                    onclick="selectLocker(this, 3)"
-                >
-
-                    <h3>
-                        Locker 3
-                    </h3>
-
-                    <div class="locker-position">
-                        Upper Part
-                    </div>
-
-                    <div class="locker-status available">
-                        Available
-                    </div>
-
-                </div>
-
-
-                <!-- LOCKER 2 - MIDDLE -->
-
-                <div
-                    class="locker-card"
-                    data-locker="2"
-                    onclick="selectLocker(this, 2)"
-                >
-
-                    <h3>
-                        Locker 2
-                    </h3>
-
-                    <div class="locker-position">
-                        Middle Part
-                    </div>
-
-                    <div class="locker-status available">
-                        Available
-                    </div>
-
-                </div>
-
-
-                <!-- LOCKER 1 - BOTTOM -->
-
-                <div
-                    class="locker-card"
-                    data-locker="1"
-                    onclick="selectLocker(this, 1)"
-                >
-
-                    <h3>
-                        Locker 1
-                    </h3>
-
-                    <div class="locker-position">
-                        Bottom Part
-                    </div>
-
-                    <div class="locker-status available">
-                        Available
-                    </div>
-
-                </div>
-
-
-            </div>
+        <div class="locker-left-column">
 
 
             <!-- =================================================
                  CALENDAR
             ================================================== -->
 
-            <div class="calendar-header">
+            <div class="locker-calendar-box">
 
 
-                <button
-                    type="button"
-                    onclick="changeMonth(-1)"
-                >
-                    ❮
-                </button>
+                <div class="calendar-header">
 
 
-                <h3 id="monthYear"></h3>
+                    <button
+                        type="button"
+                        onclick="changeMonth(-1)">
+
+                        ❮
+
+                    </button>
 
 
-                <button
-                    type="button"
-                    onclick="changeMonth(1)"
-                >
-                    ❯
-                </button>
+                    <h3 id="monthYear"></h3>
+
+
+                    <button
+                        type="button"
+                        onclick="changeMonth(1)">
+
+                        ❯
+
+                    </button>
+
+
+                </div>
+
+
+                <div
+                    class="days"
+                    id="calendarDays">
+                </div>
+
+
+                <!-- =================================================
+                     START TIME
+                ================================================== -->
+
+                <div class="locker-time-box">
+
+
+                    <h3>
+                        Select Start Time
+                    </h3>
+
+
+                    <input
+                        type="time"
+                        id="startTime"
+                        class="time-input"
+                        onchange="updateTimePreview()"
+                    >
+
+
+                    <div class="preview-box">
+
+
+                        <div class="preview-row">
+
+                            <span>
+                                Start:
+                            </span>
+
+                            <span id="previewStart">
+                                --:--
+                            </span>
+
+                        </div>
+
+
+                        <div class="preview-row">
+
+                            <span>
+                                End:
+                            </span>
+
+                            <span id="previewEnd">
+                                --:--
+                            </span>
+
+                        </div>
+
+
+                        <div class="preview-row">
+
+                            <span>
+                                Duration:
+                            </span>
+
+                            <span>
+                                3 Hours
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
 
 
             </div>
 
+        </div>
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div class="locker-time-section">
+
+
+            <!-- =================================================
+                 AVAILABLE LOCKERS
+                 
+                 IMPORTANT:
+                 HIDDEN BY DEFAULT.
+                 JS WILL SHOW THIS ONLY AFTER:
+                 DATE + TIME ARE SELECTED.
+            ================================================== -->
 
             <div
-                class="days"
-                id="calendarDays"
-            ></div>
+                id="availableLockersBox"
+                class="available-lockers-box">
 
 
-        </div>
+                <div class="available-lockers-header">
 
-    </div>
-
-
-    <!-- =================================================
-         RIGHT COLUMN
-    ================================================== -->
-
-    <div class="locker-time-section">
+                    <h3>
+                        Available Lockers
+                    </h3>
 
 
-        <!-- SELECT START TIME -->
+                    <p>
 
-        <div class="locker-time-box">
+                        Available lockers for
 
+                        <strong id="availableLockerDate">
+                            --
+                        </strong>
 
-            <h3>
-                Select Start Time
-            </h3>
+                        at
 
+                        <strong id="availableLockerTime">
+                            --
+                        </strong>
 
-            <input
-                type="time"
-                id="startTime"
-                class="time-input"
-                onchange="updateTimePreview()"
-            >
+                    </p>
 
-
-            <div class="preview-box">
+                </div>
 
 
-                <div class="preview-row">
+                <!-- =================================================
+                     LOCKER CARDS
+                ================================================== -->
 
-                    <span>
-                        Start:
+                <div class="locker-cards">
+
+
+                    <!-- LOCKER 1 -->
+
+                    <div
+                        class="locker-card"
+                        data-locker="1"
+                        onclick="selectLocker(this, 1)"
+                    >
+
+                        <h3>
+                            Locker 1
+                        </h3>
+
+
+                        <div class="locker-position">
+                            Bottom Part
+                        </div>
+
+
+                        <div
+                            class="locker-status available">
+
+                            Available
+
+                        </div>
+
+
+                        <div
+                            class="locker-select-circle">
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOCKER 2 -->
+
+                    <div
+                        class="locker-card"
+                        data-locker="2"
+                        onclick="selectLocker(this, 2)"
+                    >
+
+                        <h3>
+                            Locker 2
+                        </h3>
+
+
+                        <div class="locker-position">
+                            Middle Part
+                        </div>
+
+
+                        <div
+                            class="locker-status available">
+
+                            Available
+
+                        </div>
+
+
+                        <div
+                            class="locker-select-circle">
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOCKER 3 -->
+
+                    <div
+                        class="locker-card"
+                        data-locker="3"
+                        onclick="selectLocker(this, 3)"
+                    >
+
+                        <h3>
+                            Locker 3
+                        </h3>
+
+
+                        <div class="locker-position">
+                            Upper Part
+                        </div>
+
+
+                        <div
+                            class="locker-status available">
+
+                            Available
+
+                        </div>
+
+
+                        <div
+                            class="locker-select-circle">
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- NO AVAILABLE LOCKERS -->
+
+                <div
+                    id="noAvailableLockers"
+                    class="no-available-lockers">
+
+                    No lockers are available for the selected
+                    date and time.
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 RESERVED SLOTS
+            ================================================== -->
+
+            <div class="locker-existing-bookings">
+
+
+                <h3>
+                    Reserved Slots (Your Booking)
+                </h3>
+
+
+                <div id="reservedList">
+
+
+                    <div class="empty-booking">
+
+                        No reserved slots yet.
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 RULES
+            ================================================== -->
+
+            <div class="locker-rules">
+
+
+                ⚠ Max usage:
+                <b>3 hours</b>
+
+                <br>
+
+
+                ⚠ Grace period:
+                <b>20 minutes</b>
+
+                <br>
+
+
+                ⚠ Auto cancel if no show
+
+                <br>
+
+
+                ⚠ Needs admin approval
+
+
+            </div>
+
+
+            <!-- =================================================
+                 BOOKING SUMMARY
+            ================================================== -->
+
+            <div class="booking-summary">
+
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        Selected Date
                     </span>
 
-                    <span id="previewStart">
-                        --:--
+                    <span
+                        id="summaryDate"
+                        class="summary-value">
+
+                        --
+
                     </span>
 
                 </div>
 
 
-                <div class="preview-row">
+                <div class="summary-item">
 
-                    <span>
-                        End:
+                    <span class="summary-label">
+                        Selected Time
                     </span>
 
-                    <span id="previewEnd">
-                        --:--
+                    <span
+                        id="summaryTime"
+                        class="summary-value">
+
+                        --
+
                     </span>
 
                 </div>
 
 
-                <div class="preview-row">
+                <div class="summary-item">
 
-                    <span>
-                        Duration:
+                    <span class="summary-label">
+                        Duration
                     </span>
 
-                    <span>
+                    <span
+                        id="summaryDuration"
+                        class="summary-value">
+
                         3 Hours
+
                     </span>
 
                 </div>
 
 
-            </div>
+                <button
+                    type="button"
+                    class="locker-submit-btn"
+                    onclick="submitBooking()">
 
-        </div>
+                    Confirm Booking
 
+                </button>
 
-        <!-- RESERVED SLOTS -->
-
-        <div class="locker-existing-bookings">
-
-
-            <h3>
-                Reserved Slots
-            </h3>
-
-
-            <div id="reservedList">
-
-                <div class="empty-booking">
-                    No reservations
-                </div>
 
             </div>
 
 
         </div>
-
-
-        <!-- RULES -->
-
-        <div class="locker-rules">
-
-
-            ⚠ Max usage:
-            <b>3 hours</b>
-
-            <br>
-
-
-            ⚠ Grace period:
-            <b>20 minutes</b>
-
-            <br>
-
-
-            ⚠ Auto cancel if no show
-
-            <br>
-
-
-            ⚠ Needs admin approval
-
-
-        </div>
-
-
-        <!-- SUBMIT -->
-
-        <button
-            type="button"
-            class="locker-submit-btn"
-            onclick="submitBooking()"
-        >
-
-            Submit Booking
-
-        </button>
-
 
     </div>
 
-</div>
+
+    <!-- =========================================================
+         NOTIFICATION POPUP
+    ========================================================= -->
+
+    <div
+        id="notifPopup"
+        class="notif-popup"
+        onclick="goMessages()">
+
+
+        <b id="notifTitle">
+            New Message
+        </b>
+
+
+        <p id="notifText">
+            You have a new message
+        </p>
+
+
+    </div>
 
 
 <!-- =========================================================
-     NOTIFICATION POPUP
+     JAVASCRIPT STARTS HERE
 ========================================================= -->
 
-<div
-    id="notifPopup"
-    class="notif-popup"
-    onclick="goMessages()">
-
-
-    <b id="notifTitle">
-        New Message
-    </b>
-
-
-    <p id="notifText">
-        You have a new message
-    </p>
-
-
-</div>
-
 <script>
+
 
 /* =========================================================
    API / USER
