@@ -5569,3 +5569,547 @@ textarea {
     cursor:not-allowed;
     pointer-events:none;
 }
+
+/* =========================================================
+   CHANGE TRAINER MODAL
+========================================================= */
+
+.change-trainer-modal,
+.change-confirm-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: 0.2s ease;
+}
+
+
+.change-trainer-modal.show,
+.change-confirm-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+}
+
+
+/* =========================================================
+   MAIN MODAL
+========================================================= */
+
+.change-trainer-content {
+
+    width: 560px;
+
+    max-width: 92%;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.15);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.change-trainer-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 22px;
+}
+
+
+.change-trainer-header h2 {
+
+    margin: 0 0 6px;
+
+    font-size: 22px;
+
+    color: #26312b;
+}
+
+
+.change-trainer-header p {
+
+    margin: 0;
+
+    color: #7a847d;
+
+    font-size: 13px;
+}
+
+
+.change-trainer-close {
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    color: #7a847d;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   CURRENT INFO
+========================================================= */
+
+.change-current-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+
+.change-current-info > div {
+
+    background: #f6f8f6;
+
+    border-radius: 12px;
+
+    padding: 14px;
+}
+
+
+.change-current-info span,
+.change-trainer-preview span {
+
+    display: block;
+
+    font-size: 11px;
+
+    color: #7b857f;
+
+    margin-bottom: 5px;
+}
+
+
+.change-current-info strong,
+.change-trainer-preview strong {
+
+    display: block;
+
+    font-size: 14px;
+
+    color: #26312b;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.change-section-label {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #26312b;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   TRAINER LIST
+========================================================= */
+
+.change-trainer-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.change-trainer-option {
+
+    width: 100%;
+
+    border: 1px solid #dfe5e1;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition: 0.2s ease;
+}
+
+
+.change-trainer-option:hover {
+
+    border-color: #087c3d;
+
+    background: #f7fcf9;
+}
+
+
+.change-trainer-option.selected {
+
+    border-color: #087c3d;
+
+    background: #eaf6ee;
+}
+
+
+.change-trainer-option strong {
+
+    display: block;
+
+    font-size: 15px;
+
+    color: #26312b;
+}
+
+
+.change-trainer-option span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    color: #7a847d;
+}
+
+
+/* =========================================================
+   RATE LIST
+========================================================= */
+
+.change-rate-section {
+
+    margin-top: 24px;
+}
+
+
+.change-rate-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+
+.change-rate-option {
+
+    border: 1px solid #dfe5e1;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    transition: 0.2s ease;
+}
+
+
+.change-rate-option:hover {
+
+    border-color: #087c3d;
+}
+
+
+.change-rate-option.selected {
+
+    border-color: #087c3d;
+
+    background: #eaf6ee;
+}
+
+
+.change-rate-option strong {
+
+    display: block;
+
+    font-size: 14px;
+
+    color: #26312b;
+}
+
+
+.change-rate-option span {
+
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #087c3d;
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.change-trainer-preview {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    background: #f6f8f6;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.change-trainer-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+
+.change-cancel-btn,
+.change-confirm-btn {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 20px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.change-cancel-btn {
+
+    background: #eef1ef;
+
+    color: #4d5751;
+}
+
+
+.change-confirm-btn {
+
+    background: #087c3d;
+
+    color: white;
+}
+
+
+.change-confirm-btn:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   CONFIRMATION MODAL
+========================================================= */
+
+.change-confirm-content {
+
+    width: 380px;
+
+    max-width: 90%;
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.15);
+}
+
+
+.change-confirm-content h2 {
+
+    margin: 0 0 8px;
+
+    color: #26312b;
+
+    font-size: 21px;
+}
+
+
+.change-confirm-content p {
+
+    margin: 0;
+
+    color: #737d77;
+
+    font-size: 14px;
+}
+
+
+.change-confirm-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+
+.change-confirm-no,
+.change-confirm-yes {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 25px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.change-confirm-no {
+
+    background: #eef1ef;
+
+    color: #4d5751;
+}
+
+
+.change-confirm-yes {
+
+    background: #087c3d;
+
+    color: white;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.change-loading {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #7a847d;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width: 600px){
+
+    .change-current-info,
+    .change-trainer-preview {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .change-rate-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .change-trainer-content {
+
+        padding: 20px;
+
+    }
+
+}

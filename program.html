@@ -813,6 +813,193 @@
 </div>
 
 <!-- =========================================================
+     CHANGE TRAINER MODAL
+========================================================= -->
+
+<div id="changeTrainerModal" class="change-trainer-modal">
+
+    <div class="change-trainer-content">
+
+        <!-- HEADER -->
+        <div class="change-trainer-header">
+
+            <div>
+                <h2>Change Trainer</h2>
+
+                <p>
+                    Choose a new trainer for your current program.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="change-trainer-close"
+                onclick="closeChangeTrainer()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+        <!-- CURRENT PROGRAM -->
+        <div class="change-current-info">
+
+            <div>
+                <span>Program</span>
+                <strong id="changeTrainerProgram">-</strong>
+            </div>
+
+            <div>
+                <span>Split</span>
+                <strong id="changeTrainerSplit">-</strong>
+            </div>
+
+            <div>
+                <span>Current Trainer</span>
+                <strong id="changeCurrentTrainer">-</strong>
+            </div>
+
+        </div>
+
+
+        <!-- TRAINER LIST -->
+        <div class="change-trainer-section">
+
+            <span class="change-section-label">
+                Available Trainers
+            </span>
+
+            <div
+                id="changeTrainerList"
+                class="change-trainer-list">
+
+                <div class="change-loading">
+                    Loading trainers...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SELECTED TRAINER RATE -->
+        <div
+            id="changeTrainerRateSection"
+            class="change-rate-section"
+            style="display:none;">
+
+            <span class="change-section-label">
+                Trainer Rate
+            </span>
+
+            <div
+                id="changeTrainerRateList"
+                class="change-rate-list">
+            </div>
+
+        </div>
+
+
+        <!-- PREVIEW -->
+        <div
+            id="changeTrainerPreview"
+            class="change-trainer-preview"
+            style="display:none;">
+
+            <div>
+                <span>New Trainer</span>
+                <strong id="changeSelectedTrainer">-</strong>
+            </div>
+
+            <div>
+                <span>Rate</span>
+                <strong id="changeSelectedRate">-</strong>
+            </div>
+
+            <div>
+                <span>Status</span>
+                <strong>Pending</strong>
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+        <div class="change-trainer-actions">
+
+            <button
+                type="button"
+                class="change-cancel-btn"
+                onclick="closeChangeTrainer()">
+
+                Cancel
+
+            </button>
+
+            <button
+                type="button"
+                class="change-confirm-btn"
+                id="changeTrainerConfirmButton"
+                onclick="confirmChangeTrainer()"
+                disabled>
+
+                Confirm
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CHANGE TRAINER CONFIRMATION MODAL
+========================================================= -->
+
+<div
+    id="changeTrainerConfirmModal"
+    class="change-confirm-modal">
+
+    <div class="change-confirm-content">
+
+        <h2>Are you sure?</h2>
+
+        <p>
+            Are you sure you want to change trainer?
+        </p>
+
+        <div class="change-confirm-actions">
+
+            <button
+                type="button"
+                class="change-confirm-no"
+                onclick="closeChangeTrainerConfirmation()">
+
+                No
+
+            </button>
+
+            <button
+                type="button"
+                class="change-confirm-yes"
+                onclick="proceedChangeTrainer()">
+
+                Yes
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
 
@@ -849,7 +1036,6 @@ let workoutSchedule = [];
 
 /* =========================================================
    SELECTED SCHEDULE DATE
-
    Starts at TODAY.
 ========================================================= */
 
@@ -3382,11 +3568,817 @@ async function confirmRenewTraining(){
    CHANGE TRAINER
 ========================================================= */
 
+/* =========================================================
+   CHANGE TRAINER
+========================================================= */
+
+let changeTrainerData = null;
+
+let selectedChangeTrainer = null;
+
+let selectedChangeTrainerRate = null;
+
+
+/* =========================================================
+   STEP 1
+   CLICK CHANGE TRAINER
+   SHOW CONFIRMATION
+========================================================= */
+
 function changeTrainer(){
 
-    console.log(
-        "Change Trainer clicked"
+    if(!currentTrainerData){
+
+        alert(
+            "Current trainer information is not available."
+        );
+
+        return;
+    }
+
+
+    document
+        .getElementById(
+            "changeTrainerConfirmModal"
+        )
+        .classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE CONFIRMATION
+========================================================= */
+
+function closeChangeTrainerConfirmation(){
+
+    document
+        .getElementById(
+            "changeTrainerConfirmModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   STEP 2
+   YES
+========================================================= */
+
+async function proceedChangeTrainer(){
+
+    closeChangeTrainerConfirmation();
+
+    openChangeTrainerModal();
+
+    await loadChangeTrainerOptions();
+
+}
+
+
+/* =========================================================
+   OPEN MAIN MODAL
+========================================================= */
+
+function openChangeTrainerModal(){
+
+    const modal =
+        document.getElementById(
+            "changeTrainerModal"
+        );
+
+
+    if(!modal){
+
+        return;
+    }
+
+
+    /* CURRENT PROGRAM */
+
+    document.getElementById(
+        "changeTrainerProgram"
+    ).innerText =
+        currentTrainerData?.program_name ||
+        "-";
+
+
+    /* CURRENT SPLIT */
+
+    document.getElementById(
+        "changeTrainerSplit"
+    ).innerText =
+        currentTrainerData?.program_plan_name ||
+        currentTrainerData?.program_plan ||
+        currentTrainerData?.split_name ||
+        "-";
+
+
+    /* CURRENT TRAINER */
+
+    document.getElementById(
+        "changeCurrentTrainer"
+    ).innerText =
+        currentTrainerData?.trainer_name ||
+        currentTrainerData?.fullname ||
+        "-";
+
+
+    /* RESET */
+
+    selectedChangeTrainer = null;
+
+    selectedChangeTrainerRate = null;
+
+    document.getElementById(
+        "changeTrainerList"
+    ).innerHTML =
+        `
+            <div class="change-loading">
+                Loading trainers...
+            </div>
+        `;
+
+
+    document.getElementById(
+        "changeTrainerRateSection"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "changeTrainerPreview"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "changeTrainerConfirmButton"
+    ).disabled = true;
+
+
+    modal.classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE MAIN MODAL
+========================================================= */
+
+function closeChangeTrainer(){
+
+    document
+        .getElementById(
+            "changeTrainerModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   LOAD AVAILABLE TRAINERS
+========================================================= */
+
+async function loadChangeTrainerOptions(){
+
+    const list =
+        document.getElementById(
+            "changeTrainerList"
+        );
+
+
+    if(!currentTrainerData){
+
+        list.innerHTML =
+            `
+                <div class="change-loading">
+                    Current program not available.
+                </div>
+            `;
+
+        return;
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/program_trainers`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "CHANGE TRAINER OPTIONS:",
+            result
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const currentTrainerId =
+            String(
+                currentTrainerData.trainer_id
+            );
+
+
+        const currentProgramId =
+            String(
+                currentTrainerData.program_id
+            );
+
+
+        /*
+         * ONLY TRAINERS FOR CURRENT PROGRAM
+         * AND EXCLUDE CURRENT TRAINER
+         */
+
+        const trainers =
+            result.filter(
+                function(item){
+
+                    return (
+
+                        String(
+                            item.program_id
+                        ) === currentProgramId
+
+                        &&
+
+                        String(
+                            item.trainer_id
+                        ) !== currentTrainerId
+
+                    );
+
+                }
+            );
+
+
+        if(
+            !Array.isArray(trainers) ||
+            trainers.length === 0
+        ){
+
+            list.innerHTML =
+                `
+                    <div class="change-loading">
+                        No other trainers are available
+                        for this program.
+                    </div>
+                `;
+
+            return;
+        }
+
+
+        /*
+         * REMOVE DUPLICATE TRAINERS
+         */
+
+        const uniqueTrainers = [];
+
+
+        trainers.forEach(
+            function(item){
+
+                const trainerId =
+                    String(
+                        item.trainer_id
+                    );
+
+
+                const alreadyExists =
+                    uniqueTrainers.some(
+                        function(existing){
+
+                            return String(
+                                existing.trainer_id
+                            ) === trainerId;
+
+                        }
+                    );
+
+
+                if(!alreadyExists){
+
+                    uniqueTrainers.push(item);
+
+                }
+
+            }
+        );
+
+
+        /*
+         * BUILD TRAINER CARDS
+         */
+
+        list.innerHTML = "";
+
+
+        uniqueTrainers.forEach(
+            function(trainer){
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.type = "button";
+
+                button.className =
+                    "change-trainer-option";
+
+
+                button.innerHTML = `
+                    <strong>
+                        ${escapeHtml(
+                            trainer.trainer_name ||
+                            trainer.fullname ||
+                            "Trainer"
+                        )}
+                    </strong>
+
+                    <span>
+                        Available for your current program
+                    </span>
+                `;
+
+
+                button.onclick =
+                    function(){
+
+                        selectChangeTrainer(
+                            button,
+                            trainer
+                        );
+
+                    };
+
+
+                list.appendChild(
+                    button
+                );
+
+            }
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD CHANGE TRAINER ERROR:",
+            error
+        );
+
+
+        list.innerHTML =
+            `
+                <div class="change-loading">
+                    Unable to load trainers.
+                </div>
+            `;
+
+
+        alert(
+            error.message ||
+            "Unable to load trainers."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SELECT TRAINER
+========================================================= */
+
+function selectChangeTrainer(
+    button,
+    trainer
+){
+
+    document
+        .querySelectorAll(
+            ".change-trainer-option"
+        )
+        .forEach(
+            function(card){
+
+                card.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    button.classList.add(
+        "selected"
     );
+
+
+    selectedChangeTrainer =
+        trainer;
+
+
+    selectedChangeTrainerRate =
+        null;
+
+
+    document.getElementById(
+        "changeTrainerConfirmButton"
+    ).disabled = true;
+
+
+    loadChangeTrainerRates(
+        trainer
+    );
+
+}
+
+
+/* =========================================================
+   LOAD SELECTED TRAINER RATES
+========================================================= */
+
+function loadChangeTrainerRates(
+    trainer
+){
+
+    const section =
+        document.getElementById(
+            "changeTrainerRateSection"
+        );
+
+
+    const list =
+        document.getElementById(
+            "changeTrainerRateList"
+        );
+
+
+    section.style.display =
+        "block";
+
+
+    list.innerHTML = "";
+
+
+    const rates = [
+
+        {
+            label: "1 Day",
+
+            plan_id:
+                trainer.plan_id_day,
+
+            price:
+                trainer.price_day
+        },
+
+        {
+            label: "1 Week",
+
+            plan_id:
+                trainer.plan_id_week,
+
+            price:
+                trainer.price_week
+        },
+
+        {
+            label: "1 Month",
+
+            plan_id:
+                trainer.plan_id_month,
+
+            price:
+                trainer.price_month
+        }
+
+    ];
+
+
+    rates.forEach(
+        function(rate){
+
+            if(
+                rate.plan_id === null ||
+                rate.plan_id === undefined ||
+                rate.plan_id === ""
+            ){
+
+                return;
+
+            }
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type = "button";
+
+            button.className =
+                "change-rate-option";
+
+
+            button.innerHTML = `
+
+                <strong>
+                    ${escapeHtml(
+                        rate.label
+                    )}
+                </strong>
+
+                <span>
+                    ${formatTrainerPrice(
+                        rate.price
+                    )}
+                </span>
+
+            `;
+
+
+            button.onclick =
+                function(){
+
+                    selectChangeTrainerRate(
+                        button,
+                        rate
+                    );
+
+                };
+
+
+            list.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    if(
+        list.children.length === 0
+    ){
+
+        list.innerHTML =
+            `
+                <div class="change-loading">
+                    No trainer rates available.
+                </div>
+            `;
+
+    }
+
+}
+
+
+/* =========================================================
+   SELECT RATE
+========================================================= */
+
+function selectChangeTrainerRate(
+    button,
+    rate
+){
+
+    document
+        .querySelectorAll(
+            ".change-rate-option"
+        )
+        .forEach(
+            function(card){
+
+                card.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    button.classList.add(
+        "selected"
+    );
+
+
+    selectedChangeTrainerRate =
+        rate;
+
+
+    /*
+     * PREVIEW
+     */
+
+    document.getElementById(
+        "changeSelectedTrainer"
+    ).innerText =
+        selectedChangeTrainer?.trainer_name ||
+        selectedChangeTrainer?.fullname ||
+        "-";
+
+
+    document.getElementById(
+        "changeSelectedRate"
+    ).innerText =
+        `${rate.label} - ${
+            formatTrainerPrice(
+                rate.price
+            )
+        }`;
+
+
+    document.getElementById(
+        "changeTrainerPreview"
+    ).style.display =
+        "grid";
+
+
+    /*
+     * ENABLE CONFIRM
+     */
+
+    document.getElementById(
+        "changeTrainerConfirmButton"
+    ).disabled = false;
+
+}
+
+
+/* =========================================================
+   CONFIRM CHANGE TRAINER
+========================================================= */
+
+async function confirmChangeTrainer(){
+
+    if(
+        !selectedChangeTrainer ||
+        !selectedChangeTrainerRate
+    ){
+
+        alert(
+            "Please select a trainer and trainer rate."
+        );
+
+        return;
+    }
+
+
+    const memberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+
+    if(!memberId){
+
+        alert(
+            "Member ID not found."
+        );
+
+        return;
+    }
+
+
+    const confirmButton =
+        document.getElementById(
+            "changeTrainerConfirmButton"
+        );
+
+
+    confirmButton.disabled = true;
+
+    confirmButton.innerText =
+        "Processing...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/change-trainer`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        member_id:
+                            memberId,
+
+                        current_trainer_id:
+                            currentTrainerData.trainer_id,
+
+                        new_trainer_id:
+                            selectedChangeTrainer.trainer_id,
+
+                        program_id:
+                            currentTrainerData.program_id,
+
+                        program_plan_id:
+                            currentTrainerData.program_plan_id,
+
+                        plan_id:
+                            selectedChangeTrainerRate.plan_id
+
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "CHANGE TRAINER RESPONSE:",
+            result
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                "Trainer change failed."
+            );
+
+        }
+
+
+        alert(
+            "Trainer change request submitted. Waiting for the new trainer to accept."
+        );
+
+
+        closeChangeTrainer();
+
+
+        /*
+         * RELOAD CURRENT PROGRAM
+         */
+
+        await loadCurrentProgram();
+
+
+        /*
+         * RELOAD SCHEDULE
+         */
+
+        await loadTrainingSchedule();
+
+    }
+    catch(error){
+
+        console.error(
+            "CHANGE TRAINER ERROR:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to change trainer."
+        );
+
+    }
+    finally{
+
+        confirmButton.disabled = false;
+
+        confirmButton.innerText =
+            "Confirm";
+
+    }
 
 }
 
