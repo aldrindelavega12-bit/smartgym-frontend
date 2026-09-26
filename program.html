@@ -4810,6 +4810,193 @@ function closeChangeProgram(){
 }
 
 /* =========================================================
+   LOAD PROGRAMS
+========================================================= */
+
+async function loadChangeProgramOptions(){
+
+    const list =
+        document.getElementById(
+            "changeProgramList"
+        );
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/program_trainers`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+        const result =
+            await response.json();
+
+        console.log(
+            "CHANGE PROGRAM OPTIONS:",
+            result
+        );
+
+        if(!response.ok){
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+        if(!Array.isArray(result)){
+
+            throw new Error(
+                "Invalid program data received."
+            );
+
+        }
+
+        /* GET UNIQUE PROGRAMS */
+
+        const uniquePrograms = [];
+
+        result.forEach(
+            function(item){
+
+                const programId =
+                    String(
+                        item.program_id
+                    );
+
+                const exists =
+                    uniquePrograms.some(
+                        function(program){
+
+                            return String(
+                                program.program_id
+                            ) === programId;
+
+                        }
+                    );
+
+                if(!exists){
+
+                    uniquePrograms.push({
+
+                        program_id:
+                            item.program_id,
+
+                        program_name:
+                            item.program_name
+
+                    });
+
+                }
+
+            }
+        );
+
+        /* REMOVE CURRENT PROGRAM */
+
+        const currentProgramId =
+            String(
+                currentTrainerData.program_id
+            );
+
+        const availablePrograms =
+            uniquePrograms.filter(
+                function(program){
+
+                    return String(
+                        program.program_id
+                    ) !== currentProgramId;
+
+                }
+            );
+
+        if(
+            availablePrograms.length === 0
+        ){
+
+            list.innerHTML = `
+                <div class="change-program-loading">
+                    No other programs are available.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        /* BUILD PROGRAM BUTTONS */
+
+        list.innerHTML = "";
+
+        availablePrograms.forEach(
+            function(program){
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+                button.type = "button";
+
+                button.className =
+                    "change-program-option";
+
+                button.innerHTML = `
+                    <strong>
+                        ${escapeHtml(
+                            program.program_name
+                        )}
+                    </strong>
+
+                    <span>
+                        Choose this program
+                    </span>
+                `;
+
+                button.onclick =
+                    function(){
+
+                        selectChangeProgram(
+                            button,
+                            program
+                        );
+
+                    };
+
+                list.appendChild(
+                    button
+                );
+
+            }
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "LOAD CHANGE PROGRAM ERROR:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="change-program-loading">
+                Unable to load programs.
+            </div>
+        `;
+
+        alert(
+            error.message ||
+            "Unable to load programs."
+        );
+
+    }
+
+}
+
+/* =========================================================
    SELECT PROGRAM
 ========================================================= */
 async function selectChangeProgram(
@@ -5090,434 +5277,6 @@ function selectChangeProgramSplit(
 
 
 /* =========================================================
-   LOAD TRAINERS
-========================================================= */
-
-function loadChangeProgramTrainers(){
-
-    const section =
-        document.getElementById(
-            "changeProgramTrainerSection"
-        );
-
-
-    const list =
-        document.getElementById(
-            "changeProgramTrainerList"
-        );
-
-
-    section.style.display =
-        "block";
-
-
-    list.innerHTML = "";
-
-
-    const programId =
-        String(
-            selectedChangeProgram.program_id
-        );
-
-
-    const currentTrainerId =
-        String(
-            currentTrainerData.trainer_id
-        );
-
-
-    /* =====================================================
-       GET TRAINERS FOR SELECTED PROGRAM
-    ===================================================== */
-
-    const trainers =
-        changeProgramData.filter(
-            function(item){
-
-                return (
-
-                    String(
-                        item.program_id
-                    ) === programId
-
-                    &&
-
-                    String(
-                        item.trainer_id
-                    ) !== currentTrainerId
-
-                );
-
-            }
-        );
-
-
-    /* =====================================================
-       REMOVE DUPLICATES
-    ===================================================== */
-
-    const uniqueTrainers = [];
-
-
-    trainers.forEach(
-        function(item){
-
-            const trainerId =
-                String(
-                    item.trainer_id
-                );
-
-
-            const exists =
-                uniqueTrainers.some(
-                    function(existing){
-
-                        return String(
-                            existing.trainer_id
-                        ) === trainerId;
-
-                    }
-                );
-
-
-            if(!exists){
-
-                uniqueTrainers.push(
-                    item
-                );
-
-            }
-
-        }
-    );
-
-
-    if(
-        uniqueTrainers.length === 0
-    ){
-
-        list.innerHTML = `
-            <div class="change-program-loading">
-                No trainers are available for this program.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       BUILD TRAINERS
-    ===================================================== */
-
-    uniqueTrainers.forEach(
-        function(trainer){
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.type = "button";
-
-
-            button.className =
-                "change-program-trainer-option";
-
-
-            button.innerHTML = `
-                <strong>
-                    ${escapeHtml(
-                        trainer.trainer_name ||
-                        trainer.fullname ||
-                        "Trainer"
-                    )}
-                </strong>
-
-                <span>
-                    Available for this program
-                </span>
-            `;
-
-
-            button.onclick =
-                function(){
-
-                    selectChangeProgramTrainer(
-                        button,
-                        trainer
-                    );
-
-                };
-
-
-            list.appendChild(
-                button
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SELECT TRAINER
-========================================================= */
-
-function selectChangeProgramTrainer(
-    button,
-    trainer
-){
-
-    document
-        .querySelectorAll(
-            ".change-program-trainer-option"
-        )
-        .forEach(
-            function(card){
-
-                card.classList.remove(
-                    "selected"
-                );
-
-            }
-        );
-
-
-    button.classList.add(
-        "selected"
-    );
-
-
-    selectedChangeProgramTrainer =
-        trainer;
-
-
-    selectedChangeProgramRate =
-        null;
-
-
-    loadChangeProgramRates(
-        trainer
-    );
-
-}
-
-
-/* =========================================================
-   LOAD TRAINER RATES
-========================================================= */
-
-function loadChangeProgramRates(
-    trainer
-){
-
-    const section =
-        document.getElementById(
-            "changeProgramRateSection"
-        );
-
-
-    const list =
-        document.getElementById(
-            "changeProgramRateList"
-        );
-
-
-    section.style.display =
-        "block";
-
-
-    list.innerHTML = "";
-
-
-    const rates = [
-
-        {
-            label: "1 Day",
-            plan_id: trainer.plan_id_day,
-            price: trainer.price_day
-        },
-
-        {
-            label: "1 Week",
-            plan_id: trainer.plan_id_week,
-            price: trainer.price_week
-        },
-
-        {
-            label: "1 Month",
-            plan_id: trainer.plan_id_month,
-            price: trainer.price_month
-        }
-
-    ];
-
-
-    rates.forEach(
-        function(rate){
-
-            if(
-                rate.plan_id === null ||
-                rate.plan_id === undefined ||
-                rate.plan_id === ""
-            ){
-
-                return;
-
-            }
-
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.type = "button";
-
-
-            button.className =
-                "change-program-rate-option";
-
-
-            button.innerHTML = `
-                <strong>
-                    ${escapeHtml(
-                        rate.label
-                    )}
-                </strong>
-
-                <span>
-                    ${formatTrainerPrice(
-                        rate.price
-                    )}
-                </span>
-            `;
-
-
-            button.onclick =
-                function(){
-
-                    selectChangeProgramRate(
-                        button,
-                        rate
-                    );
-
-                };
-
-
-            list.appendChild(
-                button
-            );
-
-        }
-    );
-
-
-    if(
-        list.children.length === 0
-    ){
-
-        list.innerHTML = `
-            <div class="change-program-loading">
-                No trainer rates available.
-            </div>
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   SELECT RATE
-========================================================= */
-
-function selectChangeProgramRate(
-    button,
-    rate
-){
-
-    document
-        .querySelectorAll(
-            ".change-program-rate-option"
-        )
-        .forEach(
-            function(card){
-
-                card.classList.remove(
-                    "selected"
-                );
-
-            }
-        );
-
-
-    button.classList.add(
-        "selected"
-    );
-
-
-    selectedChangeProgramRate =
-        rate;
-
-
-    /* =====================================================
-       PREVIEW
-    ===================================================== */
-
-    document.getElementById(
-        "changeProgramSelectedName"
-    ).innerText =
-        selectedChangeProgram.program_name;
-
-
-    document.getElementById(
-        "changeProgramSelectedSplit"
-    ).innerText =
-        selectedChangeProgramSplit.plan_name;
-
-
-    document.getElementById(
-        "changeProgramSelectedTrainer"
-    ).innerText =
-        selectedChangeProgramTrainer.trainer_name ||
-        selectedChangeProgramTrainer.fullname ||
-        "-";
-
-
-    document.getElementById(
-        "changeProgramSelectedRate"
-    ).innerText =
-        `${rate.label} - ${
-            formatTrainerPrice(
-                rate.price
-            )
-        }`;
-
-
-    document.getElementById(
-        "changeProgramPreview"
-    ).style.display =
-        "grid";
-
-
-    /* =====================================================
-       ENABLE CONFIRM
-    ===================================================== */
-
-    document.getElementById(
-        "changeProgramConfirmButton"
-    ).disabled = false;
-
-}
-
-
-/* =========================================================
    CONFIRM CHANGE PROGRAM
 ========================================================= */
 
@@ -5525,17 +5284,14 @@ async function confirmChangeProgram(){
 
     if(
         !selectedChangeProgram ||
-        !selectedChangeProgramSplit ||
-        !selectedChangeProgramTrainer ||
-        !selectedChangeProgramRate
+        !selectedChangeProgramSplit
     ){
 
         alert(
-            "Please select a program, split, trainer, and trainer rate."
+            "Please select a program and split."
         );
 
         return;
-
     }
 
 
@@ -5552,7 +5308,6 @@ async function confirmChangeProgram(){
         );
 
         return;
-
     }
 
 
@@ -5567,7 +5322,7 @@ async function confirmChangeProgram(){
 
 
     confirmButton.innerText =
-        "Processing...";
+        "Submitting...";
 
 
     try{
@@ -5592,10 +5347,7 @@ async function confirmChangeProgram(){
                             selectedChangeProgram.program_id,
 
                         program_plan_id:
-                            selectedChangeProgramSplit.id,
-
-                        plan_id:
-                            selectedChangeProgramRate.plan_id
+                            selectedChangeProgramSplit.id
 
                     })
 
@@ -5631,10 +5383,6 @@ async function confirmChangeProgram(){
         closeChangeProgram();
 
 
-        /* =================================================
-           RELOAD CURRENT DATA
-        ================================================= */
-
         await loadCurrentProgram();
 
         await loadTrainingSchedule();
@@ -5661,12 +5409,11 @@ async function confirmChangeProgram(){
 
 
         confirmButton.innerText =
-            "Confirm";
+            "Submit Request";
 
     }
 
 }
-
 
 
 /* =========================================================
