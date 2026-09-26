@@ -955,11 +955,6 @@
 
 </div>
 
-
-<!-- =========================================================
-     CHANGE TRAINER CONFIRMATION MODAL
-========================================================= -->
-
 <!-- =========================================================
      CHANGE TRAINER CONFIRMATION MODAL
 ========================================================= -->
@@ -999,6 +994,284 @@
                 class="change-confirm-yes"
                 onclick="proceedChangeTrainer()">
                 Yes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     CHANGE PROGRAM MODAL
+========================================================= -->
+
+<div
+    id="changeProgramModal"
+    class="change-program-modal"
+>
+
+    <div class="change-program-content">
+
+        <!-- HEADER -->
+        <div class="change-program-header">
+
+            <div>
+
+                <h2>
+                    Change Program
+                </h2>
+
+                <p>
+                    Choose a new program, split, and trainer.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="change-program-close"
+                onclick="closeChangeProgram()"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        <!-- CURRENT PROGRAM -->
+        <div class="change-program-current">
+
+            <div>
+
+                <span>
+                    Current Program
+                </span>
+
+                <strong
+                    id="changeProgramCurrentName"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Current Split
+                </span>
+
+                <strong
+                    id="changeProgramCurrentSplit"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Current Trainer
+                </span>
+
+                <strong
+                    id="changeProgramCurrentTrainer"
+                >
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEW PROGRAM -->
+        <div class="change-program-section">
+
+            <span class="change-program-label">
+                New Program
+            </span>
+
+            <div
+                id="changeProgramList"
+                class="change-program-list"
+            >
+
+                <div class="change-program-loading">
+                    Loading programs...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEW SPLIT -->
+        <div
+            id="changeProgramSplitSection"
+            class="change-program-section"
+            style="display:none;"
+        >
+
+            <span class="change-program-label">
+                New Split
+            </span>
+
+            <div
+                id="changeProgramSplitList"
+                class="change-program-split-list"
+            >
+            </div>
+
+        </div>
+
+
+        <!-- TRAINER -->
+        <div
+            id="changeProgramTrainerSection"
+            class="change-program-section"
+            style="display:none;"
+        >
+
+            <span class="change-program-label">
+                Trainer
+            </span>
+
+            <div
+                id="changeProgramTrainerList"
+                class="change-program-trainer-list"
+            >
+            </div>
+
+        </div>
+
+
+        <!-- TRAINER RATE -->
+        <div
+            id="changeProgramRateSection"
+            class="change-program-section"
+            style="display:none;"
+        >
+
+            <span class="change-program-label">
+                Trainer Rate
+            </span>
+
+            <div
+                id="changeProgramRateList"
+                class="change-program-rate-list"
+            >
+            </div>
+
+        </div>
+
+
+        <!-- PREVIEW -->
+        <div
+            id="changeProgramPreview"
+            class="change-program-preview"
+            style="display:none;"
+        >
+
+            <div>
+
+                <span>
+                    New Program
+                </span>
+
+                <strong
+                    id="changeProgramSelectedName"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    New Split
+                </span>
+
+                <strong
+                    id="changeProgramSelectedSplit"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Trainer
+                </span>
+
+                <strong
+                    id="changeProgramSelectedTrainer"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Rate
+                </span>
+
+                <strong
+                    id="changeProgramSelectedRate"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Status
+                </span>
+
+                <strong>
+                    Pending
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+        <div class="change-program-actions">
+
+            <button
+                type="button"
+                class="change-program-cancel"
+                onclick="closeChangeProgram()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="change-program-confirm"
+                id="changeProgramConfirmButton"
+                onclick="confirmChangeProgram()"
+                disabled
+            >
+                Confirm
             </button>
 
         </div>
