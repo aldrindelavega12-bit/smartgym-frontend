@@ -3914,13 +3914,16 @@ function updateAvailableLockerHeader(){
 /* =========================================================
    LOAD AVAILABLE LOCKERS
 ========================================================= */
+/* =========================================================
+   LOAD AVAILABLE LOCKERS
+   - SHOW ONLY LOCKERS AVAILABLE FOR SELECTED DATE + TIME
+========================================================= */
 
 async function loadAvailableLockers(){
 
     /*
      * MUST HAVE DATE + TIME
      */
-
     if(
         !selectedDate ||
         !selectedStart ||
@@ -3934,57 +3937,50 @@ async function loadAvailableLockers(){
 
 
     /*
-     * SHOW BOX
+     * SHOW AVAILABLE LOCKER BOX
      */
-
     showAvailableLockers();
 
 
     /*
      * UPDATE HEADER
      */
-
     updateAvailableLockerHeader();
 
 
     /*
-     * RESET LOCKERS
+     * RESET
+     *
+     * Hide ALL lockers first.
+     * Only lockers confirmed available
+     * will be shown again.
      */
-
     document
         .querySelectorAll(".locker-card")
         .forEach(card => {
 
-            card.classList.remove(
-                "active"
-            );
+            card.classList.remove("active");
+            card.classList.remove("disabled");
 
-            card.classList.remove(
-                "disabled"
-            );
-
-            const status =
-                card.querySelector(
-                    ".locker-status"
-                );
-
-            if(status){
-
-                status.innerText =
-                    "Checking...";
-
-                status.className =
-                    "locker-status";
-
-            }
+            card.style.display = "none";
 
         });
 
 
+    /*
+     * RESET SELECTED LOCKER
+     */
+    selectedLocker = null;
+
+
+    /*
+     * NO AVAILABLE MESSAGE
+     */
     const noAvailable =
         document.getElementById(
             "noAvailableLockers"
         );
+
 
     if(noAvailable){
 
@@ -3996,22 +3992,77 @@ async function loadAvailableLockers(){
 
 
     /*
-     * FETCH ALL LOCKERS
+     * ALL LOCKERS
      */
-
-    const lockers =
-        [1, 2, 3];
+    const lockers = [
+        1,
+        2,
+        3
+    ];
 
 
     let availableCount = 0;
 
 
+    /*
+     * CHECK EACH LOCKER
+     */
     await Promise.all(
 
         lockers.map(
             async locker => {
 
+                const card =
+                    document.querySelector(
+                        `.locker-card[data-locker="${locker}"]`
+                    );
+
+
+                if(!card){
+                    return;
+                }
+
+
                 try{
+
+                    /*
+                     * -----------------------------------------
+                     * CHECK PHYSICAL STATUS
+                     * -----------------------------------------
+                     */
+
+                    const physicalStatus =
+                        String(
+                            lockerPhysicalStatus[
+                                String(locker)
+                            ] || ""
+                        ).toUpperCase();
+
+
+                    /*
+                     * PHYSICALLY UNAVAILABLE
+                     */
+                    if(
+                        physicalStatus === "IN_USE" ||
+                        physicalStatus === "OVERTIME"
+                    ){
+
+                        console.log(
+                            `[AVAILABLE LOCKER] Locker ${locker} physically unavailable`
+                        );
+
+                        card.style.display =
+                            "none";
+
+                        return;
+                    }
+
+
+                    /*
+                     * -----------------------------------------
+                     * FETCH BOOKINGS FOR THIS DATE
+                     * -----------------------------------------
+                     */
 
                     const response =
                         await fetch(
@@ -4035,6 +4086,9 @@ async function loadAvailableLockers(){
                         await response.json();
 
 
+                    /*
+                     * NORMALIZE RESPONSE
+                     */
                     const slots =
                         Array.isArray(data)
                             ? data
@@ -4044,8 +4098,9 @@ async function loadAvailableLockers(){
 
 
                     /*
-                     * CHECK IF SELECTED TIME
-                     * OVERLAPS A BOOKING
+                     * -----------------------------------------
+                     * CHECK TIME OVERLAP
+                     * -----------------------------------------
                      */
 
                     const conflict =
@@ -4057,52 +4112,27 @@ async function loadAvailableLockers(){
                         );
 
 
-                    const card =
-                        document.querySelector(
-                            `.locker-card[data-locker="${locker}"]`
-                        );
-
-
-                    if(!card){
-
-                        return;
-
-                    }
-
-
-                    const status =
-                        card.querySelector(
-                            ".locker-status"
-                        );
-
+                    /*
+                     * -----------------------------------------
+                     * NOT AVAILABLE
+                     * -----------------------------------------
+                     */
 
                     if(conflict){
 
+                        console.log(
+                            `[AVAILABLE LOCKER] Locker ${locker} RESERVED for selected time`
+                        );
+
+
+                        card.style.display =
+                            "none";
+
+
                         /*
-                         * NOT AVAILABLE
+                         * Remove selection if
+                         * this locker was selected
                          */
-
-                        card.classList.add(
-                            "disabled"
-                        );
-
-
-                        card.classList.remove(
-                            "active"
-                        );
-
-
-                        if(status){
-
-                            status.innerText =
-                                "Reserved";
-
-                            status.className =
-                                "locker-status reserved";
-
-                        }
-
-
                         if(
                             selectedLocker ===
                             Number(locker)
@@ -4113,35 +4143,64 @@ async function loadAvailableLockers(){
 
                         }
 
+
+                        return;
                     }
 
-                    else{
 
-                        /*
-                         * AVAILABLE
-                         */
+                    /*
+                     * -----------------------------------------
+                     * AVAILABLE
+                     * -----------------------------------------
+                     */
 
-                        availableCount++;
-
-
-                        if(status){
-
-                            status.innerText =
-                                "Available";
-
-                            status.className =
-                                "locker-status available";
-
-                        }
+                    availableCount++;
 
 
-                        card.classList.remove(
-                            "disabled"
+                    /*
+                     * SHOW ONLY THIS LOCKER
+                     */
+                    card.style.display =
+                        "flex";
+
+
+                    card.classList.remove(
+                        "disabled"
+                    );
+
+
+                    card.classList.remove(
+                        "active"
+                    );
+
+
+                    /*
+                     * UPDATE STATUS
+                     */
+                    const status =
+                        card.querySelector(
+                            ".locker-status"
                         );
 
+
+                    if(status){
+
+                        status.innerText =
+                            "Available";
+
+
+                        status.className =
+                            "locker-status available";
+
                     }
 
+
+                    console.log(
+                        `[AVAILABLE LOCKER] Locker ${locker} is AVAILABLE`
+                    );
+
                 }
+
 
                 catch(error){
 
@@ -4151,39 +4210,27 @@ async function loadAvailableLockers(){
                     );
 
 
-                    const card =
-                        document.querySelector(
-                            `.locker-card[data-locker="${locker}"]`
-                        );
+                    /*
+                     * IMPORTANT:
+                     *
+                     * DO NOT assume Available
+                     * when API fails.
+                     *
+                     * Hide the locker instead.
+                     */
+                    card.style.display =
+                        "none";
 
 
-                    if(card){
+                    if(
+                        selectedLocker ===
+                        Number(locker)
+                    ){
 
-                        const status =
-                            card.querySelector(
-                                ".locker-status"
-                            );
-
-
-                        card.classList.remove(
-                            "disabled"
-                        );
-
-
-                        if(status){
-
-                            status.innerText =
-                                "Available";
-
-                            status.className =
-                                "locker-status available";
-
-                        }
+                        selectedLocker =
+                            null;
 
                     }
-
-
-                    availableCount++;
 
                 }
 
@@ -4194,7 +4241,9 @@ async function loadAvailableLockers(){
 
 
     /*
+     * -----------------------------------------
      * NOTHING AVAILABLE
+     * -----------------------------------------
      */
 
     if(
