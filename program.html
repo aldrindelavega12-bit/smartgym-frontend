@@ -1793,14 +1793,13 @@ async function loadCurrentProgram(){
            SCHEDULE START DATE
            ===================================================== */
 
-        selectedScheduleDate =
-            new Date(
-                String(
-                    startDateValue
-                ).split(" ")[0]
-                + "T00:00:00"
-            );
+        /* =====================================================
+        SCHEDULE DATE
+        ALWAYS USE TODAY
+        ===================================================== */
 
+        selectedScheduleDate =
+            new Date();
 
         selectedScheduleDate.setHours(
             0,
