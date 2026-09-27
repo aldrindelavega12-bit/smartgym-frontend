@@ -1136,6 +1136,7 @@ const user =
 const trainerId =
     user?.trainer_id ||
     user?.trainerId ||
+    user?.user_id ||
     (
         user?.id &&
         String(user.id).startsWith("T")
