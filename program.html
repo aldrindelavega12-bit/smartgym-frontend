@@ -2295,7 +2295,7 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // ACTUAL DATABASE WORKOUT
+    // 1. ACTUAL DATABASE WORKOUT FIRST
     // =====================================================
 
     const actualWorkout =
@@ -2330,7 +2330,7 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // NO RECURRING PATTERN
+    // 2. NO RECURRING SCHEDULE
     // =====================================================
 
     if(
@@ -2344,7 +2344,7 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // PROGRAM START DATE
+    // 3. GET PROGRAM START DATE
     // =====================================================
 
     let programStartDate = null;
@@ -2355,19 +2355,27 @@ function getWorkoutForDate(
         currentTrainerData.start_date
     ){
 
+        const startDateString =
+            String(
+                currentTrainerData.start_date
+            )
+            .substring(
+                0,
+                10
+            );
+
+
         programStartDate =
             new Date(
-                String(
-                    currentTrainerData.start_date
-                ).split(" ")[0]
-                + "T00:00:00"
+                startDateString +
+                "T00:00:00"
             );
 
     }
 
 
     // =====================================================
-    // FALLBACK
+    // 4. INVALID START DATE
     // =====================================================
 
     if(
@@ -2377,25 +2385,18 @@ function getWorkoutForDate(
         )
     ){
 
-        programStartDate =
-            new Date(date);
-
-        programStartDate.setHours(
-            0,
-            0,
-            0,
-            0
-        );
+        return null;
 
     }
 
 
     // =====================================================
-    // NORMALIZE DATES
+    // 5. NORMALIZE DATES
     // =====================================================
 
     const targetDate =
         new Date(date);
+
 
     targetDate.setHours(
         0,
@@ -2414,7 +2415,7 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // DAYS SINCE PROGRAM START
+    // 6. CALCULATE DAYS FROM PROGRAM START
     // =====================================================
 
     const millisecondsPerDay =
@@ -2425,7 +2426,7 @@ function getWorkoutForDate(
 
 
     const daysSinceStart =
-        Math.floor(
+        Math.round(
             (
                 targetDate.getTime()
                 -
@@ -2437,7 +2438,7 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // RECURRING INDEX
+    // 7. GET RECURRING PATTERN INDEX
     // =====================================================
 
     let patternIndex =
@@ -2454,7 +2455,7 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // GET RECURRING WORKOUT
+    // 8. GET WORKOUT FROM ORIGINAL PROGRAM PATTERN
     // =====================================================
 
     const workout =
@@ -2471,19 +2472,15 @@ function getWorkoutForDate(
 
 
     // =====================================================
-    // LEGACY STATUS
+    // 9. RETURN ORIGINAL RECURRING WORKOUT
     // =====================================================
-
-    const actualStatus =
-        workoutStatuses[dateKey] || null;
-
 
     return {
 
         ...workout,
 
         status:
-            actualStatus,
+            workoutStatuses[dateKey] || null,
 
         workout_date:
             dateKey
@@ -2491,7 +2488,6 @@ function getWorkoutForDate(
     };
 
 }
-
 
 
 /* =========================================================

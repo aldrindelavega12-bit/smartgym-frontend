@@ -1928,3 +1928,101 @@ body {
     }
 
 }
+
+/* RIGHT COLUMN */
+
+.dashboard-right {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+/* NEXT STEP */
+
+.next-step-card {
+    height: fit-content;
+}
+
+
+.biometric-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.biometric-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 12px;
+
+    background: #f0f9f4;
+
+    border: 1px solid #e0eee5;
+
+    border-radius: 10px;
+}
+
+
+.biometric-number {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #07883f;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.biometric-step strong {
+    display: block;
+
+    color: #17211b;
+
+    font-size: 13px;
+}
+
+
+.biometric-step p {
+    margin: 3px 0 0;
+
+    color: #687970;
+
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+
+/* RIGHT COLUMN MOBILE */
+
+@media (max-width: 1100px) {
+
+    .pre-member-dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-right {
+        width: 100%;
+    }
+
+    .gym-information-card {
+        position: static;
+    }
+
+}
