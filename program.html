@@ -1984,6 +1984,8 @@ async function loadTrainingSchedule(){
 
         workoutSchedule = [];
 
+        workoutStatuses = {};
+
 
         /*
         =====================================================
@@ -2014,6 +2016,17 @@ async function loadTrainingSchedule(){
             result.schedule_pattern ||
             result.workouts ||
             [];
+        
+
+        if(
+            result.workout_statuses &&
+            typeof result.workout_statuses === "object"
+        ){
+
+            workoutStatuses =
+                result.workout_statuses;
+
+        }
 
 
         /*
@@ -2440,17 +2453,24 @@ function getWorkoutForDate(
     =====================================================
     */
 
+    const dateKey =
+        getDateKey(date);
+
+    const actualStatus =
+        workoutStatuses[dateKey] || null;
+
+
     return {
 
         ...workout,
 
-        status: null,
+        status:
+            actualStatus,
 
         workout_date:
-            getDateKey(date)
+            dateKey
 
     };
-
 }
 
 
