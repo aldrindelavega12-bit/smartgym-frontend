@@ -1264,6 +1264,8 @@ const user =
 ========================================================= */
 
 let workoutSchedule = [];
+let workoutStatuses = {};
+let actualWorkoutMap = {};
 
 
 
@@ -1985,6 +1987,7 @@ async function loadTrainingSchedule(){
 
         workoutStatuses = {};
 
+        actualWorkoutMap = {};
 
         /*
         =====================================================
@@ -2026,6 +2029,40 @@ async function loadTrainingSchedule(){
                 result.workout_statuses;
 
         }
+
+        const actualWorkouts =
+            result.actual_workouts || [];
+
+        if(Array.isArray(actualWorkouts)){
+
+            actualWorkouts.forEach(
+                function(workout){
+
+                    const dateKey =
+                        String(
+                            workout.workout_date || ""
+                        ).substring(0, 10);
+
+                    if(!dateKey){
+                        return;
+                    }
+
+                    if(!actualWorkoutMap[dateKey]){
+
+                        actualWorkoutMap[dateKey] =
+                            workout;
+
+                    }
+
+                }
+            );
+
+        }
+
+        console.log(
+            "ACTUAL WORKOUT MAP:",
+            actualWorkoutMap
+        );
 
 
         /*
@@ -2249,16 +2286,52 @@ function getScheduleDays(
 
    It is NOT limited by trainer fee end_date.
    ========================================================= */
-
 function getWorkoutForDate(
     date
 ){
 
-    /*
-    =====================================================
-    NO PROGRAM PATTERN
-    =====================================================
-    */
+    const dateKey =
+        getDateKey(date);
+
+
+    // =====================================================
+    // ACTUAL DATABASE WORKOUT
+    // =====================================================
+
+    const actualWorkout =
+        actualWorkoutMap[dateKey];
+
+
+    if(actualWorkout){
+
+        return {
+
+            id:
+                actualWorkout.id,
+
+            member_id:
+                actualWorkout.member_id,
+
+            trainer_id:
+                actualWorkout.trainer_id,
+
+            workout_date:
+                dateKey,
+
+            workout_name:
+                actualWorkout.workout_name,
+
+            status:
+                actualWorkout.status
+
+        };
+
+    }
+
+
+    // =====================================================
+    // NO RECURRING PATTERN
+    // =====================================================
 
     if(
         !Array.isArray(workoutSchedule) ||
@@ -2270,32 +2343,9 @@ function getWorkoutForDate(
     }
 
 
-    /*
-    =====================================================
-    GET PROGRAM START DATE
-    =====================================================
-
-    The first day of the selected split is anchored
-    to the member's program start date.
-
-    Example:
-
-    Start = Sep 26
-
-    Pattern:
-
-    Day 1 = Full Body
-    Day 2 = Rest
-
-    Therefore:
-
-    Sep 26 = Full Body
-    Sep 27 = Rest
-    Sep 28 = Full Body
-    Sep 29 = Rest
-    ...
-    =====================================================
-    */
+    // =====================================================
+    // PROGRAM START DATE
+    // =====================================================
 
     let programStartDate = null;
 
@@ -2316,11 +2366,9 @@ function getWorkoutForDate(
     }
 
 
-    /*
-    =====================================================
-    FALLBACK
-    =====================================================
-    */
+    // =====================================================
+    // FALLBACK
+    // =====================================================
 
     if(
         !programStartDate ||
@@ -2342,11 +2390,9 @@ function getWorkoutForDate(
     }
 
 
-    /*
-    =====================================================
-    NORMALIZE DATE
-    =====================================================
-    */
+    // =====================================================
+    // NORMALIZE DATES
+    // =====================================================
 
     const targetDate =
         new Date(date);
@@ -2367,11 +2413,9 @@ function getWorkoutForDate(
     );
 
 
-    /*
-    =====================================================
-    CALCULATE DAYS FROM PROGRAM START
-    =====================================================
-    */
+    // =====================================================
+    // DAYS SINCE PROGRAM START
+    // =====================================================
 
     const millisecondsPerDay =
         1000 *
@@ -2392,32 +2436,14 @@ function getWorkoutForDate(
         );
 
 
-    /*
-    =====================================================
-    RECURRING INDEX
-    =====================================================
-
-    Example:
-
-    Pattern length = 2
-
-    Day 0 % 2 = 0 → Full Body
-    Day 1 % 2 = 1 → Rest
-    Day 2 % 2 = 0 → Full Body
-    Day 3 % 2 = 1 → Rest
-    =====================================================
-    */
+    // =====================================================
+    // RECURRING INDEX
+    // =====================================================
 
     let patternIndex =
         daysSinceStart %
         workoutSchedule.length;
 
-
-    /*
-    =====================================================
-    HANDLE DATES BEFORE PROGRAM START
-    =====================================================
-    */
 
     if(patternIndex < 0){
 
@@ -2427,11 +2453,9 @@ function getWorkoutForDate(
     }
 
 
-    /*
-    =====================================================
-    GET RECURRING WORKOUT
-    =====================================================
-    */
+    // =====================================================
+    // GET RECURRING WORKOUT
+    // =====================================================
 
     const workout =
         workoutSchedule[
@@ -2446,14 +2470,9 @@ function getWorkoutForDate(
     }
 
 
-    /*
-    =====================================================
-    RETURN COPY
-    =====================================================
-    */
-
-    const dateKey =
-        getDateKey(date);
+    // =====================================================
+    // LEGACY STATUS
+    // =====================================================
 
     const actualStatus =
         workoutStatuses[dateKey] || null;
@@ -2470,6 +2489,7 @@ function getWorkoutForDate(
             dateKey
 
     };
+
 }
 
 
