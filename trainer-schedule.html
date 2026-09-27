@@ -1234,6 +1234,9 @@ let filteredSchedules = [];
 /* =========================================================
    LOAD SCHEDULE
 ========================================================= */
+/* =========================================================
+   LOAD SCHEDULE
+========================================================= */
 
 async function loadSchedules() {
 
@@ -1257,8 +1260,25 @@ async function loadSchedules() {
 
     try {
 
+        /* =========================================
+           GET SELECTED DATE
+        ========================================= */
+
+        const dateFilter =
+            document.getElementById(
+                "dateFilter"
+            );
+
+        const selectedDate =
+            dateFilter.value;
+
+
+        /* =========================================
+           BUILD API URL
+        ========================================= */
+
         const url =
-            `${API_URL}/api/trainer/workouts/${trainerId}`;
+            `${API_URL}/api/trainer/workouts/${trainerId}?date=${encodeURIComponent(selectedDate)}`;
 
 
         console.log(
@@ -1266,6 +1286,10 @@ async function loadSchedules() {
             url
         );
 
+
+        /* =========================================
+           FETCH
+        ========================================= */
 
         const response =
             await fetch(
@@ -1287,6 +1311,10 @@ async function loadSchedules() {
         );
 
 
+        /* =========================================
+           ERROR
+        ========================================= */
+
         if (!response.ok) {
 
             throw new Error(
@@ -1297,11 +1325,23 @@ async function loadSchedules() {
         }
 
 
+        /* =========================================
+           SAVE DATA
+        ========================================= */
+
         allSchedules =
             result.workouts || [];
 
 
-        applyFilters();
+        filteredSchedules =
+            [...allSchedules];
+
+
+        /* =========================================
+           RENDER
+        ========================================= */
+
+        renderSchedules();
 
     }
 
