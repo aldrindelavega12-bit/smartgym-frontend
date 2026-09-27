@@ -1230,14 +1230,6 @@ let allSchedules = [];
 
 let filteredSchedules = [];
 
-
-/* =========================================================
-   LOAD SCHEDULE
-========================================================= */
-/* =========================================================
-   LOAD SCHEDULE
-========================================================= */
-
 async function loadSchedules() {
 
     const body =
@@ -1261,7 +1253,41 @@ async function loadSchedules() {
     try {
 
         /* =========================================
-           GET SELECTED DATE
+           GET TODAY
+        ========================================= */
+
+        const today =
+            new Date();
+
+
+        const year =
+            today.getFullYear();
+
+
+        const month =
+            String(
+                today.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        const day =
+            String(
+                today.getDate()
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        const todayString =
+            `${year}-${month}-${day}`;
+
+
+        /* =========================================
+           SET DATE PICKER TO TODAY
         ========================================= */
 
         const dateFilter =
@@ -1269,8 +1295,13 @@ async function loadSchedules() {
                 "dateFilter"
             );
 
-        const selectedDate =
-            dateFilter.value;
+
+        if (dateFilter) {
+
+            dateFilter.value =
+                todayString;
+
+        }
 
 
         /* =========================================
@@ -1278,7 +1309,7 @@ async function loadSchedules() {
         ========================================= */
 
         const url =
-            `${API_URL}/api/trainer/workouts/${trainerId}?date=${encodeURIComponent(selectedDate)}`;
+            `${API_URL}/api/trainer/workouts/${trainerId}`;
 
 
         console.log(
@@ -1326,15 +1357,29 @@ async function loadSchedules() {
 
 
         /* =========================================
-           SAVE DATA
+           SAVE ALL SCHEDULES
+           
+           IMPORTANT:
+           Backend still returns the whole
+           recurring schedule.
+           
+           We only DISPLAY today's schedule.
         ========================================= */
 
         allSchedules =
             result.workouts || [];
 
 
+        /* =========================================
+           FILTER TODAY ONLY
+        ========================================= */
+
         filteredSchedules =
-            [...allSchedules];
+            allSchedules.filter(
+                workout =>
+                    workout.workout_date ===
+                    todayString
+            );
 
 
         /* =========================================
