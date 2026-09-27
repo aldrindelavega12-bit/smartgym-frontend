@@ -1851,43 +1851,89 @@ async function markMissed(workoutId) {
 
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/trainer/workout/${workoutId}/missed`,
-            {
-                method: "POST"
-            }
-        );
+        /* =========================================
+           MARK AS MISSED
+        ========================================= */
 
-        const result = await response.json();
+        const missedResponse =
+            await fetch(
+                `${API_URL}/api/trainer/workout/${workoutId}/missed`,
+                {
+                    method: "POST"
+                }
+            );
 
-        if (!response.ok) {
+
+        const missedResult =
+            await missedResponse.json();
+
+
+        if (!missedResponse.ok) {
 
             throw new Error(
-                result.message ||
+                missedResult.message ||
                 "Failed to mark workout as missed."
             );
 
         }
 
-        // Reload schedule only.
-        // DO NOT automatically reschedule.
+
+        /* =========================================
+           AUTOMATIC RESCHEDULE
+        ========================================= */
+
+        const rescheduleResponse =
+            await fetch(
+                `${API_URL}/api/trainer/workout/${workoutId}/reschedule`,
+                {
+                    method: "POST"
+                }
+            );
+
+
+        const rescheduleResult =
+            await rescheduleResponse.json();
+
+
+        if (!rescheduleResponse.ok) {
+
+            throw new Error(
+                rescheduleResult.message ||
+                "Workout was marked as missed but could not be rescheduled."
+            );
+
+        }
+
+
+        /* =========================================
+           RELOAD TODAY'S SCHEDULE
+        ========================================= */
+
         await loadSchedules();
 
-    } catch (error) {
+    }
+
+
+    catch (error) {
 
         console.error(
-            "MARK MISSED ERROR:",
+            "MISSED / RESCHEDULE ERROR:",
             error
         );
 
+
         alert(
             error.message ||
-            "Failed to mark workout as missed."
+            "Failed to reschedule workout."
         );
 
+
         await loadSchedules();
+
     }
+
 }
+
 
 /* =========================================================
    DATE FORMAT
