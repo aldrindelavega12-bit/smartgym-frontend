@@ -1301,11 +1301,7 @@ async function loadSchedules() {
             result.workouts || [];
 
 
-        filteredSchedules =
-            [...allSchedules];
-
-
-        renderSchedules();
+        applyFilters();
 
     }
 
