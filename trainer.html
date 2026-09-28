@@ -222,7 +222,7 @@
 
             <!-- MY TRAINEES -->
 
-            <div class="summary-card">
+            <div class="summary-card" onclick="openTraineesModal()">
 
 
                 <div class="summary-content">
@@ -247,7 +247,7 @@
 
             <!-- CLIENT REQUESTS -->
 
-            <div class="summary-card">
+            <div class="summary-card" onclick="openRequestsModal()">
 
                 <div class="summary-content">
 
@@ -425,7 +425,86 @@
 
 </div>
 
+<!-- MY TRAINEES MODAL -->
+<div id="traineesModal" class="dashboard-modal">
 
+    <div class="dashboard-modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeDashboardModal('traineesModal')">
+            ×
+        </button>
+
+        <h2>My Trainees</h2>
+
+        <p>
+            Your active trainees
+        </p>
+
+        <div class="modal-table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Program</th>
+                    </tr>
+                </thead>
+
+                <tbody id="traineesList">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CLIENT REQUESTS MODAL -->
+<div id="requestsModal" class="dashboard-modal">
+
+    <div class="dashboard-modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeDashboardModal('requestsModal')">
+            ×
+        </button>
+
+        <h2>Client Requests</h2>
+
+        <p>
+            Pending requests from members
+        </p>
+
+        <div class="modal-table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Plan</th>
+                    </tr>
+                </thead>
+
+                <tbody id="requestsList">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 <script>
 
 const API_URL =
@@ -834,7 +913,284 @@ function logout(){
 
 }
 
+// ========================================
+// TRAINER SUMMARY MODALS
+// ========================================
 
+function openDashboardModal(id){
+
+    document
+        .getElementById(id)
+        .classList.add("show");
+
+}
+
+
+function closeDashboardModal(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+// ========================================
+// MY TRAINEES
+// ========================================
+
+async function openTraineesModal(){
+
+    const list =
+        document.getElementById(
+            "traineesList"
+        );
+
+    list.innerHTML = `
+        <tr>
+            <td colspan="3" class="empty-row">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    openDashboardModal(
+        "traineesModal"
+    );
+
+    try{
+
+        const trainerId =
+            user.user_id;
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/trainees/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+        const trainees =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        if(trainees.length === 0){
+
+            list.innerHTML = `
+                <tr>
+                    <td
+                        colspan="3"
+                        class="empty-row">
+                        No trainees assigned
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        list.innerHTML =
+            trainees.map(
+                (trainee, index) => {
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${index + 1}
+                            </td>
+
+                            <td>
+                                ${trainee.full_name || "-"}
+                            </td>
+
+                            <td>
+                                ${trainee.plan_name || "-"}
+                            </td>
+
+                        </tr>
+                    `;
+
+                }
+            ).join("");
+
+    }
+    catch(error){
+
+        console.error(
+            "TRAINEES MODAL ERROR:",
+            error
+        );
+
+        list.innerHTML = `
+            <tr>
+                <td
+                    colspan="3"
+                    class="empty-row">
+                    Failed to load trainees
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+// ========================================
+// CLIENT REQUESTS
+// ========================================
+
+async function openRequestsModal(){
+
+    const list =
+        document.getElementById(
+            "requestsList"
+        );
+
+    list.innerHTML = `
+        <tr>
+            <td colspan="3" class="empty-row">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    openDashboardModal(
+        "requestsModal"
+    );
+
+    try{
+
+        const trainerId =
+            user.user_id;
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/requests/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+        const requests =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        if(requests.length === 0){
+
+            list.innerHTML = `
+                <tr>
+                    <td
+                        colspan="3"
+                        class="empty-row">
+                        No pending requests
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        list.innerHTML =
+            requests.map(
+                (request, index) => {
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${index + 1}
+                            </td>
+
+                            <td>
+                                ${request.full_name || "-"}
+                            </td>
+
+                            <td>
+                                ${request.plan_name || "-"}
+                            </td>
+
+                        </tr>
+                    `;
+
+                }
+            ).join("");
+
+    }
+    catch(error){
+
+        console.error(
+            "REQUESTS MODAL ERROR:",
+            error
+        );
+
+        list.innerHTML = `
+            <tr>
+                <td
+                    colspan="3"
+                    class="empty-row">
+                    Failed to load requests
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+// ========================================
+// CLOSE WHEN CLICKING OUTSIDE
+// ========================================
+
+document
+    .querySelectorAll(".dashboard-modal")
+    .forEach(modal => {
+
+        modal.addEventListener(
+            "click",
+            function(event){
+
+                if(event.target === modal){
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    });
 // =====================================================
 // INITIAL LOAD
 // =====================================================
