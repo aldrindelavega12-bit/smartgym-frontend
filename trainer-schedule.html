@@ -1847,6 +1847,10 @@ async function markComplete(
 /* =========================================================
    MISSED + AUTO RESCHEDULE
 ========================================================= */
+/* =========================================================
+   MARK WORKOUT AS MISSED
+   AUTO SHIFT IS HANDLED BY BACKEND
+========================================================= */
 async function markMissed(workoutId) {
 
     try {
@@ -1868,6 +1872,10 @@ async function markMissed(workoutId) {
             await missedResponse.json();
 
 
+        /* =========================================
+           CHECK RESPONSE
+        ========================================= */
+
         if (!missedResponse.ok) {
 
             throw new Error(
@@ -1879,34 +1887,27 @@ async function markMissed(workoutId) {
 
 
         /* =========================================
-           AUTOMATIC RESCHEDULE
+           IMPORTANT
+           
+           DO NOT CALL /reschedule HERE.
+           
+           The /missed endpoint already:
+           
+           1. Marks original workout as missed
+           2. Shifts all succeeding workouts +1 day
+           3. Creates replacement workout
+           
         ========================================= */
 
-        const rescheduleResponse =
-            await fetch(
-                `${API_URL}/api/trainer/workout/${workoutId}/reschedule`,
-                {
-                    method: "POST"
-                }
-            );
 
-
-        const rescheduleResult =
-            await rescheduleResponse.json();
-
-
-        if (!rescheduleResponse.ok) {
-
-            throw new Error(
-                rescheduleResult.message ||
-                "Workout was marked as missed but could not be rescheduled."
-            );
-
-        }
+        console.log(
+            "MISSED WORKOUT RESPONSE:",
+            missedResult
+        );
 
 
         /* =========================================
-           RELOAD TODAY'S SCHEDULE
+           RELOAD TRAINER SCHEDULE
         ========================================= */
 
         await loadSchedules();
@@ -1917,24 +1918,19 @@ async function markMissed(workoutId) {
     catch (error) {
 
         console.error(
-            "MISSED / RESCHEDULE ERROR:",
+            "MARK MISSED ERROR:",
             error
         );
 
 
         alert(
             error.message ||
-            "Failed to reschedule workout."
+            "Failed to mark workout as missed."
         );
-
-
-        await loadSchedules();
 
     }
 
 }
-
-
 /* =========================================================
    DATE FORMAT
 ========================================================= */
