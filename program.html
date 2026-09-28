@@ -2580,18 +2580,14 @@ function renderTrainingSchedule(){
             =================================================
             */
 
-            let workoutName =
-                "Rest Day";
-
+            let workoutName = "REST";
 
             if(workout){
-
                 workoutName =
+                    workout.day_name ||
                     workout.workout_name ||
                     "Workout";
-
             }
-
 
             /*
             =================================================
