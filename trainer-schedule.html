@@ -1843,94 +1843,46 @@ async function markComplete(
 
 }
 
-
-/* =========================================================
-   MISSED + AUTO RESCHEDULE
-========================================================= */
-/* =========================================================
-   MARK WORKOUT AS MISSED
-   AUTO SHIFT IS HANDLED BY BACKEND
-========================================================= */
 async function markMissed(workoutId) {
-
     try {
-
-        /* =========================================
-           MARK AS MISSED
-        ========================================= */
-
-        const missedResponse =
-            await fetch(
-                `${API_URL}/api/trainer/workout/${workoutId}/missed`,
-                {
-                    method: "POST"
-                }
-            );
-
-
-        const missedResult =
-            await missedResponse.json();
-
-
-        /* =========================================
-           CHECK RESPONSE
-        ========================================= */
-
-        if (!missedResponse.ok) {
-
-            throw new Error(
-                missedResult.message ||
-                "Failed to mark workout as missed."
-            );
-
-        }
-
-
-        /* =========================================
-           IMPORTANT
-           
-           DO NOT CALL /reschedule HERE.
-           
-           The /missed endpoint already:
-           
-           1. Marks original workout as missed
-           2. Shifts all succeeding workouts +1 day
-           3. Creates replacement workout
-           
-        ========================================= */
-
-
-        console.log(
-            "MISSED WORKOUT RESPONSE:",
-            missedResult
+        const response = await fetch(
+            `${API_URL}/api/trainer/workout/${workoutId}/missed`,
+            {
+                method: "POST"
+            }
         );
 
+        const result = await response.json();
 
-        /* =========================================
-           RELOAD TRAINER SCHEDULE
-        ========================================= */
+        if (!response.ok) {
+            throw new Error(
+                result.message ||
+                "Failed to mark workout as missed."
+            );
+        }
+
+        console.log(
+            "MISSED RESPONSE:",
+            result
+        );
 
         await loadSchedules();
 
-    }
-
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "MARK MISSED ERROR:",
             error
         );
 
-
         alert(
             error.message ||
             "Failed to mark workout as missed."
         );
-
     }
-
 }
+
+
 /* =========================================================
    DATE FORMAT
 ========================================================= */
