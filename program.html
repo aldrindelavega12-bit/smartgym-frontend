@@ -2583,10 +2583,28 @@ function renderTrainingSchedule(){
             let workoutName = "REST";
 
             if(workout){
+
                 workoutName =
-                    workout.day_name ||
                     workout.workout_name ||
                     "Workout";
+
+                // Remove program name
+                // Example:
+                // Build Muscle — Upper Body
+                // becomes:
+                // Upper Body
+
+                if(workoutName.includes("—")){
+
+                    workoutName =
+                        workoutName
+                            .split("—")
+                            .slice(1)
+                            .join("—")
+                            .trim();
+
+                }
+
             }
 
             /*
