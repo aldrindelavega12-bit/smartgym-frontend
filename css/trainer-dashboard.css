@@ -924,27 +924,19 @@ body {
 
 
 .card {
-
     position: relative;
 
-    min-height: 185px;
+    padding: 20px;
 
-    padding:
-        20px;
-
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     border-radius: 14px;
 
-    background:
-        #ffffff;
+    background: #ffffff;
 
-    box-shadow:
-        var(--shadow);
+    box-shadow: var(--shadow);
 
     display: flex;
-
     flex-direction: column;
 
     overflow: hidden;
@@ -1020,29 +1012,17 @@ body {
 
 
 .card button {
-
-    margin-top: auto;
-
+    margin-top: 18px;
     align-self: flex-start;
-
     padding: 0;
-
     border: 0;
-
-    background:
-        transparent;
-
-    color:
-        var(--green);
-
+    background: transparent;
+    color: var(--green);
     font-family:
         "Inter",
         sans-serif;
-
     font-size: 13px;
-
     font-weight: 700;
-
     cursor: pointer;
 }
 
