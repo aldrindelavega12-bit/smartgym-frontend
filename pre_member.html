@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <title>Pre Member Dashboard</title>
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/pre-member.css">
 
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="css/pre-member.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
+
 
 <body>
 
@@ -19,23 +23,36 @@
 <!-- ================= MAIN ================= -->
 
 <div class="layout">
-    <!-- =========================
-     PRE-MEMBER HOME CONTENT
-     ========================= -->
 
+
+    <!-- =========================
+         PRE-MEMBER HOME CONTENT
+         ========================= -->
+
+
+    <!-- =========================
+         SIDEBAR
+         ========================= -->
 
     <div class="navbar">
 
+
         <!-- BRAND -->
+
         <div class="brand">
 
             <div class="brand-icon">
+
                 <i class="fa-solid fa-dumbbell"></i>
+
             </div>
+
 
             <div class="brand-text">
 
-                <strong>SMART GYM</strong>
+                <strong>
+                    SMART GYM
+                </strong>
 
                 <span>
                     STRONGER PEOPLE • A HEALTHIER TOMORROW
@@ -46,13 +63,12 @@
         </div>
 
 
-        <!-- MENU -->
+        <!-- HOME ONLY -->
+
         <div class="menu">
 
-            <!-- HOME ONLY -->
-            <a href="pre_member.html" class="active">
-
-                <i class="fa-solid fa-house"></i>
+            <a href="pre_member.html"
+               class="active">
 
                 Home
 
@@ -61,34 +77,25 @@
         </div>
 
 
-        <!-- MOTIVATIONAL CARD -->
-        <div class="sidebar-message">
-
-            <div class="sidebar-message-icon">
-
-                <i class="fa-solid fa-dumbbell"></i>
-
-            </div>
-
-            <h3>
-                Keep Pushing
-            </h3>
-
-            <p>
-                Small steps every day lead to big results.
-            </p>
-
-            <div class="message-line"></div>
-
-        </div>
-
     </div>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
 
     <main class="main">
 
-        <!-- TOP HEADER -->
+
+        <!-- =========================
+             TOP HEADER
+             ========================= -->
+
         <div class="top-header">
+
             <div class="top-right">
+
 
                 <div
                     class="user-profile"
@@ -96,7 +103,9 @@
                     onclick="toggleMenu()"
                 >
 
+
                     <!-- AVATAR -->
+
                     <div
                         class="user-avatar"
                         id="topAvatar"
@@ -105,7 +114,9 @@
                     </div>
 
 
+
                     <!-- USER INFO -->
+
                     <div class="user-info">
 
                         <strong id="topProfileName">
@@ -119,114 +130,164 @@
                     </div>
 
 
+
                     <!-- CHEVRON -->
+
                     <i class="fa-solid fa-chevron-down profile-chevron"></i>
 
+
+
+                    <!-- PROFILE DROPDOWN -->
 
                     <div
                         id="profileDropdown"
                         class="profile-dropdown"
                     >
 
+
                         <!-- EDIT PROFILE -->
+
                         <button
                             type="button"
                             onclick="openEditProfile(event)"
                         >
+
                             <i class="fa-solid fa-user-pen"></i>
+
                             Edit Profile
+
                         </button>
 
 
+
                         <!-- CHANGE PASSWORD -->
+
                         <button
                             type="button"
                             onclick="openChangePassword(event)"
                         >
+
                             <i class="fa-solid fa-key"></i>
+
                             Change Password
+
                         </button>
+
 
 
                         <div class="dropdown-divider"></div>
 
 
+
                         <!-- LOGOUT -->
+
                         <button
                             type="button"
                             class="dropdown-logout"
                             onclick="logout(event)"
                         >
+
                             <i class="fa-solid fa-right-from-bracket"></i>
+
                             Log Out
+
                         </button>
+
 
                     </div>
 
+
                 </div>
 
-                
 
             </div>
+
         </div>
 
 
+
         <!-- =========================
-            HERO
-            ========================= -->
+             HERO
+             ========================= -->
 
         <section class="hero">
 
+
             <div class="hero-content">
+
 
                 <h1 id="welcomeName">
                     Aldrin
                 </h1>
 
+
                 <p>
                     Start your fitness journey with us.
                 </p>
 
+
                 <span class="hero-subtext">
-                    Explore our services and programs before completing your enrollment.
+
+                    Explore our services and programs
+                    before completing your enrollment.
+
                 </span>
 
+
             </div>
+
 
         </section>
 
 
+
         <!-- =========================
-            PRE-MEMBER DASHBOARD
-            ========================= -->
+             PRE-MEMBER DASHBOARD
+             ========================= -->
 
         <div class="pre-member-dashboard">
 
 
+
             <!-- =========================
-                LEFT CONTENT
-                ========================= -->
+                 LEFT CONTENT
+                 ========================= -->
 
             <div class="dashboard-left">
 
 
-                <!-- OUR SERVICES -->
+
+                <!-- =========================
+                     OUR SERVICES
+                     ========================= -->
+
                 <section class="dashboard-card services-card">
+
 
                     <div class="section-heading">
 
                         <div>
-                            <h2>Our Services</h2>
+
+                            <h2>
+                                Our Services
+                            </h2>
+
 
                             <p>
                                 Discover what Smart Gym can offer you.
                             </p>
+
                         </div>
 
                     </div>
 
 
+
                     <div class="services-grid">
+
+
+
+                        <!-- MEMBER ACCESS -->
 
                         <div class="service-item">
 
@@ -234,13 +295,19 @@
                                 Member Access
                             </h3>
 
+
                             <p>
+
                                 Access the gym using facial recognition
                                 and fingerprint authentication.
+
                             </p>
 
                         </div>
 
+
+
+                        <!-- BOOK LOCKER -->
 
                         <div class="service-item">
 
@@ -248,13 +315,19 @@
                                 Book a Locker
                             </h3>
 
+
                             <p>
+
                                 Reserve a locker for your workout session
                                 and keep your belongings safe.
+
                             </p>
 
                         </div>
 
+
+
+                        <!-- WORKOUT PROGRAMS -->
 
                         <div class="service-item">
 
@@ -262,222 +335,73 @@
                                 Workout Programs
                             </h3>
 
+
                             <p>
+
                                 Choose a program that fits your fitness
                                 goal with available workout splits.
+
                             </p>
 
                         </div>
 
+
                     </div>
 
+
                 </section>
+
 
 
 
                 <!-- =========================
-                    PROGRAMS WE OFFER
-                    ========================= -->
+                     PROGRAMS WE OFFER
+                     ========================= -->
 
                 <section class="dashboard-card programs-card">
+
 
                     <div class="section-heading">
 
                         <div>
-                            <h2>Programs We Offer</h2>
+
+                            <h2>
+                                Programs We Offer
+                            </h2>
+
 
                             <p>
                                 Choose a program to view available workout splits.
                             </p>
+
                         </div>
 
                     </div>
 
 
-                    <div class="program-list">
 
+                    <!--
+                        PROGRAMS ARE LOADED FROM API
 
-                        <!-- BUILD MUSCLE -->
-                        <details class="program-item">
+                        GET:
+                        /api/programs
 
-                            <summary>
-                                <span>Build Muscle</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </summary>
+                        SPLITS ARE LOADED WHEN
+                        A PROGRAM IS OPENED
 
+                        GET:
+                        /api/programs/{program_id}/plans
+                    -->
 
-                            <div class="program-content">
+                    <div
+                        class="program-list"
+                        id="programList"
+                    >
 
-                                <div class="split-row">
-
-                                    <strong>
-                                        Push Pull Legs (PPL)
-                                    </strong>
-
-                                    <span>
-                                        3–6 days per week
-                                    </span>
-
-                                </div>
-
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Arnold Split
-                                    </strong>
-
-                                    <span>
-                                        4–6 days per week
-                                    </span>
-
-                                </div>
-
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Upper / Lower
-                                    </strong>
-
-                                    <span>
-                                        4 days per week
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </details>
-
-
-
-                        <!-- WEIGHT LOSS -->
-                        <details class="program-item">
-
-                            <summary>
-                                <span>Weight Loss</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </summary>
-
-
-                            <div class="program-content">
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Full Body
-                                    </strong>
-
-                                    <span>
-                                        Full-body training schedule
-                                    </span>
-
-                                </div>
-
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Upper / Lower
-                                    </strong>
-
-                                    <span>
-                                        Balanced strength training
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </details>
-
-
-
-                        <!-- GENERAL FITNESS -->
-                        <details class="program-item">
-
-                            <summary>
-                                <span>General Fitness</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </summary>
-
-
-                            <div class="program-content">
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Full Body
-                                    </strong>
-
-                                    <span>
-                                        Complete fitness routine
-                                    </span>
-
-                                </div>
-
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Upper / Lower
-                                    </strong>
-
-                                    <span>
-                                        Balanced weekly training
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </details>
-
-
-
-                        <!-- STRENGTH & CONDITIONING -->
-                        <details class="program-item">
-
-                            <summary>
-                                <span>Strength & Conditioning</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </summary>
-
-
-                            <div class="program-content">
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Full Body Strength
-                                    </strong>
-
-                                    <span>
-                                        Strength-focused training
-                                    </span>
-
-                                </div>
-
-
-                                <div class="split-row">
-
-                                    <strong>
-                                        Conditioning Split
-                                    </strong>
-
-                                    <span>
-                                        Strength and endurance training
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </details>
-
+                        <!-- PROGRAMS WILL BE LOADED HERE -->
 
                     </div>
+
 
                 </section>
 
@@ -487,53 +411,32 @@
 
 
             <!-- =========================
-                GYM INFORMATION
-                ========================= -->
-            <!-- =========================
-            RIGHT COLUMN
-            ========================= -->
+                 RIGHT COLUMN
+                 ========================= -->
 
-        <div class="dashboard-right">
+            <div class="dashboard-right">
 
 
-            <!-- =========================
-                NEXT STEP
-                ========================= -->
 
-            <section class="dashboard-card next-step-card">
+                <!-- =========================
+                     NEXT STEP
+                     ========================= -->
 
-                <div class="section-heading">
-
-                    <div>
-
-                        <h2>Next Step</h2>
-
-                        <p>
-                            Complete your biometric enrollment to activate your membership.
-                        </p>
-
-                    </div>
-
-                </div>
+                <section class="dashboard-card next-step-card">
 
 
-                <div class="biometric-steps">
-
-
-                    <div class="biometric-step">
-
-                        <div class="biometric-number">
-                            1
-                        </div>
+                    <div class="section-heading">
 
                         <div>
 
-                            <strong>
-                                Fingerprint Enrollment
-                            </strong>
+                            <h2>
+                                Next Step
+                            </h2>
+
 
                             <p>
-                                Register your fingerprint for secure and faster access.
+                                Complete your biometric enrollment
+                                to activate your membership.
                             </p>
 
                         </div>
@@ -541,20 +444,123 @@
                     </div>
 
 
-                    <div class="biometric-step">
 
-                        <div class="biometric-number">
-                            2
+                    <div class="biometric-steps">
+
+
+
+                        <!-- FINGERPRINT -->
+
+                        <div class="biometric-step">
+
+
+                            <div class="biometric-number">
+                                1
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Fingerprint Enrollment
+                                </strong>
+
+
+                                <p>
+                                    Register your fingerprint
+                                    for secure and faster access.
+                                </p>
+
+                            </div>
+
+
                         </div>
+
+
+
+                        <!-- FACE -->
+
+                        <div class="biometric-step">
+
+
+                            <div class="biometric-number">
+                                2
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Face Recognition Enrollment
+                                </strong>
+
+
+                                <p>
+                                    Register your face
+                                    for member identification.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- ACTIVATION -->
+
+                        <div class="biometric-step">
+
+
+                            <div class="biometric-number">
+                                3
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Activation
+                                </strong>
+
+
+                                <p>
+                                    Your account will be activated
+                                    after completing both biometrics.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+
+                <!-- =========================
+                     GYM INFORMATION
+                     ========================= -->
+
+                <section class="dashboard-card gym-information-card">
+
+
+                    <div class="section-heading">
 
                         <div>
 
-                            <strong>
-                                Face Recognition Enrollment
-                            </strong>
+                            <h2>
+                                Gym Information
+                            </h2>
+
 
                             <p>
-                                Register your face for member identification.
+                                Smart Gym details and contact information.
                             </p>
 
                         </div>
@@ -562,314 +568,442 @@
                     </div>
 
 
-                    <div class="biometric-step">
 
-                        <div class="biometric-number">
-                            3
-                        </div>
+                    <!-- OPERATING HOURS -->
 
-                        <div>
+                    <div class="gym-info-row">
+
+
+                        <div class="gym-info-left">
+
+
+                            <div class="gym-info-icon">
+
+                                <i class="fa-regular fa-clock"></i>
+
+                            </div>
+
 
                             <strong>
-                                Activation
+                                Operating Hours
                             </strong>
 
-                            <p>
-                                Your account will be activated after completing both biometrics.
-                            </p>
 
                         </div>
 
-                    </div>
 
+                        <div class="gym-info-value">
 
-                </div>
+                            6:00 AM – 10:00 PM<br>
 
-            </section>
+                            Everyday
 
-            <section class="dashboard-card gym-information-card">
-
-                <div class="section-heading">
-
-                    <div>
-                        <h2>Gym Information</h2>
-
-                        <p>
-                            Smart Gym details and contact information.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div class="gym-info-row">
-
-                    <div class="gym-info-left">
-
-                        <div class="gym-info-icon">
-                            <i class="fa-regular fa-clock"></i>
                         </div>
 
-                        <strong>
-                            Operating Hours
-                        </strong>
 
                     </div>
 
-                    <div class="gym-info-value">
-                        6:00 AM – 10:00 PM<br>
-                        Everyday
-                    </div>
-
-                </div>
 
 
-                <div class="gym-info-row">
+                    <!-- ADDRESS -->
 
-                    <div class="gym-info-left">
+                    <div class="gym-info-row">
 
-                        <div class="gym-info-icon">
-                            <i class="fa-solid fa-location-dot"></i>
+
+                        <div class="gym-info-left">
+
+
+                            <div class="gym-info-icon">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                            </div>
+
+
+                            <strong>
+                                Address
+                            </strong>
+
+
                         </div>
 
-                        <strong>
-                            Address
-                        </strong>
 
-                    </div>
+                        <div class="gym-info-value">
 
-                    <div class="gym-info-value">
-                        Poblacion,<br>
-                        Balayan, Batangas
-                    </div>
+                            Poblacion,<br>
 
-                </div>
+                            Balayan, Batangas
 
-
-                <div class="gym-info-row">
-
-                    <div class="gym-info-left">
-
-                        <div class="gym-info-icon">
-                            <i class="fa-solid fa-phone"></i>
                         </div>
 
-                        <strong>
-                            Phone
-                        </strong>
 
                     </div>
 
-                    <div class="gym-info-value">
-                        0912 345 6789
-                    </div>
-
-                </div>
 
 
-                <div class="gym-info-row">
+                    <!-- PHONE -->
 
-                    <div class="gym-info-left">
+                    <div class="gym-info-row">
 
-                        <div class="gym-info-icon">
-                            <i class="fa-solid fa-envelope"></i>
+
+                        <div class="gym-info-left">
+
+
+                            <div class="gym-info-icon">
+
+                                <i class="fa-solid fa-phone"></i>
+
+                            </div>
+
+
+                            <strong>
+                                Phone
+                            </strong>
+
+
                         </div>
 
-                        <strong>
-                            Email
-                        </strong>
 
-                    </div>
+                        <div class="gym-info-value">
 
-                    <div class="gym-info-value">
-                        info@smartgym.com
-                    </div>
+                            0912 345 6789
 
-                </div>
-
-
-                <div class="gym-info-row">
-
-                    <div class="gym-info-left">
-
-                        <div class="gym-info-icon">
-                            <i class="fa-solid fa-globe"></i>
                         </div>
 
-                        <strong>
-                            Website
-                        </strong>
 
                     </div>
 
-                    <div class="gym-info-value">
-                        www.smartgym.com
-                    </div>
-
-                </div>
 
 
-                <div class="gym-info-row">
+                    <!-- EMAIL -->
 
-                    <div class="gym-info-left">
+                    <div class="gym-info-row">
 
-                        <div class="gym-info-icon">
-                            <i class="fa-brands fa-facebook-f"></i>
+
+                        <div class="gym-info-left">
+
+
+                            <div class="gym-info-icon">
+
+                                <i class="fa-solid fa-envelope"></i>
+
+                            </div>
+
+
+                            <strong>
+                                Email
+                            </strong>
+
+
                         </div>
 
-                        <strong>
-                            Facebook Page
-                        </strong>
+
+                        <div class="gym-info-value">
+
+                            info@smartgym.com
+
+                        </div>
+
 
                     </div>
 
-                    <div class="gym-info-value">
-                        Smart Gym Official
+
+
+                    <!-- WEBSITE -->
+
+                    <div class="gym-info-row">
+
+
+                        <div class="gym-info-left">
+
+
+                            <div class="gym-info-icon">
+
+                                <i class="fa-solid fa-globe"></i>
+
+                            </div>
+
+
+                            <strong>
+                                Website
+                            </strong>
+
+
+                        </div>
+
+
+                        <div class="gym-info-value">
+
+                            www.smartgym.com
+
+                        </div>
+
+
                     </div>
 
-                </div>
 
-            </section>
+
+                    <!-- FACEBOOK -->
+
+                    <div class="gym-info-row">
+
+
+                        <div class="gym-info-left">
+
+
+                            <div class="gym-info-icon">
+
+                                <i class="fa-brands fa-facebook-f"></i>
+
+                            </div>
+
+
+                            <strong>
+                                Facebook Page
+                            </strong>
+
+
+                        </div>
+
+
+                        <div class="gym-info-value">
+
+                            Smart Gym Official
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
 
 
         </div>
 
+
     </main>
 
+
 </div>
-    
-<!-- ================= NOTIFICATION ================= -->
+
+
+
+<!-- =================
+     NOTIFICATION
+     ================= -->
 
 <div
     id="notifPopup"
-    class="notif-popup">
+    class="notif-popup"
+>
 
     <b id="notifTitle">
-
         Smart Gym
-
     </b>
 
+
     <p id="notifText">
-
         Waiting for biometric enrollment.
-
     </p>
 
 </div>
 
-<!-- ================= EDIT PROFILE MODAL ================= -->
 
-<div id="editModal" class="edit-profile-overlay">
+
+<!-- =================
+     EDIT PROFILE MODAL
+     ================= -->
+
+<div
+    id="editModal"
+    class="edit-profile-overlay"
+>
+
 
     <div class="edit-profile-modal">
 
+
         <!-- HEADER -->
+
         <div class="edit-profile-header">
 
+
             <div>
-                <span>Account Settings</span>
-                <h2>Edit Profile</h2>
+
+                <span>
+                    Account Settings
+                </span>
+
+
+                <h2>
+                    Edit Profile
+                </h2>
+
             </div>
+
 
             <button
                 type="button"
                 class="edit-close"
-                onclick="closeModal()">
+                onclick="closeModal()"
+            >
+
                 &times;
+
             </button>
+
 
         </div>
 
 
+
         <!-- BODY -->
+
         <div class="edit-profile-body">
 
+
             <!-- AVATAR -->
+
             <div
                 class="profile-avatar-large"
-                id="editProfileAvatar">
+                id="editProfileAvatar"
+            >
                 A
             </div>
 
 
+
             <!-- FULL NAME -->
+
             <div class="profile-field">
 
-                <label>Full Name</label>
+
+                <label>
+                    Full Name
+                </label>
+
 
                 <input
                     type="text"
                     id="editName"
-                    placeholder="Enter your full name">
+                    placeholder="Enter your full name"
+                >
+
 
             </div>
 
 
+
             <!-- PHONE -->
+
             <div class="profile-field">
 
-                <label>Phone Number</label>
+
+                <label>
+                    Phone Number
+                </label>
+
 
                 <input
                     type="text"
                     id="editPhone"
-                    placeholder="Enter your phone number">
+                    placeholder="Enter your phone number"
+                >
+
 
             </div>
 
 
+
             <!-- USERNAME -->
+
             <div class="profile-field">
 
-                <label>Username</label>
+
+                <label>
+                    Username
+                </label>
+
 
                 <input
                     type="text"
                     id="editUsername"
-                    placeholder="Enter your username">
+                    placeholder="Enter your username"
+                >
+
 
             </div>
+
 
         </div>
 
 
+
         <!-- FOOTER -->
+
         <div class="edit-profile-footer">
+
 
             <button
                 type="button"
                 class="cancel-profile"
-                onclick="closeModal()">
+                onclick="closeModal()"
+            >
+
                 Cancel
+
             </button>
+
 
             <button
                 type="button"
                 class="save-profile"
-                onclick="saveProfile()">
+                onclick="saveProfile()"
+            >
+
                 Save Changes
+
             </button>
+
 
         </div>
 
+
     </div>
+
 
 </div>
 
-<!-- ================= CHANGE PASSWORD MODAL ================= -->
-<!-- ================= CHANGE PASSWORD MODAL ================= -->
 
-<div id="changePasswordModal" class="edit-profile-overlay">
+
+<!-- =================
+     CHANGE PASSWORD MODAL
+     ================= -->
+
+<div
+    id="changePasswordModal"
+    class="edit-profile-overlay"
+>
+
 
     <div class="edit-profile-modal">
 
+
         <!-- HEADER -->
+
         <div class="edit-profile-header">
+
 
             <div>
 
-                <span>Account Security</span>
+                <span>
+                    Account Security
+                </span>
+
 
                 <h2>
                     Change Password
@@ -877,20 +1011,29 @@
 
             </div>
 
+
             <button
                 type="button"
                 class="edit-close"
-                onclick="closeChangePassword()">
+                onclick="closeChangePassword()"
+            >
+
                 &times;
+
             </button>
+
 
         </div>
 
 
+
         <!-- BODY -->
+
         <div class="edit-profile-body">
 
+
             <!-- LOCK ICON -->
+
             <div class="profile-avatar-large">
 
                 <i class="fa-solid fa-lock"></i>
@@ -898,19 +1041,26 @@
             </div>
 
 
+
             <!-- CURRENT PASSWORD -->
+
             <div class="profile-field">
+
 
                 <label>
                     Current Password
                 </label>
 
+
                 <div class="password-wrapper">
+
 
                     <input
                         type="password"
                         id="changeCurrentPassword"
-                        placeholder="Current password">
+                        placeholder="Current password"
+                    >
+
 
                     <button
                         type="button"
@@ -920,30 +1070,40 @@
                                 'changeCurrentPassword',
                                 this
                             )
-                        ">
+                        "
+                    >
 
                         <i class="fa-regular fa-eye"></i>
 
                     </button>
 
+
                 </div>
+
 
             </div>
 
 
+
             <!-- NEW PASSWORD -->
+
             <div class="profile-field">
+
 
                 <label>
                     New Password
                 </label>
 
+
                 <div class="password-wrapper">
+
 
                     <input
                         type="password"
                         id="changeNewPassword"
-                        placeholder="New password">
+                        placeholder="New password"
+                    >
+
 
                     <button
                         type="button"
@@ -953,30 +1113,40 @@
                                 'changeNewPassword',
                                 this
                             )
-                        ">
+                        "
+                    >
 
                         <i class="fa-regular fa-eye"></i>
 
                     </button>
 
+
                 </div>
+
 
             </div>
 
 
+
             <!-- CONFIRM PASSWORD -->
+
             <div class="profile-field">
+
 
                 <label>
                     Confirm New Password
                 </label>
 
+
                 <div class="password-wrapper">
+
 
                     <input
                         type="password"
                         id="changeConfirmPassword"
-                        placeholder="Confirm new password">
+                        placeholder="Confirm new password"
+                    >
+
 
                     <button
                         type="button"
@@ -986,41 +1156,59 @@
                                 'changeConfirmPassword',
                                 this
                             )
-                        ">
+                        "
+                    >
 
                         <i class="fa-regular fa-eye"></i>
 
                     </button>
 
+
                 </div>
 
+
             </div>
+
 
         </div>
 
 
+
         <!-- FOOTER -->
+
         <div class="edit-profile-footer">
+
 
             <button
                 type="button"
                 class="cancel-profile"
-                onclick="closeChangePassword()">
+                onclick="closeChangePassword()"
+            >
+
                 Cancel
+
             </button>
+
 
             <button
                 type="button"
                 class="save-profile"
-                onclick="changePassword()">
+                onclick="changePassword()"
+            >
+
                 Change Password
+
             </button>
+
 
         </div>
 
+
     </div>
 
+
 </div>
+
 <script>
 
 const API_URL =
@@ -1535,7 +1723,372 @@ function toggleMenu() {
     dropdown.classList.toggle("show");
 }
 
+/* =========================================================
+   PROGRAMS WE OFFER
+   LOAD PROGRAMS FROM API
+   ========================================================= */
 
+async function loadPrograms() {
+
+    const programList =
+        document.getElementById("programList");
+
+    if (!programList)
+        return;
+
+
+    programList.innerHTML = `
+        <div class="program-loading">
+            Loading programs...
+        </div>
+    `;
+
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/programs`
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const programs =
+            await response.json();
+
+
+        programList.innerHTML = "";
+
+
+        if (
+            !Array.isArray(programs) ||
+            programs.length === 0
+        ) {
+
+            programList.innerHTML = `
+                <div class="program-empty">
+                    No programs available at the moment.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        programs.forEach(program => {
+
+
+            const details =
+                document.createElement("details");
+
+            details.className =
+                "program-item";
+
+
+            /*
+             * CLOSED BY DEFAULT
+             */
+
+            details.open = false;
+
+
+            details.innerHTML = `
+
+                <summary>
+
+                    <span>
+                        ${escapeProgramText(
+                            program.program_name
+                        )}
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </summary>
+
+
+                <div class="program-content">
+
+
+                    ${
+                        program.description
+                            ? `
+                                <div class="program-description">
+                                    ${escapeProgramText(
+                                        program.description
+                                    )}
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    <div
+                        class="split-list"
+                        data-program-id="${program.id}"
+                    >
+
+                        <div class="split-loading">
+                            Loading workout splits...
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            /*
+             * LOAD SPLITS ONLY
+             * WHEN PROGRAM IS OPENED
+             */
+
+            details.addEventListener(
+                "toggle",
+                async function () {
+
+                    if (!details.open)
+                        return;
+
+
+                    const splitList =
+                        details.querySelector(
+                            ".split-list"
+                        );
+
+
+                    if (!splitList)
+                        return;
+
+
+                    /*
+                     * PREVENT RELOADING
+                     */
+
+                    if (
+                        splitList.dataset.loaded === "true"
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    await loadProgramPlans(
+                        program.id,
+                        splitList
+                    );
+
+                }
+            );
+
+
+            programList.appendChild(details);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "PROGRAM LOAD ERROR:",
+            error
+        );
+
+
+        programList.innerHTML = `
+
+            <div class="program-empty">
+
+                Unable to load programs.
+                Please try again later.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD PROGRAM PLANS / SPLITS
+   ========================================================= */
+
+async function loadProgramPlans(
+    programId,
+    splitList
+) {
+
+    try {
+
+        const response = await fetch(
+
+            `${API_URL}/api/programs/${programId}/plans`
+
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        splitList.innerHTML = "";
+
+
+        if (
+            data.status !== "success" ||
+            !Array.isArray(data.plans) ||
+            data.plans.length === 0
+        ) {
+
+            splitList.innerHTML = `
+
+                <div class="split-empty">
+
+                    No workout splits available.
+
+                </div>
+
+            `;
+
+            splitList.dataset.loaded = "true";
+
+            return;
+
+        }
+
+
+        /*
+         * DISPLAY EVERY PLAN / SPLIT
+         * FROM THE DATABASE
+         */
+
+        data.plans.forEach(plan => {
+
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "split-row";
+
+
+            row.innerHTML = `
+
+                <strong>
+
+                    ${escapeProgramText(
+                        plan.plan_name
+                    )}
+
+                </strong>
+
+
+                <span>
+
+                    ${
+                        plan.description
+                            ? escapeProgramText(
+                                plan.description
+                              )
+                            : "Workout split"
+                    }
+
+                </span>
+
+            `;
+
+
+            splitList.appendChild(row);
+
+        });
+
+
+        /*
+         * MARK AS LOADED
+         */
+
+        splitList.dataset.loaded = "true";
+
+
+    } catch (error) {
+
+        console.error(
+            "PROGRAM PLANS LOAD ERROR:",
+            error
+        );
+
+
+        splitList.innerHTML = `
+
+            <div class="split-empty">
+
+                Unable to load workout splits.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE API TEXT
+   ========================================================= */
+
+function escapeProgramText(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent =
+        String(value);
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   LOAD PROGRAMS
+   ========================================================= */
+
+loadPrograms();
 // ================= CLICK OUTSIDE =================
 
 window.onclick = function(e) {
