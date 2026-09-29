@@ -1864,17 +1864,15 @@ async function markMissed(workoutId) {
     } catch (error) {
 
         console.error(
-            "MARK MISSED ERROR:",
+            "MISSED ERROR:",
             error
         );
 
         alert(
-            error.message ||
-            "Failed to mark workout as missed."
+            error.message
         );
     }
 }
-
 
 /* =========================================================
    DATE FORMAT

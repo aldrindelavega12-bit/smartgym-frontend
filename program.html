@@ -1914,10 +1914,6 @@ function setCurrentProgramEmpty(){
    LOAD TRAINING SCHEDULE
 ========================================================= */
 
-/* =========================================================
-   LOAD TRAINING SCHEDULE
-   ========================================================= */
-
 async function loadTrainingSchedule(){
 
     const memberId =
@@ -1989,31 +1985,6 @@ async function loadTrainingSchedule(){
 
         actualWorkoutMap = {};
 
-        /*
-        =====================================================
-        GET RECURRING PROGRAM PATTERN
-        =====================================================
-
-        Backend now returns:
-
-        schedule_pattern
-
-        Example:
-
-        [
-            {
-                day_number: 1,
-                workout_name: "Full Body"
-            },
-            {
-                day_number: 2,
-                workout_name: "Rest"
-            }
-        ]
-
-        This pattern is NOT limited by trainer fee.
-        */
-
         const pattern =
             result.schedule_pattern ||
             result.workouts ||
@@ -2033,29 +2004,42 @@ async function loadTrainingSchedule(){
         const actualWorkouts =
             result.actual_workouts || [];
 
+        const todayKey = getDateKey(new Date());
+
         if(Array.isArray(actualWorkouts)){
 
-            actualWorkouts.forEach(
-                function(workout){
+            for(const workout of actualWorkouts){
 
-                    const dateKey =
-                        String(
-                            workout.workout_date || ""
-                        ).substring(0, 10);
+                const dateKey =
+                    String(
+                        workout.workout_date || ""
+                    ).substring(0, 10);
 
-                    if(!dateKey){
-                        return;
+                if(!dateKey){
+                    continue;
+                }
+
+                // 👉 AUTO-MISSED CHECK: Kung lumipas na ang petsa at walang status o blanko, i-update sa database at local
+                if (dateKey < todayKey && (!workout.status || workout.status === "")) {
+                    try {
+                        await fetch(`${API_URL}/api/member/workout/${workout.id}/missed`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" }
+                        });
+                        workout.status = "missed";
+                    } catch (err) {
+                        console.error("Error updating missed workout:", err);
                     }
+                }
 
-                    if(!actualWorkoutMap[dateKey]){
+                if(!actualWorkoutMap[dateKey]){
 
-                        actualWorkoutMap[dateKey] =
-                            workout;
-
-                    }
+                    actualWorkoutMap[dateKey] =
+                        workout;
 
                 }
-            );
+
+            }
 
         }
 
@@ -3684,10 +3668,6 @@ async function confirmRenewTraining(){
    CHANGE TRAINER
 ========================================================= */
 
-/* =========================================================
-   CHANGE TRAINER
-========================================================= */
-
 let changeTrainerData = null;
 
 let selectedChangeTrainer = null;
@@ -4501,9 +4481,6 @@ async function confirmChangeTrainer(){
 /* =========================================================
    CHANGE PROGRAM
 ========================================================= */
-/* =========================================================
-   CHANGE PROGRAM
-========================================================= */
 
 let selectedChangeProgram = null;
 let selectedChangeProgramSplit = null;
@@ -4678,9 +4655,6 @@ function closeChangeProgram(){
 /* =========================================================
    LOAD PROGRAMS
 ========================================================= */
-/* =========================================================
-   LOAD PROGRAMS
-========================================================= */
 
 async function loadChangeProgramOptions(){
 
@@ -4775,20 +4749,6 @@ async function loadChangeProgramOptions(){
             }
         );
 
-
-        /* =================================================
-           ALL PROGRAMS ARE AVAILABLE
-           
-           IMPORTANT:
-           DO NOT REMOVE CURRENT PROGRAM.
-           
-           This allows:
-           
-           Build Muscle → Build Muscle
-           
-           so the member can change only
-           the split/plan.
-        ================================================= */
 
         const availablePrograms =
             uniquePrograms;
