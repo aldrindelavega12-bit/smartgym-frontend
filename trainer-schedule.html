@@ -1414,7 +1414,6 @@ async function loadSchedules() {
 /* =========================================================
    RENDER
 ========================================================= */
-
 function renderSchedules() {
 
     const body =
@@ -1422,12 +1421,10 @@ function renderSchedules() {
             "scheduleBody"
         );
 
-
     const empty =
         document.getElementById(
             "emptyState"
         );
-
 
     const count =
         document.getElementById(
@@ -1438,10 +1435,36 @@ function renderSchedules() {
     body.innerHTML = "";
 
 
-    /* EMPTY */
+    /* =====================================================
+       REMOVE REST SCHEDULES
+       ===================================================== */
+
+    const visibleSchedules =
+        filteredSchedules.filter(
+            workout => {
+
+                const workoutName =
+                    String(
+                        workout.workout_name || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                return !(
+                    workoutName === "rest" ||
+                    workoutName.endsWith("— rest") ||
+                    workoutName.endsWith("- rest")
+                );
+            }
+        );
+
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
 
     if (
-        filteredSchedules.length === 0
+        visibleSchedules.length === 0
     ) {
 
         empty.style.display =
@@ -1453,7 +1476,6 @@ function renderSchedules() {
 
 
         return;
-
     }
 
 
@@ -1461,9 +1483,11 @@ function renderSchedules() {
         "none";
 
 
-    /* ROWS */
+    /* =====================================================
+       ROWS
+       ===================================================== */
 
-    filteredSchedules.forEach(
+    visibleSchedules.forEach(
         workout => {
 
 
@@ -1473,7 +1497,9 @@ function renderSchedules() {
                 );
 
 
-            /* STATUS */
+            /* =================================================
+               STATUS
+               ================================================= */
 
             let statusClass =
                 "scheduled";
@@ -1510,7 +1536,9 @@ function renderSchedules() {
             }
 
 
-            /* ACTION */
+            /* =================================================
+               ACTION
+               ================================================= */
 
             let actionHTML = "";
 
@@ -1531,7 +1559,8 @@ function renderSchedules() {
                                 markComplete(
                                     ${workout.id}
                                 )
-                            ">
+                            "
+                        >
 
                             Complete
 
@@ -1545,7 +1574,8 @@ function renderSchedules() {
                                 markMissed(
                                     ${workout.id}
                                 )
-                            ">
+                            "
+                        >
 
                             Mark Missed
 
@@ -1573,7 +1603,9 @@ function renderSchedules() {
             }
 
 
-            /* ROW */
+            /* =================================================
+               ROW
+               ================================================= */
 
             row.innerHTML = `
 
@@ -1588,6 +1620,7 @@ function renderSchedules() {
                             </i>
 
                         </div>
+
 
                         <strong>
 
@@ -1630,7 +1663,6 @@ function renderSchedules() {
 
                         </strong>
 
-
                     </div>
 
                 </td>
@@ -1642,7 +1674,8 @@ function renderSchedules() {
                         class="
                             schedule-status
                             ${statusClass}
-                        ">
+                        "
+                    >
 
                         <span
                             class="status-dot">
@@ -1672,11 +1705,14 @@ function renderSchedules() {
     );
 
 
+    /* =====================================================
+       COUNT
+       ===================================================== */
+
     count.textContent =
-        `Showing 1 to ${filteredSchedules.length} of ${filteredSchedules.length} schedules`;
+        `Showing 1 to ${visibleSchedules.length} of ${visibleSchedules.length} schedules`;
 
 }
-
 
 /* =========================================================
    SEARCH + DATE FILTER
