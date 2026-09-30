@@ -29,6 +29,262 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
 
+
+    <!-- =====================================================
+         SUMMARY HOVER PREVIEW
+    ====================================================== -->
+
+    <style>
+
+        /* =====================================================
+           SUMMARY CARD
+        ===================================================== */
+
+        .summary-card {
+
+            position: relative;
+
+            overflow: visible;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           SUMMARY PREVIEW
+        ===================================================== */
+
+        .summary-preview {
+
+            position: absolute;
+
+            top: calc(100% + 10px);
+
+            left: 50%;
+
+            transform:
+                translateX(-50%)
+                translateY(-6px);
+
+            width: 310px;
+
+            padding: 18px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                #dfe9e3;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 12px 35px
+                rgba(25, 70, 45, 0.15);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            pointer-events: none;
+
+            z-index: 5000;
+
+            transition:
+                opacity .18s ease,
+                transform .18s ease,
+                visibility .18s ease;
+
+        }
+
+
+        /* =====================================================
+           SHOW PREVIEW ON HOVER
+        ===================================================== */
+
+        .summary-card:hover .summary-preview {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform:
+                translateX(-50%)
+                translateY(0);
+
+        }
+
+
+        /* =====================================================
+           PREVIEW TITLE
+        ===================================================== */
+
+        .summary-preview h4 {
+
+            margin: 0;
+
+            color: #17231d;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =====================================================
+           PREVIEW DESCRIPTION
+        ===================================================== */
+
+        .summary-preview > p {
+
+            margin:
+                5px 0 14px;
+
+            color: #718078;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =====================================================
+           PREVIEW LIST
+        ===================================================== */
+
+        .preview-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            max-height: 220px;
+
+            overflow-y: auto;
+
+        }
+
+
+        /* =====================================================
+           PREVIEW ITEM
+        ===================================================== */
+
+        .preview-item {
+
+            padding:
+                10px 0;
+
+            border-bottom:
+                1px solid
+                #edf2ef;
+
+        }
+
+
+        .preview-item:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        /* =====================================================
+           NAME
+        ===================================================== */
+
+        .preview-name {
+
+            display: block;
+
+            color: #26342d;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =====================================================
+           PLAN
+        ===================================================== */
+
+        .preview-info {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: #7b8781;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =====================================================
+           LOADING / EMPTY
+        ===================================================== */
+
+        .preview-loading,
+        .preview-empty {
+
+            padding:
+                12px 0;
+
+            color: #7b8781;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =====================================================
+           SCROLLBAR
+        ===================================================== */
+
+        .preview-list::-webkit-scrollbar {
+
+            width: 5px;
+
+        }
+
+
+        .preview-list::-webkit-scrollbar-thumb {
+
+            background:
+                #cbd8d0;
+
+            border-radius: 10px;
+
+        }
+
+
+        .preview-list::-webkit-scrollbar-track {
+
+            background:
+                transparent;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .summary-preview {
+
+                width: 260px;
+
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
@@ -46,7 +302,6 @@
 
     <div class="brand">
 
-        
 
         <div class="brand-text">
 
@@ -69,7 +324,6 @@
             href="trainer.html"
             class="active">
 
-
             Home
 
         </a>
@@ -78,7 +332,6 @@
         <a
             href="trainer_messages.html"
             class="msg-link">
-
 
             Messages
 
@@ -92,12 +345,13 @@
 
         </a>
 
-        <a href="trainee.html">
 
+        <a href="trainee.html">
 
             Trainee
 
         </a>
+
 
         <a href="trainer-schedule.html">
 
@@ -105,8 +359,8 @@
 
         </a>
 
-        <a href="client_requests.html">
 
+        <a href="client_requests.html">
 
             Client Requests
 
@@ -134,8 +388,9 @@
 
         <div class="top-header">
 
-            <div class="trainer-profile"
-                 onclick="toggleTrainerMenu()">
+            <div
+                class="trainer-profile"
+                onclick="toggleTrainerMenu()">
 
 
                 <div class="trainer-avatar">
@@ -181,6 +436,7 @@
 
                     </button>
 
+
                 </div>
 
             </div>
@@ -210,68 +466,143 @@
             </div>
 
         </div>
-        
+
+
         <!-- =================================================
-            SUMMARY CARDS
+             SUMMARY CARDS
         ================================================= -->
 
-                <!-- MY TRAINEES -->
-        <div class="summary-card" id="traineesCard">
+        <div class="summary-cards">
 
-            <div class="summary-content">
 
-                <span>My Trainees</span>
+            <!-- =================================================
+                 MY TRAINEES
+            ================================================= -->
 
-                <strong id="myTrainees">0</strong>
+            <div
+                class="summary-card"
+                id="traineesCard">
 
-                <small>Active trainees</small>
 
-            </div>
+                <div class="summary-content">
 
-            <div class="summary-preview">
+                    <span>
+                        My Trainees
+                    </span>
 
-                <h4>My Trainees</h4>
 
-                <p>Your active trainees</p>
+                    <strong id="myTrainees">
+                        0
+                    </strong>
 
-                <div
-                    class="preview-list"
-                    id="traineesPreviewList">
+
+                    <small>
+                        Active trainees
+                    </small>
+
                 </div>
 
+
+                <!-- =================================================
+                     HOVER PREVIEW
+                ================================================= -->
+
+                <div class="summary-preview">
+
+
+                    <h4>
+                        My Trainees
+                    </h4>
+
+
+                    <p>
+                        Your active trainees
+                    </p>
+
+
+                    <div
+                        class="preview-list"
+                        id="traineesPreviewList">
+
+                        <div class="preview-loading">
+                            Loading...
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
             </div>
+
+
+
+            <!-- =================================================
+                 CLIENT REQUESTS
+            ================================================= -->
+
+            <div
+                class="summary-card"
+                id="requestsCard">
+
+
+                <div class="summary-content">
+
+                    <span>
+                        Client Requests
+                    </span>
+
+
+                    <strong id="clientRequests">
+                        0
+                    </strong>
+
+
+                    <small>
+                        Pending requests
+                    </small>
+
+                </div>
+
+
+                <!-- =================================================
+                     HOVER PREVIEW
+                ================================================= -->
+
+                <div class="summary-preview">
+
+
+                    <h4>
+                        Client Requests
+                    </h4>
+
+
+                    <p>
+                        Pending requests from members
+                    </p>
+
+
+                    <div
+                        class="preview-list"
+                        id="requestsPreviewList">
+
+                        <div class="preview-loading">
+                            Loading...
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
 
         </div>
 
 
-        <!-- CLIENT REQUESTS -->
-        <div class="summary-card" id="requestsCard">
-
-            <div class="summary-content">
-
-                <span>Client Requests</span>
-
-                <strong id="clientRequests">0</strong>
-
-                <small>Pending requests</small>
-
-            </div>
-
-            <div class="summary-preview">
-
-                <h4>Client Requests</h4>
-
-                <p>Pending requests from members</p>
-
-                <div
-                    class="preview-list"
-                    id="requestsPreviewList">
-                </div>
-
-            </div>
-
-        </div>
-        
         <!-- =================================================
              QUICK ACTION CARDS
         ================================================== -->
@@ -309,12 +640,11 @@
 
             </div>
 
+
             <!-- TRAINEE -->
 
             <div class="card">
 
-
-            
 
                 <h3>
                     Trainee
@@ -340,6 +670,7 @@
 
             </div>
 
+
             <!-- SCHEDULE -->
 
             <div class="card">
@@ -348,11 +679,13 @@
                     Schedule
                 </h3>
 
+
                 <p>
                     View and manage<br>
                     your training schedule<br>
                     and activities.
                 </p>
+
 
                 <button
                     onclick="go('trainer-schedule.html')">
@@ -367,10 +700,10 @@
 
             </div>
 
+
             <!-- CLIENT REQUESTS -->
 
             <div class="card">
-
 
 
                 <h3>
@@ -397,6 +730,7 @@
                 </button>
 
             </div>
+
 
         </div>
 
@@ -428,10 +762,168 @@
 </div>
 
 
+
+<!-- =====================================================
+     MY TRAINEES MODAL
+     
+     KEPT AS-IS
+     Hindi ko tinanggal ang existing modal JS/HTML.
+===================================================== -->
+
+<div
+    id="traineesModal"
+    class="dashboard-modal">
+
+
+    <div class="dashboard-modal-box">
+
+
+        <button
+            class="modal-close"
+            onclick="closeDashboardModal('traineesModal')">
+
+            ×
+
+        </button>
+
+
+        <h2>
+            My Trainees
+        </h2>
+
+
+        <p>
+            Your active trainees
+        </p>
+
+
+        <div class="modal-table-wrapper">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Program
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="traineesList">
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     CLIENT REQUESTS MODAL
+     
+     KEPT AS-IS
+===================================================== -->
+
+<div
+    id="requestsModal"
+    class="dashboard-modal">
+
+
+    <div class="dashboard-modal-box">
+
+
+        <button
+            class="modal-close"
+            onclick="closeDashboardModal('requestsModal')">
+
+            ×
+
+        </button>
+
+
+        <h2>
+            Client Requests
+        </h2>
+
+
+        <p>
+            Pending requests from members
+        </p>
+
+
+        <div class="modal-table-wrapper">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Plan
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="requestsList">
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
 <script>
+
 
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
+
 
 
 // =====================================================
@@ -442,10 +934,18 @@ const user =
     JSON.parse(
         localStorage.getItem("user")
     );
-const trainerName =
-    document.getElementById("trainerName");
 
-if(trainerName && user){
+
+const trainerName =
+    document.getElementById(
+        "trainerName"
+    );
+
+
+if(
+    trainerName &&
+    user
+){
 
     trainerName.innerText =
         user.fullname ||
@@ -455,10 +955,17 @@ if(trainerName && user){
 
 }
 
-const trainerAvatar =
-    document.querySelector(".trainer-avatar");
 
-if(trainerAvatar && user){
+const trainerAvatar =
+    document.querySelector(
+        ".trainer-avatar"
+    );
+
+
+if(
+    trainerAvatar &&
+    user
+){
 
     const fullname =
         user.fullname ||
@@ -466,12 +973,14 @@ if(trainerAvatar && user){
         user.full_name ||
         "Trainer";
 
+
     trainerAvatar.innerText =
         fullname
             .charAt(0)
             .toUpperCase();
 
 }
+
 
 if(
     !user ||
@@ -484,11 +993,13 @@ if(
 }
 
 
+
 // =====================================================
 // MESSAGE COUNT
 // =====================================================
 
 let lastUnread = 0;
+
 
 
 async function loadMessageCount(){
@@ -546,9 +1057,11 @@ async function loadMessageCount(){
         }
 
 
-        lastUnread = unread;
+        lastUnread =
+            unread;
 
     }
+
     catch(error){
 
         console.error(
@@ -561,9 +1074,6 @@ async function loadMessageCount(){
 }
 
 
-// =====================================================
-// TRAINER DASHBOARD
-// =====================================================
 
 // =====================================================
 // TRAINER DASHBOARD
@@ -584,6 +1094,7 @@ async function loadTrainerDashboard(){
             );
 
         }
+
 
 
         // =================================================
@@ -625,6 +1136,7 @@ async function loadTrainerDashboard(){
             trainees.length;
 
 
+
         // =================================================
         // CLIENT REQUESTS
         // =================================================
@@ -664,7 +1176,23 @@ async function loadTrainerDashboard(){
             requests.length;
 
 
+
+        // =================================================
+        // LOAD HOVER PREVIEWS
+        // =================================================
+
+        renderTraineesPreview(
+            trainees
+        );
+
+
+        renderRequestsPreview(
+            requests
+        );
+
+
     }
+
     catch(error){
 
         console.error(
@@ -675,16 +1203,380 @@ async function loadTrainerDashboard(){
 
         document.getElementById(
             "myTrainees"
-        ).innerText = 0;
+        ).innerText =
+            0;
 
 
         document.getElementById(
             "clientRequests"
-        ).innerText = 0;
+        ).innerText =
+            0;
+
+
+        renderTraineesPreview(
+            []
+        );
+
+
+        renderRequestsPreview(
+            []
+        );
 
     }
 
 }
+
+
+
+// =====================================================
+// RENDER TRAINEES PREVIEW
+// =====================================================
+
+function renderTraineesPreview(
+    trainees
+){
+
+    const list =
+        document.getElementById(
+            "traineesPreviewList"
+        );
+
+
+    if(!list)
+        return;
+
+
+    if(
+        !Array.isArray(trainees) ||
+        trainees.length === 0
+    ){
+
+        list.innerHTML = `
+            <div class="preview-empty">
+                No active trainees
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        trainees.map(
+            trainee => {
+
+                const name =
+                    trainee.full_name ||
+                    trainee.name ||
+                    "-";
+
+
+                const plan =
+                    trainee.plan_name ||
+                    trainee.program_name ||
+                    "-";
+
+
+                return `
+                    <div class="preview-item">
+
+                        <span class="preview-name">
+                            ${name}
+                        </span>
+
+                        <span class="preview-info">
+                            ${plan}
+                        </span>
+
+                    </div>
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+
+// =====================================================
+// RENDER CLIENT REQUESTS PREVIEW
+// =====================================================
+
+function renderRequestsPreview(
+    requests
+){
+
+    const list =
+        document.getElementById(
+            "requestsPreviewList"
+        );
+
+
+    if(!list)
+        return;
+
+
+    if(
+        !Array.isArray(requests) ||
+        requests.length === 0
+    ){
+
+        list.innerHTML = `
+            <div class="preview-empty">
+                No pending requests
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        requests.map(
+            request => {
+
+                const name =
+                    request.full_name ||
+                    request.name ||
+                    "-";
+
+
+                const plan =
+                    request.plan_name ||
+                    request.program_name ||
+                    "-";
+
+
+                return `
+                    <div class="preview-item">
+
+                        <span class="preview-name">
+                            ${name}
+                        </span>
+
+                        <span class="preview-info">
+                            ${plan}
+                        </span>
+
+                    </div>
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+
+// =====================================================
+// HOVER EVENTS
+// =====================================================
+
+const traineesCard =
+    document.getElementById(
+        "traineesCard"
+    );
+
+
+if(traineesCard){
+
+    traineesCard.addEventListener(
+        "mouseenter",
+        async function(){
+
+            await refreshTraineesPreview();
+
+        }
+    );
+
+}
+
+
+
+const requestsCard =
+    document.getElementById(
+        "requestsCard"
+    );
+
+
+if(requestsCard){
+
+    requestsCard.addEventListener(
+        "mouseenter",
+        async function(){
+
+            await refreshRequestsPreview();
+
+        }
+    );
+
+}
+
+
+
+// =====================================================
+// REFRESH TRAINEES PREVIEW
+// =====================================================
+
+async function refreshTraineesPreview(){
+
+    const list =
+        document.getElementById(
+            "traineesPreviewList"
+        );
+
+
+    if(!list)
+        return;
+
+
+    try{
+
+        const trainerId =
+            user.user_id;
+
+
+        if(!trainerId)
+            return;
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/trainees/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const trainees =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        renderTraineesPreview(
+            trainees
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "TRAINEES PREVIEW ERROR:",
+            error
+        );
+
+
+        list.innerHTML = `
+            <div class="preview-empty">
+                Unable to load trainees
+            </div>
+        `;
+
+    }
+
+}
+
+
+
+// =====================================================
+// REFRESH REQUESTS PREVIEW
+// =====================================================
+
+async function refreshRequestsPreview(){
+
+    const list =
+        document.getElementById(
+            "requestsPreviewList"
+        );
+
+
+    if(!list)
+        return;
+
+
+    try{
+
+        const trainerId =
+            user.user_id;
+
+
+        if(!trainerId)
+            return;
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/requests/${trainerId}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const requests =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        renderRequestsPreview(
+            requests
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "REQUESTS PREVIEW ERROR:",
+            error
+        );
+
+
+        list.innerHTML = `
+            <div class="preview-empty">
+                Unable to load requests
+            </div>
+        `;
+
+    }
+
+}
+
+
 
 // =====================================================
 // NAVIGATION
@@ -696,6 +1588,7 @@ function go(page){
         page;
 
 }
+
 
 
 // =====================================================
@@ -748,6 +1641,7 @@ function showNotifPopup(
 }
 
 
+
 // =====================================================
 // PROFILE DROPDOWN
 // =====================================================
@@ -776,6 +1670,7 @@ function toggleTrainerMenu(){
     );
 
 }
+
 
 
 window.addEventListener(
@@ -823,6 +1718,7 @@ window.addEventListener(
 );
 
 
+
 // =====================================================
 // LOGOUT
 // =====================================================
@@ -836,21 +1732,73 @@ function logout(){
 
 }
 
-// ========================================
-// TRAINER SUMMARY HOVER PREVIEWS
-// ========================================
 
-async function loadTraineesPreview(){
+
+// =====================================================
+// TRAINER SUMMARY MODALS
+//
+// KEPT.
+// Hindi natin inalis dahil existing JS mo ito.
+// Hindi na lang sila tinatawag ng summary cards.
+// =====================================================
+
+function openDashboardModal(id){
+
+    document
+        .getElementById(id)
+        .classList.add("show");
+
+}
+
+
+
+function closeDashboardModal(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+
+// =====================================================
+// MY TRAINEES MODAL
+// =====================================================
+
+async function openTraineesModal(){
 
     const list =
         document.getElementById(
-            "traineesPreviewList"
+            "traineesList"
         );
+
+
+    list.innerHTML = `
+        <tr>
+
+            <td
+                colspan="3"
+                class="empty-row">
+
+                Loading...
+
+            </td>
+
+        </tr>
+    `;
+
+
+    openDashboardModal(
+        "traineesModal"
+    );
+
 
     try{
 
         const trainerId =
             user.user_id;
+
 
         const response =
             await fetch(
@@ -860,8 +1808,10 @@ async function loadTraineesPreview(){
                 }
             );
 
+
         const data =
             await response.json();
+
 
         if(!response.ok){
 
@@ -872,55 +1822,84 @@ async function loadTraineesPreview(){
 
         }
 
+
         const trainees =
             Array.isArray(data)
                 ? data
                 : [];
 
-        if(trainees.length === 0){
+
+        if(
+            trainees.length === 0
+        ){
 
             list.innerHTML = `
-                <div class="preview-empty">
-                    No active trainees
-                </div>
+                <tr>
+
+                    <td
+                        colspan="3"
+                        class="empty-row">
+
+                        No trainees assigned
+
+                    </td>
+
+                </tr>
             `;
 
             return;
+
         }
+
 
         list.innerHTML =
             trainees.map(
-                trainee => {
+                (trainee, index) => {
 
                     return `
-                        <div class="preview-item">
+                        <tr>
 
-                            <span class="preview-name">
+                            <td>
+                                ${index + 1}
+                            </td>
+
+                            <td>
                                 ${trainee.full_name || "-"}
-                            </span>
+                            </td>
 
-                            <span class="preview-info">
-                                ${trainee.program_name || "-"}
-                            </span>
+                            <td>
+                                ${trainee.plan_name || "-"}
+                            </td>
 
-                        </div>
+                        </tr>
                     `;
 
                 }
             ).join("");
 
+
     }
+
     catch(error){
 
         console.error(
-            "TRAINEES PREVIEW ERROR:",
+            "TRAINEES MODAL ERROR:",
             error
         );
 
+
         list.innerHTML = `
-            <div class="preview-empty">
-                Unable to load trainees
-            </div>
+            <tr>
+
+                <td
+                    colspan="3"
+                    class="empty-row">
+
+                    Failed to load trainees
+
+                </td>
+
+            </tr>
         `;
 
     }
@@ -928,21 +1907,44 @@ async function loadTraineesPreview(){
 }
 
 
-// ========================================
-// CLIENT REQUESTS PREVIEW
-// ========================================
 
-async function loadRequestsPreview(){
+// =====================================================
+// CLIENT REQUESTS MODAL
+// =====================================================
+
+async function openRequestsModal(){
 
     const list =
         document.getElementById(
-            "requestsPreviewList"
+            "requestsList"
         );
+
+
+    list.innerHTML = `
+        <tr>
+
+            <td
+                colspan="3"
+                class="empty-row">
+
+                Loading...
+
+            </td>
+
+        </tr>
+    `;
+
+
+    openDashboardModal(
+        "requestsModal"
+    );
+
 
     try{
 
         const trainerId =
             user.user_id;
+
 
         const response =
             await fetch(
@@ -952,8 +1954,10 @@ async function loadRequestsPreview(){
                 }
             );
 
+
         const data =
             await response.json();
+
 
         if(!response.ok){
 
@@ -964,55 +1968,84 @@ async function loadRequestsPreview(){
 
         }
 
+
         const requests =
             Array.isArray(data)
                 ? data
                 : [];
 
-        if(requests.length === 0){
+
+        if(
+            requests.length === 0
+        ){
 
             list.innerHTML = `
-                <div class="preview-empty">
-                    No pending requests
-                </div>
+                <tr>
+
+                    <td
+                        colspan="3"
+                        class="empty-row">
+
+                        No pending requests
+
+                    </td>
+
+                </tr>
             `;
 
             return;
+
         }
+
 
         list.innerHTML =
             requests.map(
-                request => {
+                (request, index) => {
 
                     return `
-                        <div class="preview-item">
+                        <tr>
 
-                            <span class="preview-name">
+                            <td>
+                                ${index + 1}
+                            </td>
+
+                            <td>
                                 ${request.full_name || "-"}
-                            </span>
+                            </td>
 
-                            <span class="preview-info">
-                                ${request.program_name || "-"}
-                            </span>
+                            <td>
+                                ${request.plan_name || "-"}
+                            </td>
 
-                        </div>
+                        </tr>
                     `;
 
                 }
             ).join("");
 
+
     }
+
     catch(error){
 
         console.error(
-            "REQUESTS PREVIEW ERROR:",
+            "REQUESTS MODAL ERROR:",
             error
         );
 
+
         list.innerHTML = `
-            <div class="preview-empty">
-                Unable to load requests
-            </div>
+            <tr>
+
+                <td
+                    colspan="3"
+                    class="empty-row">
+
+                    Failed to load requests
+
+                </td>
+
+            </tr>
         `;
 
     }
@@ -1020,24 +2053,41 @@ async function loadRequestsPreview(){
 }
 
 
-// ========================================
-// HOVER EVENTS
-// ========================================
+
+// =====================================================
+// CLOSE WHEN CLICKING OUTSIDE
+//
+// KEPT.
+// Hindi natin tinanggal.
+// =====================================================
 
 document
-    .getElementById("traineesCard")
-    .addEventListener(
-        "mouseenter",
-        loadTraineesPreview
+    .querySelectorAll(
+        ".dashboard-modal"
+    )
+    .forEach(
+        modal => {
+
+            modal.addEventListener(
+                "click",
+                function(event){
+
+                    if(
+                        event.target === modal
+                    ){
+
+                        modal.classList.remove(
+                            "show"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
     );
 
-
-document
-    .getElementById("requestsCard")
-    .addEventListener(
-        "mouseenter",
-        loadRequestsPreview
-    );
 
 
 // =====================================================
@@ -1049,12 +2099,15 @@ loadMessageCount();
 loadTrainerDashboard();
 
 
-// Refresh message count
+// =====================================================
+// REFRESH MESSAGE COUNT
+// =====================================================
 
 setInterval(
     loadMessageCount,
     10000
 );
+
 
 </script>
 

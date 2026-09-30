@@ -3687,138 +3687,31 @@ body {
     color: var(--muted);
 }
 
-/* ========================================
-   TRAINER SUMMARY HOVER PREVIEW
-======================================== */
+/* =========================================================
+   SUMMARY HOVER PREVIEW - FIX LAYERING
+========================================================= */
+
+.summary-cards {
+    position: relative;
+    z-index: 20;
+}
 
 .summary-card {
     position: relative;
     overflow: visible;
-    cursor: default;
+}
+
+.summary-card:hover {
+    z-index: 100;
 }
 
 .summary-preview {
-    position: absolute;
-
-    top: calc(100% + 10px);
-    left: 50%;
-
-    transform: translateX(-50%) translateY(-6px);
-
-    width: 310px;
-
-    padding: 18px;
-
-    background: #ffffff;
-
-    border: 1px solid #dfe9e3;
-    border-radius: 14px;
-
-    box-shadow:
-        0 12px 35px rgba(25, 70, 45, 0.15);
-
-    opacity: 0;
-    visibility: hidden;
-
-    pointer-events: none;
-
-    z-index: 5000;
-
-    transition:
-        opacity .18s ease,
-        transform .18s ease,
-        visibility .18s ease;
+    z-index: 9999;
 }
 
-.summary-card:hover .summary-preview {
-    opacity: 1;
-    visibility: visible;
+/* Quick action cards stay behind the summary preview */
 
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
-
-.summary-preview::before {
-    content: "";
-
-    position: absolute;
-
-    top: -7px;
-    left: 50%;
-
-    width: 13px;
-    height: 13px;
-
-    background: #ffffff;
-
-    border-left: 1px solid #dfe9e3;
-    border-top: 1px solid #dfe9e3;
-
-    transform:
-        translateX(-50%)
-        rotate(45deg);
-}
-
-.summary-preview h4 {
-    margin: 0;
-
-    color: #17231d;
-
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.summary-preview > p {
-    margin: 5px 0 14px;
-
-    color: #718078;
-
-    font-size: 12px;
-}
-
-.preview-list {
-    display: flex;
-    flex-direction: column;
-
-    max-height: 220px;
-
-    overflow-y: auto;
-}
-
-.preview-item {
-    padding: 10px 0;
-
-    border-bottom: 1px solid #edf2ef;
-}
-
-.preview-item:last-child {
-    border-bottom: none;
-}
-
-.preview-name {
-    display: block;
-
-    color: #26342d;
-
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.preview-info {
-    display: block;
-
-    margin-top: 3px;
-
-    color: #7b8781;
-
-    font-size: 11px;
-}
-
-.preview-empty {
-    padding: 12px 0;
-
-    color: #7b8781;
-
-    font-size: 12px;
+.cards {
+    position: relative;
+    z-index: 1;
 }
