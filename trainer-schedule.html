@@ -1224,6 +1224,10 @@ let allSchedules = [];
 
 let filteredSchedules = [];
 
+let currentPage = 1;
+
+const schedulesPerPage = 5;
+
 async function loadSchedules() {
 
     const body =
@@ -1404,10 +1408,6 @@ async function loadSchedules() {
 
 }
 
-
-/* =========================================================
-   RENDER
-========================================================= */
 function renderSchedules() {
 
     const body =
@@ -1425,13 +1425,28 @@ function renderSchedules() {
             "scheduleCount"
         );
 
+    const pageNumber =
+        document.querySelector(
+            ".page-number"
+        );
+
+    const prevPage =
+        document.getElementById(
+            "prevPage"
+        );
+
+    const nextPage =
+        document.getElementById(
+            "nextPage"
+        );
+
 
     body.innerHTML = "";
 
 
     /* =====================================================
        REMOVE REST SCHEDULES
-       ===================================================== */
+    ===================================================== */
 
     const visibleSchedules =
         filteredSchedules.filter(
@@ -1455,7 +1470,7 @@ function renderSchedules() {
 
     /* =====================================================
        EMPTY
-       ===================================================== */
+    ===================================================== */
 
     if (
         visibleSchedules.length === 0
@@ -1464,10 +1479,17 @@ function renderSchedules() {
         empty.style.display =
             "block";
 
-
         count.textContent =
             "Showing 0 to 0 of 0 schedules";
 
+        currentPage = 1;
+
+        pageNumber.textContent =
+            "1";
+
+        prevPage.disabled = true;
+
+        nextPage.disabled = true;
 
         return;
     }
@@ -1478,12 +1500,66 @@ function renderSchedules() {
 
 
     /* =====================================================
-       ROWS
-       ===================================================== */
+       TOTAL PAGES
+    ===================================================== */
 
-    visibleSchedules.forEach(
+    const totalPages =
+        Math.ceil(
+            visibleSchedules.length /
+            schedulesPerPage
+        );
+
+
+    /* =====================================================
+       KEEP CURRENT PAGE VALID
+    ===================================================== */
+
+    if (
+        currentPage > totalPages
+    ) {
+
+        currentPage =
+            totalPages;
+    }
+
+
+    if (
+        currentPage < 1
+    ) {
+
+        currentPage = 1;
+    }
+
+
+    /* =====================================================
+       PAGINATION RANGE
+    ===================================================== */
+
+    const startIndex =
+        (
+            currentPage - 1
+        ) *
+        schedulesPerPage;
+
+
+    const endIndex =
+        startIndex +
+        schedulesPerPage;
+
+
+    const pageSchedules =
+        visibleSchedules.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    /* =====================================================
+       RENDER CURRENT PAGE ONLY
+    ===================================================== */
+
+    pageSchedules.forEach(
         workout => {
-
 
             const row =
                 document.createElement(
@@ -1493,7 +1569,7 @@ function renderSchedules() {
 
             /* =================================================
                STATUS
-               ================================================= */
+            ================================================= */
 
             let statusClass =
                 "scheduled";
@@ -1512,9 +1588,7 @@ function renderSchedules() {
 
                 statusText =
                     "Completed";
-
             }
-
 
             else if (
                 workout.status ===
@@ -1526,13 +1600,12 @@ function renderSchedules() {
 
                 statusText =
                     "Missed";
-
             }
 
 
             /* =================================================
                ACTION
-               ================================================= */
+            ================================================= */
 
             let actionHTML = "";
 
@@ -1555,11 +1628,8 @@ function renderSchedules() {
                                 )
                             "
                         >
-
                             Complete
-
                         </button>
-
 
                         <button
                             type="button"
@@ -1570,9 +1640,7 @@ function renderSchedules() {
                                 )
                             "
                         >
-
                             Missed
-
                         </button>
 
                     </div>
@@ -1581,15 +1649,12 @@ function renderSchedules() {
 
             }
 
-
             else {
 
                 actionHTML = `
 
                     <span class="action-done">
-
                         No action
-
                     </span>
 
                 `;
@@ -1599,7 +1664,7 @@ function renderSchedules() {
 
             /* =================================================
                ROW
-               ================================================= */
+            ================================================= */
 
             row.innerHTML = `
 
@@ -1614,7 +1679,6 @@ function renderSchedules() {
                             </i>
 
                         </div>
-
 
                         <strong>
 
@@ -1700,11 +1764,34 @@ function renderSchedules() {
 
 
     /* =====================================================
-       COUNT
-       ===================================================== */
+       UPDATE PAGINATION
+    ===================================================== */
+
+    const showingStart =
+        startIndex + 1;
+
+
+    const showingEnd =
+        Math.min(
+            endIndex,
+            visibleSchedules.length
+        );
+
 
     count.textContent =
-        `Showing 1 to ${visibleSchedules.length} of ${visibleSchedules.length} schedules`;
+        `Showing ${showingStart} to ${showingEnd} of ${visibleSchedules.length} schedules`;
+
+
+    pageNumber.textContent =
+        currentPage;
+
+
+    prevPage.disabled =
+        currentPage <= 1;
+
+
+    nextPage.disabled =
+        currentPage >= totalPages;
 
 }
 
@@ -1778,7 +1865,7 @@ function applyFilters() {
             }
         );
 
-
+    currentPage = 1;
     renderSchedules();
 
 }
@@ -2048,7 +2135,77 @@ function logout() {
 
 }
 
+/* =========================================================
+   PAGINATION
+========================================================= */
 
+document
+    .getElementById("prevPage")
+    .addEventListener(
+        "click",
+        function () {
+
+            if (
+                currentPage > 1
+            ) {
+
+                currentPage--;
+
+                renderSchedules();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("nextPage")
+    .addEventListener(
+        "click",
+        function () {
+
+            const visibleSchedules =
+                filteredSchedules.filter(
+                    workout => {
+
+                        const workoutName =
+                            String(
+                                workout.workout_name || ""
+                            )
+                            .trim()
+                            .toLowerCase();
+
+                        return !(
+                            workoutName === "rest" ||
+                            workoutName.endsWith("— rest") ||
+                            workoutName.endsWith("- rest")
+                        );
+
+                    }
+                );
+
+
+            const totalPages =
+                Math.ceil(
+                    visibleSchedules.length /
+                    schedulesPerPage
+                );
+
+
+            if (
+                currentPage <
+                totalPages
+            ) {
+
+                currentPage++;
+
+                renderSchedules();
+
+            }
+
+        }
+    );
 /* =========================================================
    INITIAL LOAD
 ========================================================= */
