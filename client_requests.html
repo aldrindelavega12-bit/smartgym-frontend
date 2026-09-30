@@ -314,7 +314,7 @@
                             </th>
 
                             <th>
-                                Start Training
+                                Request type
                             </th>
 
                             <th>
@@ -794,7 +794,10 @@ function createRequestRow(
 
 
     row.dataset.requestId =
-        request.id;
+    request.id;
+
+    row.dataset.requestType =
+        request.request_type || "normal";
 
 
     const price =
@@ -935,19 +938,19 @@ function createRequestRow(
         </td>
 
 
-        <!-- START TRAINING -->
+       <!-- REQUEST TYPE -->
 
         <td>
 
-            <div class="date-info">
+            <span class="duration-badge">
 
-                <strong>
+                ${escapeHtml(
+                    request.request_type === "renewal"
+                        ? "Renewal"
+                        : "New Request"
+                )}
 
-                    ${startTraining}
-
-                </strong>
-
-            </div>
+            </span>
 
         </td>
 
@@ -1291,10 +1294,13 @@ async function acceptRequest(button){
 
 
     const requestId =
-        row.dataset.requestId;
+    row.dataset.requestId;
 
     const memberName =
         row.dataset.name;
+
+    const requestType =
+        row.dataset.requestType;
 
 
     const trainerId =
@@ -1358,10 +1364,21 @@ async function acceptRequest(button){
         }
 
 
-        showNotifPopup(
-            "Request Accepted",
-            `${memberName} has been added to your trainees.`
-        );
+        if (requestType === "renewal") {
+
+            showNotifPopup(
+                "Renewal Accepted",
+                `${memberName}'s trainer renewal has been accepted.`
+            );
+
+        } else {
+
+            showNotifPopup(
+                "Request Accepted",
+                `${memberName} has been added to your trainees.`
+            );
+
+        }
 
 
         /*
