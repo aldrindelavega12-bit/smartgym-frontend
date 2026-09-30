@@ -1356,10 +1356,7 @@ if (!user) {
 
     <div class="brand">
 
-        <div class="brand-icon">
-            <i class="fa-solid fa-dumbbell"></i>
-        </div>
-
+       
         <div class="brand-text">
 
             <strong>SMART GYM</strong>
@@ -1376,21 +1373,7 @@ if (!user) {
     <div class="menu" id="menu"></div>
 
 
-    <div class="sidebar-message">
-
-        <div class="sidebar-message-icon">
-            <i class="fa-solid fa-chart-line"></i>
-        </div>
-
-        <h3>Daily Operations</h3>
-
-        <p>
-            Keep track of attendance, lockers, and gym activities.
-        </p>
-
-        <div class="message-line"></div>
-
-    </div>
+    
 
 </div>
 
@@ -1590,7 +1573,7 @@ if(user.role === "admin"){
 
     <a href="messages.html" class="msg-link">
 
-        <i class="fa-solid fa-envelope"></i>
+        
 
         Messages
 
@@ -1603,40 +1586,40 @@ if(user.role === "admin"){
     </a>
 
     <a href="attendance.html">
-        <i class="fa-regular fa-calendar-check"></i>
+        
         Attendance
     </a>
 
     <a href="locker.html">
-        <i class="fa-solid fa-lock"></i>
+        
         Locker
     </a>
 
     <a href="members.html">
-        <i class="fa-solid fa-users"></i>
+       
         Members
     </a>
 
     <a href="staff_manage.html">
-        <i class="fa-regular fa-user"></i>
+       
         Staff
     </a>
 
     <a href="create_account.html">
-        <i class="fa-solid fa-user-plus"></i>
+        
         Create Account
     </a>
 `;
 }else{
     menu.innerHTML = `
          <a href="staff.html">
-            <i class="fa-solid fa-house"></i>
+            
             Home
         </a>
 
         <a href="messages.html" class="msg-link">
 
-            <i class="fa-solid fa-envelope"></i>
+            
 
             Messages
 
@@ -1649,12 +1632,12 @@ if(user.role === "admin"){
         </a>
 
         <a href="attendance.html">
-            <i class="fa-regular fa-calendar-check"></i>
+            
             Attendance
         </a>
 
         <a href="locker.html">
-            <i class="fa-solid fa-lock"></i>
+            
             Locker
         </a>
     `;
