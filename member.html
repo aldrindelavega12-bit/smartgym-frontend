@@ -319,9 +319,7 @@ if (!user || user.role !== "member") {
 
         <div class="panel-title workout-panel-title">
 
-            <div>
-                <h2>Today's Workout</h2>
-            </div>
+            <h2>Today's Workout</h2>
 
             <div class="workout-date">
                 <i class="fa-regular fa-calendar"></i>
@@ -341,14 +339,14 @@ if (!user || user.role !== "member") {
                     </span>
 
                     <h1 id="todayWorkoutName">
-                        -
+                        Loading...
                     </h1>
                 </div>
 
                 <span
                     class="workout-status"
                     id="todayWorkoutStatus">
-                    Workout Day
+                    -
                 </span>
 
             </div>
@@ -1568,104 +1566,158 @@ async function loadMembership(){
 // TODAY'S WORKOUT
 // ==============================
 
-function loadTodaysWorkout() {
+async function loadTodaysWorkout() {
+
+    const workoutName =
+        document.getElementById("todayWorkoutName");
+
+    const workoutStatus =
+        document.getElementById("todayWorkoutStatus");
+
+    const workoutDate =
+        document.getElementById("todayWorkoutDate");
+
+    const workoutBox =
+        document.querySelector(".today-workout-box");
+
 
     const today = new Date();
 
-    const dayName = today.toLocaleDateString(
-        "en-US",
-        {
+    const dayName =
+        today.toLocaleDateString("en-US", {
             weekday: "long"
-        }
-    );
+        });
 
-    const formattedDate = today.toLocaleDateString(
-        "en-US",
-        {
+
+    workoutDate.innerText =
+        today.toLocaleDateString("en-US", {
             weekday: "long",
             month: "long",
             day: "numeric",
             year: "numeric"
+        });
+
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/member/program/${memberId}`
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Program API error: ${response.status}`
+            );
+
         }
-    );
 
 
-    document.getElementById(
-        "todayWorkoutDate"
-    ).innerText = formattedDate;
+        const result =
+            await response.json();
 
 
-    /*
-       CURRENT WEEKLY PROGRAM SCHEDULE
-
-       Monday    = Chest
-       Tuesday   = Back
-       Wednesday = Rest
-       Thursday  = Shoulders
-       Friday    = Legs
-       Saturday  = Arms
-       Sunday    = Rest
-    */
-
-    const workoutSchedule = {
-
-        Monday: "Chest",
-
-        Tuesday: "Back",
-
-        Wednesday: "Rest",
-
-        Thursday: "Shoulders",
-
-        Friday: "Legs",
-
-        Saturday: "Arms",
-
-        Sunday: "Rest"
-
-    };
-
-
-    const workout =
-        workoutSchedule[dayName] || "Rest";
-
-
-    const workoutName =
-        document.getElementById(
-            "todayWorkoutName"
-        );
-
-    const workoutStatus =
-        document.getElementById(
-            "todayWorkoutStatus"
-        );
-
-    const workoutBox =
-        document.querySelector(
-            ".today-workout-box"
+        console.log(
+            "MEMBER PROGRAM DATA:",
+            result
         );
 
 
-    workoutName.innerText = workout;
+        const program =
+            result.program ||
+            result.data?.program ||
+            result.data;
 
 
-    if (workout === "Rest") {
+        if (
+            !program ||
+            !program.schedule
+        ) {
+
+            workoutName.innerText =
+                "No Program";
+
+            workoutStatus.innerText =
+                "Not Assigned";
+
+            return;
+
+        }
+
+
+        /*
+         * GET TODAY'S WORKOUT
+         * DIRECTLY FROM API SCHEDULE
+         */
+
+        const todaySchedule =
+            program.schedule[dayName];
+
+
+        if (!todaySchedule) {
+
+            workoutName.innerText =
+                "Rest";
+
+            workoutStatus.innerText =
+                "Rest Day";
+
+            workoutBox.classList.add(
+                "rest-day"
+            );
+
+            return;
+
+        }
+
+
+        const todayWorkout =
+            todaySchedule.workout;
+
+
+        if (
+            !todayWorkout ||
+            todayWorkout.toLowerCase() === "rest"
+        ) {
+
+            workoutName.innerText =
+                "Rest";
+
+            workoutStatus.innerText =
+                "Rest Day";
+
+            workoutBox.classList.add(
+                "rest-day"
+            );
+
+        } else {
+
+            workoutName.innerText =
+                todayWorkout;
+
+            workoutStatus.innerText =
+                "Workout Day";
+
+            workoutBox.classList.remove(
+                "rest-day"
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "TODAY'S WORKOUT ERROR:",
+            error
+        );
+
+        workoutName.innerText =
+            "Unable to load";
 
         workoutStatus.innerText =
-            "Rest Day";
-
-        workoutBox.classList.add(
-            "rest-day"
-        );
-
-    } else {
-
-        workoutStatus.innerText =
-            "Workout Day";
-
-        workoutBox.classList.remove(
-            "rest-day"
-        );
+            "Error";
 
     }
 
