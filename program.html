@@ -956,28 +956,32 @@
 </div>
 
 <!-- =========================================================
-     CHANGE TRAINER CONFIRMATION MODAL
+     CHANGE PROGRAM CONFIRMATION MODAL
 ========================================================= -->
 
 <div
-    id="changeTrainerConfirmModal"
-    class="change-confirm-modal">
+    id="changeProgramConfirmModal"
+    class="change-confirm-modal"
+>
 
     <div class="change-confirm-content">
 
-        <h2>Are you sure you want to change trainer?</h2>
+        <h2>
+            Are you sure you want to change program?
+        </h2>
 
         <p>
-            Your information with your current trainer will be removed.
+            All information and records related to your current
+            program will be deleted if the request is approved.
         </p>
 
         <p>
-            Your current program and split will remain unchanged.
+            Your current trainer will remain unchanged.
         </p>
 
         <p>
-            The new trainer will only become active after accepting
-            your request.
+            The new program will only become active after your
+            trainer accepts your request.
         </p>
 
         <div class="change-confirm-actions">
@@ -985,14 +989,16 @@
             <button
                 type="button"
                 class="change-confirm-no"
-                onclick="closeChangeTrainerConfirmation()">
+                onclick="closeChangeProgramConfirmation()"
+            >
                 No
             </button>
 
             <button
                 type="button"
                 class="change-confirm-yes"
-                onclick="proceedChangeTrainer()">
+                onclick="proceedChangeProgram()"
+            >
                 Yes
             </button>
 
@@ -1001,6 +1007,7 @@
     </div>
 
 </div>
+
 
 <!-- =========================================================
      CHANGE PROGRAM MODAL
