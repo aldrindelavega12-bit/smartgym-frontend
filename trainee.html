@@ -437,9 +437,11 @@ if(
 /* =====================================================
    DATA
 ===================================================== */
-
 let trainees = [];
 
+let currentTraineePage = 1;
+
+const traineesPerPage = 5;
 
 
 /* =====================================================
@@ -601,43 +603,55 @@ async function loadTrainees(){
 /* =====================================================
    RENDER TRAINEES
 ===================================================== */
-
-function renderTrainees(
-    list
-){
+function renderTrainees(list) {
 
     const tableBody =
         document.getElementById(
             "traineeTableBody"
         );
 
-
     const emptyState =
         document.getElementById(
             "emptyState"
+        );
+
+    const countText =
+        document.getElementById(
+            "traineeCount"
+        );
+
+    const pagination =
+        document.querySelector(
+            ".trainee-footer .pagination"
         );
 
 
     tableBody.innerHTML = "";
 
 
-    if(
+    /* =====================================================
+       EMPTY
+    ===================================================== */
+
+    if (
         !list ||
         list.length === 0
-    ){
+    ) {
 
         emptyState.classList.add(
             "show"
         );
 
+        countText.innerText =
+            "No active trainees.";
 
-        updateTraineeCount(
+        currentTraineePage = 1;
+
+        updateTraineePagination(
             0
         );
 
-
         return;
-
     }
 
 
@@ -646,7 +660,67 @@ function renderTrainees(
     );
 
 
-    list.forEach(
+    /* =====================================================
+       TOTAL PAGES
+    ===================================================== */
+
+    const totalPages =
+        Math.ceil(
+            list.length /
+            traineesPerPage
+        );
+
+
+    /* =====================================================
+       KEEP PAGE VALID
+    ===================================================== */
+
+    if (
+        currentTraineePage >
+        totalPages
+    ) {
+
+        currentTraineePage =
+            totalPages;
+    }
+
+
+    if (
+        currentTraineePage < 1
+    ) {
+
+        currentTraineePage = 1;
+    }
+
+
+    /* =====================================================
+       GET CURRENT PAGE DATA
+    ===================================================== */
+
+    const startIndex =
+        (
+            currentTraineePage - 1
+        ) *
+        traineesPerPage;
+
+
+    const endIndex =
+        startIndex +
+        traineesPerPage;
+
+
+    const pageTrainees =
+        list.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    /* =====================================================
+       RENDER 5 ONLY
+    ===================================================== */
+
+    pageTrainees.forEach(
         trainee => {
 
             tableBody.appendChild(
@@ -659,14 +733,209 @@ function renderTrainees(
     );
 
 
-    updateTraineeCount(
+    /* =====================================================
+       COUNT
+    ===================================================== */
+
+    const showingStart =
+        startIndex + 1;
+
+
+    const showingEnd =
+        Math.min(
+            endIndex,
+            list.length
+        );
+
+
+    countText.innerText =
+        `Showing ${showingStart} to ${showingEnd} of ${list.length} trainees`;
+
+
+    /* =====================================================
+       PAGINATION
+    ===================================================== */
+
+    updateTraineePagination(
         list.length
     );
 
 }
+function updateTraineePagination(
+    totalItems
+) {
+
+    const pagination =
+        document.querySelector(
+            ".trainee-footer .pagination"
+        );
+
+    if (!pagination) {
+        return;
+    }
 
 
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                totalItems /
+                traineesPerPage
+            )
+        );
 
+
+    pagination.innerHTML = `
+
+        <button
+            type="button"
+            id="traineePrevPage"
+            ${currentTraineePage <= 1 ? "disabled" : ""}
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+
+        <button
+            type="button"
+            class="current-page"
+        >
+            ${currentTraineePage}
+        </button>
+
+
+        <button
+            type="button"
+            id="traineeNextPage"
+            ${currentTraineePage >= totalPages ? "disabled" : ""}
+        >
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+    `;
+
+
+    const prev =
+        document.getElementById(
+            "traineePrevPage"
+        );
+
+    const next =
+        document.getElementById(
+            "traineeNextPage"
+        );
+
+
+    if (prev) {
+
+        prev.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    currentTraineePage >
+                    1
+                ) {
+
+                    currentTraineePage--;
+
+                    renderTrainees(
+                        getFilteredTrainees()
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (next) {
+
+        next.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    currentTraineePage <
+                    totalPages
+                ) {
+
+                    currentTraineePage++;
+
+                    renderTrainees(
+                        getFilteredTrainees()
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+function getFilteredTrainees() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
+
+
+    if (!search) {
+
+        return trainees;
+
+    }
+
+
+    return trainees.filter(
+        trainee => {
+
+            const name =
+                String(
+                    trainee.full_name ||
+                    ""
+                )
+                .toLowerCase();
+
+
+            const memberId =
+                String(
+                    trainee.member_id ||
+                    ""
+                )
+                .toLowerCase();
+
+
+            const program =
+                String(
+                    trainee.program_name ||
+                    ""
+                )
+                .toLowerCase();
+
+
+            return (
+                name.includes(search) ||
+                memberId.includes(search) ||
+                program.includes(search)
+            );
+
+        }
+    );
+
+}
 /* =====================================================
    CREATE TRAINEE ROW
 ===================================================== */
@@ -961,91 +1230,19 @@ function formatTrainingPeriod(
    SEARCH
 ===================================================== */
 
-function searchTrainees(){
+function searchTrainees() {
 
-    const search =
-        document.getElementById(
-            "searchInput"
-        )
-        .value
-        .toLowerCase()
-        .trim();
+    currentTraineePage = 1;
+
+    const filtered =
+        getFilteredTrainees();
 
 
-    const rows =
-        document.querySelectorAll(
-            "#traineeTableBody tr"
-        );
-
-
-    let visibleCount = 0;
-
-
-    rows.forEach(
-        row => {
-
-            const name =
-                (
-                    row.dataset.name ||
-                    ""
-                ).toLowerCase();
-
-
-            if(
-                name.includes(search)
-            ){
-
-                row.style.display =
-                    "";
-
-                visibleCount++;
-
-            }
-            else{
-
-                row.style.display =
-                    "none";
-
-            }
-
-        }
+    renderTrainees(
+        filtered
     );
 
-
-    const countText =
-        document.getElementById(
-            "traineeCount"
-        );
-
-
-    if(search === ""){
-
-        updateTraineeCount(
-            trainees.length
-        );
-
-        return;
-
-    }
-
-
-    if(visibleCount === 0){
-
-        countText.innerText =
-            "No matching trainees.";
-
-    }
-    else{
-
-        countText.innerText =
-            `Showing ${visibleCount} of ${trainees.length} trainees`;
-
-    }
-
 }
-
-
-
 /* =====================================================
    TRAINEE COUNT
 ===================================================== */
