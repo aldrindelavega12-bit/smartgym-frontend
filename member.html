@@ -1603,7 +1603,6 @@ async function loadMembership(){
 
 // ==============================
 // TODAY'S WORKOUT
-// DIRECT DATABASE ENDPOINT
 // ==============================
 
 async function loadTodaysWorkout() {
@@ -1628,6 +1627,21 @@ async function loadTodaysWorkout() {
             "todayWorkoutDate"
         );
 
+    const workoutPlan =
+        document.getElementById(
+            "todayWorkoutPlan"
+        );
+
+    const workoutFocus =
+        document.getElementById(
+            "todayWorkoutFocus"
+        );
+
+    const workoutScheduleStatus =
+        document.getElementById(
+            "todayWorkoutScheduleStatus"
+        );
+
     const workoutBox =
         document.querySelector(
             ".today-workout-box"
@@ -1635,7 +1649,7 @@ async function loadTodaysWorkout() {
 
 
     // =========================================
-    // DISPLAY TODAY'S DATE
+    // TODAY'S DATE
     // =========================================
 
     const today =
@@ -1681,14 +1695,14 @@ async function loadTodaysWorkout() {
 
 
         console.log(
-            "TODAY'S WORKOUT API:",
+            "TODAY'S WORKOUT API RESPONSE:",
             result
         );
 
 
-        // =====================================
+        // =========================================
         // API ERROR
-        // =====================================
+        // =========================================
 
         if (!response.ok) {
 
@@ -1700,9 +1714,9 @@ async function loadTodaysWorkout() {
         }
 
 
-        // =====================================
-        // NO WORKOUT / NO PROGRAM
-        // =====================================
+        // =========================================
+        // NO WORKOUT
+        // =========================================
 
         if (!result.has_workout) {
 
@@ -1715,6 +1729,15 @@ async function loadTodaysWorkout() {
             workoutStatus.innerText =
                 "Not Assigned";
 
+            workoutPlan.innerText =
+                "-";
+
+            workoutFocus.innerText =
+                "-";
+
+            workoutScheduleStatus.innerText =
+                "Not Assigned";
+
             workoutBox.classList.remove(
                 "rest-day"
             );
@@ -1724,25 +1747,34 @@ async function loadTodaysWorkout() {
         }
 
 
-        // =====================================
+        // =========================================
         // REST DAY
-        // =====================================
+        // =========================================
 
         if (
-            result.status_type ===
-            "rest"
-            ||
-            result.split ===
-            "Rest"
+            result.status_type === "rest" ||
+            result.split === "Rest"
         ) {
 
             workoutName.innerText =
                 "Rest";
 
             workoutSplit.innerText =
-                "";
+                "Recovery Day";
 
             workoutStatus.innerText =
+                "Rest Day";
+
+            workoutPlan.innerText =
+                result.plan_name ||
+                result.program_plan ||
+                result.program_name ||
+                "-";
+
+            workoutFocus.innerText =
+                "Recovery";
+
+            workoutScheduleStatus.innerText =
                 "Rest Day";
 
             workoutBox.classList.add(
@@ -1754,21 +1786,16 @@ async function loadTodaysWorkout() {
         }
 
 
-        // =====================================
-        // WORKOUT DAY
-        // =====================================
-
         workoutBox.classList.remove(
             "rest-day"
         );
 
 
-        // =====================================
-        // SPLIT
-        //
+        // =========================================
+        // WORKOUT NAME
         // Example:
         // Pull
-        // =====================================
+        // =========================================
 
         workoutName.innerText =
             result.split ||
@@ -1776,14 +1803,14 @@ async function loadTodaysWorkout() {
             "Workout";
 
 
-        // =====================================
+        // =========================================
         // BODY PARTS
-        //
-        // Directly from database
-        //
         // Example:
         // Back, Biceps
-        // =====================================
+        // =========================================
+
+        let bodyParts = "";
+
 
         if (
             Array.isArray(
@@ -1791,46 +1818,181 @@ async function loadTodaysWorkout() {
             )
         ) {
 
-            workoutSplit.innerText =
+            bodyParts =
                 result.body_parts.join(
                     ", "
                 );
 
         }
 
-        else {
+        else if (
+            typeof result.body_parts ===
+            "string"
+        ) {
 
-            workoutSplit.innerText =
-                "";
+            bodyParts =
+                result.body_parts;
+
+        }
+
+        else if (
+            result.training_focus
+        ) {
+
+            bodyParts =
+                result.training_focus;
 
         }
 
 
-        // =====================================
-        // STATUS
-        // =====================================
+        workoutSplit.innerText =
+            bodyParts;
+
+
+        // =========================================
+        // PROGRAM PLAN
+        // =========================================
+
+        const programPlan =
+            result.plan_name ||
+            result.program_plan ||
+            result.program_plan_name ||
+            result.plan ||
+            result.program_name ||
+            result.plan_title ||
+            "-";
+
+
+        workoutPlan.innerText =
+            programPlan;
+
+
+        // =========================================
+        // TRAINING FOCUS
+        // =========================================
+
+        const trainingFocus =
+            result.training_focus ||
+            result.focus ||
+            bodyParts ||
+            "-";
+
+
+        workoutFocus.innerText =
+            trainingFocus;
+
+
+        // =========================================
+        // WORKOUT STATUS
+        // =========================================
+
+        const rawStatus =
+            (
+                result.status ||
+                result.workout_status ||
+                "scheduled"
+            )
+            .toString()
+            .toLowerCase();
+
+
+        let displayStatus =
+            "Scheduled";
+
+
+        if (
+            rawStatus ===
+            "completed"
+        ) {
+
+            displayStatus =
+                "Completed";
+
+        }
+
+        else if (
+            rawStatus ===
+            "missed"
+        ) {
+
+            displayStatus =
+                "Missed";
+
+        }
+
+        else if (
+            rawStatus ===
+            "cancelled"
+        ) {
+
+            displayStatus =
+                "Cancelled";
+
+        }
+
+        else if (
+            rawStatus ===
+            "pending"
+        ) {
+
+            displayStatus =
+                "Pending";
+
+        }
+
 
         workoutStatus.innerText =
             "Workout Day";
 
 
-        // =====================================
+        workoutScheduleStatus.innerText =
+            displayStatus;
+
+
+        // =========================================
         // DEBUG
-        // =====================================
+        // =========================================
 
         console.log(
-            "TODAY'S SPLIT:",
+            "=============================="
+        );
+
+        console.log(
+            "TODAY'S WORKOUT:"
+        );
+
+        console.log(
+            "Split:",
             result.split
         );
 
         console.log(
-            "TODAY'S BODY PARTS:",
+            "Body Parts:",
             result.body_parts
         );
 
         console.log(
-            "TODAY'S WORKOUT:",
+            "Program Plan:",
+            programPlan
+        );
+
+        console.log(
+            "Training Focus:",
+            trainingFocus
+        );
+
+        console.log(
+            "Status:",
+            displayStatus
+        );
+
+        console.log(
+            "FULL RESPONSE:",
             result
+        );
+
+        console.log(
+            "=============================="
         );
 
     }
@@ -1847,14 +2009,20 @@ async function loadTodaysWorkout() {
         workoutName.innerText =
             "Unable to load";
 
-
         workoutSplit.innerText =
             "";
-
 
         workoutStatus.innerText =
             "Error";
 
+        workoutPlan.innerText =
+            "-";
+
+        workoutFocus.innerText =
+            "-";
+
+        workoutScheduleStatus.innerText =
+            "Error";
 
         workoutBox.classList.remove(
             "rest-day"
@@ -1866,7 +2034,7 @@ async function loadTodaysWorkout() {
 
 
 // =========================================
-// LOAD
+// LOAD TODAY'S WORKOUT
 // =========================================
 
 loadTodaysWorkout();
