@@ -437,6 +437,8 @@ let firstLoad = true;
 
 /* ================= LOAD MESSAGES ================= */
 
+/* ================= LOAD MESSAGES ================= */
+
 async function loadMessages(){
 
     try{
@@ -455,7 +457,10 @@ async function loadMessages(){
 
         container.innerHTML = "";
 
-        if(!Array.isArray(data) || data.length === 0){
+        if(
+            !Array.isArray(data) ||
+            data.length === 0
+        ){
 
             container.innerHTML = `
                 <p class="empty-message">
@@ -466,7 +471,85 @@ async function loadMessages(){
             return;
         }
 
-        data.forEach(msg => {
+
+        /* ==========================================
+           GET LATEST SMART GYM MESSAGE ONLY
+        ========================================== */
+
+        const latestSmartGym =
+            data
+                .filter(msg => {
+
+                    const senderName =
+                        String(
+                            msg.sender_name || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+                    return (
+                        senderName === "smart gym"
+                    );
+
+                })
+                .sort(
+                    (a, b) =>
+                        Number(b.id) -
+                        Number(a.id)
+                )[0];
+
+
+        /* ==========================================
+           REMOVE OLDER SMART GYM MESSAGES
+           KEEP ALL OTHER SENDERS
+        ========================================== */
+
+        const visibleMessages =
+            data.filter(msg => {
+
+                const senderName =
+                    String(
+                        msg.sender_name || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                return (
+                    senderName !== "smart gym"
+                );
+
+            });
+
+
+        /* ==========================================
+           ADD ONLY LATEST SMART GYM MESSAGE
+        ========================================== */
+
+        if(latestSmartGym){
+
+            visibleMessages.push(
+                latestSmartGym
+            );
+
+        }
+
+
+        /* ==========================================
+           SORT NEWEST FIRST
+        ========================================== */
+
+        visibleMessages.sort(
+            (a, b) =>
+                Number(b.id) -
+                Number(a.id)
+        );
+
+
+        /* ==========================================
+           RENDER MESSAGES
+        ========================================== */
+
+        visibleMessages.forEach(msg => {
 
             const senderName =
                 msg.sender_name ||
@@ -478,6 +561,7 @@ async function loadMessages(){
                     : msg.sender_role === "trainer"
                         ? "Trainer"
                         : msg.sender_role || "";
+
 
             container.innerHTML += `
 
@@ -512,6 +596,7 @@ async function loadMessages(){
 
                         </div>
 
+
                         <div
                             class="dots"
                             onclick="
@@ -524,6 +609,7 @@ async function loadMessages(){
 
                     </div>
 
+
                     <div class="msg-content">
 
                         <p class="msg-text">
@@ -535,6 +621,7 @@ async function loadMessages(){
                         </small>
 
                     </div>
+
 
                     <div
                         id="menu-${msg.id}"
@@ -550,6 +637,7 @@ async function loadMessages(){
                             Delete
                         </button>
 
+
                         <button
                             onclick="
                                 event.stopPropagation();
@@ -558,6 +646,7 @@ async function loadMessages(){
                         >
                             Mark as Read
                         </button>
+
 
                         <button
                             onclick="
@@ -576,6 +665,7 @@ async function loadMessages(){
 
         });
 
+
     }catch(err){
 
         console.error(
@@ -586,6 +676,7 @@ async function loadMessages(){
     }
 
 }
+
 
 let lastCount = 0;
 
