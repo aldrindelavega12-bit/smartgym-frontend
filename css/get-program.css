@@ -41,7 +41,7 @@ body {
 
 .brand-text strong {
     color: var(--green);
-    font-size: 21px;
+    font-size: 24px;
     font-weight: 800;
     letter-spacing: -.5px;
 }
