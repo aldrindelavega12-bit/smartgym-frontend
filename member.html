@@ -1561,10 +1561,8 @@ async function loadMembership(){
     }
 
 }
-
 // ==============================
 // TODAY'S WORKOUT
-// SAME LOGIC AS MY PROGRAM
 // ==============================
 
 async function loadTodaysWorkout() {
@@ -1583,86 +1581,56 @@ async function loadTodaysWorkout() {
 
 
     // =========================================
-    // TODAY
+    // GET TODAY
     // =========================================
 
     const today = new Date();
 
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
+    const dayName =
+        today.toLocaleDateString("en-US", {
+            weekday: "long"
+        });
 
 
     // =========================================
-    // DISPLAY DATE
+    // DISPLAY TODAY'S DATE
     // =========================================
 
     workoutDate.innerText =
-        today.toLocaleDateString(
-            "en-US",
-            {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric"
-            }
-        );
+        today.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        });
 
 
     // =========================================
-    // RESET UI
+    // RESET REST DAY STYLE
     // =========================================
 
-    workoutName.innerText =
-        "Loading...";
-
-    workoutStatus.innerText =
-        "-";
-
-    workoutBox.classList.remove(
-        "rest-day"
-    );
-
-
-    // =========================================
-    // MEMBER ID
-    // =========================================
-
-    const currentMemberId =
-        user?.member_id ||
-        user?.user_id ||
-        user?.id;
-
-
-    if(!currentMemberId){
-
-        workoutName.innerText =
-            "No Member";
-
-        workoutStatus.innerText =
-            "Not Found";
-
-        return;
-
-    }
+    workoutBox.classList.remove("rest-day");
 
 
     try {
 
         // =========================================
-        // GET WORKOUT SCHEDULE
+        // SAME API USED BY MY PROGRAM
         // =========================================
 
         const response =
             await fetch(
-                `${API_URL}/api/member/workout-schedule/${currentMemberId}`,
-                {
-                    cache: "no-store"
-                }
+                `${API_URL}/api/member/program/${memberId}`
             );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Program API error: ${response.status}`
+            );
+
+        }
 
 
         const result =
@@ -1670,35 +1638,30 @@ async function loadTodaysWorkout() {
 
 
         console.log(
-            "TODAY WORKOUT API:",
+            "MEMBER PROGRAM DATA:",
             result
         );
 
 
-        if(!response.ok){
+        // =========================================
+        // GET PROGRAM
+        // SAME LOGIC AS MY PROGRAM
+        // =========================================
 
-            throw new Error(
-                result.message ||
-                `HTTP ${response.status}`
-            );
-
-        }
+        const program =
+            result.program ||
+            result.data?.program ||
+            result.data;
 
 
         // =========================================
-        // GET RECURRING PATTERN
+        // NO PROGRAM
         // =========================================
 
-        const pattern =
-            result.schedule_pattern ||
-            result.workouts ||
-            [];
-
-
-        if(
-            !Array.isArray(pattern) ||
-            pattern.length === 0
-        ){
+        if (
+            !program ||
+            !program.schedule
+        ) {
 
             workoutName.innerText =
                 "No Program";
@@ -1712,175 +1675,29 @@ async function loadTodaysWorkout() {
 
 
         // =========================================
-        // GET PROGRAM START DATE
-        //
-        // SAME SOURCE USED BY MY PROGRAM
+        // GET ONLY TODAY'S SCHEDULE
         // =========================================
 
-        let programStartDate = null;
+        const todaySchedule =
+            program.schedule[dayName];
 
 
-        if(
-            typeof result.start_date !== "undefined"
-        ){
+        console.log(
+            "TODAY:",
+            dayName
+        );
 
-            programStartDate =
-                result.start_date;
-
-        }
-
-
-        if(
-            !programStartDate &&
-            result.current &&
-            result.current.start_date
-        ){
-
-            programStartDate =
-                result.current.start_date;
-
-        }
-
-
-        if(
-            !programStartDate &&
-            result.program &&
-            result.program.start_date
-        ){
-
-            programStartDate =
-                result.program.start_date;
-
-        }
-
-
-        // =========================================
-        // TRY DATA OBJECT
-        // =========================================
-
-        if(
-            !programStartDate &&
-            result.data &&
-            result.data.start_date
-        ){
-
-            programStartDate =
-                result.data.start_date;
-
-        }
-
-
-        // =========================================
-        // NO START DATE
-        // =========================================
-
-        if(!programStartDate){
-
-            console.error(
-                "PROGRAM START DATE NOT FOUND:",
-                result
-            );
-
-            workoutName.innerText =
-                "Unable to load";
-
-            workoutStatus.innerText =
-                "No Start Date";
-
-            return;
-
-        }
-
-
-        // =========================================
-        // CONVERT START DATE
-        // =========================================
-
-        const startParts =
-            String(
-                programStartDate
-            )
-            .split(" ")[0]
-            .split("-");
-
-
-        const startDate =
-            new Date(
-                Number(startParts[0]),
-                Number(startParts[1]) - 1,
-                Number(startParts[2])
-            );
-
-
-        startDate.setHours(
-            0,
-            0,
-            0,
-            0
+        console.log(
+            "TODAY SCHEDULE:",
+            todaySchedule
         );
 
 
         // =========================================
-        // CALCULATE DAYS SINCE PROGRAM START
+        // NO WORKOUT = REST DAY
         // =========================================
 
-        const millisecondsPerDay =
-            1000 *
-            60 *
-            60 *
-            24;
-
-
-        const daysSinceStart =
-            Math.floor(
-                (
-                    today.getTime()
-                    -
-                    startDate.getTime()
-                )
-                /
-                millisecondsPerDay
-            );
-
-
-        // =========================================
-        // RECURRING PATTERN INDEX
-        //
-        // Day 1 = pattern[0]
-        // Day 2 = pattern[1]
-        // Day 3 = pattern[2]
-        //
-        // etc.
-        // =========================================
-
-        let patternIndex =
-            daysSinceStart %
-            pattern.length;
-
-
-        // =========================================
-        // HANDLE DATE BEFORE START
-        // =========================================
-
-        if(patternIndex < 0){
-
-            patternIndex +=
-                pattern.length;
-
-        }
-
-
-        // =========================================
-        // GET TODAY'S WORKOUT
-        // =========================================
-
-        const todayWorkout =
-            pattern[
-                patternIndex
-            ];
-
-
-        if(!todayWorkout){
+        if (!todaySchedule) {
 
             workoutName.innerText =
                 "Rest";
@@ -1898,26 +1715,23 @@ async function loadTodaysWorkout() {
 
 
         // =========================================
-        // GET WORKOUT NAME
+        // GET TODAY'S WORKOUT
         // =========================================
 
-        const name =
-            todayWorkout.workout_name ||
-            todayWorkout.day_name ||
-            "Workout";
+        const todayWorkout =
+            todaySchedule.workout;
 
 
         // =========================================
         // REST
         // =========================================
 
-        if(
-            String(name)
-                .trim()
+        if (
+            !todayWorkout ||
+            todayWorkout
                 .toLowerCase()
-                ===
-                "rest"
-        ){
+                === "rest"
+        ) {
 
             workoutName.innerText =
                 "Rest";
@@ -1939,7 +1753,7 @@ async function loadTodaysWorkout() {
         // =========================================
 
         workoutName.innerText =
-            name;
+            todayWorkout;
 
         workoutStatus.innerText =
             "Workout Day";
@@ -1949,33 +1763,15 @@ async function loadTodaysWorkout() {
         );
 
 
-        // =========================================
-        // DEBUG
-        // =========================================
-
-        console.log(
-            "PROGRAM START:",
-            programStartDate
-        );
-
-        console.log(
-            "DAYS SINCE START:",
-            daysSinceStart
-        );
-
-        console.log(
-            "PATTERN INDEX:",
-            patternIndex
-        );
-
         console.log(
             "TODAY'S WORKOUT:",
-            name
+            todayWorkout
         );
 
     }
 
-    catch(error){
+
+    catch (error) {
 
         console.error(
             "TODAY'S WORKOUT ERROR:",
@@ -1995,7 +1791,7 @@ async function loadTodaysWorkout() {
 
 
 // =========================================
-// LOAD
+// LOAD TODAY'S WORKOUT
 // =========================================
 
 loadTodaysWorkout();
