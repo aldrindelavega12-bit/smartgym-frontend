@@ -7180,20 +7180,18 @@ textarea {
 .today-workout-box {
     width: 100% !important;
 
-    height: 170px !important;
-
-    min-height: 170px !important;
+    height: 165px !important;
+    min-height: 165px !important;
 
     margin-top: 10px !important;
 
-    padding: 16px !important;
+    padding: 18px !important;
 
     box-sizing: border-box !important;
 
     border-radius: 12px !important;
 
     display: flex !important;
-
     flex-direction: column !important;
 
     background:
@@ -7203,7 +7201,6 @@ textarea {
             #e5f6ed 100%
         ) !important;
 }
-
 
 /* =========================================================
    TODAY'S WORKOUT TOP
@@ -7257,7 +7254,7 @@ textarea {
 
     font-size: 36px !important;
 
-    line-height: 1.05 !important;
+    line-height: 1 !important;
 
     font-weight: 800 !important;
 
@@ -7319,9 +7316,9 @@ textarea {
 
     gap: 10px !important;
 
-    margin-top: auto !important;
+    margin-top: 8px !important;
 
-    padding-top: 10px !important;
+    padding-top: 9px !important;
 
     border-top:
         1px solid
@@ -7661,3 +7658,41 @@ textarea {
     }
 
 }
+
+
+/* =========================================
+   TODAY'S WORKOUT
+========================================= */
+
+.today-workout-box {
+    padding: 15px !important;
+}
+
+
+/* Pull */
+.today-workout-header h1 {
+    margin-top: 2px !important;
+    margin-bottom: 8px !important;
+}
+
+
+/* Space before details */
+.today-workout-details {
+    margin-top: 14px !important;
+    padding-top: 12px !important;
+}
+
+
+/* Details labels */
+.workout-detail > span {
+    margin-bottom: 7px !important;
+}
+
+
+/* Detail boxes */
+.workout-detail strong {
+    height: 38px !important;
+    padding: 0 12px !important;
+}
+
+
