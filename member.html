@@ -334,33 +334,25 @@ if (!user || user.role !== "member") {
             <div class="today-workout-header">
 
                 <div>
-                    <span class="workout-label">
-                        TODAY'S WORKOUT
-                    </span>
 
                     <h1 id="todayWorkoutName">
                         Loading...
                     </h1>
+
+                    <div
+                        id="todayWorkoutSplit"
+                        class="today-workout-split">
+                        -
+                    </div>
+
                 </div>
+
 
                 <span
                     class="workout-status"
                     id="todayWorkoutStatus">
                     -
                 </span>
-
-            </div>
-
-
-            <div class="today-workout-message">
-
-                <p>
-                    Focus on your goals!
-                </p>
-
-                <p>
-                    Complete today's workout and keep going!
-                </p>
 
             </div>
 
@@ -1561,31 +1553,46 @@ async function loadMembership(){
     }
 
 }
+
 // ==============================
 // TODAY'S WORKOUT
-// DATABASE SCHEDULE — TODAY ONLY
+// DIRECT DATABASE ENDPOINT
 // ==============================
 
 async function loadTodaysWorkout() {
 
     const workoutName =
-        document.getElementById("todayWorkoutName");
+        document.getElementById(
+            "todayWorkoutName"
+        );
+
+    const workoutSplit =
+        document.getElementById(
+            "todayWorkoutSplit"
+        );
 
     const workoutStatus =
-        document.getElementById("todayWorkoutStatus");
+        document.getElementById(
+            "todayWorkoutStatus"
+        );
 
     const workoutDate =
-        document.getElementById("todayWorkoutDate");
+        document.getElementById(
+            "todayWorkoutDate"
+        );
 
     const workoutBox =
-        document.querySelector(".today-workout-box");
+        document.querySelector(
+            ".today-workout-box"
+        );
 
 
     // =========================================
-    // TODAY
+    // DISPLAY TODAY'S DATE
     // =========================================
 
-    const today = new Date();
+    const today =
+        new Date();
 
     today.setHours(
         0,
@@ -1594,23 +1601,6 @@ async function loadTodaysWorkout() {
         0
     );
 
-
-    // =========================================
-    // DATE KEY
-    // YYYY-MM-DD
-    // =========================================
-
-    const todayKey =
-        `${today.getFullYear()}-${
-            String(today.getMonth() + 1).padStart(2, "0")
-        }-${
-            String(today.getDate()).padStart(2, "0")
-        }`;
-
-
-    // =========================================
-    // DISPLAY TODAY'S DATE
-    // =========================================
 
     workoutDate.innerText =
         today.toLocaleDateString(
@@ -1624,15 +1614,15 @@ async function loadTodaysWorkout() {
         );
 
 
-    try {
+    // =========================================
+    // LOAD TODAY'S WORKOUT
+    // =========================================
 
-        // =========================================
-        // SAME ENDPOINT USED BY MY PROGRAM
-        // =========================================
+    try {
 
         const response =
             await fetch(
-                `${API_URL}/api/member/workout-schedule/${memberId}`,
+                `${API_URL}/api/member/today-workout/${memberId}`,
                 {
                     cache: "no-store"
                 }
@@ -1644,10 +1634,14 @@ async function loadTodaysWorkout() {
 
 
         console.log(
-            "TODAY WORKOUT API:",
+            "TODAY'S WORKOUT API:",
             result
         );
 
+
+        // =====================================
+        // API ERROR
+        // =====================================
 
         if (!response.ok) {
 
@@ -1659,63 +1653,22 @@ async function loadTodaysWorkout() {
         }
 
 
-        // =========================================
-        // GET ACTUAL WORKOUTS
-        // =========================================
+        // =====================================
+        // NO WORKOUT / NO PROGRAM
+        // =====================================
 
-        const actualWorkouts =
-            result.actual_workouts || [];
-
-
-        console.log(
-            "ACTUAL WORKOUTS:",
-            actualWorkouts
-        );
-
-
-        // =========================================
-        // FIND TODAY ONLY
-        // =========================================
-
-        const todayWorkout =
-            actualWorkouts.find(
-                function(workout) {
-
-                    const workoutDate =
-                        String(
-                            workout.workout_date || ""
-                        ).substring(0, 10);
-
-                    return workoutDate === todayKey;
-
-                }
-            );
-
-
-        console.log(
-            "TODAY KEY:",
-            todayKey
-        );
-
-        console.log(
-            "TODAY'S WORKOUT RECORD:",
-            todayWorkout
-        );
-
-
-        // =========================================
-        // NO RECORD FOR TODAY
-        // =========================================
-
-        if (!todayWorkout) {
+        if (!result.has_workout) {
 
             workoutName.innerText =
-                "Rest";
+                "No Program";
+
+            workoutSplit.innerText =
+                "";
 
             workoutStatus.innerText =
-                "Rest Day";
+                "Not Assigned";
 
-            workoutBox.classList.add(
+            workoutBox.classList.remove(
                 "rest-day"
             );
 
@@ -1724,48 +1677,24 @@ async function loadTodaysWorkout() {
         }
 
 
-        // =========================================
-        // GET WORKOUT NAME
-        // =========================================
-
-        let name =
-            todayWorkout.workout_name ||
-            "Rest";
-
-
-        // =========================================
-        // REMOVE PROGRAM NAME IF INCLUDED
-        //
-        // Example:
-        // Build Muscle — Upper Body
-        //
-        // becomes:
-        // Upper Body
-        // =========================================
-
-        if (name.includes("—")) {
-
-            name =
-                name
-                    .split("—")
-                    .slice(1)
-                    .join("—")
-                    .trim();
-
-        }
-
-
-        // =========================================
-        // REST
-        // =========================================
+        // =====================================
+        // REST DAY
+        // =====================================
 
         if (
-            name.toLowerCase() === "rest"
+            result.status_type ===
+            "rest"
+            ||
+            result.split ===
+            "Rest"
         ) {
 
             workoutName.innerText =
                 "Rest";
 
+            workoutSplit.innerText =
+                "";
+
             workoutStatus.innerText =
                 "Rest Day";
 
@@ -1778,57 +1707,87 @@ async function loadTodaysWorkout() {
         }
 
 
-        // =========================================
-        // TODAY'S WORKOUT
-        // =========================================
-
-        workoutName.innerText =
-            name;
-
-
-        // =========================================
-        // STATUS
-        // =========================================
-
-        const status =
-            String(
-                todayWorkout.status || ""
-            ).toLowerCase();
-
-
-        if (status === "completed") {
-
-            workoutStatus.innerText =
-                "Completed";
-
-        }
-
-        else if (status === "missed") {
-
-            workoutStatus.innerText =
-                "Missed";
-
-        }
-
-        else {
-
-            workoutStatus.innerText =
-                "Workout Day";
-
-        }
-
+        // =====================================
+        // WORKOUT DAY
+        // =====================================
 
         workoutBox.classList.remove(
             "rest-day"
         );
 
 
+        // =====================================
+        // SPLIT
+        //
+        // Example:
+        // Pull
+        // =====================================
+
+        workoutName.innerText =
+            result.split ||
+            result.workout_name ||
+            "Workout";
+
+
+        // =====================================
+        // BODY PARTS
+        //
+        // Directly from database
+        //
+        // Example:
+        // Back, Biceps
+        // =====================================
+
+        if (
+            Array.isArray(
+                result.body_parts
+            )
+        ) {
+
+            workoutSplit.innerText =
+                result.body_parts.join(
+                    ", "
+                );
+
+        }
+
+        else {
+
+            workoutSplit.innerText =
+                "";
+
+        }
+
+
+        // =====================================
+        // STATUS
+        // =====================================
+
+        workoutStatus.innerText =
+            "Workout Day";
+
+
+        // =====================================
+        // DEBUG
+        // =====================================
+
+        console.log(
+            "TODAY'S SPLIT:",
+            result.split
+        );
+
+        console.log(
+            "TODAY'S BODY PARTS:",
+            result.body_parts
+        );
+
         console.log(
             "TODAY'S WORKOUT:",
-            name
+            result
         );
 
     }
+
 
     catch (error) {
 
@@ -1841,8 +1800,18 @@ async function loadTodaysWorkout() {
         workoutName.innerText =
             "Unable to load";
 
+
+        workoutSplit.innerText =
+            "";
+
+
         workoutStatus.innerText =
             "Error";
+
+
+        workoutBox.classList.remove(
+            "rest-day"
+        );
 
     }
 
