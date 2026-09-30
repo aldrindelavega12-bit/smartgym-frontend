@@ -1566,10 +1566,6 @@ async function loadMembership(){
 // TODAY'S WORKOUT
 // ==============================
 
-// ==============================
-// TODAY'S WORKOUT
-// ==============================
-
 async function loadTodaysWorkout() {
 
     const workoutName =
@@ -1585,59 +1581,101 @@ async function loadTodaysWorkout() {
         document.querySelector(".today-workout-box");
 
 
-    // ==============================
-    // GET TODAY
-    // ==============================
+    // =========================================
+    // TODAY
+    // =========================================
 
     const today = new Date();
 
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
     const dayName =
-        today.toLocaleDateString("en-US", {
-            weekday: "long"
-        });
-
-
-    // ==============================
-    // DISPLAY DATE
-    // ==============================
-
-    workoutDate.innerText =
-        today.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric"
-        });
-
-
-    // ==============================
-    // DEFAULT STATE
-    // ==============================
-
-    workoutName.innerText = "Loading...";
-    workoutStatus.innerText = "-";
-
-    workoutBox.classList.remove("rest-day");
-
-
-    // ==============================
-    // GET PROGRAM FROM API
-    // ==============================
-
-    try {
-
-        const response = await fetch(
-            `${API_URL}/api/member/program/${memberId}`
+        today.toLocaleDateString(
+            "en-US",
+            {
+                weekday: "long"
+            }
         );
 
 
-        if (!response.ok) {
+    // =========================================
+    // DISPLAY TODAY'S DATE
+    // =========================================
 
-            throw new Error(
-                `Program API error: ${response.status}`
+    workoutDate.innerText =
+        today.toLocaleDateString(
+            "en-US",
+            {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+
+    // =========================================
+    // DEFAULT
+    // =========================================
+
+    workoutName.innerText =
+        "Loading...";
+
+    workoutStatus.innerText =
+        "-";
+
+    workoutBox.classList.remove(
+        "rest-day"
+    );
+
+
+    // =========================================
+    // MEMBER ID
+    // =========================================
+
+    const currentMemberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+
+    console.log(
+        "TODAY'S WORKOUT MEMBER ID:",
+        currentMemberId
+    );
+
+
+    if (!currentMemberId) {
+
+        workoutName.innerText =
+            "No Member";
+
+        workoutStatus.innerText =
+            "Not Found";
+
+        return;
+    }
+
+
+    // =========================================
+    // LOAD WORKOUT SCHEDULE
+    // =========================================
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/member/workout-schedule/${currentMemberId}`,
+                {
+                    cache: "no-store"
+                }
             );
-
-        }
 
 
         const result =
@@ -1645,28 +1683,48 @@ async function loadTodaysWorkout() {
 
 
         console.log(
-            "MEMBER PROGRAM DATA:",
+            "TODAY'S WORKOUT RESPONSE:",
             result
         );
 
 
-        // ==============================
-        // GET PROGRAM
-        // ==============================
+        // =========================================
+        // API ERROR
+        // =========================================
 
-        const program =
-            result.program ||
-            result.data?.program ||
-            result.data;
+        if (!response.ok) {
+
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
 
 
-        // ==============================
-        // NO PROGRAM
-        // ==============================
+        // =========================================
+        // GET SCHEDULE PATTERN
+        // =========================================
+
+        const pattern =
+            result.schedule_pattern ||
+            result.workouts ||
+            [];
+
+
+        console.log(
+            "TODAY'S WORKOUT PATTERN:",
+            pattern
+        );
+
+
+        // =========================================
+        // NO SCHEDULE
+        // =========================================
 
         if (
-            !program ||
-            !program.schedule
+            !Array.isArray(pattern) ||
+            pattern.length === 0
         ) {
 
             workoutName.innerText =
@@ -1679,19 +1737,92 @@ async function loadTodaysWorkout() {
         }
 
 
-        // ==============================
-        // GET TODAY'S SCHEDULE
-        // ==============================
+        // =========================================
+        // FIND TODAY'S WORKOUT
+        //
+        // Uses the same recurring schedule
+        // returned by the workout-schedule API.
+        // =========================================
 
-        const todaySchedule =
-            program.schedule[dayName];
+        let todayWorkout = null;
 
 
-        // ==============================
-        // NO SCHEDULE = REST DAY
-        // ==============================
+        // -----------------------------------------
+        // FIRST:
+        // If API already gives day_name,
+        // use the matching weekday.
+        // -----------------------------------------
 
-        if (!todaySchedule) {
+        todayWorkout =
+            pattern.find(
+                function(item) {
+
+                    return (
+                        String(
+                            item.day_name || ""
+                        ).toLowerCase()
+                        ===
+                        dayName.toLowerCase()
+                    );
+
+                }
+            );
+
+
+        // =========================================
+        // IF NO DAY_NAME MATCH
+        // USE DAY_NUMBER
+        // =========================================
+
+        if (!todayWorkout) {
+
+            const jsDay =
+                today.getDay();
+
+            /*
+                JS:
+                Sunday = 0
+                Monday = 1
+                Tuesday = 2
+                ...
+                Saturday = 6
+
+                Convert to:
+                Monday = 1
+                Tuesday = 2
+                ...
+                Sunday = 7
+            */
+
+            const todayDayNumber =
+                jsDay === 0
+                    ? 7
+                    : jsDay;
+
+
+            todayWorkout =
+                pattern.find(
+                    function(item) {
+
+                        return (
+                            Number(
+                                item.day_number
+                            )
+                            ===
+                            todayDayNumber
+                        );
+
+                    }
+                );
+
+        }
+
+
+        // =========================================
+        // NO MATCH = REST
+        // =========================================
+
+        if (!todayWorkout) {
 
             workoutName.innerText =
                 "Rest";
@@ -1707,23 +1838,25 @@ async function loadTodaysWorkout() {
         }
 
 
-        // ==============================
-        // GET WORKOUT
-        // ==============================
+        // =========================================
+        // GET WORKOUT NAME
+        // =========================================
 
-        const todayWorkout =
-            todaySchedule.workout;
+        const workout =
+            todayWorkout.workout_name ||
+            todayWorkout.day_name ||
+            "Workout";
 
 
-        // ==============================
-        // REST
-        // ==============================
+        // =========================================
+        // REST DAY
+        // =========================================
 
         if (
-            !todayWorkout ||
-            todayWorkout
+            String(workout)
+                .trim()
                 .toLowerCase()
-                .trim() === "rest"
+                === "rest"
         ) {
 
             workoutName.innerText =
@@ -1740,18 +1873,24 @@ async function loadTodaysWorkout() {
         }
 
 
-        // ==============================
+        // =========================================
         // WORKOUT DAY
-        // ==============================
+        // =========================================
 
         workoutName.innerText =
-            todayWorkout;
+            workout;
 
         workoutStatus.innerText =
             "Workout Day";
 
         workoutBox.classList.remove(
             "rest-day"
+        );
+
+
+        console.log(
+            "TODAY'S WORKOUT:",
+            workout
         );
 
     }
@@ -1775,13 +1914,11 @@ async function loadTodaysWorkout() {
 }
 
 
-// ==============================
+// =========================================
 // LOAD TODAY'S WORKOUT
-// ==============================
+// =========================================
 
 loadTodaysWorkout();
-
-
 </script>
 
 </body>
