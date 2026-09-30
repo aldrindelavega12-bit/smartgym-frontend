@@ -46,7 +46,6 @@
 
     <div class="brand">
 
-        
 
 
         <div class="brand-text">
@@ -505,6 +504,10 @@ if(
 
 let clientRequests = [];
 
+let currentPage = 1;
+
+const requestsPerPage = 10;
+
 
 
 /* =====================================================
@@ -667,59 +670,141 @@ async function loadClientRequests(){
 /* =====================================================
    RENDER REQUESTS
 ===================================================== */
-
-function renderRequests(
-    requests
-){
+function renderRequests(requests) {
 
     const tableBody =
         document.getElementById(
             "requestTableBody"
         );
 
-
     const emptyState =
         document.getElementById(
             "emptyState"
+        );
+
+    const currentPageButton =
+        document.getElementById(
+            "currentPage"
+        );
+
+    const prevButton =
+        document.getElementById(
+            "prevPage"
+        );
+
+    const nextButton =
+        document.getElementById(
+            "nextPage"
         );
 
 
     tableBody.innerHTML = "";
 
 
-    if(
+    // =========================================
+    // NO REQUESTS
+    // =========================================
+
+    if (
         !requests ||
         requests.length === 0
-    ){
+    ) {
 
         emptyState.classList.add(
             "show"
         );
 
+        currentPage = 1;
 
-        updateRequestCount(
-            0
+        currentPageButton.innerText =
+            currentPage;
+
+        prevButton.disabled = true;
+
+        nextButton.disabled = true;
+
+        updateRequestCount(0);
+
+        return;
+    }
+
+
+    // =========================================
+    // TOTAL PAGES
+    // =========================================
+
+    const totalPages =
+        Math.ceil(
+            requests.length /
+            requestsPerPage
         );
 
 
-        return;
+    // =========================================
+    // KEEP PAGE VALID
+    // =========================================
 
+    if (
+        currentPage >
+        totalPages
+    ) {
+
+        currentPage =
+            totalPages;
     }
 
+
+    if (
+        currentPage < 1
+    ) {
+
+        currentPage = 1;
+    }
+
+
+    // =========================================
+    // PAGINATION RANGE
+    // =========================================
+
+    const startIndex =
+        (
+            currentPage - 1
+        ) *
+        requestsPerPage;
+
+
+    const endIndex =
+        startIndex +
+        requestsPerPage;
+
+
+    const pageRequests =
+        requests.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    // =========================================
+    // HIDE EMPTY STATE
+    // =========================================
 
     emptyState.classList.remove(
         "show"
     );
 
 
-    requests.forEach(
+    // =========================================
+    // RENDER CURRENT PAGE
+    // =========================================
+
+    pageRequests.forEach(
         request => {
 
             const row =
                 createRequestRow(
                     request
                 );
-
 
             tableBody.appendChild(
                 row
@@ -729,25 +814,52 @@ function renderRequests(
     );
 
 
-    updateRequestCount(
-        requests.length
-    );
+    // =========================================
+    // UPDATE PAGE NUMBER
+    // =========================================
+
+    currentPageButton.innerText =
+        currentPage;
+
+
+    // =========================================
+    // PREVIOUS
+    // =========================================
+
+    prevButton.disabled =
+        currentPage <= 1;
+
+
+    // =========================================
+    // NEXT
+    // =========================================
+
+    nextButton.disabled =
+        currentPage >= totalPages;
+
+
+    // =========================================
+    // REQUEST COUNT
+    // =========================================
+
+    const showingStart =
+        startIndex + 1;
+
+    const showingEnd =
+        Math.min(
+            endIndex,
+            requests.length
+        );
+
+
+    document.getElementById(
+        "requestCount"
+    ).innerText =
+        `Showing ${showingStart} to ${showingEnd} of ${requests.length} requests`;
 
 }
 
 
-
-/* =====================================================
-   CREATE REQUEST ROW
-===================================================== */
-
-/* =====================================================
-   CREATE REQUEST ROW
-===================================================== */
-
-/* =====================================================
-   CREATE REQUEST ROW
-===================================================== */
 
 function createRequestRow(
     request
@@ -1695,8 +1807,102 @@ function logout(){
 
 }
 
+// =========================================
+// PAGINATION
+// =========================================
+
+document
+    .getElementById("prevPage")
+    .addEventListener(
+        "click",
+        function () {
+
+            if (
+                currentPage > 1
+            ) {
+
+                currentPage--;
+
+                renderRequests(
+                    getFilteredRequests()
+                );
+
+            }
+
+        }
+    );
 
 
+document
+    .getElementById("nextPage")
+    .addEventListener(
+        "click",
+        function () {
+
+            const totalPages =
+                Math.ceil(
+                    clientRequests.length /
+                    requestsPerPage
+                );
+
+
+            if (
+                currentPage <
+                totalPages
+            ) {
+
+                currentPage++;
+
+                renderRequests(
+                    getFilteredRequests()
+                );
+
+            }
+
+        }
+    );
+
+    function getFilteredRequests() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
+
+
+    if (!search) {
+
+        return clientRequests;
+
+    }
+
+
+    return clientRequests.filter(
+        request => {
+
+            const name =
+                (
+                    request.full_name ||
+                    ""
+                )
+                .toLowerCase();
+
+
+            return name.includes(
+                search
+            );
+
+        }
+    );
+
+}
 /* =====================================================
    INITIAL LOAD
 ===================================================== */
