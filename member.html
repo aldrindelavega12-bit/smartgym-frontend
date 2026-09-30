@@ -314,165 +314,57 @@ if (!user || user.role !== "member") {
 <!-- DASHBOARD INFO -->
 <div class="dashboard-info">
 
-    <!-- PROGRAM PROGRESS -->
-    <div class="dashboard-panel program-panel">
+    <!-- TODAY'S WORKOUT -->
+    <div class="dashboard-panel today-workout-panel">
 
-        <div class="program-title">
+        <div class="panel-title workout-panel-title">
 
             <div>
-                <h2>Program Progress</h2>
-
-                <span>
-                    Your Weekly Training Schedule
-                </span>
+                <h2>Today's Workout</h2>
             </div>
 
-            <strong id="programName">
-                Body Building Program
-            </strong>
-
-        </div>
-
-
-        <!-- WEEKLY SCHEDULE -->
-        <div class="weekly-schedule">
-
-            <div class="program-day today">
-
-                <span>Monday</span>
-
-                <strong>
-                    Chest
-                </strong>
-
-                <small>
-                    Today
-                </small>
-
-            </div>
-
-
-            <div class="program-day">
-
-                <span>Tuesday</span>
-
-                <strong>
-                    Back
-                </strong>
-
-                <small>
-                    Upcoming
-                </small>
-
-            </div>
-
-
-            <div class="program-day">
-
-                <span>Wednesday</span>
-
-                <strong>
-                    Rest
-                </strong>
-
-                <small>
-                    Upcoming
-                </small>
-
-            </div>
-
-
-            <div class="program-day">
-
-                <span>Thursday</span>
-
-                <strong>
-                    Shoulders
-                </strong>
-
-                <small>
-                    Upcoming
-                </small>
-
-            </div>
-
-
-            <div class="program-day">
-
-                <span>Friday</span>
-
-                <strong>
-                    Legs
-                </strong>
-
-                <small>
-                    Upcoming
-                </small>
-
-            </div>
-
-
-            <div class="program-day">
-
-                <span>Saturday</span>
-
-                <strong>
-                    Arms
-                </strong>
-
-                <small>
-                    Upcoming
-                </small>
-
-            </div>
-
-
-            <div class="program-day">
-
-                <span>Sunday</span>
-
-                <strong>
-                    Rest
-                </strong>
-
-                <small>
-                    Upcoming
-                </small>
-
+            <div class="workout-date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="todayWorkoutDate">-</span>
             </div>
 
         </div>
 
 
-        <!-- WEEKLY PROGRESS -->
-        <div class="weekly-progress">
+        <div class="today-workout-box">
 
-            <div class="progress-heading">
+            <div class="today-workout-header">
 
-                <span>
-                    Weekly Progress
-                </span>
+                <div>
+                    <span class="workout-label">
+                        TODAY'S WORKOUT
+                    </span>
 
-                <strong id="weeklyProgressText">
-                    1 / 7 Completed
-                </strong>
-
-            </div>
-
-
-            <div class="weekly-progress-bar">
-
-                <div
-                    class="weekly-progress-fill"
-                    id="weeklyProgressFill">
+                    <h1 id="todayWorkoutName">
+                        -
+                    </h1>
                 </div>
 
+                <span
+                    class="workout-status"
+                    id="todayWorkoutStatus">
+                    Workout Day
+                </span>
+
             </div>
 
 
-            <p>
-                Stay consistent to reach your goals!
-            </p>
+            <div class="today-workout-message">
+
+                <p>
+                    Focus on your goals!
+                </p>
+
+                <p>
+                    Complete today's workout and keep going!
+                </p>
+
+            </div>
 
         </div>
 
@@ -1671,6 +1563,116 @@ async function loadMembership(){
     }
 
 }
+
+// ==============================
+// TODAY'S WORKOUT
+// ==============================
+
+function loadTodaysWorkout() {
+
+    const today = new Date();
+
+    const dayName = today.toLocaleDateString(
+        "en-US",
+        {
+            weekday: "long"
+        }
+    );
+
+    const formattedDate = today.toLocaleDateString(
+        "en-US",
+        {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+
+    document.getElementById(
+        "todayWorkoutDate"
+    ).innerText = formattedDate;
+
+
+    /*
+       CURRENT WEEKLY PROGRAM SCHEDULE
+
+       Monday    = Chest
+       Tuesday   = Back
+       Wednesday = Rest
+       Thursday  = Shoulders
+       Friday    = Legs
+       Saturday  = Arms
+       Sunday    = Rest
+    */
+
+    const workoutSchedule = {
+
+        Monday: "Chest",
+
+        Tuesday: "Back",
+
+        Wednesday: "Rest",
+
+        Thursday: "Shoulders",
+
+        Friday: "Legs",
+
+        Saturday: "Arms",
+
+        Sunday: "Rest"
+
+    };
+
+
+    const workout =
+        workoutSchedule[dayName] || "Rest";
+
+
+    const workoutName =
+        document.getElementById(
+            "todayWorkoutName"
+        );
+
+    const workoutStatus =
+        document.getElementById(
+            "todayWorkoutStatus"
+        );
+
+    const workoutBox =
+        document.querySelector(
+            ".today-workout-box"
+        );
+
+
+    workoutName.innerText = workout;
+
+
+    if (workout === "Rest") {
+
+        workoutStatus.innerText =
+            "Rest Day";
+
+        workoutBox.classList.add(
+            "rest-day"
+        );
+
+    } else {
+
+        workoutStatus.innerText =
+            "Workout Day";
+
+        workoutBox.classList.remove(
+            "rest-day"
+        );
+
+    }
+
+}
+
+
+loadTodaysWorkout();
 
 </script>
 

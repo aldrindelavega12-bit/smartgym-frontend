@@ -7074,3 +7074,204 @@ textarea {
 .change-program-confirm-yes:hover {
     background: #c92323;
 }
+
+/* =========================================================
+   PROGRAM PROGRESS + MEMBERSHIP STATUS
+   EXACTLY EQUAL CARDS
+========================================================= */
+
+.dashboard-info {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 12px !important;
+
+    align-items: stretch !important;
+}
+
+.dashboard-info > .dashboard-panel {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+}
+/* ========================================
+   TODAY'S WORKOUT
+======================================== */
+
+.today-workout-panel {
+    min-width: 0;
+}
+
+.workout-panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.workout-panel-title h2 {
+    margin: 0;
+}
+
+.workout-date {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 16px;
+
+    background: #f4f6f8;
+    border-radius: 12px;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: #172033;
+
+    white-space: nowrap;
+}
+
+.workout-date i {
+    font-size: 17px;
+    color: #172033;
+}
+
+.today-workout-box {
+    margin-top: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #eefaf3 0%,
+        #e5f6ed 100%
+    );
+
+    border-radius: 16px;
+
+    padding: 22px 26px;
+
+    min-height: 175px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.today-workout-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.workout-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: #536b83;
+}
+
+.today-workout-header h1 {
+    margin: 0;
+
+    font-size: 44px;
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    color: #079447;
+}
+
+.workout-status {
+    padding: 10px 15px;
+
+    background: #c9f5dc;
+
+    border-radius: 12px;
+
+    color: #079447;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.today-workout-message {
+    border-top: 1px solid rgba(20, 90, 55, 0.12);
+
+    margin-top: 18px;
+    padding-top: 18px;
+
+    text-align: center;
+
+    color: #536b83;
+}
+
+.today-workout-message p {
+    margin: 4px 0;
+
+    font-size: 20px;
+    line-height: 1.45;
+}
+
+
+/* ========================================
+   REST DAY
+======================================== */
+
+.today-workout-box.rest-day {
+    background: linear-gradient(
+        135deg,
+        #f3f5f7 0%,
+        #edf0f3 100%
+    );
+}
+
+.today-workout-box.rest-day
+.today-workout-header h1 {
+    color: #53606d;
+}
+
+.today-workout-box.rest-day
+.workout-status {
+    background: #e1e6ea;
+    color: #53606d;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 700px) {
+
+    .workout-panel-title {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .workout-date {
+        width: fit-content;
+    }
+
+    .today-workout-header {
+        flex-direction: column;
+    }
+
+    .today-workout-header h1 {
+        font-size: 36px;
+    }
+
+    .today-workout-message p {
+        font-size: 17px;
+    }
+
+}
