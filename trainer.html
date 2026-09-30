@@ -215,56 +215,60 @@
             SUMMARY CARDS
         ================================================= -->
 
-        <div class="summary-cards">
+                <!-- MY TRAINEES -->
+        <div class="summary-card" id="traineesCard">
 
+            <div class="summary-content">
 
-            <!-- MY TRAINEES -->
+                <span>My Trainees</span>
 
-            <div class="summary-card" onclick="openTraineesModal()">
+                <strong id="myTrainees">0</strong>
 
+                <small>Active trainees</small>
 
-                <div class="summary-content">
+            </div>
 
-                    <span>
-                        My Trainees
-                    </span>
+            <div class="summary-preview">
 
-                    <strong id="myTrainees">
-                        0
-                    </strong>
+                <h4>My Trainees</h4>
 
-                    <small>
-                        Active trainees
-                    </small>
+                <p>Your active trainees</p>
 
+                <div
+                    class="preview-list"
+                    id="traineesPreviewList">
                 </div>
 
             </div>
 
+        </div>
 
 
-            <!-- CLIENT REQUESTS -->
+        <!-- CLIENT REQUESTS -->
+        <div class="summary-card" id="requestsCard">
 
-            <div class="summary-card" onclick="openRequestsModal()">
+            <div class="summary-content">
 
-                <div class="summary-content">
+                <span>Client Requests</span>
 
-                    <span>
-                        Client Requests
-                    </span>
+                <strong id="clientRequests">0</strong>
 
-                    <strong id="clientRequests">
-                        0
-                    </strong>
-
-                    <small>
-                        Pending requests
-                    </small>
-
-                </div>
+                <small>Pending requests</small>
 
             </div>
 
+            <div class="summary-preview">
+
+                <h4>Client Requests</h4>
+
+                <p>Pending requests from members</p>
+
+                <div
+                    class="preview-list"
+                    id="requestsPreviewList">
+                </div>
+
+            </div>
 
         </div>
         
@@ -423,86 +427,7 @@
 
 </div>
 
-<!-- MY TRAINEES MODAL -->
-<div id="traineesModal" class="dashboard-modal">
 
-    <div class="dashboard-modal-box">
-
-        <button
-            class="modal-close"
-            onclick="closeDashboardModal('traineesModal')">
-            ×
-        </button>
-
-        <h2>My Trainees</h2>
-
-        <p>
-            Your active trainees
-        </p>
-
-        <div class="modal-table-wrapper">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Program</th>
-                    </tr>
-                </thead>
-
-                <tbody id="traineesList">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- CLIENT REQUESTS MODAL -->
-<div id="requestsModal" class="dashboard-modal">
-
-    <div class="dashboard-modal-box">
-
-        <button
-            class="modal-close"
-            onclick="closeDashboardModal('requestsModal')">
-            ×
-        </button>
-
-        <h2>Client Requests</h2>
-
-        <p>
-            Pending requests from members
-        </p>
-
-        <div class="modal-table-wrapper">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Plan</th>
-                    </tr>
-                </thead>
-
-                <tbody id="requestsList">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
 <script>
 
 const API_URL =
@@ -912,49 +837,15 @@ function logout(){
 }
 
 // ========================================
-// TRAINER SUMMARY MODALS
+// TRAINER SUMMARY HOVER PREVIEWS
 // ========================================
 
-function openDashboardModal(id){
-
-    document
-        .getElementById(id)
-        .classList.add("show");
-
-}
-
-
-function closeDashboardModal(id){
-
-    document
-        .getElementById(id)
-        .classList.remove("show");
-
-}
-
-
-// ========================================
-// MY TRAINEES
-// ========================================
-
-async function openTraineesModal(){
+async function loadTraineesPreview(){
 
     const list =
         document.getElementById(
-            "traineesList"
+            "traineesPreviewList"
         );
-
-    list.innerHTML = `
-        <tr>
-            <td colspan="3" class="empty-row">
-                Loading...
-            </td>
-        </tr>
-    `;
-
-    openDashboardModal(
-        "traineesModal"
-    );
 
     try{
 
@@ -989,13 +880,9 @@ async function openTraineesModal(){
         if(trainees.length === 0){
 
             list.innerHTML = `
-                <tr>
-                    <td
-                        colspan="3"
-                        class="empty-row">
-                        No trainees assigned
-                    </td>
-                </tr>
+                <div class="preview-empty">
+                    No active trainees
+                </div>
             `;
 
             return;
@@ -1003,24 +890,20 @@ async function openTraineesModal(){
 
         list.innerHTML =
             trainees.map(
-                (trainee, index) => {
+                trainee => {
 
                     return `
-                        <tr>
+                        <div class="preview-item">
 
-                            <td>
-                                ${index + 1}
-                            </td>
-
-                            <td>
+                            <span class="preview-name">
                                 ${trainee.full_name || "-"}
-                            </td>
+                            </span>
 
-                            <td>
-                               ${trainee.program_name || "-"}
-                            </td>
+                            <span class="preview-info">
+                                ${trainee.program_name || "-"}
+                            </span>
 
-                        </tr>
+                        </div>
                     `;
 
                 }
@@ -1030,18 +913,14 @@ async function openTraineesModal(){
     catch(error){
 
         console.error(
-            "TRAINEES MODAL ERROR:",
+            "TRAINEES PREVIEW ERROR:",
             error
         );
 
         list.innerHTML = `
-            <tr>
-                <td
-                    colspan="3"
-                    class="empty-row">
-                    Failed to load trainees
-                </td>
-            </tr>
+            <div class="preview-empty">
+                Unable to load trainees
+            </div>
         `;
 
     }
@@ -1050,27 +929,15 @@ async function openTraineesModal(){
 
 
 // ========================================
-// CLIENT REQUESTS
+// CLIENT REQUESTS PREVIEW
 // ========================================
 
-async function openRequestsModal(){
+async function loadRequestsPreview(){
 
     const list =
         document.getElementById(
-            "requestsList"
+            "requestsPreviewList"
         );
-
-    list.innerHTML = `
-        <tr>
-            <td colspan="3" class="empty-row">
-                Loading...
-            </td>
-        </tr>
-    `;
-
-    openDashboardModal(
-        "requestsModal"
-    );
 
     try{
 
@@ -1105,13 +972,9 @@ async function openRequestsModal(){
         if(requests.length === 0){
 
             list.innerHTML = `
-                <tr>
-                    <td
-                        colspan="3"
-                        class="empty-row">
-                        No pending requests
-                    </td>
-                </tr>
+                <div class="preview-empty">
+                    No pending requests
+                </div>
             `;
 
             return;
@@ -1119,24 +982,20 @@ async function openRequestsModal(){
 
         list.innerHTML =
             requests.map(
-                (request, index) => {
+                request => {
 
                     return `
-                        <tr>
+                        <div class="preview-item">
 
-                            <td>
-                                ${index + 1}
-                            </td>
-
-                            <td>
+                            <span class="preview-name">
                                 ${request.full_name || "-"}
-                            </td>
+                            </span>
 
-                            <td>
-                                ${trainee.program_name || "-"}
-                            </td>
+                            <span class="preview-info">
+                                ${request.program_name || "-"}
+                            </span>
 
-                        </tr>
+                        </div>
                     `;
 
                 }
@@ -1146,18 +1005,14 @@ async function openRequestsModal(){
     catch(error){
 
         console.error(
-            "REQUESTS MODAL ERROR:",
+            "REQUESTS PREVIEW ERROR:",
             error
         );
 
         list.innerHTML = `
-            <tr>
-                <td
-                    colspan="3"
-                    class="empty-row">
-                    Failed to load requests
-                </td>
-            </tr>
+            <div class="preview-empty">
+                Unable to load requests
+            </div>
         `;
 
     }
@@ -1166,29 +1021,25 @@ async function openRequestsModal(){
 
 
 // ========================================
-// CLOSE WHEN CLICKING OUTSIDE
+// HOVER EVENTS
 // ========================================
 
 document
-    .querySelectorAll(".dashboard-modal")
-    .forEach(modal => {
+    .getElementById("traineesCard")
+    .addEventListener(
+        "mouseenter",
+        loadTraineesPreview
+    );
 
-        modal.addEventListener(
-            "click",
-            function(event){
 
-                if(event.target === modal){
+document
+    .getElementById("requestsCard")
+    .addEventListener(
+        "mouseenter",
+        loadRequestsPreview
+    );
 
-                    modal.classList.remove(
-                        "show"
-                    );
 
-                }
-
-            }
-        );
-
-    });
 // =====================================================
 // INITIAL LOAD
 // =====================================================
