@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Admin Dashboard</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+</head>
+
+<body>
+<span id="lockers" style="display:none;">0</span>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="navbar">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div
+        class="menu"
+        id="menu">
+    </div>
+
+
+    <!-- MOTIVATIONAL CARD -->
+
+    <div class="sidebar-message">
+
+        <div class="sidebar-message-icon">
+
+            <i class="fa-solid fa-dumbbell"></i>
+
+        </div>
+
+        <h3>
+            Lead the Change
+        </h3>
+
+        <p>
+            Better management<br>
+            builds a stronger gym.
+        </p>
+
+        <div class="message-line"></div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="layout">
+
+    <div class="main">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <div class="top-header">
+
+            <div class="top-right">
+
+                <div class="staff-profile"
+                    onclick="toggleStaffMenu()">
+
+                    <div class="staff-avatar">
+                        A
+                    </div>
+
+                    <div class="staff-info">
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+
+                    <!-- ADMIN DROPDOWN -->
+
+                    <div id="staffDropdown"
+                        class="staff-profile-dropdown">
+
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <h1>
+                    ADMIN DASHBOARD
+                </h1>
+
+                <p>
+                    Manage members, records, and gym operations
+                    <br>
+                    for a stronger tomorrow.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+        ================================================== -->
+
+        <div class="summary-cards">
+
+
+            <!-- TOTAL MEMBERS -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-user-group"></i>
+
+                </div>
+
+
+                <div class="summary-content">
+
+                    <span>
+                        Total Members
+                    </span>
+
+                    <!-- EXISTING JS ID -->
+                    <strong id="total">
+                        0
+                    </strong>
+
+                    <small>
+                        Registered members
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ACTIVE MEMBERS -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <div class="summary-content">
+
+                    <span>
+                        Active Members
+                    </span>
+
+                    <!-- EXISTING JS ID -->
+                    <strong id="active">
+                        0
+                    </strong>
+
+                    <small>
+                        Currently active
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TODAY'S WALK-INS -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+                    <i class="fa-solid fa-person-walking"></i>
+                </div>
+
+                <div class="summary-content">
+
+                    <span>
+                        Today's Walk-ins
+                    </span>
+
+                    <strong id="walkins">
+                        0
+                    </strong>
+
+                    <small>
+                        Walk-in records today
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!-- DAILY ATTENDANCE -->
+
+            <div class="summary-card">
+
+                <div class="summary-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+
+                <div class="summary-content">
+
+                    <span>
+                        Daily Attendance
+                    </span>
+                    <strong id="attendance">0</strong>
+                    <small id="attendance-change">vs yesterday</small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             QUICK ACTION CARDS
+        ================================================== -->
+
+        <div class="quick-cards">
+
+
+            <!-- MESSAGES -->
+
+            <div class="quick-card">
+
+                <div class="quick-card-icon">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                </div>
+
+                <h3>
+                    Messages
+                </h3>
+
+                <p>
+                    View important<br>
+                    updates
+                </p>
+
+                <a href="admin_messages.html">
+                    View →
+                </a>
+
+            </div>
+
+
+
+            <!-- REPORTS -->
+
+            <div class="quick-card">
+
+                <div class="quick-card-icon">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                </div>
+
+                <h3>
+                    Reports
+                </h3>
+
+                <p>
+                    View system reports<br>
+                    and summaries
+                </p>
+
+                <a href="reports.html">
+                    View →
+                </a>
+
+            </div>
+
+
+
+            <!-- MEMBERS -->
+
+            <div class="quick-card">
+
+                <div class="quick-card-icon">
+
+                    <i class="fa-solid fa-user-group"></i>
+
+                </div>
+
+                <h3>
+                    Members
+                </h3>
+
+                <p>
+                    View and manage<br>
+                    member records
+                </p>
+
+                <a href="members.html">
+                    View →
+                </a>
+
+            </div>
+
+
+
+            <!-- WALK-INS -->
+
+            <div class="quick-card">
+
+                <div class="quick-card-icon">
+
+                    <i class="fa-solid fa-person-walking"></i>
+
+                </div>
+
+                <h3>
+                    Walk-ins
+                </h3>
+
+                <p>
+                    View and manage<br>
+                    walk-in records
+                </p>
+
+                <a href="walkin.html">
+                    View →
+                </a>
+
+            </div>
+
+
+
+            <!-- STAFF -->
+
+            <div class="quick-card">
+
+                <div class="quick-card-icon">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <h3>
+                    Staff
+                </h3>
+
+                <p>
+                    View and manage<br>
+                    staff accounts
+                </p>
+
+                <a href="staff_manage.html">
+                    View →
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     NOTIFICATION POPUP
+===================================================== -->
+
+<div
+    id="notifPopup"
+    class="notif-popup">
+
+    <b id="notifTitle">
+        New Message
+    </b>
+
+    <p id="notifText">
+        You have a new message
+    </p>
+
+</div>
+
+
+<audio id="notifSound">
+
+    <source
+        src="notif.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+
+<!-- =====================================================
+     EXISTING JAVASCRIPT
+     DO NOT CHANGE
+===================================================== -->
+
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com"; 
+ 
+// 🔥 GET USER (NEW SYSTEM) 
+const user = JSON.parse(localStorage.getItem("user")); 
+ 
+// 🔒 PROTECT ADMIN (FIXED) 
+if (!user || user.role !== "admin") { 
+    window.location.href = "index.html"; 
+} 
+ 
+// 🔥 ROLE MENU 
+const menu = document.getElementById("menu"); 
+
+
+menu.innerHTML = `
+
+    <a href="admin.html" class="active">
+        <i class="fa-solid fa-house"></i>
+        Home
+    </a>
+
+    <a href="admin_messages.html" class="msg-link">
+
+        <i class="fa-regular fa-envelope"></i>
+
+        Messages
+
+        <span id="msg-count"
+              class="msg-count">
+            0
+        </span>
+
+    </a>
+
+    <a href="reports.html">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Reports
+
+    </a>
+
+    <a href="members.html">
+
+        <i class="fa-solid fa-users"></i>
+
+        Members
+
+    </a>
+
+    <a href="walkin.html">
+
+        <i class="fa-solid fa-person-walking"></i>
+
+        Walk-ins
+
+    </a>
+
+    <a href="staff_manage.html">
+
+        <i class="fa-regular fa-user"></i>
+
+        Staff
+
+    </a>
+
+`;
+
+// ================= DASHBOARD ================= 
+async function loadMessageCount(){ 
+ 
+    const res = await fetch( 
+        `${API_URL}/api/admin_messages` 
+    ); 
+ 
+    const data = await res.json(); 
+ 
+    const unread = 
+        data.filter( 
+            m => m.is_read == 0 
+        ).length; 
+ 
+    const badge = 
+        document.getElementById( 
+            "msg-count" 
+        ); 
+ 
+    badge.innerText = 
+        unread > 99 
+        ? "99+" 
+        : unread; 
+ 
+    badge.style.display = 
+        unread > 0 
+        ? "flex" 
+        : "none"; 
+} 
+function showNotifPopup(title,text){ 
+ 
+    const popup = 
+        document.getElementById( 
+            "notifPopup" 
+        ); 
+ 
+    if(!popup) return; 
+ 
+    document.getElementById( 
+        "notifTitle" 
+    ).innerText = title; 
+ 
+    document.getElementById( 
+        "notifText" 
+    ).innerText = text; 
+ 
+    popup.classList.add("show"); 
+ 
+    setTimeout(() => { 
+ 
+        popup.classList.remove( 
+            "show" 
+        ); 
+ 
+    },4000); 
+} 
+
+
+// ================= MEMBER SUMMARY =================
+
+async function loadMemberSummary(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/members_list`
+        );
+
+        if(!res.ok){
+            throw new Error(
+                `Members API error: ${res.status}`
+            );
+        }
+
+        const members = await res.json();
+
+
+        // =========================
+        // TOTAL MEMBERS
+        // =========================
+
+        const totalMembers =
+            members.length;
+
+
+        // =========================
+        // ACTIVE MEMBERS
+        // =========================
+
+        const activeMembers =
+            members.filter(member =>
+
+                member.membership_status === "ACTIVE" ||
+
+                member.monthly_status === "ACTIVE"
+
+            ).length;
+
+
+        // =========================
+        // DISPLAY
+        // =========================
+
+        document.getElementById(
+            "total"
+        ).innerText = totalMembers;
+
+
+        document.getElementById(
+            "active"
+        ).innerText = activeMembers;
+
+
+        console.log(
+            "TOTAL MEMBERS:",
+            totalMembers
+        );
+
+        console.log(
+            "ACTIVE MEMBERS:",
+            activeMembers
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "MEMBER SUMMARY ERROR:",
+            error
+        );
+
+    }
+
+}
+
+async function loadWalkinSummary(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/walkins_summary`
+        );
+
+        if(!res.ok){
+            throw new Error(
+                `Walk-in API error: ${res.status}`
+            );
+        }
+
+        const data = await res.json();
+
+        document.getElementById("walkins").innerText =
+            data.today ?? 0;
+
+        console.log(
+            "TODAY'S WALK-INS:",
+            data.today
+        );
+
+    }catch(error){
+
+        console.error(
+            "WALK-IN SUMMARY ERROR:",
+            error
+        );
+
+    }
+
+}
+
+async function loadAttendanceSummary(){
+
+    try{
+
+        const res = await fetch(
+            `${API_URL}/api/attendance_summary`
+        );
+
+        if(!res.ok){
+            throw new Error(
+                `Attendance API error: ${res.status}`
+            );
+        }
+
+        const data = await res.json();
+
+        document.getElementById(
+            "attendance"
+        ).innerText = data.today;
+
+
+        const change =
+            document.getElementById(
+                "attendance-change"
+            );
+
+        if(data.percentage > 0){
+
+            change.innerText =
+                `▲ ${data.percentage}% vs yesterday`;
+
+        }
+        else if(data.percentage < 0){
+
+            change.innerText =
+                `▼ ${Math.abs(data.percentage)}% vs yesterday`;
+
+        }
+        else{
+
+            change.innerText =
+                `No change vs yesterday`;
+
+        }
+
+
+        console.log(
+            "TODAY:",
+            data.today
+        );
+
+        console.log(
+            "YESTERDAY:",
+            data.yesterday
+        );
+
+        console.log(
+            "CHANGE:",
+            data.percentage + "%"
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "ATTENDANCE SUMMARY ERROR:",
+            error
+        );
+
+    }
+
+}
+
+async function loadDashboard(){ 
+    try { 
+        const res = await fetch(`${API_URL}/api/dashboard`); 
+        const data = await res.json(); 
+ 
+        document.getElementById("total").innerText = data.total_attendance || 0; 
+        document.getElementById("active").innerText = data.active_users || 0; 
+        document.getElementById("lockers").innerText = data.active_lockers || 0; 
+    } catch (err) { 
+        console.error("Dashboard error:", err); 
+    } 
+} 
+ 
+ 
+// ================= SOCKET ================= 
+const socket = io(API_URL); 
+ 
+socket.on("attendance_update", loadDashboard); 
+socket.on("locker_update", () => { 
+    loadDashboard(); 
+    loadAlerts(); 
+}); 
+socket.on("new_message", () => { 
+ 
+    loadMessageCount(); 
+}); 
+ 
+socket.on("priority_alert", () => { 
+ 
+    loadMessageCount(); 
+}); 
+ 
+// ================= INIT ================= 
+
+loadDashboard().then(() => {
+    loadMemberSummary();
+    loadWalkinSummary();
+    loadAttendanceSummary();
+});
+
+loadMessageCount();
+// ================= ADMIN PROFILE DROPDOWN =================
+
+function toggleStaffMenu(){
+
+    const profile =
+        document.querySelector(".staff-profile");
+
+    const dropdown =
+        document.getElementById("staffDropdown");
+
+    if(!dropdown) return;
+
+    profile.classList.toggle("active");
+
+    dropdown.classList.toggle("show");
+}
+
+
+// CLOSE DROPDOWN WHEN CLICKING OUTSIDE
+
+window.addEventListener("click", function(e){
+
+    if(!e.target.closest(".staff-profile")){
+
+        const profile =
+            document.querySelector(".staff-profile");
+
+        const dropdown =
+            document.getElementById("staffDropdown");
+
+        if(profile){
+            profile.classList.remove("active");
+        }
+
+        if(dropdown){
+            dropdown.classList.remove("show");
+        }
+
+    }
+
+});
+// ================= LOGOUT ================= 
+function logout(){ 
+    localStorage.clear(); 
+    window.location.href = "index.html"; 
+} 
+</script>
+
+
+</body>
+</html>
