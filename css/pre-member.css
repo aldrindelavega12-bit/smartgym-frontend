@@ -1544,11 +1544,10 @@ body {
 /* SERVICES */
 
 .services-grid {
-
     display: grid;
 
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        repeat(4, minmax(0, 1fr));
 
     gap: 12px;
 }
@@ -2058,4 +2057,40 @@ body {
     font-weight: 400;
     color: #6b7280;
     text-align: right;
+}
+
+/* =====================================================
+   GYM RATES
+===================================================== */
+
+.gym-rates-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.gym-rate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 3px;
+}
+
+.gym-rate-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.gym-rate-row span {
+    color: #53675d;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.gym-rate-row strong {
+    color: #07883f;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
 }
