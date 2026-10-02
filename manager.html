@@ -502,7 +502,7 @@ const API_URL = "https://smartgym-api-ia2e.onrender.com";
 const user = JSON.parse(localStorage.getItem("user")); 
  
 // 🔒 PROTECT ADMIN (FIXED) 
-if (!user || user.role !== "admin") { 
+if (!user || user.role !== "manager") { 
     window.location.href = "index.html"; 
 } 
  
@@ -512,7 +512,7 @@ const menu = document.getElementById("menu");
 
 menu.innerHTML = `
 
-    <a href="admin.html" class="active">
+    <a href="manager.html" class="active">
         <i class="fa-solid fa-house"></i>
         Home
     </a>

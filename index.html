@@ -524,19 +524,45 @@
             class="change-input"
         >
 
-        <input
-            type="password"
-            id="reg_password"
-            placeholder="Password"
-            class="change-input"
-        >
+        <div class="register-password-wrapper">
 
-        <input
-            type="password"
-            id="reg_confirm"
-            placeholder="Confirm Password"
-            class="change-input"
-        >
+            <input
+                type="password"
+                id="reg_password"
+                placeholder="Password"
+                class="change-input"
+            >
+
+            <button
+                type="button"
+                class="register-password-toggle"
+                onclick="toggleRegisterPassword('reg_password', this)"
+                aria-label="Show password"
+            >
+                <span class="eye-icon">👁</span>
+            </button>
+
+        </div>
+
+        <div class="register-password-wrapper">
+
+            <input
+                type="password"
+                id="reg_confirm"
+                placeholder="Confirm Password"
+                class="change-input"
+            >
+
+            <button
+                type="button"
+                class="register-password-toggle"
+                onclick="toggleRegisterPassword('reg_confirm', this)"
+                aria-label="Show password"
+            >
+                <span class="eye-icon">👁</span>
+            </button>
+
+        </div>
 
         <button
             class="change-btn"
@@ -912,7 +938,19 @@ async function sendForgotPasswordOTP() {
 
 }
 
+function toggleRegisterPassword(inputId, button) {
 
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "👁";
+    } else {
+        input.type = "password";
+        button.textContent = "👁";
+    }
+
+}
 /* =========================================================
    OTP COOLDOWN
 ========================================================= */
@@ -2075,7 +2113,44 @@ window.onclick = function(e){
 
     to{ opacity:1; }
 }
+.register-password-wrapper {
+    position: relative;
+    width: 100%;
+}
 
+.register-password-wrapper .change-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 55px;
+}
+
+.register-password-toggle {
+    position: absolute !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    width: 30px !important;
+    height: 30px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: none !important;
+    background: transparent !important;
+
+    font-size: 18px !important;
+    line-height: 1 !important;
+
+    color: #777 !important;
+    cursor: pointer;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 10;
+}
 </style>
 
 </body>
