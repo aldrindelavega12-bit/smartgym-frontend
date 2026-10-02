@@ -652,25 +652,6 @@ textarea {
 }
 
 
-/* WELCOME BACK */
-
-.hero h1::before {
-    content: "WELCOME BACK,";
-
-    display: block;
-
-    margin-bottom: 10px;
-
-    color: var(--green);
-
-    font-size: 18px;
-
-    font-weight: 700;
-
-    line-height: 1;
-
-    letter-spacing: .2px;
-}
 
 
 /* SUBTEXT */
