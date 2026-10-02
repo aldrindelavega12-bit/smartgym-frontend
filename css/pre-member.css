@@ -186,14 +186,45 @@ body {
 }
 
 .hero h1 {
+    margin: 0 0 6px;
+
+    color: #07883f;
+
+    font-size: 18px;
+    line-height: 1.2;
+
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.hero p#welcomeName {
     margin: 0;
 
     color: #101a16;
 
-    font-size: 48px;
-    line-height: 1;
+    font-size: 42px;
+    line-height: 1.05;
 
     font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.hero p:not(#welcomeName) {
+    margin: 14px 0 4px;
+
+    color: #17211b;
+
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.hero-subtext {
+    display: block;
+
+    color: #53675d;
+
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .hero p {
@@ -1357,15 +1388,7 @@ body {
 }
 
 
-.hero h1 {
-    margin: 0;
 
-    color: #101a16;
-
-    font-size: 48px;
-    line-height: 1;
-    font-weight: 700;
-}
 
 
 .hero p {
