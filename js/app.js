@@ -149,6 +149,13 @@ async function login() {
 
                 }
 
+                else if (data.user.role === "manager") {
+
+                    window.location.href =
+                        "manager.html";
+
+                }
+
                 else {
 
                     // Unknown role
