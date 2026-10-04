@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
@@ -36,6 +37,227 @@
         rel="stylesheet"
     >
 
+    <style>
+
+        /* =====================================================
+           TRAINEE ROW
+        ===================================================== */
+
+        .trainee-table tbody tr {
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .trainee-table tbody tr:hover {
+            background: #f5faf7;
+        }
+
+
+        /* =====================================================
+           TRAINEE MODAL
+        ===================================================== */
+
+        .trainee-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .trainee-modal-overlay.show {
+            display: flex;
+        }
+
+        .trainee-modal {
+            width: 100%;
+            max-width: 620px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            animation: traineeModalIn 0.18s ease;
+        }
+
+        @keyframes traineeModalIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+        }
+
+        .trainee-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 24px;
+            border-bottom: 1px solid #e7ece9;
+        }
+
+        .trainee-modal-header h2 {
+            margin: 0;
+            font-size: 21px;
+            font-weight: 700;
+            color: #17231c;
+        }
+
+        .trainee-modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 10px;
+            background: #f3f6f4;
+            color: #607067;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .trainee-modal-close:hover {
+            background: #e8efeb;
+        }
+
+        .trainee-modal-body {
+            padding: 24px;
+        }
+
+        .trainee-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: #f5faf7;
+            border-radius: 14px;
+            margin-bottom: 22px;
+        }
+
+        .trainee-profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e4f3e9;
+            color: #07883f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .trainee-profile-info strong {
+            display: block;
+            color: #17231c;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .trainee-profile-info span {
+            color: #75827b;
+            font-size: 13px;
+        }
+
+        .trainee-form-group {
+            margin-bottom: 18px;
+        }
+
+        .trainee-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #425048;
+        }
+
+        .trainee-form-group select,
+        .trainee-form-group input {
+            width: 100%;
+            height: 46px;
+            padding: 0 13px;
+            border: 1px solid #dce5df;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #25322b;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .trainee-form-group select:focus,
+        .trainee-form-group input:focus {
+            border-color: #0b8f48;
+            box-shadow: 0 0 0 3px rgba(11, 143, 72, 0.08);
+        }
+
+        .trainee-form-group select:disabled {
+            background: #f5f7f6;
+            color: #9aa59f;
+            cursor: not-allowed;
+        }
+
+        .trainee-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 18px 24px;
+            border-top: 1px solid #e7ece9;
+        }
+
+        .trainee-btn {
+            height: 42px;
+            padding: 0 18px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .trainee-btn-secondary {
+            background: #f1f4f2;
+            color: #53615a;
+        }
+
+        .trainee-btn-secondary:hover {
+            background: #e7ecea;
+        }
+
+        .trainee-btn-primary {
+            background: #07883f;
+            color: white;
+        }
+
+        .trainee-btn-primary:hover {
+            background: #067536;
+        }
+
+        .trainee-btn-primary:disabled {
+            background: #b8c7be;
+            cursor: not-allowed;
+        }
+
+        .trainee-modal-message {
+            display: none;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #d64545;
+        }
+
+        .trainee-modal-message.show {
+            display: block;
+        }
+
+    </style>
+
 </head>
 
 
@@ -49,8 +271,6 @@
 <div class="navbar">
 
     <div class="brand">
-
-       
 
         <div class="brand-text">
 
@@ -68,10 +288,7 @@
     <div class="menu">
 
         <a href="trainer.html">
-
-
             Home
-
         </a>
 
 
@@ -79,7 +296,6 @@
             href="trainer_messages.html"
             class="msg-link"
         >
-
 
             Messages
 
@@ -98,17 +314,14 @@
             class="active"
         >
             Trainee
-
         </a>
+
 
         <a
             href="trainer-schedule.html"
         >
-
             Schedule
-
         </a>
-
 
 
         <a href="client_requests.html">
@@ -126,11 +339,7 @@
 
     </div>
 
-
-    
-
 </div>
-
 
 
 <!-- =====================================================
@@ -160,6 +369,7 @@
                     T
                 </div>
 
+
                 <div class="trainer-info">
 
                     <strong id="trainerName">
@@ -171,6 +381,7 @@
                     </small>
 
                 </div>
+
 
                 <i
                     class="fa-solid fa-chevron-down trainer-profile-chevron"
@@ -199,7 +410,6 @@
             </div>
 
         </div>
-
 
 
         <!-- =================================================
@@ -235,7 +445,6 @@
             </div>
 
         </div>
-
 
 
         <!-- =================================================
@@ -354,6 +563,171 @@
 </div>
 
 
+<!-- =====================================================
+     TRAINEE DETAILS MODAL
+===================================================== -->
+
+<div
+    id="traineeModalOverlay"
+    class="trainee-modal-overlay"
+>
+
+    <div
+        class="trainee-modal"
+        onclick="event.stopPropagation()"
+    >
+
+
+        <div class="trainee-modal-header">
+
+            <h2>
+                Trainee Details
+            </h2>
+
+            <button
+                type="button"
+                class="trainee-modal-close"
+                onclick="closeTraineeModal()"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="trainee-modal-body">
+
+
+            <!-- MEMBER -->
+
+            <div class="trainee-profile-card">
+
+                <div class="trainee-profile-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <div class="trainee-profile-info">
+
+                    <strong id="modalMemberName">
+                        Member
+                    </strong>
+
+                    <span id="modalMemberId">
+                        -
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROGRAM -->
+
+            <div class="trainee-form-group">
+
+                <label for="modalProgram">
+
+                    Program
+
+                </label>
+
+                <select
+                    id="modalProgram"
+                    onchange="loadProgramPlans()"
+                >
+
+                    <option value="">
+                        Loading programs...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PLAN -->
+
+            <div class="trainee-form-group">
+
+                <label for="modalPlan">
+
+                    Plan / Split
+
+                </label>
+
+                <select
+                    id="modalPlan"
+                    disabled
+                >
+
+                    <option value="">
+                        Select Program First
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- START DATE -->
+
+            <div class="trainee-form-group">
+
+                <label for="modalStartDate">
+
+                    Starting Date
+
+                </label>
+
+                <input
+                    type="date"
+                    id="modalStartDate"
+                    disabled
+                >
+
+            </div>
+
+
+            <div
+                id="traineeModalMessage"
+                class="trainee-modal-message"
+            ></div>
+
+
+        </div>
+
+
+        <div class="trainee-modal-footer">
+
+            <button
+                type="button"
+                class="trainee-btn trainee-btn-secondary"
+                onclick="closeTraineeModal()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                id="saveProgramButton"
+                class="trainee-btn trainee-btn-primary"
+                onclick="saveTraineeProgram()"
+            >
+                Save Program
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
 
@@ -366,7 +740,6 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-
 /* =====================================================
    USER
 ===================================================== */
@@ -377,7 +750,6 @@ const user =
     );
 
 
-
 /* =====================================================
    TRAINER PROFILE
 ===================================================== */
@@ -386,6 +758,7 @@ const trainerName =
     document.getElementById(
         "trainerName"
     );
+
 
 const trainerAvatar =
     document.getElementById(
@@ -433,15 +806,22 @@ if(
 }
 
 
-
 /* =====================================================
    DATA
 ===================================================== */
+
 let trainees = [];
 
 let currentTraineePage = 1;
 
 const traineesPerPage = 5;
+
+
+/* =====================================================
+   SELECTED TRAINEE
+===================================================== */
+
+let selectedTrainee = null;
 
 
 /* =====================================================
@@ -490,6 +870,7 @@ async function loadMessageCount(){
                 : "none";
 
     }
+
     catch(error){
 
         console.error(
@@ -500,7 +881,6 @@ async function loadMessageCount(){
     }
 
 }
-
 
 
 /* =====================================================
@@ -570,6 +950,7 @@ async function loadTrainees(){
         );
 
     }
+
     catch(error){
 
         console.error(
@@ -599,30 +980,27 @@ async function loadTrainees(){
 }
 
 
-
 /* =====================================================
    RENDER TRAINEES
 ===================================================== */
-function renderTrainees(list) {
+
+function renderTrainees(list){
 
     const tableBody =
         document.getElementById(
             "traineeTableBody"
         );
 
+
     const emptyState =
         document.getElementById(
             "emptyState"
         );
 
+
     const countText =
         document.getElementById(
             "traineeCount"
-        );
-
-    const pagination =
-        document.querySelector(
-            ".trainee-footer .pagination"
         );
 
 
@@ -633,25 +1011,30 @@ function renderTrainees(list) {
        EMPTY
     ===================================================== */
 
-    if (
+    if(
         !list ||
         list.length === 0
-    ) {
+    ){
 
         emptyState.classList.add(
             "show"
         );
 
+
         countText.innerText =
             "No active trainees.";
 
+
         currentTraineePage = 1;
+
 
         updateTraineePagination(
             0
         );
 
+
         return;
+
     }
 
 
@@ -675,21 +1058,23 @@ function renderTrainees(list) {
        KEEP PAGE VALID
     ===================================================== */
 
-    if (
+    if(
         currentTraineePage >
         totalPages
-    ) {
+    ){
 
         currentTraineePage =
             totalPages;
+
     }
 
 
-    if (
+    if(
         currentTraineePage < 1
-    ) {
+    ){
 
         currentTraineePage = 1;
+
     }
 
 
@@ -717,7 +1102,7 @@ function renderTrainees(list) {
 
 
     /* =====================================================
-       RENDER 5 ONLY
+       RENDER
     ===================================================== */
 
     pageTrainees.forEach(
@@ -761,18 +1146,24 @@ function renderTrainees(list) {
     );
 
 }
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
 function updateTraineePagination(
     totalItems
-) {
+){
 
     const pagination =
         document.querySelector(
             ".trainee-footer .pagination"
         );
 
-    if (!pagination) {
+
+    if(!pagination)
         return;
-    }
 
 
     const totalPages =
@@ -792,7 +1183,9 @@ function updateTraineePagination(
             id="traineePrevPage"
             ${currentTraineePage <= 1 ? "disabled" : ""}
         >
+
             <i class="fa-solid fa-chevron-left"></i>
+
         </button>
 
 
@@ -800,7 +1193,9 @@ function updateTraineePagination(
             type="button"
             class="current-page"
         >
+
             ${currentTraineePage}
+
         </button>
 
 
@@ -809,7 +1204,9 @@ function updateTraineePagination(
             id="traineeNextPage"
             ${currentTraineePage >= totalPages ? "disabled" : ""}
         >
+
             <i class="fa-solid fa-chevron-right"></i>
+
         </button>
 
     `;
@@ -820,22 +1217,23 @@ function updateTraineePagination(
             "traineePrevPage"
         );
 
+
     const next =
         document.getElementById(
             "traineeNextPage"
         );
 
 
-    if (prev) {
+    if(prev){
 
         prev.addEventListener(
             "click",
-            function () {
+            function(){
 
-                if (
+                if(
                     currentTraineePage >
                     1
-                ) {
+                ){
 
                     currentTraineePage--;
 
@@ -851,16 +1249,16 @@ function updateTraineePagination(
     }
 
 
-    if (next) {
+    if(next){
 
         next.addEventListener(
             "click",
-            function () {
+            function(){
 
-                if (
+                if(
                     currentTraineePage <
                     totalPages
-                ) {
+                ){
 
                     currentTraineePage++;
 
@@ -877,12 +1275,18 @@ function updateTraineePagination(
 
 }
 
-function getFilteredTrainees() {
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function getFilteredTrainees(){
 
     const searchInput =
         document.getElementById(
             "searchInput"
         );
+
 
     const search =
         searchInput
@@ -892,7 +1296,7 @@ function getFilteredTrainees() {
             : "";
 
 
-    if (!search) {
+    if(!search){
 
         return trainees;
 
@@ -936,6 +1340,8 @@ function getFilteredTrainees() {
     );
 
 }
+
+
 /* =====================================================
    CREATE TRAINEE ROW
 ===================================================== */
@@ -952,6 +1358,22 @@ function createTraineeRow(
 
     row.dataset.name =
         trainee.full_name || "";
+
+
+    /*
+        MAKE ROW CLICKABLE
+    */
+
+    row.addEventListener(
+        "click",
+        function(){
+
+            openTraineeModal(
+                trainee
+            );
+
+        }
+    );
 
 
     const trainingPeriod =
@@ -986,6 +1408,7 @@ function createTraineeRow(
             "completed";
 
     }
+
     else if(
         traineeStatus === "cancelled"
     ){
@@ -997,6 +1420,7 @@ function createTraineeRow(
             "cancelled";
 
     }
+
     else if(
         traineeStatus === "pending"
     ){
@@ -1130,6 +1554,830 @@ function createTraineeRow(
 }
 
 
+/* =====================================================
+   OPEN TRAINEE MODAL
+===================================================== */
+
+async function openTraineeModal(
+    trainee
+){
+
+    selectedTrainee =
+        trainee;
+
+
+    const overlay =
+        document.getElementById(
+            "traineeModalOverlay"
+        );
+
+
+    const memberName =
+        document.getElementById(
+            "modalMemberName"
+        );
+
+
+    const memberId =
+        document.getElementById(
+            "modalMemberId"
+        );
+
+
+    const programSelect =
+        document.getElementById(
+            "modalProgram"
+        );
+
+
+    const planSelect =
+        document.getElementById(
+            "modalPlan"
+        );
+
+
+    const startDate =
+        document.getElementById(
+            "modalStartDate"
+        );
+
+
+    const message =
+        document.getElementById(
+            "traineeModalMessage"
+        );
+
+
+    memberName.innerText =
+        trainee.full_name ||
+        "Member";
+
+
+    memberId.innerText =
+        trainee.member_id ||
+        "-";
+
+
+    startDate.value = trainee.start_date || "";
+
+
+    message.classList.remove(
+        "show"
+    );
+
+
+    message.innerText = "";
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+
+    /*
+        LOAD PROGRAMS FROM DATABASE
+    */
+
+    programSelect.innerHTML = `
+
+        <option value="">
+            Loading programs...
+        </option>
+
+    `;
+
+
+    planSelect.innerHTML = `
+
+        <option value="">
+            Select Program First
+        </option>
+
+    `;
+
+
+    planSelect.disabled = true;
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/programs`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const programs =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                programs.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        if(
+            !Array.isArray(programs) ||
+            programs.length === 0
+        ){
+
+            programSelect.innerHTML = `
+
+                <option value="">
+                    No programs available
+                </option>
+
+            `;
+
+            return;
+
+        }
+
+
+        programSelect.innerHTML = `
+
+            <option value="">
+                Select Program
+            </option>
+
+        `;
+
+
+        programs.forEach(
+            program => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    program.id;
+
+
+                option.textContent =
+                    program.program_name;
+
+
+                programSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        /*
+            IF TRAINEE ALREADY HAS PROGRAM
+        */
+
+        if(
+            trainee.program_id
+        ){
+
+            programSelect.value =
+                trainee.program_id;
+
+
+            await loadProgramPlans(
+                false
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "LOAD PROGRAMS ERROR:",
+            error
+        );
+
+
+        programSelect.innerHTML = `
+
+            <option value="">
+                Unable to load programs
+            </option>
+
+        `;
+
+        showTraineeModalMessage(
+            "Unable to load programs from the database."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD PROGRAM PLANS
+===================================================== */
+
+async function loadProgramPlans(
+    resetCurrentPlan = true
+){
+
+    const programSelect =
+        document.getElementById(
+            "modalProgram"
+        );
+
+
+    const planSelect =
+        document.getElementById(
+            "modalPlan"
+        );
+
+
+    const programId =
+        programSelect.value;
+
+
+    if(!programId){
+
+        planSelect.innerHTML = `
+
+            <option value="">
+                Select Program First
+            </option>
+
+        `;
+
+
+        planSelect.disabled = true;
+
+
+        return;
+
+    }
+
+
+    planSelect.disabled = true;
+
+
+    planSelect.innerHTML = `
+
+        <option value="">
+            Loading plans...
+        </option>
+
+    `;
+
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_URL}/api/programs/${programId}/plans`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const plans =
+            Array.isArray(data.plans)
+                ? data.plans
+                : Array.isArray(data)
+                    ? data
+                    : [];
+
+
+        if(plans.length === 0){
+
+            planSelect.innerHTML = `
+
+                <option value="">
+                    No plans available
+                </option>
+
+            `;
+
+
+            planSelect.disabled = true;
+
+
+            return;
+
+        }
+
+
+        planSelect.innerHTML = `
+
+            <option value="">
+                Select Plan / Split
+            </option>
+
+        `;
+
+
+        plans.forEach(
+            plan => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    plan.id;
+
+
+                option.textContent =
+                    plan.plan_name;
+
+
+                planSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        planSelect.disabled = false;
+
+
+        /*
+            KEEP EXISTING PLAN SELECTED
+        */
+
+        if(
+            !resetCurrentPlan &&
+            selectedTrainee &&
+            selectedTrainee.program_plan_id
+        ){
+
+            planSelect.value =
+                selectedTrainee.program_plan_id;
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "LOAD PROGRAM PLANS ERROR:",
+            error
+        );
+
+
+        planSelect.innerHTML = `
+
+            <option value="">
+                Unable to load plans
+            </option>
+
+        `;
+
+
+        planSelect.disabled = true;
+
+
+        showTraineeModalMessage(
+            "Unable to load plans for the selected program."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   MODAL MESSAGE
+===================================================== */
+
+function showTraineeModalMessage(
+    message
+){
+
+    const element =
+        document.getElementById(
+            "traineeModalMessage"
+        );
+
+
+    if(!element)
+        return;
+
+
+    element.innerText =
+        message;
+
+
+    element.classList.add(
+        "show"
+    );
+
+}
+
+/* =====================================================
+   SAVE TRAINEE PROGRAM
+===================================================== */
+
+async function saveTraineeProgram(){
+
+    const programSelect =
+        document.getElementById(
+            "modalProgram"
+        );
+
+    const planSelect =
+        document.getElementById(
+            "modalPlan"
+        );
+
+    const startDate =
+        document.getElementById(
+            "modalStartDate"
+        );
+
+    const saveButton =
+        document.getElementById(
+            "saveProgramButton"
+        );
+
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
+    if(!selectedTrainee){
+
+        showTraineeModalMessage(
+            "No trainee selected."
+        );
+
+        return;
+    }
+
+
+    if(!programSelect.value){
+
+        showTraineeModalMessage(
+            "Please select a program."
+        );
+
+        return;
+    }
+
+
+    if(!planSelect.value){
+
+        showTraineeModalMessage(
+            "Please select a plan / split."
+        );
+
+        return;
+    }
+
+
+    if(!startDate.value){
+
+        showTraineeModalMessage(
+            "Please select a starting date."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       GET TRAINER ID
+    ===================================================== */
+
+    const trainerId =
+        user &&
+        user.user_id
+            ? user.user_id
+            : null;
+
+
+    if(!trainerId){
+
+        showTraineeModalMessage(
+            "Trainer ID not found."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       GET MEMBER ID
+    ===================================================== */
+
+    const memberId =
+        selectedTrainee.member_id;
+
+
+    if(!memberId){
+
+        showTraineeModalMessage(
+            "Member ID not found."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       GET ASSIGNMENT ID
+    ===================================================== */
+
+    const assignmentId =
+        selectedTrainee.id;
+
+
+    if(!assignmentId){
+
+        showTraineeModalMessage(
+            "Trainer assignment ID not found."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       PREPARE DATA
+    ===================================================== */
+
+    const payload = {
+
+        assignment_id:
+            assignmentId,
+
+        trainer_id:
+            trainerId,
+
+        member_id:
+            memberId,
+
+        program_id:
+            Number(
+                programSelect.value
+            ),
+
+        program_plan_id:
+            Number(
+                planSelect.value
+            ),
+
+        program_start_date:
+            startDate.value
+
+    };
+
+
+    /* =====================================================
+       DISABLE BUTTON
+    ===================================================== */
+
+    if(saveButton){
+
+        saveButton.disabled = true;
+
+        saveButton.innerText =
+            "Saving...";
+    }
+
+
+    try{
+
+        /* =================================================
+           SEND TO API
+        ================================================= */
+
+        const response =
+            await fetch(
+                `${API_URL}/api/trainer/trainee/program`,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+                }
+            );
+
+
+        /* =================================================
+           READ RESPONSE
+        ================================================= */
+
+        const data =
+            await response.json();
+
+
+        /* =================================================
+           API ERROR
+        ================================================= */
+
+        if(!response.ok){
+
+            throw new Error(
+
+                data.message ||
+
+                `HTTP ${response.status}`
+
+            );
+
+        }
+
+
+        /* =================================================
+           SUCCESS
+        ================================================= */
+
+        console.log(
+            "PROGRAM SAVE SUCCESS:",
+            data
+        );
+
+
+        /*
+            Update the currently selected trainee
+            immediately so the table can reflect
+            the new program without waiting for
+            another API response.
+        */
+
+        selectedTrainee.program_id =
+            payload.program_id;
+
+        selectedTrainee.program_plan_id =
+            payload.program_plan_id;
+
+        selectedTrainee.program_start_date =
+            payload.program_start_date;
+
+
+        selectedTrainee.program_name =
+            data.trainee &&
+            data.trainee.program_name
+                ? data.trainee.program_name
+                : programSelect.options[
+                    programSelect.selectedIndex
+                  ].textContent;
+
+
+        selectedTrainee.program_plan_name =
+            data.trainee &&
+            data.trainee.program_plan_name
+                ? data.trainee.program_plan_name
+                : planSelect.options[
+                    planSelect.selectedIndex
+                  ].textContent;
+
+
+        /* =================================================
+           REFRESH TRAINEE LIST
+        ================================================= */
+
+        await loadTrainees();
+
+
+        /* =================================================
+           CLOSE MODAL
+        ================================================= */
+
+        closeTraineeModal();
+
+
+        /* =================================================
+           SUCCESS MESSAGE
+        ================================================= */
+
+        alert(
+            "Program saved successfully."
+        );
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "SAVE TRAINEE PROGRAM ERROR:",
+            error
+        );
+
+
+        showTraineeModalMessage(
+
+            error.message ||
+
+            "Unable to save trainee program."
+
+        );
+
+    }
+
+    finally{
+
+        /* =============================================
+           ENABLE BUTTON AGAIN
+        ============================================= */
+
+        if(saveButton){
+
+            saveButton.disabled = false;
+
+            saveButton.innerText =
+                "Save Program";
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE TRAINEE MODAL
+===================================================== */
+
+function closeTraineeModal(){
+
+    const overlay =
+        document.getElementById(
+            "traineeModalOverlay"
+        );
+
+
+    overlay.classList.remove(
+        "show"
+    );
+
+
+    selectedTrainee =
+        null;
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+===================================================== */
+
+document
+    .getElementById(
+        "traineeModalOverlay"
+    )
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                closeTraineeModal();
+
+            }
+
+        }
+    );
+
 
 /* =====================================================
    TRAINING PERIOD
@@ -1182,10 +2430,7 @@ function formatTrainingPeriod(
     1 Week  → +6 days
     1 Month → +29 days
 
-    Inclusive counting:
-    Sept 25 → Sept 25 = 1 Day
-    Sept 25 → Oct 1   = 7 Days
-    Sept 25 → Oct 24  = 30 Days
+    Inclusive counting.
     */
 
 
@@ -1226,13 +2471,15 @@ function formatTrainingPeriod(
 
 }
 
+
 /* =====================================================
    SEARCH
 ===================================================== */
 
-function searchTrainees() {
+function searchTrainees(){
 
     currentTraineePage = 1;
+
 
     const filtered =
         getFilteredTrainees();
@@ -1243,6 +2490,8 @@ function searchTrainees() {
     );
 
 }
+
+
 /* =====================================================
    TRAINEE COUNT
 ===================================================== */
@@ -1273,7 +2522,6 @@ function updateTraineeCount(
 }
 
 
-
 /* =====================================================
    ESCAPE HTML
 ===================================================== */
@@ -1285,29 +2533,33 @@ function escapeHtml(
     return String(
         value ?? ""
     )
+
     .replace(
         /&/g,
         "&amp;"
     )
+
     .replace(
         /</g,
         "&lt;"
     )
+
     .replace(
         />/g,
         "&gt;"
     )
+
     .replace(
         /"/g,
         "&quot;"
     )
+
     .replace(
         /'/g,
         "&#039;"
     );
 
 }
-
 
 
 /* =====================================================
@@ -1340,9 +2592,8 @@ function toggleTrainerMenu(){
 }
 
 
-
 /* =====================================================
-   CLICK OUTSIDE
+   CLICK OUTSIDE PROFILE
 ===================================================== */
 
 window.addEventListener(
@@ -1390,7 +2641,6 @@ window.addEventListener(
 );
 
 
-
 /* =====================================================
    LOGOUT
 ===================================================== */
@@ -1399,11 +2649,11 @@ function logout(){
 
     localStorage.clear();
 
+
     window.location.href =
         "index.html";
 
 }
-
 
 
 /* =====================================================
@@ -1413,7 +2663,6 @@ function logout(){
 loadMessageCount();
 
 loadTrainees();
-
 
 
 /* =====================================================
@@ -1430,6 +2679,7 @@ setInterval(
     loadMessageCount,
     10000
 );
+
 
 </script>
 

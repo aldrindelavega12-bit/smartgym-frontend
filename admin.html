@@ -1,32 +1,588 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
 
     <title>Admin Dashboard</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet"
-          href="css/admin-dashboard.css">
+    <link
+        rel="stylesheet"
+        href="css/admin-dashboard.css"
+    >
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
 
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =====================================================
+           ADMIN HOME
+        ===================================================== */
+
+        .admin-home-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.25fr)
+                minmax(300px, .75fr);
+
+            gap: 12px;
+
+            margin-top: 14px;
+
+        }
+
+
+        /* =====================================================
+           ADMIN PANELS
+        ===================================================== */
+
+        .admin-panel {
+
+            background: #ffffff;
+
+            border: 1px solid #e5e9e7;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 5px 16px rgba(0,0,0,.035);
+
+            overflow: hidden;
+
+        }
+
+
+        .admin-panel-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            padding: 12px 16px 8px;
+
+        }
+
+
+        .admin-panel-title h2 {
+
+            margin: 0;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            color: #111;
+
+        }
+
+
+        .admin-panel-title p {
+
+            margin: 3px 0 0;
+
+            font-size: 11px;
+
+            color: #777;
+
+        }
+
+
+        .panel-link {
+
+            color: #008f4c;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+            white-space: nowrap;
+
+        }
+
+
+        .panel-link:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =====================================================
+           AUDIT LOG TABLE
+        ===================================================== */
+
+        .audit-table-wrapper {
+
+            padding: 0 10px 10px;
+
+            overflow-x: auto;
+
+        }
+
+
+        .audit-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+
+        }
+
+
+        .audit-table th {
+
+            text-align: left;
+
+            padding: 7px 8px;
+
+            background: #edf8f2;
+
+            color: #234;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+        }
+
+
+        .audit-table td {
+
+            padding: 7px 8px;
+
+            border-bottom: 1px solid #edf0ef;
+
+            color: #444;
+
+            font-size: 10px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+        }
+
+
+        .audit-table tbody tr:last-child td {
+
+            border-bottom: none;
+
+        }
+
+
+        .audit-table tbody tr:hover {
+
+            background: #fafdfb;
+
+        }
+
+
+        .audit-user {
+
+            font-weight: 600;
+
+            color: #222;
+
+        }
+
+
+        .audit-action {
+
+            font-weight: 600;
+
+            color: #333;
+
+        }
+
+
+        /* =====================================================
+           LATEST BACKUP
+        ===================================================== */
+
+        .backup-content {
+
+            padding: 0 14px 12px;
+
+        }
+
+
+        .backup-main {
+
+            background: #eef9f3;
+
+            border-radius: 10px;
+
+            padding: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .backup-icon {
+
+            width: 34px;
+
+            height: 34px;
+
+            min-width: 34px;
+
+            border-radius: 50%;
+
+            background: #d8f1e3;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #008f4c;
+
+            font-size: 14px;
+
+        }
+
+
+        .backup-info {
+
+            flex: 1;
+
+            min-width: 0;
+
+        }
+
+
+        .backup-date {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #008f4c;
+
+            margin-bottom: 2px;
+
+            white-space: nowrap;
+
+        }
+
+
+        .backup-type {
+
+            font-size: 9px;
+
+            color: #777;
+
+        }
+
+
+        .backup-status {
+
+            text-align: right;
+
+            white-space: nowrap;
+
+        }
+
+
+        .backup-status-badge {
+
+            display: inline-block;
+
+            padding: 3px 7px;
+
+            border-radius: 20px;
+
+            background: #d8f1e3;
+
+            color: #008f4c;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            margin-bottom: 2px;
+
+        }
+
+
+        .backup-size {
+
+            font-size: 9px;
+
+            color: #777;
+
+        }
+
+
+        /* =====================================================
+           BACKUP DETAILS
+        ===================================================== */
+
+        .backup-details {
+
+            border-top: 1px solid #edf0ef;
+
+        }
+
+
+        .backup-detail-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 5px 1px;
+
+            border-bottom: 1px solid #f0f2f1;
+
+            font-size: 10px;
+
+            gap: 10px;
+
+        }
+
+
+        .backup-detail-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .backup-detail-label {
+
+            color: #777;
+
+        }
+
+
+        .backup-detail-value {
+
+            color: #333;
+
+            font-weight: 600;
+
+            text-align: right;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+        }
+
+
+        /* =====================================================
+           BACKUP BUTTONS
+        ===================================================== */
+
+        .backup-buttons {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 7px;
+
+            margin-top: 9px;
+
+        }
+
+
+        .backup-btn {
+
+            height: 32px;
+
+            border-radius: 7px;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 5px;
+
+            text-decoration: none;
+
+            white-space: nowrap;
+
+        }
+
+
+        .backup-btn.primary {
+
+            background: #008f4c;
+
+            color: #fff;
+
+            border: 1px solid #008f4c;
+
+        }
+
+
+        .backup-btn.secondary {
+
+            background: #fff;
+
+            color: #008f4c;
+
+            border: 1px solid #008f4c;
+
+        }
+
+
+        .backup-btn:hover {
+
+            opacity: .9;
+
+        }
+
+
+        /* =====================================================
+           QUICK ACTIONS
+           EXISTING QUICK CARD STYLE IS PRESERVED
+        ===================================================== */
+
+        .admin-quick-section {
+
+            margin-top: 12px;
+
+        }
+
+
+        .admin-quick-header {
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .admin-quick-header h2 {
+
+            margin: 0;
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+        }
+
+
+        .admin-quick-header p {
+
+            margin: 2px 0 0;
+
+            font-size: 11px;
+
+            color: #777;
+
+        }
+
+
+        /*
+           ONLY CHANGE:
+           3 QUICK CARDS
+        */
+
+        .quick-cards {
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr)) !important;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1050px) {
+
+            .admin-home-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .quick-cards {
+
+                grid-template-columns: 1fr !important;
+
+            }
+
+            .backup-buttons {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
-<span id="lockers" style="display:none;">0</span>
+
 
 <!-- =====================================================
      SIDEBAR
@@ -38,7 +594,6 @@
     <!-- BRAND -->
 
     <div class="brand">
-
 
         <div class="brand-text">
 
@@ -59,11 +614,9 @@
 
     <div
         class="menu"
-        id="menu">
+        id="menu"
+    >
     </div>
-
-
-    
 
 
 </div>
@@ -87,12 +640,15 @@
 
             <div class="top-right">
 
-                <div class="staff-profile"
-                    onclick="toggleStaffMenu()">
+                <div
+                    class="staff-profile"
+                    onclick="toggleStaffMenu()"
+                >
 
                     <div class="staff-avatar">
                         A
                     </div>
+
 
                     <div class="staff-info">
 
@@ -106,19 +662,27 @@
 
                     </div>
 
-                    <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+                    <i
+                        class="fa-solid fa-chevron-down staff-profile-chevron">
+                    </i>
 
 
-                    <!-- ADMIN DROPDOWN -->
+                    <!-- DROPDOWN -->
 
-                    <div id="staffDropdown"
-                        class="staff-profile-dropdown">
+                    <div
+                        id="staffDropdown"
+                        class="staff-profile-dropdown"
+                    >
 
                         <button
                             onclick="logout(); event.stopPropagation();"
-                            class="staff-dropdown-logout">
+                            class="staff-dropdown-logout"
+                        >
 
-                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <i
+                                class="fa-solid fa-right-from-bracket">
+                            </i>
 
                             Log Out
 
@@ -132,6 +696,8 @@
 
         </div>
 
+
+
         <!-- =================================================
              HERO
         ================================================== -->
@@ -140,15 +706,24 @@
 
             <div class="hero-content">
 
+
                 <h1>
+
                     ADMIN DASHBOARD
+
                 </h1>
 
+
                 <p>
-                    Manage members, records, and gym operations
+
+                    Monitor system activities, manage user accounts
+
                     <br>
-                    for a stronger tomorrow.
+
+                    and maintain the system for a stronger tomorrow.
+
                 </p>
+
 
             </div>
 
@@ -157,31 +732,216 @@
 
 
         <!-- =================================================
-             SUMMARY CARDS
+             AUDIT + BACKUP
         ================================================== -->
 
-        <div class="summary-cards">
+        <div class="admin-home-grid">
 
 
-            <!-- TOTAL MEMBERS -->
+            <!-- =================================================
+                 RECENT AUDIT LOGS
+            ================================================== -->
 
-            <div class="summary-card">
+            <div class="admin-panel">
 
 
-                <div class="summary-content">
+                <div class="admin-panel-header">
 
-                    <span>
-                        Total Members
-                    </span>
 
-                    <!-- EXISTING JS ID -->
-                    <strong id="total">
-                        0
-                    </strong>
+                    <div class="admin-panel-title">
 
-                    <small>
-                        Registered members
-                    </small>
+                        <h2>
+                            Recent Audit Logs
+                        </h2>
+
+                        <p>
+                            Latest system activities.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="audit_logs.html"
+                        class="panel-link"
+                    >
+
+                        View All →
+
+                    </a>
+
+
+                </div>
+
+
+
+                <div class="audit-table-wrapper">
+
+
+                    <table class="audit-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width:18%;">
+                                    Date & Time
+                                </th>
+
+                                <th style="width:12%;">
+                                    User
+                                </th>
+
+                                <th style="width:21%;">
+                                    Action
+                                </th>
+
+                                <th style="width:19%;">
+                                    Module
+                                </th>
+
+                                <th style="width:30%;">
+                                    Details
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="auditLogsBody">
+
+
+                            <tr>
+
+                                <td>
+                                    Oct 4, 2026 10:15 AM
+                                </td>
+
+                                <td class="audit-user">
+                                    manager01
+                                </td>
+
+                                <td class="audit-action">
+                                    Created Staff Account
+                                </td>
+
+                                <td>
+                                    Staff Management
+                                </td>
+
+                                <td>
+                                    New staff account created
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Oct 4, 2026 10:30 AM
+                                </td>
+
+                                <td class="audit-user">
+                                    admin01
+                                </td>
+
+                                <td class="audit-action">
+                                    Backup Database
+                                </td>
+
+                                <td>
+                                    Backup & Restore
+                                </td>
+
+                                <td>
+                                    Database backup created
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Oct 4, 2026 11:05 AM
+                                </td>
+
+                                <td class="audit-user">
+                                    staff01
+                                </td>
+
+                                <td class="audit-action">
+                                    Updated Member Record
+                                </td>
+
+                                <td>
+                                    Members
+                                </td>
+
+                                <td>
+                                    Member information updated
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Oct 4, 2026 11:20 AM
+                                </td>
+
+                                <td class="audit-user">
+                                    admin01
+                                </td>
+
+                                <td class="audit-action">
+                                    Login
+                                </td>
+
+                                <td>
+                                    System
+                                </td>
+
+                                <td>
+                                    Admin logged in
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Oct 4, 2026 11:45 AM
+                                </td>
+
+                                <td class="audit-user">
+                                    admin01
+                                </td>
+
+                                <td class="audit-action">
+                                    Restored Database
+                                </td>
+
+                                <td>
+                                    Backup & Restore
+                                </td>
+
+                                <td>
+                                    Database restored successfully
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
 
                 </div>
 
@@ -189,72 +949,203 @@
 
 
 
-            <!-- ACTIVE MEMBERS -->
+            <!-- =================================================
+                 LATEST BACKUP
+            ================================================== -->
 
-            <div class="summary-card">
-
-                
+            <div class="admin-panel">
 
 
-                <div class="summary-content">
+                <div class="admin-panel-header">
 
-                    <span>
-                        Active Members
-                    </span>
 
-                    <!-- EXISTING JS ID -->
-                    <strong id="active">
-                        0
-                    </strong>
+                    <div class="admin-panel-title">
 
-                    <small>
-                        Currently active
-                    </small>
+                        <h2>
+                            Latest Backup
+                        </h2>
+
+                        <p>
+                            Most recent database backup information.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="backup_restore.html"
+                        class="panel-link"
+                    >
+
+                        View All →
+
+                    </a>
+
 
                 </div>
 
-            </div>
+
+
+                <div class="backup-content">
+
+
+                    <!-- BACKUP SUMMARY -->
+
+                    <div class="backup-main">
+
+
+                        <div class="backup-icon">
+
+                            <i class="fa-solid fa-database"></i>
+
+                        </div>
+
+
+                        <div class="backup-info">
+
+                            <div class="backup-date">
+
+                                Oct 4, 2026 02:00 AM
+
+                            </div>
+
+
+                            <div class="backup-type">
+
+                                Automatic backup (Scheduled)
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="backup-status">
+
+                            <div class="backup-status-badge">
+
+                                Completed
+
+                            </div>
+
+
+                            <div class="backup-size">
+
+                                Size: 58.4 MB
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
 
 
 
-            <!-- TODAY'S WALK-INS -->
+                    <!-- BACKUP DETAILS -->
 
-            <div class="summary-card">
-
-                
-
-                <div class="summary-content">
-
-                    <span>
-                        Today's Walk-ins
-                    </span>
-
-                    <strong id="walkins">
-                        0
-                    </strong>
-
-                    <small>
-                        Walk-in records today
-                    </small>
-
-                </div>
-
-            </div>
-
-            <!-- DAILY ATTENDANCE -->
-
-            <div class="summary-card">
-
-                
+                    <div class="backup-details">
 
 
-                <div class="summary-content">
+                        <div class="backup-detail-row">
 
-                    <span>
-                        Daily Attendance
-                    </span>
-                    <strong id="attendance">0</strong>
-                    <small id="attendance-change">vs yesterday</small>
+                            <span class="backup-detail-label">
+                                Backup Type
+                            </span>
+
+                            <span class="backup-detail-value">
+                                Automatic (Scheduled)
+                            </span>
+
+                        </div>
+
+
+                        <div class="backup-detail-row">
+
+                            <span class="backup-detail-label">
+                                Database Name
+                            </span>
+
+                            <span class="backup-detail-value">
+                                smart_gym_db
+                            </span>
+
+                        </div>
+
+
+                        <div class="backup-detail-row">
+
+                            <span class="backup-detail-label">
+                                File Size
+                            </span>
+
+                            <span class="backup-detail-value">
+                                58.4 MB
+                            </span>
+
+                        </div>
+
+
+                        <div class="backup-detail-row">
+
+                            <span class="backup-detail-label">
+                                Backup Date & Time
+                            </span>
+
+                            <span class="backup-detail-value">
+                                Oct 4, 2026 02:00 AM
+                            </span>
+
+                        </div>
+
+
+                        <div class="backup-detail-row">
+
+                            <span class="backup-detail-label">
+                                Status
+                            </span>
+
+                            <span class="backup-detail-value">
+                                Completed
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="backup-buttons">
+
+
+                        <a
+                            href="backup_restore.html"
+                            class="backup-btn primary"
+                        >
+
+                            <i class="fa-solid fa-download"></i>
+
+                            Download Latest Backup
+
+                        </a>
+
+
+                        <a
+                            href="backup_restore.html"
+                            class="backup-btn secondary"
+                        >
+
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+
+                            Restore Database
+
+                        </a>
+
+
+                    </div>
+
 
                 </div>
 
@@ -266,101 +1157,76 @@
 
 
         <!-- =================================================
-             QUICK ACTION CARDS
+             QUICK ACTIONS
         ================================================== -->
 
-        <div class="quick-cards">
+        <div class="admin-quick-section">
+
+            <div class="quick-cards">
 
 
-            <!-- REPORTS -->
+                <!-- USER ACCOUNT MAINTENANCE -->
 
-            <div class="quick-card">
+                <div class="quick-card">
 
-            
-                <h3>
-                    Reports
-                </h3>
+                    <h3>
+                        User Account Maintenance
+                    </h3>
 
-                <p>
-                    View system reports<br>
-                    and summaries
-                </p>
+                    <p>
+                        Manage system users
+                    </p>
 
-                <a href="reports.html">
-                    View →
-                </a>
+                    <a href="user_accounts.html">
+                        View →
+                    </a>
+
+                </div>
+
+
+
+                <!-- BACKUP & RESTORE -->
+
+                <div class="quick-card">
+
+                    <h3>
+                        Backup & Restore
+                    </h3>
+
+                    <p>
+                        Create or restore<br>
+                        database backups
+                    </p>
+
+                    <a href="backup_restore.html">
+                        View →
+                    </a>
+
+                </div>
+
+
+
+                <!-- AUDIT LOGS -->
+
+                <div class="quick-card">
+
+                    <h3>
+                        Audit Logs
+                    </h3>
+
+                    <p>
+                        Track system<br>
+                        activities
+                    </p>
+
+                    <a href="audit_logs.html">
+                        View →
+                    </a>
+
+                </div>
+
 
             </div>
-
-
-
-            <!-- MEMBERS -->
-
-            <div class="quick-card">
-
-                
-
-                <h3>
-                    Members
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    member records
-                </p>
-
-                <a href="members.html">
-                    View →
-                </a>
-
-            </div>
-
-
-
-            <!-- WALK-INS -->
-
-            <div class="quick-card">
-
-                
-
-                <h3>
-                    Walk-ins
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    walk-in records
-                </p>
-
-                <a href="walkin.html">
-                    View →
-                </a>
-
-            </div>
-
-
-
-            <!-- STAFF -->
-
-            <div class="quick-card">
-
-                
-
-                <h3>
-                    Staff
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    staff accounts
-                </p>
-
-                <a href="staff_manage.html">
-                    View →
-                </a>
-
-            </div>
-
 
         </div>
 
@@ -377,392 +1243,304 @@
 
 <div
     id="notifPopup"
-    class="notif-popup">
+    class="notif-popup"
+>
 
     <b id="notifTitle">
-        New Message
+        System Notification
     </b>
 
+
     <p id="notifText">
-        You have a new message
+        System activity detected.
     </p>
 
 </div>
 
 
-<audio id="notifSound">
 
-    <source
-        src="notif.mp3"
-        type="audio/mpeg">
-
-</audio>
-
-
+<!-- =====================================================
+     SOCKET.IO
+===================================================== -->
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 
-<!-- =====================================================
-     EXISTING JAVASCRIPT
-     DO NOT CHANGE
-===================================================== -->
 
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com"; 
- 
-// 🔥 GET USER (NEW SYSTEM) 
-const user = JSON.parse(localStorage.getItem("user")); 
- 
-// 🔒 PROTECT ADMIN (FIXED) 
-if (!user || user.role !== "admin") { 
-    window.location.href = "index.html"; 
-} 
- 
-// 🔥 ROLE MENU 
-const menu = document.getElementById("menu"); 
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+// =====================================================
+// GET USER
+// =====================================================
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+// =====================================================
+// ADMIN PROTECTION
+// =====================================================
+
+if (
+    !user ||
+    user.role !== "admin"
+) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+// =====================================================
+// ADMIN MENU
+// =====================================================
+
+const menu =
+    document.getElementById("menu");
 
 
 menu.innerHTML = `
 
-    <a href="admin.html" class="active">
+    <a
+        href="admin.html"
+        class="active"
+    >
+
+        <i class="fa-solid fa-house"></i>
+
         Home
+
+    </a>
+
+
+    <a href="user_accounts.html">
+
+        <i class="fa-solid fa-users"></i>
+
+        User Account Maintenance
+
+    </a>
+
+
+    <a href="backup_restore.html">
+
+        <i class="fa-solid fa-database"></i>
+
+        Backup & Restore
+
+    </a>
+
+
+    <a href="audit_logs.html">
+
+        <i class="fa-solid fa-file-lines"></i>
+
+        Audit Logs
+
     </a>
 
 `;
 
-// ================= DASHBOARD ================= 
-async function loadMessageCount(){ 
- 
-    const res = await fetch( 
-        `${API_URL}/api/admin_messages` 
-    ); 
- 
-    const data = await res.json(); 
- 
-    const unread = 
-        data.filter( 
-            m => m.is_read == 0 
-        ).length; 
- 
-    const badge = 
-        document.getElementById( 
-            "msg-count" 
-        ); 
- 
-    badge.innerText = 
-        unread > 99 
-        ? "99+" 
-        : unread; 
- 
-    badge.style.display = 
-        unread > 0 
-        ? "flex" 
-        : "none"; 
-} 
-function showNotifPopup(title,text){ 
- 
-    const popup = 
-        document.getElementById( 
-            "notifPopup" 
-        ); 
- 
-    if(!popup) return; 
- 
-    document.getElementById( 
-        "notifTitle" 
-    ).innerText = title; 
- 
-    document.getElementById( 
-        "notifText" 
-    ).innerText = text; 
- 
-    popup.classList.add("show"); 
- 
-    setTimeout(() => { 
- 
-        popup.classList.remove( 
-            "show" 
-        ); 
- 
-    },4000); 
-} 
 
-
-// ================= MEMBER SUMMARY =================
-
-async function loadMemberSummary(){
-
-    try{
-
-        const res = await fetch(
-            `${API_URL}/api/members_list`
-        );
-
-        if(!res.ok){
-            throw new Error(
-                `Members API error: ${res.status}`
-            );
-        }
-
-        const members = await res.json();
-
-
-        // =========================
-        // TOTAL MEMBERS
-        // =========================
-
-        const totalMembers =
-            members.length;
-
-
-        // =========================
-        // ACTIVE MEMBERS
-        // =========================
-
-        const activeMembers =
-            members.filter(member =>
-
-                member.membership_status === "ACTIVE" ||
-
-                member.monthly_status === "ACTIVE"
-
-            ).length;
-
-
-        // =========================
-        // DISPLAY
-        // =========================
-
-        document.getElementById(
-            "total"
-        ).innerText = totalMembers;
-
-
-        document.getElementById(
-            "active"
-        ).innerText = activeMembers;
-
-
-        console.log(
-            "TOTAL MEMBERS:",
-            totalMembers
-        );
-
-        console.log(
-            "ACTIVE MEMBERS:",
-            activeMembers
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "MEMBER SUMMARY ERROR:",
-            error
-        );
-
-    }
-
-}
-
-async function loadWalkinSummary(){
-
-    try{
-
-        const res = await fetch(
-            `${API_URL}/api/walkins_summary`
-        );
-
-        if(!res.ok){
-            throw new Error(
-                `Walk-in API error: ${res.status}`
-            );
-        }
-
-        const data = await res.json();
-
-        document.getElementById("walkins").innerText =
-            data.today ?? 0;
-
-        console.log(
-            "TODAY'S WALK-INS:",
-            data.today
-        );
-
-    }catch(error){
-
-        console.error(
-            "WALK-IN SUMMARY ERROR:",
-            error
-        );
-
-    }
-
-}
-
-async function loadAttendanceSummary(){
-
-    try{
-
-        const res = await fetch(
-            `${API_URL}/api/attendance_summary`
-        );
-
-        if(!res.ok){
-            throw new Error(
-                `Attendance API error: ${res.status}`
-            );
-        }
-
-        const data = await res.json();
-
-        document.getElementById(
-            "attendance"
-        ).innerText = data.today;
-
-
-        const change =
-            document.getElementById(
-                "attendance-change"
-            );
-
-        if(data.percentage > 0){
-
-            change.innerText =
-                `▲ ${data.percentage}% vs yesterday`;
-
-        }
-        else if(data.percentage < 0){
-
-            change.innerText =
-                `▼ ${Math.abs(data.percentage)}% vs yesterday`;
-
-        }
-        else{
-
-            change.innerText =
-                `No change vs yesterday`;
-
-        }
-
-
-        console.log(
-            "TODAY:",
-            data.today
-        );
-
-        console.log(
-            "YESTERDAY:",
-            data.yesterday
-        );
-
-        console.log(
-            "CHANGE:",
-            data.percentage + "%"
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "ATTENDANCE SUMMARY ERROR:",
-            error
-        );
-
-    }
-
-}
-
-async function loadDashboard(){ 
-    try { 
-        const res = await fetch(`${API_URL}/api/dashboard`); 
-        const data = await res.json(); 
- 
-        document.getElementById("total").innerText = data.total_attendance || 0; 
-        document.getElementById("active").innerText = data.active_users || 0; 
-        document.getElementById("lockers").innerText = data.active_lockers || 0; 
-    } catch (err) { 
-        console.error("Dashboard error:", err); 
-    } 
-} 
- 
- 
-// ================= SOCKET ================= 
-const socket = io(API_URL); 
- 
-socket.on("attendance_update", loadDashboard); 
-socket.on("locker_update", () => { 
-    loadDashboard(); 
-    loadAlerts(); 
-}); 
-socket.on("new_message", () => { 
- 
-    loadMessageCount(); 
-}); 
- 
-socket.on("priority_alert", () => { 
- 
-    loadMessageCount(); 
-}); 
- 
-// ================= INIT ================= 
-
-loadDashboard().then(() => {
-    loadMemberSummary();
-    loadWalkinSummary();
-    loadAttendanceSummary();
-});
-
-loadMessageCount();
-// ================= ADMIN PROFILE DROPDOWN =================
+// =====================================================
+// PROFILE DROPDOWN
+// =====================================================
 
 function toggleStaffMenu(){
 
     const profile =
-        document.querySelector(".staff-profile");
+        document.querySelector(
+            ".staff-profile"
+        );
+
 
     const dropdown =
-        document.getElementById("staffDropdown");
+        document.getElementById(
+            "staffDropdown"
+        );
 
-    if(!dropdown) return;
 
-    profile.classList.toggle("active");
+    if (!dropdown)
+        return;
 
-    dropdown.classList.toggle("show");
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
 }
 
 
-// CLOSE DROPDOWN WHEN CLICKING OUTSIDE
+// =====================================================
+// CLOSE DROPDOWN
+// =====================================================
 
-window.addEventListener("click", function(e){
+window.addEventListener(
+    "click",
+    function(e){
 
-    if(!e.target.closest(".staff-profile")){
+        if (
+            !e.target.closest(
+                ".staff-profile"
+            )
+        ){
 
-        const profile =
-            document.querySelector(".staff-profile");
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
 
-        const dropdown =
-            document.getElementById("staffDropdown");
 
-        if(profile){
-            profile.classList.remove("active");
-        }
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
 
-        if(dropdown){
-            dropdown.classList.remove("show");
+
+            if (profile){
+
+                profile.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            if (dropdown){
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
         }
 
     }
+);
 
-});
-// ================= LOGOUT ================= 
-function logout(){ 
-    localStorage.clear(); 
-    window.location.href = "index.html"; 
-} 
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+function logout(){
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+// =====================================================
+// SOCKET
+// =====================================================
+
+let socket = null;
+
+
+try {
+
+    socket =
+        io(API_URL);
+
+}
+catch(error){
+
+    console.warn(
+        "Socket connection unavailable."
+    );
+
+}
+
+
+// =====================================================
+// NOTIFICATION
+// =====================================================
+
+function showNotifPopup(
+    title,
+    text
+){
+
+    const popup =
+        document.getElementById(
+            "notifPopup"
+        );
+
+
+    if (!popup)
+        return;
+
+
+    document.getElementById(
+        "notifTitle"
+    ).innerText =
+        title;
+
+
+    document.getElementById(
+        "notifText"
+    ).innerText =
+        text;
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            popup.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+// =====================================================
+// SOCKET EVENTS
+// =====================================================
+
+if (socket){
+
+    socket.on(
+        "priority_alert",
+        () => {
+
+            showNotifPopup(
+                "System Activity",
+                "A new system activity was recorded."
+            );
+
+        }
+    );
+
+}
+
 </script>
 
 
 </body>
+
 </html>
