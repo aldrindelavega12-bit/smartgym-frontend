@@ -170,7 +170,6 @@
             width: 100%;
         }
 
-        /* INCREASED CARD TITLE FONT */
         .backup-option-content h3 {
             margin: 0 0 4px;
             font-size: 16px;
@@ -179,7 +178,6 @@
             color: #20302a;
         }
 
-        /* INCREASED CARD DESCRIPTION FONT */
         .backup-option-content p {
             margin: 0;
             font-size: 10px;
@@ -306,9 +304,14 @@
             background: #eef9f3;
         }
 
+        .latest-action:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
 
         /* =====================================================
-           BACKUP HISTORY
+           HISTORY
         ===================================================== */
 
         .history-card {
@@ -440,6 +443,11 @@
             font-weight: 700;
         }
 
+        .completed-badge.failed {
+            background: #fde8e8;
+            color: #c73535;
+        }
+
         .completed-badge i {
             font-size: 6px;
         }
@@ -465,13 +473,26 @@
             font-size: 9px;
             font-weight: 700;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .table-action:hover {
             background: #eef9f3;
+        }
+
+        .table-action:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty-row {
+            text-align: center !important;
+            padding: 28px !important;
+            color: #8a9691 !important;
         }
 
 
@@ -629,6 +650,31 @@
             line-height: 1.4;
         }
 
+        .restore-selected-backup {
+            display: none;
+            margin-bottom: 10px;
+            padding: 9px 10px;
+            background: #eef9f3;
+            border: 1px solid #cce9d9;
+            border-radius: 8px;
+        }
+
+        .restore-selected-backup.show {
+            display: block;
+        }
+
+        .restore-selected-backup strong {
+            display: block;
+            font-size: 10px;
+            color: #34413d;
+            margin-bottom: 2px;
+        }
+
+        .restore-selected-backup span {
+            font-size: 9px;
+            color: #68756f;
+        }
+
         .modal-footer {
             padding: 11px 17px;
             border-top: 1px solid #edf1ef;
@@ -647,6 +693,38 @@
             font-size: 10px;
             font-weight: 600;
             cursor: pointer;
+        }
+
+        .restore-btn {
+            height: 34px;
+            min-width: 100px;
+            padding: 0 14px;
+            border: none;
+            background: #008f4c;
+            color: #fff;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .restore-btn:hover {
+            background: #007b41;
+        }
+
+        .restore-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading-text {
+            color: #7a8681;
+            font-size: 10px;
         }
 
 
@@ -672,6 +750,10 @@
 
         .toast.show {
             display: block;
+        }
+
+        .toast.error {
+            border-left-color: #c73535;
         }
 
         .toast strong {
@@ -913,7 +995,7 @@
                             </h3>
 
                             <p>
-                                Backup Smart Gym database and data.
+                                Backup Railway database and system data.
                             </p>
 
                         </div>
@@ -945,7 +1027,7 @@
 
                         <button
                             class="backup-option-btn"
-                            onclick="createBackup('Backend', this)"
+                            onclick="showUnavailable('Backend')"
                         >
                             Backup
                         </button>
@@ -970,7 +1052,7 @@
 
                         <button
                             class="backup-option-btn"
-                            onclick="createBackup('Frontend', this)"
+                            onclick="showUnavailable('Frontend')"
                         >
                             Backup
                         </button>
@@ -995,7 +1077,7 @@
 
                         <button
                             class="backup-option-btn"
-                            onclick="createBackup('Full System', this)"
+                            onclick="showUnavailable('Full System')"
                         >
                             Backup
                         </button>
@@ -1009,7 +1091,7 @@
 
 
 
-            <!-- LATEST BACKUP + RESTORE -->
+            <!-- LATEST + RESTORE -->
 
             <div class="backup-top-grid">
 
@@ -1023,7 +1105,7 @@
                         </h2>
 
                         <p>
-                            Most recent system backup information.
+                            Most recent database backup information.
                         </p>
 
                     </div>
@@ -1032,6 +1114,7 @@
                     <div class="latest-backup-body">
 
                         <div class="latest-summary">
+
 
                             <div class="latest-row">
 
@@ -1043,7 +1126,7 @@
                                     class="latest-value"
                                     id="latestDate"
                                 >
-                                    Oct 4, 2026 02:00 AM
+                                    —
                                 </span>
 
                             </div>
@@ -1052,18 +1135,15 @@
                             <div class="latest-row">
 
                                 <span class="latest-label">
-
                                     <i class="fa-solid fa-database"></i>
-
                                     Contents
-
                                 </span>
 
                                 <span
                                     class="latest-value"
                                     id="latestContent"
                                 >
-                                    Full System
+                                    —
                                 </span>
 
                             </div>
@@ -1079,7 +1159,7 @@
                                     class="latest-value"
                                     id="latestSize"
                                 >
-                                    58.4 MB
+                                    —
                                 </span>
 
                             </div>
@@ -1098,7 +1178,7 @@
                                         <i class="fa-solid fa-circle"></i>
 
                                         <span id="latestStatus">
-                                            Completed
+                                            —
                                         </span>
 
                                     </span>
@@ -1107,11 +1187,13 @@
 
                             </div>
 
+
                         </div>
 
 
                         <button
                             class="latest-action"
+                            id="downloadLatestBtn"
                             onclick="downloadLatestBackup()"
                         >
                             Download Latest Backup
@@ -1128,11 +1210,11 @@
                     <div class="backup-card-header">
 
                         <h2>
-                            Restore System
+                            Restore Database
                         </h2>
 
                         <p>
-                            Restore a previous backup.
+                            Restore a previous SQL database backup.
                         </p>
 
                     </div>
@@ -1156,11 +1238,11 @@
                         <div class="latest-row">
 
                             <span class="latest-label">
-                                Backend
+                                Validation
                             </span>
 
                             <span class="latest-value">
-                                .zip
+                                Required
                             </span>
 
                         </div>
@@ -1169,24 +1251,11 @@
                         <div class="latest-row">
 
                             <span class="latest-label">
-                                Frontend
+                                Safety Backup
                             </span>
 
                             <span class="latest-value">
-                                .zip
-                            </span>
-
-                        </div>
-
-
-                        <div class="latest-row">
-
-                            <span class="latest-label">
-                                Full System
-                            </span>
-
-                            <span class="latest-value">
-                                .zip
+                                Automatic
                             </span>
 
                         </div>
@@ -1221,7 +1290,7 @@
                         </h2>
 
                         <p>
-                            List of all database and system backups.
+                            List of all database backups.
                         </p>
 
                     </div>
@@ -1239,12 +1308,12 @@
                                 All Types
                             </option>
 
-                            <option value="Automatic">
-                                Automatic
+                            <option value="manual">
+                                Manual
                             </option>
 
-                            <option value="Manual">
-                                Manual
+                            <option value="automatic">
+                                Automatic
                             </option>
 
                         </select>
@@ -1252,28 +1321,20 @@
 
                         <select
                             class="history-select"
-                            id="contentFilter"
+                            id="statusFilter"
                             onchange="filterBackups()"
                         >
 
                             <option value="all">
-                                All Contents
+                                All Status
                             </option>
 
-                            <option value="Database">
-                                Database
+                            <option value="completed">
+                                Completed
                             </option>
 
-                            <option value="Backend">
-                                Backend
-                            </option>
-
-                            <option value="Frontend">
-                                Frontend
-                            </option>
-
-                            <option value="Full System">
-                                Full System
+                            <option value="failed">
+                                Failed
                             </option>
 
                         </select>
@@ -1281,9 +1342,11 @@
 
                         <button
                             class="refresh-btn"
+                            id="refreshBtn"
                             onclick="loadBackups()"
+                            title="Refresh"
                         >
-                            Refresh
+                            <i class="fa-solid fa-rotate-right"></i>
                         </button>
 
                     </div>
@@ -1300,19 +1363,33 @@
 
                             <tr>
 
-                                <th>#</th>
+                                <th>
+                                    #
+                                </th>
 
-                                <th>Date & Time</th>
+                                <th>
+                                    Date & Time
+                                </th>
 
-                                <th>Type</th>
+                                <th>
+                                    Type
+                                </th>
 
-                                <th>Contents</th>
+                                <th>
+                                    Contents
+                                </th>
 
-                                <th>Size</th>
+                                <th>
+                                    Size
+                                </th>
 
-                                <th>Status</th>
+                                <th>
+                                    Status
+                                </th>
 
-                                <th>Actions</th>
+                                <th>
+                                    Actions
+                                </th>
 
                             </tr>
 
@@ -1321,320 +1398,18 @@
 
                         <tbody id="backupTableBody">
 
+                            <tr>
 
-                            <tr
-                                data-type="Automatic"
-                                data-content="Full System"
-                            >
-
-                                <td class="backup-number">
-                                    1
-                                </td>
-
-                                <td class="backup-date">
-                                    Oct 4, 2026 02:00 AM
-                                </td>
-
-                                <td class="backup-type">
-                                    Automatic
-                                </td>
-
-                                <td>
-                                    Full System
-                                </td>
-
-                                <td>
-                                    58.4 MB
-                                </td>
-
-                                <td>
-
-                                    <span class="completed-badge">
-
-                                        <i class="fa-solid fa-circle"></i>
-
-                                        Completed
-
+                                <td
+                                    colspan="7"
+                                    class="empty-row"
+                                >
+                                    <span class="loading-text">
+                                        Loading backup records...
                                     </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="table-actions">
-
-                                        <button
-                                            class="table-action"
-                                            onclick="downloadBackup(1)"
-                                        >
-                                            Download
-                                        </button>
-
-                                        <button
-                                            class="table-action"
-                                            onclick="openRestoreModal(1)"
-                                        >
-                                            Restore
-                                        </button>
-
-                                    </div>
-
                                 </td>
 
                             </tr>
-
-
-
-                            <tr
-                                data-type="Automatic"
-                                data-content="Database"
-                            >
-
-                                <td class="backup-number">
-                                    2
-                                </td>
-
-                                <td class="backup-date">
-                                    Oct 3, 2026 02:00 AM
-                                </td>
-
-                                <td class="backup-type">
-                                    Automatic
-                                </td>
-
-                                <td>
-                                    Database
-                                </td>
-
-                                <td>
-                                    57.1 MB
-                                </td>
-
-                                <td>
-
-                                    <span class="completed-badge">
-
-                                        <i class="fa-solid fa-circle"></i>
-
-                                        Completed
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="table-actions">
-
-                                        <button
-                                            class="table-action"
-                                            onclick="downloadBackup(2)"
-                                        >
-                                            Download
-                                        </button>
-
-                                        <button
-                                            class="table-action"
-                                            onclick="openRestoreModal(2)"
-                                        >
-                                            Restore
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <tr
-                                data-type="Manual"
-                                data-content="Backend"
-                            >
-
-                                <td class="backup-number">
-                                    3
-                                </td>
-
-                                <td class="backup-date">
-                                    Oct 2, 2026 10:30 AM
-                                </td>
-
-                                <td class="backup-type">
-                                    Manual
-                                </td>
-
-                                <td>
-                                    Backend
-                                </td>
-
-                                <td>
-                                    18.7 MB
-                                </td>
-
-                                <td>
-
-                                    <span class="completed-badge">
-
-                                        <i class="fa-solid fa-circle"></i>
-
-                                        Completed
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="table-actions">
-
-                                        <button
-                                            class="table-action"
-                                            onclick="downloadBackup(3)"
-                                        >
-                                            Download
-                                        </button>
-
-                                        <button
-                                            class="table-action"
-                                            onclick="openRestoreModal(3)"
-                                        >
-                                            Restore
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <tr
-                                data-type="Manual"
-                                data-content="Frontend"
-                            >
-
-                                <td class="backup-number">
-                                    4
-                                </td>
-
-                                <td class="backup-date">
-                                    Oct 1, 2026 09:15 AM
-                                </td>
-
-                                <td class="backup-type">
-                                    Manual
-                                </td>
-
-                                <td>
-                                    Frontend
-                                </td>
-
-                                <td>
-                                    24.3 MB
-                                </td>
-
-                                <td>
-
-                                    <span class="completed-badge">
-
-                                        <i class="fa-solid fa-circle"></i>
-
-                                        Completed
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="table-actions">
-
-                                        <button
-                                            class="table-action"
-                                            onclick="downloadBackup(4)"
-                                        >
-                                            Download
-                                        </button>
-
-                                        <button
-                                            class="table-action"
-                                            onclick="openRestoreModal(4)"
-                                        >
-                                            Restore
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-
-                            <tr
-                                data-type="Automatic"
-                                data-content="Full System"
-                            >
-
-                                <td class="backup-number">
-                                    5
-                                </td>
-
-                                <td class="backup-date">
-                                    Sep 30, 2026 02:00 AM
-                                </td>
-
-                                <td class="backup-type">
-                                    Automatic
-                                </td>
-
-                                <td>
-                                    Full System
-                                </td>
-
-                                <td>
-                                    55.9 MB
-                                </td>
-
-                                <td>
-
-                                    <span class="completed-badge">
-
-                                        <i class="fa-solid fa-circle"></i>
-
-                                        Completed
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="table-actions">
-
-                                        <button
-                                            class="table-action"
-                                            onclick="downloadBackup(5)"
-                                        >
-                                            Download
-                                        </button>
-
-                                        <button
-                                            class="table-action"
-                                            onclick="openRestoreModal(5)"
-                                        >
-                                            Restore
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
 
                         </tbody>
 
@@ -1665,7 +1440,7 @@
         <div class="modal-header">
 
             <h3>
-                Restore System
+                Restore Database
             </h3>
 
             <button
@@ -1681,108 +1456,23 @@
         <div class="modal-body">
 
             <p>
-                Select which part of the Smart Gym system you want to restore.
+                Upload a valid SQL backup file. The system will validate the
+                backup before restoring the Railway database.
             </p>
 
 
-            <div class="restore-options">
+            <div
+                class="restore-selected-backup"
+                id="selectedBackupBox"
+            >
 
+                <strong>
+                    Selected Backup
+                </strong>
 
-                <div class="restore-option">
-
-                    <input
-                        type="radio"
-                        name="restoreType"
-                        id="restoreDatabase"
-                        value="Database"
-                        checked
-                    >
-
-                    <label for="restoreDatabase">
-
-                        <strong>
-                            Database
-                        </strong>
-
-                        <span>
-                            Restore database and system data.
-                        </span>
-
-                    </label>
-
-                </div>
-
-
-                <div class="restore-option">
-
-                    <input
-                        type="radio"
-                        name="restoreType"
-                        id="restoreBackend"
-                        value="Backend"
-                    >
-
-                    <label for="restoreBackend">
-
-                        <strong>
-                            Backend
-                        </strong>
-
-                        <span>
-                            Restore API and backend files.
-                        </span>
-
-                    </label>
-
-                </div>
-
-
-                <div class="restore-option">
-
-                    <input
-                        type="radio"
-                        name="restoreType"
-                        id="restoreFrontend"
-                        value="Frontend"
-                    >
-
-                    <label for="restoreFrontend">
-
-                        <strong>
-                            Frontend
-                        </strong>
-
-                        <span>
-                            Restore website frontend files.
-                        </span>
-
-                    </label>
-
-                </div>
-
-
-                <div class="restore-option">
-
-                    <input
-                        type="radio"
-                        name="restoreType"
-                        id="restoreFull"
-                        value="Full System"
-                    >
-
-                    <label for="restoreFull">
-
-                        <strong>
-                            Full System
-                        </strong>
-
-                        <span>
-                            Restore database, backend and frontend.
-                        </span>
-
-                    </label>
-
-                </div>
+                <span id="selectedBackupName">
+                    —
+                </span>
 
             </div>
 
@@ -1790,18 +1480,18 @@
             <div class="restore-file">
 
                 <div class="restore-file-title">
-                    Select Backup Package
+                    Select SQL Backup
                 </div>
 
                 <div class="restore-file-subtitle">
-                    Database: .sql / .sql.gz &nbsp; | &nbsp;
-                    System files: .zip
+                    Database restore accepts .sql files.
                 </div>
 
                 <input
                     type="file"
                     id="restoreFile"
-                    accept=".sql,.sql.gz,.zip"
+                    accept=".sql"
+                    onchange="handleRestoreFileChange()"
                 >
 
             </div>
@@ -1810,8 +1500,8 @@
             <div class="restore-warning">
 
                 <span>
-                    Restoring a backup may replace existing system data
-                    or files. Create a recent backup before restoring.
+                    Restoring a database will replace existing database data.
+                    A safety backup is created automatically before restore.
                 </span>
 
             </div>
@@ -1829,8 +1519,8 @@
             </button>
 
             <button
-                class="backup-option-btn"
-                style="width:120px;height:34px;margin:0;"
+                class="restore-btn"
+                id="restoreButton"
                 onclick="restoreSystem()"
             >
                 Restore
@@ -1865,13 +1555,17 @@
 
 <script>
 
+/* =====================================================
+   CONFIG
+===================================================== */
+
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-// =====================================================
-// ADMIN AUTH
-// =====================================================
+/* =====================================================
+   ADMIN AUTH
+===================================================== */
 
 const user =
     JSON.parse(
@@ -1882,13 +1576,16 @@ if (
     !user ||
     user.role !== "admin"
 ) {
-    window.location.href = "index.html";
+
+    window.location.href =
+        "index.html";
+
 }
 
 
-// =====================================================
-// PROFILE
-// =====================================================
+/* =====================================================
+   PROFILE
+===================================================== */
 
 function toggleStaffMenu() {
 
@@ -1944,9 +1641,9 @@ document.addEventListener(
 );
 
 
-// =====================================================
-// LOGOUT
-// =====================================================
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 function logout() {
 
@@ -1958,13 +1655,16 @@ function logout() {
 }
 
 
-// =====================================================
-// TOAST
-// =====================================================
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer = null;
 
 function showToast(
     title,
-    message
+    message,
+    type = "success"
 ) {
 
     const toast =
@@ -1972,48 +1672,236 @@ function showToast(
             "toast"
         );
 
-    document.getElementById(
-        "toastTitle"
-    ).textContent =
+    const toastTitle =
+        document.getElementById(
+            "toastTitle"
+        );
+
+    const toastMessage =
+        document.getElementById(
+            "toastMessage"
+        );
+
+    toastTitle.textContent =
         title;
 
-    document.getElementById(
-        "toastMessage"
-    ).textContent =
+    toastMessage.textContent =
         message;
+
+    toast.classList.remove("error");
+
+    if (type === "error") {
+        toast.classList.add("error");
+    }
 
     toast.classList.add("show");
 
-    setTimeout(
-        function() {
+    clearTimeout(toastTimer);
 
-            toast.classList.remove("show");
+    toastTimer =
+        setTimeout(
+            function() {
 
-        },
-        3500
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            4000
+        );
+
+}
+
+
+/* =====================================================
+   API ERROR
+===================================================== */
+
+async function getApiError(response) {
+
+    try {
+
+        const data =
+            await response.json();
+
+        return (
+            data.message ||
+            data.error ||
+            "Request failed."
+        );
+
+    }
+    catch(error) {
+
+        return (
+            `Request failed (${response.status}).`
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   FORMAT SIZE
+===================================================== */
+
+function formatFileSize(bytes) {
+
+    const size =
+        Number(bytes || 0);
+
+    if (size <= 0) {
+        return "0 B";
+    }
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+    let value = size;
+    let index = 0;
+
+    while (
+        value >= 1024 &&
+        index < units.length - 1
+    ) {
+
+        value /= 1024;
+        index++;
+
+    }
+
+    return (
+        value.toFixed(
+            index === 0 ? 0 : 1
+        ) +
+        " " +
+        units[index]
     );
 
 }
 
 
-// =====================================================
-// CREATE BACKUP
-// =====================================================
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(value) {
+
+    if (!value) {
+        return "—";
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+    return date.toLocaleString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NORMALIZE BACKUP
+===================================================== */
+
+function normalizeBackup(backup) {
+
+    return {
+
+        id:
+            backup.id,
+
+        backup_type:
+            String(
+                backup.backup_type ||
+                "database"
+            ).toLowerCase(),
+
+        backup_mode:
+            String(
+                backup.backup_mode ||
+                "manual"
+            ).toLowerCase(),
+
+        file_name:
+            backup.file_name ||
+            "Unknown",
+
+        file_size:
+            Number(
+                backup.file_size || 0
+            ),
+
+        status:
+            String(
+                backup.status ||
+                "unknown"
+            ).toLowerCase(),
+
+        created_at:
+            backup.created_at,
+
+        created_by:
+            backup.created_by ||
+            "admin"
+
+    };
+
+}
+
+
+/* =====================================================
+   CREATE DATABASE BACKUP
+===================================================== */
 
 async function createBackup(
     type,
     button
 ) {
 
+    if (type !== "Database") {
+
+        showUnavailable(type);
+
+        return;
+
+    }
+
+
     const confirmed =
         confirm(
-            `Create ${type} backup?\n\n` +
-            `This will create a backup of the selected system component.`
+            "Create database backup?\n\n" +
+            "This will create a new backup of " +
+            "the Railway database."
         );
 
     if (!confirmed) {
         return;
     }
+
 
     const originalHTML =
         button.innerHTML;
@@ -2026,30 +1914,49 @@ async function createBackup(
 
     try {
 
-        /*
-         * BACKEND ENDPOINT TO CONNECT:
-         *
-         * POST /api/admin/backup
-         *
-         * JSON:
-         *
-         * {
-         *     "backup_type": "Database"
-         * }
-         */
+        const response =
+            await fetch(
+                `${API_URL}/api/admin/backup`,
+                {
+                    method: "POST"
+                }
+            );
 
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    1200
-                )
-        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getApiError(response)
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Backup failed."
+            );
+
+        }
+
 
         showToast(
-            "Backup Started",
-            `${type} backup is being prepared.`
+            "Backup Complete",
+            data.message ||
+            "Database backup created successfully."
         );
+
+
+        await loadBackups();
+
+        await loadLatestBackup();
 
     }
     catch(error) {
@@ -2059,9 +1966,12 @@ async function createBackup(
             error
         );
 
+
         showToast(
             "Backup Failed",
-            `Unable to create ${type} backup.`
+            error.message ||
+            "Unable to create database backup.",
+            "error"
         );
 
     }
@@ -2077,44 +1987,517 @@ async function createBackup(
 }
 
 
-// =====================================================
-// DOWNLOAD LATEST BACKUP
-// =====================================================
+/* =====================================================
+   UNAVAILABLE BACKUP TYPES
+===================================================== */
 
-function downloadLatestBackup() {
+function showUnavailable(type) {
 
     showToast(
-        "Download",
-        "Latest backup download will be connected to the backend."
+        "Not Available Yet",
+        `${type} backup is not connected to the backend yet.`,
+        "error"
     );
 
 }
 
 
-// =====================================================
-// DOWNLOAD BACKUP
-// =====================================================
+/* =====================================================
+   LOAD BACKUPS
+===================================================== */
+
+async function loadBackups() {
+
+    const tbody =
+        document.getElementById(
+            "backupTableBody"
+        );
+
+    const refreshBtn =
+        document.getElementById(
+            "refreshBtn"
+        );
+
+
+    refreshBtn.disabled = true;
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="7"
+                class="empty-row"
+            >
+                <span class="loading-text">
+                    Loading backup records...
+                </span>
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/admin/backups`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getApiError(response)
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load backups."
+            );
+
+        }
+
+
+        const backups =
+            Array.isArray(
+                data.backups
+            )
+                ? data.backups
+                : [];
+
+
+        renderBackupTable(
+            backups
+        );
+
+
+    }
+    catch(error) {
+
+        console.error(
+            "Load backups error:",
+            error
+        );
+
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    class="empty-row"
+                >
+                    Unable to load backup records.
+                </td>
+            </tr>
+        `;
+
+
+        showToast(
+            "Load Failed",
+            error.message ||
+            "Unable to load backup records.",
+            "error"
+        );
+
+    }
+    finally {
+
+        refreshBtn.disabled = false;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER BACKUP TABLE
+===================================================== */
+
+function renderBackupTable(
+    backups
+) {
+
+    const tbody =
+        document.getElementById(
+            "backupTableBody"
+        );
+
+
+    if (!backups.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    class="empty-row"
+                >
+                    No backup records found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        backups
+            .map(
+                function(rawBackup, index) {
+
+                    const backup =
+                        normalizeBackup(
+                            rawBackup
+                        );
+
+
+                    const statusClass =
+                        backup.status ===
+                        "completed"
+                            ? ""
+                            : "failed";
+
+
+                    const statusText =
+                        backup.status
+                            .charAt(0)
+                            .toUpperCase() +
+                        backup.status.slice(1);
+
+
+                    const backupType =
+                        capitalize(
+                            backup.backup_mode
+                        );
+
+
+                    return `
+
+                        <tr
+                            data-type="${escapeHtml(
+                                backup.backup_mode
+                            )}"
+                            data-status="${escapeHtml(
+                                backup.status
+                            )}"
+                        >
+
+                            <td class="backup-number">
+                                ${index + 1}
+                            </td>
+
+                            <td class="backup-date">
+                                ${escapeHtml(
+                                    formatDate(
+                                        backup.created_at
+                                    )
+                                )}
+                            </td>
+
+                            <td class="backup-type">
+                                ${escapeHtml(
+                                    backupType
+                                )}
+                            </td>
+
+                            <td>
+                                Database
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatFileSize(
+                                        backup.file_size
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="completed-badge ${statusClass}"
+                                >
+
+                                    <i class="fa-solid fa-circle"></i>
+
+                                    ${escapeHtml(
+                                        statusText
+                                    )}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <button
+                                        class="table-action"
+                                        onclick="downloadBackup(${Number(
+                                            backup.id
+                                        )})"
+                                    >
+                                        Download
+                                    </button>
+
+                                    <button
+                                        class="table-action"
+                                        onclick="openRestoreModal(${Number(
+                                            backup.id
+                                        )})"
+                                        ${
+                                            backup.status !==
+                                            "completed"
+                                                ? "disabled"
+                                                : ""
+                                        }
+                                    >
+                                        Restore
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    filterBackups();
+
+}
+
+
+/* =====================================================
+   LOAD LATEST BACKUP
+===================================================== */
+
+async function loadLatestBackup() {
+
+    const dateElement =
+        document.getElementById(
+            "latestDate"
+        );
+
+    const contentElement =
+        document.getElementById(
+            "latestContent"
+        );
+
+    const sizeElement =
+        document.getElementById(
+            "latestSize"
+        );
+
+    const statusElement =
+        document.getElementById(
+            "latestStatus"
+        );
+
+    const downloadButton =
+        document.getElementById(
+            "downloadLatestBtn"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/admin/backups/latest`
+            );
+
+
+        if (!response.ok) {
+
+            if (response.status === 404) {
+
+                dateElement.textContent =
+                    "No backup";
+
+                contentElement.textContent =
+                    "—";
+
+                sizeElement.textContent =
+                    "—";
+
+                statusElement.textContent =
+                    "None";
+
+                downloadButton.disabled =
+                    true;
+
+                return;
+
+            }
+
+
+            throw new Error(
+                await getApiError(response)
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load latest backup."
+            );
+
+        }
+
+
+        const backup =
+            normalizeBackup(
+                data.backup
+            );
+
+
+        window.latestBackupId =
+            backup.id;
+
+
+        dateElement.textContent =
+            formatDate(
+                backup.created_at
+            );
+
+
+        contentElement.textContent =
+            "Database";
+
+
+        sizeElement.textContent =
+            formatFileSize(
+                backup.file_size
+            );
+
+
+        statusElement.textContent =
+            capitalize(
+                backup.status
+            );
+
+
+        downloadButton.disabled =
+            backup.status !==
+            "completed";
+
+    }
+    catch(error) {
+
+        console.error(
+            "Latest backup error:",
+            error
+        );
+
+
+        dateElement.textContent =
+            "Unavailable";
+
+        contentElement.textContent =
+            "—";
+
+        sizeElement.textContent =
+            "—";
+
+        statusElement.textContent =
+            "Error";
+
+        downloadButton.disabled =
+            true;
+
+    }
+
+}
+
+
+/* =====================================================
+   DOWNLOAD LATEST BACKUP
+===================================================== */
+
+function downloadLatestBackup() {
+
+    if (
+        !window.latestBackupId
+    ) {
+
+        showToast(
+            "No Backup",
+            "There is no completed backup available.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    downloadBackup(
+        window.latestBackupId
+    );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD BACKUP
+===================================================== */
 
 function downloadBackup(
     backupId
 ) {
 
-    console.log(
-        "Downloading backup:",
-        backupId
-    );
+    if (!backupId) {
 
-    showToast(
-        "Download",
-        "Backup download will be connected to the backend."
+        showToast(
+            "Download Failed",
+            "Invalid backup ID.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const url =
+        `${API_URL}/api/admin/backups/${backupId}/download`;
+
+
+    window.open(
+        url,
+        "_blank"
     );
 
 }
 
 
-// =====================================================
-// RESTORE MODAL
-// =====================================================
+/* =====================================================
+   RESTORE MODAL
+===================================================== */
 
 let selectedBackupId = null;
 
@@ -2126,11 +2509,51 @@ function openRestoreModal(
     selectedBackupId =
         backupId;
 
-    document
-        .getElementById(
+
+    const modal =
+        document.getElementById(
             "restoreModal"
-        )
-        .classList.add("show");
+        );
+
+
+    const selectedBox =
+        document.getElementById(
+            "selectedBackupBox"
+        );
+
+
+    const selectedName =
+        document.getElementById(
+            "selectedBackupName"
+        );
+
+
+    if (backupId) {
+
+        selectedBox.classList.add(
+            "show"
+        );
+
+
+        selectedName.textContent =
+            `Backup #${backupId}`;
+
+    }
+    else {
+
+        selectedBox.classList.remove(
+            "show"
+        );
+
+        selectedName.textContent =
+            "—";
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
 
 }
 
@@ -2141,7 +2564,10 @@ function closeRestoreModal() {
         .getElementById(
             "restoreModal"
         )
-        .classList.remove("show");
+        .classList.remove(
+            "show"
+        );
+
 
     document
         .getElementById(
@@ -2149,15 +2575,128 @@ function closeRestoreModal() {
         )
         .value = "";
 
+
+    document
+        .getElementById(
+            "selectedBackupBox"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
     selectedBackupId =
         null;
 
 }
 
 
-// =====================================================
-// RESTORE
-// =====================================================
+/* =====================================================
+   RESTORE FILE CHANGE
+===================================================== */
+
+function handleRestoreFileChange() {
+
+    const fileInput =
+        document.getElementById(
+            "restoreFile"
+        );
+
+
+    const file =
+        fileInput.files &&
+        fileInput.files.length
+            ? fileInput.files[0]
+            : null;
+
+
+    if (!file) {
+        return;
+    }
+
+
+    const name =
+        file.name.toLowerCase();
+
+
+    if (
+        !name.endsWith(".sql")
+    ) {
+
+        showToast(
+            "Invalid File",
+            "Please select an SQL (.sql) backup file.",
+            "error"
+        );
+
+
+        fileInput.value = "";
+
+        return;
+
+    }
+
+}
+
+
+/* =====================================================
+   VALIDATE RESTORE
+===================================================== */
+
+async function validateRestore(
+    file
+) {
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    const response =
+        await fetch(
+            `${API_URL}/api/admin/restore/validate`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            await getApiError(response)
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (!data.success) {
+
+        throw new Error(
+            data.message ||
+            "Backup validation failed."
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =====================================================
+   RESTORE DATABASE
+===================================================== */
 
 async function restoreSystem() {
 
@@ -2166,6 +2705,13 @@ async function restoreSystem() {
             "restoreFile"
         );
 
+
+    const restoreButton =
+        document.getElementById(
+            "restoreButton"
+        );
+
+
     if (
         !fileInput.files ||
         !fileInput.files.length
@@ -2173,62 +2719,29 @@ async function restoreSystem() {
 
         showToast(
             "Backup Required",
-            "Please select a backup file."
+            "Please select an SQL backup file.",
+            "error"
         );
 
         return;
 
     }
+
 
     const file =
         fileInput.files[0];
 
-    const selected =
-        document.querySelector(
-            'input[name="restoreType"]:checked'
-        );
-
-    if (!selected) {
-
-        showToast(
-            "Restore Type Required",
-            "Please select what you want to restore."
-        );
-
-        return;
-
-    }
-
-    const restoreType =
-        selected.value;
-
 
     if (
-        restoreType === "Database" &&
-        !(
-            file.name.endsWith(".sql") ||
-            file.name.endsWith(".sql.gz")
-        )
+        !file.name
+            .toLowerCase()
+            .endsWith(".sql")
     ) {
 
         showToast(
             "Invalid File",
-            "Database restore requires an SQL backup."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        restoreType !== "Database" &&
-        !file.name.endsWith(".zip")
-    ) {
-
-        showToast(
-            "Invalid File",
-            "Backend, frontend and full-system restore require a ZIP file."
+            "Database restore requires an SQL (.sql) file.",
+            "error"
         );
 
         return;
@@ -2238,40 +2751,186 @@ async function restoreSystem() {
 
     const confirmed =
         confirm(
-            `Restore the ${restoreType}?\n\n` +
-            `Existing system data or files may be replaced.\n\n` +
-            `Are you sure you want to continue?`
+            "WARNING: Database Restore\n\n" +
+            "The current Railway database will be replaced " +
+            "with the selected backup.\n\n" +
+            "A safety backup will be created automatically " +
+            "before the restore.\n\n" +
+            "Continue?"
         );
+
 
     if (!confirmed) {
         return;
     }
 
 
-    /*
-     * FUTURE BACKEND:
-     *
-     * POST /api/admin/restore
-     *
-     * FormData:
-     * backup_file
-     * restore_type
-     */
+    restoreButton.disabled =
+        true;
+
+    restoreButton.innerHTML =
+        "Validating...";
 
 
-    closeRestoreModal();
+    try {
 
-    showToast(
-        "Restore Requested",
-        `${restoreType} restore is ready for backend processing.`
-    );
+        /* ---------------------------------------------
+           STEP 1 — VALIDATE
+        --------------------------------------------- */
+
+        const validation =
+            await validateRestore(
+                file
+            );
+
+
+        const backupInfo =
+            validation.backup ||
+            {};
+
+
+        const tableCount =
+            backupInfo.tables_detected ||
+            0;
+
+
+        const insertCount =
+            backupInfo.insert_statements_detected ||
+            0;
+
+
+        const validationConfirmed =
+            confirm(
+                "Backup validation successful.\n\n" +
+                `Tables detected: ${tableCount}\n` +
+                `Insert statements: ${insertCount}\n\n` +
+                "Proceed with database restore?"
+            );
+
+
+        if (!validationConfirmed) {
+
+            restoreButton.disabled =
+                false;
+
+            restoreButton.innerHTML =
+                "Restore";
+
+            return;
+
+        }
+
+
+        /* ---------------------------------------------
+           STEP 2 — RESTORE
+        --------------------------------------------- */
+
+        restoreButton.innerHTML =
+            "Restoring...";
+
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "file",
+            file
+        );
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/admin/restore`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                await getApiError(response)
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Database restore failed."
+            );
+
+        }
+
+
+        closeRestoreModal();
+
+
+        showToast(
+            "Restore Complete",
+            data.message ||
+            "Database restored successfully."
+        );
+
+
+        /*
+         * Give Railway a moment to finish
+         * releasing connections before refreshing.
+         */
+
+        setTimeout(
+            async function() {
+
+                await loadBackups();
+
+                await loadLatestBackup();
+
+            },
+            1500
+        );
+
+    }
+    catch(error) {
+
+        console.error(
+            "Restore error:",
+            error
+        );
+
+
+        showToast(
+            "Restore Failed",
+            error.message ||
+            "Database restore failed.",
+            "error"
+        );
+
+    }
+    finally {
+
+        restoreButton.disabled =
+            false;
+
+        restoreButton.innerHTML =
+            "Restore";
+
+    }
 
 }
 
 
-// =====================================================
-// FILTER
-// =====================================================
+/* =====================================================
+   FILTER
+===================================================== */
 
 function filterBackups() {
 
@@ -2280,10 +2939,12 @@ function filterBackups() {
             "typeFilter"
         ).value;
 
-    const content =
+
+    const status =
         document.getElementById(
-            "contentFilter"
+            "statusFilter"
         ).value;
+
 
     const search =
         document.getElementById(
@@ -2291,6 +2952,7 @@ function filterBackups() {
         ).value
         .trim()
         .toLowerCase();
+
 
     const rows =
         document.querySelectorAll(
@@ -2302,30 +2964,40 @@ function filterBackups() {
         function(row) {
 
             const rowType =
-                row.dataset.type;
+                row.dataset.type ||
+                "";
 
-            const rowContent =
-                row.dataset.content;
+
+            const rowStatus =
+                row.dataset.status ||
+                "";
+
 
             const rowText =
                 row.textContent
                     .toLowerCase();
 
+
             const typeMatch =
                 type === "all" ||
                 rowType === type;
 
-            const contentMatch =
-                content === "all" ||
-                rowContent === content;
+
+            const statusMatch =
+                status === "all" ||
+                rowStatus === status;
+
 
             const searchMatch =
                 !search ||
-                rowText.includes(search);
+                rowText.includes(
+                    search
+                );
+
 
             row.style.display =
                 typeMatch &&
-                contentMatch &&
+                statusMatch &&
                 searchMatch
                     ? ""
                     : "none";
@@ -2336,9 +3008,9 @@ function filterBackups() {
 }
 
 
-// =====================================================
-// SEARCH
-// =====================================================
+/* =====================================================
+   SEARCH
+===================================================== */
 
 document
     .getElementById(
@@ -2350,23 +3022,9 @@ document
     );
 
 
-// =====================================================
-// REFRESH
-// =====================================================
-
-function loadBackups() {
-
-    showToast(
-        "Refreshed",
-        "Backup records refreshed."
-    );
-
-}
-
-
-// =====================================================
-// MODAL CLICK
-// =====================================================
+/* =====================================================
+   MODAL CLICK
+===================================================== */
 
 document
     .getElementById(
@@ -2387,7 +3045,94 @@ document
         }
     );
 
+
+/* =====================================================
+   ESCAPE KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeRestoreModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   CAPITALIZE
+===================================================== */
+
+function capitalize(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    return (
+        value.charAt(0).toUpperCase() +
+        value.slice(1)
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+        await Promise.all([
+            loadBackups(),
+            loadLatestBackup()
+        ]);
+
+    }
+);
+
 </script>
+
 
 </body>
 
