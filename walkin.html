@@ -41,10 +41,6 @@
 
     <div class="brand">
 
-        <div class="brand-icon">
-            <i class="fa-solid fa-dumbbell"></i>
-        </div>
-
         <div class="brand-text">
 
             <strong>
@@ -68,29 +64,6 @@
 
     </div>
 
-
-    <!-- MOTIVATIONAL CARD -->
-
-    <div class="sidebar-message">
-
-         <div class="sidebar-message-icon">
-
-            <i class="fa-solid fa-dumbbell"></i>
-
-        </div>
-
-        <h3>
-            Lead the Change
-        </h3>
-
-        <p>
-            Better management<br>
-            builds a stronger gym.
-        </p>
-
-        <div class="message-line"></div>
-
-    </div>
 
 </div>
 
@@ -118,17 +91,17 @@
                     onclick="toggleStaffMenu()">
 
                     <div class="staff-avatar">
-                        A
+                        M
                     </div>
 
                     <div class="staff-info">
 
                         <strong>
-                            Admin
+                            Manager
                         </strong>
 
                         <small>
-                            Administrator
+                            Gym Manager
                         </small>
 
                     </div>
@@ -375,7 +348,7 @@ const user =
 
 if(
     !user ||
-    user.role !== "admin"
+    user.role !== "manager"
 ){
 
     window.location.href =
@@ -394,36 +367,16 @@ const menu =
 
 menu.innerHTML = `
 
-    <a href="admin.html">
+    <a href="manager.html">
 
-        <i class="fa-solid fa-house"></i>
 
         Home
 
     </a>
 
 
-    <a href="admin_messages.html"
-       class="msg-link">
-
-        <i class="fa-regular fa-envelope"></i>
-
-        Messages
-
-        <span
-            id="msg-count"
-            class="msg-count">
-
-            0
-
-        </span>
-
-    </a>
-
-
     <a href="reports.html">
 
-        <i class="fa-solid fa-chart-column"></i>
 
         Reports
 
@@ -432,7 +385,7 @@ menu.innerHTML = `
 
     <a href="members.html">
 
-        <i class="fa-solid fa-users"></i>
+
 
         Members
 
@@ -442,7 +395,6 @@ menu.innerHTML = `
     <a href="walkin.html"
        class="active">
 
-        <i class="fa-solid fa-person-walking"></i>
 
         Walk-ins
 
@@ -451,7 +403,6 @@ menu.innerHTML = `
 
     <a href="staff_manage.html">
 
-        <i class="fa-regular fa-user"></i>
 
         Staff
 

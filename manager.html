@@ -2,12 +2,12 @@
 <html>
 <head>
 
-    <title>Admin Dashboard</title>
+    <title>Manager Dashboard</title>
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
+   <link rel="stylesheet"
           href="css/admin-dashboard.css">
 
     <link rel="stylesheet"
@@ -23,10 +23,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet">
 
+
+
+
 </head>
 
+
 <body>
+
 <span id="lockers" style="display:none;">0</span>
+
 
 <!-- =====================================================
      SIDEBAR
@@ -34,17 +40,7 @@
 
 <div class="navbar">
 
-
-    <!-- BRAND -->
-
     <div class="brand">
-
-        <div class="brand-icon">
-
-            <i class="fa-solid fa-dumbbell"></i>
-
-        </div>
-
 
         <div class="brand-text">
 
@@ -71,26 +67,6 @@
 
     <!-- MOTIVATIONAL CARD -->
 
-    <div class="sidebar-message">
-
-        <div class="sidebar-message-icon">
-
-            <i class="fa-solid fa-dumbbell"></i>
-
-        </div>
-
-        <h3>
-            Lead the Change
-        </h3>
-
-        <p>
-            Better management<br>
-            builds a stronger gym.
-        </p>
-
-        <div class="message-line"></div>
-
-    </div>
 
 
 </div>
@@ -115,20 +91,20 @@
             <div class="top-right">
 
                 <div class="staff-profile"
-                    onclick="toggleStaffMenu()">
+                     onclick="toggleStaffMenu()">
 
                     <div class="staff-avatar">
-                        A
+                        M
                     </div>
 
                     <div class="staff-info">
 
                         <strong>
-                            Admin
+                            Manager
                         </strong>
 
                         <small>
-                            Administrator
+                            Gym Manager
                         </small>
 
                     </div>
@@ -136,10 +112,10 @@
                     <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
 
 
-                    <!-- ADMIN DROPDOWN -->
+                    <!-- MANAGER DROPDOWN -->
 
                     <div id="staffDropdown"
-                        class="staff-profile-dropdown">
+                         class="staff-profile-dropdown">
 
                         <button
                             onclick="logout(); event.stopPropagation();"
@@ -159,6 +135,7 @@
 
         </div>
 
+
         <!-- =================================================
              HERO
         ================================================== -->
@@ -168,13 +145,13 @@
             <div class="hero-content">
 
                 <h1>
-                    ADMIN DASHBOARD
+                    MANAGER DASHBOARD
                 </h1>
 
                 <p>
-                    Manage members, records, and gym operations
+                    Manage members, monitor gym operations
                     <br>
-                    for a stronger tomorrow.
+                    and oversee gym activities.
                 </p>
 
             </div>
@@ -194,20 +171,12 @@
 
             <div class="summary-card">
 
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-user-group"></i>
-
-                </div>
-
-
                 <div class="summary-content">
 
                     <span>
                         Total Members
                     </span>
 
-                    <!-- EXISTING JS ID -->
                     <strong id="total">
                         0
                     </strong>
@@ -226,20 +195,12 @@
 
             <div class="summary-card">
 
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-user"></i>
-
-                </div>
-
-
                 <div class="summary-content">
 
                     <span>
                         Active Members
                     </span>
 
-                    <!-- EXISTING JS ID -->
                     <strong id="active">
                         0
                     </strong>
@@ -257,10 +218,6 @@
             <!-- TODAY'S WALK-INS -->
 
             <div class="summary-card">
-
-                <div class="summary-icon">
-                    <i class="fa-solid fa-person-walking"></i>
-                </div>
 
                 <div class="summary-content">
 
@@ -280,24 +237,25 @@
 
             </div>
 
+
+
             <!-- DAILY ATTENDANCE -->
 
             <div class="summary-card">
-
-                <div class="summary-icon">
-
-                    <i class="fa-solid fa-calendar-check"></i>
-
-                </div>
-
 
                 <div class="summary-content">
 
                     <span>
                         Daily Attendance
                     </span>
-                    <strong id="attendance">0</strong>
-                    <small id="attendance-change">vs yesterday</small>
+
+                    <strong id="attendance">
+                        0
+                    </strong>
+
+                    <small id="attendance-change">
+                        vs yesterday
+                    </small>
 
                 </div>
 
@@ -309,55 +267,22 @@
 
 
         <!-- =================================================
-             QUICK ACTION CARDS
+             MANAGER QUICK ACTION CARDS
         ================================================== -->
 
         <div class="quick-cards">
-
-
-            <!-- MESSAGES -->
-
-            <div class="quick-card">
-
-                <div class="quick-card-icon">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                </div>
-
-                <h3>
-                    Messages
-                </h3>
-
-                <p>
-                    View important<br>
-                    updates
-                </p>
-
-                <a href="admin_messages.html">
-                    View →
-                </a>
-
-            </div>
-
 
 
             <!-- REPORTS -->
 
             <div class="quick-card">
 
-                <div class="quick-card-icon">
-
-                    <i class="fa-solid fa-chart-column"></i>
-
-                </div>
-
                 <h3>
                     Reports
                 </h3>
 
                 <p>
-                    View system reports<br>
+                    View income reports<br>
                     and summaries
                 </p>
 
@@ -372,12 +297,6 @@
             <!-- MEMBERS -->
 
             <div class="quick-card">
-
-                <div class="quick-card-icon">
-
-                    <i class="fa-solid fa-user-group"></i>
-
-                </div>
 
                 <h3>
                     Members
@@ -400,12 +319,6 @@
 
             <div class="quick-card">
 
-                <div class="quick-card-icon">
-
-                    <i class="fa-solid fa-person-walking"></i>
-
-                </div>
-
                 <h3>
                     Walk-ins
                 </h3>
@@ -427,12 +340,6 @@
 
             <div class="quick-card">
 
-                <div class="quick-card-icon">
-
-                    <i class="fa-solid fa-user"></i>
-
-                </div>
-
                 <h3>
                     Staff
                 </h3>
@@ -449,6 +356,27 @@
             </div>
 
 
+
+            <!-- ARCHIVE -->
+
+            <div class="quick-card">
+
+                <h3>
+                    Archive
+                </h3>
+
+                <p>
+                    View archived<br>
+                    records
+                </p>
+
+                <a href="archive.html">
+                    View →
+                </a>
+
+            </div>
+
+
         </div>
 
 
@@ -458,200 +386,127 @@
 
 
 
-<!-- =====================================================
-     NOTIFICATION POPUP
-===================================================== -->
-
-<div
-    id="notifPopup"
-    class="notif-popup">
-
-    <b id="notifTitle">
-        New Message
-    </b>
-
-    <p id="notifText">
-        You have a new message
-    </p>
-
-</div>
-
-
-<audio id="notifSound">
-
-    <source
-        src="notif.mp3"
-        type="audio/mpeg">
-
-</audio>
-
-
-
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 
 <!-- =====================================================
-     EXISTING JAVASCRIPT
-     DO NOT CHANGE
+     MANAGER JAVASCRIPT
 ===================================================== -->
 
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com"; 
- 
-// 🔥 GET USER (NEW SYSTEM) 
-const user = JSON.parse(localStorage.getItem("user")); 
- 
-// 🔒 PROTECT ADMIN (FIXED) 
-if (!user || user.role !== "manager") { 
-    window.location.href = "index.html"; 
-} 
- 
-// 🔥 ROLE MENU 
-const menu = document.getElementById("menu"); 
+
+const API_URL =
+    "https://smartgym-api-ia2e.onrender.com";
+
+
+// =====================================================
+// GET USER
+// =====================================================
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+
+// =====================================================
+// PROTECT MANAGER PAGE
+// =====================================================
+
+if (
+    !user ||
+    user.role !== "manager"
+) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+// =====================================================
+// MANAGER MENU
+// =====================================================
+
+const menu =
+    document.getElementById("menu");
 
 
 menu.innerHTML = `
 
-    <a href="manager.html" class="active">
-        <i class="fa-solid fa-house"></i>
+    <a href="manager.html"
+       class="active">
+
         Home
-    </a>
-
-    <a href="admin_messages.html" class="msg-link">
-
-        <i class="fa-regular fa-envelope"></i>
-
-        Messages
-
-        <span id="msg-count"
-              class="msg-count">
-            0
-        </span>
 
     </a>
+
 
     <a href="reports.html">
-
-        <i class="fa-solid fa-chart-column"></i>
 
         Reports
 
     </a>
 
-    <a href="members.html">
 
-        <i class="fa-solid fa-users"></i>
+    <a href="members.html">
 
         Members
 
     </a>
 
-    <a href="walkin.html">
 
-        <i class="fa-solid fa-person-walking"></i>
+    <a href="walkin.html">
 
         Walk-ins
 
     </a>
 
-    <a href="staff_manage.html">
 
-        <i class="fa-regular fa-user"></i>
+    <a href="staff_manage.html">
 
         Staff
 
     </a>
 
+
+    <a href="archive.html">
+
+        Archive
+
+    </a>
+
 `;
 
-// ================= DASHBOARD ================= 
-async function loadMessageCount(){ 
- 
-    const res = await fetch( 
-        `${API_URL}/api/admin_messages` 
-    ); 
- 
-    const data = await res.json(); 
- 
-    const unread = 
-        data.filter( 
-            m => m.is_read == 0 
-        ).length; 
- 
-    const badge = 
-        document.getElementById( 
-            "msg-count" 
-        ); 
- 
-    badge.innerText = 
-        unread > 99 
-        ? "99+" 
-        : unread; 
- 
-    badge.style.display = 
-        unread > 0 
-        ? "flex" 
-        : "none"; 
-} 
-function showNotifPopup(title,text){ 
- 
-    const popup = 
-        document.getElementById( 
-            "notifPopup" 
-        ); 
- 
-    if(!popup) return; 
- 
-    document.getElementById( 
-        "notifTitle" 
-    ).innerText = title; 
- 
-    document.getElementById( 
-        "notifText" 
-    ).innerText = text; 
- 
-    popup.classList.add("show"); 
- 
-    setTimeout(() => { 
- 
-        popup.classList.remove( 
-            "show" 
-        ); 
- 
-    },4000); 
-} 
 
+// =====================================================
+// MEMBER SUMMARY
+// =====================================================
 
-// ================= MEMBER SUMMARY =================
+async function loadMemberSummary() {
 
-async function loadMemberSummary(){
+    try {
 
-    try{
+        const res =
+            await fetch(
+                `${API_URL}/api/members_list`
+            );
 
-        const res = await fetch(
-            `${API_URL}/api/members_list`
-        );
+        if (!res.ok) {
 
-        if(!res.ok){
             throw new Error(
                 `Members API error: ${res.status}`
             );
+
         }
 
-        const members = await res.json();
+        const members =
+            await res.json();
 
-
-        // =========================
-        // TOTAL MEMBERS
-        // =========================
 
         const totalMembers =
             members.length;
 
-
-        // =========================
-        // ACTIVE MEMBERS
-        // =========================
 
         const activeMembers =
             members.filter(member =>
@@ -663,18 +518,16 @@ async function loadMemberSummary(){
             ).length;
 
 
-        // =========================
-        // DISPLAY
-        // =========================
-
         document.getElementById(
             "total"
-        ).innerText = totalMembers;
+        ).innerText =
+            totalMembers;
 
 
         document.getElementById(
             "active"
-        ).innerText = activeMembers;
+        ).innerText =
+            activeMembers;
 
 
         console.log(
@@ -682,13 +535,16 @@ async function loadMemberSummary(){
             totalMembers
         );
 
+
         console.log(
             "ACTIVE MEMBERS:",
             activeMembers
         );
 
 
-    }catch(error){
+    }
+
+    catch (error) {
 
         console.error(
             "MEMBER SUMMARY ERROR:",
@@ -699,31 +555,49 @@ async function loadMemberSummary(){
 
 }
 
-async function loadWalkinSummary(){
 
-    try{
 
-        const res = await fetch(
-            `${API_URL}/api/walkins_summary`
-        );
+// =====================================================
+// WALK-IN SUMMARY
+// =====================================================
 
-        if(!res.ok){
+async function loadWalkinSummary() {
+
+    try {
+
+        const res =
+            await fetch(
+                `${API_URL}/api/walkins_summary`
+            );
+
+
+        if (!res.ok) {
+
             throw new Error(
                 `Walk-in API error: ${res.status}`
             );
+
         }
 
-        const data = await res.json();
 
-        document.getElementById("walkins").innerText =
+        const data =
+            await res.json();
+
+
+        document.getElementById(
+            "walkins"
+        ).innerText =
             data.today ?? 0;
+
 
         console.log(
             "TODAY'S WALK-INS:",
             data.today
         );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
         console.error(
             "WALK-IN SUMMARY ERROR:",
@@ -734,25 +608,39 @@ async function loadWalkinSummary(){
 
 }
 
-async function loadAttendanceSummary(){
 
-    try{
 
-        const res = await fetch(
-            `${API_URL}/api/attendance_summary`
-        );
+// =====================================================
+// ATTENDANCE SUMMARY
+// =====================================================
 
-        if(!res.ok){
+async function loadAttendanceSummary() {
+
+    try {
+
+        const res =
+            await fetch(
+                `${API_URL}/api/attendance_summary`
+            );
+
+
+        if (!res.ok) {
+
             throw new Error(
                 `Attendance API error: ${res.status}`
             );
+
         }
 
-        const data = await res.json();
+
+        const data =
+            await res.json();
+
 
         document.getElementById(
             "attendance"
-        ).innerText = data.today;
+        ).innerText =
+            data.today;
 
 
         const change =
@@ -760,22 +648,25 @@ async function loadAttendanceSummary(){
                 "attendance-change"
             );
 
-        if(data.percentage > 0){
+
+        if (data.percentage > 0) {
 
             change.innerText =
                 `▲ ${data.percentage}% vs yesterday`;
 
         }
-        else if(data.percentage < 0){
+
+        else if (data.percentage < 0) {
 
             change.innerText =
                 `▼ ${Math.abs(data.percentage)}% vs yesterday`;
 
         }
-        else{
+
+        else {
 
             change.innerText =
-                `No change vs yesterday`;
+                "No change vs yesterday";
 
         }
 
@@ -785,10 +676,12 @@ async function loadAttendanceSummary(){
             data.today
         );
 
+
         console.log(
             "YESTERDAY:",
             data.yesterday
         );
+
 
         console.log(
             "CHANGE:",
@@ -796,7 +689,8 @@ async function loadAttendanceSummary(){
         );
 
     }
-    catch(error){
+
+    catch (error) {
 
         console.error(
             "ATTENDANCE SUMMARY ERROR:",
@@ -807,93 +701,198 @@ async function loadAttendanceSummary(){
 
 }
 
-async function loadDashboard(){ 
-    try { 
-        const res = await fetch(`${API_URL}/api/dashboard`); 
-        const data = await res.json(); 
- 
-        document.getElementById("total").innerText = data.total_attendance || 0; 
-        document.getElementById("active").innerText = data.active_users || 0; 
-        document.getElementById("lockers").innerText = data.active_lockers || 0; 
-    } catch (err) { 
-        console.error("Dashboard error:", err); 
-    } 
-} 
- 
- 
-// ================= SOCKET ================= 
-const socket = io(API_URL); 
- 
-socket.on("attendance_update", loadDashboard); 
-socket.on("locker_update", () => { 
-    loadDashboard(); 
-    loadAlerts(); 
-}); 
-socket.on("new_message", () => { 
- 
-    loadMessageCount(); 
-}); 
- 
-socket.on("priority_alert", () => { 
- 
-    loadMessageCount(); 
-}); 
- 
-// ================= INIT ================= 
-
-loadDashboard().then(() => {
-    loadMemberSummary();
-    loadWalkinSummary();
-    loadAttendanceSummary();
-});
-
-loadMessageCount();
-// ================= ADMIN PROFILE DROPDOWN =================
-
-function toggleStaffMenu(){
-
-    const profile =
-        document.querySelector(".staff-profile");
-
-    const dropdown =
-        document.getElementById("staffDropdown");
-
-    if(!dropdown) return;
-
-    profile.classList.toggle("active");
-
-    dropdown.classList.toggle("show");
-}
 
 
-// CLOSE DROPDOWN WHEN CLICKING OUTSIDE
+// =====================================================
+// DASHBOARD
+// =====================================================
 
-window.addEventListener("click", function(e){
+async function loadDashboard() {
 
-    if(!e.target.closest(".staff-profile")){
+    try {
 
-        const profile =
-            document.querySelector(".staff-profile");
+        const res =
+            await fetch(
+                `${API_URL}/api/dashboard`
+            );
 
-        const dropdown =
-            document.getElementById("staffDropdown");
 
-        if(profile){
-            profile.classList.remove("active");
-        }
+        const data =
+            await res.json();
 
-        if(dropdown){
-            dropdown.classList.remove("show");
-        }
+
+        document.getElementById(
+            "total"
+        ).innerText =
+            data.total_attendance || 0;
+
+
+        document.getElementById(
+            "active"
+        ).innerText =
+            data.active_users || 0;
+
+
+        document.getElementById(
+            "lockers"
+        ).innerText =
+            data.active_lockers || 0;
+
 
     }
 
+    catch (err) {
+
+        console.error(
+            "Dashboard error:",
+            err
+        );
+
+    }
+
+}
+
+
+
+// =====================================================
+// SOCKET
+// =====================================================
+
+const socket =
+    io(API_URL);
+
+
+socket.on(
+    "attendance_update",
+    loadDashboard
+);
+
+
+socket.on(
+    "locker_update",
+    () => {
+
+        loadDashboard();
+
+    }
+);
+
+
+
+// =====================================================
+// INIT
+// =====================================================
+
+loadDashboard().then(() => {
+
+    loadMemberSummary();
+
+    loadWalkinSummary();
+
+    loadAttendanceSummary();
+
 });
-// ================= LOGOUT ================= 
-function logout(){ 
-    localStorage.clear(); 
-    window.location.href = "index.html"; 
-} 
+
+
+
+// =====================================================
+// PROFILE DROPDOWN
+// =====================================================
+
+function toggleStaffMenu() {
+
+    const profile =
+        document.querySelector(
+            ".staff-profile"
+        );
+
+
+    const dropdown =
+        document.getElementById(
+            "staffDropdown"
+        );
+
+
+    if (!dropdown)
+        return;
+
+
+    profile.classList.toggle(
+        "active"
+    );
+
+
+    dropdown.classList.toggle(
+        "show"
+    );
+
+}
+
+
+
+// =====================================================
+// CLOSE DROPDOWN
+// =====================================================
+
+window.addEventListener(
+    "click",
+    function(e) {
+
+        if (
+            !e.target.closest(
+                ".staff-profile"
+            )
+        ) {
+
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
+
+
+            if (profile) {
+
+                profile.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            if (dropdown) {
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+function logout() {
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
 </script>
 
 

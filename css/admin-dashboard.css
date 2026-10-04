@@ -3306,3 +3306,40 @@ body {
     border-color: #08b56a !important;
     box-shadow: 0 0 0 3px rgba(8, 181, 106, 0.10) !important;
 }
+
+/* =========================================
+   MANAGER QUICK CARDS - COMPACT
+========================================= */
+
+.quick-cards {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+    margin-top: 16px !important;
+    margin-bottom: 0 !important;
+}
+
+.quick-card {
+    height: 135px !important;
+    min-height: 135px !important;
+    padding: 20px 22px !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.quick-card h3 {
+    margin: 0 0 7px 0 !important;
+    font-size: 18px !important;
+}
+
+.quick-card p {
+    margin: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.35 !important;
+}
+
+.quick-card a {
+    margin-top: auto !important;
+    font-size: 15px !important;
+}
