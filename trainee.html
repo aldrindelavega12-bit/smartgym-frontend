@@ -2002,6 +2002,9 @@ function showTraineeModalMessage(
 /* =====================================================
    SAVE TRAINEE PROGRAM
 ===================================================== */
+/* =====================================================
+   SAVE TRAINEE PROGRAM
+===================================================== */
 
 async function saveTraineeProgram(){
 
@@ -2174,7 +2177,7 @@ async function saveTraineeProgram(){
     try{
 
         /* =================================================
-           SEND TO API
+           1. SAVE PROGRAM
         ================================================= */
 
         const response =
@@ -2200,7 +2203,7 @@ async function saveTraineeProgram(){
 
 
         /* =================================================
-           READ RESPONSE
+           READ PROGRAM RESPONSE
         ================================================= */
 
         const data =
@@ -2208,7 +2211,7 @@ async function saveTraineeProgram(){
 
 
         /* =================================================
-           API ERROR
+           PROGRAM API ERROR
         ================================================= */
 
         if(!response.ok){
@@ -2225,7 +2228,7 @@ async function saveTraineeProgram(){
 
 
         /* =================================================
-           SUCCESS
+           PROGRAM SAVE SUCCESS
         ================================================= */
 
         console.log(
@@ -2234,12 +2237,86 @@ async function saveTraineeProgram(){
         );
 
 
-        /*
-            Update the currently selected trainee
-            immediately so the table can reflect
-            the new program without waiting for
-            another API response.
-        */
+        /* =================================================
+           2. GENERATE WORKOUT SCHEDULE
+        ================================================= */
+
+        if(saveButton){
+
+            saveButton.innerText =
+                "Generating Schedule...";
+        }
+
+
+        const scheduleResponse =
+            await fetch(
+                `${API_URL}/api/trainer/trainee/program/schedule`,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            assignment_id:
+                                assignmentId,
+
+                            trainer_id:
+                                trainerId,
+
+                            member_id:
+                                memberId
+
+                        })
+                }
+            );
+
+
+        /* =================================================
+           READ SCHEDULE RESPONSE
+        ================================================= */
+
+        const scheduleData =
+            await scheduleResponse.json();
+
+
+        /* =================================================
+           SCHEDULE API ERROR
+        ================================================= */
+
+        if(!scheduleResponse.ok){
+
+            throw new Error(
+
+                scheduleData.message ||
+
+                `Schedule generation failed: HTTP ${scheduleResponse.status}`
+
+            );
+
+        }
+
+
+        /* =================================================
+           SCHEDULE GENERATION SUCCESS
+        ================================================= */
+
+        console.log(
+            "SCHEDULE GENERATION SUCCESS:",
+            scheduleData
+        );
+
+
+        /* =================================================
+           UPDATE SELECTED TRAINEE
+        ================================================= */
 
         selectedTrainee.program_id =
             payload.program_id;
@@ -2252,18 +2329,18 @@ async function saveTraineeProgram(){
 
 
         selectedTrainee.program_name =
-            data.trainee &&
-            data.trainee.program_name
-                ? data.trainee.program_name
+            data.program &&
+            data.program.program_name
+                ? data.program.program_name
                 : programSelect.options[
                     programSelect.selectedIndex
                   ].textContent;
 
 
         selectedTrainee.program_plan_name =
-            data.trainee &&
-            data.trainee.program_plan_name
-                ? data.trainee.program_plan_name
+            data.program_plan &&
+            data.program_plan.plan_name
+                ? data.program_plan.plan_name
                 : planSelect.options[
                     planSelect.selectedIndex
                   ].textContent;
@@ -2288,11 +2365,11 @@ async function saveTraineeProgram(){
         ================================================= */
 
         alert(
-            "Program saved successfully."
+            "Program saved and workout schedule generated successfully."
         );
 
-
     }
+
 
     catch(error){
 
@@ -2312,6 +2389,7 @@ async function saveTraineeProgram(){
 
     }
 
+
     finally{
 
         /* =============================================
@@ -2330,6 +2408,7 @@ async function saveTraineeProgram(){
     }
 
 }
+
 
 
 /* =====================================================
