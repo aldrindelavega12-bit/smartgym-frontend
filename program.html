@@ -1285,6 +1285,94 @@
     </div>
 
 </div>
+
+<!-- =========================================================
+     CONTINUE CURRENT PROGRAM MODAL
+========================================================= -->
+
+<div
+    id="continueCurrentProgramModal"
+    class="continue-current-program-modal"
+>
+
+    <div class="continue-current-program-content">
+
+        <div class="continue-current-program-header">
+
+            <div>
+
+                <h2>
+                    Continue Current Program?
+                </h2>
+
+                <p>
+                    Do you want to continue with your current program and split?
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="continue-current-program-close"
+                onclick="closeContinueCurrentProgram()"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        <div class="current-program-preview">
+
+            <div class="current-program-preview-label">
+                Current Program
+            </div>
+
+            <div
+                id="continueCurrentProgramName"
+                class="current-program-preview-name"
+            >
+                Build Muscle
+            </div>
+
+
+            <div class="current-program-preview-label">
+                Current Plan / Split
+            </div>
+
+            <div
+                id="continueCurrentProgramPlan"
+                class="current-program-preview-plan"
+            >
+                PPL
+            </div>
+
+        </div>
+
+
+        <div class="continue-current-program-actions">
+
+            <button
+                type="button"
+                class="continue-current-program-no"
+                onclick="chooseNewProgram()"
+            >
+                No, Choose New
+            </button>
+
+            <button
+                type="button"
+                class="continue-current-program-yes"
+                onclick="continueCurrentProgram()"
+            >
+                Yes, Continue
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
