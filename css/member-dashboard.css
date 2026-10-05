@@ -8019,3 +8019,590 @@ textarea {
 
     color: #ffffff;
 }
+
+/* =========================================================
+   GET TRAINER SELECTION MODAL
+========================================================= */
+
+.get-trainer-selection-modal {
+
+    position: fixed !important;
+
+    inset: 0 !important;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    z-index: 1000002 !important;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+
+}
+
+
+.get-trainer-selection-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+.get-trainer-selection-content {
+
+    width: 560px;
+
+    max-width: 92%;
+
+    max-height: 88vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.20);
+
+}
+
+
+.get-trainer-selection-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+}
+
+
+.get-trainer-selection-header h2 {
+
+    margin: 0 0 7px;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    color: #26312b;
+
+}
+
+
+.get-trainer-selection-header p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #68736d;
+
+}
+
+
+.get-trainer-selection-close {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #68736d;
+
+    font-size: 27px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   CURRENT PROGRAM
+========================================================= */
+
+.get-trainer-current-program {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 22px;
+
+    padding: 16px;
+
+    background: #f5f7f6;
+
+    border: 1px solid #e1e6e3;
+
+    border-radius: 12px;
+
+}
+
+
+.get-trainer-current-program span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 11px;
+
+    color: #68736d;
+
+}
+
+
+.get-trainer-current-program strong {
+
+    display: block;
+
+    font-size: 15px;
+
+    color: #087c3d;
+
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.get-trainer-section-title {
+
+    margin-top: 22px;
+
+}
+
+
+.get-trainer-section-title h3 {
+
+    margin: 0 0 4px;
+
+    font-size: 15px;
+
+    color: #26312b;
+
+}
+
+
+.get-trainer-section-title p {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    color: #68736d;
+
+}
+
+
+/* =========================================================
+   TRAINER LIST
+========================================================= */
+
+.get-trainer-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    margin-top: 12px;
+
+}
+
+
+.get-trainer-option {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px 16px;
+
+    border: 1px solid #dce3df;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+
+}
+
+
+.get-trainer-option:hover {
+
+    border-color: #087c3d;
+
+    background: #f7fbf8;
+
+}
+
+
+.get-trainer-option.selected {
+
+    border-color: #087c3d;
+
+    background: #eef8f2;
+
+    box-shadow:
+        0 0 0 1px #087c3d;
+
+}
+
+
+.get-trainer-option-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.get-trainer-option-info strong {
+
+    font-size: 14px;
+
+    color: #26312b;
+
+}
+
+
+.get-trainer-option-info span {
+
+    font-size: 11px;
+
+    color: #68736d;
+
+}
+
+
+.get-trainer-option-arrow {
+
+    font-size: 18px;
+
+    color: #087c3d;
+
+}
+
+
+/* =========================================================
+   RATE SECTION
+========================================================= */
+
+.get-trainer-rate-section {
+
+    margin-top: 6px;
+
+}
+
+
+.get-trainer-rate-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
+
+    margin-top: 12px;
+
+}
+
+
+.get-trainer-rate-option {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    min-height: 90px;
+
+    padding: 14px;
+
+    border: 1px solid #dce3df;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
+
+}
+
+
+.get-trainer-rate-option:hover {
+
+    border-color: #087c3d;
+
+    background: #f7fbf8;
+
+}
+
+
+.get-trainer-rate-option.selected {
+
+    border-color: #087c3d;
+
+    background: #eef8f2;
+
+    box-shadow:
+        0 0 0 1px #087c3d;
+
+}
+
+
+.get-trainer-rate-option div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.get-trainer-rate-option strong {
+
+    font-size: 13px;
+
+    color: #26312b;
+
+}
+
+
+.get-trainer-rate-option span {
+
+    font-size: 10px;
+
+    color: #68736d;
+
+}
+
+
+.get-trainer-rate-option b {
+
+    font-size: 15px;
+
+    color: #087c3d;
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.get-trainer-preview {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border-radius: 11px;
+
+    background: #f5f7f6;
+
+    border: 1px solid #e1e6e3;
+
+}
+
+
+.get-trainer-preview span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 11px;
+
+    color: #68736d;
+
+}
+
+
+.get-trainer-preview strong {
+
+    display: block;
+
+    font-size: 13px;
+
+    color: #26312b;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.get-trainer-selection-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 24px;
+
+}
+
+
+.get-trainer-cancel-button,
+.get-trainer-request-button {
+
+    min-width: 125px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    padding: 11px 18px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.get-trainer-cancel-button {
+
+    background: #eef1ef;
+
+    color: #46524b;
+
+}
+
+
+.get-trainer-request-button {
+
+    background: #087c3d;
+
+    color: #ffffff;
+
+}
+
+
+.get-trainer-request-button:disabled {
+
+    background: #cfd6d2;
+
+    color: #7b8580;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.get-trainer-loading {
+
+    padding: 18px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    color: #68736d;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px){
+
+    .get-trainer-current-program {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .get-trainer-rate-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .get-trainer-preview {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
