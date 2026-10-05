@@ -2781,7 +2781,70 @@
             .replace(/'/g, "&#039;");
 
     }
+    /* =====================================================
+    CLEAR TRAINER SETUP
+    ===================================================== */
 
+    function clearTrainerSetup() {
+
+        const container =
+            document.getElementById(
+                "trainerPrograms"
+            );
+
+        const error =
+            document.getElementById(
+                "trainerProgramError"
+            );
+
+        if (container) {
+
+            container.innerHTML = `
+                <div style="
+                    grid-column:1/-1;
+                    font-size:9px;
+                    color:#87938f;
+                ">
+                    Select Trainer to load programs.
+                </div>
+            `;
+
+        }
+
+        if (error) {
+            error.textContent = "";
+        }
+
+
+        const priceDay =
+            document.getElementById(
+                "trainerPriceDay"
+            );
+
+        const priceWeek =
+            document.getElementById(
+                "trainerPriceWeek"
+            );
+
+        const priceMonth =
+            document.getElementById(
+                "trainerPriceMonth"
+            );
+
+
+        if (priceDay) {
+            priceDay.value = "";
+        }
+
+        if (priceWeek) {
+            priceWeek.value = "";
+        }
+
+        if (priceMonth) {
+            priceMonth.value = "";
+        }
+
+    }
 
     /* =====================================================
        CREATE ACCOUNT MODAL
