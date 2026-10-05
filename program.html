@@ -70,6 +70,44 @@
     color: #087c3d !important;
 }
 
+
+
+/* =========================
+   PROGRAM ACTIONS - 2 CARDS
+   ========================= */
+
+.program-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.program-action.change-program,
+.program-action.get-trainer {
+    color: #087c3d !important;
+    border-color: #cfe9d9 !important;
+    background: #f3fbf6 !important;
+}
+
+.program-action.change-program strong,
+.program-action.get-trainer strong {
+    color: #087c3d !important;
+}
+
+.program-action.change-program span,
+.program-action.get-trainer span {
+    color: #5f7467 !important;
+}
+
+.program-action.change-program .action-arrow,
+.program-action.get-trainer .action-arrow {
+    color: #087c3d !important;
+}
+
+@media (max-width: 900px) {
+    .program-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
 </style>
 
 <body>
@@ -368,78 +406,6 @@
             <div class="program-actions">
 
 
-                <!-- RENEW TRAINING -->
-
-                <button
-                    type="button"
-                    class="program-action renew"
-                    onclick="renewTraining()">
-
-
-                    <div class="action-content">
-
-
-                        <strong>
-                            Renew Trainer Fee
-                        </strong>
-
-
-                        <span>
-                            Extend your current training period
-                            with the same program and trainer.
-                        </span>
-
-
-                    </div>
-
-
-                    <span class="action-arrow">
-
-                        <i class="fa-solid fa-chevron-right"></i>
-
-                    </span>
-
-
-                </button>
-
-
-
-                <!-- CHANGE TRAINER -->
-
-                <button
-                    type="button"
-                    class="program-action change-trainer"
-                    onclick="changeTrainer()">
-
-
-                    <div class="action-content">
-
-
-                        <strong>
-                            Change Trainer
-                        </strong>
-
-
-                        <span>
-                            Keep your current program and split,
-                            but select a different trainer.
-                        </span>
-
-
-                    </div>
-
-
-                    <span class="action-arrow">
-
-                        <i class="fa-solid fa-chevron-right"></i>
-
-                    </span>
-
-
-                </button>
-
-
-
                 <!-- CHANGE PROGRAM -->
 
                 <button
@@ -466,9 +432,40 @@
 
 
                     <span class="action-arrow">
+                        →
+                    </span>
 
-                        <i class="fa-solid fa-chevron-right"></i>
 
+                </button>
+
+
+
+                <!-- GET TRAINER -->
+
+                <button
+                    type="button"
+                    class="program-action get-trainer">
+
+
+                    <div class="action-content">
+
+
+                        <strong>
+                            Get Trainer
+                        </strong>
+
+
+                        <span>
+                            Choose a trainer for your current
+                            program and split.
+                        </span>
+
+
+                    </div>
+
+
+                    <span class="action-arrow">
+                        →
                     </span>
 
 
