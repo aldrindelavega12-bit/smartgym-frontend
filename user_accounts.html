@@ -1801,433 +1801,810 @@
     <!-- =====================================================
          JAVASCRIPT
     ===================================================== -->
+<script>
 
-    <script>
+    /* =====================================================
+       API
+    ===================================================== */
 
-        /* =====================================================
-           API
-        ===================================================== */
-
-        const API_URL =
-            "https://smartgym-api-ia2e.onrender.com";
-
-
-        /* =====================================================
-           USER DATA
-           TEMPORARY FRONTEND DATA
-           REPLACE WITH API LATER
-        ===================================================== */
-
-        const users = {
-
-            1: {
-                name: "Juan Dela Cruz",
-                username: "juan123",
-                role: "Staff",
-                modules: [
-                    "dashboard",
-                    "members",
-                    "attendance",
-                    "trainer"
-                ]
-            },
-
-            2: {
-                name: "Maria Santos",
-                username: "maria_s",
-                role: "Staff",
-                modules: [
-                    "dashboard",
-                    "members",
-                    "attendance"
-                ]
-            },
-
-            3: {
-                name: "Pedro Reyes",
-                username: "pedro_r",
-                role: "Staff",
-                modules: [
-                    "dashboard",
-                    "members"
-                ]
-            },
-
-            4: {
-                name: "Luis Mendoza",
-                username: "luis_m",
-                role: "Staff",
-                modules: [
-                    "dashboard",
-                    "members",
-                    "attendance",
-                    "locker"
-                ]
-            },
-
-            5: {
-                name: "Carla Garcia",
-                username: "carla_g",
-                role: "Manager",
-                modules: [
-                    "dashboard",
-                    "members",
-                    "attendance",
-                    "locker",
-                    "payments",
-                    "reports",
-                    "trainer",
-                    "client_request"
-                ]
-            },
-
-            6: {
-                name: "Ramon Torres",
-                username: "ramon_t",
-                role: "Staff",
-                modules: [
-                    "dashboard"
-                ]
-            },
-
-            7: {
-                name: "Admin User",
-                username: "admin",
-                role: "Admin",
-                modules: [
-                    "dashboard",
-                    "members",
-                    "attendance",
-                    "locker",
-                    "payments",
-                    "reports",
-                    "enrollment",
-                    "messages",
-                    "trainer",
-                    "client_request",
-                    "archive",
-                    "system_settings"
-                ]
-            },
-
-            8: {
-                name: "Manager User",
-                username: "manager1",
-                role: "Manager",
-                modules: [
-                    "dashboard",
-                    "members",
-                    "attendance",
-                    "reports"
-                ]
-            }
-
-        };
+    const API_URL =
+        "https://smartgym-api-ia2e.onrender.com";
 
 
-        /* =====================================================
-           MODAL
-        ===================================================== */
+    /* =====================================================
+       USER DATA
+    ===================================================== */
 
-        const userModal =
-            document.getElementById("userModal");
+    let users = {};
 
-        let selectedUserId = null;
+    let selectedUserId = null;
 
+    let allUsers = [];
 
-        /* =====================================================
-           OPEN USER MODAL
-        ===================================================== */
-
-        function openUserModal(userId) {
-
-            const user = users[userId];
-
-            if (!user) {
-                return;
-            }
-
-            selectedUserId = userId;
-
-            document.getElementById(
-                "modalName"
-            ).textContent = user.name;
-
-            document.getElementById(
-                "modalUsername"
-            ).textContent = user.username;
-
-            document.getElementById(
-                "modalRole"
-            ).textContent = user.role;
+    let filteredUsers = [];
 
 
-            const checkboxes =
-                document.querySelectorAll(
-                    ".module-option input"
+    /* =====================================================
+       DOM
+    ===================================================== */
+
+    const userModal =
+        document.getElementById("userModal");
+
+    const userTableBody =
+        document.getElementById("userTableBody");
+
+    const userSearch =
+        document.getElementById("userSearch");
+
+    const roleFilter =
+        document.getElementById("roleFilter");
+
+    const usersShowing =
+        document.getElementById("usersShowing");
+
+
+    /* =====================================================
+       LOAD USER ACCOUNTS
+    ===================================================== */
+
+    async function loadUsers() {
+
+        try {
+
+            userTableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="users-empty">
+                        Loading user accounts...
+                    </td>
+                </tr>
+            `;
+
+
+            const response = await fetch(
+                `${API_URL}/api/user_accounts`
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
                 );
 
+            }
 
-            checkboxes.forEach(
-                checkbox => {
 
-                    checkbox.checked =
-                        user.modules.includes(
-                            checkbox.value
-                        );
+            const result = await response.json();
 
-                    updateModuleOption(
-                        checkbox
-                    );
 
-                }
+            if (result.status !== "success") {
+
+                throw new Error(
+                    result.message ||
+                    "Failed to load user accounts."
+                );
+
+            }
+
+
+            allUsers = result.data || [];
+
+
+            /*
+             * Convert API users into our frontend structure.
+             *
+             * IMPORTANT:
+             * Password is intentionally NOT stored or used.
+             */
+
+            users = {};
+
+
+            allUsers.forEach(user => {
+
+                users[user.id] = {
+
+                    id: user.id,
+
+                    user_id: user.user_id,
+
+                    name:
+                        user.fullname ||
+                        "Unnamed User",
+
+                    username:
+                        user.username ||
+                        "-",
+
+                    role:
+                        user.role ||
+                        "-",
+
+                    created_at:
+                        user.created_at ||
+                        null,
+
+                    /*
+                     * Temporary only.
+                     *
+                     * Module access will later come
+                     * from the backend.
+                     */
+
+                    modules: []
+
+                };
+
+            });
+
+
+            filteredUsers = [...allUsers];
+
+
+            renderUsers();
+
+
+        } catch (error) {
+
+            console.error(
+                "USER ACCOUNT ERROR:",
+                error
             );
 
 
-            userModal.classList.add("show");
+            userTableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="users-empty">
+                        Failed to load user accounts.
+                    </td>
+                </tr>
+            `;
 
-            document.body.style.overflow =
-                "hidden";
+
+            if (usersShowing) {
+
+                usersShowing.textContent =
+                    "Unable to load users";
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RENDER USERS
+    ===================================================== */
+
+    function renderUsers() {
+
+        userTableBody.innerHTML = "";
+
+
+        if (filteredUsers.length === 0) {
+
+            userTableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="users-empty">
+                        No user accounts found.
+                    </td>
+                </tr>
+            `;
+
+
+            usersShowing.textContent =
+                "Showing 0 users";
+
+
+            return;
+
         }
 
 
-        /* =====================================================
-           CLOSE MODAL
-        ===================================================== */
+        filteredUsers.forEach(
+            (user, index) => {
 
-        function closeUserModal() {
-
-            userModal.classList.remove("show");
-
-            document.body.style.overflow =
-                "";
-
-            selectedUserId = null;
-        }
+                const frontendUser =
+                    users[user.id];
 
 
-        /* =====================================================
-           CLOSE WHEN CLICKING OUTSIDE
-        ===================================================== */
+                const row =
+                    document.createElement("tr");
 
-        userModal.addEventListener(
-            "click",
-            function(event) {
 
-                if (
-                    event.target ===
-                    userModal
-                ) {
-                    closeUserModal();
-                }
+                row.dataset.name =
+                    (
+                        user.fullname ||
+                        ""
+                    ).toLowerCase();
+
+
+                row.dataset.username =
+                    (
+                        user.username ||
+                        ""
+                    ).toLowerCase();
+
+
+                row.dataset.role =
+                    normalizeRole(
+                        user.role
+                    );
+
+
+                row.innerHTML = `
+
+                    <td class="user-number">
+                        ${index + 1}
+                    </td>
+
+
+                    <td class="user-name">
+                        ${escapeHtml(
+                            user.fullname ||
+                            "Unnamed User"
+                        )}
+                    </td>
+
+
+                    <td class="user-username">
+                        ${escapeHtml(
+                            user.username ||
+                            "-"
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        ${createRoleBadge(
+                            user.role
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${createStatusBadge(
+                            user
+                        )}
+
+                    </td>
+
+
+                    <td>
+                        -
+                    </td>
+
+
+                    <td>
+                        ${formatDate(
+                            user.created_at
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            class="view-user-btn"
+                            onclick="openUserModal(${user.id})"
+                        >
+                            View
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                userTableBody.appendChild(
+                    row
+                );
 
             }
         );
 
 
-        /* =====================================================
-           ESC
-        ===================================================== */
+        usersShowing.textContent =
+            `Showing 1 to ${filteredUsers.length} of ${allUsers.length} users`;
 
-        document.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (
-                    event.key ===
-                    "Escape"
-                ) {
-                    closeUserModal();
-                }
-
-            }
-        );
+    }
 
 
-        /* =====================================================
-           MODULE STYLE
-        ===================================================== */
+    /* =====================================================
+       ROLE NORMALIZATION
+    ===================================================== */
 
-        document
-            .querySelectorAll(
-                ".module-option input"
-            )
-            .forEach(
-                checkbox => {
+    function normalizeRole(role) {
 
-                    checkbox.addEventListener(
-                        "change",
-                        function() {
-
-                            updateModuleOption(
-                                this
-                            );
-
-                        }
-                    );
-
-                }
-            );
+        if (!role) {
+            return "";
+        }
 
 
-        function updateModuleOption(
-            checkbox
+        return String(role)
+            .trim()
+            .toLowerCase();
+
+    }
+
+
+    /* =====================================================
+       ROLE BADGE
+    ===================================================== */
+
+    function createRoleBadge(role) {
+
+        const normalized =
+            normalizeRole(role);
+
+
+        let className =
+            "role-badge";
+
+
+        if (normalized === "staff") {
+
+            className +=
+                " role-staff";
+
+        }
+
+        else if (
+            normalized === "manager"
         ) {
 
-            const option =
-                checkbox.closest(
-                    ".module-option"
-                );
+            className +=
+                " role-manager";
 
-            if (!option) {
-                return;
-            }
+        }
 
-            if (checkbox.checked) {
+        else if (
+            normalized === "admin"
+        ) {
 
-                option.classList.add(
-                    "selected"
-                );
-
-            } else {
-
-                option.classList.remove(
-                    "selected"
-                );
-
-            }
+            className +=
+                " role-admin";
 
         }
 
 
-        /* =====================================================
-           SAVE ACCESS
-        ===================================================== */
+        return `
 
-        async function saveUserAccess() {
+            <span class="${className}">
+                ${escapeHtml(
+                    role || "-"
+                )}
+            </span>
 
-            if (!selectedUserId) {
-                return;
+        `;
+
+    }
+
+
+    /* =====================================================
+       STATUS
+       
+       The current API response does NOT provide
+       an account status field.
+
+       Therefore we do NOT invent Active/Inactive data.
+
+       For now we display "Available".
+    ===================================================== */
+
+    function createStatusBadge(user) {
+
+        return `
+
+            <span class="status-badge active">
+
+                <span class="status-dot"></span>
+
+                Available
+
+            </span>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       DATE FORMAT
+    ===================================================== */
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+            return "-";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (isNaN(date.getTime())) {
+
+            return escapeHtml(
+                String(dateValue)
+            );
+
+        }
+
+
+        return date.toLocaleString(
+            "en-US",
+            {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       HTML ESCAPE
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+        if (value === null ||
+            value === undefined) {
+
+            return "";
+
+        }
+
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       OPEN USER MODAL
+    ===================================================== */
+
+    function openUserModal(userId) {
+
+        const user =
+            users[userId];
+
+
+        if (!user) {
+
+            console.error(
+                "User not found:",
+                userId
+            );
+
+            return;
+
+        }
+
+
+        selectedUserId =
+            userId;
+
+
+        document.getElementById(
+            "modalName"
+        ).textContent =
+            user.name ||
+            "Unnamed User";
+
+
+        document.getElementById(
+            "modalUsername"
+        ).textContent =
+            user.username ||
+            "-";
+
+
+        document.getElementById(
+            "modalRole"
+        ).textContent =
+            user.role ||
+            "-";
+
+
+        /*
+         * TEMPORARY MODULE ACCESS
+         *
+         * Currently modules are empty because
+         * we have not yet connected the module
+         * access backend.
+         */
+
+        const checkboxes =
+            document.querySelectorAll(
+                ".module-option input"
+            );
+
+
+        checkboxes.forEach(
+            checkbox => {
+
+                checkbox.checked =
+                    user.modules.includes(
+                        checkbox.value
+                    );
+
+
+                updateModuleOption(
+                    checkbox
+                );
+
+            }
+        );
+
+
+        userModal.classList.add(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "hidden";
+
+    }
+
+
+    /* =====================================================
+       CLOSE USER MODAL
+    ===================================================== */
+
+    function closeUserModal() {
+
+        userModal.classList.remove(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "";
+
+
+        selectedUserId =
+            null;
+
+    }
+
+
+    /* =====================================================
+       CLOSE WHEN CLICKING OUTSIDE
+    ===================================================== */
+
+    userModal.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                userModal
+            ) {
+
+                closeUserModal();
+
             }
 
+        }
+    );
 
-            const selectedModules = [];
+
+    /* =====================================================
+       ESC KEY
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeUserModal();
+
+            }
+
+        }
+    );
 
 
-            document
-                .querySelectorAll(
-                    ".module-option input:checked"
-                )
-                .forEach(
-                    checkbox => {
+    /* =====================================================
+       MODULE CHECKBOX STYLE
+    ===================================================== */
 
-                        selectedModules.push(
-                            checkbox.value
+    document
+        .querySelectorAll(
+            ".module-option input"
+        )
+        .forEach(
+            checkbox => {
+
+                checkbox.addEventListener(
+                    "change",
+                    function() {
+
+                        updateModuleOption(
+                            this
                         );
 
                     }
                 );
 
-
-            /*
-             * TEMPORARY FRONTEND STORAGE
-             *
-             * Replace this with your actual
-             * backend endpoint.
-             *
-             * Example:
-             *
-             * await fetch(
-             *     `${API_URL}/api/admin/users/${selectedUserId}/modules`,
-             *     {
-             *         method: "PUT",
-             *         headers: {
-             *             "Content-Type": "application/json"
-             *         },
-             *         body: JSON.stringify({
-             *             modules: selectedModules
-             *         })
-             *     }
-             * );
-             */
+            }
+        );
 
 
-            users[selectedUserId].modules =
-                selectedModules;
+    function updateModuleOption(
+        checkbox
+    ) {
+
+        const option =
+            checkbox.closest(
+                ".module-option"
+            );
 
 
-            closeUserModal();
+        if (!option) {
+            return;
+        }
 
 
-            showUsersToast(
-                "Access Updated",
-                "Module access has been successfully updated."
+        if (checkbox.checked) {
+
+            option.classList.add(
+                "selected"
             );
 
         }
 
+        else {
 
-        /* =====================================================
-           SEARCH + FILTER
-        ===================================================== */
-
-        const userSearch =
-            document.getElementById(
-                "userSearch"
+            option.classList.remove(
+                "selected"
             );
 
-        const roleFilter =
-            document.getElementById(
-                "roleFilter"
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE MODULE ACCESS
+       
+       TEMPORARY ONLY.
+       
+       This does NOT save to database yet.
+       Backend endpoint will be added next.
+    ===================================================== */
+
+    async function saveUserAccess() {
+
+        if (!selectedUserId) {
+            return;
+        }
+
+
+        const selectedModules = [];
+
+
+        document
+            .querySelectorAll(
+                ".module-option input:checked"
+            )
+            .forEach(
+                checkbox => {
+
+                    selectedModules.push(
+                        checkbox.value
+                    );
+
+                }
             );
 
 
-        userSearch.addEventListener(
-            "input",
-            filterUsers
+        /*
+         * Temporary frontend storage.
+         */
+
+        if (users[selectedUserId]) {
+
+            users[selectedUserId].modules =
+                selectedModules;
+
+        }
+
+
+        closeUserModal();
+
+
+        showUsersToast(
+            "Access Updated",
+            "Module access has been updated temporarily."
         );
 
-
-        roleFilter.addEventListener(
-            "change",
-            filterUsers
-        );
+    }
 
 
-        function filterUsers() {
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
-            const search =
-                userSearch.value
-                    .trim()
-                    .toLowerCase();
-
-
-            const role =
-                roleFilter.value;
+    userSearch.addEventListener(
+        "input",
+        filterUsers
+    );
 
 
-            const rows =
-                document.querySelectorAll(
-                    "#userTableBody tr"
-                );
+    /* =====================================================
+       ROLE FILTER
+    ===================================================== */
+
+    roleFilter.addEventListener(
+        "change",
+        filterUsers
+    );
 
 
-            let visibleCount = 0;
+    /* =====================================================
+       FILTER USERS
+    ===================================================== */
+
+    function filterUsers() {
+
+        const search =
+            userSearch.value
+                .trim()
+                .toLowerCase();
 
 
-            rows.forEach(
-                row => {
+        const selectedRole =
+            normalizeRole(
+                roleFilter.value
+            );
+
+
+        filteredUsers =
+            allUsers.filter(
+                user => {
 
                     const name =
-                        row.dataset.name
-                            .toLowerCase();
+                        (
+                            user.fullname ||
+                            ""
+                        ).toLowerCase();
+
 
                     const username =
-                        row.dataset.username
-                            .toLowerCase();
+                        (
+                            user.username ||
+                            ""
+                        ).toLowerCase();
 
-                    const rowRole =
-                        row.dataset.role;
+
+                    const role =
+                        normalizeRole(
+                            user.role
+                        );
 
 
                     const searchMatch =
@@ -2237,50 +2614,73 @@
 
 
                     const roleMatch =
-                        role === "all" ||
-                        rowRole === role;
+                        selectedRole === "all" ||
+                        role === selectedRole;
 
 
-                    if (
+                    return (
                         searchMatch &&
                         roleMatch
-                    ) {
-
-                        row.style.display =
-                            "";
-
-                        visibleCount++;
-
-                    } else {
-
-                        row.style.display =
-                            "none";
-
-                    }
+                    );
 
                 }
             );
 
 
+        renderUsers();
+
+    }
+
+
+    /* =====================================================
+       PROFILE DROPDOWN
+    ===================================================== */
+
+    function toggleStaffMenu() {
+
+        const profile =
+            document.querySelector(
+                ".staff-profile"
+            );
+
+
+        const dropdown =
             document.getElementById(
-                "usersShowing"
-            ).textContent =
-                `Showing ${visibleCount} of 8 users`;
+                "staffDropdown"
+            );
+
+
+        if (
+            !profile ||
+            !dropdown
+        ) {
+
+            return;
 
         }
 
 
-        /* =====================================================
-           PROFILE DROPDOWN
-           SAME BEHAVIOR AS REFERENCE
-        ===================================================== */
+        profile.classList.toggle(
+            "active"
+        );
 
-        function toggleStaffMenu() {
+
+        dropdown.classList.toggle(
+            "show"
+        );
+
+    }
+
+
+    document.addEventListener(
+        "click",
+        function(event) {
 
             const profile =
                 document.querySelector(
                     ".staff-profile"
                 );
+
 
             const dropdown =
                 document.getElementById(
@@ -2289,124 +2689,106 @@
 
 
             if (
-                !profile ||
-                !dropdown
+                profile &&
+                !profile.contains(
+                    event.target
+                )
             ) {
-                return;
-            }
+
+                profile.classList.remove(
+                    "active"
+                );
 
 
-            profile.classList.toggle(
-                "active"
-            );
+                if (dropdown) {
 
-            dropdown.classList.toggle(
-                "show"
-            );
-
-        }
-
-
-        document.addEventListener(
-            "click",
-            function(event) {
-
-                const profile =
-                    document.querySelector(
-                        ".staff-profile"
+                    dropdown.classList.remove(
+                        "show"
                     );
-
-                const dropdown =
-                    document.getElementById(
-                        "staffDropdown"
-                    );
-
-
-                if (
-                    profile &&
-                    !profile.contains(
-                        event.target
-                    )
-                ) {
-
-                    profile.classList.remove(
-                        "active"
-                    );
-
-                    if (dropdown) {
-
-                        dropdown.classList.remove(
-                            "show"
-                        );
-
-                    }
 
                 }
 
             }
+
+        }
+    );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    function logout() {
+
+        localStorage.clear();
+
+
+        window.location.href =
+            "index.html";
+
+    }
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    function showUsersToast(
+        title,
+        message
+    ) {
+
+        const toast =
+            document.getElementById(
+                "usersToast"
+            );
+
+
+        document.getElementById(
+            "usersToastTitle"
+        ).textContent =
+            title;
+
+
+        document.getElementById(
+            "usersToastMessage"
+        ).textContent =
+            message;
+
+
+        toast.classList.add(
+            "show"
         );
 
 
-        /* =====================================================
-           LOGOUT
-        ===================================================== */
+        setTimeout(
+            function() {
 
-        function logout() {
-
-            localStorage.clear();
-
-            window.location.href =
-                "index.html";
-
-        }
-
-
-        /* =====================================================
-           TOAST
-        ===================================================== */
-
-        function showUsersToast(
-            title,
-            message
-        ) {
-
-            const toast =
-                document.getElementById(
-                    "usersToast"
+                toast.classList.remove(
+                    "show"
                 );
 
+            },
+            3500
+        );
 
-            document.getElementById(
-                "usersToastTitle"
-            ).textContent =
-                title;
-
-
-            document.getElementById(
-                "usersToastMessage"
-            ).textContent =
-                message;
+    }
 
 
-            toast.classList.add(
-                "show"
-            );
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
 
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
 
-            setTimeout(
-                function() {
-
-                    toast.classList.remove(
-                        "show"
-                    );
-
-                },
-                3500
-            );
+            loadUsers();
 
         }
+    );
 
-    </script>
+</script>
 
 </body>
 
