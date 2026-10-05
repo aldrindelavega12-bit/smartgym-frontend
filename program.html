@@ -112,35 +112,441 @@
     /* lahat ng existing CSS mo dito */
 
 
-    /* ILAGAY DITO ANG GET TRAINER SELECTION CSS */
 
-    .get-trainer-selection-modal {
-        position: fixed !important;
-        inset: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+/* =========================================================
+   GET TRAINER FLOW CSS
+========================================================= */
 
-        background: rgba(0,0,0,.38);
+.program-action.get-trainer {
+    position: relative !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
 
-        z-index: 9999999 !important;
+.get-trainer-confirm-modal,
+.continue-current-program-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.38);
+    z-index: 1000000 !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, visibility .2s ease;
+}
 
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
+.get-trainer-confirm-modal.show,
+.continue-current-program-modal.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.get-trainer-confirm-content,
+.continue-current-program-content {
+    width: 430px;
+    max-width: 92vw;
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-sizing: border-box;
+    box-shadow: 0 20px 60px rgba(0,0,0,.18);
+}
+
+.get-trainer-confirm-header,
+.continue-current-program-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.get-trainer-confirm-header h2,
+.continue-current-program-header h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    color: #26312b;
+}
+
+.get-trainer-confirm-header p,
+.continue-current-program-header p {
+    margin: 0;
+    color: #68736d;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.get-trainer-confirm-close,
+.continue-current-program-close,
+.get-trainer-selection-close {
+    border: 0;
+    background: transparent;
+    color: #68736d;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.get-trainer-confirm-actions,
+.continue-current-program-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.get-trainer-no,
+.get-trainer-yes,
+.continue-current-program-no,
+.continue-current-program-yes {
+    min-width: 90px;
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.get-trainer-no,
+.continue-current-program-no {
+    background: #eef1ef;
+    color: #46524b;
+}
+
+.get-trainer-yes,
+.continue-current-program-yes {
+    background: #087c3d;
+    color: #fff;
+}
+
+.current-program-preview {
+    margin-top: 20px;
+    display: grid;
+    gap: 7px;
+    padding: 15px;
+    background: #f5f8f6;
+    border: 1px solid #e1e8e3;
+    border-radius: 11px;
+}
+
+.current-program-preview-label {
+    margin-top: 5px;
+    color: #7b857f;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.current-program-preview-name,
+.current-program-preview-plan {
+    color: #26312b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.get-trainer-selection-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.38);
+    z-index: 1000000 !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, visibility .2s ease;
+}
+
+.get-trainer-selection-modal.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.get-trainer-selection-content {
+    width: 620px;
+    max-width: 92vw;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 17px;
+    padding: 28px;
+    box-sizing: border-box;
+    box-shadow: 0 25px 70px rgba(0,0,0,.22);
+}
+
+.get-trainer-selection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.get-trainer-selection-header h2 {
+    margin: 0 0 7px;
+    color: #26312b;
+    font-size: 21px;
+}
+
+.get-trainer-selection-header p {
+    margin: 0;
+    color: #68736d;
+    font-size: 13px;
+}
+
+.get-trainer-new-program-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.get-trainer-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.get-trainer-form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #46524b;
+}
+
+.get-trainer-form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 13px;
+    border: 1px solid #d8dfdb;
+    border-radius: 9px;
+    background: #fff;
+    color: #26312b;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+}
+
+.get-trainer-form-group select:disabled {
+    background: #f3f5f4;
+    color: #9aa39e;
+    cursor: not-allowed;
+}
+
+.get-trainer-current-program {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.get-trainer-current-program > div {
+    background: #f5f8f6;
+    border: 1px solid #e1e8e3;
+    border-radius: 11px;
+    padding: 13px;
+}
+
+.get-trainer-current-program span,
+.get-trainer-preview span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: #7b857f;
+}
+
+.get-trainer-current-program strong,
+.get-trainer-preview strong {
+    color: #26312b;
+    font-size: 14px;
+}
+
+.get-trainer-section-title {
+    margin-bottom: 12px;
+}
+
+.get-trainer-section-title h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    color: #26312b;
+}
+
+.get-trainer-section-title p {
+    margin: 0;
+    font-size: 12px;
+    color: #7b857f;
+}
+
+.get-trainer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.get-trainer-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 14px 15px;
+    border: 1px solid #dfe6e1;
+    border-radius: 11px;
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.get-trainer-option:hover,
+.get-trainer-option.selected {
+    border-color: #087c3d;
+    background: #eef8f1;
+}
+
+.get-trainer-option-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.get-trainer-option-info strong {
+    color: #26312b;
+    font-size: 14px;
+}
+
+.get-trainer-option-info span {
+    color: #7b857f;
+    font-size: 11px;
+}
+
+.get-trainer-option-arrow {
+    color: #087c3d;
+    font-size: 20px;
+}
+
+.get-trainer-rate-section {
+    margin-top: 24px;
+}
+
+.get-trainer-rate-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.get-trainer-rate-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #dfe6e1;
+    border-radius: 11px;
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+
+.get-trainer-rate-option:hover,
+.get-trainer-rate-option.selected {
+    border-color: #087c3d;
+    background: #eef8f1;
+}
+
+.get-trainer-rate-option > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.get-trainer-rate-option strong {
+    font-size: 13px;
+    color: #26312b;
+}
+
+.get-trainer-rate-option span {
+    font-size: 10px;
+    color: #7b857f;
+}
+
+.get-trainer-rate-option b {
+    color: #087c3d;
+    font-size: 13px;
+}
+
+.get-trainer-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.get-trainer-preview > div {
+    padding: 13px;
+    background: #f5f8f6;
+    border-radius: 10px;
+}
+
+.get-trainer-selection-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.get-trainer-cancel-button,
+.get-trainer-request-button {
+    min-width: 120px;
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.get-trainer-cancel-button {
+    background: #eef1ef;
+    color: #46524b;
+}
+
+.get-trainer-request-button {
+    background: #087c3d;
+    color: #fff;
+}
+
+.get-trainer-request-button:disabled {
+    background: #b9c5be;
+    color: #fff;
+    cursor: not-allowed;
+}
+
+.get-trainer-loading {
+    padding: 20px;
+    text-align: center;
+    color: #7b857f;
+    font-size: 12px;
+}
+
+@media (max-width: 650px){
+    .get-trainer-new-program-section,
+    .get-trainer-current-program,
+    .get-trainer-preview {
+        grid-template-columns: 1fr;
     }
 
-    .get-trainer-selection-modal.show {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
+    .get-trainer-rate-list {
+        grid-template-columns: 1fr;
     }
-
-    /* ...yung natitirang CSS na sinend ko... */
-
+}
 
 
 </style>
@@ -1423,248 +1829,83 @@
         <div class="get-trainer-selection-header">
 
             <div>
-
-                <h2>
-                    Choose Your Trainer
-                </h2>
-
-                <p>
-                    Select a trainer for your current program and split.
+                <h2>Get a Trainer</h2>
+                <p id="getTrainerSelectionDescription">
+                    Choose your trainer and trainer rate.
                 </p>
-
             </div>
 
             <button
                 type="button"
                 class="get-trainer-selection-close"
                 onclick="cancelGetTrainerRequest()"
-            >
-                &times;
-            </button>
+            >&times;</button>
 
         </div>
 
-
-        <!-- =================================================
-             CURRENT PROGRAM
-        ================================================== -->
-
-        <div class="get-trainer-current-program">
-
-            <div>
-
-                <span>
-                    Current Program
-                </span>
-
-                <strong
-                    id="getTrainerSelectionProgram"
-                >
-                    -
-                </strong>
-
-            </div>
-
-
-            <div>
-
-                <span>
-                    Current Plan / Split
-                </span>
-
-                <strong
-                    id="getTrainerSelectionPlan"
-                >
-                    -
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             TRAINER LIST
-        ================================================== -->
-
-        <div class="get-trainer-section-title">
-
-            <h3>
-                Available Trainers
-            </h3>
-
-            <p>
-                Choose the trainer you want to work with.
-            </p>
-
-        </div>
-
-
+        <!-- NEW PROGRAM BRANCH -->
         <div
-            id="getTrainerList"
-            class="get-trainer-list"
-        >
-
-            <div class="get-trainer-loading">
-                Loading trainers...
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             TRAINER RATE
-        ================================================== -->
-
-        <div
-            id="getTrainerRateSection"
-            class="get-trainer-rate-section"
+            id="getTrainerNewProgramSection"
+            class="get-trainer-new-program-section"
             style="display:none;"
         >
 
-            <div class="get-trainer-section-title">
-
-                <h3>
-                    Trainer Rate
-                </h3>
-
-                <p>
-                    Choose your preferred trainer service duration.
-                </p>
-
+            <div class="get-trainer-form-group">
+                <label for="getTrainerProgramSelect">Program</label>
+                <select
+                    id="getTrainerProgramSelect"
+                    onchange="loadGetTrainerProgramPlans()"
+                >
+                    <option value="">Select Program</option>
+                </select>
             </div>
 
-
-            <div
-                id="getTrainerRateList"
-                class="get-trainer-rate-list"
-            >
+            <div class="get-trainer-form-group">
+                <label for="getTrainerPlanSelect">Plan / Split</label>
+                <select
+                    id="getTrainerPlanSelect"
+                    disabled
+                >
+                    <option value="">Select Plan / Split</option>
+                </select>
             </div>
 
         </div>
 
-
-        <!-- =================================================
-             PREVIEW
-        ================================================== -->
-
+        <!-- CURRENT PROGRAM BRANCH -->
         <div
-            id="getTrainerPreview"
-            class="get-trainer-preview"
-            style="display:none;"
+            id="getTrainerCurrentProgramSection"
+            class="get-trainer-current-program"
         >
 
             <div>
-
-                <span>
-                    Trainer
-                </span>
-
-                <strong
-                    id="getTrainerSelectedName"
-                >
-                    -
-                </strong>
-
-            </div>
-
-
-            <div>
-
-                <span>
-                    Selected Rate
-                </span>
-
-                <strong
-                    id="getTrainerSelectedRate"
-                >
-                    -
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             ACTIONS
-        ================================================== -->
-
-        <div class="get-trainer-selection-actions">
-
-            <button
-                type="button"
-                class="get-trainer-cancel-button"
-                onclick="cancelGetTrainerRequest()"
-            >
-                Cancel
-            </button>
-
-
-            <button
-                type="button"
-                id="getTrainerRequestButton"
-                class="get-trainer-request-button"
-                onclick="submitGetTrainerRequest()"
-                disabled
-            >
-                Request Trainer
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- GET TRAINER SELECTION MODAL -->
-
-<div id="getTrainerSelectionModal" class="get-trainer-selection-modal">
-
-    <div class="get-trainer-selection-content">
-
-        <div class="get-trainer-selection-header">
-
-            <div>
-                <h2>Choose Your Trainer</h2>
-                <p>Select a trainer for your current program and split.</p>
-            </div>
-
-            <button
-                type="button"
-                class="get-trainer-selection-close"
-                onclick="cancelGetTrainerRequest()"
-            >
-                &times;
-            </button>
-
-        </div>
-
-        <div class="get-trainer-current-program">
-
-            <div>
-                <span>Current Program</span>
+                <span>Program</span>
                 <strong id="getTrainerSelectionProgram">-</strong>
             </div>
 
             <div>
-                <span>Current Plan / Split</span>
+                <span>Plan / Split</span>
                 <strong id="getTrainerSelectionPlan">-</strong>
             </div>
 
         </div>
 
+        <!-- TRAINER LIST -->
         <div class="get-trainer-section-title">
             <h3>Available Trainers</h3>
             <p>Choose the trainer you want to work with.</p>
         </div>
 
-        <div id="getTrainerList" class="get-trainer-list">
+        <div
+            id="getTrainerList"
+            class="get-trainer-list"
+        >
             <div class="get-trainer-loading">
                 Loading trainers...
             </div>
         </div>
 
+        <!-- TRAINER RATE -->
         <div
             id="getTrainerRateSection"
             class="get-trainer-rate-section"
@@ -1683,6 +1924,7 @@
 
         </div>
 
+        <!-- PREVIEW -->
         <div
             id="getTrainerPreview"
             class="get-trainer-preview"
@@ -1701,6 +1943,7 @@
 
         </div>
 
+        <!-- ACTIONS -->
         <div class="get-trainer-selection-actions">
 
             <button
@@ -1727,102 +1970,14 @@
 
 </div>
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
-<script>
-
-
-/* =========================================================
-   API
-========================================================= */
-
-const API_URL =
-    "https://smartgym-api-ia2e.onrender.com";
-
-
-
-/* =========================================================
-   USER
-========================================================= */
-
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
-
-
-
-/* =========================================================
-   WORKOUT DATA
-========================================================= */
-
-let workoutSchedule = [];
-let workoutStatuses = {};
-let actualWorkoutMap = {};
-
-
-
-/* =========================================================
-   SELECTED SCHEDULE DATE
-   Starts at TODAY.
-========================================================= */
-
-let selectedScheduleDate = null;
-
-
-/* =========================================================
-   MEMBER PROFILE
-========================================================= */
-
-if(user){
-
-    const fullname =
-        user.fullname ||
-        user.name ||
-        user.full_name ||
-        "Member";
-
-
-    const profileName =
-        document.getElementById(
-            "profile-name"
-        );
-
-
-    const profileInitial =
-        document.getElementById(
-            "profileInitial"
-        );
-
-
-    if(profileName){
-
-        profileName.innerText =
-            fullname;
-
-    }
-
-
-    if(profileInitial){
-
-        profileInitial.innerText =
-            fullname
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
-}
-
 /* =========================================================
    GET TRAINER
 ========================================================= */
 
 let selectedGetTrainer = null;
-
 let selectedGetTrainerRate = null;
+let selectedGetTrainerProgram = null;
+let selectedGetTrainerPlan = null;
 
 
 /* =========================================================
@@ -1831,10 +1986,7 @@ let selectedGetTrainerRate = null;
 
 function openGetTrainerConfirmation(){
 
-    const modal =
-        document.getElementById(
-            "getTrainerConfirmModal"
-        );
+    const modal = document.getElementById("getTrainerConfirmModal");
 
     if(!modal){
         return;
@@ -1851,10 +2003,7 @@ function openGetTrainerConfirmation(){
 
 function closeGetTrainerConfirmation(){
 
-    const modal =
-        document.getElementById(
-            "getTrainerConfirmModal"
-        );
+    const modal = document.getElementById("getTrainerConfirmModal");
 
     if(!modal){
         return;
@@ -1866,7 +2015,7 @@ function closeGetTrainerConfirmation(){
 
 
 /* =========================================================
-   PROCEED GET TRAINER
+   YES - GET TRAINER
 ========================================================= */
 
 function proceedGetTrainer(){
@@ -1884,61 +2033,27 @@ function proceedGetTrainer(){
 
 function openContinueCurrentProgram(){
 
-    const modal =
-        document.getElementById(
-            "continueCurrentProgramModal"
-        );
+    const modal = document.getElementById("continueCurrentProgramModal");
 
     if(!modal){
-        console.error(
-            "Continue Current Program modal not found."
-        );
-
+        console.error("Continue Current Program modal not found.");
         return;
     }
 
-
-    /*
-    =========================================================
-    CURRENT PROGRAM
-    =========================================================
-    */
-
     const programName =
         currentTrainerData?.program_name ||
-        document.getElementById(
-            "currentProgramName"
-        )?.innerText ||
+        document.getElementById("currentProgramName")?.innerText ||
         "-";
-
-
-    /*
-    =========================================================
-    CURRENT PLAN / SPLIT
-    =========================================================
-    */
 
     const planName =
         currentTrainerData?.program_plan_name ||
         currentTrainerData?.program_plan ||
         currentTrainerData?.split_name ||
-        document.getElementById(
-            "currentProgramPlan"
-        )?.innerText ||
+        document.getElementById("currentProgramPlan")?.innerText ||
         "-";
 
-
-    document.getElementById(
-        "continueCurrentProgramName"
-    ).innerText =
-        programName;
-
-
-    document.getElementById(
-        "continueCurrentProgramPlan"
-    ).innerText =
-        planName;
-
+    document.getElementById("continueCurrentProgramName").innerText = programName;
+    document.getElementById("continueCurrentProgramPlan").innerText = planName;
 
     modal.classList.add("show");
 
@@ -1951,10 +2066,7 @@ function openContinueCurrentProgram(){
 
 function closeContinueCurrentProgram(){
 
-    const modal =
-        document.getElementById(
-            "continueCurrentProgramModal"
-        );
+    const modal = document.getElementById("continueCurrentProgramModal");
 
     if(!modal){
         return;
@@ -1966,42 +2078,31 @@ function closeContinueCurrentProgram(){
 
 
 /* =========================================================
-   YES — CONTINUE CURRENT PROGRAM
+   YES - CONTINUE CURRENT PROGRAM
 ========================================================= */
 
 function continueCurrentProgram(){
 
-    console.log(
-        "GET TRAINER: CONTINUE CURRENT PROGRAM"
-    );
+    console.log("GET TRAINER: CONTINUE CURRENT PROGRAM");
 
     closeContinueCurrentProgram();
 
-    openGetTrainerSelectionModal();
+    openGetTrainerSelectionModal("current");
 
 }
 
 
 /* =========================================================
-   NO — CHOOSE NEW PROGRAM
+   NO - CHOOSE NEW PROGRAM
 ========================================================= */
 
 function chooseNewProgram(){
 
-    console.log(
-        "GET TRAINER: CHOOSE NEW PROGRAM"
-    );
+    console.log("GET TRAINER: CHOOSE NEW PROGRAM");
 
     closeContinueCurrentProgram();
 
-    /*
-    NEXT BRANCH:
-    Program → Plan / Split → Trainer → Rate
-    */
-
-    alert(
-        "New program selection will be added next."
-    );
+    openGetTrainerSelectionModal("new");
 
 }
 
@@ -2010,401 +2111,407 @@ function chooseNewProgram(){
    OPEN TRAINER SELECTION MODAL
 ========================================================= */
 
-function openGetTrainerSelectionModal(){
+async function openGetTrainerSelectionModal(mode = "current"){
 
-    const modal =
-        document.getElementById(
-            "getTrainerSelectionModal"
-        );
+    const modal = document.getElementById("getTrainerSelectionModal");
 
     if(!modal){
-
-        console.error(
-            "Get Trainer Selection modal not found."
-        );
-
+        console.error("Get Trainer Selection modal not found.");
         return;
     }
 
-
-    /*
-    =========================================================
-    RESET
-    =========================================================
-    */
-
     selectedGetTrainer = null;
-
     selectedGetTrainerRate = null;
+    selectedGetTrainerProgram = null;
+    selectedGetTrainerPlan = null;
 
+    const list = document.getElementById("getTrainerList");
+    const rateSection = document.getElementById("getTrainerRateSection");
+    const preview = document.getElementById("getTrainerPreview");
+    const requestButton = document.getElementById("getTrainerRequestButton");
+    const currentSection = document.getElementById("getTrainerCurrentProgramSection");
+    const newSection = document.getElementById("getTrainerNewProgramSection");
+    const description = document.getElementById("getTrainerSelectionDescription");
 
-    /*
-    =========================================================
-    CURRENT PROGRAM
-    =========================================================
-    */
-
-    const programName =
-        currentTrainerData?.program_name ||
-        document.getElementById(
-            "currentProgramName"
-        )?.innerText ||
-        "-";
-
-
-    const planName =
-        currentTrainerData?.program_plan_name ||
-        currentTrainerData?.program_plan ||
-        currentTrainerData?.split_name ||
-        document.getElementById(
-            "currentProgramPlan"
-        )?.innerText ||
-        "-";
-
-
-    document.getElementById(
-        "getTrainerSelectionProgram"
-    ).innerText =
-        programName;
-
-
-    document.getElementById(
-        "getTrainerSelectionPlan"
-    ).innerText =
-        planName;
-
-
-    /*
-    =========================================================
-    RESET TRAINER LIST
-    =========================================================
-    */
-
-    document.getElementById(
-        "getTrainerList"
-    ).innerHTML = `
-        <div class="get-trainer-loading">
-            Loading trainers...
-        </div>
+    list.innerHTML = `
+        <div class="get-trainer-loading">Loading trainers...</div>
     `;
 
+    rateSection.style.display = "none";
+    preview.style.display = "none";
+    requestButton.disabled = true;
 
-    /*
-    =========================================================
-    HIDE RATE SECTION
-    =========================================================
-    */
+    if(mode === "current"){
 
-    document.getElementById(
-        "getTrainerRateSection"
-    ).style.display =
-        "none";
+        currentSection.style.display = "grid";
+        newSection.style.display = "none";
+        description.innerText = "Choose a trainer for your current program and split.";
 
+        const programId = currentTrainerData?.program_id;
+        const planId = currentTrainerData?.program_plan_id;
 
-    /*
-    =========================================================
-    HIDE PREVIEW
-    =========================================================
-    */
+        if(!programId || !planId){
 
-    document.getElementById(
-        "getTrainerPreview"
-    ).style.display =
-        "none";
+            list.innerHTML = `
+                <div class="get-trainer-loading">
+                    Your current program and split are not available.
+                </div>
+            `;
 
+            modal.classList.add("show");
+            return;
+        }
 
-    /*
-    =========================================================
-    DISABLE REQUEST
-    =========================================================
-    */
+        selectedGetTrainerProgram = {
+            id: programId,
+            name: currentTrainerData?.program_name || "-"
+        };
 
-    document.getElementById(
-        "getTrainerRequestButton"
-    ).disabled =
-        true;
+        selectedGetTrainerPlan = {
+            id: planId,
+            name:
+                currentTrainerData?.program_plan_name ||
+                currentTrainerData?.program_plan ||
+                currentTrainerData?.split_name ||
+                "-"
+        };
 
+        document.getElementById("getTrainerSelectionProgram").innerText =
+            selectedGetTrainerProgram.name;
 
-    /*
-    =========================================================
-    OPEN
-    =========================================================
-    */
+        document.getElementById("getTrainerSelectionPlan").innerText =
+            selectedGetTrainerPlan.name;
+
+        modal.classList.add("show");
+
+        await loadGetTrainerOptions(programId);
+        return;
+    }
+
+    currentSection.style.display = "none";
+    newSection.style.display = "grid";
+    description.innerText = "Choose your program, plan / split, trainer, and rate.";
 
     modal.classList.add("show");
 
-
-    /*
-    =========================================================
-    LOAD TRAINERS
-    =========================================================
-    */
-
-    loadGetTrainerOptions();
+    await loadGetTrainerPrograms();
 
 }
 
 
 /* =========================================================
-   CLOSE TRAINER SELECTION MODAL
+   LOAD PROGRAMS FROM DATABASE
 ========================================================= */
 
-function closeGetTrainerSelectionModal(){
+async function loadGetTrainerPrograms(){
 
-    const modal =
-        document.getElementById(
-            "getTrainerSelectionModal"
+    const select = document.getElementById("getTrainerProgramSelect");
+    const planSelect = document.getElementById("getTrainerPlanSelect");
+
+    select.innerHTML = `<option value="">Loading programs...</option>`;
+    planSelect.innerHTML = `<option value="">Select Plan / Split</option>`;
+    planSelect.disabled = true;
+
+    try{
+
+        const response = await fetch(
+            `${API_URL}/api/programs`,
+            { cache: "no-store" }
         );
 
-    if(!modal){
+        const result = await response.json();
+
+        console.log("GET TRAINER PROGRAMS:", result);
+
+        if(!response.ok){
+            throw new Error(result.message || `HTTP ${response.status}`);
+        }
+
+        const programs = Array.isArray(result)
+            ? result
+            : (Array.isArray(result.programs) ? result.programs : []);
+
+        select.innerHTML = `<option value="">Select Program</option>`;
+
+        programs.forEach(function(program){
+
+            const option = document.createElement("option");
+            option.value = program.id;
+            option.textContent =
+                program.program_name ||
+                program.name ||
+                `Program ${program.id}`;
+
+            select.appendChild(option);
+
+        });
+
+        if(programs.length === 0){
+            select.innerHTML = `<option value="">No programs available</option>`;
+        }
+
+    }
+    catch(error){
+
+        console.error("GET TRAINER PROGRAM ERROR:", error);
+
+        select.innerHTML = `<option value="">Unable to load programs</option>`;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD PLANS FOR SELECTED PROGRAM
+========================================================= */
+
+async function loadGetTrainerProgramPlans(){
+
+    const programSelect = document.getElementById("getTrainerProgramSelect");
+    const planSelect = document.getElementById("getTrainerPlanSelect");
+    const list = document.getElementById("getTrainerList");
+
+    const programId = programSelect.value;
+
+    selectedGetTrainerProgram = null;
+    selectedGetTrainerPlan = null;
+    selectedGetTrainer = null;
+    selectedGetTrainerRate = null;
+
+    document.getElementById("getTrainerRateSection").style.display = "none";
+    document.getElementById("getTrainerPreview").style.display = "none";
+    document.getElementById("getTrainerRequestButton").disabled = true;
+
+    list.innerHTML = `
+        <div class="get-trainer-loading">
+            Select a plan / split.
+        </div>
+    `;
+
+    if(!programId){
+
+        planSelect.innerHTML = `<option value="">Select Plan / Split</option>`;
+        planSelect.disabled = true;
         return;
     }
 
-    modal.classList.remove("show");
+    selectedGetTrainerProgram = {
+        id: programId,
+        name: programSelect.options[programSelect.selectedIndex].textContent
+    };
+
+    planSelect.innerHTML = `<option value="">Loading plans...</option>`;
+    planSelect.disabled = true;
+
+    try{
+
+        const response = await fetch(
+            `${API_URL}/api/programs/${programId}/plans`,
+            { cache: "no-store" }
+        );
+
+        const result = await response.json();
+
+        console.log("GET TRAINER PROGRAM PLANS:", result);
+
+        if(!response.ok){
+            throw new Error(result.message || `HTTP ${response.status}`);
+        }
+
+        const plans = Array.isArray(result)
+            ? result
+            : (Array.isArray(result.plans) ? result.plans : []);
+
+        planSelect.innerHTML = `<option value="">Select Plan / Split</option>`;
+
+        plans.forEach(function(plan){
+
+            const option = document.createElement("option");
+            option.value = plan.id;
+            option.textContent =
+                plan.plan_name ||
+                plan.name ||
+                `Plan ${plan.id}`;
+
+            planSelect.appendChild(option);
+
+        });
+
+        planSelect.disabled = plans.length === 0;
+
+        if(plans.length === 0){
+            planSelect.innerHTML = `<option value="">No plans available</option>`;
+            return;
+        }
+
+        planSelect.onchange = function(){
+            loadNewProgramTrainers();
+        };
+
+    }
+    catch(error){
+
+        console.error("GET TRAINER PLAN ERROR:", error);
+
+        planSelect.innerHTML = `<option value="">Unable to load plans</option>`;
+        planSelect.disabled = true;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD TRAINERS FOR NEW PROGRAM
+========================================================= */
+
+async function loadNewProgramTrainers(){
+
+    const programSelect = document.getElementById("getTrainerProgramSelect");
+    const planSelect = document.getElementById("getTrainerPlanSelect");
+    const programId = programSelect.value;
+    const planId = planSelect.value;
+
+    selectedGetTrainer = null;
+    selectedGetTrainerRate = null;
+
+    document.getElementById("getTrainerRateSection").style.display = "none";
+    document.getElementById("getTrainerPreview").style.display = "none";
+    document.getElementById("getTrainerRequestButton").disabled = true;
+
+    const list = document.getElementById("getTrainerList");
+
+    if(!programId || !planId){
+
+        list.innerHTML = `
+            <div class="get-trainer-loading">
+                Select a program and plan / split first.
+            </div>
+        `;
+
+        return;
+    }
+
+    selectedGetTrainerPlan = {
+        id: planId,
+        name: planSelect.options[planSelect.selectedIndex].textContent
+    };
+
+    list.innerHTML = `
+        <div class="get-trainer-loading">Loading trainers...</div>
+    `;
+
+    await loadGetTrainerOptions(programId);
 
 }
 
 
 /* =========================================================
    LOAD AVAILABLE TRAINERS
+   Existing API: /api/program_trainers
 ========================================================= */
 
-async function loadGetTrainerOptions(){
+async function loadGetTrainerOptions(programId){
 
-    const list =
-        document.getElementById(
-            "getTrainerList"
-        );
+    const list = document.getElementById("getTrainerList");
 
-
-    if(!currentTrainerData){
+    if(!programId){
 
         list.innerHTML = `
             <div class="get-trainer-loading">
-                Current program is not available.
+                Program is required.
             </div>
         `;
 
         return;
     }
-
-
-    const currentProgramId =
-        currentTrainerData.program_id;
-
-
-    if(!currentProgramId){
-
-        list.innerHTML = `
-            <div class="get-trainer-loading">
-                Current program ID is not available.
-            </div>
-        `;
-
-        return;
-    }
-
 
     try{
 
-        const response =
-            await fetch(
-                `${API_URL}/api/program_trainers`,
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        console.log(
-            "GET TRAINER OPTIONS:",
-            result
+        const response = await fetch(
+            `${API_URL}/api/program_trainers`,
+            { cache: "no-store" }
         );
 
+        const result = await response.json();
+
+        console.log("GET TRAINER OPTIONS:", result);
 
         if(!response.ok){
-
-            throw new Error(
-                result.message ||
-                `HTTP ${response.status}`
-            );
-
+            throw new Error(result.message || `HTTP ${response.status}`);
         }
-
 
         if(!Array.isArray(result)){
-
-            throw new Error(
-                "Invalid trainer data received."
-            );
-
+            throw new Error("Invalid trainer data received.");
         }
 
+        const trainers = result.filter(function(item){
+            return String(item.program_id) === String(programId);
+        });
 
-        /*
-        =====================================================
-        ONLY TRAINERS FOR CURRENT PROGRAM
-        =====================================================
-        */
-
-        const trainers =
-            result.filter(
-                function(item){
-
-                    return String(
-                        item.program_id
-                    ) === String(
-                        currentProgramId
-                    );
-
-                }
-            );
-
-
-        if(
-            trainers.length === 0
-        ){
+        if(trainers.length === 0){
 
             list.innerHTML = `
                 <div class="get-trainer-loading">
-                    No trainers are available
-                    for your current program.
+                    No trainers are available for this program.
                 </div>
             `;
 
             return;
         }
 
-
-        /*
-        =====================================================
-        REMOVE DUPLICATE TRAINERS
-        =====================================================
-        */
-
         const uniqueTrainers = [];
 
+        trainers.forEach(function(item){
 
-        trainers.forEach(
-            function(item){
+            const trainerId = String(item.trainer_id);
 
-                const trainerId =
-                    String(
-                        item.trainer_id
-                    );
+            const exists = uniqueTrainers.some(function(existing){
+                return String(existing.trainer_id) === trainerId;
+            });
 
-
-                const exists =
-                    uniqueTrainers.some(
-                        function(existing){
-
-                            return String(
-                                existing.trainer_id
-                            ) === trainerId;
-
-                        }
-                    );
-
-
-                if(!exists){
-
-                    uniqueTrainers.push(
-                        item
-                    );
-
-                }
-
+            if(!exists){
+                uniqueTrainers.push(item);
             }
-        );
 
-
-        /*
-        =====================================================
-        BUILD TRAINER LIST
-        =====================================================
-        */
+        });
 
         list.innerHTML = "";
 
+        uniqueTrainers.forEach(function(trainer){
 
-        uniqueTrainers.forEach(
-            function(trainer){
+            const button = document.createElement("button");
 
-                const button =
-                    document.createElement(
-                        "button"
-                    );
+            button.type = "button";
+            button.className = "get-trainer-option";
 
+            const trainerName =
+                trainer.trainer_name ||
+                trainer.fullname ||
+                trainer.name ||
+                "Trainer";
 
-                button.type =
-                    "button";
+            button.innerHTML = `
+                <div class="get-trainer-option-info">
+                    <strong>${escapeHtml(trainerName)}</strong>
+                    <span>Available for your selected program</span>
+                </div>
+                <div class="get-trainer-option-arrow">→</div>
+            `;
 
+            button.onclick = function(){
+                selectGetTrainer(button, trainer);
+            };
 
-                button.className =
-                    "get-trainer-option";
+            list.appendChild(button);
 
-
-                const trainerName =
-                    trainer.trainer_name ||
-                    trainer.fullname ||
-                    trainer.name ||
-                    "Trainer";
-
-
-                button.innerHTML = `
-
-                    <div class="get-trainer-option-info">
-
-                        <strong>
-                            ${escapeHtml(
-                                trainerName
-                            )}
-                        </strong>
-
-                        <span>
-                            Available for your current program
-                        </span>
-
-                    </div>
-
-                    <div class="get-trainer-option-arrow">
-                        →
-                    </div>
-
-                `;
-
-
-                button.onclick =
-                    function(){
-
-                        selectGetTrainer(
-                            button,
-                            trainer
-                        );
-
-                    };
-
-
-                list.appendChild(
-                    button
-                );
-
-            }
-        );
-
+        });
 
     }
     catch(error){
 
-        console.error(
-            "GET TRAINER OPTIONS ERROR:",
-            error
-        );
-
+        console.error("GET TRAINER OPTIONS ERROR:", error);
 
         list.innerHTML = `
             <div class="get-trainer-loading">
@@ -2421,223 +2528,87 @@ async function loadGetTrainerOptions(){
    SELECT TRAINER
 ========================================================= */
 
-function selectGetTrainer(
-    button,
-    trainer
-){
+function selectGetTrainer(button, trainer){
 
-    document
-        .querySelectorAll(
-            ".get-trainer-option"
-        )
-        .forEach(
-            function(card){
+    document.querySelectorAll(".get-trainer-option").forEach(function(card){
+        card.classList.remove("selected");
+    });
 
-                card.classList.remove(
-                    "selected"
-                );
+    button.classList.add("selected");
 
-            }
-        );
+    selectedGetTrainer = trainer;
+    selectedGetTrainerRate = null;
 
+    loadGetTrainerRates(trainer);
 
-    button.classList.add(
-        "selected"
-    );
-
-
-    selectedGetTrainer =
-        trainer;
-
-
-    selectedGetTrainerRate =
-        null;
-
-
-    /*
-    =========================================================
-    SHOW RATE SECTION
-    =========================================================
-    */
-
-    loadGetTrainerRates(
-        trainer
-    );
-
-
-    /*
-    =========================================================
-    RESET PREVIEW
-    =========================================================
-    */
-
-    document.getElementById(
-        "getTrainerPreview"
-    ).style.display =
-        "none";
-
-
-    /*
-    =========================================================
-    DISABLE REQUEST UNTIL RATE IS SELECTED
-    =========================================================
-    */
-
-    document.getElementById(
-        "getTrainerRequestButton"
-    ).disabled =
-        true;
+    document.getElementById("getTrainerPreview").style.display = "none";
+    document.getElementById("getTrainerRequestButton").disabled = true;
 
 }
 
 
 /* =========================================================
-   LOAD TRAINER RATES
+   TRAINER RATES
 ========================================================= */
 
-function loadGetTrainerRates(
-    trainer
-){
+function loadGetTrainerRates(trainer){
 
-    const section =
-        document.getElementById(
-            "getTrainerRateSection"
-        );
+    const section = document.getElementById("getTrainerRateSection");
+    const list = document.getElementById("getTrainerRateList");
 
-
-    const list =
-        document.getElementById(
-            "getTrainerRateList"
-        );
-
-
-    section.style.display =
-        "block";
-
-
+    section.style.display = "block";
     list.innerHTML = "";
 
-
-    /*
-    =========================================================
-    TRAINER RATES
-    =========================================================
-    */
-
     const rates = [
-
         {
             label: "1 Day",
-
-            plan_id:
-                trainer.plan_id_day,
-
-            price:
-                trainer.price_day
+            plan_id: trainer.plan_id_day,
+            price: trainer.price_day
         },
-
         {
             label: "1 Week",
-
-            plan_id:
-                trainer.plan_id_week,
-
-            price:
-                trainer.price_week
+            plan_id: trainer.plan_id_week,
+            price: trainer.price_week
         },
-
         {
             label: "1 Month",
-
-            plan_id:
-                trainer.plan_id_month,
-
-            price:
-                trainer.price_month
+            plan_id: trainer.plan_id_month,
+            price: trainer.price_month
         }
-
     ];
 
+    rates.forEach(function(rate){
 
-    rates.forEach(
-        function(rate){
-
-            /*
-            Ignore unavailable rates
-            */
-
-            if(
-                rate.plan_id === null ||
-                rate.plan_id === undefined ||
-                rate.plan_id === ""
-            ){
-
-                return;
-
-            }
-
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.type =
-                "button";
-
-
-            button.className =
-                "get-trainer-rate-option";
-
-
-            button.innerHTML = `
-
-                <div>
-
-                    <strong>
-                        ${escapeHtml(
-                            rate.label
-                        )}
-                    </strong>
-
-                    <span>
-                        Trainer service
-                    </span>
-
-                </div>
-
-                <b>
-                    ${formatTrainerPrice(
-                        rate.price
-                    )}
-                </b>
-
-            `;
-
-
-            button.onclick =
-                function(){
-
-                    selectGetTrainerRate(
-                        button,
-                        rate
-                    );
-
-                };
-
-
-            list.appendChild(
-                button
-            );
-
+        if(
+            rate.plan_id === null ||
+            rate.plan_id === undefined ||
+            rate.plan_id === ""
+        ){
+            return;
         }
-    );
 
+        const button = document.createElement("button");
 
-    if(
-        list.children.length === 0
-    ){
+        button.type = "button";
+        button.className = "get-trainer-rate-option";
+
+        button.innerHTML = `
+            <div>
+                <strong>${escapeHtml(rate.label)}</strong>
+                <span>Trainer service</span>
+            </div>
+            <b>${formatTrainerPrice(rate.price)}</b>
+        `;
+
+        button.onclick = function(){
+            selectGetTrainerRate(button, rate);
+        };
+
+        list.appendChild(button);
+
+    });
+
+    if(list.children.length === 0){
 
         list.innerHTML = `
             <div class="get-trainer-loading">
@@ -2654,40 +2625,15 @@ function loadGetTrainerRates(
    SELECT TRAINER RATE
 ========================================================= */
 
-function selectGetTrainerRate(
-    button,
-    rate
-){
+function selectGetTrainerRate(button, rate){
 
-    document
-        .querySelectorAll(
-            ".get-trainer-rate-option"
-        )
-        .forEach(
-            function(card){
+    document.querySelectorAll(".get-trainer-rate-option").forEach(function(card){
+        card.classList.remove("selected");
+    });
 
-                card.classList.remove(
-                    "selected"
-                );
+    button.classList.add("selected");
 
-            }
-        );
-
-
-    button.classList.add(
-        "selected"
-    );
-
-
-    selectedGetTrainerRate =
-        rate;
-
-
-    /*
-    =========================================================
-    PREVIEW
-    =========================================================
-    */
+    selectedGetTrainerRate = rate;
 
     const trainerName =
         selectedGetTrainer?.trainer_name ||
@@ -2695,169 +2641,139 @@ function selectGetTrainerRate(
         selectedGetTrainer?.name ||
         "Trainer";
 
+    document.getElementById("getTrainerSelectedName").innerText = trainerName;
 
-    document.getElementById(
-        "getTrainerSelectedName"
-    ).innerText =
-        trainerName;
+    document.getElementById("getTrainerSelectedRate").innerText =
+        `${rate.label} - ${formatTrainerPrice(rate.price)}`;
 
+    document.getElementById("getTrainerPreview").style.display = "grid";
 
-    document.getElementById(
-        "getTrainerSelectedRate"
-    ).innerText =
-        `${rate.label} - ${
-            formatTrainerPrice(
-                rate.price
-            )
-        }`;
-
-
-    document.getElementById(
-        "getTrainerPreview"
-    ).style.display =
-        "grid";
-
-
-    /*
-    =========================================================
-    ENABLE REQUEST
-    =========================================================
-    */
-
-    document.getElementById(
-        "getTrainerRequestButton"
-    ).disabled =
-        false;
+    document.getElementById("getTrainerRequestButton").disabled = false;
 
 }
 
 
 /* =========================================================
-   CLOSE / CANCEL REQUEST
+   CANCEL
 ========================================================= */
 
 function cancelGetTrainerRequest(){
 
-    selectedGetTrainer =
-        null;
+    selectedGetTrainer = null;
+    selectedGetTrainerRate = null;
+    selectedGetTrainerProgram = null;
+    selectedGetTrainerPlan = null;
 
-    selectedGetTrainerRate =
-        null;
+    const modal = document.getElementById("getTrainerSelectionModal");
 
-    closeGetTrainerSelectionModal();
+    if(modal){
+        modal.classList.remove("show");
+    }
 
 }
 
 
 /* =========================================================
-   REQUEST TRAINER
+   SUBMIT TRAINER REQUEST
 ========================================================= */
 
 async function submitGetTrainerRequest(){
 
     if(
         !selectedGetTrainer ||
-        !selectedGetTrainerRate
+        !selectedGetTrainerRate ||
+        !selectedGetTrainerProgram ||
+        !selectedGetTrainerPlan
     ){
 
         alert(
-            "Please select a trainer and trainer rate."
+            "Please complete the program, plan, trainer, and trainer rate selection."
         );
 
         return;
     }
-
 
     const memberId =
         user?.member_id ||
         user?.user_id ||
         user?.id;
 
-
     if(!memberId){
 
-        alert(
-            "Member ID not found."
-        );
-
+        alert("Member ID not found.");
         return;
     }
 
+    const button = document.getElementById("getTrainerRequestButton");
 
-    const button =
-        document.getElementById(
-            "getTrainerRequestButton"
-        );
-
-
-    button.disabled =
-        true;
-
-
-    button.innerText =
-        "Submitting...";
-
+    button.disabled = true;
+    button.innerText = "Submitting...";
 
     try{
 
         /*
-        =====================================================
-        REQUEST DATA
-        =====================================================
-        */
+         * This date is for the TRAINER SERVICE REQUEST.
+         * It is not the program starting date.
+         */
+
+        const today = new Date();
+
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const dd = String(today.getDate()).padStart(2, "0");
 
         const payload = {
-
-            member_id:
-                memberId,
-
-            trainer_id:
-                selectedGetTrainer.trainer_id,
-
-            program_id:
-                currentTrainerData.program_id,
-
-            program_plan_id:
-                currentTrainerData.program_plan_id,
-
-            plan_id:
-                selectedGetTrainerRate.plan_id,
-
-            request_type:
-                "standard"
-
+            member_id: memberId,
+            trainer_id: selectedGetTrainer.trainer_id,
+            program_id: selectedGetTrainerProgram.id,
+            program_plan_id: selectedGetTrainerPlan.id,
+            plan_id: selectedGetTrainerRate.plan_id,
+            start_date: `${yyyy}-${mm}-${dd}`
         };
 
+        console.log("GET TRAINER REQUEST:", payload);
 
-        console.log(
-            "GET TRAINER REQUEST:",
-            payload
+        const response = await fetch(
+            `${API_URL}/api/trainer/request`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
         );
 
+        const result = await response.json();
 
-        /*
-        =====================================================
-        NOTE:
-        Actual endpoint will be connected after
-        we finish and test the complete UI flow.
-        =====================================================
-        */
+        console.log("GET TRAINER REQUEST RESPONSE:", result);
+
+        if(!response.ok){
+            throw new Error(
+                result.message ||
+                `HTTP ${response.status}`
+            );
+        }
 
         alert(
-            "Trainer request data is ready."
+            result.message ||
+            "Trainer request submitted successfully."
         );
 
+        cancelGetTrainerRequest();
 
-        closeGetTrainerSelectionModal();
+        if(typeof loadCurrentProgram === "function"){
+            await loadCurrentProgram();
+        }
+
+        if(typeof loadWorkoutSchedule === "function"){
+            await loadWorkoutSchedule();
+        }
 
     }
     catch(error){
 
-        console.error(
-            "GET TRAINER REQUEST ERROR:",
-            error
-        );
-
+        console.error("GET TRAINER REQUEST ERROR:", error);
 
         alert(
             error.message ||
@@ -2867,15 +2783,13 @@ async function submitGetTrainerRequest(){
     }
     finally{
 
-        button.disabled =
-            false;
-
-        button.innerText =
-            "Request Trainer";
+        button.disabled = false;
+        button.innerText = "Request Trainer";
 
     }
 
 }
+
 
 /* =========================================================
    PROFILE DROPDOWN
