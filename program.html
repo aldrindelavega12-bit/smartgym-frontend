@@ -1410,19 +1410,29 @@ function closeGetTrainerConfirmation(){
 
 }
 
-
 function proceedGetTrainer(){
 
     closeGetTrainerConfirmation();
 
-    console.log(
-        "GET TRAINER: YES"
-    );
+    const modal =
+        document.getElementById(
+            "continueCurrentProgramModal"
+        );
 
-    // NEXT STEP:
-    // Open "Continue Current Program?" modal
+    if(!modal){
+
+        console.error(
+            "Continue Current Program modal not found."
+        );
+
+        return;
+    }
+
+    modal.classList.add("show");
 
 }
+
+
 /* =========================================================
    PROFILE DROPDOWN
 ========================================================= */
