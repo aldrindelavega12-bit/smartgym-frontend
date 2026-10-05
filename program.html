@@ -3930,7 +3930,46 @@ async function proceedChangeTrainer(){
 
 }
 
+/* =========================================================
+   CONTINUE CURRENT PROGRAM
+========================================================= */
 
+function closeContinueCurrentProgram(){
+
+    const modal =
+        document.getElementById(
+            "continueCurrentProgramModal"
+        );
+
+    if(!modal){
+        return;
+    }
+
+    modal.classList.remove("show");
+
+}
+
+
+function continueCurrentProgram(){
+
+    console.log(
+        "GET TRAINER: CONTINUE CURRENT PROGRAM"
+    );
+
+    closeContinueCurrentProgram();
+
+}
+
+
+function chooseNewProgram(){
+
+    console.log(
+        "GET TRAINER: CHOOSE NEW PROGRAM"
+    );
+
+    closeContinueCurrentProgram();
+
+}
 /* =========================================================
    OPEN MAIN MODAL
 ========================================================= */
