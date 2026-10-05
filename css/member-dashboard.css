@@ -8606,3 +8606,689 @@ textarea {
     }
 
 }
+
+/* =========================================================
+   GET TRAINER - NEW PROGRAM FORM
+========================================================= */
+
+.get-trainer-new-program-section {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.get-trainer-form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.get-trainer-form-group label {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #46524b;
+
+}
+
+
+.get-trainer-form-group select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 13px;
+
+    border: 1px solid #d8dfdb;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #26312b;
+
+    font-size: 13px;
+
+    outline: none;
+
+    cursor: pointer;
+
+}
+
+
+.get-trainer-form-group select:focus {
+
+    border-color: #087c3d;
+
+    box-shadow:
+        0 0 0 3px rgba(
+            8,
+            124,
+            61,
+            0.08
+        );
+
+}
+
+
+.get-trainer-form-group select:disabled {
+
+    background: #f3f5f4;
+
+    color: #9aa39e;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   GET TRAINER SELECTION MODAL
+========================================================= */
+
+.get-trainer-selection-modal {
+
+    position: fixed !important;
+
+    inset: 0 !important;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.38
+        );
+
+    z-index: 1000000 !important;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+
+}
+
+
+.get-trainer-selection-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+.get-trainer-selection-content {
+
+    width: 620px;
+
+    max-width: 92vw;
+
+    max-height: 88vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 17px;
+
+    padding: 28px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 70px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
+
+}
+
+
+.get-trainer-selection-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.get-trainer-selection-header h2 {
+
+    margin: 0 0 7px;
+
+    color: #26312b;
+
+    font-size: 21px;
+
+}
+
+
+.get-trainer-selection-header p {
+
+    margin: 0;
+
+    color: #68736d;
+
+    font-size: 13px;
+
+}
+
+
+.get-trainer-selection-close {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #68736d;
+
+    font-size: 27px;
+
+    cursor: pointer;
+
+    line-height: 1;
+
+}
+
+
+/* =========================================================
+   CURRENT PROGRAM
+========================================================= */
+
+.get-trainer-current-program {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.get-trainer-current-program > div {
+
+    background: #f5f8f6;
+
+    border: 1px solid #e1e8e3;
+
+    border-radius: 11px;
+
+    padding: 13px;
+
+}
+
+
+.get-trainer-current-program span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 11px;
+
+    color: #7b857f;
+
+}
+
+
+.get-trainer-current-program strong {
+
+    color: #26312b;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.get-trainer-section-title {
+
+    margin-bottom: 12px;
+
+}
+
+
+.get-trainer-section-title h3 {
+
+    margin: 0 0 4px;
+
+    font-size: 15px;
+
+    color: #26312b;
+
+}
+
+
+.get-trainer-section-title p {
+
+    margin: 0;
+
+    font-size: 12px;
+
+    color: #7b857f;
+
+}
+
+
+/* =========================================================
+   TRAINER LIST
+========================================================= */
+
+.get-trainer-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+}
+
+
+.get-trainer-option {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px 15px;
+
+    border: 1px solid #dfe6e1;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease,
+        transform 0.15s ease;
+
+}
+
+
+.get-trainer-option:hover {
+
+    border-color: #087c3d;
+
+    background: #f7fbf8;
+
+}
+
+
+.get-trainer-option.selected {
+
+    border-color: #087c3d;
+
+    background: #eef8f1;
+
+}
+
+
+.get-trainer-option-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.get-trainer-option-info strong {
+
+    color: #26312b;
+
+    font-size: 14px;
+
+}
+
+
+.get-trainer-option-info span {
+
+    color: #7b857f;
+
+    font-size: 11px;
+
+}
+
+
+.get-trainer-option-arrow {
+
+    color: #087c3d;
+
+    font-size: 20px;
+
+}
+
+
+/* =========================================================
+   RATE
+========================================================= */
+
+.get-trainer-rate-section {
+
+    margin-top: 24px;
+
+}
+
+
+.get-trainer-rate-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap: 10px;
+
+}
+
+
+.get-trainer-rate-option {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    border: 1px solid #dfe6e1;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+}
+
+
+.get-trainer-rate-option:hover {
+
+    border-color: #087c3d;
+
+}
+
+
+.get-trainer-rate-option.selected {
+
+    border-color: #087c3d;
+
+    background: #eef8f1;
+
+}
+
+
+.get-trainer-rate-option > div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.get-trainer-rate-option strong {
+
+    font-size: 13px;
+
+    color: #26312b;
+
+}
+
+
+.get-trainer-rate-option span {
+
+    font-size: 10px;
+
+    color: #7b857f;
+
+}
+
+
+.get-trainer-rate-option b {
+
+    color: #087c3d;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.get-trainer-preview {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+}
+
+
+.get-trainer-preview > div {
+
+    padding: 13px;
+
+    background: #f5f8f6;
+
+    border-radius: 10px;
+
+}
+
+
+.get-trainer-preview span {
+
+    display: block;
+
+    font-size: 10px;
+
+    color: #7b857f;
+
+    margin-bottom: 5px;
+
+}
+
+
+.get-trainer-preview strong {
+
+    color: #26312b;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.get-trainer-selection-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 25px;
+
+}
+
+
+.get-trainer-cancel-button,
+.get-trainer-request-button {
+
+    min-width: 120px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    padding: 11px 18px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.get-trainer-cancel-button {
+
+    background: #eef1ef;
+
+    color: #46524b;
+
+}
+
+
+.get-trainer-request-button {
+
+    background: #087c3d;
+
+    color: #ffffff;
+
+}
+
+
+.get-trainer-request-button:disabled {
+
+    background: #b9c5be;
+
+    color: #ffffff;
+
+    cursor: not-allowed;
+
+}
+
+
+.get-trainer-loading {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #7b857f;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(
+    max-width: 650px
+){
+
+    .get-trainer-new-program-section {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .get-trainer-current-program {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .get-trainer-rate-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .get-trainer-preview {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
