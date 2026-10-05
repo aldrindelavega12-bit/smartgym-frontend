@@ -616,6 +616,180 @@
 
 
         /* =====================================================
+           CREATE ACCOUNT BUTTON
+        ===================================================== */
+
+        .create-account-btn {
+            height: 32px;
+            padding: 0 12px;
+            border: none;
+            border-radius: 7px;
+            background: #008f4c;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .2s ease;
+        }
+
+        .create-account-btn:hover {
+            background: #007b41;
+        }
+
+
+        /* =====================================================
+           CREATE ACCOUNT MODAL
+        ===================================================== */
+
+        .create-account-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(16,28,23,.42);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            padding: 20px;
+        }
+
+        .create-account-modal-overlay.show {
+            display: flex;
+        }
+
+        .create-account-modal {
+            width: 100%;
+            max-width: 460px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.18);
+            overflow: hidden;
+        }
+
+        .create-account-modal-header {
+            padding: 15px 17px;
+            border-bottom: 1px solid #edf1ef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .create-account-modal-header h3 {
+            margin: 0;
+            font-size: 17px;
+            color: #111;
+        }
+
+        .create-account-modal-header p {
+            margin: 3px 0 0;
+            color: #71807b;
+            font-size: 9px;
+        }
+
+        .create-account-close {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #f4f7f5;
+            border-radius: 7px;
+            cursor: pointer;
+            color: #45524e;
+            font-size: 16px;
+        }
+
+        .create-account-close:hover {
+            background: #eaf2ed;
+        }
+
+        .create-account-modal-body {
+            padding: 17px;
+        }
+
+        .create-account-field {
+            margin-bottom: 13px;
+        }
+
+        .create-account-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 9px;
+            color: #34413d;
+            font-weight: 700;
+        }
+
+        .create-account-field input,
+        .create-account-field select {
+            width: 100%;
+            height: 38px;
+            box-sizing: border-box;
+            border: 1px solid #dce5e1;
+            border-radius: 8px;
+            background: #fff;
+            padding: 0 10px;
+            outline: none;
+            color: #34413d;
+            font-size: 10px;
+        }
+
+        .create-account-field input:focus,
+        .create-account-field select:focus {
+            border-color: #008f4c;
+        }
+
+        .create-account-field input::placeholder {
+            color: #9aa49f;
+        }
+
+        .create-account-error {
+            min-height: 15px;
+            margin-top: 3px;
+            color: #d33a3a;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .create-account-modal-footer {
+            padding: 11px 17px;
+            border-top: 1px solid #edf1ef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 7px;
+        }
+
+        .create-account-cancel-btn {
+            height: 34px;
+            padding: 0 14px;
+            border: 1px solid #dce5e1;
+            background: #fff;
+            color: #4e5b57;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .create-account-cancel-btn:hover {
+            background: #f5faf7;
+        }
+
+        .create-account-submit-btn {
+            height: 34px;
+            padding: 0 16px;
+            border: none;
+            background: #008f4c;
+            color: #fff;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .create-account-submit-btn:hover {
+            background: #007b41;
+        }
+
+
+        /* =====================================================
            RESPONSIVE
         ===================================================== */
 
@@ -888,6 +1062,14 @@
                                     Pre-Member
                                 </option>
                             </select>
+
+                            <button
+                                type="button"
+                                class="create-account-btn"
+                                onclick="openCreateAccountModal()"
+                            >
+                                Create Account
+                            </button>
 
                             
                         </div>
@@ -1471,6 +1653,118 @@
 
     </div>
 
+
+
+    <!-- =====================================================
+         CREATE ACCOUNT MODAL
+    ===================================================== -->
+
+    <div
+        class="create-account-modal-overlay"
+        id="createAccountModal"
+    >
+
+        <div class="create-account-modal">
+
+            <div class="create-account-modal-header">
+
+                <div>
+                    <h3>Create Account</h3>
+                    <p>Create a new user account.</p>
+                </div>
+
+                <button
+                    type="button"
+                    class="create-account-close"
+                    onclick="closeCreateAccountModal()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div class="create-account-modal-body">
+
+                <div class="create-account-field">
+                    <label for="createFullname">Full Name</label>
+                    <input
+                        type="text"
+                        id="createFullname"
+                        placeholder="Enter full name"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="create-account-field">
+                    <label for="createUsername">Username</label>
+                    <input
+                        type="text"
+                        id="createUsername"
+                        placeholder="Enter username"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="create-account-field">
+                    <label for="createPassword">Password</label>
+                    <input
+                        type="password"
+                        id="createPassword"
+                        placeholder="Enter password"
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <div class="create-account-field">
+                    <label for="createConfirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="createConfirmPassword"
+                        placeholder="Confirm password"
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <div class="create-account-field">
+                    <label for="createRole">Role</label>
+                    <select id="createRole">
+                        <option value="">Select Role</option>
+                        <option value="manager">Manager</option>
+                        <option value="trainer">Trainer</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+
+                <div
+                    class="create-account-error"
+                    id="createAccountError"
+                ></div>
+
+            </div>
+
+            <div class="create-account-modal-footer">
+
+                <button
+                    type="button"
+                    class="create-account-cancel-btn"
+                    onclick="closeCreateAccountModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="create-account-submit-btn"
+                    onclick="createAccount()"
+                >
+                    Create Account
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
     <!-- =====================================================
@@ -2291,6 +2585,117 @@
 
 
     /* =====================================================
+       CREATE ACCOUNT MODAL
+    ===================================================== */
+
+    const createAccountModal =
+        document.getElementById("createAccountModal");
+
+
+    function openCreateAccountModal() {
+
+        document.getElementById("createFullname").value = "";
+        document.getElementById("createUsername").value = "";
+        document.getElementById("createPassword").value = "";
+        document.getElementById("createConfirmPassword").value = "";
+        document.getElementById("createRole").value = "";
+        document.getElementById("createAccountError").textContent = "";
+
+        createAccountModal.classList.add("show");
+
+        document.body.style.overflow = "hidden";
+    }
+
+
+    function closeCreateAccountModal() {
+
+        createAccountModal.classList.remove("show");
+
+        document.body.style.overflow = "";
+    }
+
+
+    createAccountModal.addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === createAccountModal) {
+                closeCreateAccountModal();
+            }
+
+        }
+    );
+
+
+    function createAccount() {
+
+        const fullname =
+            document.getElementById("createFullname").value.trim();
+
+        const username =
+            document.getElementById("createUsername").value.trim();
+
+        const password =
+            document.getElementById("createPassword").value;
+
+        const confirmPassword =
+            document.getElementById("createConfirmPassword").value;
+
+        const role =
+            document.getElementById("createRole").value;
+
+        const error =
+            document.getElementById("createAccountError");
+
+        error.textContent = "";
+
+        if (!fullname) {
+            error.textContent = "Please enter the full name.";
+            return;
+        }
+
+        if (!username) {
+            error.textContent = "Please enter a username.";
+            return;
+        }
+
+        if (!password) {
+            error.textContent = "Please enter a password.";
+            return;
+        }
+
+        if (!confirmPassword) {
+            error.textContent = "Please confirm the password.";
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            error.textContent = "Passwords do not match.";
+            return;
+        }
+
+        if (!role) {
+            error.textContent = "Please select a role.";
+            return;
+        }
+
+        /*
+         * BACKEND WILL BE CONNECTED NEXT.
+         *
+         * For now, this only validates the form and
+         * does not create an account in the database.
+         */
+
+        showUsersToast(
+            "Ready to Create",
+            "The account form is valid. Backend creation will be connected next."
+        );
+
+        closeCreateAccountModal();
+    }
+
+
+    /* =====================================================
        OPEN USER MODAL
     ===================================================== */
 
@@ -2435,6 +2840,7 @@
             ) {
 
                 closeUserModal();
+                closeCreateAccountModal();
 
             }
 
