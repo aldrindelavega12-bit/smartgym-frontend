@@ -7682,3 +7682,131 @@ textarea {
 }
 
 
+
+
+/* =========================================================
+   GET TRAINER BUTTON CLICK FIX
+========================================================= */
+
+.program-action.get-trainer {
+    position: relative !important;
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* =========================================================
+   GET TRAINER CONFIRMATION MODAL
+========================================================= */
+
+.get-trainer-confirm-modal {
+    position: fixed !important;
+    inset: 0 !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    z-index: 1000000 !important;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+}
+
+.get-trainer-confirm-modal.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.get-trainer-confirm-content {
+    width: 430px;
+    max-width: 90%;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.get-trainer-confirm-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.get-trainer-confirm-header h2 {
+    margin: 0 0 8px;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    color: #26312b;
+}
+
+.get-trainer-confirm-header p {
+    margin: 0;
+
+    color: #68736d;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.get-trainer-confirm-close {
+    border: 0;
+    background: transparent;
+
+    color: #68736d;
+
+    font-size: 26px;
+
+    cursor: pointer;
+}
+
+.get-trainer-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.get-trainer-no,
+.get-trainer-yes {
+    min-width: 90px;
+
+    border: 0;
+    border-radius: 9px;
+
+    padding: 11px 18px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.get-trainer-no {
+    background: #eef1ef;
+    color: #46524b;
+}
+
+.get-trainer-yes {
+    background: #087c3d;
+    color: #ffffff;
+}
