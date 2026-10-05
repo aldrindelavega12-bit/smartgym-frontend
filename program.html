@@ -438,39 +438,32 @@
 
                 </button>
 
-
-
                 <!-- GET TRAINER -->
 
                 <button
                     type="button"
-                    class="program-action get-trainer">
-
+                    class="program-action get-trainer"
+                    onclick="openGetTrainerConfirmation()"
+                >
 
                     <div class="action-content">
-
 
                         <strong>
                             Get Trainer
                         </strong>
-
 
                         <span>
                             Choose a trainer for your current
                             program and split.
                         </span>
 
-
                     </div>
-
 
                     <span class="action-arrow">
                         →
                     </span>
 
-
                 </button>
-
 
             </div>
 
@@ -1230,6 +1223,66 @@
     </div>
 
 </div>
+
+<!-- =========================================================
+     GET TRAINER CONFIRMATION MODAL
+========================================================= -->
+
+<div
+    id="getTrainerConfirmModal"
+    class="get-trainer-confirm-modal"
+>
+
+    <div class="get-trainer-confirm-content">
+
+        <div class="get-trainer-confirm-header">
+
+            <div>
+
+                <h2>
+                    Get a Trainer
+                </h2>
+
+                <p>
+                    Are you sure you want to have a trainer?
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="get-trainer-confirm-close"
+                onclick="closeGetTrainerConfirmation()"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        <div class="get-trainer-confirm-actions">
+
+            <button
+                type="button"
+                class="get-trainer-no"
+                onclick="closeGetTrainerConfirmation()"
+            >
+                No
+            </button>
+
+            <button
+                type="button"
+                class="get-trainer-yes"
+                onclick="proceedGetTrainer()"
+            >
+                Yes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
@@ -1320,7 +1373,54 @@ if(user){
 }
 
 
+/* =========================================================
+   GET TRAINER
+========================================================= */
 
+function openGetTrainerConfirmation(){
+
+    const modal =
+        document.getElementById(
+            "getTrainerConfirmModal"
+        );
+
+    if(!modal){
+        return;
+    }
+
+    modal.classList.add("show");
+
+}
+
+
+function closeGetTrainerConfirmation(){
+
+    const modal =
+        document.getElementById(
+            "getTrainerConfirmModal"
+        );
+
+    if(!modal){
+        return;
+    }
+
+    modal.classList.remove("show");
+
+}
+
+
+function proceedGetTrainer(){
+
+    closeGetTrainerConfirmation();
+
+    console.log(
+        "GET TRAINER: YES"
+    );
+
+    // NEXT STEP:
+    // Open "Continue Current Program?" modal
+
+}
 /* =========================================================
    PROFILE DROPDOWN
 ========================================================= */
