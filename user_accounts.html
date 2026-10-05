@@ -1372,31 +1372,8 @@
             >
 
                 <div class="trainer-setup-title">
-                    Trainer Setup
+                    Trainer Rates
                 </div>
-
-
-                <div
-                    class="trainer-programs"
-                    id="trainerPrograms"
-                >
-
-                    <div style="
-                        grid-column:1/-1;
-                        font-size:9px;
-                        color:#87938f;
-                    ">
-                        Select Trainer to load programs.
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="trainer-program-error"
-                    id="trainerProgramError"
-                ></div>
-
 
                 <div class="trainer-prices">
 
@@ -2821,33 +2798,7 @@ async function createAccount(){
 
     if(role === "trainer"){
 
-        const selectedPrograms =
-            document.querySelectorAll(
-                ".trainer-program-checkbox:checked"
-            );
-
-
-        programs =
-            Array.from(
-                selectedPrograms
-            ).map(
-                checkbox =>
-                    Number(
-                        checkbox.value
-                    )
-            );
-
-
-        if(!programs.length){
-
-            document.getElementById(
-                "trainerProgramError"
-            ).textContent =
-                "Please select at least one program.";
-
-            return;
-
-        }
+    
 
 
         price_day =
