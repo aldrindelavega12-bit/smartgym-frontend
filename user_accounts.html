@@ -2627,7 +2627,7 @@
     );
 
 
-    function createAccount() {
+    async function createAccount() {
 
         const fullname =
             document.getElementById("createFullname").value.trim();
@@ -2647,7 +2647,15 @@
         const error =
             document.getElementById("createAccountError");
 
+        const submitButton =
+            document.querySelector(".create-account-submit-btn");
+
         error.textContent = "";
+
+
+        // =========================
+        // VALIDATION
+        // =========================
 
         if (!fullname) {
             error.textContent = "Please enter the full name.";
@@ -2679,22 +2687,134 @@
             return;
         }
 
-        /*
-         * BACKEND WILL BE CONNECTED NEXT.
-         *
-         * For now, this only validates the form and
-         * does not create an account in the database.
-         */
+        if (!["manager", "trainer", "staff"].includes(role)) {
+            error.textContent = "Invalid role selected.";
+            return;
+        }
 
-        showUsersToast(
-            "Ready to Create",
-            "The account form is valid. Backend creation will be connected next."
-        );
 
-        closeCreateAccountModal();
+        // =========================
+        // CREATE ACCOUNT
+        // =========================
+
+        try {
+
+            if (submitButton) {
+
+                submitButton.disabled = true;
+                submitButton.textContent = "Creating...";
+                submitButton.style.opacity = "0.7";
+                submitButton.style.cursor = "not-allowed";
+
+            }
+
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/admin/create_account`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            fullname: fullname,
+
+                            username: username,
+
+                            password: password,
+
+                            role: role
+
+                        })
+                    }
+                );
+
+
+            let result = {};
+
+            try {
+
+                result =
+                    await response.json();
+
+            } catch (jsonError) {
+
+                result = {
+                    status: "error",
+                    message:
+                        `Server returned HTTP ${response.status}.`
+                };
+
+            }
+
+
+            // =========================
+            // BACKEND ERROR
+            // =========================
+
+            if (
+                !response.ok ||
+                result.status !== "success"
+            ) {
+
+                error.textContent =
+                    result.message ||
+                    "Failed to create account.";
+
+                return;
+
+            }
+
+
+            // =========================
+            // SUCCESS
+            // =========================
+
+            closeCreateAccountModal();
+
+
+            showUsersToast(
+                "Account Created",
+                result.message ||
+                "Account created successfully."
+            );
+
+
+            // Reload users so new account appears
+            await loadUsers();
+
+
+        } catch (requestError) {
+
+            console.error(
+                "CREATE ACCOUNT ERROR:",
+                requestError
+            );
+
+            error.textContent =
+                "Unable to connect to the server.";
+
+        } finally {
+
+            if (submitButton) {
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "Create Account";
+
+                submitButton.style.opacity = "";
+                submitButton.style.cursor = "";
+
+            }
+
+        }
+
     }
-
-
     /* =====================================================
        OPEN USER MODAL
     ===================================================== */

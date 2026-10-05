@@ -108,6 +108,41 @@
     }
 }
 
+
+    /* lahat ng existing CSS mo dito */
+
+
+    /* ILAGAY DITO ANG GET TRAINER SELECTION CSS */
+
+    .get-trainer-selection-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(0,0,0,.38);
+
+        z-index: 9999999 !important;
+
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .get-trainer-selection-modal.show {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    /* ...yung natitirang CSS na sinend ko... */
+
+
+
 </style>
 
 <body>
@@ -1581,6 +1616,117 @@
     </div>
 
 </div>
+
+<!-- GET TRAINER SELECTION MODAL -->
+
+<div id="getTrainerSelectionModal" class="get-trainer-selection-modal">
+
+    <div class="get-trainer-selection-content">
+
+        <div class="get-trainer-selection-header">
+
+            <div>
+                <h2>Choose Your Trainer</h2>
+                <p>Select a trainer for your current program and split.</p>
+            </div>
+
+            <button
+                type="button"
+                class="get-trainer-selection-close"
+                onclick="cancelGetTrainerRequest()"
+            >
+                &times;
+            </button>
+
+        </div>
+
+        <div class="get-trainer-current-program">
+
+            <div>
+                <span>Current Program</span>
+                <strong id="getTrainerSelectionProgram">-</strong>
+            </div>
+
+            <div>
+                <span>Current Plan / Split</span>
+                <strong id="getTrainerSelectionPlan">-</strong>
+            </div>
+
+        </div>
+
+        <div class="get-trainer-section-title">
+            <h3>Available Trainers</h3>
+            <p>Choose the trainer you want to work with.</p>
+        </div>
+
+        <div id="getTrainerList" class="get-trainer-list">
+            <div class="get-trainer-loading">
+                Loading trainers...
+            </div>
+        </div>
+
+        <div
+            id="getTrainerRateSection"
+            class="get-trainer-rate-section"
+            style="display:none;"
+        >
+
+            <div class="get-trainer-section-title">
+                <h3>Trainer Rate</h3>
+                <p>Choose your preferred trainer service duration.</p>
+            </div>
+
+            <div
+                id="getTrainerRateList"
+                class="get-trainer-rate-list"
+            ></div>
+
+        </div>
+
+        <div
+            id="getTrainerPreview"
+            class="get-trainer-preview"
+            style="display:none;"
+        >
+
+            <div>
+                <span>Trainer</span>
+                <strong id="getTrainerSelectedName">-</strong>
+            </div>
+
+            <div>
+                <span>Selected Rate</span>
+                <strong id="getTrainerSelectedRate">-</strong>
+            </div>
+
+        </div>
+
+        <div class="get-trainer-selection-actions">
+
+            <button
+                type="button"
+                class="get-trainer-cancel-button"
+                onclick="cancelGetTrainerRequest()"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="getTrainerRequestButton"
+                class="get-trainer-request-button"
+                onclick="submitGetTrainerRequest()"
+                disabled
+            >
+                Request Trainer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
