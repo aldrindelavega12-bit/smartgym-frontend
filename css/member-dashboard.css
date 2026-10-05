@@ -4508,7 +4508,12 @@ textarea {
 }
 
 
-
+.program-action.get-trainer {
+    position: relative !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
 
 /* =========================================================
    PROGRAM ACTIONS
