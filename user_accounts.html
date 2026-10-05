@@ -851,6 +851,124 @@
 
         }
 
+        /* =====================================================
+        TRAINER SETUP
+        ===================================================== */
+
+        .trainer-setup {
+            display: none;
+            margin-top: 4px;
+            padding: 12px;
+            background: #f8fbf9;
+            border: 1px solid #e1e9e5;
+            border-radius: 9px;
+        }
+
+        .trainer-setup.show {
+            display: block;
+        }
+
+        .trainer-setup-title {
+            margin-bottom: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #34413d;
+        }
+
+        .trainer-programs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .trainer-program-option {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 34px;
+            padding: 7px 9px;
+            border: 1px solid #dce5e1;
+            border-radius: 7px;
+            background: #fff;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .trainer-program-option:hover {
+            border-color: #9acfb4;
+            background: #fbfefc;
+        }
+
+        .trainer-program-option.selected {
+            border-color: #b7dfc8;
+            background: #eef9f3;
+        }
+
+        .trainer-program-option input {
+            width: 14px;
+            height: 14px;
+            margin: 0;
+            accent-color: #008f4c;
+            cursor: pointer;
+        }
+
+        .trainer-program-option span {
+            font-size: 9px;
+            color: #34413d;
+            font-weight: 600;
+        }
+
+        .trainer-prices {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 7px;
+        }
+
+        .trainer-price-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 8px;
+            color: #34413d;
+            font-weight: 700;
+        }
+
+        .trainer-price-field input {
+            width: 100%;
+            height: 34px;
+            box-sizing: border-box;
+            border: 1px solid #dce5e1;
+            border-radius: 7px;
+            padding: 0 8px;
+            outline: none;
+            font-size: 9px;
+            color: #34413d;
+        }
+
+        .trainer-price-field input:focus {
+            border-color: #008f4c;
+        }
+
+        .trainer-program-error {
+            margin-top: 5px;
+            margin-bottom: 8px;
+            color: #d33a3a;
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 650px) {
+
+            .trainer-programs {
+                grid-template-columns: 1fr;
+            }
+
+            .trainer-prices {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
     </style>
 </head>
 
@@ -1736,6 +1854,87 @@
                 </div>
 
                 <div
+                    class="trainer-setup"
+                    id="trainerSetup"
+                >
+
+                    <div class="trainer-setup-title">
+                        Trainer Setup
+                    </div>
+
+                    <div
+                        class="trainer-programs"
+                        id="trainerPrograms"
+                    >
+                        <div style="
+                            grid-column:1/-1;
+                            font-size:9px;
+                            color:#87938f;
+                        ">
+                            Loading programs...
+                        </div>
+                    </div>
+
+                    <div
+                        class="trainer-program-error"
+                        id="trainerProgramError"
+                    ></div>
+
+                    <div class="trainer-prices">
+
+                        <div class="trainer-price-field">
+
+                            <label for="trainerPriceDay">
+                                Price Per Day
+                            </label>
+
+                            <input
+                                type="number"
+                                id="trainerPriceDay"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                            >
+
+                        </div>
+
+                        <div class="trainer-price-field">
+
+                            <label for="trainerPriceWeek">
+                                Price Per Week
+                            </label>
+
+                            <input
+                                type="number"
+                                id="trainerPriceWeek"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                            >
+
+                        </div>
+
+                        <div class="trainer-price-field">
+
+                            <label for="trainerPriceMonth">
+                                Price Per Month
+                            </label>
+
+                            <input
+                                type="number"
+                                id="trainerPriceMonth"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div
                     class="create-account-error"
                     id="createAccountError"
                 ></div>
@@ -2591,20 +2790,48 @@
     const createAccountModal =
         document.getElementById("createAccountModal");
 
-
     function openCreateAccountModal() {
 
-        document.getElementById("createFullname").value = "";
-        document.getElementById("createUsername").value = "";
-        document.getElementById("createPassword").value = "";
-        document.getElementById("createConfirmPassword").value = "";
-        document.getElementById("createRole").value = "";
-        document.getElementById("createAccountError").textContent = "";
+        document.getElementById(
+            "createFullname"
+        ).value = "";
 
-        createAccountModal.classList.add("show");
+        document.getElementById(
+            "createUsername"
+        ).value = "";
 
-        document.body.style.overflow = "hidden";
+        document.getElementById(
+            "createPassword"
+        ).value = "";
+
+        document.getElementById(
+            "createConfirmPassword"
+        ).value = "";
+
+        document.getElementById(
+            "createRole"
+        ).value = "";
+
+        document.getElementById(
+            "createAccountError"
+        ).textContent = "";
+
+
+        clearTrainerSetup();
+
+
+        createAccountModal.classList.add(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "hidden";
+
     }
+
+
+    
 
 
     function closeCreateAccountModal() {
@@ -2626,86 +2853,205 @@
         }
     );
 
-
     async function createAccount() {
 
         const fullname =
-            document.getElementById("createFullname").value.trim();
+            document
+                .getElementById("createFullname")
+                .value
+                .trim();
 
         const username =
-            document.getElementById("createUsername").value.trim();
+            document
+                .getElementById("createUsername")
+                .value
+                .trim();
 
         const password =
-            document.getElementById("createPassword").value;
+            document
+                .getElementById("createPassword")
+                .value;
 
         const confirmPassword =
-            document.getElementById("createConfirmPassword").value;
+            document
+                .getElementById("createConfirmPassword")
+                .value;
 
         const role =
-            document.getElementById("createRole").value;
+            document
+                .getElementById("createRole")
+                .value;
 
         const error =
-            document.getElementById("createAccountError");
+            document
+                .getElementById("createAccountError");
 
         const submitButton =
-            document.querySelector(".create-account-submit-btn");
+            document.querySelector(
+                ".create-account-submit-btn"
+            );
 
         error.textContent = "";
 
-
-        // =========================
-        // VALIDATION
-        // =========================
+        /* =========================
+        BASIC VALIDATION
+        ========================= */
 
         if (!fullname) {
-            error.textContent = "Please enter the full name.";
+            error.textContent =
+                "Please enter the full name.";
             return;
         }
 
         if (!username) {
-            error.textContent = "Please enter a username.";
+            error.textContent =
+                "Please enter a username.";
             return;
         }
 
         if (!password) {
-            error.textContent = "Please enter a password.";
+            error.textContent =
+                "Please enter a password.";
             return;
         }
 
         if (!confirmPassword) {
-            error.textContent = "Please confirm the password.";
+            error.textContent =
+                "Please confirm the password.";
             return;
         }
 
         if (password !== confirmPassword) {
-            error.textContent = "Passwords do not match.";
+            error.textContent =
+                "Passwords do not match.";
             return;
         }
 
         if (!role) {
-            error.textContent = "Please select a role.";
+            error.textContent =
+                "Please select a role.";
             return;
         }
 
-        if (!["manager", "trainer", "staff"].includes(role)) {
-            error.textContent = "Invalid role selected.";
+        if (
+            ![
+                "manager",
+                "trainer",
+                "staff"
+            ].includes(role)
+        ) {
+            error.textContent =
+                "Invalid role selected.";
             return;
         }
 
 
-        // =========================
-        // CREATE ACCOUNT
-        // =========================
+        /* =========================
+        TRAINER DATA
+        ========================= */
+
+        let programs = [];
+
+        let price_day = null;
+        let price_week = null;
+        let price_month = null;
+
+
+        if (role === "trainer") {
+
+            const selectedPrograms =
+                document.querySelectorAll(
+                    ".trainer-program-checkbox:checked"
+                );
+
+            programs =
+                Array.from(
+                    selectedPrograms
+                ).map(
+                    checkbox =>
+                        Number(checkbox.value)
+                );
+
+
+            if (!programs.length) {
+
+                document.getElementById(
+                    "trainerProgramError"
+                ).textContent =
+                    "Please select at least one program.";
+
+                return;
+            }
+
+
+            price_day =
+                document
+                    .getElementById(
+                        "trainerPriceDay"
+                    )
+                    .value;
+
+            price_week =
+                document
+                    .getElementById(
+                        "trainerPriceWeek"
+                    )
+                    .value;
+
+            price_month =
+                document
+                    .getElementById(
+                        "trainerPriceMonth"
+                    )
+                    .value;
+
+
+            if (
+                price_day === "" ||
+                price_week === "" ||
+                price_month === ""
+            ) {
+
+                error.textContent =
+                    "Please complete all trainer prices.";
+
+                return;
+            }
+
+
+            if (
+                Number(price_day) < 0 ||
+                Number(price_week) < 0 ||
+                Number(price_month) < 0
+            ) {
+
+                error.textContent =
+                    "Trainer prices cannot be negative.";
+
+                return;
+            }
+
+        }
+
+
+        /* =========================
+        SUBMIT
+        ========================= */
 
         try {
 
             if (submitButton) {
 
                 submitButton.disabled = true;
-                submitButton.textContent = "Creating...";
-                submitButton.style.opacity = "0.7";
-                submitButton.style.cursor = "not-allowed";
 
+                submitButton.textContent =
+                    "Creating...";
+
+                submitButton.style.opacity =
+                    "0.7";
+
+                submitButton.style.cursor =
+                    "not-allowed";
             }
 
 
@@ -2716,18 +3062,35 @@
                         method: "POST",
 
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type":
+                                "application/json"
                         },
 
                         body: JSON.stringify({
 
-                            fullname: fullname,
+                            fullname:
+                                fullname,
 
-                            username: username,
+                            username:
+                                username,
 
-                            password: password,
+                            password:
+                                password,
 
-                            role: role
+                            role:
+                                role,
+
+                            programs:
+                                programs,
+
+                            price_day:
+                                price_day,
+
+                            price_week:
+                                price_week,
+
+                            price_month:
+                                price_month
 
                         })
                     }
@@ -2744,17 +3107,20 @@
             } catch (jsonError) {
 
                 result = {
+
                     status: "error",
+
                     message:
                         `Server returned HTTP ${response.status}.`
+
                 };
 
             }
 
 
-            // =========================
-            // BACKEND ERROR
-            // =========================
+            /* =========================
+            BACKEND ERROR
+            ========================= */
 
             if (
                 !response.ok ||
@@ -2766,13 +3132,12 @@
                     "Failed to create account.";
 
                 return;
-
             }
 
 
-            // =========================
-            // SUCCESS
-            // =========================
+            /* =========================
+            SUCCESS
+            ========================= */
 
             closeCreateAccountModal();
 
@@ -2784,7 +3149,6 @@
             );
 
 
-            // Reload users so new account appears
             await loadUsers();
 
 
@@ -2795,26 +3159,35 @@
                 requestError
             );
 
+
             error.textContent =
                 "Unable to connect to the server.";
+
 
         } finally {
 
             if (submitButton) {
 
-                submitButton.disabled = false;
+                submitButton.disabled =
+                    false;
 
                 submitButton.textContent =
                     "Create Account";
 
-                submitButton.style.opacity = "";
-                submitButton.style.cursor = "";
+                submitButton.style.opacity =
+                    "";
 
+                submitButton.style.cursor =
+                    "";
             }
 
         }
 
     }
+
+
+   
+    
     /* =====================================================
        OPEN USER MODAL
     ===================================================== */
