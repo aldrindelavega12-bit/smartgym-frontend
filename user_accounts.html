@@ -866,9 +866,7 @@
                                     All Roles
                                 </option>
 
-                                <option value="admin">
-                                    Admin
-                                </option>
+                                
 
                                 <option value="manager">
                                     Manager
@@ -1899,7 +1897,12 @@
             }
 
 
-            allUsers = result.data || [];
+            allUsers = (result.data || []).filter(user => {
+                return (
+                    user.role &&
+                    user.role.toLowerCase() !== "admin"
+                );
+            });
 
 
             /*
