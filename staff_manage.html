@@ -335,13 +335,27 @@ if(
 
     <div class="staff-modal-box">
 
+        <!-- =========================
+             HEADER
+        ========================== -->
+
         <div class="staff-modal-header">
 
-            <h2 id="staffModalTitle">
-                Add Staff
-            </h2>
+            <div class="staff-modal-title-area">
+
+                <h2 id="staffModalTitle">
+                    Create Account
+                </h2>
+
+                <p>
+                    Create a new user account.
+                </p>
+
+            </div>
+
 
             <button
+                type="button"
                 class="close-modal"
                 onclick="closeStaffModal()">
 
@@ -352,133 +366,212 @@ if(
         </div>
 
 
-        <div id="trainerStep1">
+        <!-- =========================
+             BODY
+        ========================== -->
 
-            <!-- FULL NAME -->
-            <div class="staff-form-group">
-                <label>Full Name</label>
+        <div class="staff-modal-body">
 
-                <input
-                    type="text"
-                    id="fullname"
-                    placeholder="Enter full name">
-            </div>
+            <div id="trainerStep1">
 
 
-            <!-- USERNAME -->
-            <div class="staff-form-group">
-                <label>Username</label>
+                <!-- FULL NAME -->
 
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="Enter username">
-            </div>
+                <div class="staff-form-group">
 
+                    <label>
+                        Full Name
+                    </label>
 
-            <!-- PASSWORD -->
-            <div class="staff-form-group">
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter password">
-            </div>
-
-
-            <!-- CONFIRM PASSWORD -->
-            <div class="staff-form-group">
-                <label>Confirm Password</label>
-
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm password">
-            </div>
-
-
-            <!-- ROLE -->
-            <div class="staff-form-group">
-                <label>Role</label>
-
-                <select id="role">
-
-                    <option value="">
-                        Select Role
-                    </option>
-
-                    <option value="staff">
-                        Front Desk
-                    </option>
-
-                    <option value="trainer">
-                        Trainer
-                    </option>
-
-                </select>
-            </div>
-
-
-            <!-- TRAINER RATE -->
-            <div
-                id="trainerRateFields"
-                class="trainer-rate-section"
-                style="display:none;">
-
-                <div class="trainer-rate-header">
-                    <strong>Trainer Rate</strong>
-
-                    <span>
-                        Set the trainer's rate for sessions.
-                    </span>
-                </div>
-
-
-                <div class="trainer-rate-grid">
-
-                    <div class="staff-form-group">
-                        <label>Price Per Day</label>
-
-                        <input
-                            type="number"
-                            id="priceDay"
-                            placeholder="Enter price"
-                            min="0"
-                            step="1">
-                    </div>
-
-
-                    <div class="staff-form-group">
-                        <label>Price Per Week</label>
-
-                        <input
-                            type="number"
-                            id="priceWeek"
-                            placeholder="Enter price"
-                            min="0"
-                            step="1">
-                    </div>
-
-
-                    <div class="staff-form-group">
-                        <label>Price Per Month</label>
-
-                        <input
-                            type="number"
-                            id="priceMonth"
-                            placeholder="Enter price"
-                            min="0"
-                            step="1">
-                    </div>
+                    <input
+                        type="text"
+                        id="fullname"
+                        placeholder="Enter full name">
 
                 </div>
 
+
+                <!-- USERNAME -->
+
+                <div class="staff-form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username">
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="staff-form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password">
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="staff-form-group">
+
+                    <label>
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm password">
+
+                </div>
+
+
+                <!-- ROLE -->
+
+                <div class="staff-form-group">
+
+                    <label>
+                        Role
+                    </label>
+
+                    <select id="role">
+
+                        <option value="">
+                            Select Role
+                        </option>
+
+                        <option value="staff">
+                            Front Desk
+                        </option>
+
+                        <option value="trainer">
+                            Trainer
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- =========================
+                     TRAINER RATES
+                ========================== -->
+
+                <div
+                    id="trainerRateFields"
+                    class="trainer-rate-section"
+                    style="display:none;">
+
+                    <div class="trainer-rate-title">
+                        Trainer Rates
+                    </div>
+
+
+                    <div class="trainer-rate-grid">
+
+
+                        <!-- DAY -->
+
+                        <div class="trainer-rate-field">
+
+                            <label>
+                                Price Per Day
+                            </label>
+
+                            <input
+                                type="number"
+                                id="priceDay"
+                                placeholder="0.00"
+                                min="0"
+                                step="0.01">
+
+                        </div>
+
+
+                        <!-- WEEK -->
+
+                        <div class="trainer-rate-field">
+
+                            <label>
+                                Price Per Week
+                            </label>
+
+                            <input
+                                type="number"
+                                id="priceWeek"
+                                placeholder="0.00"
+                                min="0"
+                                step="0.01">
+
+                        </div>
+
+
+                        <!-- MONTH -->
+
+                        <div class="trainer-rate-field">
+
+                            <label>
+                                Price Per Month
+                            </label>
+
+                            <input
+                                type="number"
+                                id="priceMonth"
+                                placeholder="0.00"
+                                min="0"
+                                step="0.01">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR MESSAGE -->
+
+                <div
+                    id="staffFormError"
+                    class="staff-form-error">
+                </div>
+
+
             </div>
 
+        </div>
 
-            <!-- CREATE BUTTON -->
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+
+        <div class="staff-modal-footer">
+
             <button
+                type="button"
+                class="staff-cancel-btn"
+                onclick="closeStaffModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
                 id="createStaffBtn"
                 class="create-staff-submit"
                 onclick="createAccount()">
@@ -489,10 +582,10 @@ if(
 
         </div>
 
+
     </div>
 
 </div>
-
 
 
 <!-- DELETE CONFIRMATION MODAL -->

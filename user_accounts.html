@@ -903,6 +903,306 @@
         }
 
 
+
+        /* =====================================================
+           STAFF MANAGEMENT VISUAL MATCH
+           Presentation only — existing JS/API/functionality kept
+        ===================================================== */
+
+        .users-page {
+            width: 100%;
+        }
+
+        .users-page-header {
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .users-page-title h1 {
+            margin: 0;
+            font-size: 36px;
+            line-height: 1.1;
+            font-weight: 800;
+            color: #14231d;
+        }
+
+        .users-page-title p {
+            margin: 3px 0 0;
+            font-size: 16px;
+            color: #65756e;
+        }
+
+        .users-search {
+            width: auto;
+            height: 42px;
+            flex: 1;
+            min-width: 0;
+            background: #fff;
+            border: 1px solid #dfe5ec;
+            border-radius: 8px;
+            box-shadow: none;
+            padding: 0 13px;
+        }
+
+        .users-search input {
+            font-family: Inter, sans-serif;
+            font-size: 13px;
+            color: #24395f;
+        }
+
+        .users-card {
+            background: #fff;
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(20, 60, 45, 0.06);
+            padding: 16px;
+            overflow: visible;
+            height: fit-content;
+        }
+
+        .users-card-header {
+            padding: 0;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .users-card-title {
+            display: none;
+        }
+
+        .users-tools {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .users-select {
+            width: 205px;
+            min-width: 205px;
+            height: 42px;
+            border: 1px solid #dfe5ec;
+            border-radius: 8px;
+            padding: 0 13px;
+            background: #fff;
+            color: #20385f;
+            font-family: Inter, sans-serif;
+            font-size: 13px;
+        }
+
+        .create-account-btn {
+            height: 42px;
+            min-width: 145px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 8px;
+            background: #09ad65;
+            color: #fff;
+            font-family: Inter, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .create-account-btn:hover {
+            background: #079657;
+        }
+
+        .users-table-wrap {
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        .users-table thead {
+            background: #edf9f4;
+        }
+
+        .users-table th {
+            text-align: left;
+            padding: 9px 10px;
+            background: transparent;
+            color: #385248;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .users-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #edf1ef;
+            color: #40534b;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .users-table tbody tr {
+            height: 40px;
+        }
+
+        .users-table tbody tr:hover {
+            background: #fafdfb;
+        }
+
+        .user-number {
+            color: #5f7294;
+        }
+
+        .user-name {
+            color: #40534b;
+            font-weight: 600;
+        }
+
+        .user-username {
+            color: #40534b;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .role-staff {
+            background: #e5f3fc;
+            color: #0879d8;
+        }
+
+        .role-manager {
+            background: #eeeafc;
+            color: #6744c5;
+        }
+
+        .role-admin {
+            background: #eeeafc;
+            color: #6744c5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .status-badge.active {
+            background: #e4f6ed;
+            color: #16834c;
+        }
+
+        .status-badge.inactive {
+            background: #ffe8e8;
+            color: #d93636;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .view-user-btn {
+            height: 34px;
+            padding: 0 12px;
+            border: none;
+            border-radius: 7px;
+            background: #f5f7f9;
+            color: #19355c;
+            font-family: Inter, sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .view-user-btn:hover {
+            background: #edf2f5;
+        }
+
+        .users-table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding: 0;
+            border-top: none;
+        }
+
+        .users-showing {
+            color: #5f7294;
+            font-size: 12px;
+        }
+
+        .users-pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pagination-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 7px;
+            background: #f5f7f9;
+            color: #19355c;
+            font-family: Inter, sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pagination-btn:hover {
+            background: #edf2f5;
+        }
+
+        .pagination-btn.active {
+            background: #09ad65;
+            border-color: #09ad65;
+            color: #fff;
+        }
+
+        @media (max-width: 1000px) {
+            .users-page-header {
+                margin-bottom: 24px;
+            }
+
+            .users-card-header {
+                align-items: stretch;
+            }
+
+            .users-tools {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .users-tools {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .users-search,
+            .users-select,
+            .create-account-btn {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
     </style>
 </head>
 
