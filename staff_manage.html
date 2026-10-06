@@ -356,8 +356,13 @@ if(
              STEP 1
         ========================== -->
 
+        <!-- =========================
+            STAFF / TRAINER FORM
+        ========================== -->
+
         <div id="trainerStep1">
 
+            <!-- FULL NAME -->
             <div class="staff-form-group">
 
                 <label>Full Name</label>
@@ -370,6 +375,7 @@ if(
             </div>
 
 
+            <!-- ROLE -->
             <div class="staff-form-group">
 
                 <label>Role</label>
@@ -389,6 +395,7 @@ if(
             </div>
 
 
+            <!-- USERNAME -->
             <div class="staff-form-group">
 
                 <label>Username</label>
@@ -401,6 +408,7 @@ if(
             </div>
 
 
+            <!-- PASSWORD -->
             <div class="staff-form-group">
 
                 <label>Password</label>
@@ -413,6 +421,7 @@ if(
             </div>
 
 
+            <!-- CONFIRM PASSWORD -->
             <div class="staff-form-group">
 
                 <label>Confirm Password</label>
@@ -425,150 +434,70 @@ if(
             </div>
 
 
-            <!-- STAFF ONLY -->
+            <!-- =========================
+                TRAINER RATES
+            ========================== -->
 
-            <button
-                id="createStaffBtn"
-                class="create-staff-submit"
-                onclick="createAccount()">
-
-                Create Staff Account
-
-            </button>
-
-
-            <!-- TRAINER ONLY -->
-
-            <button
-                id="trainerNextBtn"
-                class="create-staff-submit"
-                onclick="nextTrainerStep()"
+            <div
+                id="trainerRateFields"
                 style="display:none;">
 
-                Next →
+                <div class="staff-form-group">
 
-            </button>
+                    <label>Price Per Day</label>
 
-        </div>
+                    <input
+                        type="number"
+                        id="priceDay"
+                        placeholder="Enter price"
+                        min="0"
+                        step="1">
 
-
-
-        <!-- =========================
-             STEP 2 - TRAINER
-        ========================== -->
-
-        <div
-            id="trainerStep2"
-            style="display:none;">
-
-            <div class="staff-form-group">
-
-                <label>
-                    Programs Offered
-                </label>
-
-                <select
-                    id="programSelect"
-                    onchange="addSelectedProgram()">
-
-                    <option value="">
-                        Select Program
-                    </option>
-
-                </select>
-
-            </div>
+                </div>
 
 
-            <div id="selectedPrograms"></div>
+                <div class="staff-form-group">
+
+                    <label>Price Per Week</label>
+
+                    <input
+                        type="number"
+                        id="priceWeek"
+                        placeholder="Enter price"
+                        min="0"
+                        step="1">
+
+                </div>
 
 
-            <!-- TRAINER PRICING -->
+                <div class="staff-form-group">
 
-            <div class="trainer-pricing-fields show">
+                    <label>Price Per Month</label>
 
-                <div class="trainer-pricing-row">
-
-                    <div class="trainer-price-group">
-
-                        <label>
-                            Price Per Day
-                        </label>
-
-                        <input
-                            type="number"
-                            id="priceDay"
-                            placeholder="Enter price"
-                            min="0"
-                            step="1">
-
-                    </div>
-
-
-                    <div class="trainer-price-group">
-
-                        <label>
-                            Price Per Week
-                        </label>
-
-                        <input
-                            type="number"
-                            id="priceWeek"
-                            placeholder="Enter price"
-                            min="0"
-                            step="1">
-
-                    </div>
-
-
-                    <div class="trainer-price-group">
-
-                        <label>
-                            Price Per Month
-                        </label>
-
-                        <input
-                            type="number"
-                            id="priceMonth"
-                            placeholder="Enter price"
-                            min="0"
-                            step="1">
-
-                    </div>
+                    <input
+                        type="number"
+                        id="priceMonth"
+                        placeholder="Enter price"
+                        min="0"
+                        step="1">
 
                 </div>
 
             </div>
 
 
-            <div
-                style="
-                    display:flex;
-                    gap:10px;
-                    margin-top:20px;
-                ">
+            <!-- =========================
+                CREATE BUTTON
+            ========================== -->
 
-                <button
-                    type="button"
-                    onclick="backTrainerStep()"
-                    class="create-staff-submit"
-                    style="background:#eef2f0; color:#26352f;">
+            <button
+                id="createStaffBtn"
+                class="create-staff-submit"
+                onclick="createAccount()">
 
-                    ← Back
+                Create Account
 
-                </button>
-
-
-                <button
-                    type="button"
-                    onclick="createAccount()"
-                    class="create-staff-submit">
-
-                    Create Trainer
-
-                </button>
-
-            </div>
+            </button>
 
         </div>
 
