@@ -2242,6 +2242,8 @@
 
     let filteredUsers = [];
 
+    let currentUserPage = 1;
+    const usersPerPage = 10;
 
     /* =====================================================
        DOM
@@ -2397,6 +2399,125 @@
 
     }
 
+    function renderUserPagination(totalPages) {
+
+        const pagination =
+            document.querySelector(
+                ".users-pagination"
+            );
+
+        if (!pagination) {
+            return;
+        }
+
+        pagination.innerHTML = "";
+
+        if (totalPages <= 1) {
+            return;
+        }
+
+        const previous =
+            document.createElement("button");
+
+        previous.className =
+            "pagination-btn";
+
+        previous.innerHTML = "‹";
+
+        previous.disabled =
+            currentUserPage === 1;
+
+        previous.onclick = function () {
+
+            if (currentUserPage > 1) {
+
+                currentUserPage--;
+
+                renderUsers();
+
+            }
+
+        };
+
+        pagination.appendChild(
+            previous
+        );
+
+
+        for (
+            let page = 1;
+            page <= totalPages;
+            page++
+        ) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.className =
+                "pagination-btn";
+
+            button.textContent =
+                page;
+
+            if (
+                page === currentUserPage
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+            button.onclick =
+                function () {
+
+                    currentUserPage =
+                        page;
+
+                    renderUsers();
+
+                };
+
+            pagination.appendChild(
+                button
+            );
+
+        }
+
+
+        const next =
+            document.createElement("button");
+
+        next.className =
+            "pagination-btn";
+
+        next.innerHTML = "›";
+
+        next.disabled =
+            currentUserPage === totalPages;
+
+        next.onclick = function () {
+
+            if (
+                currentUserPage < totalPages
+            ) {
+
+                currentUserPage++;
+
+                renderUsers();
+
+            }
+
+        };
+
+        pagination.appendChild(
+            next
+        );
+    }
+
 
     /* =====================================================
        RENDER USERS
@@ -2405,7 +2526,6 @@
     function renderUsers() {
 
         userTableBody.innerHTML = "";
-
 
         if (filteredUsers.length === 0) {
 
@@ -2417,53 +2537,66 @@
                 </tr>
             `;
 
-
             usersShowing.textContent =
                 "Showing 0 users";
 
-
             return;
-
         }
 
+        const totalUsers = filteredUsers.length;
 
-        filteredUsers.forEach(
+        const totalPages = Math.ceil(
+            totalUsers / usersPerPage
+        );
+
+        if (currentUserPage > totalPages) {
+            currentUserPage = totalPages;
+        }
+
+        const startIndex =
+            (currentUserPage - 1) * usersPerPage;
+
+        const endIndex =
+            Math.min(
+                startIndex + usersPerPage,
+                totalUsers
+            );
+
+        const pageUsers =
+            filteredUsers.slice(
+                startIndex,
+                endIndex
+            );
+
+        pageUsers.forEach(
             (user, index) => {
 
                 const frontendUser =
                     users[user.id];
 
-
                 const row =
                     document.createElement("tr");
 
-
                 row.dataset.name =
                     (
-                        user.fullname ||
-                        ""
+                        user.fullname || ""
                     ).toLowerCase();
-
 
                 row.dataset.username =
                     (
-                        user.username ||
-                        ""
+                        user.username || ""
                     ).toLowerCase();
-
 
                 row.dataset.role =
                     normalizeRole(
                         user.role
                     );
 
-
                 row.innerHTML = `
 
                     <td class="user-number">
-                        ${index + 1}
+                        ${startIndex + index + 1}
                     </td>
-
 
                     <td class="user-name">
                         ${escapeHtml(
@@ -2472,7 +2605,6 @@
                         )}
                     </td>
 
-
                     <td class="user-username">
                         ${escapeHtml(
                             user.username ||
@@ -2480,29 +2612,21 @@
                         )}
                     </td>
 
-
                     <td>
-
                         ${createRoleBadge(
                             user.role
                         )}
-
                     </td>
 
-
                     <td>
-
                         ${createStatusBadge(
                             user
                         )}
-
                     </td>
-
 
                     <td>
                         -
                     </td>
-
 
                     <td>
                         ${formatDate(
@@ -2510,32 +2634,28 @@
                         )}
                     </td>
 
-
                     <td>
-
                         <button
                             class="view-user-btn"
                             onclick="openUserModal(${user.id})"
                         >
                             View
                         </button>
-
                     </td>
 
                 `;
 
-
-                userTableBody.appendChild(
-                    row
-                );
+                userTableBody.appendChild(row);
 
             }
         );
 
-
         usersShowing.textContent =
-            `Showing 1 to ${filteredUsers.length} of ${allUsers.length} users`;
+            `Showing ${startIndex + 1} to ${endIndex} of ${totalUsers} users`;
 
+        renderUserPagination(
+            totalPages
+        );
     }
 
 
@@ -3387,12 +3507,10 @@
                 .trim()
                 .toLowerCase();
 
-
         const selectedRole =
             normalizeRole(
                 roleFilter.value
             );
-
 
         filteredUsers =
             allUsers.filter(
@@ -3404,30 +3522,25 @@
                             ""
                         ).toLowerCase();
 
-
                     const username =
                         (
                             user.username ||
                             ""
                         ).toLowerCase();
 
-
                     const role =
                         normalizeRole(
                             user.role
                         );
-
 
                     const searchMatch =
                         !search ||
                         name.includes(search) ||
                         username.includes(search);
 
-
                     const roleMatch =
                         selectedRole === "all" ||
                         role === selectedRole;
-
 
                     return (
                         searchMatch &&
@@ -3437,11 +3550,13 @@
                 }
             );
 
+        // Reset to page 1 whenever
+        // search/filter changes
+        currentUserPage = 1;
 
         renderUsers();
 
     }
-
 
     /* =====================================================
        PROFILE DROPDOWN

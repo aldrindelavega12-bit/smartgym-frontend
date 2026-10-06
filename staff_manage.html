@@ -352,35 +352,61 @@ if(
         </div>
 
 
-        <!-- =========================
-             STEP 1
-        ========================== -->
-
-        <!-- =========================
-            STAFF / TRAINER FORM
-        ========================== -->
-
         <div id="trainerStep1">
 
             <!-- FULL NAME -->
             <div class="staff-form-group">
-
                 <label>Full Name</label>
 
                 <input
                     type="text"
                     id="fullname"
                     placeholder="Enter full name">
+            </div>
 
+
+            <!-- USERNAME -->
+            <div class="staff-form-group">
+                <label>Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter username">
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="staff-form-group">
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password">
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="staff-form-group">
+                <label>Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm password">
             </div>
 
 
             <!-- ROLE -->
             <div class="staff-form-group">
-
                 <label>Role</label>
 
                 <select id="role">
+
+                    <option value="">
+                        Select Role
+                    </option>
 
                     <option value="staff">
                         Front Desk
@@ -391,105 +417,67 @@ if(
                     </option>
 
                 </select>
-
             </div>
 
 
-            <!-- USERNAME -->
-            <div class="staff-form-group">
-
-                <label>Username</label>
-
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="Enter username">
-
-            </div>
-
-
-            <!-- PASSWORD -->
-            <div class="staff-form-group">
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter password">
-
-            </div>
-
-
-            <!-- CONFIRM PASSWORD -->
-            <div class="staff-form-group">
-
-                <label>Confirm Password</label>
-
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm password">
-
-            </div>
-
-
-            <!-- =========================
-                TRAINER RATES
-            ========================== -->
-
+            <!-- TRAINER RATE -->
             <div
                 id="trainerRateFields"
+                class="trainer-rate-section"
                 style="display:none;">
 
-                <div class="staff-form-group">
+                <div class="trainer-rate-header">
+                    <strong>Trainer Rate</strong>
 
-                    <label>Price Per Day</label>
-
-                    <input
-                        type="number"
-                        id="priceDay"
-                        placeholder="Enter price"
-                        min="0"
-                        step="1">
-
+                    <span>
+                        Set the trainer's rate for sessions.
+                    </span>
                 </div>
 
 
-                <div class="staff-form-group">
+                <div class="trainer-rate-grid">
 
-                    <label>Price Per Week</label>
+                    <div class="staff-form-group">
+                        <label>Price Per Day</label>
 
-                    <input
-                        type="number"
-                        id="priceWeek"
-                        placeholder="Enter price"
-                        min="0"
-                        step="1">
+                        <input
+                            type="number"
+                            id="priceDay"
+                            placeholder="Enter price"
+                            min="0"
+                            step="1">
+                    </div>
 
-                </div>
+
+                    <div class="staff-form-group">
+                        <label>Price Per Week</label>
+
+                        <input
+                            type="number"
+                            id="priceWeek"
+                            placeholder="Enter price"
+                            min="0"
+                            step="1">
+                    </div>
 
 
-                <div class="staff-form-group">
+                    <div class="staff-form-group">
+                        <label>Price Per Month</label>
 
-                    <label>Price Per Month</label>
-
-                    <input
-                        type="number"
-                        id="priceMonth"
-                        placeholder="Enter price"
-                        min="0"
-                        step="1">
+                        <input
+                            type="number"
+                            id="priceMonth"
+                            placeholder="Enter price"
+                            min="0"
+                            step="1">
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <!-- =========================
-                CREATE BUTTON
-            ========================== -->
-
+            <!-- CREATE BUTTON -->
             <button
                 id="createStaffBtn"
                 class="create-staff-submit"
@@ -1294,42 +1282,68 @@ function toggleActionMenu(index){
     }
 
 }
-
 function openStaffModal(){
-
-    trainerStep = 1;
-
-    selectedPrograms = [];
-
-    document.getElementById(
-        "trainerStep1"
-    ).style.display = "block";
-
-    document.getElementById(
-        "trainerStep2"
-    ).style.display = "none";
 
     document.getElementById(
         "staffModalTitle"
-    ).innerText =
-        "Add Staff";
+    ).innerText = "Add Staff";
+
 
     document.getElementById(
         "createStaffBtn"
-    ).style.display =
-        "block";
+    ).style.display = "block";
+
 
     document.getElementById(
-        "trainerNextBtn"
-    ).style.display =
-        "none";
+        "trainerRateFields"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "fullname"
+    ).value = "";
+
+
+    document.getElementById(
+        "username"
+    ).value = "";
+
+
+    document.getElementById(
+        "password"
+    ).value = "";
+
+
+    document.getElementById(
+        "confirmPassword"
+    ).value = "";
+
+
+    document.getElementById(
+        "role"
+    ).value = "staff";
+
+
+    document.getElementById(
+        "priceDay"
+    ).value = "";
+
+
+    document.getElementById(
+        "priceWeek"
+    ).value = "";
+
+
+    document.getElementById(
+        "priceMonth"
+    ).value = "";
+
 
     document
         .getElementById("staffModal")
         .classList.add("show");
 
 }
-
 
 function closeStaffModal(){
 
@@ -1341,40 +1355,30 @@ function closeStaffModal(){
 
 document
     .getElementById("role")
-    .addEventListener(
-        "change",
-        function(){
+    .addEventListener("change", function(){
 
-            const isTrainer =
-                this.value === "trainer";
+        const isTrainer =
+            this.value === "trainer";
 
-
-            document.getElementById(
-                "createStaffBtn"
-            ).style.display =
-                isTrainer
-                ? "none"
-                : "block";
+        const trainerRateFields =
+            document.getElementById("trainerRateFields");
 
 
-            document.getElementById(
-                "trainerNextBtn"
-            ).style.display =
-                isTrainer
-                ? "block"
-                : "none";
+        if(isTrainer){
 
+            trainerRateFields.style.display = "block";
 
-            if(!isTrainer){
+        }else{
 
-                selectedPrograms = [];
+            trainerRateFields.style.display = "none";
 
-                backTrainerStep();
-
-            }
+            document.getElementById("priceDay").value = "";
+            document.getElementById("priceWeek").value = "";
+            document.getElementById("priceMonth").value = "";
 
         }
-    );
+
+    });
 
 /* =====================================================
    TRAINER SETUP
