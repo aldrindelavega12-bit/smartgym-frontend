@@ -1474,394 +1474,9 @@ document
     });
 
 /* =====================================================
-   TRAINER SETUP
-===================================================== */
-
-let trainerPrograms = [];
-
-let selectedPrograms = [];
-
-let trainerStep = 1;
-
-
-/* =========================
-   LOAD PROGRAMS
-========================= */
-
-async function loadPrograms(){
-
-    try{
-
-        const res =
-            await fetch(
-                `${API_URL}/api/programs`,
-                {
-                    cache: "no-store"
-                }
-            );
-
-        if(!res.ok)
-            throw new Error("Failed to load programs");
-
-        const data =
-            await res.json();
-
-        trainerPrograms =
-            Array.isArray(data)
-            ? data
-            : [];
-
-        renderProgramOptions();
-
-    }
-    catch(error){
-
-        console.error(
-            "PROGRAM LOAD ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   PROGRAM DROPDOWN
-========================= */
-
-function renderProgramOptions(){
-
-    const select =
-        document.getElementById(
-            "programSelect"
-        );
-
-    if(!select)
-        return;
-
-    select.innerHTML = `
-        <option value="">
-            Select Program
-        </option>
-    `;
-
-    trainerPrograms.forEach(
-        program => {
-
-            if(
-                selectedPrograms.some(
-                    p =>
-                        Number(p.id) ===
-                        Number(program.id)
-                )
-            ){
-
-                return;
-
-            }
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-            option.value =
-                program.id;
-
-            option.textContent =
-                program.program_name;
-
-            select.appendChild(
-                option
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================
-   ADD SELECTED PROGRAM
-========================= */
-
-function addSelectedProgram(){
-
-    const select =
-        document.getElementById(
-            "programSelect"
-        );
-
-    const id =
-        select.value;
-
-    if(!id)
-        return;
-
-
-    const program =
-        trainerPrograms.find(
-            p =>
-                Number(p.id) ===
-                Number(id)
-        );
-
-
-    if(!program)
-        return;
-
-
-    selectedPrograms.push(
-        program
-    );
-
-
-    renderSelectedPrograms();
-
-    renderProgramOptions();
-
-    select.value = "";
-
-}
-
-
-/* =========================
-   ADD ANOTHER PROGRAM
-========================= */
-
-function addAnotherProgram(){
-
-    const select =
-        document.getElementById("programSelect");
-
-    if(!select)
-        return;
-
-    select.focus();
-
-    select.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-
-}
-
-/* =========================
-   RENDER SELECTED
-========================= */
-
-function renderSelectedPrograms(){
-
-    const container =
-        document.getElementById(
-            "selectedPrograms"
-        );
-
-    container.innerHTML = "";
-
-
-    selectedPrograms.forEach(
-        program => {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.style.cssText = `
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                padding:12px 14px;
-                margin-bottom:8px;
-                border:1px solid #dce7e1;
-                border-radius:10px;
-                background:#f8fbf9;
-            `;
-
-
-            div.innerHTML = `
-
-                <div>
-
-                    <strong>
-                        ${escapeHtml(
-                            program.program_name
-                        )}
-                    </strong>
-
-                    <div
-                        style="
-                            font-size:12px;
-                            color:#7b8c83;
-                            margin-top:3px;
-                        "
-                    >
-                        Duration:
-                        ${program.duration_days} days
-                    </div>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    onclick="removeSelectedProgram(${program.id})"
-                    style="
-                        border:none;
-                        background:none;
-                        color:#d9534f;
-                        cursor:pointer;
-                        font-weight:600;
-                    "
-                >
-                    Remove
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================
-   REMOVE PROGRAM
-========================= */
-
-function removeSelectedProgram(id){
-
-    selectedPrograms =
-        selectedPrograms.filter(
-            p =>
-                Number(p.id) !==
-                Number(id)
-        );
-
-
-    renderSelectedPrograms();
-
-    renderProgramOptions();
-
-}
-
-
-/* =========================
-   NEXT
-========================= */
-
-function nextTrainerStep(){
-
-    const fullname =
-        document.getElementById(
-            "fullname"
-        ).value.trim();
-
-    const username =
-        document.getElementById(
-            "username"
-        ).value.trim();
-
-    const password =
-        document.getElementById(
-            "password"
-        ).value;
-
-    const confirmPassword =
-        document.getElementById(
-            "confirmPassword"
-        ).value;
-
-
-    if(
-        !fullname ||
-        !username ||
-        !password ||
-        !confirmPassword
-    ){
-
-        alert(
-            "Complete all fields."
-        );
-
-        return;
-
-    }
-
-
-    if(
-        password !== confirmPassword
-    ){
-
-        alert(
-            "Passwords do not match."
-        );
-
-        return;
-
-    }
-
-
-    trainerStep = 2;
-
-
-    document.getElementById(
-        "trainerStep1"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "trainerStep2"
-    ).style.display = "block";
-
-
-    document.getElementById(
-        "staffModalTitle"
-    ).innerText =
-        "Trainer Setup";
-
-
-    loadPrograms();
-
-}
-
-
-/* =========================
-   BACK
-========================= */
-
-function backTrainerStep(){
-
-    trainerStep = 1;
-
-
-    document.getElementById(
-        "trainerStep2"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "trainerStep1"
-    ).style.display = "block";
-
-
-    document.getElementById(
-        "staffModalTitle"
-    ).innerText =
-        "Add Staff";
-
-}
-
-/* =====================================================
    CREATE STAFF
 ===================================================== */
+
 async function createAccount(){
 
     const fullname =
@@ -1897,7 +1512,8 @@ async function createAccount(){
         !fullname ||
         !username ||
         !password ||
-        !confirmPassword
+        !confirmPassword ||
+        !role
     ){
 
         alert("Complete all fields.");
@@ -1924,16 +1540,6 @@ async function createAccount(){
 
     if(role === "trainer"){
 
-        if(selectedPrograms.length === 0){
-
-            alert(
-                "Please select at least one program."
-            );
-
-            return;
-        }
-
-
         if(
             priceDay === "" ||
             priceWeek === "" ||
@@ -1946,7 +1552,6 @@ async function createAccount(){
 
             return;
         }
-
     }
 
 
@@ -1990,17 +1595,7 @@ async function createAccount(){
                         price_month:
                             role === "trainer"
                             ? Number(priceMonth)
-                            : null,
-
-                        // IMPORTANT:
-                        // IDs ONLY
-                        programs:
-                            role === "trainer"
-                            ? selectedPrograms.map(
-                                program =>
-                                    Number(program.id)
-                            )
-                            : []
+                            : null
 
                     })
                 }
@@ -2035,7 +1630,9 @@ async function createAccount(){
             "Successfully Created!",
 
             role === "trainer"
-            ? "The trainer account, pricing, and programs have been successfully created."
+
+            ? "The trainer account and rates have been successfully created."
+
             : "The staff account has been successfully created."
 
         );
@@ -2078,37 +1675,8 @@ async function createAccount(){
         ).value = "";
 
 
-        selectedPrograms = [];
-
-        renderSelectedPrograms();
-
-        renderProgramOptions();
-
-
-        // =========================
-        // RESET STEP
-        // =========================
-
-        trainerStep = 1;
-
         document.getElementById(
-            "trainerStep1"
-        ).style.display = "block";
-
-        document.getElementById(
-            "trainerStep2"
-        ).style.display = "none";
-
-        document.getElementById(
-            "staffModalTitle"
-        ).innerText = "Add Staff";
-
-        document.getElementById(
-            "createStaffBtn"
-        ).style.display = "block";
-
-        document.getElementById(
-            "trainerNextBtn"
+            "trainerRateFields"
         ).style.display = "none";
 
 
@@ -2126,6 +1694,7 @@ async function createAccount(){
         await loadStaff();
 
     }
+
     catch(error){
 
         console.error(
@@ -2140,7 +1709,6 @@ async function createAccount(){
     }
 
 }
-
 
 /* =====================================================
    DELETE STAFF
