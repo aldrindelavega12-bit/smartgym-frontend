@@ -343,6 +343,100 @@
             color: #fff;
         }
 
+        .users-card-header {
+            padding: 12px 12px 10px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .users-tools {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* SEARCH */
+
+        .users-search {
+            flex: 1;
+            height: 54px;
+            background: #fff;
+            border: 1px solid #dce5e1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+
+        .users-search input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #34413d;
+            font-size: 14px;
+        }
+
+        .users-search input::placeholder {
+            color: #87938f;
+        }
+
+
+        /* CREATE ACCOUNT */
+
+        .create-account-btn {
+            height: 54px;
+            min-width: 180px;
+            padding: 0 22px;
+            border: none;
+            border-radius: 10px;
+            background: #008f4c;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .2s ease;
+        }
+
+        .create-account-btn:hover {
+            background: #007b41;
+        }
+
+        .create-plus {
+            font-size: 22px;
+            line-height: 0;
+            vertical-align: -2px;
+            margin-right: 7px;
+            font-weight: 400;
+        }
+
+
+        /* SORT */
+
+        .users-select {
+            height: 54px;
+            width: 260px;
+            min-width: 260px;
+            border: 1px solid #dce5e1;
+            border-radius: 10px;
+            background: #fff;
+            padding: 0 14px;
+            font-size: 14px;
+            color: #34413d;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .users-select:focus {
+            border-color: #008f4c;
+        }
+
 
         /* =====================================================
            USER MODULE MODAL
@@ -1069,30 +1163,35 @@
 
                     <div class="users-card-header">
 
-                        <div class="users-card-title">
-
-                            <h2>
-                                User List
-                            </h2>
-
-                            <p>
-                                Select a user to view their account access.
-                            </p>
-
-                        </div>
-
-
                         <div class="users-tools">
+
+                            <div class="users-search">
+
+                                <input
+                                    type="text"
+                                    id="userSearch"
+                                    placeholder="Search name or username..."
+                                >
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="create-account-btn"
+                                onclick="openCreateAccountModal()"
+                            >
+                                <span class="create-plus">+</span>
+                                Create Account
+                            </button>
 
                             <select
                                 class="users-select"
                                 id="roleFilter"
                             >
-                                <option value="all">
-                                    All Roles
-                                </option>
 
-                                
+                                <option value="all">
+                                    Sort by
+                                </option>
 
                                 <option value="manager">
                                     Manager
@@ -1113,21 +1212,12 @@
                                 <option value="pre_member">
                                     Pre-Member
                                 </option>
+
                             </select>
 
-                            <button
-                                type="button"
-                                class="create-account-btn"
-                                onclick="openCreateAccountModal()"
-                            >
-                                Create Account
-                            </button>
-
-                            
                         </div>
 
                     </div>
-
 
 
                     <!-- TABLE -->
