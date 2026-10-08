@@ -819,6 +819,108 @@
 
         }
 
+        /* =====================================================
+        CREATE BACKUP MODAL
+        ===================================================== */
+
+        .backup-confirm-modal {
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.18);
+            overflow: hidden;
+        }
+
+        .backup-confirm-icon {
+            width: 46px;
+            height: 46px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: #eef9f3;
+            color: #008f4c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .backup-confirm-body {
+            padding: 22px 20px 18px;
+            text-align: center;
+        }
+
+        .backup-confirm-body h3 {
+            margin: 0 0 7px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #26332f;
+        }
+
+        .backup-confirm-body p {
+            margin: 0;
+            color: #71807b;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .backup-confirm-type {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 5px 10px;
+            background: #eef9f3;
+            color: #008f4c;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .backup-confirm-footer {
+            padding: 11px 17px;
+            border-top: 1px solid #edf1ef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 7px;
+        }
+
+        .backup-confirm-cancel {
+            height: 34px;
+            padding: 0 14px;
+            border: 1px solid #dce5e1;
+            background: #fff;
+            color: #4e5b57;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .backup-confirm-cancel:hover {
+            background: #f5f8f6;
+        }
+
+        .backup-confirm-create {
+            height: 34px;
+            min-width: 105px;
+            padding: 0 14px;
+            border: none;
+            background: #008f4c;
+            color: #fff;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .backup-confirm-create:hover {
+            background: #007b41;
+        }
+
+        .backup-confirm-create:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
     </style>
 
 </head>
@@ -1428,7 +1530,64 @@
 </div>
 
 
+<!-- CREATE BACKUP CONFIRMATION MODAL -->
 
+<div
+    class="modal-overlay"
+    id="backupConfirmModal"
+>
+
+    <div class="backup-confirm-modal">
+
+        <div class="backup-confirm-body">
+
+            <div class="backup-confirm-icon">
+                <i class="fa-solid fa-database"></i>
+            </div>
+
+            <h3>
+                Create Backup
+            </h3>
+
+            <p>
+                Are you sure you want to create
+                a new backup of the selected system component?
+            </p>
+
+            <span
+                class="backup-confirm-type"
+                id="backupConfirmType"
+            >
+                Database
+            </span>
+
+        </div>
+
+
+        <div class="backup-confirm-footer">
+
+            <button
+                type="button"
+                class="backup-confirm-cancel"
+                onclick="closeBackupConfirmModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="backup-confirm-create"
+                id="confirmBackupButton"
+                onclick="confirmCreateBackup()"
+            >
+                Create Backup
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <!-- RESTORE MODAL -->
 
 <div
@@ -1640,7 +1799,85 @@ document.addEventListener(
     }
 );
 
+/* =====================================================
+   CREATE BACKUP CONFIRMATION
+===================================================== */
 
+let pendingBackupType = null;
+let pendingBackupButton = null;
+
+
+function openBackupConfirmModal(
+    type,
+    button
+) {
+
+    pendingBackupType =
+        type;
+
+    pendingBackupButton =
+        button;
+
+
+    document.getElementById(
+        "backupConfirmType"
+    ).textContent =
+        type;
+
+
+    document.getElementById(
+        "backupConfirmModal"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+function closeBackupConfirmModal() {
+
+    document.getElementById(
+        "backupConfirmModal"
+    ).classList.remove(
+        "show"
+    );
+
+
+    pendingBackupType =
+        null;
+
+    pendingBackupButton =
+        null;
+
+}
+
+
+async function confirmCreateBackup() {
+
+    if (
+        !pendingBackupType ||
+        !pendingBackupButton
+    ) {
+        return;
+    }
+
+
+    const type =
+        pendingBackupType;
+
+    const button =
+        pendingBackupButton;
+
+
+    closeBackupConfirmModal();
+
+
+    await executeBackup(
+        type,
+        button
+    );
+
+}
 /* =====================================================
    LOGOUT
 ===================================================== */
@@ -1911,8 +2148,20 @@ function normalizeBackup(backup) {
 /* =====================================================
    CREATE BACKUP
 ===================================================== */
-
 async function createBackup(
+    type,
+    button
+) {
+
+    openBackupConfirmModal(
+        type,
+        button
+    );
+
+}
+
+
+async function executeBackup(
     type,
     button
 ) {
@@ -1929,8 +2178,10 @@ async function createBackup(
 
     };
 
+
     const backupType =
         typeMap[type];
+
 
     if (!backupType) {
 
@@ -1942,18 +2193,6 @@ async function createBackup(
 
         return;
 
-    }
-
-
-    const confirmed =
-        confirm(
-            `Create ${type} backup?\n\n` +
-            `This will create a new ${type.toLowerCase()} backup.`
-        );
-
-
-    if (!confirmed) {
-        return;
     }
 
 
@@ -2052,8 +2291,6 @@ async function createBackup(
     }
 
 }
-
-
 /* =====================================================
    LOAD BACKUPS
 ===================================================== */
