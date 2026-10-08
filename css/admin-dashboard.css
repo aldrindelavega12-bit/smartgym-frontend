@@ -5581,3 +5581,55 @@ a[href="#incomeReport"]::before {
     pointer-events: auto;
 }
 
+
+
+/* ========================================
+   WALK-IN STICKY PREVIEW
+======================================== */
+
+#walkinCard.active-open .summary-preview {
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+    pointer-events: auto;
+}
+
+
+/* ========================================
+   WALK-IN SCROLL
+======================================== */
+
+#walkinCard #walkinPreviewList {
+    max-height: 220px;
+    overflow-y: auto;
+
+    padding-right: 6px;
+    margin-top: 12px;
+
+    scrollbar-width: thin;
+}
+
+
+/* Chrome / Edge scrollbar */
+
+#walkinCard #walkinPreviewList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#walkinCard #walkinPreviewList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#walkinCard #walkinPreviewList::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 10px;
+}
+
+#walkinCard #walkinPreviewList::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}

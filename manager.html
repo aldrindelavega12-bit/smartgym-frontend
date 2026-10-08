@@ -747,38 +747,95 @@ if (activeCard) {
 // WALK-IN SUMMARY
 // =====================================================
 
+// =====================================================
+// WALK-IN SUMMARY
+// =====================================================
+
 async function loadWalkinSummary() {
 
     try {
 
-        const res =
-            await fetch(
-                `${API_URL}/api/walkins_summary`
-            );
-
+        const res = await fetch(
+            `${API_URL}/api/manager_walkin`
+        );
 
         if (!res.ok) {
-
             throw new Error(
                 `Walk-in API error: ${res.status}`
             );
+        }
 
+        const walkins = await res.json();
+
+
+        // ==============================
+        // WALK-IN COUNT
+        // ==============================
+
+        document.getElementById("walkins").innerText =
+            walkins.length;
+
+
+        // ==============================
+        // WALK-IN PREVIEW
+        // ==============================
+
+        const preview =
+            document.getElementById("walkinPreviewList");
+
+        preview.innerHTML = "";
+
+
+        if (!walkins.length) {
+
+            preview.innerHTML = `
+                <div class="preview-empty">
+                    No walk-ins today
+                </div>
+            `;
+
+            return;
         }
 
 
-        const data =
-            await res.json();
+        // ==============================
+        // SHOW ALL WALK-INS
+        // ==============================
 
+        walkins.forEach(walkin => {
 
-        document.getElementById(
-            "walkins"
-        ).innerText =
-            data.today ?? 0;
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "active-member-preview";
+
+            item.innerHTML = `
+                <div class="active-member-info">
+
+                    <strong>
+                        ${walkin.full_name || "Unknown"}
+                    </strong>
+
+                    <small>
+                        ${walkin.id || ""}
+                    </small>
+
+                </div>
+
+                <span class="active-status">
+                    WALK-IN
+                </span>
+            `;
+
+            preview.appendChild(item);
+
+        });
 
 
         console.log(
             "TODAY'S WALK-INS:",
-            data.today
+            walkins.length
         );
 
     }
@@ -790,12 +847,64 @@ async function loadWalkinSummary() {
             error
         );
 
+        document.getElementById(
+            "walkins"
+        ).innerText = "0";
+
+        document.getElementById(
+            "walkinPreviewList"
+        ).innerHTML = `
+            <div class="preview-error">
+                Unable to load walk-ins
+            </div>
+        `;
     }
 
 }
 
+// ========================================
+// WALK-INS STICKY PREVIEW
+// ========================================
+
+const walkinCard =
+    document.getElementById("walkinCard");
+
+if (walkinCard) {
+
+    // Hover = open
+    walkinCard.addEventListener(
+        "mouseenter",
+        function () {
+
+            walkinCard.classList.add(
+                "active-open"
+            );
+
+        }
+    );
 
 
+    // Click = toggle
+    walkinCard.addEventListener(
+        "click",
+        function (e) {
+
+            // Don't close when interacting
+            // with preview contents
+            if (
+                e.target.closest(".summary-preview")
+            ) {
+                return;
+            }
+
+            walkinCard.classList.toggle(
+                "active-open"
+            );
+
+        }
+    );
+
+}
 // =====================================================
 // ATTENDANCE SUMMARY
 // =====================================================
