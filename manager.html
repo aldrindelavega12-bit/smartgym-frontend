@@ -267,13 +267,27 @@
 
                 </div>
 
-                <div class="summary-preview">
+                <div class="summary-preview" id="walkinPreview">
 
-                    <h4>Today's Walk-ins</h4>
+                    <div class="active-preview-header">
 
-                    <p>Walk-in customers recorded today</p>
+                        <div>
+                            <h4>Today's Walk-ins</h4>
 
-                    <div class="preview-list"
+                            <p>Walk-in customers recorded today</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="closeWalkinPreview"
+                            class="close-active-preview">
+                            ×
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="preview-list"
                         id="walkinPreviewList">
 
                         <div class="preview-loading">
