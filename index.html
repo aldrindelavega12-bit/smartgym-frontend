@@ -455,7 +455,7 @@
 
         </div>
 
-        <div class="activation-group">
+        <div class="activation-group activation-password-wrapper">
 
             <input
                 id="activationPassword"
@@ -464,9 +464,19 @@
                 placeholder="Password"
             >
 
+            <button
+                type="button"
+                class="activation-password-toggle"
+                onclick="toggleActivationPassword('activationPassword', this)"
+                aria-label="Show password"
+            >
+                <i class="fa-regular fa-eye"></i>
+            </button>
+
         </div>
 
-        <div class="activation-group">
+
+        <div class="activation-group activation-password-wrapper">
 
             <input
                 id="activationConfirm"
@@ -474,6 +484,15 @@
                 type="password"
                 placeholder="Confirm Password"
             >
+
+            <button
+                type="button"
+                class="activation-password-toggle"
+                onclick="toggleActivationPassword('activationConfirm', this)"
+                aria-label="Show password"
+            >
+                <i class="fa-regular fa-eye"></i>
+            </button>
 
         </div>
 
@@ -1369,7 +1388,30 @@ async function resetForgotPassword() {
     }
 
 }
+function toggleActivationPassword(inputId, button) {
 
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector("i");
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+        button.setAttribute("aria-label", "Hide password");
+
+    } else {
+
+        input.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+        button.setAttribute("aria-label", "Show password");
+    }
+}
 /* =========================================================
    FORGOT PASSWORD SHOW / HIDE
 ========================================================= */
@@ -2349,6 +2391,57 @@ window.onclick = function(e){
         height: 54px;
     }
 }
+/* =========================================================
+   ACTIVATION PASSWORD EYE
+========================================================= */
+
+.activation-password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.activation-password-wrapper .activation-input {
+    padding-right: 55px;
+}
+
+.activation-password-toggle {
+    position: absolute;
+
+    right: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+    background: transparent;
+
+    color: #777;
+
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    padding: 0;
+}
+
+.activation-password-toggle:hover {
+    color: #111;
+}
+
+.activation-password-toggle:focus {
+    outline: none;
+}
+
+
 </style>
 
 </body>
