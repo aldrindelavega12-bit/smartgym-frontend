@@ -5115,12 +5115,10 @@ function closeTrainerReport(){
 /* =====================================================
    VIEW TRAINER DETAILS
 ===================================================== */
-
 function viewTrainerDetails(trainerId){
 
     const trainer =
         trainerReportData[trainerId];
-
 
     if(!trainer)
         return;
@@ -5137,6 +5135,7 @@ function viewTrainerDetails(trainerId){
         );
 
 
+    // Hide Trainer Report
     if(trainerReport){
 
         trainerReport.style.display =
@@ -5145,6 +5144,7 @@ function viewTrainerDetails(trainerId){
     }
 
 
+    // Show Trainer Details
     if(trainerDetails){
 
         trainerDetails.style.display =
@@ -5153,42 +5153,26 @@ function viewTrainerDetails(trainerId){
     }
 
 
-    document.getElementById(
-        "trainerDetailsName"
-    ).innerText =
-        trainer.name;
+    // Trainer Name
+    const trainerName =
+        document.getElementById(
+            "trainerDetailsName"
+        );
+
+    if(trainerName){
+
+        trainerName.innerText =
+            trainer.name;
+
+    }
 
 
-    document.getElementById(
-        "trainerDetailsId"
-    ).innerText =
-        trainer.id;
-
-
-    document.getElementById(
-        "trainerDetailsProgram"
-    ).innerText =
-        trainer.program;
-
-
-    document.getElementById(
-        "trainerDetailsFee"
-    ).innerText =
-        trainer.fee;
-
-
-    document.getElementById(
-        "trainerDetailsTrainees"
-    ).innerText =
-        trainer.trainees.length;
-
-
+    // Render trainees
     renderTrainerTrainees(
         trainer.trainees
     );
 
 }
-
 
 /* =====================================================
    RENDER TRAINEES
