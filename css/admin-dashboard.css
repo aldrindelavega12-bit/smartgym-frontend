@@ -6582,10 +6582,14 @@ a[href="#incomeReport"]::before {
 .existing-report-panel > .report-main-header{
     display: none !important;
 }
+/* =====================================================
+   ATTENDANCE REPORT - TOP SPACING
+===================================================== */
+
 .existing-report-panel{
-    padding-top: 0 !important;
+    padding-top: 24px !important;
 }
 
 #attendanceReport{
-    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
