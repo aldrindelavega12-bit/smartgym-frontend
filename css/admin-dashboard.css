@@ -5353,3 +5353,181 @@ a[href="#incomeReport"]::before {
     font-size: 12px;
     color: #888;
 }
+
+/* Active Members card */
+#activeCard {
+    position: relative;
+    cursor: pointer;
+}
+
+/* HIDE BY DEFAULT */
+#activeCard .summary-preview {
+    display: none;
+}
+
+/* SHOW WHEN CLICKED */
+#activeCard.active-open .summary-preview {
+    display: block;
+}
+
+/* Preview panel */
+#activeCard .summary-preview {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 360px;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.12);
+
+    z-index: 1000;
+
+    box-sizing: border-box;
+}
+
+/* Header */
+.active-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: 12px;
+}
+
+.active-preview-header h4 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.active-preview-header p {
+    margin: 5px 0 0;
+
+    font-size: 13px;
+    color: #777;
+}
+
+/* Close */
+.close-active-preview {
+    border: none;
+    background: transparent;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    color: #777;
+
+    padding: 0 4px;
+}
+
+.close-active-preview:hover {
+    color: #222;
+}
+
+/* SCROLL AREA */
+#activePreviewList {
+    height: 180px;
+
+    overflow-y: auto;
+
+    padding-right: 6px;
+
+    margin: 12px 0;
+
+    scrollbar-width: thin;
+}
+
+/* Chrome scrollbar */
+#activePreviewList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#activePreviewList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#activePreviewList::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 10px;
+}
+
+#activePreviewList::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* Member */
+.active-member-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 9px 10px;
+
+    margin-bottom: 6px;
+
+    border: 1px solid #eee;
+
+    border-radius: 8px;
+
+    background: #fafafa;
+}
+
+.active-member-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.active-member-info strong {
+    font-size: 13px;
+}
+
+.active-member-info small {
+    font-size: 11px;
+    color: #777;
+}
+
+.active-status {
+    font-size: 10px;
+    font-weight: 600;
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    background: #e8f7ee;
+    color: #198754;
+}
+
+/* Manage button */
+.manage-active-members-btn {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    background: #0f8f4f;
+    color: white;
+}
+
+.manage-active-members-btn:hover {
+    opacity: 0.9;
+}

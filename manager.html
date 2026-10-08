@@ -215,43 +215,34 @@
 
                 <div class="summary-content">
 
-                    <span>
-                        Active Members
-                    </span>
+                    <span>Active Members</span>
 
-                    <strong id="active">
-                        0
-                    </strong>
+                    <strong id="active">0</strong>
 
-                    <small>
-                        Currently active
-                    </small>
+                    <small>Currently active</small>
 
                 </div>
 
-                <div class="summary-preview">
+                <div class="summary-preview" id="activePreview">
 
-                    <h4>Active Members</h4>
-
-                    <p>Members with active membership</p>
-
-                    <div class="preview-list"
-                        id="activePreviewList">
-
-                        <div class="preview-loading">
-                            Loading...
+                    <div class="active-preview-header">
+                        <div>
+                            <h4>Active Members</h4>
+                            <p>Members with active membership</p>
                         </div>
 
+                        <button
+                            type="button"
+                            id="closeActivePreview"
+                            class="close-active-preview">
+                            ×
+                        </button>
                     </div>
 
-                    <!-- MANAGE ACTIVE MEMBERS -->
-                    <button
-                        type="button"
-                        id="manageActiveMembersBtn"
-                        class="manage-active-members-btn">
-                        Manage Active Members
-                    </button>
-
+                    <div
+                        class="preview-list"
+                        id="activePreviewList">
+                    </div>
                 </div>
 
             </div>
@@ -612,6 +603,39 @@ async function loadTodayIncome() {
     }
 
 }
+
+
+const activeCard =
+    document.getElementById("activeCard");
+
+const closeActivePreview =
+    document.getElementById("closeActivePreview");
+
+
+activeCard.addEventListener("click", function(e) {
+
+    // Huwag mag-close/open kapag close button
+    // ang mismong pinindot
+    if (
+        e.target.closest("#closeActivePreview") ||
+        e.target.closest("#manageActiveMembersBtn")
+    ) {
+        return;
+    }
+
+    activeCard.classList.toggle("active-open");
+
+});
+
+
+closeActivePreview.addEventListener("click", function(e) {
+
+    e.stopPropagation();
+
+    activeCard.classList.remove("active-open");
+
+});
+
 // =====================================================
 // MEMBER SUMMARY
 // =====================================================
