@@ -615,7 +615,6 @@ async function loadTodayIncome() {
 // =====================================================
 // MEMBER SUMMARY
 // =====================================================
-
 async function loadMemberSummary() {
 
     try {
@@ -632,17 +631,88 @@ async function loadMemberSummary() {
 
         const members = await res.json();
 
-        const activeMembers = members.length;
+        // ==============================
+        // ACTIVE MEMBER COUNT
+        // ==============================
 
         document.getElementById("active").innerText =
-            activeMembers;
+            members.length;
+
+
+        // ==============================
+        // ACTIVE MEMBER PREVIEW
+        // ==============================
+
+        const preview =
+            document.getElementById("activePreviewList");
+
+        preview.innerHTML = "";
+
+
+        if (!members.length) {
+
+            preview.innerHTML = `
+                <div class="preview-empty">
+                    No active members
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // Show active members
+        members.slice(0, 5).forEach(member => {
+
+            const item = document.createElement("div");
+
+            item.className = "active-member-preview";
+
+            item.innerHTML = `
+                <div class="active-member-info">
+
+                    <strong>
+                        ${member.full_name || "Unknown Member"}
+                    </strong>
+
+                    <small>
+                        ${member.id || ""}
+                    </small>
+
+                </div>
+
+                <span class="active-status">
+                    ACTIVE
+                </span>
+            `;
+
+            preview.appendChild(item);
+
+        });
+
+
+        // Show remaining count
+        if (members.length > 5) {
+
+            const more = document.createElement("div");
+
+            more.className = "preview-more";
+
+            more.innerText =
+                `+${members.length - 5} more members`;
+
+            preview.appendChild(more);
+        }
+
 
         console.log(
             "ACTIVE MEMBERS:",
-            activeMembers
+            members.length
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "ACTIVE MEMBERS ERROR:",
@@ -650,6 +720,14 @@ async function loadMemberSummary() {
         );
 
         document.getElementById("active").innerText = "0";
+
+        document.getElementById(
+            "activePreviewList"
+        ).innerHTML = `
+            <div class="preview-error">
+                Unable to load active members
+            </div>
+        `;
     }
 }
 
