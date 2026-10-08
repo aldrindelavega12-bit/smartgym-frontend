@@ -6629,3 +6629,62 @@ a[href="#incomeReport"]::before {
     min-width: 39px;
     font-size: 15px;
 }
+
+/* =====================================================
+   ATTENDANCE SUMMARY
+   SAME SIZE AS TRAINER SUMMARY
+===================================================== */
+
+#attendanceReport .attendance-summary-grid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+#attendanceReport .attendance-summary-card{
+    min-height: 82px;
+    padding: 15px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+
+    border: 1px solid #edf3ef;
+    border-left: 1px solid #edf3ef;
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #eef9f3,
+            #f6fbf8
+        );
+}
+
+#attendanceReport .attendance-summary-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#attendanceReport .attendance-summary-content > span{
+    color: #21344d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#attendanceReport .attendance-summary-content > strong{
+    margin-top: 5px;
+    color: #08ad57;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+#attendanceReport .attendance-summary-content > small{
+    margin-top: 4px;
+    font-size: 10px;
+}
