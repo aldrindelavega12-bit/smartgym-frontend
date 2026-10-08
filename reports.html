@@ -355,9 +355,9 @@ if(
             <!-- ATTENDANCE REPORT -->
 
             <a
-                href="#attendanceReport"
+                href="javascript:void(0)"
                 class="report-option"
-                onclick="showAttendanceReport();">
+                onclick="showAttendanceReport(); return false;">
 
                 <div class="report-option-content">
 
@@ -6346,11 +6346,6 @@ function showAttendanceReport(){
             "lockerReport"
         );
 
-    const existingPanel =
-        document.querySelector(
-            ".existing-report-panel"
-        );
-
 
     /* ==============================
        HIDE LANDING
@@ -6408,16 +6403,9 @@ function showAttendanceReport(){
 
     }
 
-    if(existingPanel){
-
-        existingPanel.style.display =
-            "none";
-
-    }
-
 
     /* ==============================
-       SHOW ATTENDANCE
+       SHOW ATTENDANCE REPORT
     ============================== */
 
     if(attendanceReport){
@@ -6439,6 +6427,7 @@ function showAttendanceReport(){
     }
 
 }
+
 
 function closeAttendanceReport(){
 
