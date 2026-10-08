@@ -4237,3 +4237,255 @@ a[href="#incomeReport"]::before {
     cursor: not-allowed;
     background: #f7f9f8;
 }
+
+/* ========================================
+   MANAGER SUMMARY HOVER PREVIEW
+======================================== */
+
+.summary-card {
+    position: relative;
+    cursor: default;
+    overflow: visible;
+}
+
+
+/* ========================================
+   HOVER PREVIEW
+======================================== */
+
+.summary-preview {
+
+    position: absolute;
+
+    top: calc(100% + 10px);
+
+    left: 50%;
+
+    transform:
+        translateX(-50%)
+        translateY(-6px);
+
+    width: 310px;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #dfe9e3;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(25, 70, 45, 0.15);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    z-index: 5000;
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+}
+
+
+/* ========================================
+   SHOW WHEN HOVER
+======================================== */
+
+.summary-card:hover
+.summary-preview {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+
+/* ========================================
+   SMALL ARROW
+======================================== */
+
+.summary-preview::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: -7px;
+
+    left: 50%;
+
+    width: 13px;
+
+    height: 13px;
+
+    background: #ffffff;
+
+    border-left:
+        1px solid #dfe9e3;
+
+    border-top:
+        1px solid #dfe9e3;
+
+    transform:
+        translateX(-50%)
+        rotate(45deg);
+}
+
+
+/* ========================================
+   PREVIEW TITLE
+======================================== */
+
+.summary-preview h4 {
+
+    margin: 0;
+
+    color: #17231d;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+/* ========================================
+   PREVIEW DESCRIPTION
+======================================== */
+
+.summary-preview > p {
+
+    margin:
+        5px 0 14px;
+
+    color: #718078;
+
+    font-size: 12px;
+}
+
+
+/* ========================================
+   PREVIEW LIST
+======================================== */
+
+.preview-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0;
+
+    max-height: 220px;
+
+    overflow-y: auto;
+}
+
+
+/* ========================================
+   PREVIEW ITEM
+======================================== */
+
+.preview-item {
+
+    padding: 10px 0;
+
+    border-bottom:
+        1px solid #edf2ef;
+}
+
+
+.preview-item:last-child {
+
+    border-bottom: none;
+}
+
+
+/* ========================================
+   NAME
+======================================== */
+
+.preview-name {
+
+    display: block;
+
+    color: #26342d;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* ========================================
+   SECONDARY INFO
+======================================== */
+
+.preview-info {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #7b8781;
+
+    font-size: 11px;
+}
+
+
+/* ========================================
+   EMPTY
+======================================== */
+
+.preview-empty {
+
+    padding: 15px 0;
+
+    color: #7b8781;
+
+    font-size: 12px;
+}
+
+
+/* ========================================
+   LOADING
+======================================== */
+
+.preview-loading {
+
+    padding: 15px 0;
+
+    color: #7b8781;
+
+    font-size: 12px;
+}
+
+
+/* ========================================
+   SCROLLBAR
+======================================== */
+
+.preview-list::-webkit-scrollbar {
+
+    width: 5px;
+}
+
+
+.preview-list::-webkit-scrollbar-thumb {
+
+    background:
+        #cddbd3;
+
+    border-radius: 10px;
+}
