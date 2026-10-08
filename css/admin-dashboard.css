@@ -6573,3 +6573,19 @@ a[href="#incomeReport"]::before {
     }
 
 }
+
+/* =====================================================
+   HIDE OLD ATTENDANCE / LOCKER HEADER
+   KEEP BUTTONS FOR JS
+===================================================== */
+
+.existing-report-panel > .report-main-header{
+    display: none !important;
+}
+.existing-report-panel{
+    padding-top: 0 !important;
+}
+
+#attendanceReport{
+    margin-top: 0 !important;
+}
