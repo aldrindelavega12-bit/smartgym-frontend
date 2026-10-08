@@ -1552,7 +1552,6 @@
 </div>
 
 
-
 <script>
 
 /* =====================================================
@@ -1661,6 +1660,7 @@ function logout() {
 
 let toastTimer = null;
 
+
 function showToast(
     title,
     message,
@@ -1688,7 +1688,9 @@ function showToast(
     toastMessage.textContent =
         message;
 
-    toast.classList.remove("error");
+    toast.classList.remove(
+        "error"
+    );
 
     if (type === "error") {
         toast.classList.add("error");
@@ -1731,6 +1733,7 @@ async function getApiError(response) {
         );
 
     }
+
     catch(error) {
 
         return (
@@ -1824,6 +1827,37 @@ function formatDate(value) {
 
 
 /* =====================================================
+   BACKUP TYPE LABEL
+===================================================== */
+
+function getBackupTypeLabel(type) {
+
+    const normalized =
+        String(type || "")
+            .toLowerCase()
+            .trim();
+
+    const labels = {
+
+        database: "Database",
+
+        backend: "Backend",
+
+        frontend: "Frontend",
+
+        full_system: "Full System"
+
+    };
+
+    return (
+        labels[normalized] ||
+        capitalize(normalized || "Unknown")
+    );
+
+}
+
+
+/* =====================================================
    NORMALIZE BACKUP
 ===================================================== */
 
@@ -1874,7 +1908,7 @@ function normalizeBackup(backup) {
 
 
 /* =====================================================
-   CREATE DATABASE BACKUP
+   CREATE BACKUP
 ===================================================== */
 
 async function createBackup(
@@ -1882,9 +1916,28 @@ async function createBackup(
     button
 ) {
 
-    if (type !== "Database") {
+    const typeMap = {
 
-        showUnavailable(type);
+        Database: "database",
+
+        Backend: "backend",
+
+        Frontend: "frontend",
+
+        "Full System": "full_system"
+
+    };
+
+    const backupType =
+        typeMap[type];
+
+    if (!backupType) {
+
+        showToast(
+            "Backup Failed",
+            "Invalid backup type.",
+            "error"
+        );
 
         return;
 
@@ -1893,10 +1946,10 @@ async function createBackup(
 
     const confirmed =
         confirm(
-            "Create database backup?\n\n" +
-            "This will create a new backup of " +
-            "the Railway database."
+            `Create ${type} backup?\n\n` +
+            `This will create a new ${type.toLowerCase()} backup.`
         );
+
 
     if (!confirmed) {
         return;
@@ -1905,6 +1958,7 @@ async function createBackup(
 
     const originalHTML =
         button.innerHTML;
+
 
     button.disabled = true;
 
@@ -1918,7 +1972,17 @@ async function createBackup(
             await fetch(
                 `${API_URL}/api/admin/backup`,
                 {
-                    method: "POST"
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        backup_type:
+                            backupType
+                    })
                 }
             );
 
@@ -1941,7 +2005,7 @@ async function createBackup(
             throw new Error(
                 data.message ||
                 data.error ||
-                "Backup failed."
+                `${type} backup failed.`
             );
 
         }
@@ -1950,7 +2014,7 @@ async function createBackup(
         showToast(
             "Backup Complete",
             data.message ||
-            "Database backup created successfully."
+            `${type} backup created successfully.`
         );
 
 
@@ -1959,6 +2023,7 @@ async function createBackup(
         await loadLatestBackup();
 
     }
+
     catch(error) {
 
         console.error(
@@ -1970,11 +2035,12 @@ async function createBackup(
         showToast(
             "Backup Failed",
             error.message ||
-            "Unable to create database backup.",
+            `Unable to create ${type} backup.`,
             "error"
         );
 
     }
+
     finally {
 
         button.disabled = false;
@@ -1983,21 +2049,6 @@ async function createBackup(
             originalHTML;
 
     }
-
-}
-
-
-/* =====================================================
-   UNAVAILABLE BACKUP TYPES
-===================================================== */
-
-function showUnavailable(type) {
-
-    showToast(
-        "Not Available Yet",
-        `${type} backup is not connected to the backend yet.`,
-        "error"
-    );
 
 }
 
@@ -2079,8 +2130,8 @@ async function loadBackups() {
             backups
         );
 
-
     }
+
     catch(error) {
 
         console.error(
@@ -2109,6 +2160,7 @@ async function loadBackups() {
         );
 
     }
+
     finally {
 
         refreshBtn.disabled = false;
@@ -2176,8 +2228,8 @@ function renderBackupTable(
 
 
                     const backupType =
-                        capitalize(
-                            backup.backup_mode
+                        getBackupTypeLabel(
+                            backup.backup_type
                         );
 
 
@@ -2185,7 +2237,7 @@ function renderBackupTable(
 
                         <tr
                             data-type="${escapeHtml(
-                                backup.backup_mode
+                                backup.backup_type
                             )}"
                             data-status="${escapeHtml(
                                 backup.status
@@ -2196,6 +2248,7 @@ function renderBackupTable(
                                 ${index + 1}
                             </td>
 
+
                             <td class="backup-date">
                                 ${escapeHtml(
                                     formatDate(
@@ -2204,15 +2257,20 @@ function renderBackupTable(
                                 )}
                             </td>
 
+
                             <td class="backup-type">
                                 ${escapeHtml(
                                     backupType
                                 )}
                             </td>
 
+
                             <td>
-                                Database
+                                ${escapeHtml(
+                                    backupType
+                                )}
                             </td>
+
 
                             <td>
                                 ${escapeHtml(
@@ -2221,6 +2279,7 @@ function renderBackupTable(
                                     )
                                 )}
                             </td>
+
 
                             <td>
 
@@ -2238,6 +2297,7 @@ function renderBackupTable(
 
                             </td>
 
+
                             <td>
 
                                 <div class="table-actions">
@@ -2250,6 +2310,7 @@ function renderBackupTable(
                                     >
                                         Download
                                     </button>
+
 
                                     <button
                                         class="table-action"
@@ -2386,7 +2447,9 @@ async function loadLatestBackup() {
 
 
         contentElement.textContent =
-            "Database";
+            getBackupTypeLabel(
+                backup.backup_type
+            );
 
 
         sizeElement.textContent =
@@ -2406,6 +2469,7 @@ async function loadLatestBackup() {
             "completed";
 
     }
+
     catch(error) {
 
         console.error(
@@ -2515,12 +2579,10 @@ function openRestoreModal(
             "restoreModal"
         );
 
-
     const selectedBox =
         document.getElementById(
             "selectedBackupBox"
         );
-
 
     const selectedName =
         document.getElementById(
@@ -2539,11 +2601,13 @@ function openRestoreModal(
             `Backup #${backupId}`;
 
     }
+
     else {
 
         selectedBox.classList.remove(
             "show"
         );
+
 
         selectedName.textContent =
             "—";
@@ -2650,6 +2714,7 @@ async function validateRestore(
     const formData =
         new FormData();
 
+
     formData.append(
         "file",
         file
@@ -2704,7 +2769,6 @@ async function restoreSystem() {
         document.getElementById(
             "restoreFile"
         );
-
 
     const restoreButton =
         document.getElementById(
@@ -2832,6 +2896,7 @@ async function restoreSystem() {
         const formData =
             new FormData();
 
+
         formData.append(
             "file",
             file
@@ -2882,11 +2947,6 @@ async function restoreSystem() {
         );
 
 
-        /*
-         * Give Railway a moment to finish
-         * releasing connections before refreshing.
-         */
-
         setTimeout(
             async function() {
 
@@ -2899,6 +2959,7 @@ async function restoreSystem() {
         );
 
     }
+
     catch(error) {
 
         console.error(
@@ -2915,6 +2976,7 @@ async function restoreSystem() {
         );
 
     }
+
     finally {
 
         restoreButton.disabled =

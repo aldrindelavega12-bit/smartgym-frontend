@@ -170,612 +170,967 @@ if(
 
     </div>
 
+    <!-- =================================================
+        REPORTS LANDING
+    ================================================== -->
+
+    <div class="reports-landing">
+
+        <div class="reports-list">
+
+            <!-- INCOME REPORT -->
+            <a href="javascript:void(0)"
+            class="report-option"
+            onclick="showIncomeReport()">
+
+                <div class="report-option-content">
+
+                    <div>
+                        <h2>Income Report</h2>
+                        <p>
+                            View and analyze gym income and revenue reports.
+                        </p>
+                    </div>
+
+                    <div class="report-option-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- TRAINER REPORT -->
+            <a href="#" class="report-option">
+                <div class="report-option-content">
+
+                    <div>
+                        <h2>Trainer Report</h2>
+                        <p>View trainer activity and trainer fee reports.</p>
+                    </div>
+
+                    <div class="report-option-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+
+                </div>
+            </a>
+
+
+            <!-- ATTENDANCE REPORT -->
+            <a href="javascript:void(0)"
+            class="report-option"
+            onclick="showAttendanceReport()">
+
+                <div class="report-option-content">
+
+                    <div>
+                        <h2>Attendance Report</h2>
+                        <p>View member and walk-in attendance records.</p>
+                    </div>
+
+                    <div class="report-option-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- LOCKER REPORT -->
+            <a href="javascript:void(0)"
+            class="report-option"
+            onclick="showLockerReport()">
+
+                <div class="report-option-content">
+
+                    <div>
+                        <h2>Locker Report</h2>
+                        <p>View locker usage and booking reports.</p>
+                    </div>
+
+                    <div class="report-option-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
 
 
     <!-- =================================================
-         REPORT PANEL
+        EXISTING ATTENDANCE / LOCKER REPORT AREA
+
+        KEPT IN DOM FOR EXISTING JS
     ================================================== -->
 
-    <div class="reports-panel">
-
-
-        <!-- REPORT HEADER -->
-
-        <div class="report-main-header">
-
-            <div class="report-title-area">
-
-                <div class="report-main-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-
-                <div>
-
-                    <h2>
-                        Attendance Report
-                    </h2>
-
-                    <p>
-                        View member and walk-in attendance records.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- ATTENDANCE / LOCKER -->
-
-            <div class="report-switch">
-
-                <button
-                    id="attendanceTab"
-                    class="report-tab active"
-                    onclick="showAttendanceReport()">
-
-                    <i class="fa-solid fa-users"></i>
-
-                    Attendance
-
-                </button>
-
-
-                <button
-                    id="lockerTab"
-                    class="report-tab"
-                    onclick="showLockerReport()">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    Locker
-
-                </button>
-
-            </div>
-
-        </div>
-
-
+    <div class="reports-working-area">
 
         <!-- =================================================
-             ATTENDANCE CONTENT
+            REPORT PANEL
         ================================================== -->
 
-        <div
-            id="attendanceReport"
-            class="attendance-report">
+        <!-- =================================================
+        REPORT PANEL
+    ================================================== -->
 
+    <div class="reports-layout">
 
-            <!-- FILTER BAR -->
+        <!-- =================================================
+            REPORT LIST
+        ================================================== -->
 
-            <div class="report-filter-bar">
+        <div class="reports-sidebar">
 
-                <div class="date-range-group">
+            <!-- INCOME REPORT -->
 
-                    <label>
-                        <i class="fa-regular fa-calendar"></i>
-                        Date Range
-                    </label>
-
-                    <div class="date-inputs">
-
-                        <input
-                            type="date"
-                            id="startDate">
-
-                        <span>
-                            –
-                        </span>
-
-                        <input
-                            type="date"
-                            id="endDate">
-
-                    </div>
-
-                </div>
-
-
-                <div class="quick-date-buttons">
-
-                    <button
-                        onclick="setToday()">
-                        Today
-                    </button>
-
-                    <button
-                        onclick="setThisWeek()">
-                        This Week
-                    </button>
-
-                    <button
-                        onclick="setThisMonth()">
-                        This Month
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 SUMMARY CARDS
-            ================================================== -->
-
-            <div class="report-summary-grid">
-
-                <div class="report-summary-card entry-card">
-
-                    <div class="summary-icon">
-                        <i class="fa-solid fa-calendar-check"></i>
-                    </div>
+            <!-- INCOME REPORT -->
+            <a href="#incomeReport" class="report-option">
+                <div class="report-option-content">
 
                     <div>
+                        <h2>Income Report</h2>
+                        <p>View and analyze gym income and revenue reports.</p>
+                    </div>
 
-                        <span>
-                            Total Attendance
-                        </span>
-
-                        <strong id="totalAttendance">
-                            0
-                        </strong>
-
-                        <small>
-                            Total attendance records
-                        </small>
-
+                    <div class="report-option-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
                     </div>
 
                 </div>
+            </a>
+            <!-- TRAINER REPORT -->
 
+            <a
+                href="#"
+                class="report-option">
 
-                <div class="report-summary-card member-card">
-
-                    <div class="summary-icon">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
+                <div class="report-option-content">
 
                     <div>
+                        <h2>Trainer Report</h2>
 
-                        <span>
-                            Members
-                        </span>
-
-                        <strong id="totalMembers">
-                            0
-                        </strong>
-
-                        <small>
-                            Member attendance
-                        </small>
-
+                        <p>
+                            View trainer activity and trainer fee reports.
+                        </p>
                     </div>
+
+                    <i class="fa-solid fa-chevron-right"></i>
 
                 </div>
 
+            </a>
 
-                <div class="report-summary-card walkin-card">
 
-                    <div class="summary-icon">
-                        <i class="fa-solid fa-person-walking"></i>
-                    </div>
+            <!-- ATTENDANCE REPORT -->
+
+            <a
+                href="#attendanceReport"
+                class="report-option"
+                onclick="showAttendanceReport();">
+
+                <div class="report-option-content">
 
                     <div>
+                        <h2>Attendance Report</h2>
 
-                        <span>
-                            Walk-ins
-                        </span>
-
-                        <strong id="totalWalkins">
-                            0
-                        </strong>
-
-                        <small>
-                            Walk-in attendance
-                        </small>
-
+                        <p>
+                            View member and walk-in attendance records.
+                        </p>
                     </div>
 
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 RECORDS HEADER
-            ================================================== -->
-
-            <div class="records-header">
-
-                <div>
-
-                    <h2>
-
-                        <i class="fa-solid fa-file-lines"></i>
-
-                        Attendance Records
-
-                    </h2>
-
-                    <p>
-                        List of all time-in and time-out logs for members and walk-ins.
-                    </p>
+                    <i class="fa-solid fa-chevron-right"></i>
 
                 </div>
 
-
-                <div class="report-search">
-
-                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <input
-                        type="text"
-                        id="reportSearch"
-                        placeholder="Search name, ID, or type...">
-
-                </div>
-
-            </div>
+            </a>
 
 
+            <!-- LOCKER REPORT -->
 
-            <!-- =================================================
-                 TABLE
-            ================================================== -->
+            <a
+                href="#lockerReport"
+                class="report-option"
+                onclick="showLockerReport();">
 
-            <div class="report-table-wrapper">
+                <div class="report-option-content">
 
-                <table class="report-table">
+                    <div>
+                        <h2>Locker Report</h2>
 
-                    <thead>
+                        <p>
+                            View locker usage and booking reports.
+                        </p>
+                    </div>
 
-                        <tr>
-
-                            <th>
-                                ID
-                            </th>
-
-                            <th>
-                                Name
-                            </th>
-
-                            <th>
-                                Type
-                            </th>
-
-                            <th>
-                                Time In
-                            </th>
-
-                            <th>
-                                Time Out
-                            </th>
-
-                            <th>
-                                Duration
-                            </th>
-
-                            <th>
-                                Visit Date
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="attendanceBody">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <!-- FOOTER -->
-
-            <div class="report-footer">
-
-                <span id="reportCount">
-                    Showing 0 records
-                </span>
-
-                <div
-                    id="reportPagination"
-                    class="report-pagination">
+                    <i class="fa-solid fa-chevron-right"></i>
 
                 </div>
 
-            </div>
+            </a>
 
         </div>
 
+
         <!-- =================================================
-            LOCKER REPORT
-        ================================================= -->
+            REPORT CONTENT
+        ================================================== -->
 
-        <div
-            id="lockerReport"
-            class="locker-report"
-            style="display:none;">
+        <div class="reports-content">
 
 
-            <!-- FILTER BAR -->
+            <!-- =================================================
+                INCOME REPORT
+            ================================================== -->
 
-            <div class="report-filter-bar">
+            <div
+                id="incomeReport"
+                class="income-report-view">
 
-                <div class="date-range-group">
 
-                    <label>
+                <!-- HEADER -->
 
-                        <i class="fa-regular fa-calendar"></i>
-
-                        Date Range
-
-                    </label>
-
-
-                    <div class="date-inputs">
-
-                        <input
-                            type="date"
-                            id="lockerStartDate">
-
-                        <span>
-                            –
-                        </span>
-
-                        <input
-                            type="date"
-                            id="lockerEndDate">
-
-                    </div>
-
-                </div>
-
-
-                <div class="quick-date-buttons">
-
-                    <button
-                        onclick="setLockerToday()">
-
-                        Today
-
-                    </button>
-
-
-                    <button
-                        onclick="setLockerThisWeek()">
-
-                        This Week
-
-                    </button>
-
-
-                    <button
-                        onclick="setLockerThisMonth()">
-
-                        This Month
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- SUMMARY -->
-
-            <div class="report-summary-grid">
-
-
-                <!-- TOTAL LOCKER USAGE -->
-
-                <div class="report-summary-card entry-card">
-
-                    <div class="summary-icon">
-
-                        <i class="fa-solid fa-lock"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>
-                            Locker
-                        </span>
-
-                        <strong id="totalLockerUsage">
-                            0
-                        </strong>
-
-                        <small>
-                            Total locker Usage
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- MEMBERS -->
-
-                <div class="report-summary-card member-card">
-
-                    <div class="summary-icon">
-
-                        <i class="fa-solid fa-users"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>
-                            Members
-                        </span>
-
-                        <strong id="totalLockerMembers">
-                            0
-                        </strong>
-
-                        <small>
-                            Member locker usage
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- WALK-INS -->
-
-                <div class="report-summary-card walkin-card">
-
-                    <div class="summary-icon">
-
-                        <i class="fa-solid fa-person-walking"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>
-                            Walk-ins
-                        </span>
-
-                        <strong id="totalLockerWalkins">
-                            0
-                        </strong>
-
-                        <small>
-                            Walk-in locker usage
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- RECORDS HEADER -->
-
-            <div class="records-header">
-
-                <div>
+                <div class="income-report-header">
 
                     <h2>
-
-                        <i class="fa-solid fa-file-lines"></i>
-
-                        Locker Sessions
-
+                        Income Report
                     </h2>
 
-
                     <p>
-                        List of all locker usage records.
+                        View and analyze gym income and revenue reports.
                     </p>
 
                 </div>
 
 
-                <div class="report-search">
+                <!-- FILTER -->
 
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="income-filter-row">
 
-                    <input
-                        type="text"
-                        id="lockerSearch"
-                        placeholder="Search locker #, name, or type...">
+
+                    <div class="income-period">
+
+                        <label>
+                            Report Period
+                        </label>
+
+
+                        <div class="income-period-buttons">
+
+                            <button
+                                type="button"
+                                class="income-period-btn active">
+
+                                Daily
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="income-period-btn">
+
+                                Weekly
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="income-period-btn">
+
+                                Custom Date
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="income-date">
+
+                        <label>
+                            Date:
+                        </label>
+
+
+                        <div class="income-date-input">
+
+                            <span>
+                                October 7, 2026
+                            </span>
+
+                            <i class="fa-regular fa-calendar"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL INCOME -->
+
+                <div class="total-income-card">
+
+                    <div>
+
+                        <h3>
+                            Total Income
+                        </h3>
+
+                        <p>
+                            Total revenue for the selected date.
+                        </p>
+
+                    </div>
+
+
+                    <strong>
+                        ₱25,500.00
+                    </strong>
+
+                </div>
+
+
+                <!-- INCOME BREAKDOWN -->
+
+                <div class="income-breakdown-grid">
+
+
+                    <!-- MEMBER -->
+
+                    <div class="income-breakdown-card">
+
+                        <div>
+
+                            <h3>
+                                Member Income
+                            </h3>
+
+                            <p>
+                                Revenue from member registrations
+                                and renewals.
+                            </p>
+
+                        </div>
+
+
+                        <strong>
+                            ₱8,000.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- WALK-IN -->
+
+                    <div class="income-breakdown-card">
+
+                        <div>
+
+                            <h3>
+                                Walk-in Income
+                            </h3>
+
+                            <p>
+                                Revenue from walk-in gym access.
+                            </p>
+
+                        </div>
+
+
+                        <strong>
+                            ₱5,000.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- LOCKER -->
+
+                    <div class="income-breakdown-card">
+
+                        <div>
+
+                            <h3>
+                                Locker Income
+                            </h3>
+
+                            <p>
+                                Revenue from locker usage
+                                (including overtime fees).
+                            </p>
+
+                        </div>
+
+
+                        <strong>
+                            ₱4,500.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TRAINER -->
+
+                    <div class="income-breakdown-card">
+
+                        <div>
+
+                            <h3>
+                                Trainer Income
+                            </h3>
+
+                            <p>
+                                Revenue from trainer fees.
+                            </p>
+
+                        </div>
+
+
+                        <strong>
+                            ₱8,000.00
+                        </strong>
+
+                    </div>
+
 
                 </div>
 
             </div>
 
 
+            <!-- =================================================
+                EXISTING ATTENDANCE / LOCKER REPORT
+                KEEP EXISTING IDS FOR JS
+            ================================================== -->
 
-            <!-- TABLE -->
-
-            <div class="report-table-wrapper">
-
-                <table class="report-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Locker #
-                            </th>
-
-                            <th>
-                                Name
-                            </th>
-
-                            <th>
-                                Type
-                            </th>
-
-                            <th>
-                                Start Time
-                            </th>
-
-                            <th>
-                                End Time
-                            </th>
-
-                            <th>
-                                Duration
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Visit Date
-                            </th>
-
-                        </tr>
-
-                    </thead>
+            <div
+                class="reports-panel existing-report-panel">
 
 
-                    <tbody id="lockerBody">
+                <!-- REPORT HEADER -->
 
-                    </tbody>
+                <div class="report-main-header">
 
-                </table>
+                    <div class="report-title-area">
 
-            </div>
+                        <div class="report-main-icon">
+
+                            <i class="fa-solid fa-users"></i>
+
+                        </div>
 
 
+                        <div>
 
-            <!-- FOOTER -->
+                            <h2>
+                                Attendance Report
+                            </h2>
 
-            <div class="report-footer">
+                            <p>
+                                View member and walk-in attendance records.
+                            </p>
 
-                <span id="lockerCount">
-                    Showing 0 records
-                </span>
+                        </div>
 
+                    </div>
+
+
+                    <div class="report-switch">
+
+                        <button
+                            id="attendanceTab"
+                            class="report-tab active"
+                            onclick="showAttendanceReport()">
+
+                            <i class="fa-solid fa-users"></i>
+
+                            Attendance
+
+                        </button>
+
+
+                        <button
+                            id="lockerTab"
+                            class="report-tab"
+                            onclick="showLockerReport()">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            Locker
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                    ATTENDANCE
+                ================================================== -->
 
                 <div
-                    id="lockerPagination"
-                    class="report-pagination">
+                    id="attendanceReport"
+                    class="attendance-report">
+
+
+                    <div class="report-filter-bar">
+
+                        <div class="date-range-group">
+
+                            <label>
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                                Date Range
+
+                            </label>
+
+
+                            <div class="date-inputs">
+
+                                <input
+                                    type="date"
+                                    id="startDate">
+
+                                <span>–</span>
+
+                                <input
+                                    type="date"
+                                    id="endDate">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-date-buttons">
+
+                            <button onclick="setToday()">
+                                Today
+                            </button>
+
+                            <button onclick="setThisWeek()">
+                                This Week
+                            </button>
+
+                            <button onclick="setThisMonth()">
+                                This Month
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-summary-grid">
+
+
+                        <div class="report-summary-card entry-card">
+
+                            <div class="summary-icon">
+
+                                <i class="fa-solid fa-calendar-check"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Total Attendance
+                                </span>
+
+                                <strong id="totalAttendance">
+                                    0
+                                </strong>
+
+                                <small>
+                                    Total attendance records
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-summary-card member-card">
+
+                            <div class="summary-icon">
+
+                                <i class="fa-solid fa-users"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Members
+                                </span>
+
+                                <strong id="totalMembers">
+                                    0
+                                </strong>
+
+                                <small>
+                                    Member attendance
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-summary-card walkin-card">
+
+                            <div class="summary-icon">
+
+                                <i class="fa-solid fa-person-walking"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Walk-ins
+                                </span>
+
+                                <strong id="totalWalkins">
+                                    0
+                                </strong>
+
+                                <small>
+                                    Walk-in attendance
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="records-header">
+
+                        <div>
+
+                            <h2>
+
+                                <i class="fa-solid fa-file-lines"></i>
+
+                                Attendance Records
+
+                            </h2>
+
+                            <p>
+                                List of all time-in and time-out logs
+                                for members and walk-ins.
+                            </p>
+
+                        </div>
+
+
+                        <div class="report-search">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="text"
+                                id="reportSearch"
+                                placeholder="Search name, ID, or type...">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-table-wrapper">
+
+                        <table class="report-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Time In</th>
+                                    <th>Time Out</th>
+                                    <th>Duration</th>
+                                    <th>Visit Date</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="attendanceBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="report-footer">
+
+                        <span id="reportCount">
+                            Showing 0 records
+                        </span>
+
+
+                        <div
+                            id="reportPagination"
+                            class="report-pagination">
+                        </div>
+
+                    </div>
 
                 </div>
+
+
+                <!-- =================================================
+                    LOCKER
+                ================================================== -->
+
+                <div
+                    id="lockerReport"
+                    class="locker-report"
+                    style="display:none;">
+
+
+                    <div class="report-filter-bar">
+
+                        <div class="date-range-group">
+
+                            <label>
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                                Date Range
+
+                            </label>
+
+
+                            <div class="date-inputs">
+
+                                <input
+                                    type="date"
+                                    id="lockerStartDate">
+
+                                <span>–</span>
+
+                                <input
+                                    type="date"
+                                    id="lockerEndDate">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-date-buttons">
+
+                            <button onclick="setLockerToday()">
+                                Today
+                            </button>
+
+                            <button onclick="setLockerThisWeek()">
+                                This Week
+                            </button>
+
+                            <button onclick="setLockerThisMonth()">
+                                This Month
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-summary-grid">
+
+
+                        <div class="report-summary-card entry-card">
+
+                            <div class="summary-icon">
+
+                                <i class="fa-solid fa-lock"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Locker
+                                </span>
+
+                                <strong id="totalLockerUsage">
+                                    0
+                                </strong>
+
+                                <small>
+                                    Total locker usage
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-summary-card member-card">
+
+                            <div class="summary-icon">
+
+                                <i class="fa-solid fa-users"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Members
+                                </span>
+
+                                <strong id="totalLockerMembers">
+                                    0
+                                </strong>
+
+                                <small>
+                                    Member locker usage
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-summary-card walkin-card">
+
+                            <div class="summary-icon">
+
+                                <i class="fa-solid fa-person-walking"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Walk-ins
+                                </span>
+
+                                <strong id="totalLockerWalkins">
+                                    0
+                                </strong>
+
+                                <small>
+                                    Walk-in locker usage
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="records-header">
+
+                        <div>
+
+                            <h2>
+
+                                <i class="fa-solid fa-file-lines"></i>
+
+                                Locker Sessions
+
+                            </h2>
+
+                            <p>
+                                List of all locker usage records.
+                            </p>
+
+                        </div>
+
+
+                        <div class="report-search">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="text"
+                                id="lockerSearch"
+                                placeholder="Search locker #, name, or type...">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-table-wrapper">
+
+                        <table class="report-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Locker #</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Visit Date</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="lockerBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="report-footer">
+
+                        <span id="lockerCount">
+                            Showing 0 records
+                        </span>
+
+
+                        <div
+                            id="lockerPagination"
+                            class="report-pagination">
+                        </div>
+
+                    </div>
+
+                </div>
+
 
             </div>
 
@@ -783,7 +1138,827 @@ if(
 
     </div>
 
-</div>
+
+<!-- =================================================
+     REPORT PAGE STYLE OVERRIDE
+================================================== -->
+
+<style>
+
+/* =================================================
+   REPORT LANDING
+================================================= */
+/* =====================================================
+   REPORT SELECTOR LAYOUT
+===================================================== */
+
+.reports-layout {
+    display: grid;
+    grid-template-columns: 365px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    width: 100%;
+}
+
+
+/* =====================================================
+   LEFT REPORT OPTIONS
+===================================================== */
+
+.reports-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.report-option {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 88px;
+    padding: 0 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe8e3;
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        transform .18s ease;
+}
+
+
+.report-option:hover {
+    background: #f8fcfa;
+    border-color: #c8e4d3;
+    transform: translateY(-1px);
+}
+
+
+.report-option-content {
+    min-height: 88px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.report-option h2 {
+    margin: 0 0 6px;
+
+    color: #16243b;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+.report-option p {
+    margin: 0;
+
+    max-width: 275px;
+
+    color: #52647e;
+
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+.report-option-content > i {
+    flex-shrink: 0;
+
+    color: #5c73a0;
+
+    font-size: 17px;
+}
+
+
+/* =====================================================
+   INCOME SELECTED
+===================================================== */
+
+body:has(#incomeReport:target)
+.report-option[href="#incomeReport"] {
+    background:
+        linear-gradient(
+            90deg,
+            #e7f8ee,
+            #f1faf5
+        );
+
+    border-color: #d2ebdc;
+}
+
+
+body:has(#incomeReport:target)
+.report-option[href="#incomeReport"]::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background: #08b85b;
+
+    border-radius:
+        0 4px 4px 0;
+}
+
+
+body:has(#incomeReport:target)
+.report-option[href="#incomeReport"]
+.report-option-content > i {
+    color: #08a653;
+}
+
+
+/* =====================================================
+   INCOME REPORT
+===================================================== */
+
+.income-report-view {
+    display: none;
+
+    position: relative;
+
+    width: 100%;
+
+    padding: 26px 24px 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #edf1ef;
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 20px rgba(30,80,55,.05);
+}
+body:has(#incomeReport:target) .income-report-view {
+    display: block !important;
+}
+
+body:has(#incomeReport:target) .existing-report-panel {
+    display: none !important;
+}
+/* Show income only after click */
+.reports-layout {
+    position: relative;
+    z-index: 10;
+}
+
+.reports-sidebar {
+    position: relative;
+    z-index: 20;
+}
+
+.report-option {
+    position: relative;
+    z-index: 30;
+
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+body:has(#incomeReport:target)
+.income-report-view {
+    display: block;
+}
+
+
+/* =====================================================
+   DEFAULT STATE
+   REPORT LIST ONLY
+===================================================== */
+
+
+
+/* =====================================================
+   WHEN INCOME IS OPEN
+===================================================== */
+
+body:has(#incomeReport:target)
+.existing-report-panel {
+    display: none !important;
+}
+
+
+/* =====================================================
+   INCOME HEADER
+===================================================== */
+
+.income-report-header {
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid #edf1ef;
+}
+
+
+.income-report-header h2 {
+    margin: 0;
+
+    color: #14233d;
+
+    font-size: 31px;
+    font-weight: 800;
+
+    letter-spacing: -.7px;
+}
+
+
+.income-report-header p {
+    margin: 6px 0 0;
+
+    color: #65759a;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   FILTER ROW
+===================================================== */
+
+.income-filter-row {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 22px;
+
+    padding: 17px 2px;
+}
+
+
+.income-period {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    flex: 1;
+}
+
+
+.income-period > label {
+    color: #192b48;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.income-period-buttons {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    max-width: 505px;
+}
+
+
+.income-period-btn {
+    height: 42px;
+
+    border:
+        1px solid #dce5ea;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #172843;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.income-period-btn.active {
+    background: #08b85b;
+
+    border-color: #08b85b;
+
+    color: #ffffff;
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.income-date {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.income-date > label {
+    color: #182b48;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.income-date-input {
+    width: 260px;
+    height: 44px;
+
+    padding: 0 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border:
+        1px solid #dce5ea;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #172843;
+
+    font-size: 13px;
+}
+
+
+.income-date-input i {
+    color: #172b48;
+
+    font-size: 16px;
+}
+
+
+/* =====================================================
+   TOTAL INCOME
+===================================================== */
+
+.total-income-card {
+    min-height: 108px;
+
+    margin-bottom: 14px;
+
+    padding: 20px 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #edf9f3,
+            #f5fbf8
+        );
+
+    border-left:
+        5px solid #08bd62;
+
+    border-radius: 9px;
+}
+
+
+.total-income-card h3 {
+    margin: 0 0 7px;
+
+    color: #17243b;
+
+    font-size: 19px;
+    font-weight: 750;
+}
+
+
+.total-income-card p {
+    margin: 0;
+
+    color: #65759a;
+
+    font-size: 14px;
+}
+
+
+.total-income-card strong {
+    color: #08ad57;
+
+    font-size: 37px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   INCOME CARDS
+===================================================== */
+
+.income-breakdown-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+.income-breakdown-card {
+    min-height: 126px;
+
+    padding: 21px 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 18px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #edf9f3,
+            #f5fbf8
+        );
+
+    border-left:
+        5px solid #08bd62;
+
+    border-radius: 9px;
+}
+
+
+.income-breakdown-card h3 {
+    margin: 0 0 6px;
+
+    color: #17243b;
+
+    font-size: 18px;
+    font-weight: 750;
+}
+
+
+.income-breakdown-card p {
+    margin: 0;
+
+    max-width: 310px;
+
+    color: #65759a;
+
+    font-size: 14px;
+
+    line-height: 1.45;
+}
+
+
+.income-breakdown-card strong {
+    color: #08ad57;
+
+    font-size: 27px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1250px) {
+
+    .reports-layout {
+        grid-template-columns:
+            300px minmax(0, 1fr);
+
+        gap: 18px;
+    }
+
+    .income-filter-row {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .income-period-buttons {
+        max-width: none;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .reports-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .income-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .income-report-view {
+        padding: 20px 16px;
+    }
+
+    .income-period-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .income-date {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .income-date-input {
+        width: 100%;
+    }
+
+    .total-income-card,
+    .income-breakdown-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+.reports-landing {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e7eee9;
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: 0 5px 18px rgba(30, 80, 55, 0.05);
+    margin-top: 4px;
+}
+
+.reports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.income-report-link {
+    position: relative !important;
+    z-index: 9999 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+.income-report-link * {
+    pointer-events: none;
+}
+/* =================================================
+   REPORT OPTION
+================================================= */
+
+.report-option {
+    display: block;
+    width: 100%;
+    min-height: 104px;
+
+    padding: 0 24px;
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f0f8f4 0%,
+            #f5faf8 100%
+        );
+
+    border: 1px solid #edf3ef;
+    border-radius: 11px;
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+
+    cursor: pointer;
+}
+
+
+.report-option:hover {
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(
+            90deg,
+            #eaf7f0 0%,
+            #f3faf6 100%
+        );
+
+    border-color: #dcece3;
+
+    box-shadow:
+        0 5px 16px rgba(30, 80, 55, 0.06);
+}
+
+
+.report-option-content {
+    width: 100%;
+    min-height: 104px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.report-option h2 {
+    margin: 0 0 7px;
+
+    color: #14231d;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.report-option p {
+    margin: 0;
+
+    color: #62756d;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    line-height: 1.4;
+}
+
+
+.report-option-arrow {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #079c50;
+
+    font-size: 21px;
+
+    padding-left: 20px;
+}
+
+
+.report-option:hover .report-option-arrow {
+    color: #057d40;
+    transform: translateX(2px);
+}
+
+
+/* =================================================
+   EXISTING REPORT WORKING AREA
+   HIDDEN INITIALLY
+================================================= */
+
+.reports-working-area {
+    display: none;
+    margin-top: 14px;
+}
+
+
+/*
+   Kapag ginagamit na ng existing report JS ang
+   Attendance / Locker report, visible ang area.
+*/
+
+.reports-working-area.show {
+    display: block;
+}
+
+
+/* =================================================
+   PAGE HEADER
+================================================= */
+
+.reports-page-header {
+    margin-bottom: 20px !important;
+}
+
+
+.reports-page-header h1 {
+    margin: 0;
+
+    color: #14231d !important;
+
+    font-size: 36px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: -0.8px;
+}
+
+
+.reports-page-header p {
+    margin: 4px 0 0 !important;
+
+    color: #65756e !important;
+
+    font-size: 16px !important;
+}
+
+
+/* =================================================
+   REPORT PANEL
+================================================= */
+
+.reports-working-area .reports-panel {
+    background: #ffffff;
+
+    border: 1px solid #e6eee9;
+
+    border-radius: 14px;
+
+    padding: 14px;
+
+    box-shadow:
+        0 5px 18px rgba(30, 80, 55, 0.05);
+}
+
+
+/* =================================================
+   MOBILE
+================================================= */
+
+@media (max-width: 700px) {
+
+    .reports-landing {
+        padding: 9px;
+    }
+
+    .report-option {
+        min-height: 92px;
+        padding: 0 18px;
+    }
+
+    .report-option-content {
+        min-height: 92px;
+    }
+
+    .report-option h2 {
+        font-size: 16px;
+    }
+
+    .report-option p {
+        font-size: 12px;
+    }
+
+    .report-option-arrow {
+        font-size: 18px;
+    }
+
+}
+
+</style>
+
+
+
+
 
 <!-- =====================================================
      SCRIPT
@@ -1969,7 +3144,67 @@ function setLockerToday(){
     loadLockerReport();
 
 }
+/* =====================================================
+   INCOME REPORT
+===================================================== */
 
+function showIncomeReport(){
+
+    // Hide the report selection page
+    const landing =
+        document.querySelector(".reports-landing");
+
+    if(landing){
+        landing.style.display = "none";
+    }
+
+
+    // Show the report working area
+    const workingArea =
+        document.querySelector(".reports-working-area");
+
+    if(workingArea){
+        workingArea.style.display = "block";
+    }
+
+
+    // Show Income Report
+    const incomeReport =
+        document.getElementById("incomeReport");
+
+    if(incomeReport){
+        incomeReport.style.display = "block";
+    }
+
+
+    // Hide existing Attendance / Locker panel
+    const existingPanel =
+        document.querySelector(".existing-report-panel");
+
+    if(existingPanel){
+        existingPanel.style.display = "none";
+    }
+
+
+    // Remove active state from other report options
+    document
+        .querySelectorAll(".reports-sidebar .report-option")
+        .forEach(option => {
+            option.classList.remove("selected");
+        });
+
+
+    // Activate Income Report in sidebar
+    const incomeOption =
+        document.querySelector(
+            '.reports-sidebar a[href="#incomeReport"]'
+        );
+
+    if(incomeOption){
+        incomeOption.classList.add("selected");
+    }
+
+}
 
 /* =====================================================
    LOCKER THIS WEEK
