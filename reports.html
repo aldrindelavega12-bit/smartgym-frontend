@@ -305,29 +305,36 @@ if(
 
                 </div>
             </a>
-            <!-- TRAINER REPORT -->
 
             <a
-                href="#"
-                class="report-option">
+                href="javascript:void(0)"
+                class="report-option"
+                onclick="showTrainerReport()">
 
                 <div class="report-option-content">
 
                     <div>
-                        <h2>Trainer Report</h2>
+
+                        <h2>
+                            Trainer Report
+                        </h2>
 
                         <p>
                             View trainer activity and trainer fee reports.
                         </p>
+
                     </div>
 
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <div class="report-option-arrow">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </div>
 
                 </div>
 
             </a>
-
-
+            <!-- TRAINER REPORT -->
             <!-- ATTENDANCE REPORT -->
 
             <a
@@ -4803,7 +4810,523 @@ async function loadLockerReport(){
 
 }
 
+/* =====================================================
+   TRAINER REPORT DATA
+===================================================== */
 
+const trainerReportData = {
+
+    T001: {
+
+        id: "T001",
+
+        name: "John Dela Cruz",
+
+        program: "Build Muscle",
+
+        fee: "₱2,000.00",
+
+        trainees: [
+
+            {
+                id: "M001",
+                name: "Juan Dela Cruz",
+                program: "Build Muscle",
+                startDate: "October 1, 2026"
+            },
+
+            {
+                id: "M002",
+                name: "Mark Santos",
+                program: "Build Muscle",
+                startDate: "October 2, 2026"
+            },
+
+            {
+                id: "M003",
+                name: "Carlo Reyes",
+                program: "Weight Loss",
+                startDate: "October 4, 2026"
+            },
+
+            {
+                id: "M004",
+                name: "Ana Cruz",
+                program: "Build Muscle",
+                startDate: "October 5, 2026"
+            },
+
+            {
+                id: "M005",
+                name: "Kevin Garcia",
+                program: "Build Muscle",
+                startDate: "October 6, 2026"
+            }
+
+        ]
+
+    },
+
+
+    T002: {
+
+        id: "T002",
+
+        name: "Maria Santos",
+
+        program: "Weight Loss",
+
+        fee: "₱1,500.00",
+
+        trainees: [
+
+            {
+                id: "M006",
+                name: "Sofia Reyes",
+                program: "Weight Loss",
+                startDate: "October 1, 2026"
+            },
+
+            {
+                id: "M007",
+                name: "Paolo Cruz",
+                program: "Weight Loss",
+                startDate: "October 2, 2026"
+            },
+
+            {
+                id: "M008",
+                name: "Angela Santos",
+                program: "Weight Loss",
+                startDate: "October 3, 2026"
+            },
+
+            {
+                id: "M009",
+                name: "Miguel Garcia",
+                program: "Weight Loss",
+                startDate: "October 4, 2026"
+            }
+
+        ]
+
+    },
+
+
+    T003: {
+
+        id: "T003",
+
+        name: "Carlos Reyes",
+
+        program: "Build Muscle",
+
+        fee: "₱2,500.00",
+
+        trainees: [
+
+            {
+                id: "M010",
+                name: "Daniel Cruz",
+                program: "Build Muscle",
+                startDate: "October 1, 2026"
+            },
+
+            {
+                id: "M011",
+                name: "James Santos",
+                program: "Build Muscle",
+                startDate: "October 2, 2026"
+            },
+
+            {
+                id: "M012",
+                name: "Luis Garcia",
+                program: "Build Muscle",
+                startDate: "October 4, 2026"
+            }
+
+        ]
+
+    },
+
+
+    T004: {
+
+        id: "T004",
+
+        name: "Ana Garcia",
+
+        program: "Weight Loss",
+
+        fee: "₱1,000.00",
+
+        trainees: [
+
+            {
+                id: "M013",
+                name: "Rachel Cruz",
+                program: "Weight Loss",
+                startDate: "October 2, 2026"
+            },
+
+            {
+                id: "M014",
+                name: "Mia Santos",
+                program: "Weight Loss",
+                startDate: "October 5, 2026"
+            }
+
+        ]
+
+    },
+
+
+    T005: {
+
+        id: "T005",
+
+        name: "Mark Villanueva",
+
+        program: "Build Muscle",
+
+        fee: "₱1,000.00",
+
+        trainees: [
+
+            {
+                id: "M015",
+                name: "Ryan Cruz",
+                program: "Build Muscle",
+                startDate: "October 1, 2026"
+            },
+
+            {
+                id: "M016",
+                name: "Josh Reyes",
+                program: "Build Muscle",
+                startDate: "October 3, 2026"
+            },
+
+            {
+                id: "M017",
+                name: "Kyle Santos",
+                program: "Build Muscle",
+                startDate: "October 5, 2026"
+            }
+
+        ]
+
+    }
+
+};
+
+
+/* =====================================================
+   SHOW TRAINER REPORT
+===================================================== */
+
+function showTrainerReport(){
+
+    const landing =
+        document.querySelector(
+            ".reports-landing"
+        );
+
+    const workingArea =
+        document.querySelector(
+            ".reports-working-area"
+        );
+
+    const trainerReport =
+        document.getElementById(
+            "trainerReport"
+        );
+
+    const incomeReport =
+        document.getElementById(
+            "incomeReport"
+        );
+
+    const trainerDetails =
+        document.getElementById(
+            "trainerDetails"
+        );
+
+    const existingPanel =
+        document.querySelector(
+            ".existing-report-panel"
+        );
+
+
+    if(landing){
+
+        landing.style.display =
+            "none";
+
+    }
+
+
+    if(workingArea){
+
+        workingArea.style.display =
+            "block";
+
+    }
+
+
+    if(incomeReport){
+
+        incomeReport.style.display =
+            "none";
+
+    }
+
+
+    if(existingPanel){
+
+        existingPanel.style.display =
+            "none";
+
+    }
+
+
+    if(trainerDetails){
+
+        trainerDetails.style.display =
+            "none";
+
+    }
+
+
+    if(trainerReport){
+
+        trainerReport.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE TRAINER REPORT
+===================================================== */
+
+function closeTrainerReport(){
+
+    const landing =
+        document.querySelector(
+            ".reports-landing"
+        );
+
+    const workingArea =
+        document.querySelector(
+            ".reports-working-area"
+        );
+
+    const trainerReport =
+        document.getElementById(
+            "trainerReport"
+        );
+
+
+    if(trainerReport){
+
+        trainerReport.style.display =
+            "none";
+
+    }
+
+
+    if(workingArea){
+
+        workingArea.style.display =
+            "none";
+
+    }
+
+
+    if(landing){
+
+        landing.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =====================================================
+   VIEW TRAINER DETAILS
+===================================================== */
+
+function viewTrainerDetails(trainerId){
+
+    const trainer =
+        trainerReportData[trainerId];
+
+
+    if(!trainer)
+        return;
+
+
+    const trainerReport =
+        document.getElementById(
+            "trainerReport"
+        );
+
+    const trainerDetails =
+        document.getElementById(
+            "trainerDetails"
+        );
+
+
+    if(trainerReport){
+
+        trainerReport.style.display =
+            "none";
+
+    }
+
+
+    if(trainerDetails){
+
+        trainerDetails.style.display =
+            "block";
+
+    }
+
+
+    document.getElementById(
+        "trainerDetailsName"
+    ).innerText =
+        trainer.name;
+
+
+    document.getElementById(
+        "trainerDetailsId"
+    ).innerText =
+        trainer.id;
+
+
+    document.getElementById(
+        "trainerDetailsProgram"
+    ).innerText =
+        trainer.program;
+
+
+    document.getElementById(
+        "trainerDetailsFee"
+    ).innerText =
+        trainer.fee;
+
+
+    document.getElementById(
+        "trainerDetailsTrainees"
+    ).innerText =
+        trainer.trainees.length;
+
+
+    renderTrainerTrainees(
+        trainer.trainees
+    );
+
+}
+
+
+/* =====================================================
+   RENDER TRAINEES
+===================================================== */
+
+function renderTrainerTrainees(trainees){
+
+    const body =
+        document.getElementById(
+            "trainerTraineesBody"
+        );
+
+
+    if(!body)
+        return;
+
+
+    body.innerHTML = "";
+
+
+    trainees.forEach(
+        trainee => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${trainee.id}
+                </td>
+
+                <td>
+                    ${trainee.name}
+                </td>
+
+                <td>
+                    ${trainee.program}
+                </td>
+
+                <td>
+                    ${trainee.startDate}
+                </td>
+
+            `;
+
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE TRAINER DETAILS
+===================================================== */
+
+function closeTrainerDetails(){
+
+    const trainerDetails =
+        document.getElementById(
+            "trainerDetails"
+        );
+
+    const trainerReport =
+        document.getElementById(
+            "trainerReport"
+        );
+
+
+    if(trainerDetails){
+
+        trainerDetails.style.display =
+            "none";
+
+    }
+
+
+    if(trainerReport){
+
+        trainerReport.style.display =
+            "block";
+
+    }
+
+}
 /* =====================================================
    LOCKER SUMMARY
 ===================================================== */
