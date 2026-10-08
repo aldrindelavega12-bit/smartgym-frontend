@@ -210,6 +210,7 @@
 
 
             <!-- ACTIVE MEMBERS -->
+             <!-- ACTIVE MEMBERS -->
             <div class="summary-card" id="activeCard">
 
                 <div class="summary-content">
@@ -243,10 +244,18 @@
 
                     </div>
 
+                    <!-- MANAGE ACTIVE MEMBERS -->
+                    <button
+                        type="button"
+                        id="manageActiveMembersBtn"
+                        class="manage-active-members-btn">
+                        Manage Active Members
+                    </button>
+
                 </div>
 
             </div>
-
+                        
 
             <!-- TODAY'S WALK-INS -->
             <div class="summary-card" id="walkinCard">
@@ -611,71 +620,38 @@ async function loadMemberSummary() {
 
     try {
 
-        const res =
-            await fetch(
-                `${API_URL}/api/members_list`
-            );
-
-        if (!res.ok) {
-
-            throw new Error(
-                `Members API error: ${res.status}`
-            );
-
-        }
-
-        const members =
-            await res.json();
-
-
-        const totalMembers =
-            members.length;
-
-
-        const activeMembers =
-            members.filter(member =>
-
-                member.membership_status === "ACTIVE" ||
-
-                member.monthly_status === "ACTIVE"
-
-            ).length;
-
-
-        
-
-
-        document.getElementById(
-            "active"
-        ).innerText =
-            activeMembers;
-
-
-        console.log(
-            "TOTAL MEMBERS:",
-            totalMembers
+        const res = await fetch(
+            `${API_URL}/api/manager_active_member`
         );
 
+        if (!res.ok) {
+            throw new Error(
+                `Active Members API error: ${res.status}`
+            );
+        }
+
+        const members = await res.json();
+
+        const activeMembers = members.length;
+
+        document.getElementById("active").innerText =
+            activeMembers;
 
         console.log(
             "ACTIVE MEMBERS:",
             activeMembers
         );
 
-
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "MEMBER SUMMARY ERROR:",
+            "ACTIVE MEMBERS ERROR:",
             error
         );
 
+        document.getElementById("active").innerText = "0";
     }
-
 }
-
 
 
 // =====================================================
