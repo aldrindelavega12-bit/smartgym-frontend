@@ -7246,7 +7246,531 @@ window.addEventListener(
     }
 );
 
+/* =====================================================
+   ATTENDANCE REPORT PERIOD
+===================================================== */
 
+let attendancePeriod = "daily";
+
+
+/* =====================================================
+   FORMAT ATTENDANCE DATE
+===================================================== */
+
+function formatAttendanceDate(date){
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   UPDATE ATTENDANCE DATE DISPLAY
+===================================================== */
+
+function updateAttendanceDateDisplay(){
+
+    const startInput =
+        document.getElementById("startDate");
+
+    const endInput =
+        document.getElementById("endDate");
+
+    const startDisplay =
+        document.getElementById("attendanceStartDate");
+
+    const endDisplay =
+        document.getElementById("attendanceEndDate");
+
+
+    if(
+        !startInput ||
+        !endInput ||
+        !startDisplay ||
+        !endDisplay
+    ){
+        return;
+    }
+
+
+    if(startInput.value){
+
+        const startDate =
+            parseLocalDate(startInput.value);
+
+        startDisplay.textContent =
+            formatAttendanceDate(startDate);
+
+    }
+
+
+    if(endInput.value){
+
+        const endDate =
+            parseLocalDate(endInput.value);
+
+        endDisplay.textContent =
+            formatAttendanceDate(endDate);
+
+    }
+
+}
+
+
+/* =====================================================
+   ATTENDANCE DATE MODE
+===================================================== */
+
+function setAttendanceDateMode(mode){
+
+    const label =
+        document.getElementById(
+            "attendanceDateLabel"
+        );
+
+    const endBox =
+        document.getElementById(
+            "attendanceEndDateBox"
+        );
+
+    const separator =
+        document.getElementById(
+            "attendanceDateSeparator"
+        );
+
+
+    if(!label || !endBox || !separator){
+        return;
+    }
+
+
+    if(mode === "single"){
+
+        label.textContent = "Date:";
+
+        endBox.style.display = "none";
+
+        separator.style.display = "none";
+
+    }
+    else{
+
+        label.textContent = "Date Range:";
+
+        endBox.style.display = "flex";
+
+        separator.style.display = "inline";
+
+    }
+
+}
+
+
+/* =====================================================
+   SET ATTENDANCE PERIOD
+===================================================== */
+
+function setAttendancePeriod(period){
+
+    attendancePeriod = period;
+
+
+    const dailyBtn =
+        document.getElementById(
+            "attendanceDailyBtn"
+        );
+
+    const weeklyBtn =
+        document.getElementById(
+            "attendanceWeeklyBtn"
+        );
+
+    const customBtn =
+        document.getElementById(
+            "attendanceCustomBtn"
+        );
+
+
+    /* REMOVE ACTIVE */
+
+    if(dailyBtn){
+        dailyBtn.classList.remove("active");
+    }
+
+    if(weeklyBtn){
+        weeklyBtn.classList.remove("active");
+    }
+
+    if(customBtn){
+        customBtn.classList.remove("active");
+    }
+
+
+    /* =================================================
+       DAILY
+    ================================================= */
+
+    if(period === "daily"){
+
+        if(dailyBtn){
+            dailyBtn.classList.add("active");
+        }
+
+
+        const today =
+            new Date();
+
+        const todayValue =
+            formatDateInput(today);
+
+
+        document.getElementById(
+            "startDate"
+        ).value = todayValue;
+
+
+        document.getElementById(
+            "endDate"
+        ).value = todayValue;
+
+
+        setAttendanceDateMode("single");
+
+        updateAttendanceDateDisplay();
+
+        generateReport();
+
+        return;
+
+    }
+
+
+    /* =================================================
+       WEEKLY
+    ================================================= */
+
+    if(period === "weekly"){
+
+        if(weeklyBtn){
+            weeklyBtn.classList.add("active");
+        }
+
+
+        const today =
+            new Date();
+
+
+        const day =
+            today.getDay();
+
+
+        const diff =
+            day === 0
+                ? 6
+                : day - 1;
+
+
+        const monday =
+            new Date(today);
+
+
+        monday.setDate(
+            today.getDate() - diff
+        );
+
+
+        const sunday =
+            new Date(monday);
+
+
+        sunday.setDate(
+            monday.getDate() + 6
+        );
+
+
+        document.getElementById(
+            "startDate"
+        ).value =
+            formatDateInput(monday);
+
+
+        document.getElementById(
+            "endDate"
+        ).value =
+            formatDateInput(sunday);
+
+
+        setAttendanceDateMode("range");
+
+        updateAttendanceDateDisplay();
+
+        generateReport();
+
+        return;
+
+    }
+
+
+    /* =================================================
+       CUSTOM DATE
+    ================================================= */
+
+    if(period === "custom"){
+
+        if(customBtn){
+            customBtn.classList.add("active");
+        }
+
+
+        setAttendanceDateMode("range");
+
+        updateAttendanceDateDisplay();
+
+        /*
+         * IMPORTANT:
+         * Do NOT immediately call generateReport()
+         * here.
+         *
+         * Wait until user selects both dates.
+         */
+
+        return;
+
+    }
+
+}
+
+
+/* =====================================================
+   ATTENDANCE START DATE CHANGE
+===================================================== */
+
+function handleAttendanceStartDateChange(){
+
+    const startInput =
+        document.getElementById(
+            "startDate"
+        );
+
+    const endInput =
+        document.getElementById(
+            "endDate"
+        );
+
+
+    if(!startInput || !endInput){
+        return;
+    }
+
+
+    if(!startInput.value){
+        return;
+    }
+
+
+    /*
+     * Once user manually changes date,
+     * automatically switch to Custom Date.
+     */
+
+    attendancePeriod = "custom";
+
+
+    const dailyBtn =
+        document.getElementById(
+            "attendanceDailyBtn"
+        );
+
+    const weeklyBtn =
+        document.getElementById(
+            "attendanceWeeklyBtn"
+        );
+
+    const customBtn =
+        document.getElementById(
+            "attendanceCustomBtn"
+        );
+
+
+    if(dailyBtn){
+        dailyBtn.classList.remove("active");
+    }
+
+    if(weeklyBtn){
+        weeklyBtn.classList.remove("active");
+    }
+
+    if(customBtn){
+        customBtn.classList.add("active");
+    }
+
+
+    setAttendanceDateMode("range");
+
+
+    /*
+     * If start date is later than end date,
+     * automatically move end date to start date.
+     */
+
+    if(
+        endInput.value &&
+        startInput.value > endInput.value
+    ){
+
+        endInput.value =
+            startInput.value;
+
+    }
+
+
+    updateAttendanceDateDisplay();
+
+    generateReport();
+
+}
+
+
+/* =====================================================
+   ATTENDANCE END DATE CHANGE
+===================================================== */
+
+function handleAttendanceEndDateChange(){
+
+    const startInput =
+        document.getElementById(
+            "startDate"
+        );
+
+    const endInput =
+        document.getElementById(
+            "endDate"
+        );
+
+
+    if(!startInput || !endInput){
+        return;
+    }
+
+
+    if(!endInput.value){
+        return;
+    }
+
+
+    /*
+     * Automatically switch to Custom Date
+     */
+
+    attendancePeriod = "custom";
+
+
+    const dailyBtn =
+        document.getElementById(
+            "attendanceDailyBtn"
+        );
+
+    const weeklyBtn =
+        document.getElementById(
+            "attendanceWeeklyBtn"
+        );
+
+    const customBtn =
+        document.getElementById(
+            "attendanceCustomBtn"
+        );
+
+
+    if(dailyBtn){
+        dailyBtn.classList.remove("active");
+    }
+
+    if(weeklyBtn){
+        weeklyBtn.classList.remove("active");
+    }
+
+    if(customBtn){
+        customBtn.classList.add("active");
+    }
+
+
+    setAttendanceDateMode("range");
+
+
+    /*
+     * Validate range
+     */
+
+    if(
+        startInput.value &&
+        endInput.value < startInput.value
+    ){
+
+        alert(
+            "End date cannot be earlier than start date."
+        );
+
+        endInput.value =
+            startInput.value;
+
+    }
+
+
+    updateAttendanceDateDisplay();
+
+    generateReport();
+
+}
+
+
+/* =====================================================
+   INITIALIZE ATTENDANCE DATE FILTER
+===================================================== */
+
+function initializeAttendanceDateFilter(){
+
+    const startInput =
+        document.getElementById(
+            "startDate"
+        );
+
+    const endInput =
+        document.getElementById(
+            "endDate"
+        );
+
+
+    if(!startInput || !endInput){
+        return;
+    }
+
+
+    startInput.addEventListener(
+        "change",
+        handleAttendanceStartDateChange
+    );
+
+
+    endInput.addEventListener(
+        "change",
+        handleAttendanceEndDateChange
+    );
+
+
+    /*
+     * Default = Daily
+     */
+
+    setAttendancePeriod("daily");
+
+}
 
 /* =====================================================
    INITIAL LOAD
