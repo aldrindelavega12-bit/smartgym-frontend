@@ -734,34 +734,45 @@ if(
 
                         <div class="trainer-date-controls">
 
+                            <!-- START DATE -->
                             <div class="trainer-date-input">
+
+                                <span id="trainerStartDate">
+                                    October 8, 2026
+                                </span>
 
                                 <i class="fa-regular fa-calendar"></i>
 
-                                <span>
-                                    October 8, 2026
-                                </span>
+                                <input
+                                    type="date"
+                                    id="trainerStartPicker">
 
                             </div>
 
-                            <span>
+
+                            <span class="trainer-date-separator">
                                 -
                             </span>
 
+
+                            <!-- END DATE -->
                             <div class="trainer-date-input">
 
-                                <span>
+                                <span id="trainerEndDate">
                                     October 8, 2026
                                 </span>
 
                                 <i class="fa-regular fa-calendar"></i>
+
+                                <input
+                                    type="date"
+                                    id="trainerEndPicker">
 
                             </div>
 
                         </div>
 
                     </div>
-
                 </div>
 
 
@@ -770,37 +781,44 @@ if(
                 <div class="trainer-quick-filters">
 
                     <button
+                        id="trainerTodayBtn"
                         class="trainer-filter-btn active"
-                        type="button">
+                        type="button"
+                        onclick="setTrainerPeriod('today')">
 
                         Today
 
                     </button>
 
                     <button
+                        id="trainerWeekBtn"
                         class="trainer-filter-btn"
-                        type="button">
+                        type="button"
+                        onclick="setTrainerPeriod('week')">
 
                         This Week
 
                     </button>
 
                     <button
+                        id="trainerMonthBtn"
                         class="trainer-filter-btn"
-                        type="button">
+                        type="button"
+                        onclick="setTrainerPeriod('month')">
 
                         This Month
 
                     </button>
 
                     <button
+                        id="trainerCustomBtn"
                         class="trainer-filter-btn"
-                        type="button">
+                        type="button"
+                        onclick="setTrainerPeriod('custom')">
 
                         Custom
 
                     </button>
-
                 </div>
 
 
@@ -3243,7 +3261,436 @@ function getIncomeWeekRange(date){
 
 }
 
+/* =====================================================
+   TRAINER REPORT DATE
+===================================================== */
 
+let trainerStartDate = new Date();
+let trainerEndDate = new Date();
+let trainerPeriod = "today";
+
+
+function formatTrainerDate(date){
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function formatTrainerInputDate(date){
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+function updateTrainerDateDisplay(){
+
+    const startDisplay =
+        document.getElementById(
+            "trainerStartDate"
+        );
+
+    const endDisplay =
+        document.getElementById(
+            "trainerEndDate"
+        );
+
+    const startPicker =
+        document.getElementById(
+            "trainerStartPicker"
+        );
+
+    const endPicker =
+        document.getElementById(
+            "trainerEndPicker"
+        );
+
+
+    if(startDisplay){
+
+        startDisplay.innerText =
+            formatTrainerDate(
+                trainerStartDate
+            );
+
+    }
+
+
+    if(endDisplay){
+
+        endDisplay.innerText =
+            formatTrainerDate(
+                trainerEndDate
+            );
+
+    }
+
+
+    if(startPicker){
+
+        startPicker.value =
+            formatTrainerInputDate(
+                trainerStartDate
+            );
+
+    }
+
+
+    if(endPicker){
+
+        endPicker.value =
+            formatTrainerInputDate(
+                trainerEndDate
+            );
+
+    }
+
+}
+
+
+function setTrainerPeriod(period){
+
+    trainerPeriod = period;
+
+
+    document
+        .querySelectorAll(
+            ".trainer-filter-btn"
+        )
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    if(period === "today"){
+
+        document
+            .getElementById(
+                "trainerTodayBtn"
+            )
+            ?.classList.add("active");
+
+
+        const today =
+            new Date();
+
+        trainerStartDate =
+            new Date(today);
+
+        trainerEndDate =
+            new Date(today);
+
+    }
+
+
+    if(period === "week"){
+
+        document
+            .getElementById(
+                "trainerWeekBtn"
+            )
+            ?.classList.add("active");
+
+
+        const today =
+            new Date();
+
+        const day =
+            today.getDay();
+
+        const diff =
+            day === 0
+                ? 6
+                : day - 1;
+
+
+        const monday =
+            new Date(today);
+
+        monday.setDate(
+            today.getDate() - diff
+        );
+
+
+        const sunday =
+            new Date(monday);
+
+        sunday.setDate(
+            monday.getDate() + 6
+        );
+
+
+        trainerStartDate =
+            monday;
+
+        trainerEndDate =
+            sunday;
+
+    }
+
+
+    if(period === "month"){
+
+        document
+            .getElementById(
+                "trainerMonthBtn"
+            )
+            ?.classList.add("active");
+
+
+        const today =
+            new Date();
+
+
+        trainerStartDate =
+            new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                1
+            );
+
+        trainerEndDate =
+            new Date(today);
+
+    }
+
+
+    if(period === "custom"){
+
+        document
+            .getElementById(
+                "trainerCustomBtn"
+            )
+            ?.classList.add("active");
+
+        // Keep current selected range
+
+    }
+
+
+    updateTrainerDateDisplay();
+
+}
+
+
+function handleTrainerStartDateChange(){
+
+    const picker =
+        document.getElementById(
+            "trainerStartPicker"
+        );
+
+    if(!picker || !picker.value)
+        return;
+
+
+    const parts =
+        picker.value
+            .split("-")
+            .map(Number);
+
+
+    trainerStartDate =
+        new Date(
+            parts[0],
+            parts[1] - 1,
+            parts[2]
+        );
+
+
+    trainerPeriod =
+        "custom";
+
+
+    document
+        .querySelectorAll(
+            ".trainer-filter-btn"
+        )
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .getElementById(
+            "trainerCustomBtn"
+        )
+        ?.classList.add("active");
+
+
+    if(
+        trainerStartDate >
+        trainerEndDate
+    ){
+
+        trainerEndDate =
+            new Date(
+                trainerStartDate
+            );
+
+    }
+
+
+    updateTrainerDateDisplay();
+
+}
+
+
+function handleTrainerEndDateChange(){
+
+    const picker =
+        document.getElementById(
+            "trainerEndPicker"
+        );
+
+    if(!picker || !picker.value)
+        return;
+
+
+    const parts =
+        picker.value
+            .split("-")
+            .map(Number);
+
+
+    const selectedDate =
+        new Date(
+            parts[0],
+            parts[1] - 1,
+            parts[2]
+        );
+
+
+    if(
+        selectedDate <
+        trainerStartDate
+    ){
+
+        alert(
+            "End date cannot be earlier than start date."
+        );
+
+        updateTrainerDateDisplay();
+
+        return;
+
+    }
+
+
+    trainerEndDate =
+        selectedDate;
+
+
+    trainerPeriod =
+        "custom";
+
+
+    document
+        .querySelectorAll(
+            ".trainer-filter-btn"
+        )
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .getElementById(
+            "trainerCustomBtn"
+        )
+        ?.classList.add("active");
+
+
+    updateTrainerDateDisplay();
+
+}
+
+
+function initializeTrainerReport(){
+
+    const today =
+        new Date();
+
+
+    trainerStartDate =
+        new Date(today);
+
+    trainerEndDate =
+        new Date(today);
+
+
+    updateTrainerDateDisplay();
+
+
+    const startPicker =
+        document.getElementById(
+            "trainerStartPicker"
+        );
+
+    const endPicker =
+        document.getElementById(
+            "trainerEndPicker"
+        );
+
+
+    if(startPicker){
+
+        startPicker.addEventListener(
+            "change",
+            handleTrainerStartDateChange
+        );
+
+    }
+
+
+    if(endPicker){
+
+        endPicker.addEventListener(
+            "change",
+            handleTrainerEndDateChange
+        );
+
+    }
+
+
+    setTrainerPeriod(
+        "today"
+    );
+
+}
 /* =====================================================
    START DATE CHANGED
 ===================================================== */
@@ -6021,6 +6468,7 @@ generateReport();
 initializeIncomeReport();
 
 loadMessageCount();
+initializeTrainerReport();
 
 </script>
 
