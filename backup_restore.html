@@ -1407,19 +1407,25 @@
                             id="typeFilter"
                             onchange="filterBackups()"
                         >
-
                             <option value="all">
                                 All Types
                             </option>
 
-                            <option value="manual">
-                                Manual
+                            <option value="database">
+                                Database
                             </option>
 
-                            <option value="automatic">
-                                Automatic
+                            <option value="backend">
+                                Backend
                             </option>
 
+                            <option value="frontend">
+                                Frontend
+                            </option>
+
+                            <option value="full_system">
+                                Full System
+                            </option>
                         </select>
 
 
@@ -4332,7 +4338,7 @@ function filterBackups() {
 
                 const typeMatch =
                     type === "all" ||
-                    backup.backup_mode === type;
+                    backup.backup_type === type;
 
 
                 const statusMatch =
