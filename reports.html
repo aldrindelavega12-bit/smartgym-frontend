@@ -664,6 +664,637 @@ if(
 
             </div>
 
+            <!-- =====================================================
+                TRAINER REPORT
+            ===================================================== -->
+
+            <div
+                id="trainerReport"
+                class="trainer-report-view"
+                style="display:none;">
+
+                <!-- CLOSE -->
+
+                <button
+                    type="button"
+                    class="close-trainer-report"
+                    onclick="closeTrainerReport()"
+                    aria-label="Close Trainer Report">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+                <!-- HEADER -->
+
+                <div class="trainer-report-header">
+
+                    <div>
+
+                        <h2>
+                            Trainer Report
+                        </h2>
+
+                        <p>
+                            View trainer activity and trainer fee reports.
+                        </p>
+
+                    </div>
+
+
+                    <!-- DATE FILTER -->
+
+                    <div class="trainer-date-filter">
+
+                        <label>
+                            Date Range
+                        </label>
+
+                        <div class="trainer-date-controls">
+
+                            <div class="trainer-date-input">
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                                <span>
+                                    October 8, 2026
+                                </span>
+
+                            </div>
+
+                            <span>
+                                -
+                            </span>
+
+                            <div class="trainer-date-input">
+
+                                <span>
+                                    October 8, 2026
+                                </span>
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK FILTERS -->
+
+                <div class="trainer-quick-filters">
+
+                    <button
+                        class="trainer-filter-btn active"
+                        type="button">
+
+                        Today
+
+                    </button>
+
+                    <button
+                        class="trainer-filter-btn"
+                        type="button">
+
+                        This Week
+
+                    </button>
+
+                    <button
+                        class="trainer-filter-btn"
+                        type="button">
+
+                        This Month
+
+                    </button>
+
+                    <button
+                        class="trainer-filter-btn"
+                        type="button">
+
+                        Custom
+
+                    </button>
+
+                </div>
+
+
+                <!-- SUMMARY -->
+
+                <div class="trainer-summary-grid">
+
+
+                    <!-- TOTAL TRAINERS -->
+
+                    <div class="trainer-summary-card">
+
+                        <span>
+                            Total Trainers
+                        </span>
+
+                        <strong>
+                            12
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TOTAL INCOME -->
+
+                    <div class="trainer-summary-card">
+
+                        <span>
+                            Total Trainer Income
+                        </span>
+
+                        <strong>
+                            ₱8,000.00
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                    TRAINERS LIST
+                ================================================== -->
+
+                <div class="trainer-list-section">
+
+
+                    <div class="trainer-list-header">
+
+                        <div>
+
+                            <h3>
+                                Trainers List
+                            </h3>
+
+                            <p>
+                                List of all trainers with their activity and fee details.
+                            </p>
+
+                        </div>
+
+
+                        <!-- SEARCH -->
+
+                        <div class="trainer-search">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="text"
+                                id="trainerReportSearch"
+                                placeholder="Search by trainer name...">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TABLE -->
+
+                    <div class="trainer-table-wrapper">
+
+                        <table class="trainer-report-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        ID
+                                    </th>
+
+                                    <th>
+                                        Trainer Name
+                                    </th>
+
+                                    <th>
+                                        Program Count
+                                    </th>
+
+                                    <th>
+                                        Active Clients
+                                    </th>
+
+                                    <th>
+                                        Total Fees
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="trainerReportBody">
+
+                                <!-- T001 -->
+
+                                <tr>
+
+                                    <td>
+                                        T001
+                                    </td>
+
+                                    <td>
+                                        John Dela Cruz
+                                    </td>
+
+                                    <td>
+                                        4
+                                    </td>
+
+                                    <td>
+                                        15
+                                    </td>
+
+                                    <td>
+                                        ₱2,000.00
+                                    </td>
+
+                                    <td>
+
+                                        <button
+                                            class="trainer-view-btn"
+                                            onclick="viewTrainerDetails('T001')">
+
+                                            View
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- T002 -->
+
+                                <tr>
+
+                                    <td>
+                                        T002
+                                    </td>
+
+                                    <td>
+                                        Maria Santos
+                                    </td>
+
+                                    <td>
+                                        3
+                                    </td>
+
+                                    <td>
+                                        12
+                                    </td>
+
+                                    <td>
+                                        ₱1,500.00
+                                    </td>
+
+                                    <td>
+
+                                        <button
+                                            class="trainer-view-btn"
+                                            onclick="viewTrainerDetails('T002')">
+
+                                            View
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- T003 -->
+
+                                <tr>
+
+                                    <td>
+                                        T003
+                                    </td>
+
+                                    <td>
+                                        Carlos Reyes
+                                    </td>
+
+                                    <td>
+                                        5
+                                    </td>
+
+                                    <td>
+                                        8
+                                    </td>
+
+                                    <td>
+                                        ₱2,500.00
+                                    </td>
+
+                                    <td>
+
+                                        <button
+                                            class="trainer-view-btn"
+                                            onclick="viewTrainerDetails('T003')">
+
+                                            View
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- T004 -->
+
+                                <tr>
+
+                                    <td>
+                                        T004
+                                    </td>
+
+                                    <td>
+                                        Ana Garcia
+                                    </td>
+
+                                    <td>
+                                        2
+                                    </td>
+
+                                    <td>
+                                        10
+                                    </td>
+
+                                    <td>
+                                        ₱1,000.00
+                                    </td>
+
+                                    <td>
+
+                                        <button
+                                            class="trainer-view-btn"
+                                            onclick="viewTrainerDetails('T004')">
+
+                                            View
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- T005 -->
+
+                                <tr>
+
+                                    <td>
+                                        T005
+                                    </td>
+
+                                    <td>
+                                        Mark Villanueva
+                                    </td>
+
+                                    <td>
+                                        3
+                                    </td>
+
+                                    <td>
+                                        9
+                                    </td>
+
+                                    <td>
+                                        ₱1,000.00
+                                    </td>
+
+                                    <td>
+
+                                        <button
+                                            class="trainer-view-btn"
+                                            onclick="viewTrainerDetails('T005')">
+
+                                            View
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- FOOTER -->
+
+                    <div class="trainer-table-footer">
+
+                        <span>
+                            Showing 1 to 5 of 5 records
+                        </span>
+
+
+                        <div class="trainer-pagination">
+
+                            <button disabled>
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+
+                            <button class="active">
+                                1
+                            </button>
+
+                            <button disabled>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                TRAINER DETAILS
+            ===================================================== -->
+
+            <div
+                id="trainerDetails"
+                class="trainer-details-view"
+                style="display:none;">
+
+                <!-- CLOSE -->
+
+                <button
+                    type="button"
+                    class="close-trainer-details"
+                    onclick="closeTrainerDetails()"
+                    aria-label="Close Trainer Details">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+                <!-- HEADER -->
+
+                <div class="trainer-details-header">
+
+                    <div>
+
+                        <h2 id="trainerDetailsName">
+                            John Dela Cruz
+                        </h2>
+
+                        <p>
+                            Trainer Details
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRAINER INFO -->
+
+                <div class="trainer-info-grid">
+
+
+                    <div class="trainer-info-card">
+
+                        <span>
+                            Trainer ID
+                        </span>
+
+                        <strong id="trainerDetailsId">
+                            T001
+                        </strong>
+
+                    </div>
+
+
+                    <div class="trainer-info-card">
+
+                        <span>
+                            Program
+                        </span>
+
+                        <strong id="trainerDetailsProgram">
+                            Build Muscle
+                        </strong>
+
+                    </div>
+
+
+                    <div class="trainer-info-card">
+
+                        <span>
+                            Trainer Fee
+                        </span>
+
+                        <strong id="trainerDetailsFee">
+                            ₱2,000.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="trainer-info-card">
+
+                        <span>
+                            Total Trainees
+                        </span>
+
+                        <strong id="trainerDetailsTrainees">
+                            5
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- TRAINEES -->
+
+                <div class="trainer-trainees-section">
+
+                    <div class="trainer-trainees-header">
+
+                        <div>
+
+                            <h3>
+                                Trainees
+                            </h3>
+
+                            <p>
+                                Members assigned to this trainer.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="trainer-table-wrapper">
+
+                        <table class="trainer-report-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        ID
+                                    </th>
+
+                                    <th>
+                                        Trainee Name
+                                    </th>
+
+                                    <th>
+                                        Program
+                                    </th>
+
+                                    <th>
+                                        Starting Date
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="trainerTraineesBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
 
             <!-- =================================================
                 EXISTING ATTENDANCE / LOCKER REPORT
