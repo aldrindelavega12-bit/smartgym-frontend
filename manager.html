@@ -880,8 +880,16 @@ async function loadWalkinSummary() {
 // WALK-INS STICKY PREVIEW
 // ========================================
 
+// ========================================
+// WALK-INS STICKY PREVIEW
+// ========================================
+
 const walkinCard =
     document.getElementById("walkinCard");
+
+const closeWalkinPreview =
+    document.getElementById("closeWalkinPreview");
+
 
 if (walkinCard) {
 
@@ -898,13 +906,13 @@ if (walkinCard) {
     );
 
 
-    // Click = toggle
+    // Click card = toggle
     walkinCard.addEventListener(
         "click",
         function (e) {
 
-            // Don't close when interacting
-            // with preview contents
+            // Don't toggle when clicking
+            // inside the preview
             if (
                 e.target.closest(".summary-preview")
             ) {
@@ -912,6 +920,28 @@ if (walkinCard) {
             }
 
             walkinCard.classList.toggle(
+                "active-open"
+            );
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   CLOSE WALK-IN PREVIEW
+======================================== */
+
+if (closeWalkinPreview) {
+
+    closeWalkinPreview.addEventListener(
+        "click",
+        function (e) {
+
+            e.stopPropagation();
+
+            walkinCard.classList.remove(
                 "active-open"
             );
 
