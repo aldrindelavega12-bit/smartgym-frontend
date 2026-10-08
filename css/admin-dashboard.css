@@ -6593,3 +6593,39 @@ a[href="#incomeReport"]::before {
 #attendanceReport{
     padding-top: 0 !important;
 }
+
+/* =====================================================
+   SMALLER ATTENDANCE SUMMARY CARDS
+===================================================== */
+
+#attendanceReport .attendance-summary-grid{
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+#attendanceReport .attendance-summary-card{
+    min-height: 105px;
+    padding: 15px 17px;
+    border-radius: 8px;
+}
+
+#attendanceReport .attendance-summary-content span{
+    font-size: 11px;
+}
+
+#attendanceReport .attendance-summary-content strong{
+    margin-top: 6px;
+    font-size: 25px;
+}
+
+#attendanceReport .attendance-summary-content small{
+    margin-top: 6px;
+    font-size: 10px;
+}
+
+#attendanceReport .attendance-summary-icon{
+    width: 39px;
+    height: 39px;
+    min-width: 39px;
+    font-size: 15px;
+}
