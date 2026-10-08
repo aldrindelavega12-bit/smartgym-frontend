@@ -3768,6 +3768,82 @@ function closeSystemAlertModal() {
     );
 
 }
+
+
+function requestSystemConfirmation(options = {}) {
+
+    return new Promise((resolve) => {
+
+        openSystemConfirmModal({
+
+            title:
+                options.title ||
+                "Confirm Action",
+
+            heading:
+                options.heading ||
+                "Are you sure?",
+
+            message:
+                options.message ||
+                "Please confirm this action.",
+
+            confirmText:
+                options.confirmText ||
+                "Continue",
+
+            type:
+                options.type ||
+                "warning",
+
+            callback: function () {
+
+                resolve(true);
+
+            }
+
+        });
+
+
+        /*
+         * Replace the Cancel button behavior
+         * so it resolves false.
+         */
+
+        const cancelButton =
+            document.querySelector(
+                "#systemConfirmModal .system-modal-cancel"
+            );
+
+
+        cancelButton.onclick =
+            function () {
+
+                closeSystemConfirmModal();
+
+                resolve(false);
+
+            };
+
+
+        const closeButton =
+            document.querySelector(
+                "#systemConfirmModal .system-modal-close"
+            );
+
+
+        closeButton.onclick =
+            function () {
+
+                closeSystemConfirmModal();
+
+                resolve(false);
+
+            };
+
+    });
+
+}
 /* =====================================================
    RESTORE MODAL
 ===================================================== */
@@ -4023,14 +4099,27 @@ async function restoreSystem() {
 
 
     const confirmed =
-        confirm(
-            "WARNING: Database Restore\n\n" +
-            "The current Railway database will be replaced " +
-            "with the selected backup.\n\n" +
-            "A safety backup will be created automatically " +
-            "before the restore.\n\n" +
-            "Continue?"
-        );
+        await requestSystemConfirmation({
+
+            title:
+                "Database Restore",
+
+            heading:
+                "WARNING: Database Restore",
+
+            message:
+                "The current Railway database will be replaced " +
+                "with the selected backup.\n\n" +
+                "A safety backup will be created automatically " +
+                "before the restore.",
+
+            confirmText:
+                "Continue",
+
+            type:
+                "warning"
+
+        });
 
 
     if (!confirmed) {
@@ -4073,12 +4162,26 @@ async function restoreSystem() {
 
 
         const validationConfirmed =
-            confirm(
-                "Backup validation successful.\n\n" +
-                `Tables detected: ${tableCount}\n` +
-                `Insert statements: ${insertCount}\n\n` +
-                "Proceed with database restore?"
-            );
+            await requestSystemConfirmation({
+
+                title:
+                    "Backup Validation Successful",
+
+                heading:
+                    "Backup validation successful.",
+
+                message:
+                    `Tables detected: ${tableCount}\n` +
+                    `Insert statements: ${insertCount}\n\n` +
+                    "Proceed with database restore?",
+
+                confirmText:
+                    "Proceed",
+
+                type:
+                    "warning"
+
+            });
 
 
         if (!validationConfirmed) {
