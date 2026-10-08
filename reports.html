@@ -305,7 +305,10 @@ if(
             <!-- INCOME REPORT -->
 
             <!-- INCOME REPORT -->
-            <a href="#incomeReport" class="report-option">
+            <a
+                href="javascript:void(0)"
+                class="report-option"
+                onclick="showIncomeReport(); return false;">
                 <div class="report-option-content">
 
                     <div>
@@ -4810,46 +4813,67 @@ function setLockerToday(){
 /* =====================================================
    INCOME REPORT
 ===================================================== */
-
 function showIncomeReport(){
 
-    // Hide the report selection page
+    // CLEAR URL HASH
+    history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+    );
+
     const landing =
         document.querySelector(".reports-landing");
 
+    const workingArea =
+        document.querySelector(".reports-working-area");
+
+    const incomeReport =
+        document.getElementById("incomeReport");
+
+    const trainerReport =
+        document.getElementById("trainerReport");
+
+    const trainerDetails =
+        document.getElementById("trainerDetails");
+
+    const existingPanel =
+        document.querySelector(".existing-report-panel");
+
+
+    // HIDE LANDING
     if(landing){
         landing.style.display = "none";
     }
 
 
-    // Show the report working area
-    const workingArea =
-        document.querySelector(".reports-working-area");
-
+    // SHOW WORKING AREA
     if(workingArea){
         workingArea.style.display = "block";
     }
 
 
-    // Show Income Report
-    const incomeReport =
-        document.getElementById("incomeReport");
-
-    if(incomeReport){
-        incomeReport.style.display = "block";
+    // HIDE ALL OTHER REPORTS
+    if(trainerReport){
+        trainerReport.style.display = "none";
     }
 
-
-    // Hide existing Attendance / Locker panel
-    const existingPanel =
-        document.querySelector(".existing-report-panel");
+    if(trainerDetails){
+        trainerDetails.style.display = "none";
+    }
 
     if(existingPanel){
         existingPanel.style.display = "none";
     }
 
 
-    // Remove active state from other report options
+    // SHOW ONLY INCOME
+    if(incomeReport){
+        incomeReport.style.display = "block";
+    }
+
+
+    // REMOVE SELECTED
     document
         .querySelectorAll(".reports-sidebar .report-option")
         .forEach(option => {
@@ -4857,10 +4881,10 @@ function showIncomeReport(){
         });
 
 
-    // Activate Income Report in sidebar
+    // SELECT INCOME
     const incomeOption =
         document.querySelector(
-            '.reports-sidebar a[href="#incomeReport"]'
+            '.reports-sidebar .report-option[onclick*="showIncomeReport"]'
         );
 
     if(incomeOption){
@@ -5334,89 +5358,74 @@ const trainerReportData = {
 /* =====================================================
    SHOW TRAINER REPORT
 ===================================================== */
-
 function showTrainerReport(){
 
+    // CLEAR URL HASH
+    history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+    );
+
     const landing =
-        document.querySelector(
-            ".reports-landing"
-        );
+        document.querySelector(".reports-landing");
 
     const workingArea =
-        document.querySelector(
-            ".reports-working-area"
-        );
-
-    const trainerReport =
-        document.getElementById(
-            "trainerReport"
-        );
+        document.querySelector(".reports-working-area");
 
     const incomeReport =
-        document.getElementById(
-            "incomeReport"
-        );
+        document.getElementById("incomeReport");
+
+    const trainerReport =
+        document.getElementById("trainerReport");
 
     const trainerDetails =
-        document.getElementById(
-            "trainerDetails"
-        );
+        document.getElementById("trainerDetails");
 
     const existingPanel =
-        document.querySelector(
-            ".existing-report-panel"
-        );
+        document.querySelector(".existing-report-panel");
 
 
+    // HIDE LANDING
     if(landing){
-
-        landing.style.display =
-            "none";
-
+        landing.style.display = "none";
     }
 
 
+    // SHOW WORKING AREA
     if(workingArea){
-
-        workingArea.style.display =
-            "block";
-
+        workingArea.style.display = "block";
     }
 
 
+    // HIDE EVERYTHING ELSE
     if(incomeReport){
-
-        incomeReport.style.display =
-            "none";
-
+        incomeReport.style.display = "none";
     }
-
 
     if(existingPanel){
-
-        existingPanel.style.display =
-            "none";
-
+        existingPanel.style.display = "none";
     }
-
 
     if(trainerDetails){
-
-        trainerDetails.style.display =
-            "none";
-
+        trainerDetails.style.display = "none";
     }
 
 
+    // SHOW TRAINER ONLY
     if(trainerReport){
-
-        trainerReport.style.display =
-            "block";
-
+        trainerReport.style.display = "block";
     }
+
+
+    // REMOVE SELECTED
+    document
+        .querySelectorAll(".reports-sidebar .report-option")
+        .forEach(option => {
+            option.classList.remove("selected");
+        });
 
 }
-
 
 /* =====================================================
    CLOSE TRAINER REPORT
