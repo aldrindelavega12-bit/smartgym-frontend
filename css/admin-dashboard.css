@@ -4194,3 +4194,46 @@ a[href="#incomeReport"]::before {
     box-shadow:
         0 0 0 3px rgba(8,184,91,.08);
 }
+
+/* =====================================================
+   BACKUP PAGINATION
+===================================================== */
+
+.backup-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 0 12px 12px;
+}
+
+.pagination-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 9px;
+    border: 1px solid #dce5e1;
+    border-radius: 7px;
+    background: #fff;
+    color: #34413d;
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pagination-btn:hover {
+    background: #eef9f3;
+    color: #008f4c;
+    border-color: #b9ddca;
+}
+
+.pagination-btn.active {
+    background: #008f4c;
+    color: #fff;
+    border-color: #008f4c;
+}
+
+.pagination-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    background: #f7f9f8;
+}

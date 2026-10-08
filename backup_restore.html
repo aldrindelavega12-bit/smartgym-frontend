@@ -2409,18 +2409,53 @@ async function loadBackups() {
 /* =====================================================
    RENDER BACKUP TABLE
 ===================================================== */
+/* =====================================================
+   BACKUP HISTORY PAGINATION
+===================================================== */
 
-function renderBackupTable(
-    backups
-) {
+const BACKUPS_PER_PAGE = 5;
+
+let allBackupRecords = [];
+let filteredBackupRecords = [];
+let currentBackupPage = 1;
+
+
+/* =====================================================
+   RENDER BACKUP TABLE
+===================================================== */
+
+function renderBackupTable(backups) {
 
     const tbody =
         document.getElementById(
             "backupTableBody"
         );
 
+    allBackupRecords = Array.isArray(backups)
+        ? backups
+        : [];
 
-    if (!backups.length) {
+    filteredBackupRecords =
+        [...allBackupRecords];
+
+    currentBackupPage = 1;
+
+    renderBackupPage();
+}
+
+
+/* =====================================================
+   RENDER CURRENT PAGE
+===================================================== */
+
+function renderBackupPage() {
+
+    const tbody =
+        document.getElementById(
+            "backupTableBody"
+        );
+
+    if (!filteredBackupRecords.length) {
 
         tbody.innerHTML = `
             <tr>
@@ -2433,15 +2468,45 @@ function renderBackupTable(
             </tr>
         `;
 
-        return;
+        renderBackupPagination();
 
+        return;
     }
 
 
+    const totalPages =
+        Math.ceil(
+            filteredBackupRecords.length /
+            BACKUPS_PER_PAGE
+        );
+
+
+    if (currentBackupPage > totalPages) {
+        currentBackupPage = totalPages;
+    }
+
+
+    const startIndex =
+        (currentBackupPage - 1) *
+        BACKUPS_PER_PAGE;
+
+
+    const endIndex =
+        startIndex +
+        BACKUPS_PER_PAGE;
+
+
+    const pageBackups =
+        filteredBackupRecords.slice(
+            startIndex,
+            endIndex
+        );
+
+
     tbody.innerHTML =
-        backups
+        pageBackups
             .map(
-                function(rawBackup, index) {
+                function(rawBackup, pageIndex) {
 
                     const backup =
                         normalizeBackup(
@@ -2469,6 +2534,12 @@ function renderBackupTable(
                         );
 
 
+                    const recordNumber =
+                        startIndex +
+                        pageIndex +
+                        1;
+
+
                     return `
 
                         <tr
@@ -2481,7 +2552,7 @@ function renderBackupTable(
                         >
 
                             <td class="backup-number">
-                                ${index + 1}
+                                ${recordNumber}
                             </td>
 
 
@@ -2523,7 +2594,9 @@ function renderBackupTable(
                                     class="completed-badge ${statusClass}"
                                 >
 
-                                    <i class="fa-solid fa-circle"></i>
+                                    <i
+                                        class="fa-solid fa-circle"
+                                    ></i>
 
                                     ${escapeHtml(
                                         statusText
@@ -2576,11 +2649,162 @@ function renderBackupTable(
             .join("");
 
 
-    filterBackups();
+    renderBackupPagination();
+}
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+function renderBackupPagination() {
+
+    const existing =
+        document.getElementById(
+            "backupPagination"
+        );
+
+
+    if (existing) {
+        existing.remove();
+    }
+
+
+    if (
+        !filteredBackupRecords.length ||
+        filteredBackupRecords.length <=
+            BACKUPS_PER_PAGE
+    ) {
+        return;
+    }
+
+
+    const totalPages =
+        Math.ceil(
+            filteredBackupRecords.length /
+            BACKUPS_PER_PAGE
+        );
+
+
+    const pagination =
+        document.createElement(
+            "div"
+        );
+
+
+    pagination.id =
+        "backupPagination";
+
+
+    pagination.className =
+        "backup-pagination";
+
+
+    let html = "";
+
+
+    /* PREVIOUS */
+
+    html += `
+        <button
+            class="pagination-btn"
+            onclick="changeBackupPage(${currentBackupPage - 1})"
+            ${currentBackupPage === 1 ? "disabled" : ""}
+        >
+            Previous
+        </button>
+    `;
+
+
+    /* PAGE NUMBERS */
+
+    for (
+        let page = 1;
+        page <= totalPages;
+        page++
+    ) {
+
+        html += `
+            <button
+                class="pagination-btn ${
+                    page === currentBackupPage
+                        ? "active"
+                        : ""
+                }"
+                onclick="changeBackupPage(${page})"
+            >
+                ${page}
+            </button>
+        `;
+    }
+
+
+    /* NEXT */
+
+    html += `
+        <button
+            class="pagination-btn"
+            onclick="changeBackupPage(${currentBackupPage + 1})"
+            ${
+                currentBackupPage === totalPages
+                    ? "disabled"
+                    : ""
+            }
+        >
+            Next
+        </button>
+    `;
+
+
+    pagination.innerHTML =
+        html;
+
+
+    const tableWrap =
+        document.querySelector(
+            ".history-table-wrap"
+        );
+
+
+    if (tableWrap) {
+
+        tableWrap.insertAdjacentElement(
+            "afterend",
+            pagination
+        );
+
+    }
 
 }
 
 
+/* =====================================================
+   CHANGE PAGE
+===================================================== */
+
+function changeBackupPage(page) {
+
+    const totalPages =
+        Math.ceil(
+            filteredBackupRecords.length /
+            BACKUPS_PER_PAGE
+        );
+
+
+    if (
+        page < 1 ||
+        page > totalPages
+    ) {
+        return;
+    }
+
+
+    currentBackupPage =
+        page;
+
+
+    renderBackupPage();
+}
 /* =====================================================
    LOAD LATEST BACKUP
 ===================================================== */
@@ -3229,6 +3453,9 @@ async function restoreSystem() {
 /* =====================================================
    FILTER
 ===================================================== */
+/* =====================================================
+   FILTER BACKUPS
+===================================================== */
 
 function filterBackups() {
 
@@ -3248,63 +3475,76 @@ function filterBackups() {
         document.getElementById(
             "backupSearch"
         ).value
-        .trim()
-        .toLowerCase();
+            .trim()
+            .toLowerCase();
 
 
-    const rows =
-        document.querySelectorAll(
-            "#backupTableBody tr"
-        );
+    filteredBackupRecords =
+        allBackupRecords.filter(
+            function(rawBackup) {
+
+                const backup =
+                    normalizeBackup(
+                        rawBackup
+                    );
 
 
-    rows.forEach(
-        function(row) {
-
-            const rowType =
-                row.dataset.type ||
-                "";
+                const rowType =
+                    backup.backup_type ||
+                    "";
 
 
-            const rowStatus =
-                row.dataset.status ||
-                "";
+                const rowStatus =
+                    backup.status ||
+                    "";
 
 
-            const rowText =
-                row.textContent
+                const rowText =
+                    (
+                        getBackupTypeLabel(
+                            backup.backup_type
+                        ) +
+                        " " +
+                        backup.file_name +
+                        " " +
+                        backup.created_at +
+                        " " +
+                        backup.status
+                    )
                     .toLowerCase();
 
 
-            const typeMatch =
-                type === "all" ||
-                rowType === type;
+                const typeMatch =
+                    type === "all" ||
+                    backup.backup_mode === type;
 
 
-            const statusMatch =
-                status === "all" ||
-                rowStatus === status;
+                const statusMatch =
+                    status === "all" ||
+                    rowStatus === status;
 
 
-            const searchMatch =
-                !search ||
-                rowText.includes(
-                    search
+                const searchMatch =
+                    !search ||
+                    rowText.includes(
+                        search
+                    );
+
+
+                return (
+                    typeMatch &&
+                    statusMatch &&
+                    searchMatch
                 );
 
+            }
+        );
 
-            row.style.display =
-                typeMatch &&
-                statusMatch &&
-                searchMatch
-                    ? ""
-                    : "none";
 
-        }
-    );
+    currentBackupPage = 1;
 
+    renderBackupPage();
 }
-
 
 /* =====================================================
    SEARCH
