@@ -6688,3 +6688,622 @@ a[href="#incomeReport"]::before {
     margin-top: 4px;
     font-size: 10px;
 }
+
+/* =====================================================
+   LOCKER REPORT
+===================================================== */
+
+.locker-report{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.locker-report-header{
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    width: 100%;
+
+    margin-bottom: 22px;
+
+}
+
+.locker-report-header h2{
+
+    margin: 0;
+
+    color: #182b46;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+}
+
+.locker-report-header p{
+
+    margin: 5px 0 0;
+
+    color: #536176;
+
+    font-size: 14px;
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.locker-date-area{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+.locker-date-area label{
+
+    color: #182b46;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+.locker-date-box{
+
+    position: relative;
+
+    width: 310px;
+
+}
+
+.locker-date-box input{
+
+    width: 100%;
+
+    height: 40px;
+
+    padding: 0 42px 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dce5df;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #24364d;
+
+    font-size: 13px;
+
+    outline: none;
+
+}
+
+.locker-date-box input:focus{
+
+    border-color: #08ad57;
+
+}
+
+.locker-date-box i{
+
+    position: absolute;
+
+    right: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #182b46;
+
+    pointer-events: none;
+
+}
+
+
+/* =====================================================
+   REPORT PERIOD
+===================================================== */
+
+.locker-period{
+
+    margin-bottom: 24px;
+
+}
+
+.locker-period > label{
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #182b46;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+.locker-period-buttons{
+
+    display: flex;
+
+    gap: 6px;
+
+    width: 650px;
+
+}
+
+.locker-period-btn{
+
+    flex: 1;
+
+    height: 42px;
+
+    border: 1px solid #a9e4c7;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #182b46;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+.locker-period-btn:hover{
+
+    background: #f0faf5;
+
+}
+
+.locker-period-btn.active{
+
+    background: #08ad57;
+
+    border-color: #08ad57;
+
+    color: #ffffff;
+
+}
+
+
+/* =====================================================
+   CUSTOM DATE
+===================================================== */
+
+.locker-custom-date-area{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: -10px;
+
+    margin-bottom: 20px;
+
+}
+
+.locker-custom-date-area label{
+
+    color: #182b46;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+.locker-custom-date-area input{
+
+    height: 36px;
+
+    padding: 0 10px;
+
+    border: 1px solid #dce5df;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    outline: none;
+
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.locker-summary-grid{
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+
+    width: 100%;
+
+    margin-bottom: 25px;
+
+}
+
+.locker-summary-card{
+
+    min-height: 86px;
+
+    padding: 16px 20px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border: 1px solid #edf3ef;
+
+    border-left: 3px solid #08ad57;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #eef9f3,
+            #f7fbf9
+        );
+
+}
+
+.locker-summary-content{
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+}
+
+.locker-summary-content span{
+
+    color: #21344d;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+.locker-summary-content strong{
+
+    margin-top: 5px;
+
+    color: #08ad57;
+
+    font-size: 29px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+}
+
+
+/* =====================================================
+   RECORD HEADER
+===================================================== */
+
+.locker-records-header{
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+
+}
+
+.locker-records-header h3{
+
+    margin: 0;
+
+    color: #182b46;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+}
+
+.locker-search-box{
+
+    width: 350px;
+
+}
+
+.locker-search-box input{
+
+    width: 100%;
+
+    height: 39px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dce5df;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #24364d;
+
+    font-size: 12px;
+
+    outline: none;
+
+}
+
+.locker-search-box input:focus{
+
+    border-color: #08ad57;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.locker-table-wrapper{
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+.locker-report-table{
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+
+}
+
+.locker-report-table thead th{
+
+    padding: 9px 10px;
+
+    background: #eef8f3;
+
+    color: #182b46;
+
+    text-align: left;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+}
+
+.locker-report-table tbody td{
+
+    padding: 8px 10px;
+
+    border-bottom: 1px solid #edf1ef;
+
+    color: #26384f;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+}
+
+.locker-report-table tbody tr:hover{
+
+    background: #f8fcfa;
+
+}
+
+
+/* =====================================================
+   BADGES
+===================================================== */
+
+.locker-report-table .locker-badge{
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    background: #e3f7ec;
+
+    color: #079b50;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.locker-report-footer{
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-top: 20px;
+
+}
+
+#lockerCount{
+
+    color: #182b46;
+
+    font-size: 12px;
+
+}
+
+.locker-pagination{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+.locker-pagination button{
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #f5f9f7;
+
+    color: #182b46;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+.locker-pagination button.active{
+
+    background: #08ad57;
+
+    color: #ffffff;
+
+}
+
+.locker-pagination button:disabled{
+
+    opacity: .45;
+
+    cursor: default;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 1100px){
+
+    .locker-report-header{
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+    .locker-period-buttons{
+
+        width: 100%;
+
+    }
+
+    .locker-search-box{
+
+        width: 300px;
+
+    }
+
+}
+
+@media(max-width: 800px){
+
+    .locker-summary-grid{
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .locker-records-header{
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 10px;
+
+    }
+
+    .locker-search-box{
+
+        width: 100%;
+
+    }
+
+    .locker-period-buttons{
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+}
