@@ -1313,11 +1313,11 @@
                     <div class="backup-card-header">
 
                         <h2>
-                            Restore Database
+                            Restore System
                         </h2>
 
                         <p>
-                            Restore a previous SQL database backup.
+                            Restore a previous backup of the Smart Gym system.
                         </p>
 
                     </div>
@@ -1341,11 +1341,11 @@
                         <div class="latest-row">
 
                             <span class="latest-label">
-                                Validation
+                                Backend
                             </span>
 
                             <span class="latest-value">
-                                Required
+                                .zip
                             </span>
 
                         </div>
@@ -1354,11 +1354,24 @@
                         <div class="latest-row">
 
                             <span class="latest-label">
-                                Safety Backup
+                                Frontend
                             </span>
 
                             <span class="latest-value">
-                                Automatic
+                                .zip
+                            </span>
+
+                        </div>
+
+
+                        <div class="latest-row">
+
+                            <span class="latest-label">
+                                Full System
+                            </span>
+
+                            <span class="latest-value">
+                                .zip
                             </span>
 
                         </div>
@@ -1588,6 +1601,8 @@
 </div>
 <!-- RESTORE MODAL -->
 
+<!-- RESTORE MODAL -->
+
 <div
     class="modal-overlay"
     id="restoreModal"
@@ -1598,7 +1613,7 @@
         <div class="modal-header">
 
             <h3>
-                Restore Database
+                Restore System
             </h3>
 
             <button
@@ -1614,10 +1629,119 @@
         <div class="modal-body">
 
             <p>
-                Upload a valid SQL backup file. The system will validate the
-                backup before restoring the Railway database.
+                Select the type of backup you want to restore.
+                The system will validate the backup before restoring.
             </p>
 
+
+            <!-- RESTORE TYPE -->
+
+            <div class="restore-options">
+
+                <div class="restore-option">
+
+                    <input
+                        type="radio"
+                        name="restoreType"
+                        id="restoreDatabase"
+                        value="database"
+                        checked
+                        onchange="handleRestoreTypeChange()"
+                    >
+
+                    <label for="restoreDatabase">
+
+                        <strong>
+                            Database
+                        </strong>
+
+                        <span>
+                            Restore Railway database (.sql)
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="restore-option">
+
+                    <input
+                        type="radio"
+                        name="restoreType"
+                        id="restoreBackend"
+                        value="backend"
+                        onchange="handleRestoreTypeChange()"
+                    >
+
+                    <label for="restoreBackend">
+
+                        <strong>
+                            Backend
+                        </strong>
+
+                        <span>
+                            Restore API and backend files (.zip)
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="restore-option">
+
+                    <input
+                        type="radio"
+                        name="restoreType"
+                        id="restoreFrontend"
+                        value="frontend"
+                        onchange="handleRestoreTypeChange()"
+                    >
+
+                    <label for="restoreFrontend">
+
+                        <strong>
+                            Frontend
+                        </strong>
+
+                        <span>
+                            Restore website files (.zip)
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="restore-option">
+
+                    <input
+                        type="radio"
+                        name="restoreType"
+                        id="restoreFullSystem"
+                        value="full_system"
+                        onchange="handleRestoreTypeChange()"
+                    >
+
+                    <label for="restoreFullSystem">
+
+                        <strong>
+                            Full System
+                        </strong>
+
+                        <span>
+                            Restore database, backend and frontend (.zip)
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- SELECTED BACKUP -->
 
             <div
                 class="restore-selected-backup"
@@ -1635,15 +1759,24 @@
             </div>
 
 
+            <!-- FILE -->
+
             <div class="restore-file">
 
-                <div class="restore-file-title">
-                    Select SQL Backup
+                <div
+                    class="restore-file-title"
+                    id="restoreFileTitle"
+                >
+                    Select Database Backup
                 </div>
 
-                <div class="restore-file-subtitle">
+                <div
+                    class="restore-file-subtitle"
+                    id="restoreFileSubtitle"
+                >
                     Database restore accepts .sql files.
                 </div>
+
 
                 <input
                     type="file"
@@ -1655,11 +1788,14 @@
             </div>
 
 
+            <!-- WARNING -->
+
             <div class="restore-warning">
 
-                <span>
-                    Restoring a database will replace existing database data.
-                    A safety backup is created automatically before restore.
+                <span id="restoreWarningText">
+                    Restoring a database will replace existing
+                    database data. A safety backup is created
+                    automatically before restore.
                 </span>
 
             </div>
@@ -1675,6 +1811,7 @@
             >
                 Cancel
             </button>
+
 
             <button
                 class="restore-btn"
