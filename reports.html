@@ -1257,73 +1257,165 @@ if(
                     ATTENDANCE
                 ================================================== -->
 
+                <!-- =================================================
+     ATTENDANCE REPORT
+================================================= -->
+
                 <div
                     id="attendanceReport"
-                    class="attendance-report">
+                    class="attendance-report"
+                    style="display:none;">
 
+                    <!-- ==========================================
+                        HEADER
+                    =========================================== -->
 
-                    <div class="report-filter-bar">
+                    <div class="attendance-report-header">
 
-                        <div class="date-range-group">
+                        <div>
 
-                            <label>
+                            <h2>
+                                Attendance Report
+                            </h2>
 
-                                <i class="fa-regular fa-calendar"></i>
-
-                                Date Range
-
-                            </label>
-
-
-                            <div class="date-inputs">
-
-                                <input
-                                    type="date"
-                                    id="startDate">
-
-                                <span>–</span>
-
-                                <input
-                                    type="date"
-                                    id="endDate">
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="quick-date-buttons">
-
-                            <button onclick="setToday()">
-                                Today
-                            </button>
-
-                            <button onclick="setThisWeek()">
-                                This Week
-                            </button>
-
-                            <button onclick="setThisMonth()">
-                                This Month
-                            </button>
+                            <p>
+                                View member and walk-in attendance records.
+                            </p>
 
                         </div>
 
                     </div>
 
 
-                    <div class="report-summary-grid">
+                    <!-- ==========================================
+                        FILTER
+                    =========================================== -->
+
+                    <div class="attendance-filter-row">
+
+                        <!-- REPORT PERIOD -->
+
+                        <div class="attendance-period">
+
+                            <label>
+                                Report Period
+                            </label>
+
+                            <div class="attendance-period-buttons">
+
+                                <button
+                                    type="button"
+                                    id="attendanceDailyBtn"
+                                    class="attendance-period-btn active"
+                                    onclick="setAttendancePeriod('daily')">
+
+                                    Daily
+
+                                </button>
 
 
-                        <div class="report-summary-card entry-card">
+                                <button
+                                    type="button"
+                                    id="attendanceWeeklyBtn"
+                                    class="attendance-period-btn"
+                                    onclick="setAttendancePeriod('weekly')">
 
-                            <div class="summary-icon">
+                                    Weekly
 
-                                <i class="fa-solid fa-calendar-check"></i>
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    id="attendanceCustomBtn"
+                                    class="attendance-period-btn"
+                                    onclick="setAttendancePeriod('custom')">
+
+                                    Custom Date
+
+                                </button>
 
                             </div>
 
+                        </div>
 
-                            <div>
+
+                        <!-- DATE -->
+
+                        <div class="attendance-date">
+
+                            <label id="attendanceDateLabel">
+                                Date:
+                            </label>
+
+                            <div class="attendance-date-range">
+
+                                <!-- START DATE -->
+
+                                <div
+                                    class="attendance-date-input"
+                                    id="attendanceStartDateBox">
+
+                                    <span id="attendanceStartDate">
+                                        October 8, 2026
+                                    </span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    <input
+                                        type="date"
+                                        id="startDate">
+
+                                </div>
+
+
+                                <!-- SEPARATOR -->
+
+                                <span
+                                    id="attendanceDateSeparator"
+                                    class="attendance-date-separator">
+
+                                    –
+
+                                </span>
+
+
+                                <!-- END DATE -->
+
+                                <div
+                                    class="attendance-date-input"
+                                    id="attendanceEndDateBox">
+
+                                    <span id="attendanceEndDate">
+                                        October 8, 2026
+                                    </span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    <input
+                                        type="date"
+                                        id="endDate">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==========================================
+                        SUMMARY
+                    =========================================== -->
+
+                    <div class="attendance-summary-grid">
+
+                        <!-- TOTAL -->
+
+                        <div class="attendance-summary-card">
+
+                            <div class="attendance-summary-content">
 
                                 <span>
                                     Total Attendance
@@ -1339,22 +1431,23 @@ if(
 
                             </div>
 
-                        </div>
-
-
-                        <div class="report-summary-card member-card">
-
-                            <div class="summary-icon">
+                            <div class="attendance-summary-icon">
 
                                 <i class="fa-solid fa-users"></i>
 
                             </div>
 
+                        </div>
 
-                            <div>
+
+                        <!-- MEMBERS -->
+
+                        <div class="attendance-summary-card">
+
+                            <div class="attendance-summary-content">
 
                                 <span>
-                                    Members
+                                    Member Attendance
                                 </span>
 
                                 <strong id="totalMembers">
@@ -1367,22 +1460,23 @@ if(
 
                             </div>
 
-                        </div>
+                            <div class="attendance-summary-icon">
 
-
-                        <div class="report-summary-card walkin-card">
-
-                            <div class="summary-icon">
-
-                                <i class="fa-solid fa-person-walking"></i>
+                                <i class="fa-solid fa-user"></i>
 
                             </div>
 
+                        </div>
 
-                            <div>
+
+                        <!-- WALK-INS -->
+
+                        <div class="attendance-summary-card">
+
+                            <div class="attendance-summary-content">
 
                                 <span>
-                                    Walk-ins
+                                    Walk-in Attendance
                                 </span>
 
                                 <strong id="totalWalkins">
@@ -1395,91 +1489,144 @@ if(
 
                             </div>
 
-                        </div>
+                            <div class="attendance-summary-icon">
 
+                                <i class="fa-solid fa-users"></i>
 
-                    </div>
-
-
-                    <div class="records-header">
-
-                        <div>
-
-                            <h2>
-
-                                <i class="fa-solid fa-file-lines"></i>
-
-                                Attendance Records
-
-                            </h2>
-
-                            <p>
-                                List of all time-in and time-out logs
-                                for members and walk-ins.
-                            </p>
-
-                        </div>
-
-
-                        <div class="report-search">
-
-                            <i class="fa-solid fa-magnifying-glass"></i>
-
-                            <input
-                                type="text"
-                                id="reportSearch"
-                                placeholder="Search name, ID, or type...">
+                            </div>
 
                         </div>
 
                     </div>
 
 
-                    <div class="report-table-wrapper">
+                    <!-- ==========================================
+                        ATTENDANCE RECORDS
+                    =========================================== -->
 
-                        <table class="report-table">
+                    <div class="attendance-records-section">
 
-                            <thead>
+                        <!-- HEADER -->
 
-                                <tr>
+                        <div class="attendance-records-header">
 
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                    <th>Duration</th>
-                                    <th>Visit Date</th>
+                            <div>
 
-                                </tr>
+                                <h3>
+                                    Attendance Records
+                                </h3>
 
-                            </thead>
+                                <p>
+                                    List of all time-in and time-out records
+                                    for members and walk-ins.
+                                </p>
 
-
-                            <tbody id="attendanceBody">
-                            </tbody>
-
-                        </table>
-
-                    </div>
+                            </div>
 
 
-                    <div class="report-footer">
+                            <!-- SEARCH -->
 
-                        <span id="reportCount">
-                            Showing 0 records
-                        </span>
+                            <div class="attendance-search">
+
+                                <i class="fa-solid fa-magnifying-glass"></i>
+
+                                <input
+                                    type="text"
+                                    id="reportSearch"
+                                    placeholder="Search name, ID, or type...">
+
+                            </div>
+
+                        </div>
 
 
-                        <div
-                            id="reportPagination"
-                            class="report-pagination">
+                        <!-- ======================================
+                            TABLE
+                        ======================================= -->
+
+                        <div class="attendance-table-wrapper">
+
+                            <table class="attendance-report-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            ID
+                                        </th>
+
+                                        <th>
+                                            Name
+                                        </th>
+
+                                        <th>
+                                            Type
+                                        </th>
+
+                                        <th>
+                                            Time In
+                                        </th>
+
+                                        <th>
+                                            Time Out
+                                        </th>
+
+                                        <th>
+                                            Duration
+                                        </th>
+
+                                        <th>
+                                            Visit Date
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="attendanceBody">
+
+                                    <tr>
+
+                                        <td
+                                            colspan="7"
+                                            class="attendance-loading">
+
+                                            Loading attendance records...
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                        <!-- ======================================
+                            FOOTER
+                        ======================================= -->
+
+                        <div class="attendance-table-footer">
+
+                            <span id="reportCount">
+                                Showing 0 records
+                            </span>
+
+
+                            <div
+                                id="reportPagination"
+                                class="attendance-pagination">
+                            </div>
+
                         </div>
 
                     </div>
 
                 </div>
-
 
                 <!-- =================================================
                     LOCKER
@@ -6162,40 +6309,206 @@ document
 /* =====================================================
    REPORT TABS
 ===================================================== */
-
 function showAttendanceReport(){
 
-    document.querySelector(
-        ".report-title-area h2"
-    ).innerText = "Attendance Report";
+    const landing =
+        document.querySelector(
+            ".reports-landing"
+        );
 
-    document.querySelector(
-        ".report-title-area p"
-    ).innerText =
-        "View member and walk-in attendance records.";
+    const workingArea =
+        document.querySelector(
+            ".reports-working-area"
+        );
 
-    document.querySelector(
-        ".report-main-icon i"
-    ).className =
-        "fa-solid fa-users";
+    const attendanceReport =
+        document.getElementById(
+            "attendanceReport"
+        );
+
+    const incomeReport =
+        document.getElementById(
+            "incomeReport"
+        );
+
+    const trainerReport =
+        document.getElementById(
+            "trainerReport"
+        );
+
+    const trainerDetails =
+        document.getElementById(
+            "trainerDetails"
+        );
+
+    const lockerReport =
+        document.getElementById(
+            "lockerReport"
+        );
+
+    const existingPanel =
+        document.querySelector(
+            ".existing-report-panel"
+        );
 
 
-    document
-        .getElementById("attendanceTab")
-        .classList.add("active");
+    /* ==============================
+       HIDE LANDING
+    ============================== */
 
-    document
-        .getElementById("lockerTab")
-        .classList.remove("active");
+    if(landing){
+
+        landing.style.display =
+            "none";
+
+    }
 
 
-    document
-        .getElementById("attendanceReport")
-        .style.display = "block";
+    /* ==============================
+       SHOW WORKING AREA
+    ============================== */
 
-    document
-        .getElementById("lockerReport")
-        .style.display = "none";
+    if(workingArea){
+
+        workingArea.style.display =
+            "block";
+
+    }
+
+
+    /* ==============================
+       HIDE OTHER REPORTS
+    ============================== */
+
+    if(incomeReport){
+
+        incomeReport.style.display =
+            "none";
+
+    }
+
+    if(trainerReport){
+
+        trainerReport.style.display =
+            "none";
+
+    }
+
+    if(trainerDetails){
+
+        trainerDetails.style.display =
+            "none";
+
+    }
+
+    if(lockerReport){
+
+        lockerReport.style.display =
+            "none";
+
+    }
+
+    if(existingPanel){
+
+        existingPanel.style.display =
+            "none";
+
+    }
+
+
+    /* ==============================
+       SHOW ATTENDANCE
+    ============================== */
+
+    if(attendanceReport){
+
+        attendanceReport.style.display =
+            "block";
+
+    }
+
+
+    /* ==============================
+       LOAD ATTENDANCE DATA
+    ============================== */
+
+    if(typeof generateReport === "function"){
+
+        generateReport();
+
+    }
+
+}
+
+function closeAttendanceReport(){
+
+    const landing =
+        document.querySelector(
+            ".reports-landing"
+        );
+
+    const workingArea =
+        document.querySelector(
+            ".reports-working-area"
+        );
+
+    const attendanceReport =
+        document.getElementById(
+            "attendanceReport"
+        );
+
+    const existingPanel =
+        document.querySelector(
+            ".existing-report-panel"
+        );
+
+
+    /* ==============================
+       HIDE ATTENDANCE
+    ============================== */
+
+    if(attendanceReport){
+
+        attendanceReport.style.display =
+            "none";
+
+    }
+
+
+    /* ==============================
+       HIDE WORKING AREA
+    ============================== */
+
+    if(workingArea){
+
+        workingArea.style.display =
+            "none";
+
+    }
+
+
+    /* ==============================
+       SHOW LANDING
+    ============================== */
+
+    if(landing){
+
+        landing.style.display =
+            "block";
+
+    }
+
+
+    /* ==============================
+       RESTORE EXISTING PANEL
+    ============================== */
+
+    if(existingPanel){
+
+        existingPanel.style.display =
+            "";
+
+    }
 
 }
 
