@@ -169,26 +169,26 @@
 
             <!-- TOTAL MEMBERS -->
 
+            <!-- TOTAL INCOME -->
             <div class="summary-card">
 
                 <div class="summary-content">
 
                     <span>
-                        Total Members
+                        Total Income
                     </span>
 
-                    <strong id="total">
-                        0
+                    <strong id="total-income">
+                        ₱0.00
                     </strong>
 
                     <small>
-                        Registered members
+                        Income collected today
                     </small>
 
                 </div>
 
             </div>
-
 
 
             <!-- ACTIVE MEMBERS -->
@@ -478,7 +478,69 @@ menu.innerHTML = `
 
 `;
 
+// =====================================================
+// TODAY'S TOTAL INCOME
+// =====================================================
 
+async function loadTodayIncome() {
+
+    try {
+
+        const res = await fetch(
+            `${API_URL}/api/dashboard`
+        );
+
+        if (!res.ok) {
+
+            throw new Error(
+                `Income API error: ${res.status}`
+            );
+
+        }
+
+        const data = await res.json();
+
+        const income =
+            Number(
+                data.today_income ??
+                data.total_income ??
+                data.income_today ??
+                0
+            );
+
+        document.getElementById(
+            "total-income"
+        ).innerText =
+            `₱${income.toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            )}`;
+
+        console.log(
+            "TODAY'S TOTAL INCOME:",
+            income
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "TOTAL INCOME ERROR:",
+            error
+        );
+
+        document.getElementById(
+            "total-income"
+        ).innerText =
+            "₱0.00";
+
+    }
+
+}
 // =====================================================
 // MEMBER SUMMARY
 // =====================================================
@@ -518,10 +580,7 @@ async function loadMemberSummary() {
             ).length;
 
 
-        document.getElementById(
-            "total"
-        ).innerText =
-            totalMembers;
+        
 
 
         document.getElementById(
@@ -786,6 +845,8 @@ socket.on(
 loadDashboard().then(() => {
 
     loadMemberSummary();
+
+    loadTodayIncome();
 
     loadWalkinSummary();
 
