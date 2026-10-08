@@ -2656,6 +2656,9 @@ function renderBackupPage() {
 /* =====================================================
    PAGINATION
 ===================================================== */
+/* =====================================================
+   PAGINATION
+===================================================== */
 
 function renderBackupPagination() {
 
@@ -2703,7 +2706,9 @@ function renderBackupPagination() {
     let html = "";
 
 
-    /* PREVIOUS */
+    /* =================================================
+       PREVIOUS
+    ================================================= */
 
     html += `
         <button
@@ -2716,11 +2721,91 @@ function renderBackupPagination() {
     `;
 
 
-    /* PAGE NUMBERS */
+    /* =================================================
+       PAGE RANGE
+    ================================================= */
+
+    let startPage;
+    let endPage;
+
+
+    if (totalPages <= 3) {
+
+        /*
+         * Example:
+         * 1 2
+         * 1 2 3
+         */
+
+        startPage = 1;
+        endPage = totalPages;
+
+    }
+
+    else if (currentBackupPage <= 2) {
+
+        /*
+         * Page 1:
+         * 1 2 3
+         *
+         * Page 2:
+         * 1 2 3
+         */
+
+        startPage = 1;
+        endPage = 3;
+
+    }
+
+    else if (
+        currentBackupPage >=
+        totalPages - 1
+    ) {
+
+        /*
+         * Last pages
+         *
+         * Example:
+         * 2 3 4
+         *
+         * or
+         *
+         * 3 4 5
+         */
+
+        startPage =
+            totalPages - 2;
+
+        endPage =
+            totalPages;
+
+    }
+
+    else {
+
+        /*
+         * Middle pages
+         *
+         * Example:
+         * 2 3 4
+         */
+
+        startPage =
+            currentBackupPage - 1;
+
+        endPage =
+            currentBackupPage + 1;
+
+    }
+
+
+    /* =================================================
+       PAGE BUTTONS
+    ================================================= */
 
     for (
-        let page = 1;
-        page <= totalPages;
+        let page = startPage;
+        page <= endPage;
         page++
     ) {
 
@@ -2736,10 +2821,13 @@ function renderBackupPagination() {
                 ${page}
             </button>
         `;
+
     }
 
 
-    /* NEXT */
+    /* =================================================
+       NEXT
+    ================================================= */
 
     html += `
         <button
@@ -2776,7 +2864,6 @@ function renderBackupPagination() {
     }
 
 }
-
 
 /* =====================================================
    CHANGE PAGE
