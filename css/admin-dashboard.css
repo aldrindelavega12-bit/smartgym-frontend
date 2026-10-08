@@ -5974,3 +5974,602 @@ a[href="#incomeReport"]::before {
     background: #008744;
 }
 
+/* =========================================================
+   ATTENDANCE REPORT - NEW DESIGN OVERRIDE
+   IMPORTANT:
+   CSS ONLY - DO NOT CHANGE HTML / JS
+========================================================= */
+
+#attendanceReport{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 28px 28px;
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   ATTENDANCE INNER HEADER
+========================================================= */
+
+#attendanceReport .attendance-report-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 0 18px;
+    margin: 0 0 18px;
+    border-bottom: 1px solid #e5ebe8;
+}
+
+#attendanceReport .attendance-report-header h2{
+    margin: 0;
+    color: #102c4d;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+#attendanceReport .attendance-report-header p{
+    margin: 6px 0 0;
+    color: #71809a;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   FILTER ROW
+========================================================= */
+
+#attendanceReport .attendance-filter-row{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    gap: 30px;
+    margin: 0 0 22px;
+}
+
+
+/* =========================================================
+   REPORT PERIOD
+========================================================= */
+
+#attendanceReport .attendance-period{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#attendanceReport .attendance-period > label{
+    margin: 0;
+    color: #17304e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#attendanceReport .attendance-period-buttons{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#attendanceReport .attendance-period-btn{
+    height: 42px;
+    min-width: 96px;
+    padding: 0 17px;
+
+    border: 1px solid #d7e1e7;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #213752;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: .15s ease;
+}
+
+#attendanceReport .attendance-period-btn:hover{
+    border-color: #08b86a;
+}
+
+#attendanceReport .attendance-period-btn.active{
+    background: #08b86a;
+    border-color: #08b86a;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+#attendanceReport .attendance-date{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#attendanceReport .attendance-date > label{
+    margin: 0;
+    color: #17304e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#attendanceReport .attendance-date-range{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#attendanceReport .attendance-date-input{
+    position: relative;
+    width: 180px;
+    height: 42px;
+    box-sizing: border-box;
+}
+
+#attendanceReport .attendance-date-input span{
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+
+    padding: 0 42px 0 13px;
+
+    border: 1px solid #d7e1e7;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #34465f;
+
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+#attendanceReport .attendance-date-input i{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    color: #71839a;
+    font-size: 16px;
+
+    pointer-events: none;
+}
+
+#attendanceReport .attendance-date-input input{
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+    cursor: pointer;
+}
+
+#attendanceReport .attendance-date-separator{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #7a8798;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+#attendanceReport .attendance-summary-grid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+    width: 100%;
+
+    margin: 0 0 28px;
+}
+
+#attendanceReport .attendance-summary-card{
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    min-height: 122px;
+    box-sizing: border-box;
+
+    padding: 18px 20px;
+
+    border: 1px solid #dfebe5;
+    border-left: 4px solid #08b86a;
+    border-radius: 9px;
+
+    background: linear-gradient(
+        110deg,
+        #ffffff 0%,
+        #f3faf6 100%
+    );
+}
+
+#attendanceReport .attendance-summary-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#attendanceReport .attendance-summary-content span{
+    color: #172e4b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#attendanceReport .attendance-summary-content strong{
+    display: block;
+
+    margin-top: 8px;
+
+    color: #079756;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#attendanceReport .attendance-summary-content small{
+    display: block;
+
+    margin-top: 8px;
+
+    color: #71809a;
+    font-size: 11px;
+}
+
+#attendanceReport .attendance-summary-icon{
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e3f7ed;
+    color: #08a963;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   ATTENDANCE RECORDS HEADER
+========================================================= */
+
+#attendanceReport .attendance-records-section{
+    width: 100%;
+}
+
+#attendanceReport .attendance-records-header{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    width: 100%;
+    gap: 20px;
+
+    margin: 0 0 12px;
+}
+
+#attendanceReport .attendance-records-header h3{
+    margin: 0;
+
+    color: #102c4d;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+#attendanceReport .attendance-records-header p{
+    margin: 4px 0 0;
+
+    color: #71809a;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+#attendanceReport .attendance-search{
+    position: relative;
+
+    width: 282px;
+    height: 42px;
+
+    flex-shrink: 0;
+}
+
+#attendanceReport .attendance-search i{
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #71839a;
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+#attendanceReport .attendance-search input{
+    width: 100%;
+    height: 42px;
+
+    box-sizing: border-box;
+
+    padding: 0 13px 0 38px;
+
+    border: 1px solid #d7e1e7;
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #ffffff;
+    color: #263b56;
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+#attendanceReport .attendance-search input::placeholder{
+    color: #8996a8;
+}
+
+#attendanceReport .attendance-search input:focus{
+    border-color: #08b86a;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+#attendanceReport .attendance-table-wrapper{
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #dfe8e4;
+    border-radius: 8px;
+
+    background: #ffffff;
+}
+
+#attendanceReport .attendance-report-table{
+    width: 100%;
+    min-width: 820px;
+
+    border-collapse: collapse;
+}
+
+#attendanceReport .attendance-report-table thead{
+    background: #edf8f2;
+}
+
+#attendanceReport .attendance-report-table thead th{
+    height: 36px;
+
+    padding: 0 10px;
+
+    border-bottom: 1px solid #dfe9e4;
+
+    color: #17324f;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-align: left;
+    white-space: nowrap;
+}
+
+#attendanceReport .attendance-report-table tbody td{
+    height: 36px;
+
+    padding: 0 10px;
+
+    border-bottom: 1px solid #edf2ef;
+
+    color: #344861;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+#attendanceReport .attendance-report-table tbody tr:last-child td{
+    border-bottom: none;
+}
+
+#attendanceReport .attendance-report-table tbody tr:hover{
+    background: #fbfdfc;
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+========================================================= */
+
+#attendanceReport .attendance-loading{
+    height: 80px;
+
+    text-align: center;
+
+    color: #8290a3;
+    font-size: 11px;
+}
+
+#attendanceReport .attendance-empty{
+    height: 80px;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    color: #8290a3;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   TYPE BADGES
+========================================================= */
+
+#attendanceReport .attendance-type-member,
+#attendanceReport .attendance-type-walkin{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 65px;
+    height: 22px;
+
+    padding: 0 9px;
+
+    border-radius: 12px;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+#attendanceReport .attendance-type-member{
+    background: #dff6ea;
+    color: #078e51;
+}
+
+#attendanceReport .attendance-type-walkin{
+    background: #e4f2fc;
+    color: #2180bf;
+}
+
+
+/* =========================================================
+   TABLE FOOTER
+========================================================= */
+
+#attendanceReport .attendance-table-footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    margin-top: 13px;
+}
+
+#attendanceReport #reportCount{
+    color: #52647c;
+    font-size: 10px;
+}
+
+#attendanceReport .attendance-pagination{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 5px;
+}
+
+#attendanceReport .attendance-pagination button{
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    border: 1px solid #e0ebe6;
+    border-radius: 7px;
+
+    background: #f2faf6;
+    color: #17324f;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+#attendanceReport .attendance-pagination button:hover{
+    background: #e4f6ed;
+}
+
+#attendanceReport .attendance-pagination button.active{
+    background: #08b86a;
+    border-color: #08b86a;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 1100px){
+
+    #attendanceReport .attendance-filter-row{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #attendanceReport .attendance-date{
+        width: 100%;
+    }
+
+}
+
+@media(max-width: 850px){
+
+    #attendanceReport .attendance-summary-grid{
+        grid-template-columns: 1fr;
+    }
+
+    #attendanceReport .attendance-records-header{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #attendanceReport .attendance-search{
+        width: 100%;
+    }
+
+}
+
+@media(max-width: 600px){
+
+    #attendanceReport{
+        padding: 0 15px 20px;
+    }
+
+    #attendanceReport .attendance-date-range{
+        flex-wrap: wrap;
+    }
+
+    #attendanceReport .attendance-date-input{
+        width: 160px;
+    }
+
+}
