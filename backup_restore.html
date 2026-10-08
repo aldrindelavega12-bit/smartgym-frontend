@@ -4296,7 +4296,6 @@ async function restoreSystem() {
 /* =====================================================
    FILTER BACKUPS
 ===================================================== */
-
 function filterBackups() {
 
     const type =
@@ -4309,14 +4308,6 @@ function filterBackups() {
         document.getElementById(
             "statusFilter"
         ).value;
-
-
-    const search =
-        document.getElementById(
-            "backupSearch"
-        ).value
-            .trim()
-            .toLowerCase();
 
 
     filteredBackupRecords =
@@ -4339,21 +4330,6 @@ function filterBackups() {
                     "";
 
 
-                const rowText =
-                    (
-                        getBackupTypeLabel(
-                            backup.backup_type
-                        ) +
-                        " " +
-                        backup.file_name +
-                        " " +
-                        backup.created_at +
-                        " " +
-                        backup.status
-                    )
-                    .toLowerCase();
-
-
                 const typeMatch =
                     type === "all" ||
                     backup.backup_mode === type;
@@ -4364,17 +4340,9 @@ function filterBackups() {
                     rowStatus === status;
 
 
-                const searchMatch =
-                    !search ||
-                    rowText.includes(
-                        search
-                    );
-
-
                 return (
                     typeMatch &&
-                    statusMatch &&
-                    searchMatch
+                    statusMatch
                 );
 
             }
@@ -4384,7 +4352,10 @@ function filterBackups() {
     currentBackupPage = 1;
 
     renderBackupPage();
+
 }
+
+
 
 /* =====================================================
    SEARCH
