@@ -662,7 +662,7 @@ async function loadMemberSummary() {
 
 
         // Show active members
-        members.slice(0, 5).forEach(member => {
+        members.forEach(member => {
 
             const item = document.createElement("div");
 
@@ -691,18 +691,6 @@ async function loadMemberSummary() {
         });
 
 
-        // Show remaining count
-        if (members.length > 5) {
-
-            const more = document.createElement("div");
-
-            more.className = "preview-more";
-
-            more.innerText =
-                `+${members.length - 5} more members`;
-
-            preview.appendChild(more);
-        }
 
 
         console.log(
