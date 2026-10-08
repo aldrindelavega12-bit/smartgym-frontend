@@ -4105,7 +4105,92 @@ function getDateRange(
     return dates;
 
 }
+/* =====================================================
+   SWITCH REPORT
+===================================================== */
 
+function switchReport(reportName){
+
+    const reports = [
+        "incomeReport",
+        "trainerReport",
+        "attendanceReport",
+        "lockerReport",
+        "trainerDetails"
+    ];
+
+
+    /* ==========================================
+       HIDE ALL REPORTS
+    ========================================== */
+
+    reports.forEach(id => {
+
+        const element =
+            document.getElementById(id);
+
+        if(element){
+
+            element.style.display = "none";
+
+        }
+
+    });
+
+
+    /* ==========================================
+       SHOW SELECTED REPORT
+    ========================================== */
+
+    const selectedReport =
+        document.getElementById(reportName);
+
+    if(selectedReport){
+
+        selectedReport.style.display = "block";
+
+    }
+
+
+    /* ==========================================
+       UPDATE SIDEBAR SELECTED STATE
+    ========================================== */
+
+    document
+        .querySelectorAll(
+            ".reports-sidebar .report-option"
+        )
+        .forEach(option => {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    const selectedOption =
+        document.querySelector(
+            `.reports-sidebar .report-option[onclick*="show${capitalizeFirst(reportName.replace("Report", ""))}Report"]`
+        );
+
+
+    if(selectedOption){
+
+        selectedOption.classList.add("selected");
+
+    }
+
+}
+
+
+/* =====================================================
+   CAPITALIZE
+===================================================== */
+
+function capitalizeFirst(text){
+
+    return text.charAt(0).toUpperCase() + text.slice(1);
+
+}
 /* =====================================================
    ATTENDANCE DATE FILTER
 ===================================================== */
@@ -5528,13 +5613,6 @@ function setLockerToday(){
 ===================================================== */
 function showIncomeReport(){
 
-    // CLEAR URL HASH
-    history.replaceState(
-        null,
-        "",
-        window.location.pathname + window.location.search
-    );
-
     const landing =
         document.querySelector(".reports-landing");
 
@@ -5547,61 +5625,47 @@ function showIncomeReport(){
     const trainerReport =
         document.getElementById("trainerReport");
 
+    const attendanceReport =
+        document.getElementById("attendanceReport");
+
+    const lockerReport =
+        document.getElementById("lockerReport");
+
     const trainerDetails =
         document.getElementById("trainerDetails");
 
-    const existingPanel =
-        document.querySelector(".existing-report-panel");
 
+    /* SHOW WORKING AREA */
 
-    // HIDE LANDING
     if(landing){
         landing.style.display = "none";
     }
 
-
-    // SHOW WORKING AREA
     if(workingArea){
         workingArea.style.display = "block";
     }
 
 
-    // HIDE ALL OTHER REPORTS
-    if(trainerReport){
-        trainerReport.style.display = "none";
-    }
+    /* HIDE ALL REPORTS */
 
-    if(trainerDetails){
-        trainerDetails.style.display = "none";
-    }
-
-    if(existingPanel){
-        existingPanel.style.display = "none";
-    }
-
-
-    // SHOW ONLY INCOME
     if(incomeReport){
         incomeReport.style.display = "block";
     }
 
+    if(trainerReport){
+        trainerReport.style.display = "none";
+    }
 
-    // REMOVE SELECTED
-    document
-        .querySelectorAll(".reports-sidebar .report-option")
-        .forEach(option => {
-            option.classList.remove("selected");
-        });
+    if(attendanceReport){
+        attendanceReport.style.display = "none";
+    }
 
+    if(lockerReport){
+        lockerReport.style.display = "none";
+    }
 
-    // SELECT INCOME
-    const incomeOption =
-        document.querySelector(
-            '.reports-sidebar .report-option[onclick*="showIncomeReport"]'
-        );
-
-    if(incomeOption){
-        incomeOption.classList.add("selected");
+    if(trainerDetails){
+        trainerDetails.style.display = "none";
     }
 
 }
@@ -6073,13 +6137,6 @@ const trainerReportData = {
 ===================================================== */
 function showTrainerReport(){
 
-    // CLEAR URL HASH
-    history.replaceState(
-        null,
-        "",
-        window.location.pathname + window.location.search
-    );
-
     const landing =
         document.querySelector(".reports-landing");
 
@@ -6092,51 +6149,44 @@ function showTrainerReport(){
     const trainerReport =
         document.getElementById("trainerReport");
 
+    const attendanceReport =
+        document.getElementById("attendanceReport");
+
+    const lockerReport =
+        document.getElementById("lockerReport");
+
     const trainerDetails =
         document.getElementById("trainerDetails");
 
-    const existingPanel =
-        document.querySelector(".existing-report-panel");
 
-
-    // HIDE LANDING
     if(landing){
         landing.style.display = "none";
     }
 
-
-    // SHOW WORKING AREA
     if(workingArea){
         workingArea.style.display = "block";
     }
 
 
-    // HIDE EVERYTHING ELSE
     if(incomeReport){
         incomeReport.style.display = "none";
     }
 
-    if(existingPanel){
-        existingPanel.style.display = "none";
+    if(trainerReport){
+        trainerReport.style.display = "block";
+    }
+
+    if(attendanceReport){
+        attendanceReport.style.display = "none";
+    }
+
+    if(lockerReport){
+        lockerReport.style.display = "none";
     }
 
     if(trainerDetails){
         trainerDetails.style.display = "none";
     }
-
-
-    // SHOW TRAINER ONLY
-    if(trainerReport){
-        trainerReport.style.display = "block";
-    }
-
-
-    // REMOVE SELECTED
-    document
-        .querySelectorAll(".reports-sidebar .report-option")
-        .forEach(option => {
-            option.classList.remove("selected");
-        });
 
 }
 
@@ -6878,121 +6928,60 @@ document
 function showAttendanceReport(){
 
     const landing =
-        document.querySelector(
-            ".reports-landing"
-        );
+        document.querySelector(".reports-landing");
 
     const workingArea =
-        document.querySelector(
-            ".reports-working-area"
-        );
-
-    const attendanceReport =
-        document.getElementById(
-            "attendanceReport"
-        );
+        document.querySelector(".reports-working-area");
 
     const incomeReport =
-        document.getElementById(
-            "incomeReport"
-        );
+        document.getElementById("incomeReport");
 
     const trainerReport =
-        document.getElementById(
-            "trainerReport"
-        );
+        document.getElementById("trainerReport");
 
-    const trainerDetails =
-        document.getElementById(
-            "trainerDetails"
-        );
+    const attendanceReport =
+        document.getElementById("attendanceReport");
 
     const lockerReport =
-        document.getElementById(
-            "lockerReport"
-        );
+        document.getElementById("lockerReport");
 
+    const trainerDetails =
+        document.getElementById("trainerDetails");
 
-    /* ==============================
-       HIDE LANDING
-    ============================== */
 
     if(landing){
-
-        landing.style.display =
-            "none";
-
+        landing.style.display = "none";
     }
-
-
-    /* ==============================
-       SHOW WORKING AREA
-    ============================== */
 
     if(workingArea){
-
-        workingArea.style.display =
-            "block";
-
+        workingArea.style.display = "block";
     }
 
 
-    /* ==============================
-       HIDE OTHER REPORTS
-    ============================== */
+    /* HIDE EVERYTHING ELSE */
 
     if(incomeReport){
-
-        incomeReport.style.display =
-            "none";
-
+        incomeReport.style.display = "none";
     }
 
     if(trainerReport){
-
-        trainerReport.style.display =
-            "none";
-
+        trainerReport.style.display = "none";
     }
 
-    if(trainerDetails){
-
-        trainerDetails.style.display =
-            "none";
-
+    if(attendanceReport){
+        attendanceReport.style.display = "block";
     }
 
     if(lockerReport){
-
-        lockerReport.style.display =
-            "none";
-
+        lockerReport.style.display = "none";
     }
 
-
-    /* ==============================
-       SHOW ATTENDANCE REPORT
-    ============================== */
-
-    if(attendanceReport){
-
-        attendanceReport.style.display =
-            "block";
-
-    }
-
-
-    /* ==============================
-       LOAD ATTENDANCE DATA
-    ============================== */
-
-    if(typeof generateReport === "function"){
-
-        generateReport();
-
+    if(trainerDetails){
+        trainerDetails.style.display = "none";
     }
 
 }
+
 
 
 function closeAttendanceReport(){
@@ -7069,44 +7058,60 @@ function closeAttendanceReport(){
 
 function showLockerReport(){
 
-    document.querySelector(
-        ".report-title-area h2"
-    ).innerText = "Locker Report";
+    const landing =
+        document.querySelector(".reports-landing");
 
-    document.querySelector(
-        ".report-title-area p"
-    ).innerText =
-        "View locker usage and session records.";
+    const workingArea =
+        document.querySelector(".reports-working-area");
 
-    document.querySelector(
-        ".report-main-icon i"
-    ).className =
-        "fa-solid fa-lock";
+    const incomeReport =
+        document.getElementById("incomeReport");
 
+    const trainerReport =
+        document.getElementById("trainerReport");
 
-    document
-        .getElementById("attendanceTab")
-        .classList.remove("active");
+    const attendanceReport =
+        document.getElementById("attendanceReport");
 
-    document
-        .getElementById("lockerTab")
-        .classList.add("active");
+    const lockerReport =
+        document.getElementById("lockerReport");
+
+    const trainerDetails =
+        document.getElementById("trainerDetails");
 
 
-    document
-        .getElementById("attendanceReport")
-        .style.display = "none";
+    if(landing){
+        landing.style.display = "none";
+    }
 
-    document
-        .getElementById("lockerReport")
-        .style.display = "block";
+    if(workingArea){
+        workingArea.style.display = "block";
+    }
 
 
-    setLockerDefaultDates();
+    if(incomeReport){
+        incomeReport.style.display = "none";
+    }
 
-    loadLockerReport();
+    if(trainerReport){
+        trainerReport.style.display = "none";
+    }
+
+    if(attendanceReport){
+        attendanceReport.style.display = "none";
+    }
+
+    if(lockerReport){
+        lockerReport.style.display = "block";
+    }
+
+    if(trainerDetails){
+        trainerDetails.style.display = "none";
+    }
 
 }
+
+
 
 /* =====================================================
    PROFILE
