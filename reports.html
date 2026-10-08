@@ -6263,43 +6263,49 @@ function closeIncomeReport(){
     const landing =
         document.querySelector(".reports-landing");
 
-    if(landing){
-        landing.style.display = "block";
-    }
-
-
     const workingArea =
         document.querySelector(".reports-working-area");
-
-    if(workingArea){
-        workingArea.style.display = "none";
-    }
-
 
     const incomeReport =
         document.getElementById("incomeReport");
 
+    const existingPanel =
+        document.querySelector(".existing-report-panel");
+
+    // CLEAR #incomeReport FROM URL
+    history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+    );
+
+    // SHOW REPORT LIST
+    if(landing){
+        landing.style.display = "block";
+    }
+
+    // HIDE WORKING AREA
+    if(workingArea){
+        workingArea.style.display = "none";
+    }
+
+    // HIDE INCOME
     if(incomeReport){
         incomeReport.style.display = "none";
     }
 
-
-    const existingPanel =
-        document.querySelector(".existing-report-panel");
-
+    // RESET EXISTING PANEL
     if(existingPanel){
         existingPanel.style.display = "";
     }
 
-
+    // REMOVE SELECTED STATE
     document
         .querySelectorAll(".report-option")
         .forEach(option => {
             option.classList.remove("selected");
         });
-
 }
-
 /* =====================================================
    LOGOUT
 ===================================================== */
