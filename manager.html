@@ -605,36 +605,7 @@ async function loadTodayIncome() {
 }
 
 
-const activeCard =
-    document.getElementById("activeCard");
 
-const closeActivePreview =
-    document.getElementById("closeActivePreview");
-
-
-activeCard.addEventListener("click", function(e) {
-
-    // Huwag mag-close/open kapag close button
-    // ang mismong pinindot
-    if (
-        e.target.closest("#closeActivePreview") ||
-        e.target.closest("#manageActiveMembersBtn")
-    ) {
-        return;
-    }
-
-    activeCard.classList.toggle("active-open");
-
-});
-
-
-closeActivePreview.addEventListener("click", function(e) {
-
-    e.stopPropagation();
-
-    activeCard.classList.remove("active-open");
-
-});
 
 // =====================================================
 // MEMBER SUMMARY
@@ -743,7 +714,35 @@ async function loadMemberSummary() {
     }
 }
 
+// ========================================
+// ACTIVE MEMBERS STICKY PREVIEW
+// ========================================
 
+const activeCard =
+    document.getElementById("activeCard");
+
+if (activeCard) {
+
+    // Hover the card = open
+    activeCard.addEventListener("mouseenter", function () {
+
+        activeCard.classList.add("active-open");
+
+    });
+
+    // Click the card again = close
+    activeCard.addEventListener("click", function (e) {
+
+        // Huwag i-toggle kapag nasa loob ng preview
+        if (e.target.closest(".summary-preview")) {
+            return;
+        }
+
+        activeCard.classList.toggle("active-open");
+
+    });
+
+}
 // =====================================================
 // WALK-IN SUMMARY
 // =====================================================
