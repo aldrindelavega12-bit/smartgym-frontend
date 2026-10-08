@@ -3032,7 +3032,136 @@ function changeBackupPage(page) {
 /* =====================================================
    LOAD LATEST BACKUP
 ===================================================== */
+/* =====================================================
+   RESTORE TYPE CHANGE
+===================================================== */
 
+function handleRestoreTypeChange() {
+
+    const selectedType =
+        document.querySelector(
+            'input[name="restoreType"]:checked'
+        )?.value || "database";
+
+
+    const title =
+        document.getElementById(
+            "restoreFileTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "restoreFileSubtitle"
+        );
+
+    const warning =
+        document.getElementById(
+            "restoreWarningText"
+        );
+
+    const fileInput =
+        document.getElementById(
+            "restoreFile"
+        );
+
+
+    /* ================================================
+       DATABASE
+    ================================================ */
+
+    if (selectedType === "database") {
+
+        title.textContent =
+            "Select Database Backup";
+
+        subtitle.textContent =
+            "Database restore accepts .sql files.";
+
+        warning.textContent =
+            "Restoring a database will replace existing " +
+            "database data. A safety backup is created " +
+            "automatically before restore.";
+
+        fileInput.accept =
+            ".sql";
+
+    }
+
+
+    /* ================================================
+       BACKEND
+    ================================================ */
+
+    else if (selectedType === "backend") {
+
+        title.textContent =
+            "Select Backend Backup";
+
+        subtitle.textContent =
+            "Backend restore accepts .zip files.";
+
+        warning.textContent =
+            "Restoring the backend will replace the existing " +
+            "backend files.";
+
+        fileInput.accept =
+            ".zip";
+
+    }
+
+
+    /* ================================================
+       FRONTEND
+    ================================================ */
+
+    else if (selectedType === "frontend") {
+
+        title.textContent =
+            "Select Frontend Backup";
+
+        subtitle.textContent =
+            "Frontend restore accepts .zip files.";
+
+        warning.textContent =
+            "Restoring the frontend will replace the existing " +
+            "frontend files.";
+
+        fileInput.accept =
+            ".zip";
+
+    }
+
+
+    /* ================================================
+       FULL SYSTEM
+    ================================================ */
+
+    else if (selectedType === "full_system") {
+
+        title.textContent =
+            "Select Full System Backup";
+
+        subtitle.textContent =
+            "Full system restore accepts .zip files.";
+
+        warning.textContent =
+            "Restoring the full system will replace the " +
+            "database, backend and frontend. A safety " +
+            "backup will be created automatically before restore.";
+
+        fileInput.accept =
+            ".zip";
+
+    }
+
+
+    /* ================================================
+       CLEAR PREVIOUS FILE
+    ================================================ */
+
+    fileInput.value = "";
+
+}
 async function loadLatestBackup() {
 
     const dateElement =
