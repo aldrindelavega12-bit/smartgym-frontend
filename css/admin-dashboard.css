@@ -4000,3 +4000,100 @@ a[href="#incomeReport"]::before {
 
     color: #17251f;
 }
+
+/* =====================================================
+   INCOME REPORT PERIOD CONTROLS
+===================================================== */
+
+.income-period-btn {
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+
+    cursor: pointer;
+}
+
+
+.income-period-btn:hover {
+    border-color: #08b85b;
+    color: #08a653;
+}
+
+
+.income-period-btn.active {
+    background: #08b85b;
+    border-color: #08b85b;
+    color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(8, 184, 91, 0.15);
+}
+
+
+/* =====================================================
+   INCOME DATE PICKER
+===================================================== */
+
+.income-date-input {
+    position: relative;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+
+.income-date-input:hover {
+    border-color: #08b85b;
+
+    box-shadow:
+        0 0 0 3px rgba(8, 184, 91, 0.08);
+}
+
+
+.income-date-input i {
+    pointer-events: none;
+}
+
+
+/* Hidden native date input */
+
+#incomeDatePicker {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    cursor: pointer;
+
+    border: none;
+}
+
+
+/* Custom mode */
+
+.income-date-input.custom-active {
+    border-color: #08b85b;
+
+    box-shadow:
+        0 0 0 3px rgba(8, 184, 91, 0.08);
+}
+
+
+/* =====================================================
+   INCOME DATE LABEL
+===================================================== */
+
+#incomeSelectedDate {
+    white-space: nowrap;
+}

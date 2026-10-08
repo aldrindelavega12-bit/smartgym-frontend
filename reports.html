@@ -421,8 +421,11 @@ if(
 
                 <!-- FILTER -->
 
-                <div class="income-filter-row">
+                <!-- =================================================
+                    INCOME FILTER
+                ================================================= -->
 
+                <div class="income-filter-row">
 
                     <div class="income-period">
 
@@ -430,12 +433,13 @@ if(
                             Report Period
                         </label>
 
-
                         <div class="income-period-buttons">
 
                             <button
                                 type="button"
-                                class="income-period-btn active">
+                                id="incomeDailyBtn"
+                                class="income-period-btn active"
+                                onclick="setIncomePeriod('daily')">
 
                                 Daily
 
@@ -444,7 +448,9 @@ if(
 
                             <button
                                 type="button"
-                                class="income-period-btn">
+                                id="incomeWeeklyBtn"
+                                class="income-period-btn"
+                                onclick="setIncomePeriod('weekly')">
 
                                 Weekly
 
@@ -453,7 +459,9 @@ if(
 
                             <button
                                 type="button"
-                                class="income-period-btn">
+                                id="incomeCustomBtn"
+                                class="income-period-btn"
+                                onclick="setIncomePeriod('custom')">
 
                                 Custom Date
 
@@ -471,13 +479,23 @@ if(
                         </label>
 
 
-                        <div class="income-date-input">
+                        <div
+                            class="income-date-input"
+                            id="incomeDatePickerBox"
+                            onclick="openIncomeCalendar()">
 
-                            <span>
+                            <span id="incomeSelectedDate">
                                 October 7, 2026
                             </span>
 
+
                             <i class="fa-regular fa-calendar"></i>
+
+
+                            <input
+                                type="date"
+                                id="incomeDatePicker"
+                                aria-label="Select income report date">
 
                         </div>
 
@@ -2254,7 +2272,531 @@ function setThisWeek(){
 
 }
 
+/* =====================================================
+   INCOME REPORT PERIOD
+===================================================== */
 
+let incomePeriod = "daily";
+
+let incomeSelectedDate = new Date();
+
+
+/* =====================================================
+   FORMAT INCOME DATE
+===================================================== */
+
+function formatIncomeDate(date){
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT DATE FOR INPUT
+===================================================== */
+
+function formatIncomeInputDate(date){
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+/* =====================================================
+   UPDATE INCOME DATE DISPLAY
+===================================================== */
+
+function updateIncomeDateDisplay(){
+
+    const display =
+        document.getElementById(
+            "incomeSelectedDate"
+        );
+
+    const picker =
+        document.getElementById(
+            "incomeDatePicker"
+        );
+
+    if(display){
+
+        display.innerText =
+            formatIncomeDate(
+                incomeSelectedDate
+            );
+
+    }
+
+
+    if(picker){
+
+        picker.value =
+            formatIncomeInputDate(
+                incomeSelectedDate
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   SET INCOME PERIOD
+===================================================== */
+
+function setIncomePeriod(period){
+
+    incomePeriod =
+        period;
+
+
+    const dailyBtn =
+        document.getElementById(
+            "incomeDailyBtn"
+        );
+
+    const weeklyBtn =
+        document.getElementById(
+            "incomeWeeklyBtn"
+        );
+
+    const customBtn =
+        document.getElementById(
+            "incomeCustomBtn"
+        );
+
+
+    /*
+     * Remove active state
+     */
+
+    if(dailyBtn)
+        dailyBtn.classList.remove("active");
+
+    if(weeklyBtn)
+        weeklyBtn.classList.remove("active");
+
+    if(customBtn)
+        customBtn.classList.remove("active");
+
+
+    /*
+     * Apply active state
+     */
+
+    if(period === "daily"){
+
+        if(dailyBtn)
+            dailyBtn.classList.add("active");
+
+
+        document
+            .getElementById(
+                "incomeDatePickerBox"
+            )
+            ?.classList.remove(
+                "custom-active"
+            );
+
+
+        updateIncomeReportView();
+
+        return;
+
+    }
+
+
+    if(period === "weekly"){
+
+        if(weeklyBtn)
+            weeklyBtn.classList.add("active");
+
+
+        document
+            .getElementById(
+                "incomeDatePickerBox"
+            )
+            ?.classList.remove(
+                "custom-active"
+            );
+
+
+        updateIncomeReportView();
+
+        return;
+
+    }
+
+
+    if(period === "custom"){
+
+        if(customBtn)
+            customBtn.classList.add("active");
+
+
+        document
+            .getElementById(
+                "incomeDatePickerBox"
+            )
+            ?.classList.add(
+                "custom-active"
+            );
+
+
+        openIncomeCalendar();
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN INCOME CALENDAR
+===================================================== */
+
+function openIncomeCalendar(){
+
+    const picker =
+        document.getElementById(
+            "incomeDatePicker"
+        );
+
+
+    if(!picker)
+        return;
+
+
+    /*
+     * Make sure current date is loaded
+     */
+
+    picker.value =
+        formatIncomeInputDate(
+            incomeSelectedDate
+        );
+
+
+    /*
+     * Use native browser calendar
+     */
+
+    if(picker.showPicker){
+
+        picker.showPicker();
+
+    }
+    else{
+
+        picker.click();
+
+    }
+
+}
+
+
+/* =====================================================
+   INCOME DATE CHANGED
+===================================================== */
+
+function handleIncomeDateChange(){
+
+    const picker =
+        document.getElementById(
+            "incomeDatePicker"
+        );
+
+
+    if(!picker || !picker.value)
+        return;
+
+
+    const parts =
+        picker.value
+            .split("-")
+            .map(Number);
+
+
+    incomeSelectedDate =
+        new Date(
+            parts[0],
+            parts[1] - 1,
+            parts[2]
+        );
+
+
+    /*
+     * Selecting a date automatically
+     * means Custom Date mode.
+     */
+
+    incomePeriod =
+        "custom";
+
+
+    updateIncomePeriodButtons();
+
+    updateIncomeDateDisplay();
+
+    updateIncomeReportView();
+
+}
+
+
+/* =====================================================
+   UPDATE ACTIVE BUTTON
+===================================================== */
+
+function updateIncomePeriodButtons(){
+
+    const buttons = [
+
+        document.getElementById(
+            "incomeDailyBtn"
+        ),
+
+        document.getElementById(
+            "incomeWeeklyBtn"
+        ),
+
+        document.getElementById(
+            "incomeCustomBtn"
+        )
+
+    ];
+
+
+    buttons.forEach(
+        button => {
+
+            if(button){
+
+                button.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    if(incomePeriod === "daily"){
+
+        document
+            .getElementById(
+                "incomeDailyBtn"
+            )
+            ?.classList.add(
+                "active"
+            );
+
+    }
+
+
+    if(incomePeriod === "weekly"){
+
+        document
+            .getElementById(
+                "incomeWeeklyBtn"
+            )
+            ?.classList.add(
+                "active"
+            );
+
+    }
+
+
+    if(incomePeriod === "custom"){
+
+        document
+            .getElementById(
+                "incomeCustomBtn"
+            )
+            ?.classList.add(
+                "active"
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   GET WEEK RANGE
+===================================================== */
+
+function getIncomeWeekRange(date){
+
+    const selected =
+        new Date(date);
+
+
+    const day =
+        selected.getDay();
+
+
+    const difference =
+        day === 0
+            ? 6
+            : day - 1;
+
+
+    const monday =
+        new Date(selected);
+
+
+    monday.setDate(
+        selected.getDate() - difference
+    );
+
+
+    const sunday =
+        new Date(monday);
+
+
+    sunday.setDate(
+        monday.getDate() + 6
+    );
+
+
+    return {
+        start: monday,
+        end: sunday
+    };
+
+}
+
+
+/* =====================================================
+   UPDATE INCOME REPORT VIEW
+===================================================== */
+
+function updateIncomeReportView(){
+
+    const description =
+        document.querySelector(
+            ".total-income-card p"
+        );
+
+
+    if(!description)
+        return;
+
+
+    if(incomePeriod === "daily"){
+
+        description.innerText =
+            "Total revenue for the selected date.";
+
+    }
+
+
+    else if(incomePeriod === "weekly"){
+
+        const range =
+            getIncomeWeekRange(
+                incomeSelectedDate
+            );
+
+
+        description.innerText =
+            `Total revenue for the week of ${
+                formatIncomeDate(range.start)
+            } – ${
+                formatIncomeDate(range.end)
+            }.`;
+
+    }
+
+
+    else if(incomePeriod === "custom"){
+
+        description.innerText =
+            "Total revenue for the selected date.";
+
+    }
+
+
+    /*
+     * Keep selected date visible.
+     */
+
+    updateIncomeDateDisplay();
+
+}
+
+
+/* =====================================================
+   INCOME REPORT INITIALIZE
+===================================================== */
+
+function initializeIncomeReport(){
+
+    /*
+     * Current date.
+     */
+
+    incomeSelectedDate =
+        new Date();
+
+
+    /*
+     * Update date picker.
+     */
+
+    updateIncomeDateDisplay();
+
+
+    /*
+     * Attach calendar change event.
+     */
+
+    const picker =
+        document.getElementById(
+            "incomeDatePicker"
+        );
+
+
+    if(picker){
+
+        picker.addEventListener(
+            "change",
+            handleIncomeDateChange
+        );
+
+    }
+
+
+    /*
+     * Default = Daily
+     */
+
+    setIncomePeriod(
+        "daily"
+    );
+
+}
 /* =====================================================
    THIS MONTH
 ===================================================== */
