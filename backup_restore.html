@@ -1027,10 +1027,11 @@
 
                         <button
                             class="backup-option-btn"
-                            onclick="showUnavailable('Backend')"
+                            onclick="createBackup('Backend', this)"
                         >
                             Backup
                         </button>
+
 
                     </div>
 
@@ -1052,7 +1053,7 @@
 
                         <button
                             class="backup-option-btn"
-                            onclick="showUnavailable('Frontend')"
+                            onclick="createBackup('Frontend', this)"
                         >
                             Backup
                         </button>
@@ -1077,7 +1078,7 @@
 
                         <button
                             class="backup-option-btn"
-                            onclick="showUnavailable('Full System')"
+                            onclick="createBackup('Full System', this)"
                         >
                             Backup
                         </button>
