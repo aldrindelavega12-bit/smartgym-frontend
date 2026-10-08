@@ -3955,3 +3955,48 @@ a[href="#incomeReport"]::before {
     grid-template-columns: 365px minmax(0, 1fr) !important;
     gap: 20px !important;
 }
+
+/* =====================================================
+   CLOSE INCOME REPORT
+===================================================== */
+
+.income-report-view {
+    position: relative !important;
+}
+
+
+.close-income-report {
+    position: absolute;
+
+    top: 18px;
+    right: 20px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #718078;
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    transition:
+        background .18s ease,
+        color .18s ease;
+}
+
+
+.close-income-report:hover {
+    background: #eef5f1;
+
+    color: #17251f;
+}

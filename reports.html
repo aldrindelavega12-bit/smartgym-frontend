@@ -4105,7 +4105,47 @@ function toggleStaffMenu(){
 
 }
 
+function closeIncomeReport(){
 
+    const landing =
+        document.querySelector(".reports-landing");
+
+    if(landing){
+        landing.style.display = "block";
+    }
+
+
+    const workingArea =
+        document.querySelector(".reports-working-area");
+
+    if(workingArea){
+        workingArea.style.display = "none";
+    }
+
+
+    const incomeReport =
+        document.getElementById("incomeReport");
+
+    if(incomeReport){
+        incomeReport.style.display = "none";
+    }
+
+
+    const existingPanel =
+        document.querySelector(".existing-report-panel");
+
+    if(existingPanel){
+        existingPanel.style.display = "";
+    }
+
+
+    document
+        .querySelectorAll(".report-option")
+        .forEach(option => {
+            option.classList.remove("selected");
+        });
+
+}
 
 /* =====================================================
    LOGOUT
