@@ -5665,3 +5665,311 @@ a[href="#incomeReport"]::before {
     background: #e9eeee;
     color: #111;
 }
+
+/* =====================================================
+   SYSTEM CONFIRM / ALERT MODALS
+===================================================== */
+
+.system-modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+
+    padding: 20px;
+}
+
+.system-modal-overlay.show {
+
+    display: flex;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.system-modal {
+
+    width: 100%;
+    max-width: 520px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.20);
+
+    overflow: hidden;
+
+    animation: systemModalIn 0.18s ease;
+}
+
+
+@keyframes systemModalIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px)
+            scale(0.98);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.system-modal-header {
+
+    min-height: 74px;
+
+    padding: 0 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf0ef;
+}
+
+
+.system-modal-header h3 {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    color: #202827;
+}
+
+
+.system-modal-close {
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+
+    background: #f5f7f7;
+
+    border-radius: 10px;
+
+    font-size: 28px;
+
+    font-weight: 400;
+
+    line-height: 1;
+
+    color: #4b5555;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    transition: 0.2s ease;
+}
+
+
+.system-modal-close:hover {
+
+    background: #e9eeee;
+
+    color: #111;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.system-modal-body {
+
+    padding: 28px 24px;
+
+    display: flex;
+
+    gap: 18px;
+
+    align-items: flex-start;
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.system-modal-icon {
+
+    width: 44px;
+    height: 44px;
+
+    min-width: 44px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    background: #e9f7ef;
+
+    color: #008f4c;
+}
+
+
+.system-modal-icon.warning {
+
+    background: #fff4d8;
+
+    color: #a66a00;
+}
+
+
+.system-modal-icon.error {
+
+    background: #fdeaea;
+
+    color: #c62828;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.system-modal-content {
+
+    flex: 1;
+}
+
+
+.system-modal-content h4 {
+
+    margin: 1px 0 7px;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #202827;
+}
+
+
+.system-modal-content p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+
+    color: #65706f;
+
+    white-space: pre-line;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.system-modal-footer {
+
+    padding: 16px 22px;
+
+    border-top: 1px solid #edf0ef;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+}
+
+
+.system-modal-cancel,
+.system-modal-confirm {
+
+    min-width: 100px;
+
+    height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.system-modal-cancel {
+
+    background: #ffffff;
+
+    border: 1px solid #d9dfdd;
+
+    color: #56615f;
+}
+
+
+.system-modal-cancel:hover {
+
+    background: #f5f7f7;
+}
+
+
+.system-modal-confirm {
+
+    border: 1px solid #009b50;
+
+    background: #009b50;
+
+    color: #ffffff;
+}
+
+
+.system-modal-confirm:hover {
+
+    background: #008744;
+}

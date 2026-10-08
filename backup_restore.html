@@ -1846,7 +1846,149 @@
     </span>
 
 </div>
+<!-- =====================================================
+     SYSTEM CONFIRMATION MODAL
+===================================================== -->
 
+<div
+    class="system-modal-overlay"
+    id="systemConfirmModal"
+>
+
+    <div class="system-modal">
+
+        <div class="system-modal-header">
+
+            <h3 id="systemConfirmTitle">
+                Confirm Action
+            </h3>
+
+            <button
+                class="system-modal-close"
+                onclick="closeSystemConfirmModal()"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="system-modal-body">
+
+            <div
+                class="system-modal-icon warning"
+                id="systemConfirmIcon"
+            >
+                !
+            </div>
+
+
+            <div class="system-modal-content">
+
+                <h4 id="systemConfirmHeading">
+                    Are you sure?
+                </h4>
+
+                <p id="systemConfirmMessage">
+                    Please confirm this action.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="system-modal-footer">
+
+            <button
+                class="system-modal-cancel"
+                onclick="closeSystemConfirmModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="system-modal-confirm"
+                id="systemConfirmButton"
+            >
+                Continue
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SYSTEM ALERT MODAL
+===================================================== -->
+
+<div
+    class="system-modal-overlay"
+    id="systemAlertModal"
+>
+
+    <div class="system-modal">
+
+        <div class="system-modal-header">
+
+            <h3 id="systemAlertTitle">
+                Notice
+            </h3>
+
+            <button
+                class="system-modal-close"
+                onclick="closeSystemAlertModal()"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="system-modal-body">
+
+            <div
+                class="system-modal-icon"
+                id="systemAlertIcon"
+            >
+                ✓
+            </div>
+
+
+            <div class="system-modal-content">
+
+                <h4 id="systemAlertHeading">
+                    Operation Complete
+                </h4>
+
+                <p id="systemAlertMessage">
+                    The operation was completed successfully.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="system-modal-footer">
+
+            <button
+                class="system-modal-confirm"
+                onclick="closeSystemAlertModal()"
+            >
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script>
 
@@ -3372,7 +3514,260 @@ function downloadBackup(
 
 }
 
+/* =====================================================
+   SYSTEM CONFIRMATION MODAL
+===================================================== */
 
+let systemConfirmCallback = null;
+
+
+function openSystemConfirmModal({
+
+    title = "Confirm Action",
+
+    heading = "Are you sure?",
+
+    message = "Please confirm this action.",
+
+    confirmText = "Continue",
+
+    callback = null,
+
+    type = "warning"
+
+} = {}) {
+
+
+    const modal =
+        document.getElementById(
+            "systemConfirmModal"
+        );
+
+
+    const titleElement =
+        document.getElementById(
+            "systemConfirmTitle"
+        );
+
+
+    const headingElement =
+        document.getElementById(
+            "systemConfirmHeading"
+        );
+
+
+    const messageElement =
+        document.getElementById(
+            "systemConfirmMessage"
+        );
+
+
+    const confirmButton =
+        document.getElementById(
+            "systemConfirmButton"
+        );
+
+
+    const icon =
+        document.getElementById(
+            "systemConfirmIcon"
+        );
+
+
+    titleElement.textContent =
+        title;
+
+
+    headingElement.textContent =
+        heading;
+
+
+    messageElement.textContent =
+        message;
+
+
+    confirmButton.textContent =
+        confirmText;
+
+
+    icon.className =
+        "system-modal-icon";
+
+
+    if (type === "error") {
+
+        icon.classList.add(
+            "error"
+        );
+
+        icon.textContent =
+            "×";
+
+    }
+
+    else {
+
+        icon.classList.add(
+            "warning"
+        );
+
+        icon.textContent =
+            "!";
+
+    }
+
+
+    systemConfirmCallback =
+        callback;
+
+
+    confirmButton.onclick =
+        function () {
+
+            const action =
+                systemConfirmCallback;
+
+
+            closeSystemConfirmModal();
+
+
+            if (typeof action === "function") {
+
+                action();
+
+            }
+
+        };
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+function closeSystemConfirmModal() {
+
+    const modal =
+        document.getElementById(
+            "systemConfirmModal"
+        );
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+
+    systemConfirmCallback =
+        null;
+
+}
+
+
+/* =====================================================
+   SYSTEM ALERT MODAL
+===================================================== */
+
+function openSystemAlertModal({
+
+    title = "Notice",
+
+    heading = "Operation Complete",
+
+    message = "",
+
+    type = "success"
+
+} = {}) {
+
+
+    const modal =
+        document.getElementById(
+            "systemAlertModal"
+        );
+
+
+    const titleElement =
+        document.getElementById(
+            "systemAlertTitle"
+        );
+
+
+    const headingElement =
+        document.getElementById(
+            "systemAlertHeading"
+        );
+
+
+    const messageElement =
+        document.getElementById(
+            "systemAlertMessage"
+        );
+
+
+    const icon =
+        document.getElementById(
+            "systemAlertIcon"
+        );
+
+
+    titleElement.textContent =
+        title;
+
+
+    headingElement.textContent =
+        heading;
+
+
+    messageElement.textContent =
+        message;
+
+
+    icon.className =
+        "system-modal-icon";
+
+
+    if (type === "error") {
+
+        icon.classList.add(
+            "error"
+        );
+
+        icon.textContent =
+            "×";
+
+    }
+
+    else {
+
+        icon.textContent =
+            "✓";
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+function closeSystemAlertModal() {
+
+    const modal =
+        document.getElementById(
+            "systemAlertModal"
+        );
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+}
 /* =====================================================
    RESTORE MODAL
 ===================================================== */
