@@ -735,26 +735,88 @@ async function loadMemberSummary() {
 const activeCard =
     document.getElementById("activeCard");
 
+const closeActivePreview =
+    document.getElementById("closeActivePreview");
+
 if (activeCard) {
 
-    // Hover the card = open
-    activeCard.addEventListener("mouseenter", function () {
+    activeCard.addEventListener(
+        "mouseenter",
+        function () {
 
-        activeCard.classList.add("active-open");
+            // Re-open only after mouse
+            // has left the card
+            if (
+                !activeCard.classList.contains(
+                    "active-closed"
+                )
+            ) {
 
-    });
+                activeCard.classList.add(
+                    "active-open"
+                );
 
-    // Click the card again = close
-    activeCard.addEventListener("click", function (e) {
+            }
 
-        // Huwag i-toggle kapag nasa loob ng preview
-        if (e.target.closest(".summary-preview")) {
-            return;
         }
+    );
 
-        activeCard.classList.toggle("active-open");
 
-    });
+    activeCard.addEventListener(
+        "click",
+        function (e) {
+
+            if (
+                e.target.closest(".summary-preview")
+            ) {
+                return;
+            }
+
+            activeCard.classList.toggle(
+                "active-open"
+            );
+
+        }
+    );
+
+
+    activeCard.addEventListener(
+        "mouseleave",
+        function () {
+
+            activeCard.classList.remove(
+                "active-closed"
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// CLOSE BUTTON
+// ========================================
+
+if (closeActivePreview) {
+
+    closeActivePreview.addEventListener(
+        "click",
+        function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            activeCard.classList.remove(
+                "active-open"
+            );
+
+            activeCard.classList.add(
+                "active-closed"
+            );
+
+        }
+    );
 
 }
 // =====================================================

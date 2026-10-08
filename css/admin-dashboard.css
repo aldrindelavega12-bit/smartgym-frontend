@@ -5633,3 +5633,11 @@ a[href="#incomeReport"]::before {
 #walkinCard #walkinPreviewList::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
+
+/* ========================================
+   ACTIVE MEMBERS CLOSE OVERRIDE
+======================================== */
+
+#activeCard.active-closed .summary-preview {
+    display: none !important;
+}
