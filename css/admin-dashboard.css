@@ -7790,3 +7790,77 @@ a[href="#incomeReport"]::before {
         flex: 0 0 140px !important;
     }
 }
+
+.function-column {
+    width: 90px;
+    text-align: center;
+}
+
+.member-action-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.member-menu-toggle {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background: #f3f5f8;
+    color: #164477;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.member-menu-toggle:hover {
+    background: #e7edf4;
+}
+
+.member-menu-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 165px;
+    padding: 6px;
+    background: #ffffff;
+    border: 1px solid #e6eaf0;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+}
+
+.member-action-menu.open .member-menu-dropdown {
+    display: block;
+}
+
+.member-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.member-menu-item:hover {
+    background: #f5f7fa;
+}
+
+.archive-item {
+    color: #9a6700;
+}
+
+.delete-item {
+    color: #dc2626;
+}
