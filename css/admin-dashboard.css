@@ -7769,3 +7769,24 @@ a[href="#incomeReport"]::before {
 }
 
 
+#attendanceReport #attendanceCustomBtn {
+    flex: 0 0 120px !important;
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+    box-sizing: border-box !important;
+    padding: 0 8px !important;
+}
+
+/* ATTENDANCE REPORT — SMALLER CALENDAR */
+#attendanceReport .attendance-date-input {
+    width: 170px !important;
+    flex: 0 0 170px !important;
+}
+
+@media (max-width: 600px) {
+    #attendanceReport .attendance-date-input {
+        width: 140px !important;
+        flex: 0 0 140px !important;
+    }
+}

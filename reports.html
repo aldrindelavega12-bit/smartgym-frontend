@@ -2812,6 +2812,12 @@ menu.innerHTML = `
 
     </a>
 
+    <a href="archive.html">
+
+        Archive
+
+    </a>
+
 
 `;
 
@@ -6905,25 +6911,76 @@ function renderLockerPagination(){
 
 }
 
+/* =====================================================
+   LOCKER DATE CHANGE
+===================================================== */
 
 /* =====================================================
    LOCKER DATE CHANGE
 ===================================================== */
 
-document
-    .getElementById("lockerStartDate")
-    .addEventListener(
-        "change",
-        loadLockerReport
-    );
+function handleLockerDateChange(changedInput) {
+    const startInput = document.getElementById("lockerStartDate");
+    const endInput = document.getElementById("lockerEndDate");
 
+    if (!startInput || !endInput) return;
+    if (!startInput.value || !endInput.value) return;
 
-document
-    .getElementById("lockerEndDate")
-    .addEventListener(
-        "change",
-        loadLockerReport
-    );
+    // DAILY: use the selected date for both inputs.
+    if (lockerPeriod === "daily") {
+        startInput.value = changedInput.value;
+        endInput.value = changedInput.value;
+
+        updateLockerDateDisplay();
+        loadLockerReport();
+        return;
+    }
+
+    // Custom date range.
+    lockerPeriod = "custom";
+
+    document.getElementById("lockerDailyBtn")?.classList.remove("active");
+    document.getElementById("lockerWeeklyBtn")?.classList.remove("active");
+    document.getElementById("lockerCustomBtn")?.classList.add("active");
+
+    const endBox = document.getElementById("lockerEndDateBox");
+    const separator = document.getElementById("lockerDateSeparator");
+    const label = document.getElementById("lockerDateLabel");
+
+    if (endBox) endBox.style.display = "flex";
+    if (separator) separator.style.display = "inline";
+    if (label) label.textContent = "Date Range:";
+
+    // Prevent start date from being later than end date.
+    if (startInput.value > endInput.value) {
+        if (changedInput.id === "lockerStartDate") {
+            endInput.value = startInput.value;
+        } else {
+            startInput.value = endInput.value;
+        }
+    }
+
+    // Update both visible date labels.
+    updateLockerDateDisplay();
+
+    // Reload records using the selected date range.
+    loadLockerReport();
+}
+
+document.getElementById("lockerStartDate")?.addEventListener(
+    "change",
+    function () {
+        handleLockerDateChange(this);
+    }
+);
+
+document.getElementById("lockerEndDate")?.addEventListener(
+    "change",
+    function () {
+        handleLockerDateChange(this);
+    }
+);
+
 
 
 /* =====================================================
@@ -6940,12 +6997,12 @@ document
 /* =====================================================
    LOCKER REPORT PERIOD
 ===================================================== */
+
 /* =====================================================
    LOCKER REPORT PERIOD
 ===================================================== */
 
 let lockerPeriod = "daily";
-
 
 function setLockerPeriod(period) {
     lockerPeriod = period;
@@ -6954,39 +7011,33 @@ function setLockerPeriod(period) {
     const weeklyBtn = document.getElementById("lockerWeeklyBtn");
     const customBtn = document.getElementById("lockerCustomBtn");
 
+    const startInput = document.getElementById("lockerStartDate");
+    const endInput = document.getElementById("lockerEndDate");
+    const endBox = document.getElementById("lockerEndDateBox");
+    const separator = document.getElementById("lockerDateSeparator");
+    const label = document.getElementById("lockerDateLabel");
+
+    if (!startInput || !endInput) {
+        console.error("Locker date inputs not found.");
+        return;
+    }
+
+    // Reset active buttons.
     dailyBtn?.classList.remove("active");
     weeklyBtn?.classList.remove("active");
     customBtn?.classList.remove("active");
 
     if (period === "daily") {
         dailyBtn?.classList.add("active");
-    } else if (period === "weekly") {
-        weeklyBtn?.classList.add("active");
-    } else if (period === "custom") {
-        customBtn?.classList.add("active");
-    }
 
-    const startInput = document.getElementById("lockerStartDate");
-    const endInput = document.getElementById("lockerEndDate");
-
-    const endBox = document.getElementById("lockerEndDateBox");
-    const separator = document.getElementById("lockerDateSeparator");
-    const label = document.getElementById("lockerDateLabel");
-
-    if (!startInput || !endInput || !endBox || !separator || !label) {
-        console.error("Locker date filter elements not found.");
-        return;
-    }
-
-    if (period === "daily") {
         const today = formatDateInput(new Date());
 
         startInput.value = today;
         endInput.value = today;
 
-        endBox.style.display = "none";
-        separator.style.display = "none";
-        label.textContent = "Date:";
+        if (endBox) endBox.style.display = "none";
+        if (separator) separator.style.display = "none";
+        if (label) label.textContent = "Date:";
 
         updateLockerDateDisplay();
         loadLockerReport();
@@ -6994,6 +7045,8 @@ function setLockerPeriod(period) {
     }
 
     if (period === "weekly") {
+        weeklyBtn?.classList.add("active");
+
         const today = new Date();
         const day = today.getDay();
         const diff = day === 0 ? 6 : day - 1;
@@ -7007,9 +7060,9 @@ function setLockerPeriod(period) {
         startInput.value = formatDateInput(monday);
         endInput.value = formatDateInput(sunday);
 
-        endBox.style.display = "flex";
-        separator.style.display = "inline";
-        label.textContent = "Date Range:";
+        if (endBox) endBox.style.display = "flex";
+        if (separator) separator.style.display = "inline";
+        if (label) label.textContent = "Date Range:";
 
         updateLockerDateDisplay();
         loadLockerReport();
@@ -7017,17 +7070,33 @@ function setLockerPeriod(period) {
     }
 
     if (period === "custom") {
-        endBox.style.display = "flex";
-        separator.style.display = "inline";
-        label.textContent = "Date Range:";
+        customBtn?.classList.add("active");
+
+        if (endBox) endBox.style.display = "flex";
+        if (separator) separator.style.display = "inline";
+        if (label) label.textContent = "Date Range:";
 
         updateLockerDateDisplay();
+
+        // Mag-load lang kapag may valid na start at end date.
+        if (
+            startInput.value &&
+            endInput.value &&
+            startInput.value <= endInput.value
+        ) {
+            loadLockerReport();
+        }
     }
 }
+
+/* =====================================================
+   UPDATE LOCKER DATE DISPLAY
+===================================================== */
 
 function updateLockerDateDisplay() {
     const startInput = document.getElementById("lockerStartDate");
     const endInput = document.getElementById("lockerEndDate");
+
     const startDisplay = document.getElementById("lockerStartDateDisplay");
     const endDisplay = document.getElementById("lockerEndDateDisplay");
 
