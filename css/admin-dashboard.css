@@ -7864,3 +7864,143 @@ a[href="#incomeReport"]::before {
 .delete-item {
     color: #dc2626;
 }
+
+/* ==============================
+   SMART GYM CONFIRMATION MODAL
+============================== */
+
+.member-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.50);
+    backdrop-filter: blur(3px);
+    z-index: 99999;
+}
+
+.member-modal-overlay.show {
+    display: flex;
+}
+
+.member-modal {
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.20);
+    text-align: center;
+    animation: memberModalIn 0.18s ease-out;
+}
+
+.member-modal-icon {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 25px;
+}
+
+.member-modal-icon.archive {
+    color: #b77900;
+    background: #fff3d6;
+}
+
+.member-modal-icon.delete {
+    color: #dc2626;
+    background: #fee2e2;
+}
+
+.member-modal h3 {
+    margin: 0 0 10px;
+    color: #172b4d;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.member-modal p {
+    margin: 0 0 26px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.member-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.member-modal-actions button {
+    min-width: 120px;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.member-modal-cancel {
+    color: #475569;
+    background: #f1f5f9;
+}
+
+.member-modal-cancel:hover {
+    background: #e2e8f0;
+}
+
+.member-modal-confirm.archive {
+    color: #ffffff;
+    background: #d99a16;
+}
+
+.member-modal-confirm.archive:hover {
+    background: #b77900;
+}
+
+.member-modal-confirm.delete {
+    color: #ffffff;
+    background: #dc2626;
+}
+
+.member-modal-confirm.delete:hover {
+    background: #b91c1c;
+}
+
+.member-modal-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes memberModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .member-modal {
+        padding: 24px 20px;
+    }
+
+    .member-modal-actions button {
+        min-width: 0;
+        flex: 1;
+    }
+}
