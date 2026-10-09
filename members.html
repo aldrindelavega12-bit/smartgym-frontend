@@ -937,6 +937,44 @@ document.addEventListener("click", function(event) {
         });
     }
 });
+
+
+// ================= ARCHIVE MEMBER =================
+async function archiveMember(memberId) {
+    const confirmed = confirm(
+        "Are you sure you want to archive this member?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/archive/member/${encodeURIComponent(memberId)}`,
+            {
+                method: "POST"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "Failed to archive member."
+            );
+        }
+
+        alert("Member archived successfully.");
+
+        document.querySelectorAll(".member-action-menu.open")
+            .forEach(menu => menu.classList.remove("open"));
+
+        await loadMembers();
+
+    } catch (error) {
+        console.error("Archive member error:", error);
+        alert("Failed to archive member: " + error.message);
+    }
+}
 // =====================================================
 // MEMBER COUNT
 // =====================================================
