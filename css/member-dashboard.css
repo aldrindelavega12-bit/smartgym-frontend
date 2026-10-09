@@ -9292,3 +9292,42 @@ textarea {
     }
 
 }
+
+.function-column {
+    min-width: 190px;
+    text-align: center;
+}
+
+.member-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.member-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 11px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.archive-btn {
+    background: #fff7e6;
+    color: #9a6700;
+    border-color: #f0d28a;
+}
+
+.delete-btn {
+    background: #fff0f0;
+    color: #c62828;
+    border-color: #f0b5b5;
+}
