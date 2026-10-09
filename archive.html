@@ -709,7 +709,13 @@ async function confirmDelete() {
         const response = await fetch(
             `${API_URL}/api/archive/${encodeURIComponent(selectedRecordType)}/${encodeURIComponent(selectedRecordId)}`,
             {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    actor_id: user?.id
+                })
             }
         );
 
@@ -760,7 +766,15 @@ async function confirmRestore() {
     try {
         const response = await fetch(
             `${API_URL}/api/archive/restore/${encodeURIComponent(selectedRecordType)}/${encodeURIComponent(selectedRecordId)}`,
-            { method: "POST" }
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    actor_id: user?.id
+                })
+            }
         );
 
         const result = await response.json();
