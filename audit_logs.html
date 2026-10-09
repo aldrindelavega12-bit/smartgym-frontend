@@ -12,13 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* PAGE HEADER - PRESERVED */
         .audit-page {
             width: 100%;
             color: #26332f;
             font-family: 'Inter', sans-serif;
         }
 
+        /* PAGE HEADER */
         .audit-page-header {
             display: flex;
             justify-content: space-between;
@@ -41,82 +41,85 @@
             font-size: 14px;
         }
 
-        /* SEARCH, FILTER AND DATE - OUTSIDE TABLE */
+        /* SEARCH, FILTER AND DATE */
         .audit-toolbar {
-            display: grid;
-            grid-template-columns: 1.2fr 0.9fr 0.95fr;
-            gap: 14px;
-            align-items: center;
-            width: 100%;
-            margin: 0 0 16px;
-            padding: 0;
-            box-sizing: border-box;
-            border: 0;
-            background: transparent;
+            display: grid !important;
+            grid-template-columns: 70fr 10fr 20fr !important;
+            gap: 10px !important;
+            align-items: center !important;
+            width: 100% !important;
+            margin: 0 0 16px !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+            border: none !important;
+            background: transparent !important;
         }
 
         .audit-search,
         .audit-filter,
         .audit-date {
-            width: 100%;
-            min-width: 0;
-            height: 48px;
-            box-sizing: border-box;
-            border: 1px solid #d9e3e9;
-            border-radius: 11px;
-            background: #fff;
-            font-family: inherit;
-            font-size: 14px;
+            display: block !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            height: 48px !important;
+            box-sizing: border-box !important;
+            border: 1px solid #d9e3e9 !important;
+            border-radius: 11px !important;
+            background: #fff !important;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 14px !important;
         }
 
         .audit-search {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 16px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 0 16px !important;
         }
 
         .audit-search i {
-            color: #526680;
-            flex-shrink: 0;
-            font-size: 16px;
+            color: #526680 !important;
+            flex-shrink: 0 !important;
+            font-size: 16px !important;
         }
 
         .audit-search input {
-            width: 100%;
-            min-width: 0;
-            border: none;
-            outline: none;
-            background: transparent;
-            color: #344563;
-            font-family: inherit;
-            font-size: 14px;
+            display: block !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            height: auto !important;
+            padding: 0 !important;
+            border: none !important;
+            outline: none !important;
+            background: transparent !important;
+            color: #344563 !important;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 14px !important;
+            box-shadow: none !important;
         }
 
         .audit-search input::placeholder {
-            color: #8793a6;
+            color: #8793a6 !important;
+            opacity: 1 !important;
         }
 
         .audit-filter {
-            appearance: auto;
-            padding: 0 16px;
-            color: #26332f;
-            outline: none;
-            cursor: pointer;
+            padding: 0 12px !important;
+            color: #26332f !important;
+            cursor: pointer !important;
         }
 
         .audit-date {
-            padding: 0 14px;
-            color: #526680;
-            outline: none;
-            cursor: pointer;
+            padding: 0 12px !important;
+            color: #526680 !important;
+            cursor: pointer !important;
         }
 
         .audit-search:focus-within,
         .audit-filter:focus,
         .audit-date:focus {
-            border-color: #d9e3e9;
-            outline: none;
+            border-color: #009650 !important;
+            outline: none !important;
         }
 
         /* TABLE CARD */
@@ -131,6 +134,7 @@
         }
 
         .audit-table-wrapper {
+            display: block !important;
             width: 100%;
             padding: 16px 16px 0;
             box-sizing: border-box;
@@ -145,6 +149,7 @@
         }
 
         .audit-table thead {
+            display: table-header-group !important;
             background: #edf7f2;
         }
 
@@ -212,47 +217,7 @@
             white-space: nowrap;
         }
 
-        /* EMPTY STATE - ONLY SHOWN WHEN THERE ARE NO RECORDS */
-        .audit-empty {
-            display: none;
-            min-height: 0;
-            padding: 35px 20px;
-            box-sizing: border-box;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .audit-empty-icon {
-            width: 62px;
-            height: 62px;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #edf8f2;
-            color: #009650;
-            border-radius: 50%;
-            font-size: 22px;
-        }
-
-        .audit-empty h3 {
-            margin: 0 0 8px;
-            color: #17211b;
-            font-size: 17px;
-            font-weight: 700;
-        }
-
-        .audit-empty p {
-            max-width: 500px;
-            margin: 0;
-            color: #81909a;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* PAGINATION FOOTER */
+        /* TABLE FOOTER */
         .audit-table-footer {
             display: flex;
             justify-content: space-between;
@@ -315,10 +280,15 @@
             font-size: 14px;
         }
 
-        /* RESPONSIVE */
+        .audit-empty-row td {
+            height: 180px;
+            text-align: center;
+            color: #81909a;
+        }
+
         @media (max-width: 900px) {
             .audit-toolbar {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr !important;
             }
 
             .audit-date {
@@ -332,7 +302,7 @@
             }
 
             .audit-toolbar {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
             }
 
             .audit-date {
@@ -354,102 +324,12 @@
                 height: 36px;
             }
         }
-
-
-        /* FORCE OVERRIDE: AUDIT LOG SEARCH / TYPE / DATE */
-        .audit-toolbar {
-            display: grid !important;
-            grid-template-columns: 50fr 20fr 30fr !important;
-            gap: 10px !important;
-            align-items: center !important;
-            width: 100% !important;
-            margin: 0 0 16px !important;
-            padding: 0 !important;
-            box-sizing: border-box !important;
-            border: none !important;
-            background: transparent !important;
-        }
-
-        .audit-toolbar .audit-search,
-        .audit-toolbar .audit-filter,
-        .audit-toolbar .audit-date {
-            display: flex !important;
-            width: 100% !important;
-            min-width: 0 !important;
-            height: 48px !important;
-            box-sizing: border-box !important;
-            border: 1px solid #d9e3e9 !important;
-            border-radius: 11px !important;
-            background: #fff !important;
-            font-family: 'Inter', sans-serif !important;
-            font-size: 14px !important;
-        }
-
-        .audit-toolbar .audit-search {
-            align-items: center !important;
-            gap: 12px !important;
-            padding: 0 16px !important;
-        }
-
-        .audit-toolbar .audit-search i {
-            flex-shrink: 0 !important;
-            color: #526680 !important;
-            font-size: 16px !important;
-        }
-
-        .audit-toolbar .audit-search input {
-            display: block !important;
-            width: 100% !important;
-            min-width: 0 !important;
-            height: auto !important;
-            padding: 0 !important;
-            border: none !important;
-            outline: none !important;
-            background: transparent !important;
-            color: #344563 !important;
-            font-family: 'Inter', sans-serif !important;
-            font-size: 14px !important;
-            box-shadow: none !important;
-        }
-
-        .audit-toolbar .audit-search input::placeholder {
-            color: #8793a6 !important;
-            opacity: 1 !important;
-        }
-
-        .audit-toolbar .audit-filter {
-            display: block !important;
-            padding: 0 12px !important;
-            color: #26332f !important;
-            cursor: pointer !important;
-        }
-
-        .audit-toolbar .audit-date {
-            display: block !important;
-            padding: 0 12px !important;
-            color: #526680 !important;
-            cursor: pointer !important;
-        }
-
-        .audit-toolbar .audit-search:focus-within,
-        .audit-toolbar .audit-filter:focus,
-        .audit-toolbar .audit-date:focus {
-            border-color: #d9e3e9 !important;
-            outline: none !important;
-            box-shadow: none !important;
-        }
-
-        @media (max-width: 650px) {
-            .audit-toolbar {
-                grid-template-columns: 1fr !important;
-                gap: 10px !important;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <!-- SIDEBAR - PRESERVED -->
+
+    <!-- SIDEBAR -->
     <div class="navbar">
         <div class="brand">
             <div class="brand-text">
@@ -470,10 +350,14 @@
     <div class="layout">
         <div class="main">
 
-            <!-- TOP HEADER - PRESERVED -->
+            <!-- TOP HEADER -->
             <div class="top-header">
                 <div class="top-right">
-                    <div class="staff-profile" id="staffProfile" onclick="toggleStaffMenu(event)">
+                    <div
+                        class="staff-profile"
+                        id="staffProfile"
+                        onclick="toggleStaffMenu(event)"
+                    >
                         <div class="staff-avatar">A</div>
 
                         <div class="staff-info">
@@ -484,7 +368,11 @@
                         <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
 
                         <div id="staffDropdown" class="staff-profile-dropdown">
-                            <button type="button" onclick="logout(event)" class="staff-dropdown-logout">
+                            <button
+                                type="button"
+                                onclick="logout(event)"
+                                class="staff-dropdown-logout"
+                            >
                                 <i class="fa-solid fa-right-from-bracket"></i>
                                 Log Out
                             </button>
@@ -495,7 +383,7 @@
 
             <main class="audit-page">
 
-                <!-- PAGE HEADER - PRESERVED -->
+                <!-- PAGE HEADER -->
                 <div class="audit-page-header">
                     <div class="audit-page-title">
                         <h1>Audit Logs</h1>
@@ -503,19 +391,23 @@
                     </div>
                 </div>
 
-                <!-- SEARCH, FILTER AND DATE OUTSIDE THE TABLE CARD -->
+                <!-- SEARCH, FILTER AND DATE -->
                 <div class="audit-toolbar">
                     <label class="audit-search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input
                             type="search"
                             id="auditSearch"
-                            placeholder="Search archived records..."
+                            placeholder="Search user, action, details..."
                             autocomplete="off"
                         >
                     </label>
 
-                    <select class="audit-filter" id="actionFilter" aria-label="Filter by type">
+                    <select
+                        class="audit-filter"
+                        id="actionFilter"
+                        aria-label="Filter by type"
+                    >
                         <option value="all">All Types</option>
                         <option value="created">Created</option>
                         <option value="added">Added</option>
@@ -536,9 +428,9 @@
                     >
                 </div>
 
-                <!-- AUDIT TABLE CARD -->
+                <!-- AUDIT TABLE -->
                 <section class="audit-card">
-                    <div class="audit-table-wrapper" id="auditTableWrapper">
+                    <div class="audit-table-wrapper">
                         <table class="audit-table">
                             <thead>
                                 <tr>
@@ -551,16 +443,6 @@
                             </thead>
                             <tbody id="auditTableBody"></tbody>
                         </table>
-                    </div>
-
-                    <div class="audit-empty" id="auditEmpty">
-                        <div class="audit-empty-icon">
-                            <i class="fa-solid fa-clipboard-list"></i>
-                        </div>
-                        <h3 id="auditEmptyTitle">No audit records available</h3>
-                        <p id="auditEmptyMessage">
-                            Connect this page to your audit logs API to display recorded activities.
-                        </p>
                     </div>
 
                     <div class="audit-table-footer">
@@ -576,29 +458,190 @@
     </div>
 
     <script>
-        /*
-         * Set this to the real audit-log API endpoint.
-         * Supported response formats:
-         *   [ {...}, {...} ]
-         *   { "logs": [...] }
-         *   { "data": [...] }
-         *   { "records": [...] }
-         */
-        const AUDIT_API_URL = "";
-
         const PAGE_SIZE = 10;
 
-        let auditRecords = [];
-        let filteredRecords = [];
+        /*
+         * HARDCODED SAMPLE DATA
+         * Petsa ay naka-base sa kasalukuyang local date ng browser.
+         * Sample records lamang ito para makita at masubukan ang table.
+         */
+        function getLocalDateOffset(daysAgo) {
+            const date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+
+        const auditRecords = [
+            {
+                user_name: "Aldrin Dela Cruz",
+                role: "Admin",
+                action: "Created",
+                details: "Created staff account for Juan Santos (S0005)",
+                date: getLocalDateOffset(0)
+            },
+            {
+                user_name: "Maria Reyes",
+                role: "Manager",
+                action: "Updated",
+                details: "Updated member information (M0015)",
+                date: getLocalDateOffset(0)
+            },
+            {
+                user_name: "Juan Santos",
+                role: "Staff",
+                action: "Added",
+                details: "Added new walk-in record (W0021)",
+                date: getLocalDateOffset(0)
+            },
+            {
+                user_name: "Aldrin Dela Cruz",
+                role: "Admin",
+                action: "Backup",
+                details: "Created database backup",
+                date: getLocalDateOffset(0)
+            },
+            {
+                user_name: "Carlos Reyes",
+                role: "Manager",
+                action: "Archived",
+                details: "Archived member (M0012)",
+                date: getLocalDateOffset(1)
+            },
+            {
+                user_name: "Mark Santos",
+                role: "Staff",
+                action: "Deleted",
+                details: "Deleted locker booking (LKB0015)",
+                date: getLocalDateOffset(1)
+            },
+            {
+                user_name: "Ana Lim",
+                role: "Manager",
+                action: "Updated",
+                details: "Updated staff information (S0003)",
+                date: getLocalDateOffset(1)
+            },
+            {
+                user_name: "Mark Santos",
+                role: "Staff",
+                action: "Login",
+                details: "User logged in",
+                date: getLocalDateOffset(1)
+            },
+            {
+                user_name: "Aldrin Dela Cruz",
+                role: "Admin",
+                action: "Settings",
+                details: "Updated system settings (attendance)",
+                date: getLocalDateOffset(2)
+            },
+            {
+                user_name: "Maria Reyes",
+                role: "Manager",
+                action: "Restored",
+                details: "Restored archived member (M0008)",
+                date: getLocalDateOffset(2)
+            },
+            {
+                user_name: "Aldrin Dela Cruz",
+                role: "Admin",
+                action: "Login",
+                details: "Administrator logged in",
+                date: getLocalDateOffset(2)
+            },
+            {
+                user_name: "Juan Santos",
+                role: "Staff",
+                action: "Created",
+                details: "Created a new walk-in transaction (W0022)",
+                date: getLocalDateOffset(3)
+            },
+            {
+                user_name: "Ana Lim",
+                role: "Manager",
+                action: "Added",
+                details: "Added a new member record (M0016)",
+                date: getLocalDateOffset(3)
+            },
+            {
+                user_name: "Mark Santos",
+                role: "Staff",
+                action: "Updated",
+                details: "Updated locker booking information (LKB0016)",
+                date: getLocalDateOffset(4)
+            },
+            {
+                user_name: "Aldrin Dela Cruz",
+                role: "Admin",
+                action: "Deleted",
+                details: "Deleted an inactive user account (U0014)",
+                date: getLocalDateOffset(4)
+            },
+            {
+                user_name: "Maria Reyes",
+                role: "Manager",
+                action: "Archived",
+                details: "Archived inactive member (M0009)",
+                date: getLocalDateOffset(5)
+            },
+            {
+                user_name: "Carlos Reyes",
+                role: "Manager",
+                action: "Login",
+                details: "User logged in",
+                date: getLocalDateOffset(5)
+            },
+            {
+                user_name: "Aldrin Dela Cruz",
+                role: "Admin",
+                action: "Backup",
+                details: "Completed database backup",
+                date: getLocalDateOffset(6)
+            },
+            {
+                user_name: "Ana Lim",
+                role: "Manager",
+                action: "Restored",
+                details: "Restored archived member (M0010)",
+                date: getLocalDateOffset(7)
+            },
+            {
+                user_name: "Juan Santos",
+                role: "Staff",
+                action: "Settings",
+                details: "Updated attendance-related settings",
+                date: getLocalDateOffset(8)
+            },
+            {
+                user_name: "Mark Santos",
+                role: "Staff",
+                action: "Added",
+                details: "Added a new walk-in record (W0023)",
+                date: getLocalDateOffset(9)
+            },
+            {
+                user_name: "Maria Reyes",
+                role: "Manager",
+                action: "Updated",
+                details: "Updated member contact information (M0011)",
+                date: getLocalDateOffset(10)
+            }
+        ];
+
+        let filteredRecords = [...auditRecords];
         let currentPage = 1;
 
         const searchInput = document.getElementById("auditSearch");
         const actionFilter = document.getElementById("actionFilter");
-        
+        const dateFilter = document.getElementById("dateFilter");
         const tableBody = document.getElementById("auditTableBody");
-        const tableWrapper = document.getElementById("auditTableWrapper");
-        const emptyState = document.getElementById("auditEmpty");
         const pagination = document.getElementById("auditPagination");
+        const resultsInfo = document.getElementById("auditResultsInfo");
 
         function escapeHTML(value) {
             return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -610,60 +653,17 @@
             })[character]);
         }
 
-        function getUser(record) {
-            return record.user_name ||
-                   record.username ||
-                   record.user ||
-                   record.name ||
-                   record.email ||
-                   "—";
-        }
+        function formatDate(dateString) {
+            if (!dateString) return "—";
 
-        function getRole(record) {
-            return record.role ||
-                   record.user_role ||
-                   "—";
-        }
+            const parts = dateString.split("-");
+            if (parts.length !== 3) return dateString;
 
-        function getAction(record) {
-            return record.action ||
-                   record.activity ||
-                   record.event_type ||
-                   record.operation ||
-                   "—";
-        }
-
-        function getDetails(record) {
-            return record.details ||
-                   record.description ||
-                   record.activity_details ||
-                   record.message ||
-                   "—";
-        }
-
-        function getDate(record) {
-            return record.created_at ||
-                   record.timestamp ||
-                   record.date_time ||
-                   record.datetime ||
-                   record.date ||
-                   "";
-        }
-
-        function parseDate(record) {
-            const value = getDate(record);
-            if (!value) return null;
-
-            const parsed = new Date(value);
-            return Number.isNaN(parsed.getTime()) ? null : parsed;
-        }
-
-        function formatDate(record) {
-            const date = parseDate(record);
-
-            if (!date) {
-                return getDate(record) || "—";
-            }
+            const date = new Date(
+                Number(parts[0]),
+                Number(parts[1]) - 1,
+                Number(parts[2])
+            );
 
             return date.toLocaleDateString("en-US", {
                 month: "short",
@@ -678,35 +678,27 @@
             if (value.includes("login") || value.includes("logout")) {
                 return "login";
             }
-
             if (value.includes("create") || value.includes("register")) {
                 return "created";
             }
-
             if (value.includes("add")) {
                 return "added";
             }
-
             if (value.includes("update") || value.includes("edit")) {
                 return "updated";
             }
-
             if (value.includes("delete") || value.includes("remove")) {
                 return "deleted";
             }
-
             if (value.includes("archive")) {
                 return "archived";
             }
-
             if (value.includes("restore")) {
                 return "restored";
             }
-
             if (value.includes("backup")) {
                 return "backup";
             }
-
             if (value.includes("setting")) {
                 return "settings";
             }
@@ -720,41 +712,23 @@
             const selectedDate = dateFilter.value;
 
             filteredRecords = auditRecords.filter(record => {
-                const user = getUser(record);
-                const role = getRole(record);
-                const action = getAction(record);
-                const details = getDetails(record);
-                const timestamp = getDate(record);
-
                 const searchable = [
-                    user,
-                    role,
-                    action,
-                    details,
-                    timestamp
+                    record.user_name,
+                    record.role,
+                    record.action,
+                    record.details,
+                    formatDate(record.date)
                 ].join(" ").toLowerCase();
 
                 const matchesSearch =
                     !query || searchable.includes(query);
 
-                const normalizedAction = normalizeAction(action);
-
                 const matchesAction =
                     selectedAction === "all" ||
-                    normalizedAction === selectedAction;
-
-                const date = parseDate(record);
-
-                const recordDate = date
-                    ? [
-                        date.getFullYear(),
-                        String(date.getMonth() + 1).padStart(2, "0"),
-                        String(date.getDate()).padStart(2, "0")
-                    ].join("-")
-                    : "";
+                    normalizeAction(record.action) === selectedAction;
 
                 const matchesDate =
-                    !selectedDate || recordDate === selectedDate;
+                    !selectedDate || record.date === selectedDate;
 
                 return matchesSearch && matchesAction && matchesDate;
             });
@@ -766,44 +740,34 @@
         function renderTable() {
             const total = filteredRecords.length;
             const totalPages = Math.ceil(total / PAGE_SIZE);
-
-            if (totalPages > 0 && currentPage > totalPages) {
-                currentPage = totalPages;
-            }
-
             const start = (currentPage - 1) * PAGE_SIZE;
+
             const pageRecords = filteredRecords.slice(
                 start,
                 start + PAGE_SIZE
             );
 
-            tableBody.innerHTML = pageRecords.map(record => `
-                <tr>
-                    <td>${escapeHTML(getUser(record))}</td>
-                    <td>${escapeHTML(getRole(record))}</td>
-                    <td>${escapeHTML(getAction(record))}</td>
-                    <td>${escapeHTML(getDetails(record))}</td>
-                    <td>${escapeHTML(formatDate(record))}</td>
-                </tr>
-            `).join("");
+            if (pageRecords.length > 0) {
+                tableBody.innerHTML = pageRecords.map(record => `
+                    <tr>
+                        <td>${escapeHTML(record.user_name)}</td>
+                        <td>${escapeHTML(record.role)}</td>
+                        <td>${escapeHTML(record.action)}</td>
+                        <td>${escapeHTML(record.details)}</td>
+                        <td>${escapeHTML(formatDate(record.date))}</td>
+                    </tr>
+                `).join("");
+            } else {
+                tableBody.innerHTML = `
+                    <tr class="audit-empty-row">
+                        <td colspan="5">No audit records match your filters.</td>
+                    </tr>
+                `;
+            }
 
-            tableWrapper.style.display = total > 0 ? "block" : "none";
-            emptyState.style.display = total > 0 ? "none" : "flex";
-
-            document.getElementById("auditEmptyTitle").textContent =
-                auditRecords.length === 0
-                    ? "No audit records available"
-                    : "No matching records found";
-
-            document.getElementById("auditEmptyMessage").textContent =
-                auditRecords.length === 0
-                    ? "Connect this page to your audit logs API to display recorded activities."
-                    : "Try changing your search term, action type, or date.";
-
-            document.getElementById("auditResultsInfo").textContent =
-                total === 0
-                    ? "Showing 0 logs"
-                    : `Showing ${start + 1} to ${Math.min(start + PAGE_SIZE, total)} of ${total} logs`;
+            resultsInfo.textContent = total === 0
+                ? "Showing 0 logs"
+                : `Showing ${start + 1} to ${Math.min(start + PAGE_SIZE, total)} of ${total} logs`;
 
             renderPagination(totalPages);
         }
@@ -811,9 +775,7 @@
         function renderPagination(totalPages) {
             pagination.innerHTML = "";
 
-            if (filteredRecords.length === 0) {
-                return;
-            }
+            if (totalPages <= 1) return;
 
             function addButton(label, page, active = false, disabled = false) {
                 const button = document.createElement("button");
@@ -891,63 +853,16 @@
             );
         }
 
-        async function loadAuditLogs() {
-            if (!AUDIT_API_URL) {
-                auditRecords = [];
-                applyFilters();
-                return;
-            }
-
-            try {
-                const response = await fetch(AUDIT_API_URL, {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                const records = Array.isArray(result)
-                    ? result
-                    : result.logs || result.data || result.records || [];
-
-                if (!Array.isArray(records)) {
-                    throw new Error("Unexpected API response format.");
-                }
-
-                auditRecords = records;
-                applyFilters();
-
-            } catch (error) {
-                console.error("Failed to load audit logs:", error);
-
-                auditRecords = [];
-                applyFilters();
-
-                document.getElementById("auditEmptyTitle").textContent =
-                    "Unable to load audit logs";
-
-                document.getElementById("auditEmptyMessage").textContent =
-                    "Check the audit logs API endpoint and server response.";
-            }
-        }
-
         searchInput.addEventListener("input", applyFilters);
         actionFilter.addEventListener("change", applyFilters);
         dateFilter.addEventListener("change", applyFilters);
 
-        /* TOP HEADER PROFILE MENU - PRESERVED */
         function toggleStaffMenu(event) {
             if (event) event.stopPropagation();
 
-            const dropdown = document.getElementById("staffDropdown");
-            dropdown.classList.toggle("show");
+            document
+                .getElementById("staffDropdown")
+                .classList.toggle("show");
         }
 
         document.addEventListener("click", event => {
@@ -964,34 +879,12 @@
             window.location.href = "login.html";
         }
 
-        loadAuditLogs();
+        // Default date: today. Clear it if you want to view all dates.
+        dateFilter.value = getLocalDateOffset(0);
 
-        const dateFilter = document.getElementById("dateFilter");
-
-        // Automatically select today's date
-        // SET TODAY'S DATE AUTOMATICALLY
-        function setTodayDate() {
-            const today = new Date();
-
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, "0");
-            const day = String(today.getDate()).padStart(2, "0");
-
-            dateFilter.value = `${year}-${month}-${day}`;
-        }
-
-        // INITIALIZE AUDIT LOGS
-        document.addEventListener("DOMContentLoaded", () => {
-            setTodayDate();
-
-            // Apply today's date to the existing filter
-            applyFilters();
-
-            // Load records from the configured API
-            loadAuditLogs();
-        });
-
-
+        // Render the hardcoded sample records immediately.
+        applyFilters();
     </script>
+
 </body>
 </html>

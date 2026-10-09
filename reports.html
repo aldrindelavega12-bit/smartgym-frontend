@@ -7679,7 +7679,35 @@ function setAttendancePeriod(period){
     }
 
 }
+function openLockerReport() {
+    // Default report period to Daily
+    const dailyButton = document.querySelector(
+        '#lockerReport .daily-btn'
+    );
 
+    if (dailyButton) {
+        dailyButton.click();
+    }
+
+    // Set date to today
+    const today = new Date();
+    const localDate = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0')
+    ].join('-');
+
+    const dateInput = document.querySelector(
+        '#lockerReport input[type="date"]'
+    );
+
+    if (dateInput) {
+        dateInput.value = localDate;
+        dateInput.dispatchEvent(new Event('change', {
+            bubbles: true
+        }));
+    }
+}
 
 /* =====================================================
    ATTENDANCE START DATE CHANGE
