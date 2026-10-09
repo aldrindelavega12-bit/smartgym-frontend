@@ -1024,10 +1024,7 @@
                             <span class="backup-detail-value" id="detailBackupType">--</span>
                         </div>
 
-                        <div class="backup-detail-row">
-                            <span class="backup-detail-label">Backup Mode</span>
-                            <span class="backup-detail-value" id="detailBackupMode">--</span>
-                        </div>
+                        
 
                         <div class="backup-detail-row">
                             <span class="backup-detail-label">File Size</span>
@@ -1266,7 +1263,6 @@ async function loadLatestBackup() {
 
             [
                 "detailBackupType",
-                "detailBackupMode",
                 "detailBackupSize",
                 "detailBackupDate",
                 "detailBackupStatus"
@@ -1280,20 +1276,18 @@ async function loadLatestBackup() {
         const size = formatSize(backup.file_size);
         const type = String(backup.backup_type || "--")
             .replace(/_/g, " ");
-        const mode = String(backup.backup_mode || "--")
-            .replace(/_/g, " ");
+        
         const status = String(backup.status || "Unknown");
 
         // Latest backup summary
         dateEl.textContent = date;
-        modeEl.textContent = `${mode} backup`;
+        modeEl.textContent = `${type} backup`;
         filenameEl.textContent = backup.file_name || "";
         statusEl.textContent = status;
         sizeEl.textContent = `Size: ${size}`;
 
         // Backup details
         setText("detailBackupType", type);
-        setText("detailBackupMode", mode);
         setText("detailBackupSize", size);
         setText("detailBackupDate", date);
         setText("detailBackupStatus", status);
