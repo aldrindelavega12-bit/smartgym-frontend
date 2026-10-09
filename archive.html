@@ -543,7 +543,7 @@ function renderArchive() {
                         type="button"
                         class="delete-btn"
                         title="Delete permanently"
-                        onclick="openDeleteModal('${escapeHtml(record.id)}')">
+                        onclick="openDeleteModal('${escapeHtml(record.id)}', '${escapeHtml(record.apiType)}')"
 
                         <span>Delete</span>
                     </button>
@@ -643,9 +643,9 @@ function renderPagination() {
 /* =====================================================
    DELETE ACTION
 ===================================================== */
-
-function openDeleteModal(id) {
+function openDeleteModal(id, type) {
     selectedRecordId = id;
+    selectedRecordType = type;
     selectedAction = "delete";
 
     document.getElementById("deleteModal").classList.add("show");
@@ -653,21 +653,52 @@ function openDeleteModal(id) {
 
 function closeDeleteModal() {
     document.getElementById("deleteModal").classList.remove("show");
+
     selectedRecordId = null;
+    selectedRecordType = null;
 }
 
-function confirmDelete() {
-    if (!selectedRecordId) return;
 
-    archiveRecords = archiveRecords.filter(
-        record => record.id !== selectedRecordId
+async function confirmDelete() {
+    if (!selectedRecordId || !selectedRecordType) return;
+
+    const deleteButton = document.querySelector(
+        "#deleteModal .archive-confirm-delete"
     );
 
-    closeDeleteModal();
-    applyFilters();
+    if (deleteButton) {
+        deleteButton.disabled = true;
+        deleteButton.textContent = "Deleting...";
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/archive/${encodeURIComponent(selectedRecordType)}/${encodeURIComponent(selectedRecordId)}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || result.success !== true) {
+            throw new Error(
+                result.message || "Failed to delete record."
+            );
+        }
+
+        closeDeleteModal();
+        await loadArchive();
+
+    } catch (error) {
+        alert(error.message || "Unable to delete archived record.");
+    } finally {
+        if (deleteButton) {
+            deleteButton.disabled = false;
+            deleteButton.textContent = "Delete Permanently";
+        }
+    }
 }
-
-
 /* =====================================================
    RESTORE ACTION
 ===================================================== */
