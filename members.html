@@ -865,25 +865,34 @@ function renderMembers(){
 
                 </span>
 
-            </td>
-
-                        <td class="function-column">
-                <div class="member-actions">
+            <td class="function-column">
+                <div class="member-action-menu">
                     <button
                         type="button"
-                        class="member-action-btn archive-btn"
-                        onclick="archiveMember('${row.id}')">
-                        <i class="fa-solid fa-box-archive"></i>
-                        Archive
+                        class="member-menu-toggle"
+                        onclick="toggleMemberActions(this)"
+                        aria-label="Member actions"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
 
-                    <button
-                        type="button"
-                        class="member-action-btn delete-btn"
-                        onclick="deleteMember('${row.id}')">
-                        <i class="fa-solid fa-trash"></i>
-                        Delete
-                    </button>
+                    <div class="member-menu-dropdown">
+                        <button
+                            type="button"
+                            class="member-menu-item archive-item"
+                            onclick="archiveMember('${row.id}')">
+                            <i class="fa-solid fa-box-archive"></i>
+                            Archive
+                        </button>
+
+                        <button
+                            type="button"
+                            class="member-menu-item delete-item"
+                            onclick="deleteMember('${row.id}')">
+                            <i class="fa-solid fa-trash"></i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </td>
 
