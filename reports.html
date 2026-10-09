@@ -1617,90 +1617,69 @@ if(
                     style="display:none;">
 
                     <!-- HEADER -->
+                                        
+                    <!-- LOCKER REPORT HEADER -->
                     <div class="locker-report-header">
-
                         <div>
                             <h2>Locker Report</h2>
+                            <p>View locker usage and session records.</p>
+                        </div>
+                    </div>
 
-                            <p>
-                                View locker usage and session records.
-                            </p>
+                    <!-- REPORT FILTER ROW -->
+                    <div class="locker-filter-row">
+
+                        <!-- REPORT PERIOD -->
+                        <div class="locker-period">
+                            <label>Report Period</label>
+
+                            <div class="locker-period-buttons">
+                                <button
+                                    type="button"
+                                    id="lockerDailyBtn"
+                                    class="locker-period-btn active"
+                                    onclick="setLockerPeriod('daily')">
+                                    Daily
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="lockerWeeklyBtn"
+                                    class="locker-period-btn"
+                                    onclick="setLockerPeriod('weekly')">
+                                    Weekly
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="lockerMonthlyBtn"
+                                    class="locker-period-btn"
+                                    onclick="setLockerPeriod('monthly')">
+                                    Monthly
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="lockerCustomBtn"
+                                    class="locker-period-btn"
+                                    onclick="setLockerPeriod('custom')">
+                                    Custom Date
+                                </button>
+                            </div>
                         </div>
 
                         <!-- DATE -->
                         <div class="locker-date-area">
-
-                            <label for="lockerStartDate">
-                                Date:
-                            </label>
+                            <label for="lockerStartDate">Date:</label>
 
                             <div class="locker-date-box">
-
-                                <input
-                                    type="date"
-                                    id="lockerStartDate">
-
+                                <input type="date" id="lockerStartDate">
                                 <i class="fa-regular fa-calendar"></i>
-
                             </div>
-
                         </div>
 
                     </div>
 
-
-                    <!-- REPORT PERIOD -->
-                    <div class="locker-period">
-
-                        <label>
-                            Report Period
-                        </label>
-
-                        <div class="locker-period-buttons">
-
-                            <button
-                                type="button"
-                                id="lockerDailyBtn"
-                                class="locker-period-btn active"
-                                onclick="setLockerPeriod('daily')">
-
-                                Daily
-
-                            </button>
-
-                            <button
-                                type="button"
-                                id="lockerWeeklyBtn"
-                                class="locker-period-btn"
-                                onclick="setLockerPeriod('weekly')">
-
-                                Weekly
-
-                            </button>
-
-                            <button
-                                type="button"
-                                id="lockerMonthlyBtn"
-                                class="locker-period-btn"
-                                onclick="setLockerPeriod('monthly')">
-
-                                Monthly
-
-                            </button>
-
-                            <button
-                                type="button"
-                                id="lockerCustomBtn"
-                                class="locker-period-btn"
-                                onclick="setLockerPeriod('custom')">
-
-                                Custom Date
-
-                            </button>
-
-                        </div>
-
-                    </div>
 
 
                     <!-- CUSTOM END DATE -->

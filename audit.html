@@ -1,1153 +1,2528 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Audit Log</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Audit Logs | Smart Gym</title>
+
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+
+    <!-- INTER FONT -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
 
     <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
+        :root {
+
+            --green: #087c3d;
+            --green-dark: #075d2e;
+
+            --green-light: #eaf6ee;
+            --green-soft: #f2faf5;
+
+            --text: #17211b;
+            --muted: #68736d;
+
+            --white: #ffffff;
+
+            --bg: #f7faf8;
+
+            --border: #e6eee9;
+
+            --shadow:
+                0 8px 25px rgba(18, 70, 40, 0.06);
+        }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
+
+        html,
         body {
-            font-family: Inter, Arial, sans-serif;
-            background: #f7f9f8;
-            color: #263a33;
-        }
 
-        /* =====================================================
-           PAGE
-        ===================================================== */
-
-        .page {
-            padding: 28px 32px;
-            max-width: 1600px;
-            margin: auto;
-        }
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 24px;
-        }
-
-        .page-title h1 {
-            font-size: 25px;
-            font-weight: 700;
-            color: #263a33;
-            margin-bottom: 6px;
-        }
-
-        .page-title p {
-            font-size: 13px;
-            color: #718078;
-        }
-
-        /* =====================================================
-           SUMMARY CARDS
-        ===================================================== */
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 22px;
-        }
-
-        .summary-card {
-            background: #ffffff;
-            border: 1px solid #e6ebe8;
-            border-radius: 10px;
-            padding: 18px 20px;
-            min-height: 92px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .summary-card h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #65746e;
-            margin-bottom: 8px;
-        }
-
-        .summary-card .summary-number {
-            font-size: 26px;
-            line-height: 1;
-            font-weight: 700;
-            color: #2f4039;
-        }
-
-        /* =====================================================
-           MAIN CARD
-        ===================================================== */
-
-        .audit-card {
-            background: #ffffff;
-            border: 1px solid #e6ebe8;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        /* =====================================================
-           CARD HEADER
-        ===================================================== */
-
-        .audit-card-header {
-            padding: 18px 20px;
-            border-bottom: 1px solid #edf1ef;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
-
-        .audit-card-title h2 {
-            font-size: 15px;
-            font-weight: 700;
-            color: #30423a;
-        }
-
-        .audit-card-title p {
-            margin-top: 4px;
-            font-size: 11px;
-            color: #87938e;
-        }
-
-        /* =====================================================
-           FILTERS
-        ===================================================== */
-
-        .filter-area {
-            padding: 16px 20px;
-            border-bottom: 1px solid #edf1ef;
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 230px;
-        }
-
-        .search-box input {
-            width: 100%;
-            height: 36px;
-
-            border: 1px solid #dfe6e2;
-            border-radius: 7px;
-
-            padding: 0 12px;
-
-            outline: none;
-
-            font-family: Inter, Arial, sans-serif;
-            font-size: 12px;
-
-            color: #394b44;
-            background: #ffffff;
-        }
-
-        .search-box input::placeholder {
-            color: #9aa5a0;
-        }
-
-        .search-box input:focus {
-            border-color: #b8c8c1;
-        }
-
-        .filter-select,
-        .date-input {
-            height: 36px;
-
-            border: 1px solid #dfe6e2;
-            border-radius: 7px;
-
-            padding: 0 11px;
-
-            outline: none;
-
-            font-family: Inter, Arial, sans-serif;
-            font-size: 12px;
-
-            color: #43544d;
-            background: #ffffff;
-
-            min-width: 135px;
-        }
-
-        .filter-select:focus,
-        .date-input:focus {
-            border-color: #b8c8c1;
-        }
-
-        .clear-btn {
-            height: 36px;
-
-            padding: 0 14px;
-
-            border: 1px solid #dfe6e2;
-            border-radius: 7px;
-
-            background: #ffffff;
-            color: #52615b;
-
-            font-family: Inter, Arial, sans-serif;
-            font-size: 12px;
-            font-weight: 600;
-
-            cursor: pointer;
-        }
-
-        .clear-btn:hover {
-            background: #f6f8f7;
-        }
-
-        /* =====================================================
-           TABLE
-        ===================================================== */
-
-        .audit-table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .audit-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-        }
-
-        .audit-table thead {
-            background: #f5f8f6;
-        }
-
-        .audit-table th {
-            text-align: left;
-
-            padding: 11px 14px;
-
-            color: #53645c;
-
-            font-size: 11px;
-            font-weight: 700;
-
-            white-space: nowrap;
-
-            border-bottom: 1px solid #e9eeeb;
-        }
-
-        .audit-table td {
-            padding: 11px 14px;
-
-            border-bottom: 1px solid #edf1ef;
-
-            color: #465750;
-
-            font-size: 12px;
-
-            white-space: nowrap;
-        }
-
-        .audit-table tbody tr {
-            height: 48px;
-        }
-
-        .audit-table tbody tr:hover {
-            background: #fafcfb;
-        }
-
-        .audit-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* =====================================================
-           DATE / TIME
-        ===================================================== */
-
-        .date-cell {
-            color: #52625b;
-        }
-
-        .time-cell {
-            color: #7b8882;
-            font-size: 11px;
-        }
-
-        /* =====================================================
-           USER
-        ===================================================== */
-
-        .user-name {
-            font-weight: 600;
-            color: #35473f;
-        }
-
-        .user-role {
-            margin-top: 3px;
-            font-size: 10px;
-            color: #89958f;
-        }
-
-        /* =====================================================
-           AUDIT TYPE
-        ===================================================== */
-
-        .audit-type {
-            color: #465750;
-            font-weight: 500;
-        }
-
-        /* =====================================================
-           ACTION
-        ===================================================== */
-
-        .audit-action {
-            color: #3d4d46;
-            font-weight: 500;
-        }
-
-        /* =====================================================
-           TARGET
-        ===================================================== */
-
-        .target-name {
-            color: #52615b;
-        }
-
-        /* =====================================================
-           STATUS
-        ===================================================== */
-
-        .status {
-            color: #53635c;
-            font-weight: 500;
-        }
-
-        /* =====================================================
-           DETAILS
-        ===================================================== */
-
-        .details-btn {
-            border: none;
-            background: transparent;
-
+            margin: 0;
             padding: 0;
 
-            color: #4e5e57;
+            min-height: 100%;
 
-            font-family: Inter, Arial, sans-serif;
-            font-size: 12px;
-            font-weight: 600;
+            background: var(--bg);
 
-            cursor: pointer;
+            color: var(--text);
+
+            font-family:
+                "Inter",
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            -webkit-font-smoothing: antialiased;
         }
 
-        .details-btn:hover {
-            text-decoration: underline;
+
+        button,
+        input,
+        select {
+
+            font-family:
+                "Inter",
+                "Segoe UI",
+                Arial,
+                sans-serif;
         }
 
-        /* =====================================================
-           EMPTY STATE
-        ===================================================== */
 
-        .empty-row {
-            display: none;
-        }
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
 
-        .empty-row td {
-            text-align: center;
-            padding: 45px 20px;
+        .navbar {
 
-            color: #89958f;
-            font-size: 12px;
-        }
+            position: fixed;
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+            left: 0;
+            top: 0;
+            bottom: 0;
 
-        .audit-footer {
-            padding: 13px 20px;
+            width: 302px;
 
-            border-top: 1px solid #edf1ef;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .audit-count {
-            font-size: 11px;
-            color: #7d8984;
-        }
-
-        .pagination {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .pagination button {
-            min-width: 30px;
-            height: 30px;
-
-            padding: 0 8px;
-
-            border: 1px solid #dfe6e2;
-            border-radius: 6px;
+            padding: 32px 20px;
 
             background: #ffffff;
-            color: #586760;
 
-            font-size: 11px;
+            border-right:
+                1px solid var(--border);
 
-            cursor: pointer;
-        }
+            display: flex;
 
-        .pagination button:hover {
-            background: #f5f8f6;
-        }
-
-        .pagination button.active {
-            background: #52635b;
-            border-color: #52635b;
-            color: #ffffff;
-        }
-
-        /* =====================================================
-           DETAILS MODAL
-        ===================================================== */
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-
-            background: rgba(28, 40, 35, 0.28);
-
-            display: none;
-
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
 
             z-index: 1000;
         }
 
-        .modal-overlay.show {
+
+        /* =========================================================
+           BRAND
+        ========================================================= */
+
+        .brand {
+
             display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding:
+                8px 12px 35px;
         }
 
-        .audit-modal {
-            width: 470px;
-            max-width: calc(100% - 30px);
+
+        .brand-text {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .brand-text strong {
+
+            color: var(--green);
+
+            font-size: 25px;
+
+            font-weight: 800;
+
+            line-height: 1;
+
+            letter-spacing: -0.8px;
+        }
+
+
+        .brand-text span {
+
+            margin-top: 5px;
+
+            color: #69756e;
+
+            font-size: 7px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           MENU
+        ========================================================= */
+
+        .menu {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 3px;
+
+            width: 100%;
+        }
+
+
+        .menu a {
+
+            position: relative;
+
+            width: 100%;
+
+            min-height: 50px;
+
+            padding: 0 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            border-radius: 13px;
+
+            background: transparent;
+
+            color: #26312b;
+
+            text-decoration: none;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            transition:
+                background .2s ease,
+                color .2s ease;
+        }
+
+
+        .menu a i {
+
+            width: 22px;
+
+            text-align: center;
+
+            color: #56635b;
+
+            font-size: 18px;
+        }
+
+
+        .menu a:hover {
+
+            background: #f1f8f4;
+
+            color: var(--green);
+        }
+
+
+        .menu a:hover i {
+
+            color: var(--green);
+        }
+
+
+        .menu a.active {
+
+            background: #e7f5ed;
+
+            color: var(--green);
+
+            font-weight: 700;
+        }
+
+
+        .menu a.active i {
+
+            color: var(--green);
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .layout {
+
+            min-height: 100vh;
+        }
+
+
+        .main {
+
+            margin-left: 302px;
+
+            min-height: 100vh;
+
+            padding:
+                0 28px 30px;
+        }
+
+
+        /* =========================================================
+           TOP HEADER
+        ========================================================= */
+
+        .top-header {
+
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+        }
+
+
+        .top-right {
+
+            display: flex;
+
+            align-items: center;
+        }
+
+
+        /* =========================================================
+           STAFF PROFILE
+        ========================================================= */
+
+        .staff-profile {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            cursor: pointer;
+
+            user-select: none;
+        }
+
+
+        .staff-avatar {
+
+            width: 49px;
+            height: 49px;
+
+            border-radius: 50%;
+
+            background: #079447;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            font-weight: 600;
+        }
+
+
+        .staff-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-width: 115px;
+        }
+
+
+        .staff-info strong {
+
+            color: #18231d;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            line-height: 1.2;
+        }
+
+
+        .staff-info small {
+
+            margin-top: 3px;
+
+            color: #66736c;
+
+            font-size: 12px;
+        }
+
+
+        .staff-profile-chevron {
+
+            margin-left: 3px;
+
+            color: #182d25;
+
+            font-size: 12px;
+
+            transition: transform .2s ease;
+        }
+
+
+        .staff-profile.active
+        .staff-profile-chevron {
+
+            transform: rotate(180deg);
+        }
+
+
+        /* =========================================================
+           PROFILE DROPDOWN
+        ========================================================= */
+
+        .staff-profile-dropdown {
+
+            position: absolute;
+
+            top: 60px;
+
+            right: 0;
+
+            width: 160px;
 
             background: #ffffff;
 
+            border:
+                1px solid #e4ebe7;
+
             border-radius: 10px;
 
-            box-shadow: 0 15px 40px rgba(20, 35, 30, .15);
+            padding: 6px;
 
-            overflow: hidden;
+            box-shadow:
+                0 12px 30px rgba(20, 50, 35, .12);
+
+            display: none;
+
+            z-index: 2000;
         }
 
-        .modal-header {
-            padding: 17px 20px;
 
-            border-bottom: 1px solid #edf1ef;
+        .staff-profile-dropdown.show {
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: block;
         }
 
-        .modal-header h3 {
-            font-size: 15px;
-            font-weight: 700;
-            color: #34463e;
-        }
 
-        .close-modal {
+        .staff-dropdown-logout {
+
+            width: 100%;
+
+            height: 36px;
+
             border: none;
+
+            border-radius: 7px;
+
             background: transparent;
 
-            font-size: 20px;
-            line-height: 1;
+            color: #26332d;
 
-            color: #7c8983;
+            text-align: left;
+
+            padding: 0 10px;
+
+            font-size: 12px;
 
             cursor: pointer;
         }
 
-        .modal-body {
-            padding: 20px;
+
+        .staff-dropdown-logout:hover {
+
+            background: #f1f7f3;
+
+            color: var(--green);
         }
 
-        .detail-row {
+
+        .staff-dropdown-logout i {
+
+            margin-right: 8px;
+        }
+
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .audit-page {
+
+            width: 100%;
+        }
+
+
+        /* =========================================================
+           PAGE TITLE
+        ========================================================= */
+
+        .audit-page-header {
+
+            margin-bottom: 20px;
+        }
+
+
+        .audit-page-title h1 {
+
+            margin: 0;
+
+            color: #101b16;
+
+            font-size: 39px;
+
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+        }
+
+
+        .audit-page-title p {
+
+            margin: 6px 0 0;
+
+            color: #61716b;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================================================
+           FILTER BAR
+        ========================================================= */
+
+        .audit-filters {
+
             display: grid;
-            grid-template-columns: 120px 1fr;
+
+            grid-template-columns:
+                1.45fr
+                1fr
+                1fr
+                1fr
+                1.45fr
+                auto;
+
+            gap: 18px;
+
+            align-items: end;
+
+            margin-bottom: 16px;
+        }
+
+
+        .filter-group {
+
+            min-width: 0;
+        }
+
+
+        .filter-label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #33463d;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================================
+           DATE RANGE
+        ========================================================= */
+
+        .date-range-wrapper {
+
+            position: relative;
+        }
+
+
+        .date-range {
+
+            width: 100%;
+
+            height: 50px;
+
+            padding: 0 13px;
+
+            border:
+                1px solid #dce5e0;
+
+            border-radius: 9px;
+
+            background: #ffffff;
+
+            color: #30463c;
+
+            display: flex;
+
+            align-items: center;
 
             gap: 10px;
 
-            padding: 9px 0;
+            cursor: pointer;
 
-            border-bottom: 1px solid #f0f3f1;
+            box-shadow:
+                0 3px 10px rgba(20, 60, 40, .025);
         }
 
-        .detail-row:last-child {
+
+        .date-range i {
+
+            color: #29443a;
+
+            font-size: 16px;
+        }
+
+
+        .date-range-text {
+
+            flex: 1;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            white-space: nowrap;
+        }
+
+
+        .date-range-calendar {
+
+            color: #385047;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           CUSTOM DATE PICKER
+        ========================================================= */
+
+        .date-picker {
+
+            position: absolute;
+
+            top: calc(100% + 8px);
+
+            left: 0;
+
+            width: 330px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #dfe8e3;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            box-shadow:
+                0 15px 40px rgba(20, 55, 38, .14);
+
+            display: none;
+
+            z-index: 5000;
+        }
+
+
+        .date-picker.show {
+
+            display: block;
+        }
+
+
+        .date-picker-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 13px;
+        }
+
+
+        .date-picker-header strong {
+
+            color: #263a31;
+
+            font-size: 13px;
+        }
+
+
+        .date-picker-close {
+
+            width: 28px;
+            height: 28px;
+
+            border: none;
+
+            background: #f4f7f5;
+
+            color: #52625a;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+        }
+
+
+        .date-input-row {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 9px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .date-input-box {
+
+            position: relative;
+        }
+
+
+        .date-input-box span {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #697871;
+
+            font-size: 9px;
+
+            font-weight: 600;
+        }
+
+
+        .date-input-box input {
+
+            width: 100%;
+
+            height: 38px;
+
+            padding:
+                0 8px;
+
+            border:
+                1px solid #dce5e0;
+
+            border-radius: 7px;
+
+            outline: none;
+
+            color: #34483e;
+
+            font-size: 11px;
+        }
+
+
+        .date-input-box input:focus {
+
+            border-color: #0a9b54;
+        }
+
+
+        .date-picker-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 7px;
+        }
+
+
+        .date-clear-btn,
+        .date-apply-btn {
+
+            height: 33px;
+
+            padding: 0 13px;
+
+            border-radius: 7px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .date-clear-btn {
+
+            border:
+                1px solid #dce5e0;
+
+            background: #ffffff;
+
+            color: #506159;
+        }
+
+
+        .date-apply-btn {
+
+            border: none;
+
+            background: #079447;
+
+            color: #ffffff;
+        }
+
+
+        /* =========================================================
+           SELECT
+        ========================================================= */
+
+        .filter-select {
+
+            width: 100%;
+
+            height: 50px;
+
+            padding:
+                0 38px 0 14px;
+
+            border:
+                1px solid #dce5e0;
+
+            border-radius: 9px;
+
+            background:
+                #ffffff
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23243e33' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")
+                no-repeat
+                right 14px center;
+
+            appearance: none;
+
+            outline: none;
+
+            color: #30453b;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+
+        .filter-select:focus {
+
+            border-color: #0a9b54;
+
+            box-shadow:
+                0 0 0 3px rgba(10, 155, 84, .07);
+        }
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        .audit-search {
+
+            position: relative;
+        }
+
+
+        .audit-search i {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #29463a;
+
+            font-size: 15px;
+
+            pointer-events: none;
+        }
+
+
+        .audit-search input {
+
+            width: 100%;
+
+            height: 50px;
+
+            padding:
+                0 13px 0 42px;
+
+            border:
+                1px solid #dce5e0;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background: #ffffff;
+
+            color: #30453b;
+
+            font-size: 13px;
+        }
+
+
+        .audit-search input::placeholder {
+
+            color: #87948e;
+        }
+
+
+        .audit-search input:focus {
+
+            border-color: #0a9b54;
+
+            box-shadow:
+                0 0 0 3px rgba(10,155,84,.07);
+        }
+
+
+        /* =========================================================
+           REFRESH BUTTON
+        ========================================================= */
+
+        .refresh-btn {
+
+            height: 50px;
+
+            min-width: 116px;
+
+            padding: 0 16px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #079447;
+
+            color: #ffffff;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                background .2s ease,
+                transform .15s ease;
+        }
+
+
+        .refresh-btn:hover {
+
+            background: #07823e;
+        }
+
+
+        .refresh-btn:active {
+
+            transform: scale(.98);
+        }
+
+
+        .refresh-btn.loading i {
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =========================================================
+           AUDIT CARD
+        ========================================================= */
+
+        .audit-card {
+
+            background: #ffffff;
+
+            border:
+                1px solid #e3eae6;
+
+            border-radius: 13px;
+
+            box-shadow:
+                0 6px 20px rgba(20, 70, 45, .045);
+
+            overflow: visible;
+        }
+
+
+        /* =========================================================
+           CARD HEADER
+        ========================================================= */
+
+        .audit-card-header {
+
+            padding:
+                16px 19px 13px;
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 11px;
+        }
+
+
+        .audit-card-icon {
+
+            width: 29px;
+            height: 29px;
+
+            border-radius: 6px;
+
+            background: #e8f5ed;
+
+            color: #087c3d;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            font-size: 15px;
+        }
+
+
+        .audit-card-title h2 {
+
+            margin: 0;
+
+            color: #102447;
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+
+        .audit-card-title p {
+
+            margin: 4px 0 0;
+
+            color: #6a7b73;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================================================
+           TABLE WRAPPER
+        ========================================================= */
+
+        .audit-table-wrapper {
+
+            width: 100%;
+
+            overflow-x: auto;
+
+            padding:
+                0 13px;
+        }
+
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .audit-table {
+
+            width: 100%;
+
+            min-width: 1080px;
+
+            border-collapse: collapse;
+
+            table-layout: auto;
+        }
+
+
+        .audit-table thead {
+
+            background: #edf8f3;
+        }
+
+
+        .audit-table th {
+
+            text-align: left;
+
+            padding:
+                9px 10px;
+
+            color: #30473d;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        .audit-table td {
+
+            padding:
+                10px 10px;
+
+            border-bottom:
+                1px solid #edf1ef;
+
+            color: #52645b;
+
+            font-size: 11px;
+
+            white-space: nowrap;
+
+            vertical-align: middle;
+        }
+
+
+        .audit-table tbody tr {
+
+            height: 40px;
+        }
+
+
+        .audit-table tbody tr:hover {
+
+            background: #fafdfb;
+        }
+
+
+        .audit-table tbody tr:last-child td {
+
             border-bottom: none;
         }
 
-        .detail-label {
-            font-size: 11px;
-            color: #89958f;
+
+        /* =========================================================
+           TABLE COLUMNS
+        ========================================================= */
+
+        .col-number {
+
+            width: 50px;
+
+            color: #718078 !important;
         }
 
-        .detail-value {
-            font-size: 12px;
-            color: #405149;
+
+        .col-date {
+
+            min-width: 180px;
+        }
+
+
+        .col-user {
+
+            min-width: 155px;
+
+            color: #3d5147 !important;
+
             font-weight: 500;
         }
 
-        /* =====================================================
+
+        .col-role {
+
+            min-width: 80px;
+        }
+
+
+        .col-action {
+
+            min-width: 90px;
+        }
+
+
+        .col-module {
+
+            min-width: 115px;
+        }
+
+
+        .col-details {
+
+            min-width: 310px;
+        }
+
+
+        .col-ip {
+
+            min-width: 120px;
+        }
+
+
+        .col-actions {
+
+            width: 60px;
+
+            text-align: center !important;
+        }
+
+
+        /* =========================================================
+           ACTION TEXT
+        ========================================================= */
+
+        .action-text {
+
+            color: #40564c;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           THREE DOT ACTION
+        ========================================================= */
+
+        .row-action-wrapper {
+
+            position: relative;
+
+            display: inline-flex;
+
+            justify-content: center;
+        }
+
+
+        .row-action-btn {
+
+            width: 31px;
+            height: 31px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: transparent;
+
+            color: #263a32;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        .row-action-btn:hover {
+
+            background: #edf6f1;
+
+            color: #087c3d;
+        }
+
+
+        .row-action-menu {
+
+            position: absolute;
+
+            top: 34px;
+
+            right: 0;
+
+            width: 125px;
+
+            padding: 5px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #e3eae6;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 10px 25px rgba(20,50,35,.13);
+
+            display: none;
+
+            z-index: 100;
+        }
+
+
+        .row-action-menu.show {
+
+            display: block;
+        }
+
+
+        .row-action-menu button {
+
+            width: 100%;
+
+            height: 31px;
+
+            border: none;
+
+            border-radius: 5px;
+
+            background: transparent;
+
+            color: #33463d;
+
+            text-align: left;
+
+            padding: 0 9px;
+
+            font-size: 10px;
+
+            cursor: pointer;
+        }
+
+
+        .row-action-menu button:hover {
+
+            background: #f1f7f3;
+
+            color: #087c3d;
+        }
+
+
+        /* =========================================================
+           TABLE FOOTER
+        ========================================================= */
+
+        .audit-footer {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding:
+                17px 19px;
+        }
+
+
+        .audit-count {
+
+            color: #61736a;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           PAGINATION
+        ========================================================= */
+
+        .pagination {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+        }
+
+
+        .page-btn {
+
+            width: 36px;
+            height: 36px;
+
+            border:
+                1px solid #dfe7e3;
+
+            border-radius: 7px;
+
+            background: #ffffff;
+
+            color: #34483e;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        .page-btn:hover {
+
+            background: #edf7f1;
+
+            border-color: #cce2d5;
+        }
+
+
+        .page-btn.active {
+
+            background: #079447;
+
+            color: #ffffff;
+
+            border-color: #079447;
+
+            font-weight: 700;
+        }
+
+
+        .page-btn:disabled {
+
+            opacity: .45;
+
+            cursor: not-allowed;
+
+            background: #ffffff;
+        }
+
+
+        .page-dots {
+
+            color: #68766f;
+
+            font-size: 13px;
+
+            padding: 0 2px;
+        }
+
+
+        /* =========================================================
+           LOG DETAILS MODAL
+        ========================================================= */
+
+        .modal-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(18, 31, 25, .40);
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 9999;
+        }
+
+
+        .modal-overlay.show {
+
+            display: flex;
+        }
+
+
+        .audit-modal {
+
+            width: 100%;
+
+            max-width: 500px;
+
+            background: #ffffff;
+
+            border-radius: 13px;
+
+            box-shadow:
+                0 20px 60px rgba(0,0,0,.18);
+
+            overflow: hidden;
+        }
+
+
+        .audit-modal-header {
+
+            padding:
+                15px 18px;
+
+            border-bottom:
+                1px solid #edf1ef;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        .audit-modal-header h3 {
+
+            margin: 0;
+
+            color: #1a2922;
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+
+        .modal-close {
+
+            width: 31px;
+            height: 31px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #f3f6f4;
+
+            color: #53625b;
+
+            cursor: pointer;
+
+            font-size: 16px;
+        }
+
+
+        .modal-close:hover {
+
+            background: #eaf1ed;
+        }
+
+
+        .audit-modal-body {
+
+            padding: 18px;
+        }
+
+
+        .detail-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                125px 1fr;
+
+            gap: 11px 15px;
+        }
+
+
+        .detail-label {
+
+            color: #74827b;
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+
+        .detail-value {
+
+            color: #33483e;
+
+            font-size: 11px;
+
+            font-weight: 500;
+        }
+
+
+        .detail-description {
+
+            margin-top: 17px;
+
+            padding: 12px;
+
+            background: #f5faf7;
+
+            border:
+                1px solid #e1eee6;
+
+            border-radius: 8px;
+        }
+
+
+        .detail-description strong {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #33483e;
+
+            font-size: 10px;
+        }
+
+
+        .detail-description span {
+
+            color: #68776f;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+
+        .audit-modal-footer {
+
+            padding:
+                11px 18px;
+
+            border-top:
+                1px solid #edf1ef;
+
+            display: flex;
+
+            justify-content: flex-end;
+        }
+
+
+        .modal-ok-btn {
+
+            height: 34px;
+
+            min-width: 75px;
+
+            padding: 0 15px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #079447;
+
+            color: #ffffff;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty-row {
+
+            text-align: center !important;
+
+            padding: 35px !important;
+
+            color: #87938d !important;
+
+            font-size: 11px !important;
+        }
+
+
+        /* =========================================================
            RESPONSIVE
-        ===================================================== */
+        ========================================================= */
 
-        @media (max-width: 900px) {
+        @media (max-width: 1350px) {
 
-            .page {
-                padding: 20px;
+            .audit-filters {
+
+                grid-template-columns:
+                    1.4fr
+                    1fr
+                    1fr;
+
             }
 
-            .summary-grid {
+            .refresh-btn {
+
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 1000px) {
+
+            .navbar {
+
+                width: 230px;
+            }
+
+            .main {
+
+                margin-left: 230px;
+            }
+
+            .audit-page-title h1 {
+
+                font-size: 32px;
+            }
+
+        }
+
+
+        @media (max-width: 760px) {
+
+            .navbar {
+
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                padding: 20px;
+
+                border-right: none;
+
+                border-bottom:
+                    1px solid var(--border);
+            }
+
+
+            .menu {
+
+                flex-direction: row;
+
+                overflow-x: auto;
+            }
+
+
+            .menu a {
+
+                min-width: max-content;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+
+                padding:
+                    0 15px 25px;
+            }
+
+
+            .audit-filters {
+
                 grid-template-columns: 1fr;
             }
 
-            .audit-card-header {
-                align-items: flex-start;
+
+            .top-header {
+
+                height: 75px;
             }
 
-            .filter-area {
-                align-items: stretch;
-            }
-
-            .search-box {
-                flex-basis: 100%;
-            }
-
-            .filter-select,
-            .date-input,
-            .clear-btn {
-                flex: 1;
-            }
-        }
-
-        @media (max-width: 600px) {
-
-            .page {
-                padding: 15px;
-            }
-
-            .page-header {
-                margin-bottom: 18px;
-            }
-
-            .page-title h1 {
-                font-size: 21px;
-            }
-
-            .filter-select,
-            .date-input,
-            .clear-btn {
-                width: 100%;
-                flex: none;
-            }
 
             .audit-footer {
-                gap: 10px;
-                flex-direction: column;
+
                 align-items: flex-start;
+
+                flex-direction: column;
             }
+
+
+            .pagination {
+
+                width: 100%;
+
+                justify-content: flex-end;
+            }
+
         }
+
+
+        @media (max-width: 500px) {
+
+            .staff-info {
+
+                display: none;
+            }
+
+
+            .audit-page-title h1 {
+
+                font-size: 28px;
+            }
+
+
+            .date-picker {
+
+                width: 290px;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-<div class="page">
 
-    <!-- =====================================================
-         PAGE HEADER
-    ====================================================== -->
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
-    <div class="page-header">
+<div class="navbar">
 
-        <div class="page-title">
-            <h1>Audit Log</h1>
-            <p>Monitor system activities and recorded transactions.</p>
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-text">
+
+            <strong>
+                SMART GYM
+            </strong>
+
+            <span>
+                STRONGER PEOPLE • A HEALTHIER TOMORROW
+            </span>
+
         </div>
 
     </div>
 
 
-    <!-- =====================================================
-         SUMMARY
-    ====================================================== -->
+    <!-- MENU -->
 
-    <div class="summary-grid">
+    <div class="menu">
 
-        <div class="summary-card">
-            <div>
-                <h3>Member</h3>
-                <div class="summary-number" id="memberCount">24</div>
-            </div>
-        </div>
 
-        <div class="summary-card">
-            <div>
-                <h3>Walk-in</h3>
-                <div class="summary-number" id="walkinCount">12</div>
-            </div>
-        </div>
+        <a href="admin.html">
 
-        <div class="summary-card">
-            <div>
-                <h3>Overtime</h3>
-                <div class="summary-number" id="overtimeCount">5</div>
-            </div>
-        </div>
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <a href="user_accounts.html">
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>
+                User Access
+            </span>
+
+        </a>
+
+
+        <a
+            href="audit_logs.html"
+            class="active"
+        >
+
+            <i class="fa-solid fa-clipboard-list"></i>
+
+            <span>
+                Audit Logs
+            </span>
+
+        </a>
+
+
+        <a href="backup_restore.html">
+
+            <i class="fa-solid fa-database"></i>
+
+            <span>
+                Backup & Restore
+            </span>
+
+        </a>
+
+
+        <a href="system_settings.html">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>
+                System Settings
+            </span>
+
+        </a>
+
 
     </div>
 
+</div>
 
-    <!-- =====================================================
-         AUDIT LOG CARD
-    ====================================================== -->
 
-    <div class="audit-card">
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-        <div class="audit-card-header">
+<div class="layout">
 
-            <div class="audit-card-title">
-                <h2>System Activity</h2>
-                <p>Recorded actions performed within the system.</p>
-            </div>
-
-        </div>
+    <div class="main">
 
 
         <!-- =================================================
-             FILTERS
+             TOP HEADER
         ================================================== -->
 
-        <div class="filter-area">
+        <div class="top-header">
 
-            <div class="search-box">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search audit logs..."
+            <div class="top-right">
+
+                <div
+                    class="staff-profile"
+                    onclick="toggleStaffMenu()"
                 >
+
+
+                    <div class="staff-avatar">
+                        A
+                    </div>
+
+
+                    <div class="staff-info">
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            System Administrator
+                        </small>
+
+                    </div>
+
+
+                    <i
+                        class="fa-solid fa-chevron-down staff-profile-chevron"
+                    ></i>
+
+
+                    <div
+                        class="staff-profile-dropdown"
+                        id="staffDropdown"
+                    >
+
+                        <button
+                            class="staff-dropdown-logout"
+                            onclick="logout(); event.stopPropagation();"
+                        >
+
+                            <i
+                                class="fa-solid fa-right-from-bracket"
+                            ></i>
+
+                            Log Out
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
             </div>
-
-            <select
-                class="filter-select"
-                id="typeFilter"
-            >
-                <option value="">All Types</option>
-                <option value="Database">Database</option>
-                <option value="Backend">Backend</option>
-                <option value="Frontend">Frontend</option>
-                <option value="Authentication">Authentication</option>
-                <option value="System">System</option>
-                <option value="API">API</option>
-            </select>
-
-            <select
-                class="filter-select"
-                id="userFilter"
-            >
-                <option value="">All Users</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Staff">Staff</option>
-                <option value="Trainer">Trainer</option>
-            </select>
-
-            <input
-                type="date"
-                class="date-input"
-                id="dateFilter"
-            >
-
-            <button
-                class="clear-btn"
-                onclick="clearFilters()"
-            >
-                Clear
-            </button>
 
         </div>
 
 
         <!-- =================================================
-             TABLE
+             PAGE
         ================================================== -->
 
-        <div class="audit-table-wrapper">
+        <div class="audit-page">
 
-            <table class="audit-table">
 
-                <thead>
+            <!-- PAGE HEADER -->
 
-                    <tr>
-                        <th>Date</th>
-                        <th>User</th>
-                        <th>Type</th>
-                        <th>Action</th>
-                        <th>Target</th>
-                        <th>Status</th>
-                        <th>Details</th>
-                    </tr>
+            <div class="audit-page-header">
 
-                </thead>
+                <div class="audit-page-title">
 
-                <tbody id="auditTableBody">
+                    <h1>
+                        Audit Logs
+                    </h1>
 
-                    <!-- ROW 1 -->
+                    <p>
+                        View and monitor system activities, changes, and records.
+                    </p>
 
-                    <tr
-                        data-type="Database"
-                        data-user="Admin"
-                        data-date="2026-10-08"
-                    >
+                </div>
 
-                        <td>
-                            <div class="date-cell">Oct 08, 2026</div>
-                            <div class="time-cell">09:42 AM</div>
-                        </td>
-
-                        <td>
-                            <div class="user-name">Admin</div>
-                            <div class="user-role">Administrator</div>
-                        </td>
-
-                        <td>
-                            <span class="audit-type">
-                                Database
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="audit-action">
-                                Updated Member
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="target-name">
-                                MEM-00124
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="status">
-                                Success
-                            </span>
-                        </td>
-
-                        <td>
-                            <button
-                                class="details-btn"
-                                onclick="showDetails(
-                                    'Admin',
-                                    'Database',
-                                    'Updated Member',
-                                    'MEM-00124',
-                                    'Success',
-                                    'Member information was updated.'
-                                )"
-                            >
-                                View
-                            </button>
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 2 -->
-
-                    <tr
-                        data-type="Backend"
-                        data-user="Manager"
-                        data-date="2026-10-08"
-                    >
-
-                        <td>
-                            <div class="date-cell">Oct 08, 2026</div>
-                            <div class="time-cell">09:28 AM</div>
-                        </td>
-
-                        <td>
-                            <div class="user-name">Manager</div>
-                            <div class="user-role">Manager</div>
-                        </td>
-
-                        <td>
-                            <span class="audit-type">
-                                Backend
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="audit-action">
-                                Created Staff Account
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="target-name">
-                                ST-00018
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="status">
-                                Success
-                            </span>
-                        </td>
-
-                        <td>
-                            <button
-                                class="details-btn"
-                                onclick="showDetails(
-                                    'Manager',
-                                    'Backend',
-                                    'Created Staff Account',
-                                    'ST-00018',
-                                    'Success',
-                                    'A new staff account was created.'
-                                )"
-                            >
-                                View
-                            </button>
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 3 -->
-
-                    <tr
-                        data-type="Authentication"
-                        data-user="Staff"
-                        data-date="2026-10-08"
-                    >
-
-                        <td>
-                            <div class="date-cell">Oct 08, 2026</div>
-                            <div class="time-cell">09:15 AM</div>
-                        </td>
-
-                        <td>
-                            <div class="user-name">Staff</div>
-                            <div class="user-role">Front Desk</div>
-                        </td>
-
-                        <td>
-                            <span class="audit-type">
-                                Authentication
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="audit-action">
-                                User Login
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="target-name">
-                                Staff Account
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="status">
-                                Success
-                            </span>
-                        </td>
-
-                        <td>
-                            <button
-                                class="details-btn"
-                                onclick="showDetails(
-                                    'Staff',
-                                    'Authentication',
-                                    'User Login',
-                                    'Staff Account',
-                                    'Success',
-                                    'Staff successfully logged into the system.'
-                                )"
-                            >
-                                View
-                            </button>
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 4 -->
-
-                    <tr
-                        data-type="Database"
-                        data-user="Admin"
-                        data-date="2026-10-08"
-                    >
-
-                        <td>
-                            <div class="date-cell">Oct 08, 2026</div>
-                            <div class="time-cell">08:58 AM</div>
-                        </td>
-
-                        <td>
-                            <div class="user-name">Admin</div>
-                            <div class="user-role">Administrator</div>
-                        </td>
-
-                        <td>
-                            <span class="audit-type">
-                                Database
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="audit-action">
-                                Database Backup
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="target-name">
-                                Smart Gym DB
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="status">
-                                Success
-                            </span>
-                        </td>
-
-                        <td>
-                            <button
-                                class="details-btn"
-                                onclick="showDetails(
-                                    'Admin',
-                                    'Database',
-                                    'Database Backup',
-                                    'Smart Gym DB',
-                                    'Success',
-                                    'A database backup was successfully created.'
-                                )"
-                            >
-                                View
-                            </button>
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 5 -->
-
-                    <tr
-                        data-type="System"
-                        data-user="Staff"
-                        data-date="2026-10-07"
-                    >
-
-                        <td>
-                            <div class="date-cell">Oct 07, 2026</div>
-                            <div class="time-cell">06:41 PM</div>
-                        </td>
-
-                        <td>
-                            <div class="user-name">Staff</div>
-                            <div class="user-role">Front Desk</div>
-                        </td>
-
-                        <td>
-                            <span class="audit-type">
-                                System
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="audit-action">
-                                Walk-in Registration
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="target-name">
-                                WI-00291
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="status">
-                                Success
-                            </span>
-                        </td>
-
-                        <td>
-                            <button
-                                class="details-btn"
-                                onclick="showDetails(
-                                    'Staff',
-                                    'System',
-                                    'Walk-in Registration',
-                                    'WI-00291',
-                                    'Success',
-                                    'A walk-in customer was successfully registered.'
-                                )"
-                            >
-                                View
-                            </button>
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 6 -->
-
-                    <tr
-                        data-type="Backend"
-                        data-user="Staff"
-                        data-date="2026-10-07"
-                    >
-
-                        <td>
-                            <div class="date-cell">Oct 07, 2026</div>
-                            <div class="time-cell">05:32 PM</div>
-                        </td>
-
-                        <td>
-                            <div class="user-name">Staff</div>
-                            <div class="user-role">Front Desk</div>
-                        </td>
-
-                        <td>
-                            <span class="audit-type">
-                                Backend
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="audit-action">
-                                Overtime Recorded
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="target-name">
-                                MEM-00089
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="status">
-                                Success
-                            </span>
-                        </td>
-
-                        <td>
-                            <button
-                                class="details-btn"
-                                onclick="showDetails(
-                                    'Staff',
-                                    'Backend',
-                                    'Overtime Recorded',
-                                    'MEM-00089',
-                                    'Success',
-                                    'Member locker usage exceeded the allowed duration.'
-                                )"
-                            >
-                                View
-                            </button>
-                        </td>
-
-                    </tr>
-
-
-                    <!-- EMPTY -->
-
-                    <tr
-                        class="empty-row"
-                        id="emptyRow"
-                    >
-                        <td colspan="7">
-                            No audit logs found.
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-        <!-- =================================================
-             FOOTER
-        ================================================== -->
-
-        <div class="audit-footer">
-
-            <div
-                class="audit-count"
-                id="auditCount"
-            >
-                Showing 6 audit records
             </div>
 
-            <div class="pagination">
 
-                <button
-                    class="active"
-                    type="button"
-                >
-                    1
-                </button>
+            <!-- =================================================
+                 FILTERS
+            ================================================== -->
 
-                <button type="button">
-                    2
-                </button>
+            <div class="audit-filters">
 
-                <button type="button">
-                    3
-                </button>
 
-                <button type="button">
-                    Next
-                </button>
+                <!-- DATE RANGE -->
+
+                <div class="filter-group">
+
+                    <label class="filter-label">
+                        Date Range
+                    </label>
+
+
+                    <div class="date-range-wrapper">
+
+                        <button
+                            type="button"
+                            class="date-range"
+                            id="dateRangeButton"
+                            onclick="toggleDatePicker()"
+                        >
+
+                            <i
+                                class="fa-regular fa-calendar"
+                            ></i>
+
+
+                            <span
+                                class="date-range-text"
+                                id="dateRangeText"
+                            >
+                                10/01/2026 &nbsp;–&nbsp; 10/04/2026
+                            </span>
+
+
+                            <i
+                                class="fa-regular fa-calendar-days date-range-calendar"
+                            ></i>
+
+                        </button>
+
+
+                        <!-- DATE PICKER -->
+
+                        <div
+                            class="date-picker"
+                            id="datePicker"
+                        >
+
+                            <div class="date-picker-header">
+
+                                <strong>
+                                    Select Date Range
+                                </strong>
+
+                                <button
+                                    class="date-picker-close"
+                                    onclick="toggleDatePicker()"
+                                >
+                                    ×
+                                </button>
+
+                            </div>
+
+
+                            <div class="date-input-row">
+
+
+                                <div class="date-input-box">
+
+                                    <span>
+                                        Start Date
+                                    </span>
+
+                                    <input
+                                        type="date"
+                                        id="startDate"
+                                        value="2026-10-01"
+                                    >
+
+                                </div>
+
+
+                                <div class="date-input-box">
+
+                                    <span>
+                                        End Date
+                                    </span>
+
+                                    <input
+                                        type="date"
+                                        id="endDate"
+                                        value="2026-10-04"
+                                    >
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="date-picker-actions">
+
+                                <button
+                                    class="date-clear-btn"
+                                    onclick="clearDateRange()"
+                                >
+                                    Clear
+                                </button>
+
+
+                                <button
+                                    class="date-apply-btn"
+                                    onclick="applyDateRange()"
+                                >
+                                    Apply
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- USER -->
+
+                <div class="filter-group">
+
+                    <label class="filter-label">
+                        User
+                    </label>
+
+
+                    <select
+                        class="filter-select"
+                        id="userFilter"
+                        onchange="applyFilters()"
+                    >
+
+                        <option value="all">
+                            All Users
+                        </option>
+
+                        <option value="Aldrin Dela Cruz">
+                            Aldrin Dela Cruz
+                        </option>
+
+                        <option value="Maria Reyes">
+                            Maria Reyes
+                        </option>
+
+                        <option value="Juan Santos">
+                            Juan Santos
+                        </option>
+
+                        <option value="Carlos Reyes">
+                            Carlos Reyes
+                        </option>
+
+                        <option value="Mark Santos">
+                            Mark Santos
+                        </option>
+
+                        <option value="Ana Lim">
+                            Ana Lim
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ACTION TYPE -->
+
+                <div class="filter-group">
+
+                    <label class="filter-label">
+                        Action Type
+                    </label>
+
+
+                    <select
+                        class="filter-select"
+                        id="actionFilter"
+                        onchange="applyFilters()"
+                    >
+
+                        <option value="all">
+                            All Types
+                        </option>
+
+                        <option value="Created">
+                            Created
+                        </option>
+
+                        <option value="Updated">
+                            Updated
+                        </option>
+
+                        <option value="Added">
+                            Added
+                        </option>
+
+                        <option value="Deleted">
+                            Deleted
+                        </option>
+
+                        <option value="Archived">
+                            Archived
+                        </option>
+
+                        <option value="Restored">
+                            Restored
+                        </option>
+
+                        <option value="Login">
+                            Login
+                        </option>
+
+                        <option value="Backup">
+                            Backup
+                        </option>
+
+                        <option value="Settings">
+                            Settings
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- MODULE -->
+
+                <div class="filter-group">
+
+                    <label class="filter-label">
+                        Module
+                    </label>
+
+
+                    <select
+                        class="filter-select"
+                        id="moduleFilter"
+                        onchange="applyFilters()"
+                    >
+
+                        <option value="all">
+                            All Modules
+                        </option>
+
+                        <option value="User Access">
+                            User Access
+                        </option>
+
+                        <option value="Members">
+                            Members
+                        </option>
+
+                        <option value="Walk-ins">
+                            Walk-ins
+                        </option>
+
+                        <option value="Locker">
+                            Locker
+                        </option>
+
+                        <option value="Staff">
+                            Staff
+                        </option>
+
+                        <option value="System">
+                            System
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="filter-group">
+
+                    <label class="filter-label">
+                        &nbsp;
+                    </label>
+
+
+                    <div class="audit-search">
+
+                        <i
+                            class="fa-solid fa-magnifying-glass"
+                        ></i>
+
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search logs..."
+                            oninput="applyFilters()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- REFRESH -->
+
+                <div class="filter-group">
+
+                    <label class="filter-label">
+                        &nbsp;
+                    </label>
+
+
+                    <button
+                        class="refresh-btn"
+                        id="refreshButton"
+                        onclick="refreshLogs()"
+                    >
+
+                        <i
+                            class="fa-solid fa-rotate-right"
+                        ></i>
+
+                        Refresh
+
+                    </button>
+
+                </div>
+
 
             </div>
+
+
+            <!-- =================================================
+                 AUDIT LOG CARD
+            ================================================== -->
+
+            <div class="audit-card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="audit-card-header">
+
+                    <div class="audit-card-icon">
+
+                        <i
+                            class="fa-solid fa-clipboard-list"
+                        ></i>
+
+                    </div>
+
+
+                    <div class="audit-card-title">
+
+                        <h2>
+                            Audit Log Records
+                        </h2>
+
+                        <p>
+                            List of all system activities, changes, and records.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE -->
+
+                <div class="audit-table-wrapper">
+
+                    <table class="audit-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="col-number">
+                                    #
+                                </th>
+
+                                <th class="col-date">
+                                    Date &amp; Time
+                                </th>
+
+                                <th class="col-user">
+                                    User
+                                </th>
+
+                                <th class="col-role">
+                                    Role
+                                </th>
+
+                                <th class="col-action">
+                                    Action
+                                </th>
+
+                                <th class="col-module">
+                                    Module
+                                </th>
+
+                                <th class="col-details">
+                                    Details
+                                </th>
+
+                                <th class="col-ip">
+                                    IP Address
+                                </th>
+
+                                <th class="col-actions">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="auditTableBody">
+
+                        </tbody>
+
+
+                    </table>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="audit-footer">
+
+
+                    <div
+                        class="audit-count"
+                        id="auditCount"
+                    >
+                        Showing 1 to 10 of 256 logs
+                    </div>
+
+
+                    <div
+                        class="pagination"
+                        id="pagination"
+                    >
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
 
         </div>
 
@@ -1158,120 +2533,142 @@
 
 <!-- =========================================================
      DETAILS MODAL
-========================================================== -->
+========================================================= -->
 
 <div
     class="modal-overlay"
     id="detailsModal"
 >
 
+
     <div class="audit-modal">
 
-        <div class="modal-header">
 
-            <h3>Audit Details</h3>
+        <div class="audit-modal-header">
+
+            <h3>
+                Audit Log Details
+            </h3>
+
 
             <button
-                class="close-modal"
-                onclick="closeDetails()"
+                class="modal-close"
+                onclick="closeDetailsModal()"
             >
                 ×
             </button>
 
         </div>
 
-        <div class="modal-body">
 
-            <div class="detail-row">
+        <div class="audit-modal-body">
 
-                <div class="detail-label">
+
+            <div class="detail-grid">
+
+
+                <span class="detail-label">
+                    Date & Time
+                </span>
+
+                <span
+                    class="detail-value"
+                    id="modalDate"
+                >
+                    —
+                </span>
+
+
+                <span class="detail-label">
                     User
-                </div>
+                </span>
 
-                <div
+                <span
                     class="detail-value"
-                    id="detailUser"
+                    id="modalUser"
                 >
-                </div>
+                    —
+                </span>
 
-            </div>
 
+                <span class="detail-label">
+                    Role
+                </span>
 
-            <div class="detail-row">
-
-                <div class="detail-label">
-                    Type
-                </div>
-
-                <div
+                <span
                     class="detail-value"
-                    id="detailType"
+                    id="modalRole"
                 >
-                </div>
+                    —
+                </span>
 
-            </div>
 
-
-            <div class="detail-row">
-
-                <div class="detail-label">
+                <span class="detail-label">
                     Action
-                </div>
+                </span>
 
-                <div
+                <span
                     class="detail-value"
-                    id="detailAction"
+                    id="modalAction"
                 >
-                </div>
+                    —
+                </span>
+
+
+                <span class="detail-label">
+                    Module
+                </span>
+
+                <span
+                    class="detail-value"
+                    id="modalModule"
+                >
+                    —
+                </span>
+
+
+                <span class="detail-label">
+                    IP Address
+                </span>
+
+                <span
+                    class="detail-value"
+                    id="modalIp"
+                >
+                    —
+                </span>
+
 
             </div>
 
 
-            <div class="detail-row">
+            <div class="detail-description">
 
-                <div class="detail-label">
-                    Target
-                </div>
-
-                <div
-                    class="detail-value"
-                    id="detailTarget"
-                >
-                </div>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <div class="detail-label">
-                    Status
-                </div>
-
-                <div
-                    class="detail-value"
-                    id="detailStatus"
-                >
-                </div>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <div class="detail-label">
+                <strong>
                     Details
-                </div>
+                </strong>
 
-                <div
-                    class="detail-value"
-                    id="detailDescription"
-                >
-                </div>
+                <span id="modalDetails">
+                    —
+                </span>
 
             </div>
+
 
         </div>
+
+
+        <div class="audit-modal-footer">
+
+            <button
+                class="modal-ok-btn"
+                onclick="closeDetailsModal()"
+            >
+                Close
+            </button>
+
+        </div>
+
 
     </div>
 
@@ -1280,211 +2677,1206 @@
 
 <script>
 
-    /* =====================================================
-       FILTER
-    ===================================================== */
+    /* =========================================================
+       SAMPLE AUDIT LOG DATA
+    ========================================================= */
 
-    const searchInput = document.getElementById("searchInput");
-    const typeFilter = document.getElementById("typeFilter");
-    const userFilter = document.getElementById("userFilter");
-    const dateFilter = document.getElementById("dateFilter");
+    const auditLogs = [
 
-    const tableBody = document.getElementById("auditTableBody");
-    const emptyRow = document.getElementById("emptyRow");
-    const auditCount = document.getElementById("auditCount");
+        {
+            id: 1,
+            date: "Oct 04, 2026 10:42 AM",
+            dateValue: "2026-10-04",
+            user: "Aldrin Dela Cruz",
+            role: "Admin",
+            action: "Created",
+            module: "User Access",
+            details: "Created staff account for Juan Santos (S0005)",
+            ip: "192.168.1.10"
+        },
+
+        {
+            id: 2,
+            date: "Oct 04, 2026 10:30 AM",
+            dateValue: "2026-10-04",
+            user: "Maria Reyes",
+            role: "Manager",
+            action: "Updated",
+            module: "Members",
+            details: "Updated member information (M0015)",
+            ip: "192.168.1.15"
+        },
+
+        {
+            id: 3,
+            date: "Oct 04, 2026 09:45 AM",
+            dateValue: "2026-10-04",
+            user: "Juan Santos",
+            role: "Staff",
+            action: "Added",
+            module: "Walk-ins",
+            details: "Added new walk-in record (W0021)",
+            ip: "192.168.1.22"
+        },
+
+        {
+            id: 4,
+            date: "Oct 04, 2026 09:30 AM",
+            dateValue: "2026-10-04",
+            user: "Aldrin Dela Cruz",
+            role: "Admin",
+            action: "Backup",
+            module: "System",
+            details: "Created database backup",
+            ip: "192.168.1.10"
+        },
+
+        {
+            id: 5,
+            date: "Oct 03, 2026 04:18 PM",
+            dateValue: "2026-10-03",
+            user: "Carlos Reyes",
+            role: "Manager",
+            action: "Archived",
+            module: "Members",
+            details: "Archived member (M0012)",
+            ip: "192.168.1.18"
+        },
+
+        {
+            id: 6,
+            date: "Oct 03, 2026 03:55 PM",
+            dateValue: "2026-10-03",
+            user: "Mark Santos",
+            role: "Staff",
+            action: "Deleted",
+            module: "Locker",
+            details: "Deleted locker booking (LKB0015)",
+            ip: "192.168.1.25"
+        },
+
+        {
+            id: 7,
+            date: "Oct 03, 2026 02:20 PM",
+            dateValue: "2026-10-03",
+            user: "Ana Lim",
+            role: "Manager",
+            action: "Updated",
+            module: "Staff",
+            details: "Updated staff information (S0003)",
+            ip: "192.168.1.18"
+        },
+
+        {
+            id: 8,
+            date: "Oct 03, 2026 11:12 AM",
+            dateValue: "2026-10-03",
+            user: "Mark Santos",
+            role: "Staff",
+            action: "Login",
+            module: "System",
+            details: "User logged in",
+            ip: "192.168.1.25"
+        },
+
+        {
+            id: 9,
+            date: "Oct 03, 2026 10:05 AM",
+            dateValue: "2026-10-03",
+            user: "Aldrin Dela Cruz",
+            role: "Admin",
+            action: "Settings",
+            module: "System",
+            details: "Updated system settings (attendance)",
+            ip: "192.168.1.10"
+        },
+
+        {
+            id: 10,
+            date: "Oct 03, 2026 09:40 AM",
+            dateValue: "2026-10-03",
+            user: "Maria Reyes",
+            role: "Manager",
+            action: "Restored",
+            module: "Members",
+            details: "Restored archived member (M0008)",
+            ip: "192.168.1.15"
+        },
 
 
-    function filterAuditLogs() {
+        /* Additional records for pagination */
 
-        const search =
-            searchInput.value
-                .toLowerCase()
-                .trim();
+        {
+            id: 11,
+            date: "Oct 02, 2026 04:10 PM",
+            dateValue: "2026-10-02",
+            user: "Juan Santos",
+            role: "Staff",
+            action: "Added",
+            module: "Walk-ins",
+            details: "Added new walk-in record (W0020)",
+            ip: "192.168.1.22"
+        },
 
-        const selectedType =
-            typeFilter.value;
+        {
+            id: 12,
+            date: "Oct 02, 2026 03:44 PM",
+            dateValue: "2026-10-02",
+            user: "Ana Lim",
+            role: "Manager",
+            action: "Updated",
+            module: "Staff",
+            details: "Updated trainer information (S0007)",
+            ip: "192.168.1.18"
+        },
 
-        const selectedUser =
-            userFilter.value;
+        {
+            id: 13,
+            date: "Oct 02, 2026 02:31 PM",
+            dateValue: "2026-10-02",
+            user: "Mark Santos",
+            role: "Staff",
+            action: "Deleted",
+            module: "Locker",
+            details: "Removed locker booking (LKB0014)",
+            ip: "192.168.1.25"
+        },
 
-        const selectedDate =
-            dateFilter.value;
+        {
+            id: 14,
+            date: "Oct 02, 2026 01:15 PM",
+            dateValue: "2026-10-02",
+            user: "Maria Reyes",
+            role: "Manager",
+            action: "Archived",
+            module: "Members",
+            details: "Archived member (M0011)",
+            ip: "192.168.1.15"
+        },
+
+        {
+            id: 15,
+            date: "Oct 02, 2026 11:22 AM",
+            dateValue: "2026-10-02",
+            user: "Aldrin Dela Cruz",
+            role: "Admin",
+            action: "Settings",
+            module: "System",
+            details: "Updated system configuration",
+            ip: "192.168.1.10"
+        },
+
+        {
+            id: 16,
+            date: "Oct 02, 2026 10:40 AM",
+            dateValue: "2026-10-02",
+            user: "Carlos Reyes",
+            role: "Manager",
+            action: "Created",
+            module: "User Access",
+            details: "Created staff account (S0008)",
+            ip: "192.168.1.18"
+        },
+
+        {
+            id: 17,
+            date: "Oct 01, 2026 04:45 PM",
+            dateValue: "2026-10-01",
+            user: "Juan Santos",
+            role: "Staff",
+            action: "Login",
+            module: "System",
+            details: "User logged in",
+            ip: "192.168.1.22"
+        },
+
+        {
+            id: 18,
+            date: "Oct 01, 2026 03:28 PM",
+            dateValue: "2026-10-01",
+            user: "Mark Santos",
+            role: "Staff",
+            action: "Added",
+            module: "Walk-ins",
+            details: "Added walk-in payment record (W0019)",
+            ip: "192.168.1.25"
+        },
+
+        {
+            id: 19,
+            date: "Oct 01, 2026 01:50 PM",
+            dateValue: "2026-10-01",
+            user: "Maria Reyes",
+            role: "Manager",
+            action: "Updated",
+            module: "Members",
+            details: "Updated membership information (M0010)",
+            ip: "192.168.1.15"
+        },
+
+        {
+            id: 20,
+            date: "Oct 01, 2026 10:20 AM",
+            dateValue: "2026-10-01",
+            user: "Aldrin Dela Cruz",
+            role: "Admin",
+            action: "Backup",
+            module: "System",
+            details: "Created database backup",
+            ip: "192.168.1.10"
+        }
+
+    ];
 
 
-        const rows =
-            tableBody.querySelectorAll(
-                "tr:not(.empty-row)"
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    const LOGS_PER_PAGE = 10;
+
+    let filteredLogs = [...auditLogs];
+
+    let currentPage = 1;
+
+
+    /* =========================================================
+       PROFILE
+    ========================================================= */
+
+    function toggleStaffMenu() {
+
+        const profile =
+            document.querySelector(
+                ".staff-profile"
+            );
+
+        const dropdown =
+            document.getElementById(
+                "staffDropdown"
+            );
+
+        if (!profile || !dropdown) {
+            return;
+        }
+
+        profile.classList.toggle("active");
+
+        dropdown.classList.toggle("show");
+    }
+
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const profile =
+                document.querySelector(
+                    ".staff-profile"
+                );
+
+            const dropdown =
+                document.getElementById(
+                    "staffDropdown"
+                );
+
+            if (
+                profile &&
+                !profile.contains(
+                    event.target
+                )
+            ) {
+
+                profile.classList.remove(
+                    "active"
+                );
+
+                if (dropdown) {
+
+                    dropdown.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       DATE PICKER
+    ========================================================= */
+
+    function toggleDatePicker() {
+
+        const picker =
+            document.getElementById(
+                "datePicker"
+            );
+
+        picker.classList.toggle(
+            "show"
+        );
+    }
+
+
+    function applyDateRange() {
+
+        const start =
+            document.getElementById(
+                "startDate"
+            ).value;
+
+        const end =
+            document.getElementById(
+                "endDate"
+            ).value;
+
+
+        if (!start || !end) {
+
+            return;
+        }
+
+
+        if (start > end) {
+
+            alert(
+                "Start date cannot be later than end date."
+            );
+
+            return;
+        }
+
+
+        const startDate =
+            formatDisplayDate(
+                start
+            );
+
+        const endDate =
+            formatDisplayDate(
+                end
             );
 
 
-        let visibleCount = 0;
+        document.getElementById(
+            "dateRangeText"
+        ).innerHTML =
+            `${startDate} &nbsp;–&nbsp; ${endDate}`;
 
 
-        rows.forEach(row => {
-
-            const rowText =
-                row.innerText.toLowerCase();
-
-            const rowType =
-                row.dataset.type || "";
-
-            const rowUser =
-                row.dataset.user || "";
-
-            const rowDate =
-                row.dataset.date || "";
+        document.getElementById(
+            "datePicker"
+        ).classList.remove(
+            "show"
+        );
 
 
-            const matchesSearch =
-                !search ||
-                rowText.includes(search);
-
-
-            const matchesType =
-                !selectedType ||
-                rowType === selectedType;
-
-
-            const matchesUser =
-                !selectedUser ||
-                rowUser === selectedUser;
-
-
-            const matchesDate =
-                !selectedDate ||
-                rowDate === selectedDate;
-
-
-            const visible =
-                matchesSearch &&
-                matchesType &&
-                matchesUser &&
-                matchesDate;
-
-
-            row.style.display =
-                visible ? "" : "none";
-
-
-            if (visible) {
-                visibleCount++;
-            }
-
-        });
-
-
-        emptyRow.style.display =
-            visibleCount === 0
-                ? "table-row"
-                : "none";
-
-
-        auditCount.textContent =
-            "Showing " +
-            visibleCount +
-            " audit record" +
-            (visibleCount !== 1 ? "s" : "");
-
+        applyFilters();
     }
 
 
-    searchInput.addEventListener(
-        "input",
-        filterAuditLogs
-    );
+    function clearDateRange() {
 
-    typeFilter.addEventListener(
-        "change",
-        filterAuditLogs
-    );
-
-    userFilter.addEventListener(
-        "change",
-        filterAuditLogs
-    );
-
-    dateFilter.addEventListener(
-        "change",
-        filterAuditLogs
-    );
+        document.getElementById(
+            "startDate"
+        ).value = "";
 
 
-    /* =====================================================
-       CLEAR FILTERS
-    ===================================================== */
+        document.getElementById(
+            "endDate"
+        ).value = "";
 
-    function clearFilters() {
 
-        searchInput.value = "";
-        typeFilter.value = "";
-        userFilter.value = "";
-        dateFilter.value = "";
+        document.getElementById(
+            "dateRangeText"
+        ).textContent =
+            "All Dates";
 
-        filterAuditLogs();
 
+        document.getElementById(
+            "datePicker"
+        ).classList.remove(
+            "show"
+        );
+
+
+        applyFilters();
     }
 
 
-    /* =====================================================
-       DETAILS MODAL
-    ===================================================== */
-
-    function showDetails(
-        user,
-        type,
-        action,
-        target,
-        status,
-        description
+    function formatDisplayDate(
+        value
     ) {
 
-        document.getElementById(
-            "detailUser"
-        ).textContent = user;
-
-        document.getElementById(
-            "detailType"
-        ).textContent = type;
-
-        document.getElementById(
-            "detailAction"
-        ).textContent = action;
-
-        document.getElementById(
-            "detailTarget"
-        ).textContent = target;
-
-        document.getElementById(
-            "detailStatus"
-        ).textContent = status;
-
-        document.getElementById(
-            "detailDescription"
-        ).textContent = description;
+        if (!value) {
+            return "";
+        }
 
 
-        document.getElementById(
-            "detailsModal"
-        ).classList.add("show");
+        const parts =
+            value.split("-");
+
+
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;
+    }
+
+
+    /* =========================================================
+       FILTERS
+    ========================================================= */
+
+    function applyFilters() {
+
+        const user =
+            document.getElementById(
+                "userFilter"
+            ).value;
+
+
+        const action =
+            document.getElementById(
+                "actionFilter"
+            ).value;
+
+
+        const module =
+            document.getElementById(
+                "moduleFilter"
+            ).value;
+
+
+        const search =
+            document.getElementById(
+                "searchInput"
+            ).value
+            .trim()
+            .toLowerCase();
+
+
+        const startDate =
+            document.getElementById(
+                "startDate"
+            ).value;
+
+
+        const endDate =
+            document.getElementById(
+                "endDate"
+            ).value;
+
+
+        filteredLogs =
+            auditLogs.filter(
+                function(log) {
+
+
+                    /* USER */
+
+                    if (
+                        user !== "all" &&
+                        log.user !== user
+                    ) {
+
+                        return false;
+                    }
+
+
+                    /* ACTION */
+
+                    if (
+                        action !== "all" &&
+                        log.action !== action
+                    ) {
+
+                        return false;
+                    }
+
+
+                    /* MODULE */
+
+                    if (
+                        module !== "all" &&
+                        log.module !== module
+                    ) {
+
+                        return false;
+                    }
+
+
+                    /* DATE */
+
+                    if (
+                        startDate &&
+                        log.dateValue < startDate
+                    ) {
+
+                        return false;
+                    }
+
+
+                    if (
+                        endDate &&
+                        log.dateValue > endDate
+                    ) {
+
+                        return false;
+                    }
+
+
+                    /* SEARCH */
+
+                    if (search) {
+
+                        const searchable =
+                            [
+                                log.user,
+                                log.role,
+                                log.action,
+                                log.module,
+                                log.details,
+                                log.ip,
+                                log.date
+                            ]
+                            .join(" ")
+                            .toLowerCase();
+
+
+                        if (
+                            !searchable.includes(
+                                search
+                            )
+                        ) {
+
+                            return false;
+                        }
+
+                    }
+
+
+                    return true;
+
+                }
+            );
+
+
+        currentPage = 1;
+
+        renderTable();
+
+        renderPagination();
+    }
+
+
+    /* =========================================================
+       RENDER TABLE
+    ========================================================= */
+
+    function renderTable() {
+
+        const tbody =
+            document.getElementById(
+                "auditTableBody"
+            );
+
+
+        if (!filteredLogs.length) {
+
+            tbody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        class="empty-row"
+                    >
+
+                        No audit log records found.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            updateCount();
+
+            return;
+        }
+
+
+        const start =
+            (currentPage - 1) *
+            LOGS_PER_PAGE;
+
+
+        const end =
+            start +
+            LOGS_PER_PAGE;
+
+
+        const pageLogs =
+            filteredLogs.slice(
+                start,
+                end
+            );
+
+
+        tbody.innerHTML =
+            pageLogs
+                .map(
+                    function(log, index) {
+
+                        return `
+
+                            <tr>
+
+                                <td class="col-number">
+
+                                    ${
+                                        start +
+                                        index +
+                                        1
+                                    }
+
+                                </td>
+
+
+                                <td class="col-date">
+
+                                    ${escapeHtml(
+                                        log.date
+                                    )}
+
+                                </td>
+
+
+                                <td class="col-user">
+
+                                    ${escapeHtml(
+                                        log.user
+                                    )}
+
+                                </td>
+
+
+                                <td class="col-role">
+
+                                    ${escapeHtml(
+                                        log.role
+                                    )}
+
+                                </td>
+
+
+                                <td class="col-action">
+
+                                    <span class="action-text">
+
+                                        ${escapeHtml(
+                                            log.action
+                                        )}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td class="col-module">
+
+                                    ${escapeHtml(
+                                        log.module
+                                    )}
+
+                                </td>
+
+
+                                <td class="col-details">
+
+                                    ${escapeHtml(
+                                        log.details
+                                    )}
+
+                                </td>
+
+
+                                <td class="col-ip">
+
+                                    ${escapeHtml(
+                                        log.ip
+                                    )}
+
+                                </td>
+
+
+                                <td class="col-actions">
+
+                                    <div class="row-action-wrapper">
+
+
+                                        <button
+                                            class="row-action-btn"
+                                            onclick="toggleRowMenu(event, ${log.id})"
+                                        >
+
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+
+                                        </button>
+
+
+                                        <div
+                                            class="row-action-menu"
+                                            id="rowMenu-${log.id}"
+                                        >
+
+                                            <button
+                                                onclick="viewLog(${log.id})"
+                                            >
+
+                                                View Details
+
+                                            </button>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+        updateCount();
+    }
+
+
+    /* =========================================================
+       COUNT
+    ========================================================= */
+
+    function updateCount() {
+
+        const count =
+            document.getElementById(
+                "auditCount"
+            );
+
+
+        if (!filteredLogs.length) {
+
+            count.textContent =
+                "Showing 0 of 0 logs";
+
+            return;
+        }
+
+
+        const start =
+            (currentPage - 1) *
+            LOGS_PER_PAGE +
+            1;
+
+
+        const end =
+            Math.min(
+                currentPage *
+                LOGS_PER_PAGE,
+                filteredLogs.length
+            );
+
+
+        count.textContent =
+            `Showing ${start} to ${end} of ${filteredLogs.length} logs`;
+    }
+
+
+    /* =========================================================
+       PAGINATION
+    ========================================================= */
+
+    function renderPagination() {
+
+        const pagination =
+            document.getElementById(
+                "pagination"
+            );
+
+
+        const totalPages =
+            Math.ceil(
+                filteredLogs.length /
+                LOGS_PER_PAGE
+            );
+
+
+        if (totalPages <= 1) {
+
+            pagination.innerHTML = "";
+
+            return;
+        }
+
+
+        let html = "";
+
+
+        /* PREVIOUS */
+
+        html += `
+
+            <button
+                class="page-btn"
+                onclick="changePage(${currentPage - 1})"
+                ${currentPage === 1 ? "disabled" : ""}
+            >
+
+                <i
+                    class="fa-solid fa-chevron-left"
+                ></i>
+
+            </button>
+
+        `;
+
+
+        /* PAGE RANGE */
+
+        let pages = [];
+
+
+        if (totalPages <= 6) {
+
+            for (
+                let i = 1;
+                i <= totalPages;
+                i++
+            ) {
+
+                pages.push(i);
+
+            }
+
+        }
+
+        else {
+
+            pages.push(1);
+
+
+            if (currentPage > 3) {
+
+                pages.push("dots");
+
+            }
+
+
+            let start =
+                Math.max(
+                    2,
+                    currentPage - 1
+                );
+
+
+            let end =
+                Math.min(
+                    totalPages - 1,
+                    currentPage + 1
+                );
+
+
+            for (
+                let i = start;
+                i <= end;
+                i++
+            ) {
+
+                pages.push(i);
+
+            }
+
+
+            if (
+                currentPage <
+                totalPages - 2
+            ) {
+
+                pages.push("dots");
+
+            }
+
+
+            pages.push(
+                totalPages
+            );
+
+        }
+
+
+        pages.forEach(
+            function(page) {
+
+                if (page === "dots") {
+
+                    html += `
+
+                        <span class="page-dots">
+                            ...
+                        </span>
+
+                    `;
+
+                    return;
+                }
+
+
+                html += `
+
+                    <button
+                        class="page-btn ${
+                            page === currentPage
+                                ? "active"
+                                : ""
+                        }"
+                        onclick="changePage(${page})"
+                    >
+
+                        ${page}
+
+                    </button>
+
+                `;
+
+            }
+        );
+
+
+        /* NEXT */
+
+        html += `
+
+            <button
+                class="page-btn"
+                onclick="changePage(${currentPage + 1})"
+                ${
+                    currentPage === totalPages
+                        ? "disabled"
+                        : ""
+                }
+            >
+
+                <i
+                    class="fa-solid fa-chevron-right"
+                ></i>
+
+            </button>
+
+        `;
+
+
+        pagination.innerHTML =
+            html;
+    }
+
+
+    function changePage(page) {
+
+        const totalPages =
+            Math.ceil(
+                filteredLogs.length /
+                LOGS_PER_PAGE
+            );
+
+
+        if (
+            page < 1 ||
+            page > totalPages
+        ) {
+
+            return;
+        }
+
+
+        currentPage = page;
+
+        renderTable();
+
+        renderPagination();
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    /* =========================================================
+       ROW ACTION MENU
+    ========================================================= */
+
+    function toggleRowMenu(
+        event,
+        id
+    ) {
+
+        event.stopPropagation();
+
+
+        document
+            .querySelectorAll(
+                ".row-action-menu"
+            )
+            .forEach(
+                function(menu) {
+
+                    menu.classList.remove(
+                        "show"
+                    );
+
+                }
+            );
+
+
+        const menu =
+            document.getElementById(
+                `rowMenu-${id}`
+            );
+
+
+        if (menu) {
+
+            menu.classList.toggle(
+                "show"
+            );
+
+        }
 
     }
 
 
-    function closeDetails() {
+    document.addEventListener(
+        "click",
+        function() {
+
+            document
+                .querySelectorAll(
+                    ".row-action-menu"
+                )
+                .forEach(
+                    function(menu) {
+
+                        menu.classList.remove(
+                            "show"
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+
+    /* =========================================================
+       VIEW LOG
+    ========================================================= */
+
+    function viewLog(id) {
+
+        const log =
+            auditLogs.find(
+                function(item) {
+
+                    return item.id === id;
+
+                }
+            );
+
+
+        if (!log) {
+            return;
+        }
+
+
+        document.getElementById(
+            "modalDate"
+        ).textContent =
+            log.date;
+
+
+        document.getElementById(
+            "modalUser"
+        ).textContent =
+            log.user;
+
+
+        document.getElementById(
+            "modalRole"
+        ).textContent =
+            log.role;
+
+
+        document.getElementById(
+            "modalAction"
+        ).textContent =
+            log.action;
+
+
+        document.getElementById(
+            "modalModule"
+        ).textContent =
+            log.module;
+
+
+        document.getElementById(
+            "modalIp"
+        ).textContent =
+            log.ip;
+
+
+        document.getElementById(
+            "modalDetails"
+        ).textContent =
+            log.details;
+
 
         document.getElementById(
             "detailsModal"
-        ).classList.remove("show");
+        ).classList.add(
+            "show"
+        );
 
     }
 
 
-    /* =====================================================
-       CLOSE MODAL OUTSIDE
-    ===================================================== */
+    /* =========================================================
+       CLOSE MODAL
+    ========================================================= */
+
+    function closeDetailsModal() {
+
+        document.getElementById(
+            "detailsModal"
+        ).classList.remove(
+            "show"
+        );
+    }
+
 
     document
-        .getElementById("detailsModal")
+        .getElementById(
+            "detailsModal"
+        )
         .addEventListener(
             "click",
             function(event) {
@@ -1492,29 +3884,152 @@
                 if (
                     event.target === this
                 ) {
-                    closeDetails();
+
+                    closeDetailsModal();
+
                 }
 
             }
         );
 
 
-    /* =====================================================
+    /* =========================================================
+       REFRESH
+    ========================================================= */
+
+    function refreshLogs() {
+
+        const button =
+            document.getElementById(
+                "refreshButton"
+            );
+
+
+        button.classList.add(
+            "loading"
+        );
+
+
+        button.disabled = true;
+
+
+        setTimeout(
+            function() {
+
+                applyFilters();
+
+
+                button.classList.remove(
+                    "loading"
+                );
+
+
+                button.disabled = false;
+
+            },
+            500
+        );
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    function logout() {
+
+        localStorage.clear();
+
+        window.location.href =
+            "index.html";
+    }
+
+
+    /* =========================================================
+       ESCAPE HTML
+    ========================================================= */
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+    }
+
+
+    /* =========================================================
        ESC KEY
-    ===================================================== */
+    ========================================================= */
 
     document.addEventListener(
         "keydown",
         function(event) {
 
-            if (event.key === "Escape") {
-                closeDetails();
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeDetailsModal();
+
+
+                const picker =
+                    document.getElementById(
+                        "datePicker"
+                    );
+
+
+                if (picker) {
+
+                    picker.classList.remove(
+                        "show"
+                    );
+
+                }
+
             }
+
+        }
+    );
+
+
+    /* =========================================================
+       INITIAL LOAD
+    ========================================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            renderTable();
+
+            renderPagination();
 
         }
     );
 
 </script>
 
+
 </body>
+
 </html>

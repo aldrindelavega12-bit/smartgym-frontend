@@ -7307,3 +7307,210 @@ a[href="#incomeReport"]::before {
     }
 
 }
+
+
+/* =====================================================
+   LOCKER REPORT — MATCH ATTENDANCE REPORT FILTER
+===================================================== */
+
+#lockerReport {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header */
+#lockerReport .locker-report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 18px;
+    margin: 0 0 22px;
+    border-bottom: 1px solid #e5ebe8;
+}
+
+#lockerReport .locker-report-header h2 {
+    margin: 0;
+    color: #102c4d;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+#lockerReport .locker-report-header p {
+    margin: 6px 0 0;
+    color: #71809a;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Period and date in one row */
+#lockerReport .locker-filter-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    margin: 0 0 28px;
+}
+
+#lockerReport .locker-period {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+#lockerReport .locker-period > label {
+    display: block;
+    margin: 0 0 10px;
+    color: #17304e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Period buttons */
+#lockerReport .locker-period-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 505px;
+}
+
+#lockerReport .locker-period-btn {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d7e1e7;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #203957;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .18s ease,
+                border-color .18s ease,
+                color .18s ease;
+}
+
+#lockerReport .locker-period-btn:hover {
+    border-color: #08b86a;
+}
+
+#lockerReport .locker-period-btn.active {
+    background: #08b86a;
+    border-color: #08b86a;
+    color: #ffffff;
+}
+
+/* Date field aligned to the right */
+#lockerReport .locker-date-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+#lockerReport .locker-date-area > label {
+    color: #17304e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#lockerReport .locker-date-box {
+    position: relative;
+    width: 225px;
+}
+
+#lockerReport .locker-date-box input {
+    display: block;
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 12px;
+    border: 1px solid #d7e1e7;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #203957;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+#lockerReport .locker-date-box input:focus {
+    border-color: #08b86a;
+    box-shadow: 0 0 0 3px rgba(8, 184, 106, .08);
+}
+
+#lockerReport .locker-date-box i {
+    display: none;
+}
+
+/* Custom end date */
+#lockerReport .locker-custom-date-area {
+    display: none;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: -12px 0 24px;
+}
+
+#lockerReport .locker-custom-date-area label {
+    color: #17304e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#lockerReport .locker-custom-date-area input {
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 12px;
+    border: 1px solid #d7e1e7;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #203957;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+#lockerReport .locker-custom-date-area input:focus {
+    border-color: #08b86a;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    #lockerReport .locker-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+
+    #lockerReport .locker-period-buttons {
+        max-width: none;
+    }
+
+    #lockerReport .locker-date-area {
+        width: 100%;
+    }
+
+    #lockerReport .locker-date-box {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    #lockerReport .locker-period-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    #lockerReport .locker-period-btn {
+        width: 100%;
+    }
+}
