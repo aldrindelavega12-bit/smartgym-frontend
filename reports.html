@@ -6376,6 +6376,34 @@ function renderTrainerTrainees(trainees){
    CLOSE TRAINER DETAILS
 ===================================================== */
 
+function updateLockerDateDisplay() {
+    const startPicker = document.getElementById("lockerStartDate");
+    const endPicker = document.getElementById("lockerEndDate");
+
+    const startDisplay = document.getElementById("lockerStartDateDisplay");
+    const endDisplay = document.getElementById("lockerEndDateDisplay");
+
+    if (startPicker?.value && startDisplay) {
+        const [year, month, day] = startPicker.value.split("-").map(Number);
+        startDisplay.textContent = new Date(year, month - 1, day)
+            .toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+    }
+
+    if (endPicker?.value && endDisplay) {
+        const [year, month, day] = endPicker.value.split("-").map(Number);
+        endDisplay.textContent = new Date(year, month - 1, day)
+            .toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+    }
+}
+
 function closeTrainerDetails(){
 
     const trainerDetails =
