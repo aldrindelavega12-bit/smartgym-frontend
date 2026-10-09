@@ -910,7 +910,33 @@ function renderMembers(){
     renderPagination();
 
 }
+function toggleMemberActions(button) {
+    const currentMenu = button.closest(".member-action-menu");
+    const wasOpen = currentMenu.classList.contains("open");
 
+    document.querySelectorAll(".member-action-menu.open").forEach(menu => {
+        menu.classList.remove("open");
+
+        const toggle = menu.querySelector(".member-menu-toggle");
+        if (toggle) toggle.setAttribute("aria-expanded", "false");
+    });
+
+    if (!wasOpen) {
+        currentMenu.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+    }
+}
+
+document.addEventListener("click", function(event) {
+    if (!event.target.closest(".member-action-menu")) {
+        document.querySelectorAll(".member-action-menu.open").forEach(menu => {
+            menu.classList.remove("open");
+
+            const toggle = menu.querySelector(".member-menu-toggle");
+            if (toggle) toggle.setAttribute("aria-expanded", "false");
+        });
+    }
+});
 // =====================================================
 // MEMBER COUNT
 // =====================================================
