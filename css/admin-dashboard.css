@@ -7517,123 +7517,116 @@ a[href="#incomeReport"]::before {
 
 
 
-/* LOCKER FILTER — SAME APPEARANCE AS ATTENDANCE */
-#lockerReport .locker-filter-row {
+/* =========================================
+   LOCKER REPORT PERIOD — MATCH ATTENDANCE
+========================================= */
+
+.locker-filter-row {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 22px;
-    padding: 17px 0;
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 24px;
 }
 
-#lockerReport .locker-period {
+.locker-period {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    flex: 1;
-    min-width: 0;
-}
-
-#lockerReport .locker-period > label,
-#lockerReport .locker-date-area > label {
-    color: #192b48;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-#lockerReport .locker-period-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
-    max-width: 398px;
 }
 
-#lockerReport .locker-period-btn {
-    height: 52px;
-    border: 1px solid #dce5ea;
-    border-radius: 10px;
-    background: #fff;
-    color: #172843;
-    font-family: inherit;
+.locker-period > label,
+.locker-date-area > label {
+    display: block;
     font-size: 14px;
     font-weight: 600;
-    cursor: pointer;
+    color: #333;
 }
 
-#lockerReport .locker-period-btn.active {
-    background: #08b85b;
-    border-color: #08b85b;
+.locker-period-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.locker-period-btn {
+    min-height: 40px;
+    padding: 10px 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.locker-period-btn:hover {
+    border-color: #16803c;
+}
+
+.locker-period-btn.active {
+    background: #16803c;
+    border-color: #16803c;
     color: #fff;
 }
 
-#lockerReport .locker-date-area {
+.locker-date-area {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    width: 225px;
-    flex-shrink: 0;
+    gap: 10px;
+    align-items: flex-start;
 }
 
-#lockerReport .locker-date-range {
+.locker-date-area .attendance-date-range {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 100%;
 }
 
-#lockerReport .locker-date-input {
+.locker-date-area .attendance-date-input {
     position: relative;
-    box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 52px;
-    padding: 0 14px;
-    border: 1px solid #dce5ea;
-    border-radius: 10px;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
     background: #fff;
-    color: #172843;
-    font-size: 14px;
-    overflow: hidden;
 }
 
-#lockerReport .locker-date-input span {
-    pointer-events: none;
+.locker-date-area .attendance-date-input input {
+    width: 145px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #333;
+    font-family: inherit;
+    font-size: 13px;
 }
 
-#lockerReport .locker-date-input i {
-    color: #7186a5;
-    font-size: 17px;
-    pointer-events: none;
+.locker-date-area .attendance-date-input i {
+    color: #555;
+    margin-right: 8px;
 }
 
-#lockerReport .locker-date-input input[type="date"] {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
+.locker-date-area .attendance-date-separator {
+    color: #777;
 }
 
-#lockerReport .locker-date-separator {
-    color: #172843;
-    flex-shrink: 0;
-}
-
-@media (max-width: 900px) {
-    #lockerReport .locker-filter-row {
+@media (max-width: 768px) {
+    .locker-filter-row {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-start;
     }
 
-    #lockerReport .locker-period-buttons {
-        max-width: none;
+    .locker-period-buttons {
+        flex-wrap: wrap;
     }
 
-    #lockerReport .locker-date-area {
-        width: 100%;
+    .locker-date-area .attendance-date-input input {
+        width: 120px;
     }
 }
