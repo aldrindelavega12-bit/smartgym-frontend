@@ -988,164 +988,81 @@
 
                 <div class="backup-content">
 
-
-                    <!-- BACKUP SUMMARY -->
-
                     <div class="backup-main">
-
-
                         <div class="backup-icon">
-
                             <i class="fa-solid fa-database"></i>
-
                         </div>
-
 
                         <div class="backup-info">
-
-                            <div class="backup-date">
-
-                                Oct 4, 2026 02:00 AM
-
+                            <div class="backup-date" id="latestBackupDate">
+                                Loading latest backup...
                             </div>
 
-
-                            <div class="backup-type">
-
-                                Automatic backup (Scheduled)
-
+                            <div class="backup-type" id="latestBackupMode">
+                                Retrieving backup information...
                             </div>
 
+                            <div class="backup-type" id="latestBackupFilename"
+                                style="overflow-wrap:anywhere;"></div>
                         </div>
-
 
                         <div class="backup-status">
-
-                            <div class="backup-status-badge">
-
-                                Completed
-
+                            <div class="backup-status-badge" id="latestBackupStatus">
+                                Loading
                             </div>
 
-
-                            <div class="backup-size">
-
-                                Size: 58.4 MB
-
+                            <div class="backup-size" id="latestBackupSize">
+                                Size: --
                             </div>
-
                         </div>
-
-
                     </div>
-
-
-
-                    <!-- BACKUP DETAILS -->
 
                     <div class="backup-details">
 
-
                         <div class="backup-detail-row">
-
-                            <span class="backup-detail-label">
-                                Backup Type
-                            </span>
-
-                            <span class="backup-detail-value">
-                                Automatic (Scheduled)
-                            </span>
-
+                            <span class="backup-detail-label">Backup Type</span>
+                            <span class="backup-detail-value" id="detailBackupType">--</span>
                         </div>
 
-
                         <div class="backup-detail-row">
-
-                            <span class="backup-detail-label">
-                                Database Name
-                            </span>
-
-                            <span class="backup-detail-value">
-                                smart_gym_db
-                            </span>
-
+                            <span class="backup-detail-label">Backup Mode</span>
+                            <span class="backup-detail-value" id="detailBackupMode">--</span>
                         </div>
 
-
                         <div class="backup-detail-row">
-
-                            <span class="backup-detail-label">
-                                File Size
-                            </span>
-
-                            <span class="backup-detail-value">
-                                58.4 MB
-                            </span>
-
+                            <span class="backup-detail-label">File Size</span>
+                            <span class="backup-detail-value" id="detailBackupSize">--</span>
                         </div>
 
-
                         <div class="backup-detail-row">
-
-                            <span class="backup-detail-label">
-                                Backup Date & Time
-                            </span>
-
-                            <span class="backup-detail-value">
-                                Oct 4, 2026 02:00 AM
-                            </span>
-
+                            <span class="backup-detail-label">Backup Date &amp; Time</span>
+                            <span class="backup-detail-value" id="detailBackupDate">--</span>
                         </div>
 
-
                         <div class="backup-detail-row">
-
-                            <span class="backup-detail-label">
-                                Status
-                            </span>
-
-                            <span class="backup-detail-value">
-                                Completed
-                            </span>
-
+                            <span class="backup-detail-label">Status</span>
+                            <span class="backup-detail-value" id="detailBackupStatus">--</span>
                         </div>
-
 
                     </div>
-
-
-
-                    <!-- BUTTONS -->
 
                     <div class="backup-buttons">
 
-
-                        <a
-                            href="backup_restore.html"
-                            class="backup-btn primary"
-                        >
-
+                        <a href="#"
+                        id="downloadLatestBackupBtn"
+                        class="backup-btn primary"
+                        aria-disabled="true">
                             <i class="fa-solid fa-download"></i>
-
                             Download Latest Backup
-
                         </a>
 
-
-                        <a
-                            href="backup_restore.html"
-                            class="backup-btn secondary"
-                        >
-
+                        <a href="backup_restore.html"
+                        class="backup-btn secondary">
                             <i class="fa-solid fa-clock-rotate-left"></i>
-
                             Restore Database
-
                         </a>
-
 
                     </div>
-
 
                 </div>
 
@@ -1272,7 +1189,145 @@
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
+async function loadLatestBackup() {
+    const $ = id => document.getElementById(id);
 
+    const dateEl = $("latestBackupDate");
+    const modeEl = $("latestBackupMode");
+    const filenameEl = $("latestBackupFilename");
+    const statusEl = $("latestBackupStatus");
+    const sizeEl = $("latestBackupSize");
+    const downloadBtn = $("downloadLatestBackupBtn");
+
+    function setText(id, value) {
+        $(id).textContent = value;
+    }
+
+    function formatSize(bytes) {
+        const size = Number(bytes);
+
+        if (!Number.isFinite(size) || size < 0) return "--";
+        if (size < 1024) return `${size} bytes`;
+        if (size < 1048576) return `${(size / 1024).toFixed(2)} KB`;
+
+        return `${(size / 1048576).toFixed(2)} MB`;
+    }
+
+    function formatDate(value) {
+        if (!value) return "--";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return value;
+
+        return date.toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+
+    function disableDownload() {
+        downloadBtn.removeAttribute("href");
+        downloadBtn.setAttribute("aria-disabled", "true");
+        downloadBtn.style.pointerEvents = "none";
+        downloadBtn.style.opacity = "0.5";
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/admin/backups/latest`,
+            {
+                method: "GET",
+                headers: { Accept: "application/json" }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || "Failed to load backup");
+        }
+
+        const backup = result.backup;
+
+        if (!backup) {
+            dateEl.textContent = "No backup available";
+            modeEl.textContent = "No completed backup found";
+            filenameEl.textContent = "";
+            statusEl.textContent = "No Backup";
+            sizeEl.textContent = "Size: --";
+
+            [
+                "detailBackupType",
+                "detailBackupMode",
+                "detailBackupSize",
+                "detailBackupDate",
+                "detailBackupStatus"
+            ].forEach(id => setText(id, "--"));
+
+            disableDownload();
+            return;
+        }
+
+        const date = formatDate(backup.created_at);
+        const size = formatSize(backup.file_size);
+        const type = String(backup.backup_type || "--")
+            .replace(/_/g, " ");
+        const mode = String(backup.backup_mode || "--")
+            .replace(/_/g, " ");
+        const status = String(backup.status || "Unknown");
+
+        // Latest backup summary
+        dateEl.textContent = date;
+        modeEl.textContent = `${mode} backup`;
+        filenameEl.textContent = backup.file_name || "";
+        statusEl.textContent = status;
+        sizeEl.textContent = `Size: ${size}`;
+
+        // Backup details
+        setText("detailBackupType", type);
+        setText("detailBackupMode", mode);
+        setText("detailBackupSize", size);
+        setText("detailBackupDate", date);
+        setText("detailBackupStatus", status);
+
+        // Use the actual ID returned by the API
+        downloadBtn.href =
+            `${API_URL}/api/admin/backups/${encodeURIComponent(backup.id)}/download`;
+
+        downloadBtn.removeAttribute("aria-disabled");
+        downloadBtn.style.pointerEvents = "";
+        downloadBtn.style.opacity = "";
+
+    } catch (error) {
+        console.error("Latest backup error:", error);
+
+        dateEl.textContent = "Unable to load backup";
+        modeEl.textContent = "Please try again later";
+        filenameEl.textContent = "";
+        statusEl.textContent = "Unavailable";
+        sizeEl.textContent = "Size: --";
+
+        [
+            "detailBackupType",
+            "detailBackupMode",
+            "detailBackupSize",
+            "detailBackupDate"
+        ].forEach(id => setText(id, "--"));
+
+        setText("detailBackupStatus", "Unavailable");
+        disableDownload();
+    }
+}
+
+loadLatestBackup();
 // =====================================================
 // GET USER
 // =====================================================
