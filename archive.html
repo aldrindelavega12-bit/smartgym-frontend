@@ -134,8 +134,8 @@ if (!user || user.role !== "manager") {
                     <option value="">All Types</option>
                     <option value="Member">Member</option>
                     <option value="Walk-in">Walk-in</option>
+                    <option value="Front Desk">Front Desk</option>
                     <option value="Trainer">Trainer</option>
-                    <option value="Staff">Staff</option>
                 </select>
 
                 <div class="archive-date-filter">
@@ -321,51 +321,108 @@ document.addEventListener("click", function(event) {
 });
 
 
-/* =====================================================
-   SAMPLE ARCHIVE DATA
-===================================================== */
+// =====================================================
+// ARCHIVE DATA
+// =====================================================
 
-let archiveRecords = [
-    {
-        id: "MEM-001",
-        name: "Juan Dela Cruz",
-        type: "Member",
-        archiveDate: "2026-10-05"
-    },
-    {
-        id: "WALK-002",
-        name: "Pedro Santos",
-        type: "Walk-in",
-        archiveDate: "2026-10-04"
-    },
-    {
-        id: "TRN-003",
-        name: "Maria Garcia",
-        type: "Trainer",
-        archiveDate: "2026-10-03"
-    },
-    {
-        id: "STF-004",
-        name: "Mark Reyes",
-        type: "Staff",
-        archiveDate: "2026-10-02"
-    },
-    {
-        id: "MEM-005",
-        name: "Ana Mendoza",
-        type: "Member",
-        archiveDate: "2026-10-01"
-    }
-];
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
-let filteredRecords = [...archiveRecords];
+let archiveRecords = [];
+let filteredRecords = [];
 let currentPage = 1;
 const recordsPerPage = 8;
 
 let selectedRecordId = null;
+let selectedRecordType = null;
 let selectedAction = null;
 
 
+// =====================================================
+// LOAD ARCHIVE FROM DATABASE
+// =====================================================
+
+async function loadArchive() {
+    const body = document.getElementById("archiveBody");
+
+    body.innerHTML = `
+        <tr>
+            <td colspan="5" class="archive-empty">
+                Loading archived records...
+            </td>
+        </tr>
+    `;
+
+    try {
+        const response = await fetch(`${API_URL}/api/archive`);
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "Unable to load archived records."
+            );
+        }
+
+        archiveRecords = (result.data || []).map(record => {
+            const apiType = String(record.type || "").toLowerCase();
+
+            let displayType;
+
+            switch (apiType) {
+                case "member":
+                    displayType = "Member";
+                    break;
+
+                case "walkin":
+                case "walk-in":
+                    displayType = "Walk-in";
+                    break;
+
+                case "trainer":
+                    displayType = "Trainer";
+                    break;
+
+                case "staff":
+                    displayType = "Front Desk";
+                    break;
+
+                default:
+                    displayType = apiType;
+            }
+
+            return {
+                id: String(record.id ?? ""),
+                name: String(record.name ?? "N/A"),
+                type: displayType,
+                apiType: apiType,
+                archiveDate: record.archiveDate
+                    ? String(record.archiveDate).substring(0, 10)
+                    : ""
+            };
+        });
+
+        applyFilters();
+
+    } catch (error) {
+        console.error("Archive loading error:", error);
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="5" class="archive-empty">
+                    <div class="archive-empty-content">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <strong>Unable to load archive</strong>
+                        <span>Please refresh the page and try again.</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        document.getElementById("archiveCount").textContent =
+            "Unable to load records";
+
+        document.getElementById("archivePagination").innerHTML = "";
+    }
+}
 /* =====================================================
    ESCAPE HTML
 ===================================================== */
@@ -383,7 +440,6 @@ function escapeHtml(value) {
 /* =====================================================
    FILTER RECORDS
 ===================================================== */
-
 function applyFilters() {
     const search = document.getElementById("archiveSearch")
         .value.trim().toLowerCase();
@@ -408,7 +464,6 @@ function applyFilters() {
     currentPage = 1;
     renderArchive();
 }
-
 
 /* =====================================================
    RENDER TABLE
@@ -479,7 +534,7 @@ function renderArchive() {
                         type="button"
                         class="restore-btn"
                         title="Restore record"
-                        onclick="openRestoreModal('${escapeHtml(record.id)}')">
+                        onclick="openRestoreModal('${escapeHtml(record.id)}', '${escapeHtml(record.apiType)}')"
 
                         <span>Restore</span>
                     </button>
@@ -617,39 +672,51 @@ function confirmDelete() {
    RESTORE ACTION
 ===================================================== */
 
-function openRestoreModal(id) {
-    selectedRecordId = id;
+function openRestoreModal(id, type) {
+    selectedRecordId = String(id);
+    selectedRecordType = type;
     selectedAction = "restore";
 
     document.getElementById("restoreModal").classList.add("show");
 }
+
 
 function closeRestoreModal() {
     document.getElementById("restoreModal").classList.remove("show");
     selectedRecordId = null;
 }
 
-function confirmRestore() {
-    if (!selectedRecordId) return;
+async function confirmRestore() {
+    if (!selectedRecordId || !selectedRecordType) return;
 
-    const record = archiveRecords.find(
-        item => item.id === selectedRecordId
-    );
+    const button = document.querySelector(".archive-confirm-restore");
+    button.disabled = true;
 
-    if (!record) {
+    try {
+        const response = await fetch(
+            `${API_URL}/api/archive/restore/${encodeURIComponent(selectedRecordType)}/${encodeURIComponent(selectedRecordId)}`,
+            { method: "POST" }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "Unable to restore record."
+            );
+        }
+
         closeRestoreModal();
-        return;
+        await loadArchive();
+
+    } catch (error) {
+        console.error("Restore error:", error);
+        alert("Restore failed: " + error.message);
+
+    } finally {
+        button.disabled = false;
     }
-
-    archiveRecords = archiveRecords.filter(
-        item => item.id !== selectedRecordId
-    );
-
-    closeRestoreModal();
-    applyFilters();
 }
-
-
 /* =====================================================
    EVENT LISTENERS
 ===================================================== */
@@ -677,8 +744,7 @@ document.getElementById("restoreModal")
 /* =====================================================
    INITIALIZE
 ===================================================== */
-
-renderArchive();
+loadArchive();
 </script>
 
 </body>
