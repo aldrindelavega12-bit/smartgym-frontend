@@ -9292,12 +9292,13 @@ textarea {
     }
 
 }
-
+/* ACTION COLUMN */
 .function-column {
     min-width: 190px;
     text-align: center;
 }
 
+/* ACTION BUTTONS */
 .member-actions {
     display: flex;
     justify-content: center;
@@ -9310,24 +9311,42 @@ textarea {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 11px;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    font-family: inherit;
+    gap: 7px;
+    padding: 9px 13px;
+    border: none;
+    border-radius: 7px;
+    font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.2s ease,
+                transform 0.2s ease;
 }
 
+.member-action-btn i {
+    font-size: 12px;
+}
+
+.member-action-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* ARCHIVE */
 .archive-btn {
-    background: #fff7e6;
+    background: #fff4d6;
     color: #9a6700;
-    border-color: #f0d28a;
 }
 
+.archive-btn:hover {
+    background: #ffe7a3;
+}
+
+/* DELETE */
 .delete-btn {
-    background: #fff0f0;
-    color: #c62828;
-    border-color: #f0b5b5;
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.delete-btn:hover {
+    background: #fecaca;
 }
