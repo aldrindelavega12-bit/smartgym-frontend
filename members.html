@@ -198,7 +198,7 @@ if(!user){
                     <input
                         type="text"
                         id="memberSearch"
-                        placeholder="Search member name, ID, or contact...">
+                        placeholder="Search member name, or ID ...">
 
                 </div>
 
@@ -597,20 +597,12 @@ function applyMemberFilters(){
                 ).toLowerCase();
 
 
-            const contact =
-                String(
-                    member.contact ||
-                    member.phone ||
-                    member.contact_number ||
-                    ""
-                ).toLowerCase();
-
+            
 
             const matchesSearch =
                 !search ||
                 id.includes(search) ||
-                name.includes(search) ||
-                contact.includes(search);
+                name.includes(search);
 
 
             if(!matchesSearch)
@@ -813,11 +805,7 @@ function renderMembers(){
             : "red";
 
 
-        const contact =
-            row.contact ||
-            row.phone ||
-            row.contact_number ||
-            "N/A";
+        
 
 
         const tr =
@@ -838,9 +826,7 @@ function renderMembers(){
             </td>
 
 
-            <td>
-                ${contact}
-            </td>
+            
 
 
             <td>
@@ -879,6 +865,26 @@ function renderMembers(){
 
                 </span>
 
+            </td>
+
+                        <td class="function-column">
+                <div class="member-actions">
+                    <button
+                        type="button"
+                        class="member-action-btn archive-btn"
+                        onclick="archiveMember('${row.id}')">
+                        <i class="fa-solid fa-box-archive"></i>
+                        Archive
+                    </button>
+
+                    <button
+                        type="button"
+                        class="member-action-btn delete-btn"
+                        onclick="deleteMember('${row.id}')">
+                        <i class="fa-solid fa-trash"></i>
+                        Delete
+                    </button>
+                </div>
             </td>
 
 
