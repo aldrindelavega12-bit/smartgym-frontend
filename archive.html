@@ -1,610 +1,72 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Archive | Smart Gym</title>
 
-    <title>Archive</title>
-
-    <!-- EXISTING PROJECT CSS -->
-    <link rel="stylesheet"
-          href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/archive.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet">
-
-    <style>
-        /* =====================================================
-           ARCHIVE PAGE
-           USES EXISTING ADMIN DASHBOARD LAYOUT
-        ===================================================== */
-
-        .archive-page-header {
-            padding: 38px 40px 0 !important;
-            margin: 0 0 28px !important;
-        }
-
-        .archive-page-header h1 {
-            margin: 0;
-            color: #17231e;
-            font-size: 30px;
-            font-weight: 800;
-            letter-spacing: -0.8px;
-        }
-
-        .archive-page-header p {
-            margin: 8px 0 0;
-            color: #66776f;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        /* MAIN PANEL */
-
-        .archive-panel {
-            margin: 0 40px 45px;
-            padding: 26px;
-            background: #ffffff;
-            border: 1px solid #e1ebe6;
-            border-radius: 18px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
-            min-width: 0;
-        }
-
-        /* FILTER ROW */
-
-        .archive-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .archive-toolbar-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-            min-width: 250px;
-            flex-wrap: wrap;
-        }
-
-        .archive-search {
-            position: relative;
-            flex: 1;
-            min-width: 210px;
-            max-width: 340px;
-        }
-
-        .archive-search input {
-            width: 100%;
-            height: 44px;
-            box-sizing: border-box;
-            padding: 0 14px 0 40px;
-            border: 1px solid #dce6e0;
-            border-radius: 9px;
-            outline: none;
-            background: #ffffff;
-            color: #26352d;
-            font-family: inherit;
-            font-size: 13px;
-            transition: border-color .2s, box-shadow .2s;
-        }
-
-        .archive-search input:focus {
-            border-color: #078344;
-            box-shadow: 0 0 0 3px rgba(7, 131, 68, .08);
-        }
-
-        .archive-search input::placeholder {
-            color: #98a69e;
-        }
-
-        .archive-search i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #819087;
-            font-size: 14px;
-            pointer-events: none;
-        }
-
-        .archive-type-filter {
-            height: 44px;
-            min-width: 145px;
-            padding: 0 35px 0 13px;
-            border: 1px solid #dce6e0;
-            border-radius: 9px;
-            background: #ffffff;
-            color: #35453b;
-            font-family: inherit;
-            font-size: 13px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .archive-type-filter:focus {
-            border-color: #078344;
-        }
-
-        /* DATE RANGE */
-
-        .archive-date-filter {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .archive-date-field {
-            position: relative;
-            display: flex;
-            align-items: center;
-            width: 155px;
-            height: 44px;
-            box-sizing: border-box;
-            border: 1px solid #dce6e0;
-            border-radius: 9px;
-            background: #ffffff;
-            overflow: hidden;
-        }
-
-        .archive-date-field input {
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            padding: 0 9px;
-            border: none;
-            outline: none;
-            background: transparent;
-            color: #35453b;
-            font-family: inherit;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .archive-date-field input:focus {
-            box-shadow: inset 0 0 0 1px #078344;
-        }
-
-        .archive-date-separator {
-            color: #849188;
-            font-size: 13px;
-        }
-
-        /* TABLE */
-
-        .archive-table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid #e5ece8;
-            border-radius: 11px;
-        }
-
-        .archive-table {
-            width: 100%;
-            min-width: 750px;
-            border-collapse: collapse;
-            background: #ffffff;
-        }
-
-        .archive-table thead {
-            background: #f5f8f6;
-        }
-
-        .archive-table th {
-            height: 49px;
-            padding: 0 18px;
-            text-align: left;
-            color: #66776f;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .45px;
-            white-space: nowrap;
-            border-bottom: 1px solid #e5ece8;
-        }
-
-        .archive-table td {
-            height: 65px;
-            padding: 10px 18px;
-            color: #35443b;
-            font-size: 13px;
-            border-bottom: 1px solid #edf1ee;
-            white-space: nowrap;
-        }
-
-        .archive-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .archive-table tbody tr {
-            transition: background .15s;
-        }
-
-        .archive-table tbody tr:hover {
-            background: #fafcfb;
-        }
-
-        .archive-record-name {
-            color: #24342a;
-            font-weight: 600;
-        }
-
-        .archive-record-id {
-            color: #77867d;
-            font-size: 12px;
-        }
-
-        .archive-type-label {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 6px;
-            background: #edf3ef;
-            color: #3e5145;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* THREE-DOT ACTION */
-
-        .archive-action-cell {
-            width: 65px;
-            text-align: center !important;
-        }
-
-        .archive-action {
-            position: relative;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .archive-action-button {
-            width: 34px;
-            height: 34px;
-            border: none;
-            border-radius: 7px;
-            background: transparent;
-            color: #66776f;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .archive-action-button:hover,
-        .archive-action-button.active {
-            background: #edf5ef;
-            color: #087c3d;
-        }
-
-        .archive-action-menu {
-            position: absolute;
-            top: 37px;
-            right: 0;
-            z-index: 30;
-            display: none;
-            width: 145px;
-            padding: 5px;
-            background: #ffffff;
-            border: 1px solid #e0e8e3;
-            border-radius: 9px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .10);
-            text-align: left;
-        }
-
-        .archive-action-menu.show {
-            display: block;
-        }
-
-        .archive-action-menu button {
-            display: block;
-            width: 100%;
-            padding: 10px 11px;
-            border: none;
-            border-radius: 6px;
-            background: transparent;
-            color: #35443b;
-            text-align: left;
-            font-family: inherit;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .archive-action-menu button:hover {
-            background: #f2f7f3;
-        }
-
-        .archive-action-menu .archive-delete-option {
-            color: #b42318;
-        }
-
-        .archive-action-menu .archive-delete-option:hover {
-            background: #fff1f0;
-        }
-
-        /* EMPTY / LOADING / ERROR */
-
-        .archive-empty {
-            padding: 45px 20px !important;
-            text-align: center;
-            color: #7b8981 !important;
-            font-size: 13px !important;
-        }
-
-        .archive-error {
-            color: #b42318 !important;
-        }
-
-        /* FOOTER */
-
-        .archive-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-            padding-top: 22px;
-        }
-
-        .archive-count {
-            color: #77867d;
-            font-size: 12px;
-        }
-
-        .archive-pagination {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .archive-page-button {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 33px;
-            height: 33px;
-            padding: 0 9px;
-            border: 1px solid #dfe8e2;
-            border-radius: 7px;
-            background: #ffffff;
-            color: #53645a;
-            font-family: inherit;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .archive-page-button:hover:not(:disabled) {
-            border-color: #078344;
-            color: #078344;
-        }
-
-        .archive-page-button.active {
-            background: #087c3d;
-            border-color: #087c3d;
-            color: #ffffff;
-        }
-
-        .archive-page-button:disabled {
-            opacity: .4;
-            cursor: not-allowed;
-        }
-
-        /* DETAILS MODAL */
-
-        .archive-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(16, 28, 21, .45);
-        }
-
-        .archive-modal.show {
-            display: flex;
-        }
-
-        .archive-modal-box {
-            width: 100%;
-            max-width: 480px;
-            padding: 26px;
-            border-radius: 15px;
-            background: #ffffff;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, .15);
-        }
-
-        .archive-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            padding-bottom: 17px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #e7eee9;
-        }
-
-        .archive-modal-header h2 {
-            margin: 0;
-            color: #17231e;
-            font-size: 19px;
-            font-weight: 700;
-        }
-
-        .archive-modal-close {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 7px;
-            background: #f1f5f2;
-            color: #4b5a50;
-            font-size: 17px;
-            cursor: pointer;
-        }
-
-        .archive-detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-            padding: 12px 0;
-            border-bottom: 1px solid #edf1ee;
-            font-size: 13px;
-        }
-
-        .archive-detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .archive-detail-label {
-            color: #77867d;
-        }
-
-        .archive-detail-value {
-            color: #26372d;
-            font-weight: 600;
-            text-align: right;
-            overflow-wrap: anywhere;
-        }
-
-        .archive-modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 23px;
-        }
-
-        .archive-modal-btn {
-            min-height: 39px;
-            padding: 0 17px;
-            border: 1px solid #dce6e0;
-            border-radius: 8px;
-            background: #ffffff;
-            color: #35443b;
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .archive-modal-btn.primary {
-            border-color: #087c3d;
-            background: #087c3d;
-            color: #ffffff;
-        }
-
-        .archive-modal-btn.danger {
-            border-color: #b42318;
-            background: #b42318;
-            color: #ffffff;
-        }
-
-        /* RESPONSIVE */
-
-        @media (max-width: 1100px) {
-            .archive-toolbar {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .archive-toolbar-left {
-                width: 100%;
-            }
-
-            .archive-date-filter {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 700px) {
-            .archive-page-header {
-                padding: 25px 18px 0 !important;
-            }
-
-            .archive-page-header h1 {
-                font-size: 25px;
-            }
-
-            .archive-panel {
-                margin: 0 18px 30px;
-                padding: 17px;
-            }
-
-            .archive-toolbar-left {
-                flex-direction: column;
-                align-items: stretch;
-                min-width: 0;
-            }
-
-            .archive-search {
-                max-width: none;
-                width: 100%;
-            }
-
-            .archive-type-filter {
-                width: 100%;
-            }
-
-            .archive-date-filter {
-                align-items: stretch;
-            }
-
-            .archive-date-field {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .archive-footer {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     MANAGER ACCESS PROTECTION
-===================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-    let user = null;
+document.addEventListener("DOMContentLoaded", function () {
+    const dateInput = document.getElementById("archiveDate");
 
-    try {
-        user = JSON.parse(localStorage.getItem("user"));
-    } catch (error) {
-        user = null;
+    if (typeof flatpickr === "undefined") {
+        console.error("Flatpickr failed to load. Check your internet connection.");
+        return;
     }
 
-    if (!user || user.role !== "manager") {
-        window.location.href = "index.html";
-    }
+    flatpickr(dateInput, {
+        dateFormat: "F j, Y",
+        allowInput: false,
+
+        onChange: function (selectedDates) {
+            if (selectedDates.length) {
+                const date = selectedDates[0];
+
+                dateInput.dataset.filterDate =
+                    date.getFullYear() + "-" +
+                    String(date.getMonth() + 1).padStart(2, "0") + "-" +
+                    String(date.getDate()).padStart(2, "0");
+            } else {
+                delete dateInput.dataset.filterDate;
+            }
+
+            applyFilters();
+        }
+    });
+});
 </script>
 
-<!-- =====================================================
-     EXISTING SIDEBAR
-===================================================== -->
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
 
+if (!user || user.role !== "manager") {
+    window.location.href = "index.html";
+}
+</script>
+
+<!-- SIDEBAR -->
 <div class="navbar">
-
     <div class="brand">
         <div class="brand-text">
             <strong>SMART GYM</strong>
@@ -613,358 +75,285 @@
     </div>
 
     <div class="menu" id="menu"></div>
-
 </div>
 
-<!-- =====================================================
-     MAIN LAYOUT
-===================================================== -->
-
+<!-- MAIN CONTENT -->
 <div class="layout">
-
     <div class="main">
 
-        <!-- EXISTING TOP HEADER -->
-
+        <!-- TOP HEADER -->
         <div class="top-header">
-
             <div class="top-right">
+                <div class="staff-profile" onclick="toggleStaffMenu()">
 
-                <div class="staff-profile"
-                     onclick="toggleStaffMenu()">
-
-                    <div class="staff-avatar" id="managerAvatar">
-                        M
-                    </div>
+                    <div class="staff-avatar">M</div>
 
                     <div class="staff-info">
-                        <strong id="managerName">Manager</strong>
+                        <strong>Manager</strong>
                         <small>Gym Manager</small>
                     </div>
 
                     <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
 
-                    <div id="staffDropdown"
-                         class="staff-profile-dropdown">
-
-                        <button class="staff-dropdown-logout"
-                                onclick="logout(); event.stopPropagation();">
+                    <div id="staffDropdown" class="staff-profile-dropdown">
+                        <button
+                            onclick="logout(); event.stopPropagation();"
+                            class="staff-dropdown-logout">
 
                             <i class="fa-solid fa-right-from-bracket"></i>
                             Log Out
-
                         </button>
-
                     </div>
 
                 </div>
-
             </div>
-
         </div>
 
         <!-- PAGE HEADER -->
-
-        <div class="page-header archive-page-header">
-
+        <div class="page-header">
             <h1>Archive</h1>
-
-            <p>
-                View and manage archived member, walk-in, and overtime records.
-            </p>
-
+            <p>View and manage archived members, walk-ins, trainers, and staff.</p>
         </div>
 
-        <!-- ARCHIVE CONTENT -->
-
+        <!-- ARCHIVE PANEL -->
         <section class="archive-panel">
 
-            <!-- SEARCH / TYPE FILTER -->
-
+            <!-- TOOLBAR -->
             <div class="archive-toolbar">
 
-                <div class="archive-toolbar-left">
+                <div class="archive-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
 
-                    <div class="archive-search">
-
-                        <i class="fa-solid fa-magnifying-glass"></i>
-
-                        <input
-                            type="search"
-                            id="archiveSearch"
-                            placeholder="Search archived records..."
-                            autocomplete="off">
-
-                    </div>
-
-                    <select id="archiveType"
-                            class="archive-type-filter">
-
-                        <option value="all">All Types</option>
-                        <option value="member">Member</option>
-                        <option value="walkin">Walk-in</option>
-                        <option value="overtime">Overtime</option>
-
-                    </select>
-
+                    <input
+                        type="text"
+                        id="archiveSearch"
+                        placeholder="Search name or ID...">
                 </div>
 
-                <!-- DATE RANGE -->
+                <select id="archiveType" class="archive-filter">
+                    <option value="">All Types</option>
+                    <option value="Member">Member</option>
+                    <option value="Walk-in">Walk-in</option>
+                    <option value="Trainer">Trainer</option>
+                    <option value="Staff">Staff</option>
+                </select>
 
                 <div class="archive-date-filter">
+                    <input
+                        type="text"
+                        id="archiveDate"
+                        placeholder="Select date"
+                        readonly
+                        aria-label="Filter by archive date">
 
-                    <div class="archive-date-field">
-                        <input
-                            type="date"
-                            id="archiveStartDate"
-                            aria-label="Start date">
-                    </div>
-
-                    <span class="archive-date-separator">to</span>
-
-                    <div class="archive-date-field">
-                        <input
-                            type="date"
-                            id="archiveEndDate"
-                            aria-label="End date">
-                    </div>
-
+                    <i class="fa-regular fa-calendar calendar-icon"></i>
                 </div>
 
             </div>
 
-            <!-- ARCHIVE TABLE -->
-
+            <!-- TABLE -->
             <div class="archive-table-wrapper">
-
                 <table class="archive-table">
 
                     <thead>
                         <tr>
-                            <th>Record</th>
-                            <th>Record ID</th>
+                            <th>Member ID</th>
+                            <th>Name</th>
                             <th>Type</th>
-                            <th>Archived Date</th>
-                            <th>Archived By</th>
-                            <th class="archive-action-cell">Action</th>
+                            <th>Archive Date</th>
+                            <th class="archive-action-heading">Action</th>
                         </tr>
                     </thead>
 
-                    <tbody id="archiveTableBody">
-
-                        <tr>
-                            <td colspan="6" class="archive-empty">
-                                Loading archived records...
-                            </td>
-                        </tr>
-
-                    </tbody>
+                    <tbody id="archiveBody"></tbody>
 
                 </table>
-
             </div>
 
-            <!-- PAGINATION -->
-
+            <!-- FOOTER -->
             <div class="archive-footer">
+                <span id="archiveCount">Showing 0 records</span>
 
-                <div class="archive-count"
-                     id="archiveCount">
-                    Showing 0 records
-                </div>
-
-                <div class="archive-pagination"
-                     id="archivePagination"></div>
-
+                <div class="archive-pagination" id="archivePagination"></div>
             </div>
 
         </section>
 
     </div>
-
 </div>
 
-<!-- =====================================================
-     RECORD DETAILS MODAL
-===================================================== -->
-
-<div class="archive-modal" id="archiveDetailsModal">
-
+<!-- DELETE CONFIRMATION MODAL -->
+<div class="archive-modal" id="deleteModal">
     <div class="archive-modal-box">
 
-        <div class="archive-modal-header">
-
-            <h2>Archive Details</h2>
-
-            <button type="button"
-                    class="archive-modal-close"
-                    onclick="closeArchiveModal()">
-                &times;
-            </button>
-
+        <div class="archive-modal-icon">
+            <i class="fa-solid fa-trash"></i>
         </div>
 
-        <div id="archiveDetailsContent"></div>
+        <h2>Delete Archived Record?</h2>
 
-        <div class="archive-modal-actions">
-
-            <button type="button"
-                    class="archive-modal-btn"
-                    onclick="closeArchiveModal()">
-                Close
-            </button>
-
-            <button type="button"
-                    class="archive-modal-btn primary"
-                    id="restoreArchiveButton"
-                    onclick="restoreArchiveRecord()">
-                Restore
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- =====================================================
-     DELETE CONFIRMATION MODAL
-===================================================== -->
-
-<div class="archive-modal" id="archiveDeleteModal">
-
-    <div class="archive-modal-box">
-
-        <div class="archive-modal-header">
-            <h2>Delete Archived Record?</h2>
-            <button type="button"
-                    class="archive-modal-close"
-                    onclick="closeDeleteArchiveModal()">
-                &times;
-            </button>
-        </div>
-
-        <p style="color:#66776f;font-size:13px;line-height:1.7;">
-            Are you sure you want to permanently delete this archived record?
-            This action cannot be undone.
+        <p>
+            This action is permanent. The selected record will be removed
+            from the archive.
         </p>
 
         <div class="archive-modal-actions">
-
-            <button type="button"
-                    class="archive-modal-btn"
-                    onclick="closeDeleteArchiveModal()">
+            <button
+                type="button"
+                class="archive-cancel-btn"
+                onclick="closeDeleteModal()">
                 Cancel
             </button>
 
-            <button type="button"
-                    class="archive-modal-btn danger"
-                    onclick="confirmDeleteArchiveRecord()">
-                Delete
+            <button
+                type="button"
+                class="archive-confirm-delete"
+                onclick="confirmDelete()">
+                Delete Permanently
             </button>
-
         </div>
 
     </div>
+</div>
 
+<!-- RESTORE CONFIRMATION MODAL -->
+<div class="archive-modal" id="restoreModal">
+    <div class="archive-modal-box">
+
+        <div class="archive-modal-icon restore-icon">
+            <i class="fa-solid fa-rotate-left"></i>
+        </div>
+
+        <h2>Restore Record?</h2>
+
+        <p>
+            The selected record will be removed from the archive
+            and returned to its original list.
+        </p>
+
+        <div class="archive-modal-actions">
+            <button
+                type="button"
+                class="archive-cancel-btn"
+                onclick="closeRestoreModal()">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="archive-confirm-restore"
+                onclick="confirmRestore()">
+                Restore Record
+            </button>
+        </div>
+
+    </div>
 </div>
 
 <script>
 /* =====================================================
-   CONFIGURATION
-===================================================== */
-
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
-
-const ARCHIVE_API = `${API_URL}/api/archive`;
-
-const ARCHIVE_PAGE_SIZE = 8;
-
-let allArchiveRecords = [];
-let filteredArchiveRecords = [];
-let currentArchivePage = 1;
-let selectedArchiveRecord = null;
-
-/*
- * Set to true only if the backend provides the matching
- * restore and permanent-delete endpoints below.
- */
-const ARCHIVE_ACTIONS_ENABLED = false;
-
-
-/* =====================================================
-   MANAGER MENU
-   KEEP THE EXISTING MANAGER NAVIGATION
+   SIDEBAR MENU
 ===================================================== */
 
 const menu = document.getElementById("menu");
 
 menu.innerHTML = `
-    <a href="manager.html">Home</a>
-    <a href="reports.html">Reports</a>
-    <a href="members.html">Members</a>
-    <a href="walkin.html">Walk-ins</a>
-    <a href="staff_manage.html">Staff</a>
-    <a href="archive.html" class="active">Archive</a>
+    <a href="manager.html">
+        <i class="fa-solid fa-house"></i>
+        <span>Dashboard</span>
+    </a>
+
+    <a href="members.html">
+        <i class="fa-solid fa-users"></i>
+        <span>Members</span>
+    </a>
+
+    <a href="staff-management.html">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Staff Management</span>
+    </a>
+
+    <a href="reports.html">
+        <i class="fa-solid fa-chart-column"></i>
+        <span>Reports</span>
+    </a>
+
+    <a href="archive.html" class="active">
+        <i class="fa-solid fa-box-archive"></i>
+        <span>Archive</span>
+    </a>
 `;
 
-
-/* =====================================================
-   MANAGER PROFILE
-===================================================== */
-
-if (user) {
-    const name =
-        user.fullname ||
-        user.full_name ||
-        user.name ||
-        "Manager";
-
-    document.getElementById("managerName").textContent = name;
-
-    document.getElementById("managerAvatar").textContent =
-        name.trim().charAt(0).toUpperCase() || "M";
-}
-
 function toggleStaffMenu() {
-    const profile = document.querySelector(".staff-profile");
-    const dropdown = document.getElementById("staffDropdown");
-
-    if (!profile || !dropdown) return;
-
-    profile.classList.toggle("active");
-    dropdown.classList.toggle("show");
+    document.getElementById("staffDropdown")
+        .classList.toggle("show");
 }
 
 function logout() {
-    localStorage.clear();
+    localStorage.removeItem("user");
     window.location.href = "index.html";
 }
 
-document.addEventListener("click", function (event) {
+document.addEventListener("click", function(event) {
     const profile = document.querySelector(".staff-profile");
+    const dropdown = document.getElementById("staffDropdown");
 
     if (profile && !profile.contains(event.target)) {
-        profile.classList.remove("active");
-
-        const dropdown = document.getElementById("staffDropdown");
-
-        if (dropdown) {
-            dropdown.classList.remove("show");
-        }
-    }
-
-    if (!event.target.closest(".archive-action")) {
-        closeArchiveActionMenus();
+        dropdown.classList.remove("show");
     }
 });
 
 
 /* =====================================================
-   SAFE TEXT OUTPUT
+   SAMPLE ARCHIVE DATA
 ===================================================== */
 
-function escapeHTML(value) {
+let archiveRecords = [
+    {
+        id: "MEM-001",
+        name: "Juan Dela Cruz",
+        type: "Member",
+        archiveDate: "2026-10-05"
+    },
+    {
+        id: "WALK-002",
+        name: "Pedro Santos",
+        type: "Walk-in",
+        archiveDate: "2026-10-04"
+    },
+    {
+        id: "TRN-003",
+        name: "Maria Garcia",
+        type: "Trainer",
+        archiveDate: "2026-10-03"
+    },
+    {
+        id: "STF-004",
+        name: "Mark Reyes",
+        type: "Staff",
+        archiveDate: "2026-10-02"
+    },
+    {
+        id: "MEM-005",
+        name: "Ana Mendoza",
+        type: "Member",
+        archiveDate: "2026-10-01"
+    }
+];
+
+let filteredRecords = [...archiveRecords];
+let currentPage = 1;
+const recordsPerPage = 8;
+
+let selectedRecordId = null;
+let selectedAction = null;
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
     return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -975,260 +364,32 @@ function escapeHTML(value) {
 
 
 /* =====================================================
-   NORMALIZE ARCHIVE RECORDS
+   FILTER RECORDS
 ===================================================== */
 
-function normalizeArchiveRecord(record, index) {
-    const rawType = String(
-        record.type ??
-        record.record_type ??
-        record.archive_type ??
-        record.category ??
-        ""
-    ).toLowerCase().replace(/[_\s-]/g, "");
+function applyFilters() {
+    const search = document.getElementById("archiveSearch")
+        .value.trim().toLowerCase();
 
-    let type = "member";
+    const type = document.getElementById("archiveType").value;
 
-    if (
-        rawType.includes("walkin") ||
-        rawType.includes("walkinrecord")
-    ) {
-        type = "walkin";
-    } else if (
-        rawType.includes("overtime") ||
-        rawType.includes("locker")
-    ) {
-        type = "overtime";
-    } else if (rawType.includes("member")) {
-        type = "member";
-    }
+    const date = document.getElementById("archiveDate")
+        .dataset.filterDate || "";
 
-    const name =
-        record.fullname ??
-        record.full_name ??
-        record.member_name ??
-        record.walkin_name ??
-        record.name ??
-        record.customer_name ??
-        record.description ??
-        "Unnamed Record";
-
-    const id =
-        record.archive_id ??
-        record.id ??
-        record.record_id ??
-        record.member_id ??
-        record.walkin_id ??
-        record.session_id ??
-        `record-${index + 1}`;
-
-    const archivedDate =
-        record.archived_at ??
-        record.archived_date ??
-        record.deleted_at ??
-        record.created_at ??
-        record.date_archived ??
-        "";
-
-    const archivedBy =
-        record.archived_by_name ??
-        record.archived_by ??
-        record.deleted_by ??
-        record.actor_name ??
-        record.username ??
-        "—";
-
-    return {
-        ...record,
-        _archiveId: String(id),
-        _archiveType: type,
-        _archiveName: String(name),
-        _archivedDate: archivedDate,
-        _archivedBy: String(archivedBy)
-    };
-}
-
-
-/* =====================================================
-   LOAD ARCHIVED RECORDS
-===================================================== */
-
-async function loadArchiveRecords() {
-    const tbody = document.getElementById("archiveTableBody");
-
-    tbody.innerHTML = `
-        <tr>
-            <td colspan="6" class="archive-empty">
-                Loading archived records...
-            </td>
-        </tr>
-    `;
-
-    try {
-        const response = await fetch(ARCHIVE_API, {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        const records = Array.isArray(result)
-            ? result
-            : (
-                result.records ??
-                result.archives ??
-                result.data ??
-                []
-            );
-
-        if (!Array.isArray(records)) {
-            throw new Error("Unexpected archive response format.");
-        }
-
-        allArchiveRecords = records.map(normalizeArchiveRecord);
-
-        applyArchiveFilters();
-
-    } catch (error) {
-        console.error("ARCHIVE LOAD ERROR:", error);
-
-        allArchiveRecords = [];
-        filteredArchiveRecords = [];
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6"
-                    class="archive-empty archive-error">
-                    Unable to load archived records.
-                    Check the archive API endpoint and server response.
-                </td>
-            </tr>
-        `;
-
-        document.getElementById("archiveCount").textContent =
-            "Unable to load records";
-
-        document.getElementById("archivePagination").innerHTML = "";
-    }
-}
-
-
-/* =====================================================
-   FORMAT DATE
-===================================================== */
-
-function formatArchiveDate(value) {
-    if (!value) return "—";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-        return String(value);
-    }
-
-    return date.toLocaleString("en-PH", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-    });
-}
-
-function getArchiveDateOnly(value) {
-    if (!value) return "";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-        return String(value).slice(0, 10);
-    }
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-function getArchiveTypeLabel(type) {
-    const labels = {
-        member: "Member",
-        walkin: "Walk-in",
-        overtime: "Overtime"
-    };
-
-    return labels[type] || "Member";
-}
-
-
-/* =====================================================
-   SEARCH / TYPE / DATE FILTERS
-===================================================== */
-
-function applyArchiveFilters() {
-    const search = document
-        .getElementById("archiveSearch")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const selectedType = document
-        .getElementById("archiveType")
-        .value;
-
-    const startDate = document
-        .getElementById("archiveStartDate")
-        .value;
-
-    const endDate = document
-        .getElementById("archiveEndDate")
-        .value;
-
-    filteredArchiveRecords = allArchiveRecords.filter(record => {
-        const searchableText = [
-            record._archiveName,
-            record._archiveId,
-            record._archiveType,
-            record._archivedBy,
-            record.member_id,
-            record.walkin_id,
-            record.locker_id
-        ].filter(Boolean).join(" ").toLowerCase();
-
+    filteredRecords = archiveRecords.filter(record => {
         const matchesSearch =
-            !search || searchableText.includes(search);
+            record.id.toLowerCase().includes(search) ||
+            record.name.toLowerCase().includes(search);
 
-        const matchesType =
-            selectedType === "all" ||
-            record._archiveType === selectedType;
+        const matchesType = !type || record.type === type;
 
-        const recordDate = getArchiveDateOnly(record._archivedDate);
+        const matchesDate = !date || record.archiveDate === date;
 
-        const matchesStart =
-            !startDate || (recordDate && recordDate >= startDate);
-
-        const matchesEnd =
-            !endDate || (recordDate && recordDate <= endDate);
-
-        return (
-            matchesSearch &&
-            matchesType &&
-            matchesStart &&
-            matchesEnd
-        );
+        return matchesSearch && matchesType && matchesDate;
     });
 
-    currentArchivePage = 1;
-
-    renderArchiveTable();
+    currentPage = 1;
+    renderArchive();
 }
 
 
@@ -1236,132 +397,113 @@ function applyArchiveFilters() {
    RENDER TABLE
 ===================================================== */
 
-function renderArchiveTable() {
-    const tbody = document.getElementById("archiveTableBody");
+function renderArchive() {
+    const body = document.getElementById("archiveBody");
     const count = document.getElementById("archiveCount");
 
-    const total = filteredArchiveRecords.length;
-    const totalPages = Math.max(
-        1,
-        Math.ceil(total / ARCHIVE_PAGE_SIZE)
-    );
+    body.innerHTML = "";
 
-    if (currentArchivePage > totalPages) {
-        currentArchivePage = totalPages;
-    }
-
-    const startIndex =
-        (currentArchivePage - 1) * ARCHIVE_PAGE_SIZE;
-
-    const pageRecords = filteredArchiveRecords.slice(
-        startIndex,
-        startIndex + ARCHIVE_PAGE_SIZE
-    );
-
-    if (total === 0) {
-        tbody.innerHTML = `
+    if (filteredRecords.length === 0) {
+        body.innerHTML = `
             <tr>
-                <td colspan="6" class="archive-empty">
-                    No archived records found.
+                <td colspan="5" class="archive-empty">
+                    <div class="archive-empty-content">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <strong>No archived records found</strong>
+                        <span>Try changing your search or filters.</span>
+                    </div>
                 </td>
             </tr>
         `;
 
         count.textContent = "Showing 0 records";
-
-        renderArchivePagination(0);
-
+        renderPagination();
         return;
     }
 
-    tbody.innerHTML = pageRecords.map((record, index) => {
-        const safeId = escapeHTML(record._archiveId);
-        const safeName = escapeHTML(record._archiveName);
-        const safeType = escapeHTML(
-            getArchiveTypeLabel(record._archiveType)
-        );
-        const safeDate = escapeHTML(
-            formatArchiveDate(record._archivedDate)
-        );
-        const safeBy = escapeHTML(record._archivedBy);
+    const start = (currentPage - 1) * recordsPerPage;
+    const end = Math.min(start + recordsPerPage, filteredRecords.length);
 
-        const globalIndex = startIndex + index;
+    const pageRecords = filteredRecords.slice(start, end);
 
-        return `
-            <tr>
-                <td>
-                    <span class="archive-record-name">
-                        ${safeName}
-                    </span>
-                </td>
+    pageRecords.forEach(record => {
+        const row = document.createElement("tr");
 
-                <td>
-                    <span class="archive-record-id">
-                        ${safeId}
-                    </span>
-                </td>
+        row.innerHTML = `
+            <td>
+                <span class="archive-id">
+                    ${escapeHtml(record.id)}
+                </span>
+            </td>
 
-                <td>
-                    <span class="archive-type-label">
-                        ${safeType}
-                    </span>
-                </td>
+            <td>
+                <span class="archive-name">
+                    ${escapeHtml(record.name)}
+                </span>
+            </td>
 
-                <td>${safeDate}</td>
+            <td>
+                <span class="archive-type type-${record.type
+                    .toLowerCase().replace("-", "")}">
+                    ${escapeHtml(record.type)}
+                </span>
+            </td>
 
-                <td>${safeBy}</td>
+            <td>
+                <span class="archive-date">
+                    ${formatDate(record.archiveDate)}
+                </span>
+            </td>
 
-                <td class="archive-action-cell">
-                    <div class="archive-action">
+            <td>
+                <div class="archive-actions">
 
-                        <button
-                            type="button"
-                            class="archive-action-button"
-                            aria-label="Record actions"
-                            aria-expanded="false"
-                            onclick="toggleArchiveActionMenu(this)">
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                        </button>
+                    <button
+                        type="button"
+                        class="restore-btn"
+                        title="Restore record"
+                        onclick="openRestoreModal('${escapeHtml(record.id)}')">
 
-                        <div class="archive-action-menu">
+                        <span>Restore</span>
+                    </button>
 
-                            <button
-                                type="button"
-                                onclick="viewArchiveRecord(${globalIndex})">
-                                View Details
-                            </button>
+                    <button
+                        type="button"
+                        class="delete-btn"
+                        title="Delete permanently"
+                        onclick="openDeleteModal('${escapeHtml(record.id)}')">
 
-                            <button
-                                type="button"
-                                onclick="restoreArchiveByIndex(${globalIndex})">
-                                Restore
-                            </button>
+                        <span>Delete</span>
+                    </button>
 
-                            <button
-                                type="button"
-                                class="archive-delete-option"
-                                onclick="deleteArchiveByIndex(${globalIndex})">
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </div>
-                </td>
-            </tr>
+                </div>
+            </td>
         `;
-    }).join("");
 
-    const firstRecord = startIndex + 1;
-    const lastRecord = Math.min(
-        startIndex + ARCHIVE_PAGE_SIZE,
-        total
-    );
+        body.appendChild(row);
+    });
 
     count.textContent =
-        `Showing ${firstRecord}–${lastRecord} of ${total} records`;
+        `Showing ${start + 1} to ${end} of ${filteredRecords.length} records`;
 
-    renderArchivePagination(totalPages);
+    renderPagination();
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(dateString) {
+    if (!dateString) return "-";
+
+    const date = new Date(dateString + "T00:00:00");
+
+    return date.toLocaleDateString("en-PH", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit"
+    });
 }
 
 
@@ -1369,337 +511,149 @@ function renderArchiveTable() {
    PAGINATION
 ===================================================== */
 
-function renderArchivePagination(totalPages) {
-    const pagination =
-        document.getElementById("archivePagination");
+function renderPagination() {
+    const pagination = document.getElementById("archivePagination");
 
-    if (!totalPages || totalPages <= 1) {
-        pagination.innerHTML = "";
-        return;
-    }
+    pagination.innerHTML = "";
 
-    let html = `
-        <button
-            type="button"
-            class="archive-page-button"
-            ${currentArchivePage === 1 ? "disabled" : ""}
-            onclick="changeArchivePage(${currentArchivePage - 1})"
-            aria-label="Previous page">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-    `;
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
+    if (totalPages <= 1) return;
+
+    const previous = document.createElement("button");
+    previous.className = "archive-page-btn";
+    previous.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+    previous.disabled = currentPage === 1;
+
+    previous.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderArchive();
+        }
+    };
+
+    pagination.appendChild(previous);
 
     for (let page = 1; page <= totalPages; page++) {
-        html += `
-            <button
-                type="button"
-                class="archive-page-button ${
-                    page === currentArchivePage ? "active" : ""
-                }"
-                onclick="changeArchivePage(${page})">
-                ${page}
-            </button>
-        `;
+        const button = document.createElement("button");
+
+        button.className = "archive-page-btn";
+        button.textContent = page;
+
+        if (page === currentPage) {
+            button.classList.add("active");
+        }
+
+        button.onclick = () => {
+            currentPage = page;
+            renderArchive();
+        };
+
+        pagination.appendChild(button);
     }
 
-    html += `
-        <button
-            type="button"
-            class="archive-page-button"
-            ${currentArchivePage === totalPages ? "disabled" : ""}
-            onclick="changeArchivePage(${currentArchivePage + 1})"
-            aria-label="Next page">
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-    `;
+    const next = document.createElement("button");
+    next.className = "archive-page-btn";
+    next.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+    next.disabled = currentPage === totalPages;
 
-    pagination.innerHTML = html;
+    next.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderArchive();
+        }
+    };
+
+    pagination.appendChild(next);
 }
 
-function changeArchivePage(page) {
-    const totalPages = Math.max(
-        1,
-        Math.ceil(
-            filteredArchiveRecords.length / ARCHIVE_PAGE_SIZE
-        )
+
+/* =====================================================
+   DELETE ACTION
+===================================================== */
+
+function openDeleteModal(id) {
+    selectedRecordId = id;
+    selectedAction = "delete";
+
+    document.getElementById("deleteModal").classList.add("show");
+}
+
+function closeDeleteModal() {
+    document.getElementById("deleteModal").classList.remove("show");
+    selectedRecordId = null;
+}
+
+function confirmDelete() {
+    if (!selectedRecordId) return;
+
+    archiveRecords = archiveRecords.filter(
+        record => record.id !== selectedRecordId
     );
 
-    if (page < 1 || page > totalPages) return;
-
-    currentArchivePage = page;
-
-    renderArchiveTable();
+    closeDeleteModal();
+    applyFilters();
 }
 
 
 /* =====================================================
-   THREE-DOT MENU
+   RESTORE ACTION
 ===================================================== */
 
-function closeArchiveActionMenus() {
-    document.querySelectorAll(".archive-action-menu.show")
-        .forEach(menu => menu.classList.remove("show"));
+function openRestoreModal(id) {
+    selectedRecordId = id;
+    selectedAction = "restore";
 
-    document.querySelectorAll(".archive-action-button.active")
-        .forEach(button => {
-            button.classList.remove("active");
-            button.setAttribute("aria-expanded", "false");
-        });
+    document.getElementById("restoreModal").classList.add("show");
 }
 
-function toggleArchiveActionMenu(button) {
-    const menu = button.nextElementSibling;
-    const wasOpen = menu.classList.contains("show");
+function closeRestoreModal() {
+    document.getElementById("restoreModal").classList.remove("show");
+    selectedRecordId = null;
+}
 
-    closeArchiveActionMenus();
+function confirmRestore() {
+    if (!selectedRecordId) return;
 
-    if (!wasOpen) {
-        menu.classList.add("show");
-        button.classList.add("active");
-        button.setAttribute("aria-expanded", "true");
+    const record = archiveRecords.find(
+        item => item.id === selectedRecordId
+    );
+
+    if (!record) {
+        closeRestoreModal();
+        return;
     }
+
+    archiveRecords = archiveRecords.filter(
+        item => item.id !== selectedRecordId
+    );
+
+    closeRestoreModal();
+    applyFilters();
 }
 
 
 /* =====================================================
-   RECORD DETAILS
-===================================================== */
-
-function viewArchiveRecord(index) {
-    const record = filteredArchiveRecords[index];
-
-    if (!record) return;
-
-    selectedArchiveRecord = record;
-
-    closeArchiveActionMenus();
-
-    const fields = [
-        ["Record", record._archiveName],
-        ["Record ID", record._archiveId],
-        ["Type", getArchiveTypeLabel(record._archiveType)],
-        ["Archived Date", formatArchiveDate(record._archivedDate)],
-        ["Archived By", record._archivedBy]
-    ];
-
-    document.getElementById("archiveDetailsContent").innerHTML =
-        fields.map(([label, value]) => `
-            <div class="archive-detail-row">
-                <span class="archive-detail-label">
-                    ${escapeHTML(label)}
-                </span>
-
-                <span class="archive-detail-value">
-                    ${escapeHTML(value)}
-                </span>
-            </div>
-        `).join("");
-
-    document.getElementById("archiveDetailsModal")
-        .classList.add("show");
-
-    document.getElementById("restoreArchiveButton").style.display =
-        ARCHIVE_ACTIONS_ENABLED ? "" : "none";
-}
-
-function closeArchiveModal() {
-    document.getElementById("archiveDetailsModal")
-        .classList.remove("show");
-}
-
-
-/* =====================================================
-   RESTORE ARCHIVED RECORD
-===================================================== */
-
-function restoreArchiveByIndex(index) {
-    const record = filteredArchiveRecords[index];
-
-    if (!record) return;
-
-    selectedArchiveRecord = record;
-
-    closeArchiveActionMenus();
-
-    if (!ARCHIVE_ACTIONS_ENABLED) {
-        alert(
-            "Restore is not connected yet. " +
-            "Connect the correct backend restore endpoint first."
-        );
-        return;
-    }
-
-    if (!confirm("Restore this archived record?")) {
-        return;
-    }
-
-    restoreArchiveRecord();
-}
-
-async function restoreArchiveRecord() {
-    if (!selectedArchiveRecord) return;
-
-    if (!ARCHIVE_ACTIONS_ENABLED) {
-        alert("The backend restore endpoint has not been configured.");
-        return;
-    }
-
-    try {
-        const id = encodeURIComponent(
-            selectedArchiveRecord._archiveId
-        );
-
-        const response = await fetch(
-            `${ARCHIVE_API}/${id}/restore`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        closeArchiveModal();
-
-        await loadArchiveRecords();
-
-        alert("Record restored successfully.");
-
-    } catch (error) {
-        console.error("ARCHIVE RESTORE ERROR:", error);
-
-        alert("Unable to restore the record. Check the server logs.");
-    }
-}
-
-
-/* =====================================================
-   PERMANENT DELETE
-===================================================== */
-
-function deleteArchiveByIndex(index) {
-    const record = filteredArchiveRecords[index];
-
-    if (!record) return;
-
-    selectedArchiveRecord = record;
-
-    closeArchiveActionMenus();
-
-    if (!ARCHIVE_ACTIONS_ENABLED) {
-        alert(
-            "Delete is not connected yet. " +
-            "Connect the correct backend delete endpoint first."
-        );
-        return;
-    }
-
-    document.getElementById("archiveDeleteModal")
-        .classList.add("show");
-}
-
-function closeDeleteArchiveModal() {
-    document.getElementById("archiveDeleteModal")
-        .classList.remove("show");
-}
-
-async function confirmDeleteArchiveRecord() {
-    if (!selectedArchiveRecord) return;
-
-    if (!ARCHIVE_ACTIONS_ENABLED) {
-        alert("The backend delete endpoint has not been configured.");
-        return;
-    }
-
-    try {
-        const id = encodeURIComponent(
-            selectedArchiveRecord._archiveId
-        );
-
-        const response = await fetch(
-            `${ARCHIVE_API}/${id}`,
-            {
-                method: "DELETE",
-                headers: {
-                    "Accept": "application/json"
-                }
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        closeDeleteArchiveModal();
-
-        await loadArchiveRecords();
-
-        alert("Archived record deleted successfully.");
-
-    } catch (error) {
-        console.error("ARCHIVE DELETE ERROR:", error);
-
-        alert("Unable to delete the record. Check the server logs.");
-    }
-}
-
-
-/* =====================================================
-   FILTER EVENTS
+   EVENT LISTENERS
 ===================================================== */
 
 document.getElementById("archiveSearch")
-    .addEventListener("input", applyArchiveFilters);
+    .addEventListener("input", applyFilters);
 
 document.getElementById("archiveType")
-    .addEventListener("change", applyArchiveFilters);
+    .addEventListener("change", applyFilters);
 
-document.getElementById("archiveStartDate")
-    .addEventListener("change", function () {
-        const start = this.value;
-        const endInput = document.getElementById("archiveEndDate");
+document.getElementById("archiveDate")
+    .addEventListener("change", applyFilters);
 
-        if (start && endInput.value && start > endInput.value) {
-            endInput.value = start;
-        }
-
-        applyArchiveFilters();
+document.getElementById("deleteModal")
+    .addEventListener("click", function(event) {
+        if (event.target === this) closeDeleteModal();
     });
 
-document.getElementById("archiveEndDate")
-    .addEventListener("change", function () {
-        const startInput = document.getElementById("archiveStartDate");
-
-        if (startInput.value && this.value && this.value < startInput.value) {
-            alert("End date cannot be earlier than start date.");
-            this.value = startInput.value;
-        }
-
-        applyArchiveFilters();
-    });
-
-
-/* =====================================================
-   CLOSE MODALS ON BACKDROP CLICK
-===================================================== */
-
-document.getElementById("archiveDetailsModal")
-    .addEventListener("click", function (event) {
-        if (event.target === this) {
-            closeArchiveModal();
-        }
-    });
-
-document.getElementById("archiveDeleteModal")
-    .addEventListener("click", function (event) {
-        if (event.target === this) {
-            closeDeleteArchiveModal();
-        }
+document.getElementById("restoreModal")
+    .addEventListener("click", function(event) {
+        if (event.target === this) closeRestoreModal();
     });
 
 
@@ -1707,9 +661,8 @@ document.getElementById("archiveDeleteModal")
    INITIALIZE
 ===================================================== */
 
-loadArchiveRecords();
+renderArchive();
 </script>
 
 </body>
 </html>
-```

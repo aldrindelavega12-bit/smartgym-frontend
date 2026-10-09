@@ -1,0 +1,793 @@
+/* =====================================================
+   ARCHIVE PAGE
+   Shared sidebar, top header, and page header
+   are inherited from admin-dashboard.css.
+===================================================== */
+
+.archive-panel {
+    width: 100%;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e6eee9;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(20, 60, 45, 0.06);
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.archive-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.archive-search {
+    position: relative;
+    flex: 1;
+    min-width: 180px;
+}
+
+.archive-search i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #687a70;
+    font-size: 13px;
+}
+
+.archive-search input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px 0 36px;
+    border: 1px solid #dce5e0;
+    border-radius: 7px;
+    outline: none;
+    background: #ffffff;
+    color: #26352f;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.archive-search input:focus {
+    border-color: #0b8f4d;
+    box-shadow: 0 0 0 3px rgba(11, 143, 77, 0.08);
+}
+
+.archive-filter,
+.archive-date-filter {
+    height: 38px;
+    border: 1px solid #dce5e0;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #40534b;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    outline: none;
+}
+
+.archive-filter {
+    width: 135px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.archive-filter:focus {
+    border-color: #0b8f4d;
+}
+
+.archive-date-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+}
+
+.archive-date-filter i {
+    color: #687a70;
+    font-size: 13px;
+}
+
+/* DATE FILTER — MATCH SEARCH AND TYPE FILTER */
+
+.archive-date-filter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 0 0 169px;
+    width: 169px;
+    max-width: 169px;
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid #dce5e0;
+    border-radius: 7px;
+    background: #ffffff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.archive-date-filter input {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0 24px 0 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #40534b;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.archive-date-filter input::placeholder {
+    color: #40534b;
+    opacity: 1;
+}
+
+.archive-date-filter .calendar-icon {
+    position: absolute;
+    right: 10px;
+    color: #687a70;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.archive-date-filter:focus-within {
+    border-color: #0b8f4d;
+    box-shadow: 0 0 0 3px rgba(11, 143, 77, 0.08);
+}
+
+/* Keep controls aligned on smaller screens */
+@media (max-width: 600px) {
+    .archive-date-filter {
+        flex: 1;
+        width: auto;
+        max-width: none;
+        min-width: 0;
+    }
+}
+
+.flatpickr-calendar {
+    font-family: "Inter", sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(18, 70, 40, 0.12);
+}
+
+.archive-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 38px;
+    padding: 0 13px;
+    border: 1px solid #dce5e0;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #40534b;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.archive-reset-btn:hover {
+    background: #f2faf5;
+    border-color: #b8d8c5;
+    color: #087c3d;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.archive-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e6eee9;
+    border-radius: 9px;
+}
+
+.archive-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    font-family: "Inter", sans-serif;
+}
+
+.archive-table thead tr {
+    background: #edf8f2;
+}
+
+.archive-table th {
+    padding: 13px 15px;
+    color: #385248;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    border-bottom: 1px solid #e1eee6;
+}
+
+.archive-table td {
+    padding: 13px 15px;
+    color: #40534b;
+    font-size: 12px;
+    border-bottom: 1px solid #edf1ef;
+    vertical-align: middle;
+}
+
+.archive-table tbody tr {
+    height: 57px;
+    transition: background 0.15s ease;
+}
+
+.archive-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.archive-table tbody tr:hover {
+    background: #fafdfb;
+}
+
+.archive-action-heading {
+    width: 210px;
+    text-align: center !important;
+}
+
+
+/* =====================================================
+   MEMBER ID AND NAME
+===================================================== */
+
+.archive-id {
+    display: inline-block;
+    color: #087c3d;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.archive-name {
+    color: #26352f;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   TYPE BADGES
+===================================================== */
+
+.archive-type {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 65px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.type-member {
+    color: #087c3d;
+    background: #e7f6ec;
+}
+
+.type-walkin {
+    color: #996515;
+    background: #fff5d9;
+}
+
+.type-trainer {
+    color: #265cb4;
+    background: #eaf1ff;
+}
+
+.type-staff {
+    color: #7046a5;
+    background: #f2eaff;
+}
+
+
+/* =====================================================
+   ARCHIVE DATE
+===================================================== */
+
+.archive-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #62736a;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.archive-date i {
+    color: #8b9a91;
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.archive-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.restore-btn,
+.delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 78px;
+    height: 31px;
+    padding: 0 9px;
+    border-radius: 6px;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.restore-btn {
+    color: #087c3d;
+    background: #edf8f2;
+    border: 1px solid #cce8d6;
+}
+
+.restore-btn:hover {
+    background: #d9f0e1;
+    border-color: #9bd0ad;
+}
+
+.delete-btn {
+    color: #c0392b;
+    background: #fff1ef;
+    border: 1px solid #f3d2ce;
+}
+
+.delete-btn:hover {
+    background: #ffe1dd;
+    border-color: #eab2aa;
+}
+
+.restore-btn i,
+.delete-btn i {
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.archive-empty {
+    height: 190px;
+    text-align: center;
+}
+
+.archive-empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 30px 15px;
+}
+
+.archive-empty-content > i {
+    margin-bottom: 4px;
+    color: #a8b7ae;
+    font-size: 30px;
+}
+
+.archive-empty-content strong {
+    color: #40534b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.archive-empty-content span {
+    color: #89968e;
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   FOOTER AND PAGINATION
+===================================================== */
+
+.archive-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 0 3px;
+}
+
+#archiveCount {
+    color: #687a70;
+    font-size: 11px;
+}
+
+.archive-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.archive-page-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid #e0e9e3;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #52655a;
+    font-family: "Inter", sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.archive-page-btn:hover:not(:disabled) {
+    border-color: #a8d4b8;
+    color: #087c3d;
+    background: #f2faf5;
+}
+
+.archive-page-btn.active {
+    color: #ffffff;
+    background: #087c3d;
+    border-color: #087c3d;
+}
+
+.archive-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   CONFIRMATION MODALS
+===================================================== */
+
+.archive-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(18, 35, 25, 0.42);
+    backdrop-filter: blur(3px);
+}
+
+.archive-modal.show {
+    display: flex;
+}
+
+.archive-modal-box {
+    width: 100%;
+    max-width: 390px;
+    padding: 27px;
+    border: 1px solid #e6eee9;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 15px 45px rgba(18, 70, 40, 0.16);
+    text-align: center;
+    animation: archiveModalIn 0.18s ease-out;
+}
+
+@keyframes archiveModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.archive-modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 17px;
+    border-radius: 50%;
+    color: #c0392b;
+    background: #fff0ed;
+    font-size: 21px;
+}
+
+.archive-modal-icon.restore-icon {
+    color: #087c3d;
+    background: #e7f6ec;
+}
+
+.archive-modal-box h2 {
+    margin: 0 0 10px;
+    color: #20352a;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.archive-modal-box p {
+    margin: 0 auto;
+    max-width: 300px;
+    color: #728078;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.archive-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.archive-cancel-btn,
+.archive-confirm-delete,
+.archive-confirm-restore {
+    min-height: 38px;
+    padding: 0 13px;
+    border-radius: 7px;
+    font-family: "Inter", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.archive-cancel-btn {
+    border: 1px solid #dce5e0;
+    background: #ffffff;
+    color: #52655a;
+}
+
+.archive-cancel-btn:hover {
+    background: #f5f8f6;
+}
+
+.archive-confirm-delete {
+    border: 1px solid #c0392b;
+    background: #c0392b;
+    color: #ffffff;
+}
+
+.archive-confirm-delete:hover {
+    background: #a92f23;
+}
+
+.archive-confirm-restore {
+    border: 1px solid #087c3d;
+    background: #087c3d;
+    color: #ffffff;
+}
+
+.archive-confirm-restore:hover {
+    background: #075d2e;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1050px) {
+    .archive-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .archive-search {
+        flex-basis: 100%;
+    }
+
+    .archive-filter {
+        flex: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .archive-panel {
+        padding: 12px;
+    }
+
+    .archive-toolbar {
+        gap: 8px;
+    }
+
+    .archive-search {
+        flex-basis: 100%;
+    }
+
+    .archive-filter {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .archive-date-filter {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .archive-date-filter input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .archive-reset-btn {
+        flex-shrink: 0;
+    }
+
+    .archive-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .archive-modal-box {
+        padding: 22px 17px;
+    }
+
+    .archive-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .archive-cancel-btn,
+    .archive-confirm-delete,
+    .archive-confirm-restore {
+        width: 100%;
+    }
+}
+
+/* FLATPICKR — COMPACT CALENDAR STYLE */
+
+.flatpickr-calendar {
+    width: 272px !important;
+    padding: 0 8px 8px !important;
+    border: 1px solid #e1e5e9 !important;
+    border-radius: 3px !important;
+    background: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+    font-family: Arial, sans-serif !important;
+}
+
+.flatpickr-calendar.arrowTop::before,
+.flatpickr-calendar.arrowTop::after {
+    display: none !important;
+}
+
+/* Header */
+.flatpickr-months {
+    height: 43px !important;
+    align-items: center !important;
+}
+
+.flatpickr-month {
+    height: 43px !important;
+}
+
+.flatpickr-current-month {
+    left: 0 !important;
+    width: 75% !important;
+    padding-top: 11px !important;
+    text-align: left !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.flatpickr-current-month input.cur-year {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    display: none !important;
+}
+
+/* Custom-looking up/down navigation */
+.flatpickr-months {
+    position: relative !important;
+}
+
+.flatpickr-months::after {
+    content: "↑   ↓";
+    position: absolute;
+    right: 4px;
+    top: 11px;
+    color: #333333;
+    font-size: 19px;
+    letter-spacing: 5px;
+    pointer-events: none;
+}
+
+/* Weekdays */
+.flatpickr-weekdays {
+    height: 25px !important;
+}
+
+span.flatpickr-weekday {
+    color: #222222 !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+}
+
+/* Days */
+.flatpickr-days {
+    width: 100% !important;
+}
+
+.dayContainer {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    justify-content: space-around !important;
+}
+
+.flatpickr-day {
+    flex-basis: 14.2857% !important;
+    max-width: 14.2857% !important;
+    height: 31px !important;
+    line-height: 31px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    color: #222222 !important;
+    font-size: 12px !important;
+}
+
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: #999999 !important;
+}
+
+.flatpickr-day:hover {
+    background: #eeeeee !important;
+    border-color: transparent !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: #e5e5e5 !important;
+    border-color: #777777 !important;
+    color: #111111 !important;
+}
+
+/* Remove footer spacing */
+.flatpickr-innerContainer {
+    border-bottom: none !important;
+}

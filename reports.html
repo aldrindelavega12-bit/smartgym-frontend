@@ -1627,49 +1627,97 @@ if(
                     </div>
 
                     
-                    
                     <!-- LOCKER REPORT FILTER -->
-                                        
-                    <div class="locker-filter-row">
+                    <div class="attendance-filter-row">
 
-                        <div class="locker-period">
-                            <label>Report Period</label>
+                        <!-- REPORT PERIOD -->
+                        <div class="attendance-period">
 
-                            <div class="locker-period-buttons">
-                                <button type="button"
+                            <label>
+                                Report Period
+                            </label>
+
+                            <div class="attendance-period-buttons">
+
+                                <button
+                                    type="button"
                                     id="lockerDailyBtn"
-                                    class="locker-period-btn active"
+                                    class="attendance-period-btn active"
                                     onclick="setLockerPeriod('daily')">
                                     Daily
                                 </button>
 
-                                <button type="button"
+                                <button
+                                    type="button"
                                     id="lockerWeeklyBtn"
-                                    class="locker-period-btn"
+                                    class="attendance-period-btn"
                                     onclick="setLockerPeriod('weekly')">
                                     Weekly
                                 </button>
 
-                                <button type="button"
+                                <button
+                                    type="button"
                                     id="lockerCustomBtn"
-                                    class="locker-period-btn"
+                                    class="attendance-period-btn"
                                     onclick="setLockerPeriod('custom')">
                                     Custom Date
                                 </button>
+
                             </div>
+
                         </div>
 
-                        <div class="locker-date-area">
-                            <label for="lockerStartDate">Date:</label>
+                        <!-- DATE -->
+                        <div class="attendance-date">
 
-                            <div class="locker-date-box">
-                                <input type="date" id="lockerStartDate">
-                                <i class="fa-regular fa-calendar"></i>
+                            <label id="lockerDateLabel">
+                                Date:
+                            </label>
+
+                            <div class="attendance-date-range">
+
+                                <!-- START DATE -->
+                                <div
+                                    class="attendance-date-input"
+                                    id="lockerStartDateBox">
+
+                                    <span id="lockerStartDateDisplay"></span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    <input
+                                        type="date"
+                                        id="lockerStartDate">
+
+                                </div>
+
+                                <!-- DATE SEPARATOR -->
+                                <span
+                                    id="lockerDateSeparator"
+                                    class="attendance-date-separator">
+                                    –
+                                </span>
+
+                                <!-- END DATE -->
+                                <div
+                                    class="attendance-date-input"
+                                    id="lockerEndDateBox">
+
+                                    <span id="lockerEndDateDisplay"></span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    <input
+                                        type="date"
+                                        id="lockerEndDate">
+
+                                </div>
+
                             </div>
+
                         </div>
 
                     </div>
-
 
 
 
@@ -6892,152 +6940,114 @@ document
 /* =====================================================
    LOCKER REPORT PERIOD
 ===================================================== */
+/* =====================================================
+   LOCKER REPORT PERIOD
+===================================================== */
 
 let lockerPeriod = "daily";
 
 
-function setLockerPeriod(period){
-
+function setLockerPeriod(period) {
     lockerPeriod = period;
 
+    const dailyBtn = document.getElementById("lockerDailyBtn");
+    const weeklyBtn = document.getElementById("lockerWeeklyBtn");
+    const customBtn = document.getElementById("lockerCustomBtn");
 
-    document
-        .querySelectorAll(".locker-period-btn")
-        .forEach(button => {
+    dailyBtn?.classList.remove("active");
+    weeklyBtn?.classList.remove("active");
+    customBtn?.classList.remove("active");
 
-            button.classList.remove("active");
-
-        });
-
-
-    const buttonMap = {
-
-        daily: "lockerDailyBtn",
-
-        weekly: "lockerWeeklyBtn",
-
-        custom: "lockerCustomBtn"
-
-    };
-
-
-    const activeButton =
-        document.getElementById(
-            buttonMap[period]
-        );
-
-
-    if(activeButton){
-
-        activeButton.classList.add("active");
-
+    if (period === "daily") {
+        dailyBtn?.classList.add("active");
+    } else if (period === "weekly") {
+        weeklyBtn?.classList.add("active");
+    } else if (period === "custom") {
+        customBtn?.classList.add("active");
     }
 
+    const startInput = document.getElementById("lockerStartDate");
+    const endInput = document.getElementById("lockerEndDate");
 
-    const customArea =
-        document.getElementById(
-            "lockerCustomDateArea"
-        );
+    const endBox = document.getElementById("lockerEndDateBox");
+    const separator = document.getElementById("lockerDateSeparator");
+    const label = document.getElementById("lockerDateLabel");
 
-
-    if(period === "custom"){
-
-        customArea.style.display = "flex";
-
-        loadLockerReport();
-
+    if (!startInput || !endInput || !endBox || !separator || !label) {
+        console.error("Locker date filter elements not found.");
         return;
-
     }
 
+    if (period === "daily") {
+        const today = formatDateInput(new Date());
 
-    customArea.style.display = "none";
+        startInput.value = today;
+        endInput.value = today;
 
+        endBox.style.display = "none";
+        separator.style.display = "none";
+        label.textContent = "Date:";
 
-    const today = new Date();
-
-    let startDate;
-    let endDate;
-
-
-    /* ==============================
-       DAILY
-    ============================== */
-
-    if(period === "daily"){
-
-        startDate =
-            new Date(today);
-
-        endDate =
-            new Date(today);
-
+        updateLockerDateDisplay();
+        loadLockerReport();
+        return;
     }
 
+    if (period === "weekly") {
+        const today = new Date();
+        const day = today.getDay();
+        const diff = day === 0 ? 6 : day - 1;
 
-    /* ==============================
-       WEEKLY
-    ============================== */
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - diff);
 
-    else if(period === "weekly"){
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
 
-        const day =
-            today.getDay();
+        startInput.value = formatDateInput(monday);
+        endInput.value = formatDateInput(sunday);
 
-        const diff =
-            day === 0
-                ? 6
-                : day - 1;
+        endBox.style.display = "flex";
+        separator.style.display = "inline";
+        label.textContent = "Date Range:";
 
-
-        startDate =
-            new Date(today);
-
-        startDate.setDate(
-            today.getDate() - diff
-        );
-
-
-        endDate =
-            new Date(today);
-
+        updateLockerDateDisplay();
+        loadLockerReport();
+        return;
     }
 
+    if (period === "custom") {
+        endBox.style.display = "flex";
+        separator.style.display = "inline";
+        label.textContent = "Date Range:";
 
-    /* ==============================
-       MONTHLY
-    ============================== */
+        updateLockerDateDisplay();
+    }
+}
 
-    else if(period === "monthly"){
+function updateLockerDateDisplay() {
+    const startInput = document.getElementById("lockerStartDate");
+    const endInput = document.getElementById("lockerEndDate");
+    const startDisplay = document.getElementById("lockerStartDateDisplay");
+    const endDisplay = document.getElementById("lockerEndDateDisplay");
 
-        startDate =
-            new Date(
-                today.getFullYear(),
-                today.getMonth(),
-                1
-            );
-
-
-        endDate =
-            new Date(today);
-
+    if (startInput?.value && startDisplay) {
+        startDisplay.textContent = parseLocalDate(startInput.value)
+            .toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
     }
 
-
-    document.getElementById(
-        "lockerStartDate"
-    ).value =
-        formatDateInput(startDate);
-
-
-    document.getElementById(
-        "lockerEndDate"
-    ).value =
-        formatDateInput(endDate);
-
-
-    loadLockerReport();
-
+    if (endInput?.value && endDisplay) {
+        endDisplay.textContent = parseLocalDate(endInput.value)
+            .toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+    }
 }
 
 /* =====================================================
