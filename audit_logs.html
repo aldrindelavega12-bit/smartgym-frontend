@@ -969,8 +969,10 @@
         const dateFilter = document.getElementById("dateFilter");
 
         // Automatically select today's date
+        // SET TODAY'S DATE AUTOMATICALLY
         function setTodayDate() {
             const today = new Date();
+
             const year = today.getFullYear();
             const month = String(today.getMonth() + 1).padStart(2, "0");
             const day = String(today.getDate()).padStart(2, "0");
@@ -978,8 +980,16 @@
             dateFilter.value = `${year}-${month}-${day}`;
         }
 
-        // Set today's date when the page loads
-        setTodayDate();
+        // INITIALIZE AUDIT LOGS
+        document.addEventListener("DOMContentLoaded", () => {
+            setTodayDate();
+
+            // Apply today's date to the existing filter
+            applyFilters();
+
+            // Load records from the configured API
+            loadAuditLogs();
+        });
 
 
     </script>
