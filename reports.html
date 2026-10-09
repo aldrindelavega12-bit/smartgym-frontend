@@ -1626,18 +1626,22 @@ if(
                         </div>
                     </div>
 
-                    <!-- REPORT FILTER ROW -->
+                    
                     <div class="locker-filter-row">
 
-                        <!-- REPORT PERIOD -->
-                        <div class="locker-period">
+                     
+                    <!-- REPORT FILTER ROW — MATCH ATTENDANCE EXACTLY -->
+                    <div class="locker-filter-row attendance-filter-row">
+
+                        <div class="locker-period attendance-period">
                             <label>Report Period</label>
 
-                            <div class="locker-period-buttons">
+                            <div class="locker-period-buttons attendance-period-buttons">
+
                                 <button
                                     type="button"
                                     id="lockerDailyBtn"
-                                    class="locker-period-btn active"
+                                    class="locker-period-btn attendance-period-btn active"
                                     onclick="setLockerPeriod('daily')">
                                     Daily
                                 </button>
@@ -1645,58 +1649,68 @@ if(
                                 <button
                                     type="button"
                                     id="lockerWeeklyBtn"
-                                    class="locker-period-btn"
+                                    class="locker-period-btn attendance-period-btn"
                                     onclick="setLockerPeriod('weekly')">
                                     Weekly
                                 </button>
 
                                 <button
                                     type="button"
-                                    id="lockerMonthlyBtn"
-                                    class="locker-period-btn"
-                                    onclick="setLockerPeriod('monthly')">
-                                    Monthly
-                                </button>
-
-                                <button
-                                    type="button"
                                     id="lockerCustomBtn"
-                                    class="locker-period-btn"
+                                    class="locker-period-btn attendance-period-btn"
                                     onclick="setLockerPeriod('custom')">
                                     Custom Date
                                 </button>
+
                             </div>
                         </div>
 
-                        <!-- DATE -->
-                        <div class="locker-date-area">
-                            <label for="lockerStartDate">Date:</label>
+                        <div class="locker-date-area attendance-date">
+                            <label id="lockerDateLabel">Date:</label>
 
-                            <div class="locker-date-box">
-                                <input type="date" id="lockerStartDate">
-                                <i class="fa-regular fa-calendar"></i>
+                            <div class="locker-date-range attendance-date-range">
+
+                                <div
+                                    class="locker-date-input attendance-date-input"
+                                    id="lockerStartDateBox">
+
+                                    <span id="lockerStartDateDisplay"></span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    <input
+                                        type="date"
+                                        id="lockerStartDate"
+                                        aria-label="Select locker report date">
+                                </div>
+
+                                <span
+                                    id="lockerDateSeparator"
+                                    class="locker-date-separator attendance-date-separator"
+                                    style="display:none;">
+                                    –
+                                </span>
+
+                                <div
+                                    class="locker-date-input attendance-date-input"
+                                    id="lockerEndDateBox"
+                                    style="display:none;">
+
+                                    <span id="lockerEndDateDisplay"></span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    <input
+                                        type="date"
+                                        id="lockerEndDate"
+                                        aria-label="Select locker report end date">
+                                </div>
+
                             </div>
                         </div>
 
                     </div>
-
-
-
-                    <!-- CUSTOM END DATE -->
-                    <div
-                        id="lockerCustomDateArea"
-                        class="locker-custom-date-area"
-                        style="display:none;">
-
-                        <label for="lockerEndDate">
-                            End Date
-                        </label>
-
-                        <input
-                            type="date"
-                            id="lockerEndDate">
-
-                    </div>
+   
 
 
                     <!-- SUMMARY -->
