@@ -527,27 +527,34 @@ function renderArchive() {
                 </span>
             </td>
 
-            <td>
-                <div class="archive-actions">
-
+            <td class="archive-action-heading">
+                <div class="archive-action-menu">
                     <button
                         type="button"
-                        class="restore-btn"
-                        title="Restore record"
-                        onclick="openRestoreModal('${escapeHtml(record.id)}', '${escapeHtml(record.apiType)}')"
-
-                        <span>Restore</span>
+                        class="archive-menu-toggle"
+                        onclick="toggleArchiveActions(this)"
+                        aria-label="Archive actions"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
 
-                    <button
-                        type="button"
-                        class="delete-btn"
-                        title="Delete permanently"
-                        onclick="openDeleteModal('${escapeHtml(record.id)}', '${escapeHtml(record.apiType)}')"
+                    <div class="archive-menu-dropdown">
+                        <button
+                            type="button"
+                            class="archive-menu-item restore-item"
+                            onclick="openRestoreModal('${escapeHtml(record.id)}', '${escapeHtml(record.apiType)}')">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            Restore
+                        </button>
 
-                        <span>Delete</span>
-                    </button>
-
+                        <button
+                            type="button"
+                            class="archive-menu-item delete-item"
+                            onclick="openDeleteModal('${escapeHtml(record.id)}', '${escapeHtml(record.apiType)}')">
+                            <i class="fa-solid fa-trash"></i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </td>
         `;
@@ -578,7 +585,34 @@ function formatDate(dateString) {
     });
 }
 
+function toggleArchiveActions(button) {
+    const dropdown = button.nextElementSibling;
+    const isOpen = dropdown.classList.contains("show");
 
+    // Close all other open menus
+    document.querySelectorAll(".archive-menu-dropdown.show")
+        .forEach(menu => menu.classList.remove("show"));
+
+    document.querySelectorAll(".archive-menu-toggle")
+        .forEach(toggle => toggle.setAttribute("aria-expanded", "false"));
+
+    // Toggle the selected menu
+    if (!isOpen) {
+        dropdown.classList.add("show");
+        button.setAttribute("aria-expanded", "true");
+    }
+}
+
+// Close menu when clicking outside
+document.addEventListener("click", function(event) {
+    if (!event.target.closest(".archive-action-menu")) {
+        document.querySelectorAll(".archive-menu-dropdown.show")
+            .forEach(menu => menu.classList.remove("show"));
+
+        document.querySelectorAll(".archive-menu-toggle")
+            .forEach(toggle => toggle.setAttribute("aria-expanded", "false"));
+    }
+});
 /* =====================================================
    PAGINATION
 ===================================================== */
