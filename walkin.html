@@ -1113,100 +1113,108 @@ document.addEventListener("click", function (event) {
 });
 
 
-/* =====================================================
-   ARCHIVE WALK-IN
-===================================================== */
-
 async function archiveWalkin(walkinId) {
-    if (!user || !user.user_id) {
-        alert("Unable to identify the logged-in manager.");
-        return;
-    }
+    showMemberActionModal({
+        title: "Archive Walk-in?",
+        message: "This walk-in will be moved to the Archive page. You can restore the record later.",
+        actionLabel: "Archive Walk-in",
+        actionType: "archive",
+        icon: "fa-solid fa-box-archive",
 
-    if (!confirm("Are you sure you want to archive this walk-in?")) {
-        return;
-    }
+        onConfirm: async (closeModal) => {
+            try {
+                if (!user?.user_id) {
+                    throw new Error("Unable to identify the logged-in manager.");
+                }
 
-    try {
-        const response = await fetch(
-            `${API_URL}/api/archive/walkin/${encodeURIComponent(walkinId)}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    actor_id: user.user_id
-                })
+                const response = await fetch(
+                    `${API_URL}/api/archive/walkin/${encodeURIComponent(walkinId)}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            actor_id: user.user_id
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || result.success === false) {
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        "Failed to archive walk-in."
+                    );
+                }
+
+                closeModal();
+                await loadWalkins();
+
+            } catch (error) {
+                console.error("ARCHIVE WALK-IN ERROR:", error);
+
+                document.getElementById("memberModalMessage").textContent =
+                    error.message || "Failed to archive walk-in.";
             }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok || result.success === false) {
-            throw new Error(
-                result.error || result.message || "Failed to archive walk-in."
-            );
         }
-
-        alert("Walk-in archived successfully.");
-
-        await loadWalkins();
-
-    } catch (error) {
-        console.error("ARCHIVE WALK-IN ERROR:", error);
-        alert(error.message || "Failed to archive walk-in.");
-    }
+    });
 }
 
-
-/* =====================================================
-   DELETE WALK-IN
-===================================================== */
 
 async function deleteWalkin(walkinId) {
-    if (!user || !user.user_id) {
-        alert("Unable to identify the logged-in manager.");
-        return;
-    }
+    showMemberActionModal({
+        title: "Delete Walk-in?",
+        message: "This walk-in will be permanently deleted. This action cannot be undone.",
+        actionLabel: "Delete Permanently",
+        actionType: "delete",
+        icon: "fa-solid fa-trash",
 
-    if (!confirm(
-        "Are you sure you want to permanently delete this walk-in? This action cannot be undone."
-    )) {
-        return;
-    }
+        onConfirm: async (closeModal) => {
+            try {
+                if (!user?.user_id) {
+                    throw new Error("Unable to identify the logged-in manager.");
+                }
 
-    try {
-        const response = await fetch(
-            `${API_URL}/api/records/walkin/${encodeURIComponent(walkinId)}`,
-            {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    actor_id: user.user_id
-                })
+                const response = await fetch(
+                    `${API_URL}/api/records/walkin/${encodeURIComponent(walkinId)}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            actor_id: user.user_id
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || result.success === false) {
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        "Failed to delete walk-in."
+                    );
+                }
+
+                closeModal();
+                await loadWalkins();
+
+            } catch (error) {
+                console.error("DELETE WALK-IN ERROR:", error);
+
+                document.getElementById("memberModalMessage").textContent =
+                    error.message || "Failed to delete walk-in.";
             }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok || result.success === false) {
-            throw new Error(
-                result.error || result.message || "Failed to delete walk-in."
-            );
         }
-
-        alert("Walk-in deleted successfully.");
-
-        await loadWalkins();
-
-    } catch (error) {
-        console.error("DELETE WALK-IN ERROR:", error);
-        alert(error.message || "Failed to delete walk-in.");
-    }
+    });
 }
+
+
 
 /* =========================================================
    PAGINATION
