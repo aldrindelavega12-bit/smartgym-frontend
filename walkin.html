@@ -176,7 +176,7 @@
                     <input
                         type="text"
                         id="walkinSearch"
-                        placeholder="Search name, ID, or phone number...">
+                        placeholder="Search name, or ID...">
 
                 </div>
 
@@ -233,9 +233,6 @@
                                 Name
                             </th>
 
-                            <th>
-                                Phone Number
-                            </th>
 
                             <th>
                                 Visit Date
@@ -244,6 +241,8 @@
                             <th>
                                 Total Visit
                             </th>
+
+                            <th class="function-column">Action</th>
 
                         </tr>
 
@@ -628,17 +627,13 @@ function applyWalkinFilters(){
                 ).toLowerCase();
 
 
-            const phone =
-                String(
-                    walkin.phone || ""
-                ).toLowerCase();
+            
 
 
             return (
                 !search ||
                 id.includes(search) ||
-                name.includes(search) ||
-                phone.includes(search)
+                name.includes(search)
             );
 
         });
@@ -893,10 +888,6 @@ function renderWalkins(){
             </td>
 
 
-            <td>
-                ${walkin.phone || "-"}
-            </td>
-
 
             <td>
                 ${walkin.visit_date || "-"}
@@ -905,6 +896,37 @@ function renderWalkins(){
 
             <td>
                 ${walkin.total_visit || 0}
+            </td>
+
+            <td class="function-column">
+                <div class="member-action-menu">
+                    <button
+                        type="button"
+                        class="member-menu-toggle"
+                        onclick="toggleWalkinActions(this)"
+                        aria-label="Walk-in actions"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+
+                    <div class="member-menu-dropdown">
+                        <button
+                            type="button"
+                            class="member-menu-item archive-item"
+                            onclick="archiveWalkin('${walkin.id}')">
+                            <i class="fa-solid fa-box-archive"></i>
+                            Archive
+                        </button>
+
+                        <button
+                            type="button"
+                            class="member-menu-item delete-item"
+                            onclick="deleteWalkin('${walkin.id}')">
+                            <i class="fa-solid fa-trash"></i>
+                            Delete
+                        </button>
+                    </div>
+                </div>
             </td>
 
         `;
@@ -942,7 +964,39 @@ function renderWalkins(){
 
 }
 
+function toggleWalkinActions(button) {
+    const currentMenu = button.closest(".member-action-menu");
+    const wasOpen = currentMenu.classList.contains("open");
 
+    document.querySelectorAll(".member-action-menu.open")
+        .forEach(menu => {
+            menu.classList.remove("open");
+
+            const toggle = menu.querySelector(".member-menu-toggle");
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", "false");
+            }
+        });
+
+    if (!wasOpen) {
+        currentMenu.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+    }
+}
+
+document.addEventListener("click", function(event) {
+    if (!event.target.closest(".member-action-menu")) {
+        document.querySelectorAll(".member-action-menu.open")
+            .forEach(menu => {
+                menu.classList.remove("open");
+
+                const toggle = menu.querySelector(".member-menu-toggle");
+                if (toggle) {
+                    toggle.setAttribute("aria-expanded", "false");
+                }
+            });
+    }
+});
 /* =========================================================
    PAGINATION
 ========================================================= */
