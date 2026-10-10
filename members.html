@@ -1057,20 +1057,59 @@ async function archiveMember(memberId) {
     });
 }
 
-function deleteMember(memberId) {
+async function deleteMember(memberId) {
     showMemberActionModal({
         title: "Delete Member?",
-        message: "Are you sure you want to permanently delete this member? This action cannot be undone.",
-        actionLabel: "Delete Member",
+        message:
+            "This member will be permanently deleted. " +
+            "This action cannot be undone.",
+        actionLabel: "Delete Permanently",
         actionType: "delete",
         icon: "fa-solid fa-trash",
 
-        onConfirm: async () => {
-            document.getElementById("memberModalMessage").textContent =
-                "Permanent Delete is not connected yet. No record has been deleted.";
+        onConfirm: async closeModal => {
+            try {
+                if (!user?.user_id) {
+                    throw new Error(
+                        "Unable to identify the current user. Please log in again."
+                    );
+                }
+
+                const response = await fetch(
+                    `${API_URL}/api/records/member/${encodeURIComponent(memberId)}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            actor_id: user.user_id
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Failed to delete member."
+                    );
+                }
+
+                closeModal();
+                await loadMembers();
+
+            } catch (error) {
+                console.error("Permanent member delete error:", error);
+
+                document.getElementById(
+                    "memberModalMessage"
+                ).textContent = error.message;
+            }
         }
     });
 }
+
 // =====================================================
 // MEMBER COUNT
 // =====================================================

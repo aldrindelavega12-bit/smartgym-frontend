@@ -700,6 +700,11 @@ async function confirmDelete() {
         "#deleteModal .archive-confirm-delete"
     );
 
+    if (!user?.user_id) {
+        alert("Unable to identify the current user. Please log in again.");
+        return;
+    }
+
     if (deleteButton) {
         deleteButton.disabled = true;
         deleteButton.textContent = "Deleting...";
@@ -714,16 +719,16 @@ async function confirmDelete() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    actor_id: user?.user_id
+                    actor_id: user.user_id
                 })
             }
         );
 
         const result = await response.json();
 
-        if (!response.ok || result.success !== true) {
+        if (!response.ok || !result.success) {
             throw new Error(
-                result.message || "Failed to delete record."
+                result.message || "Failed to delete archived record."
             );
         }
 
@@ -731,7 +736,9 @@ async function confirmDelete() {
         await loadArchive();
 
     } catch (error) {
+        console.error("Permanent archive delete error:", error);
         alert(error.message || "Unable to delete archived record.");
+
     } finally {
         if (deleteButton) {
             deleteButton.disabled = false;
@@ -739,6 +746,7 @@ async function confirmDelete() {
         }
     }
 }
+
 /* =====================================================
    RESTORE ACTION
 ===================================================== */
