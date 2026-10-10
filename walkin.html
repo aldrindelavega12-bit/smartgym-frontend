@@ -321,6 +321,35 @@
 </audio>
 
 
+<!-- ACTION CONFIRMATION MODAL -->
+<div id="memberActionModal" class="member-modal-overlay">
+    <div class="member-modal">
+        <div id="memberModalIcon" class="member-modal-icon archive">
+            <i class="fa-solid fa-box-archive"></i>
+        </div>
+
+        <h3 id="memberModalTitle">Archive Walk-in?</h3>
+
+        <p id="memberModalMessage">
+            This walk-in will be moved to the Archive page.
+        </p>
+
+        <div class="member-modal-actions">
+            <button type="button"
+                    id="memberModalCancel"
+                    class="member-modal-cancel">
+                Cancel
+            </button>
+
+            <button type="button"
+                    id="memberModalConfirm"
+                    class="member-modal-confirm archive">
+                Archive Walk-in
+            </button>
+        </div>
+    </div>
+</div>
+
 
 <!-- SOCKET.IO -->
 
