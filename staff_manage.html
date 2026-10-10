@@ -938,11 +938,22 @@ function renderStaff() {
 
                         <button
                             type="button"
+                            class="member-menu-item archive-item"
+                            onclick="archiveStaff('${userId}')">
+
+                            <i class="fa-solid fa-box-archive"></i>
+                            Archive
+
+                        </button>
+
+                        <button
+                            type="button"
                             class="member-menu-item delete-item"
                             onclick="deleteStaff('${userId}')">
 
                             <i class="fa-solid fa-trash"></i>
                             Delete
+
                         </button>
 
                     </div>
@@ -961,7 +972,89 @@ function renderStaff() {
 
     renderStaffPagination();
 }
+/* =====================================================
+   ARCHIVE STAFF
+===================================================== */
 
+async function archiveStaff(userId) {
+    if (!userId) return;
+
+    // Close the three-dot menu.
+    document.querySelectorAll(".member-action-menu.open").forEach(menu => {
+        menu.classList.remove("open");
+
+        const toggle = menu.querySelector(".member-menu-toggle");
+
+        if (toggle) {
+            toggle.setAttribute("aria-expanded", "false");
+        }
+    });
+
+    const staff = allStaff.find(
+        item => String(item.user_id) === String(userId)
+    );
+
+    const staffName = staff
+        ? staff.fullname || staff.username || userId
+        : userId;
+
+    showMemberActionModal({
+        title: "Archive Staff Account?",
+        message: `Are you sure you want to archive ${staffName}? The account will be moved to the Archive page.`,
+        actionLabel: "Archive",
+        actionType: "archive",
+        icon: "fa-solid fa-box-archive",
+
+        onConfirm: async closeModal => {
+            try {
+                const response = await fetch(
+                    `${API_URL}/api/archive/staff/${encodeURIComponent(userId)}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            actor_id: user?.user_id
+                        })
+                    }
+                );
+
+                const data = await response.json().catch(() => ({}));
+
+                if (
+                    !response.ok ||
+                    data.success === false ||
+                    data.status === "error"
+                ) {
+                    throw new Error(
+                        data.message || "Failed to archive staff account."
+                    );
+                }
+
+                closeModal();
+
+                await loadStaff();
+
+                showSuccessModal(
+                    "Successfully Archived!",
+                    "The staff account has been moved to the Archive page."
+                );
+
+            } catch (error) {
+                console.error("ARCHIVE STAFF ERROR:", error);
+
+                const message = document.getElementById("memberModalMessage");
+
+                if (message) {
+                    message.textContent =
+                        "Unable to archive this staff account. " +
+                        error.message;
+                }
+            }
+        }
+    });
+}
 /* =====================================================
    STAFF ACTION MENU
 ===================================================== */
@@ -1327,6 +1420,7 @@ async function createAccount() {
                     role,
                     username,
                     password,
+                    actor_id: user?.user_id,
 
                     price_day: role === "trainer"
                         ? Number(priceDay)
