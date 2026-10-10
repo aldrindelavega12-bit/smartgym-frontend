@@ -1025,13 +1025,23 @@ async function archiveMember(memberId) {
             try {
                 const response = await fetch(
                     `${API_URL}/api/archive/member/${encodeURIComponent(memberId)}`,
-                    { method: "POST" }
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            actor_id: user?.user_id
+                        })
+                    }
                 );
 
                 const result = await response.json();
 
                 if (!response.ok || !result.success) {
-                    throw new Error(result.message || "Failed to archive member.");
+                    throw new Error(
+                        result.message || "Failed to archive member."
+                    );
                 }
 
                 closeModal();
@@ -1039,6 +1049,7 @@ async function archiveMember(memberId) {
 
             } catch (error) {
                 console.error("Archive member error:", error);
+
                 document.getElementById("memberModalMessage").textContent =
                     "Unable to archive this member. " + error.message;
             }
