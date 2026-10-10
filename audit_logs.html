@@ -458,6 +458,7 @@
     </div>
 
  
+
 <script>
     const PAGE_SIZE = 10;
     const AUDIT_API_URL =
@@ -600,18 +601,12 @@
             ACCEPT_TRAINER_REQUEST: "accepted trainer request"
         };
 
-        if (descriptions[value]) {
-            return descriptions[value];
-        }
-
-        return value
-            .replace(/_/g, " ")
-            .toLowerCase();
+        return descriptions[value] ||
+            value.replace(/_/g, " ").toLowerCase();
     }
 
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
-
         const parts = raw.split("|").map(part => part.trim());
 
         const entity = parts[0] || "";
@@ -639,7 +634,6 @@
 
         const actionDescription = getActionDescription(record.raw_action);
 
-        // If the action is not recognized, retain the actual API details.
         if (!actionDescription || !target) {
             return raw || "—";
         }
@@ -654,8 +648,7 @@
     function parseDate(value) {
         if (!value) return null;
 
-        // API format: YYYY-MM-DD HH:MM:SS
-        // Interpret the API timestamp as UTC.
+        // Assumes timestamps without a timezone are stored in UTC.
         let normalized = String(value).trim().replace(" ", "T");
 
         if (!/[zZ]$|[+-]\d{2}:\d{2}$/.test(normalized)) {
@@ -667,14 +660,13 @@
         return Number.isNaN(date.getTime()) ? null : date;
     }
 
-
     function getDateKey(value) {
         const date = String(value ?? "").slice(0, 10);
 
         return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "";
     }
 
-    function formatDateTime(value) {
+    function formatDate(value) {
         const date = parseDate(value);
 
         if (!date) return "—";
@@ -683,14 +675,9 @@
             timeZone: "Asia/Manila",
             month: "short",
             day: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true
+            year: "numeric"
         }).format(date);
     }
-
-
 
     function showMessage(message) {
         tableBody.innerHTML = `
@@ -740,7 +727,6 @@
                 date: record.created_at || ""
             }));
 
-            // Generate Details from the actual API record.
             auditRecords = auditRecords.map(record => ({
                 ...record,
                 details: getDetails(record)
@@ -770,7 +756,7 @@
                 record.action,
                 record.raw_action,
                 record.details,
-                formatDateTime(record.date)
+                formatDate(record.date)
             ].join(" ").toLowerCase();
 
             const matchesSearch =
@@ -813,7 +799,7 @@
                     <td>${escapeHTML(record.role)}</td>
                     <td>${escapeHTML(record.action)}</td>
                     <td>${escapeHTML(record.details)}</td>
-                    <td>${escapeHTML(formatDateTime(record.date))}</td>
+                    <td>${escapeHTML(formatDate(record.date))}</td>
                 </tr>
             `).join("");
         } else {
@@ -944,13 +930,13 @@
         window.location.href = "login.html";
     }
 
-    // Show logs from all dates by default.
+    // No default date filter; show all available dates.
     dateFilter.value = "";
 
-    // Fetch actual audit logs from the API.
+    // Load actual records from the API.
     loadAuditLogs();
 </script>
-   
+
 
 </body>
 </html>
