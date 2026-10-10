@@ -446,6 +446,55 @@ menu.innerHTML = `
 
 
 
+function showMemberActionModal({
+    title,
+    message,
+    actionLabel,
+    actionType,
+    icon,
+    onConfirm
+}) {
+    const modal = document.getElementById("memberActionModal");
+    const modalIcon = document.getElementById("memberModalIcon");
+    const confirmButton = document.getElementById("memberModalConfirm");
+    const cancelButton = document.getElementById("memberModalCancel");
+
+    document.getElementById("memberModalTitle").textContent = title;
+    document.getElementById("memberModalMessage").textContent = message;
+
+    modalIcon.className = `member-modal-icon ${actionType}`;
+    modalIcon.innerHTML = `<i class="${icon}"></i>`;
+
+    confirmButton.textContent = actionLabel;
+    confirmButton.className = `member-modal-confirm ${actionType}`;
+
+    modal.classList.add("show");
+
+    const closeModal = () => {
+        modal.classList.remove("show");
+        confirmButton.onclick = null;
+        cancelButton.onclick = null;
+    };
+
+    cancelButton.onclick = closeModal;
+
+    modal.onclick = event => {
+        if (event.target === modal) closeModal();
+    };
+
+    confirmButton.onclick = async () => {
+        confirmButton.disabled = true;
+        cancelButton.disabled = true;
+
+        try {
+            await onConfirm(closeModal);
+        } finally {
+            confirmButton.disabled = false;
+            cancelButton.disabled = false;
+        }
+    };
+}
+
 /* =====================================================
    PROFILE DROPDOWN
 ===================================================== */
