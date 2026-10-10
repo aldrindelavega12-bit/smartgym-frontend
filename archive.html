@@ -714,7 +714,7 @@ async function confirmDelete() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    actor_id: user?.id
+                    actor_id: user?.user_id
                 })
             }
         );
@@ -772,7 +772,7 @@ async function confirmRestore() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    actor_id: user?.id
+                    actor_id: user?.user_id
                 })
             }
         );
