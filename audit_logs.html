@@ -486,9 +486,10 @@
 
     function capitalize(value) {
         const text = String(value ?? "").trim();
+
         return text
             ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
-            : "—";
+            : "Unknown";
     }
 
     function normalizeAction(action) {
@@ -540,12 +541,14 @@
             RESTORE_MEMBER: "Restore",
             RESTORE_WALKIN: "Restore",
             RESTORE_STAFF: "Restore",
+
             DELETE_MEMBER: "Delete",
             DELETE_WALKIN: "Delete",
             DELETE_STAFF: "Delete",
             DELETE_ARCHIVED_MEMBER: "Delete",
             DELETE_ARCHIVED_WALKIN: "Delete",
             DELETE_ARCHIVED_STAFF: "Delete",
+
             ARCHIVE_MEMBER: "Archive",
             ARCHIVE_WALKIN: "Archive",
             ARCHIVE_STAFF: "Archive"
@@ -561,58 +564,97 @@
             .replace(/\b\w/g, letter => letter.toUpperCase());
     }
 
-    function getDetails(details) {
-        const value = String(details ?? "").trim();
+    function getActionDescription(action) {
+        const value = String(action || "").toUpperCase();
 
-        if (!value) {
-            return "—";
+        const descriptions = {
+            ARCHIVE_MEMBER: "archived member",
+            RESTORE_MEMBER: "restored member",
+            DELETE_MEMBER: "deleted member",
+            DELETE_ARCHIVED_MEMBER: "deleted member from archive",
+
+            ARCHIVE_WALKIN: "archived walk-in",
+            RESTORE_WALKIN: "restored walk-in",
+            DELETE_WALKIN: "deleted walk-in",
+            DELETE_ARCHIVED_WALKIN: "deleted walk-in from archive",
+
+            ARCHIVE_STAFF: "archived staff",
+            RESTORE_STAFF: "restored staff",
+            DELETE_STAFF: "deleted staff",
+            DELETE_ARCHIVED_STAFF: "deleted staff from archive",
+
+            ADD_MEMBER: "added member",
+            CREATE_MEMBER: "created member",
+            ADD_WALKIN: "added walk-in",
+            CREATE_WALKIN: "created walk-in",
+            ADD_STAFF: "added staff",
+            CREATE_STAFF: "created staff",
+
+            MEMBERSHIP_PAYMENT: "processed membership payment",
+            MEMBERSHIP_TYPE_PAYMENT: "processed membership type payment",
+            WALKIN_ACCESS_PAYMENT: "processed walk-in access payment",
+            TRAINER_FEE_PAYMENT: "processed trainer fee payment",
+            WALKIN_LOCKER_USAGE: "recorded walk-in locker usage",
+            LOCKER_OVERTIME: "recorded locker overtime",
+            ACCEPT_LOCKER_BOOKING: "accepted locker booking",
+            ACCEPT_TRAINER_REQUEST: "accepted trainer request"
+        };
+
+        if (descriptions[value]) {
+            return descriptions[value];
         }
 
-        // Convert API details into a shorter readable description.
-        const parts = value.split("|").map(part => part.trim());
+        return value
+            .replace(/_/g, " ")
+            .toLowerCase();
+    }
 
-        if (parts.length >= 3) {
-            const entity = parts[0];
-            const id = parts.find(part => /^ID\s*:/i.test(part));
-            const name = parts.find(part => /^Name\s*:/i.test(part));
-            const message = parts.slice(1).find(part =>
-                /successfully|permanently deleted|deleted from|archived/i.test(part)
-            );
+    function getDetails(record) {
+        const raw = String(record.details ?? "").trim();
 
-            const entityId = id ? id.replace(/^ID\s*:\s*/i, "") : "";
-            const entityName = name
-                ? name.replace(/^Name\s*:\s*/i, "")
-                : "";
+        const parts = raw.split("|").map(part => part.trim());
 
-            let description = entity;
+        const entity = parts[0] || "";
+        const idPart = parts.find(part => /^ID\s*:/i.test(part));
+        const namePart = parts.find(part => /^Name\s*:/i.test(part));
 
-            if (entityId) {
-                description += " " + entityId;
-            }
+        const targetId = idPart
+            ? idPart.replace(/^ID\s*:\s*/i, "").trim()
+            : "";
 
-            if (entityName) {
-                description += " (" + entityName + ")";
-            }
+        const targetName = namePart
+            ? namePart.replace(/^Name\s*:\s*/i, "").trim()
+            : "";
 
-            if (message) {
-                let actionMessage = message
-                    .replace(/^Member\s+/i, "")
-                    .replace(/^Walk-in\s+/i, "")
-                    .replace(/^Staff\s+/i, "");
+        const target = [
+            entity,
+            targetId,
+            targetName ? `(${targetName})` : ""
+        ].filter(Boolean).join(" ");
 
-                description += " " + actionMessage;
-            }
+        const actorRole = String(record.actor_role || "").trim();
+        const actorName = String(
+            record.actor_name || record.actor_id || "Unknown"
+        ).trim();
 
-            return description;
+        const actionDescription = getActionDescription(record.raw_action);
+
+        // If the action is not recognized, retain the actual API details.
+        if (!actionDescription || !target) {
+            return raw || "—";
         }
 
-        return value;
+        const actor = actorRole
+            ? `${capitalize(actorRole)} ${actorName}`
+            : actorName;
+
+        return `${actor} ${actionDescription} ${target}.`;
     }
 
     function parseDate(value) {
         if (!value) return null;
 
-        // API format: YYYY-MM-DD HH:MM:SS
+        // API date format: YYYY-MM-DD HH:MM:SS
         const normalized = String(value).replace(" ", "T");
         const date = new Date(normalized);
 
@@ -623,18 +665,6 @@
         const date = String(value ?? "").slice(0, 10);
 
         return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "";
-    }
-
-    function formatDate(value) {
-        const date = parseDate(value);
-
-        if (!date) return "—";
-
-        return date.toLocaleDateString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric"
-        });
     }
 
     function formatDateTime(value) {
@@ -688,12 +718,21 @@
 
             auditRecords = result.data.map(record => ({
                 id: record.id,
-                user_name: record.actor_name || record.actor_id || "—",
+                actor_name: record.actor_name || "",
+                actor_id: record.actor_id || "",
+                actor_role: record.actor_role || "",
+                user_name: record.actor_name || record.actor_id || "Unknown",
                 role: capitalize(record.actor_role),
                 raw_action: record.action || "",
                 action: getActionLabel(record.action),
-                details: getDetails(record.details),
+                details: record.details || "",
                 date: record.created_at || ""
+            }));
+
+            // Generate Details from the actual API record.
+            auditRecords = auditRecords.map(record => ({
+                ...record,
+                details: getDetails(record)
             }));
 
             applyFilters();
@@ -702,7 +741,7 @@
             console.error("Failed to load audit logs:", error);
 
             showMessage(
-                "Unable to load audit logs. Check your API connection and try again."
+                "Unable to load audit logs. Check the API connection and try again."
             );
         }
     }
@@ -715,6 +754,7 @@
         filteredRecords = auditRecords.filter(record => {
             const searchable = [
                 record.user_name,
+                record.actor_id,
                 record.role,
                 record.action,
                 record.raw_action,
@@ -744,11 +784,12 @@
         const total = filteredRecords.length;
         const totalPages = Math.ceil(total / PAGE_SIZE);
 
-        if (currentPage > totalPages && totalPages > 0) {
+        if (totalPages > 0 && currentPage > totalPages) {
             currentPage = totalPages;
         }
 
         const start = (currentPage - 1) * PAGE_SIZE;
+
         const pageRecords = filteredRecords.slice(
             start,
             start + PAGE_SIZE
@@ -822,7 +863,8 @@
             pages = [1, 2, 3, 4, 5, "...", totalPages];
         } else if (currentPage >= totalPages - 2) {
             pages = [
-                1, "...",
+                1,
+                "...",
                 totalPages - 4,
                 totalPages - 3,
                 totalPages - 2,
@@ -831,7 +873,8 @@
             ];
         } else {
             pages = [
-                1, "...",
+                1,
+                "...",
                 currentPage - 1,
                 currentPage,
                 currentPage + 1,
@@ -843,6 +886,7 @@
         pages.forEach(page => {
             if (page === "...") {
                 const span = document.createElement("span");
+
                 span.className = "audit-page-ellipsis";
                 span.textContent = "...";
                 pagination.appendChild(span);
@@ -889,10 +933,10 @@
         window.location.href = "login.html";
     }
 
-    // No default date filter: show records from all available dates.
+    // Show logs from all dates by default.
     dateFilter.value = "";
 
-    // Load real records from the API.
+    // Fetch actual audit logs from the API.
     loadAuditLogs();
 </script>
    
