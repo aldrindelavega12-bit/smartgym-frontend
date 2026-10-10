@@ -457,434 +457,445 @@
         </div>
     </div>
 
-    <script>
-        const PAGE_SIZE = 10;
+ 
+<script>
+    const PAGE_SIZE = 10;
+    const AUDIT_API_URL =
+        "https://smartgym-api-ia2e.onrender.com/api/audit-logs";
 
-        /*
-         * HARDCODED SAMPLE DATA
-         * Petsa ay naka-base sa kasalukuyang local date ng browser.
-         * Sample records lamang ito para makita at masubukan ang table.
-         */
-        function getLocalDateOffset(daysAgo) {
-            const date = new Date();
-            date.setDate(date.getDate() - daysAgo);
+    let auditRecords = [];
+    let filteredRecords = [];
+    let currentPage = 1;
 
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
+    const searchInput = document.getElementById("auditSearch");
+    const actionFilter = document.getElementById("actionFilter");
+    const dateFilter = document.getElementById("dateFilter");
+    const tableBody = document.getElementById("auditTableBody");
+    const pagination = document.getElementById("auditPagination");
+    const resultsInfo = document.getElementById("auditResultsInfo");
 
-            return `${year}-${month}-${day}`;
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        })[character]);
+    }
+
+    function capitalize(value) {
+        const text = String(value ?? "").trim();
+        return text
+            ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+            : "—";
+    }
+
+    function normalizeAction(action) {
+        const value = String(action || "").toLowerCase();
+
+        if (value.includes("login") || value.includes("logout")) {
+            return "login";
         }
 
-        const auditRecords = [
-            {
-                user_name: "Aldrin Dela Cruz",
-                role: "Admin",
-                action: "Created",
-                details: "Created staff account for Juan Santos (S0005)",
-                date: getLocalDateOffset(0)
-            },
-            {
-                user_name: "Maria Reyes",
-                role: "Manager",
-                action: "Updated",
-                details: "Updated member information (M0015)",
-                date: getLocalDateOffset(0)
-            },
-            {
-                user_name: "Juan Santos",
-                role: "Staff",
-                action: "Added",
-                details: "Added new walk-in record (W0021)",
-                date: getLocalDateOffset(0)
-            },
-            {
-                user_name: "Aldrin Dela Cruz",
-                role: "Admin",
-                action: "Backup",
-                details: "Created database backup",
-                date: getLocalDateOffset(0)
-            },
-            {
-                user_name: "Carlos Reyes",
-                role: "Manager",
-                action: "Archived",
-                details: "Archived member (M0012)",
-                date: getLocalDateOffset(1)
-            },
-            {
-                user_name: "Mark Santos",
-                role: "Staff",
-                action: "Deleted",
-                details: "Deleted locker booking (LKB0015)",
-                date: getLocalDateOffset(1)
-            },
-            {
-                user_name: "Ana Lim",
-                role: "Manager",
-                action: "Updated",
-                details: "Updated staff information (S0003)",
-                date: getLocalDateOffset(1)
-            },
-            {
-                user_name: "Mark Santos",
-                role: "Staff",
-                action: "Login",
-                details: "User logged in",
-                date: getLocalDateOffset(1)
-            },
-            {
-                user_name: "Aldrin Dela Cruz",
-                role: "Admin",
-                action: "Settings",
-                details: "Updated system settings (attendance)",
-                date: getLocalDateOffset(2)
-            },
-            {
-                user_name: "Maria Reyes",
-                role: "Manager",
-                action: "Restored",
-                details: "Restored archived member (M0008)",
-                date: getLocalDateOffset(2)
-            },
-            {
-                user_name: "Aldrin Dela Cruz",
-                role: "Admin",
-                action: "Login",
-                details: "Administrator logged in",
-                date: getLocalDateOffset(2)
-            },
-            {
-                user_name: "Juan Santos",
-                role: "Staff",
-                action: "Created",
-                details: "Created a new walk-in transaction (W0022)",
-                date: getLocalDateOffset(3)
-            },
-            {
-                user_name: "Ana Lim",
-                role: "Manager",
-                action: "Added",
-                details: "Added a new member record (M0016)",
-                date: getLocalDateOffset(3)
-            },
-            {
-                user_name: "Mark Santos",
-                role: "Staff",
-                action: "Updated",
-                details: "Updated locker booking information (LKB0016)",
-                date: getLocalDateOffset(4)
-            },
-            {
-                user_name: "Aldrin Dela Cruz",
-                role: "Admin",
-                action: "Deleted",
-                details: "Deleted an inactive user account (U0014)",
-                date: getLocalDateOffset(4)
-            },
-            {
-                user_name: "Maria Reyes",
-                role: "Manager",
-                action: "Archived",
-                details: "Archived inactive member (M0009)",
-                date: getLocalDateOffset(5)
-            },
-            {
-                user_name: "Carlos Reyes",
-                role: "Manager",
-                action: "Login",
-                details: "User logged in",
-                date: getLocalDateOffset(5)
-            },
-            {
-                user_name: "Aldrin Dela Cruz",
-                role: "Admin",
-                action: "Backup",
-                details: "Completed database backup",
-                date: getLocalDateOffset(6)
-            },
-            {
-                user_name: "Ana Lim",
-                role: "Manager",
-                action: "Restored",
-                details: "Restored archived member (M0010)",
-                date: getLocalDateOffset(7)
-            },
-            {
-                user_name: "Juan Santos",
-                role: "Staff",
-                action: "Settings",
-                details: "Updated attendance-related settings",
-                date: getLocalDateOffset(8)
-            },
-            {
-                user_name: "Mark Santos",
-                role: "Staff",
-                action: "Added",
-                details: "Added a new walk-in record (W0023)",
-                date: getLocalDateOffset(9)
-            },
-            {
-                user_name: "Maria Reyes",
-                role: "Manager",
-                action: "Updated",
-                details: "Updated member contact information (M0011)",
-                date: getLocalDateOffset(10)
-            }
-        ];
-
-        let filteredRecords = [...auditRecords];
-        let currentPage = 1;
-
-        const searchInput = document.getElementById("auditSearch");
-        const actionFilter = document.getElementById("actionFilter");
-        const dateFilter = document.getElementById("dateFilter");
-        const tableBody = document.getElementById("auditTableBody");
-        const pagination = document.getElementById("auditPagination");
-        const resultsInfo = document.getElementById("auditResultsInfo");
-
-        function escapeHTML(value) {
-            return String(value ?? "").replace(/[&<>"']/g, character => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#039;"
-            })[character]);
+        if (value.includes("create") || value.includes("register")) {
+            return "created";
         }
 
-        function formatDate(dateString) {
-            if (!dateString) return "—";
+        if (value.includes("add")) {
+            return "added";
+        }
 
-            const parts = dateString.split("-");
-            if (parts.length !== 3) return dateString;
+        if (value.includes("update") || value.includes("edit")) {
+            return "updated";
+        }
 
-            const date = new Date(
-                Number(parts[0]),
-                Number(parts[1]) - 1,
-                Number(parts[2])
+        if (value.includes("delete") || value.includes("remove")) {
+            return "deleted";
+        }
+
+        if (value.includes("archive")) {
+            return "archived";
+        }
+
+        if (value.includes("restore")) {
+            return "restored";
+        }
+
+        if (value.includes("backup")) {
+            return "backup";
+        }
+
+        if (value.includes("setting")) {
+            return "settings";
+        }
+
+        return value;
+    }
+
+    function getActionLabel(action) {
+        const value = String(action || "").toUpperCase();
+
+        const labels = {
+            RESTORE_MEMBER: "Restore",
+            RESTORE_WALKIN: "Restore",
+            RESTORE_STAFF: "Restore",
+            DELETE_MEMBER: "Delete",
+            DELETE_WALKIN: "Delete",
+            DELETE_STAFF: "Delete",
+            DELETE_ARCHIVED_MEMBER: "Delete",
+            DELETE_ARCHIVED_WALKIN: "Delete",
+            DELETE_ARCHIVED_STAFF: "Delete",
+            ARCHIVE_MEMBER: "Archive",
+            ARCHIVE_WALKIN: "Archive",
+            ARCHIVE_STAFF: "Archive"
+        };
+
+        if (labels[value]) {
+            return labels[value];
+        }
+
+        return value
+            .replace(/_/g, " ")
+            .toLowerCase()
+            .replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    function getDetails(details) {
+        const value = String(details ?? "").trim();
+
+        if (!value) {
+            return "—";
+        }
+
+        // Convert API details into a shorter readable description.
+        const parts = value.split("|").map(part => part.trim());
+
+        if (parts.length >= 3) {
+            const entity = parts[0];
+            const id = parts.find(part => /^ID\s*:/i.test(part));
+            const name = parts.find(part => /^Name\s*:/i.test(part));
+            const message = parts.slice(1).find(part =>
+                /successfully|permanently deleted|deleted from|archived/i.test(part)
             );
 
-            return date.toLocaleDateString("en-US", {
-                month: "short",
-                day: "2-digit",
-                year: "numeric"
-            });
+            const entityId = id ? id.replace(/^ID\s*:\s*/i, "") : "";
+            const entityName = name
+                ? name.replace(/^Name\s*:\s*/i, "")
+                : "";
+
+            let description = entity;
+
+            if (entityId) {
+                description += " " + entityId;
+            }
+
+            if (entityName) {
+                description += " (" + entityName + ")";
+            }
+
+            if (message) {
+                let actionMessage = message
+                    .replace(/^Member\s+/i, "")
+                    .replace(/^Walk-in\s+/i, "")
+                    .replace(/^Staff\s+/i, "");
+
+                description += " " + actionMessage;
+            }
+
+            return description;
         }
 
-        function normalizeAction(action) {
-            const value = String(action || "").toLowerCase();
+        return value;
+    }
 
-            if (value.includes("login") || value.includes("logout")) {
-                return "login";
-            }
-            if (value.includes("create") || value.includes("register")) {
-                return "created";
-            }
-            if (value.includes("add")) {
-                return "added";
-            }
-            if (value.includes("update") || value.includes("edit")) {
-                return "updated";
-            }
-            if (value.includes("delete") || value.includes("remove")) {
-                return "deleted";
-            }
-            if (value.includes("archive")) {
-                return "archived";
-            }
-            if (value.includes("restore")) {
-                return "restored";
-            }
-            if (value.includes("backup")) {
-                return "backup";
-            }
-            if (value.includes("setting")) {
-                return "settings";
-            }
+    function parseDate(value) {
+        if (!value) return null;
 
-            return value;
-        }
+        // API format: YYYY-MM-DD HH:MM:SS
+        const normalized = String(value).replace(" ", "T");
+        const date = new Date(normalized);
 
-        function applyFilters() {
-            const query = searchInput.value.trim().toLowerCase();
-            const selectedAction = actionFilter.value;
-            const selectedDate = dateFilter.value;
+        return Number.isNaN(date.getTime()) ? null : date;
+    }
 
-            filteredRecords = auditRecords.filter(record => {
-                const searchable = [
-                    record.user_name,
-                    record.role,
-                    record.action,
-                    record.details,
-                    formatDate(record.date)
-                ].join(" ").toLowerCase();
+    function getDateKey(value) {
+        const date = String(value ?? "").slice(0, 10);
 
-                const matchesSearch =
-                    !query || searchable.includes(query);
+        return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "";
+    }
 
-                const matchesAction =
-                    selectedAction === "all" ||
-                    normalizeAction(record.action) === selectedAction;
+    function formatDate(value) {
+        const date = parseDate(value);
 
-                const matchesDate =
-                    !selectedDate || record.date === selectedDate;
+        if (!date) return "—";
 
-                return matchesSearch && matchesAction && matchesDate;
+        return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric"
+        });
+    }
+
+    function formatDateTime(value) {
+        const date = parseDate(value);
+
+        if (!date) return "—";
+
+        return date.toLocaleString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+
+    function showMessage(message) {
+        tableBody.innerHTML = `
+            <tr class="audit-empty-row">
+                <td colspan="5">${escapeHTML(message)}</td>
+            </tr>
+        `;
+
+        resultsInfo.textContent = message;
+        pagination.innerHTML = "";
+    }
+
+    async function loadAuditLogs() {
+        showMessage("Loading audit logs...");
+
+        try {
+            const response = await fetch(AUDIT_API_URL, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
             });
 
-            currentPage = 1;
-            renderTable();
-        }
+            const result = await response.json();
 
-        function renderTable() {
-            const total = filteredRecords.length;
-            const totalPages = Math.ceil(total / PAGE_SIZE);
-            const start = (currentPage - 1) * PAGE_SIZE;
-
-            const pageRecords = filteredRecords.slice(
-                start,
-                start + PAGE_SIZE
-            );
-
-            if (pageRecords.length > 0) {
-                tableBody.innerHTML = pageRecords.map(record => `
-                    <tr>
-                        <td>${escapeHTML(record.user_name)}</td>
-                        <td>${escapeHTML(record.role)}</td>
-                        <td>${escapeHTML(record.action)}</td>
-                        <td>${escapeHTML(record.details)}</td>
-                        <td>${escapeHTML(formatDate(record.date))}</td>
-                    </tr>
-                `).join("");
-            } else {
-                tableBody.innerHTML = `
-                    <tr class="audit-empty-row">
-                        <td colspan="5">No audit records match your filters.</td>
-                    </tr>
-                `;
-            }
-
-            resultsInfo.textContent = total === 0
-                ? "Showing 0 logs"
-                : `Showing ${start + 1} to ${Math.min(start + PAGE_SIZE, total)} of ${total} logs`;
-
-            renderPagination(totalPages);
-        }
-
-        function renderPagination(totalPages) {
-            pagination.innerHTML = "";
-
-            if (totalPages <= 1) return;
-
-            function addButton(label, page, active = false, disabled = false) {
-                const button = document.createElement("button");
-
-                button.type = "button";
-                button.className =
-                    "audit-page-btn" + (active ? " active" : "");
-                button.textContent = label;
-                button.disabled = disabled;
-
-                button.addEventListener("click", () => {
-                    currentPage = page;
-                    renderTable();
-                });
-
-                pagination.appendChild(button);
-            }
-
-            addButton(
-                "‹",
-                Math.max(1, currentPage - 1),
-                false,
-                currentPage === 1
-            );
-
-            let pages = [];
-
-            if (totalPages <= 6) {
-                pages = Array.from(
-                    { length: totalPages },
-                    (_, index) => index + 1
+            if (!response.ok) {
+                throw new Error(
+                    result.message || `Request failed (${response.status})`
                 );
-            } else if (currentPage <= 3) {
-                pages = [1, 2, 3, 4, 5, "...", totalPages];
-            } else if (currentPage >= totalPages - 2) {
-                pages = [
-                    1, "...",
-                    totalPages - 4,
-                    totalPages - 3,
-                    totalPages - 2,
-                    totalPages - 1,
-                    totalPages
-                ];
-            } else {
-                pages = [
-                    1, "...",
-                    currentPage - 1,
-                    currentPage,
-                    currentPage + 1,
-                    "...",
-                    totalPages
-                ];
             }
 
-            pages.forEach(page => {
-                if (page === "...") {
-                    const span = document.createElement("span");
-                    span.className = "audit-page-ellipsis";
-                    span.textContent = "...";
-                    pagination.appendChild(span);
-                } else {
-                    addButton(
-                        String(page),
-                        page,
-                        page === currentPage
-                    );
-                }
-            });
+            if (!Array.isArray(result.data)) {
+                throw new Error("Invalid audit logs response from API.");
+            }
 
-            addButton(
-                "›",
-                Math.min(totalPages, currentPage + 1),
-                false,
-                currentPage === totalPages
+            auditRecords = result.data.map(record => ({
+                id: record.id,
+                user_name: record.actor_name || record.actor_id || "—",
+                role: capitalize(record.actor_role),
+                raw_action: record.action || "",
+                action: getActionLabel(record.action),
+                details: getDetails(record.details),
+                date: record.created_at || ""
+            }));
+
+            applyFilters();
+
+        } catch (error) {
+            console.error("Failed to load audit logs:", error);
+
+            showMessage(
+                "Unable to load audit logs. Check your API connection and try again."
             );
         }
+    }
 
-        searchInput.addEventListener("input", applyFilters);
-        actionFilter.addEventListener("change", applyFilters);
-        dateFilter.addEventListener("change", applyFilters);
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        const selectedAction = actionFilter.value;
+        const selectedDate = dateFilter.value;
 
-        function toggleStaffMenu(event) {
-            if (event) event.stopPropagation();
+        filteredRecords = auditRecords.filter(record => {
+            const searchable = [
+                record.user_name,
+                record.role,
+                record.action,
+                record.raw_action,
+                record.details,
+                formatDateTime(record.date)
+            ].join(" ").toLowerCase();
 
-            document
-                .getElementById("staffDropdown")
-                .classList.toggle("show");
+            const matchesSearch =
+                !query || searchable.includes(query);
+
+            const matchesAction =
+                selectedAction === "all" ||
+                normalizeAction(record.raw_action) === selectedAction;
+
+            const matchesDate =
+                !selectedDate ||
+                getDateKey(record.date) === selectedDate;
+
+            return matchesSearch && matchesAction && matchesDate;
+        });
+
+        currentPage = 1;
+        renderTable();
+    }
+
+    function renderTable() {
+        const total = filteredRecords.length;
+        const totalPages = Math.ceil(total / PAGE_SIZE);
+
+        if (currentPage > totalPages && totalPages > 0) {
+            currentPage = totalPages;
         }
 
-        document.addEventListener("click", event => {
-            const profile = document.getElementById("staffProfile");
-            const dropdown = document.getElementById("staffDropdown");
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageRecords = filteredRecords.slice(
+            start,
+            start + PAGE_SIZE
+        );
 
-            if (profile && !profile.contains(event.target)) {
-                dropdown.classList.remove("show");
+        if (pageRecords.length > 0) {
+            tableBody.innerHTML = pageRecords.map(record => `
+                <tr>
+                    <td>${escapeHTML(record.user_name)}</td>
+                    <td>${escapeHTML(record.role)}</td>
+                    <td>${escapeHTML(record.action)}</td>
+                    <td>${escapeHTML(record.details)}</td>
+                    <td>${escapeHTML(formatDateTime(record.date))}</td>
+                </tr>
+            `).join("");
+        } else {
+            tableBody.innerHTML = `
+                <tr class="audit-empty-row">
+                    <td colspan="5">No audit records found.</td>
+                </tr>
+            `;
+        }
+
+        resultsInfo.textContent = total === 0
+            ? "Showing 0 logs"
+            : `Showing ${start + 1} to ${Math.min(
+                start + PAGE_SIZE,
+                total
+            )} of ${total} logs`;
+
+        renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+        pagination.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        function addButton(label, page, active = false, disabled = false) {
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.className =
+                "audit-page-btn" + (active ? " active" : "");
+            button.textContent = label;
+            button.disabled = disabled;
+
+            button.addEventListener("click", () => {
+                currentPage = page;
+                renderTable();
+            });
+
+            pagination.appendChild(button);
+        }
+
+        addButton(
+            "‹",
+            Math.max(1, currentPage - 1),
+            false,
+            currentPage === 1
+        );
+
+        let pages = [];
+
+        if (totalPages <= 6) {
+            pages = Array.from(
+                { length: totalPages },
+                (_, index) => index + 1
+            );
+        } else if (currentPage <= 3) {
+            pages = [1, 2, 3, 4, 5, "...", totalPages];
+        } else if (currentPage >= totalPages - 2) {
+            pages = [
+                1, "...",
+                totalPages - 4,
+                totalPages - 3,
+                totalPages - 2,
+                totalPages - 1,
+                totalPages
+            ];
+        } else {
+            pages = [
+                1, "...",
+                currentPage - 1,
+                currentPage,
+                currentPage + 1,
+                "...",
+                totalPages
+            ];
+        }
+
+        pages.forEach(page => {
+            if (page === "...") {
+                const span = document.createElement("span");
+                span.className = "audit-page-ellipsis";
+                span.textContent = "...";
+                pagination.appendChild(span);
+            } else {
+                addButton(
+                    String(page),
+                    page,
+                    page === currentPage
+                );
             }
         });
 
-        function logout(event) {
-            if (event) event.stopPropagation();
-            window.location.href = "login.html";
+        addButton(
+            "›",
+            Math.min(totalPages, currentPage + 1),
+            false,
+            currentPage === totalPages
+        );
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+    actionFilter.addEventListener("change", applyFilters);
+    dateFilter.addEventListener("change", applyFilters);
+
+    function toggleStaffMenu(event) {
+        if (event) event.stopPropagation();
+
+        document
+            .getElementById("staffDropdown")
+            .classList.toggle("show");
+    }
+
+    document.addEventListener("click", event => {
+        const profile = document.getElementById("staffProfile");
+        const dropdown = document.getElementById("staffDropdown");
+
+        if (profile && !profile.contains(event.target)) {
+            dropdown.classList.remove("show");
         }
+    });
 
-        // Default date: today. Clear it if you want to view all dates.
-        dateFilter.value = getLocalDateOffset(0);
+    function logout(event) {
+        if (event) event.stopPropagation();
+        window.location.href = "login.html";
+    }
 
-        // Render the hardcoded sample records immediately.
-        applyFilters();
-    </script>
+    // No default date filter: show records from all available dates.
+    dateFilter.value = "";
+
+    // Load real records from the API.
+    loadAuditLogs();
+</script>
+   
 
 </body>
 </html>
