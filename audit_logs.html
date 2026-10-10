@@ -820,6 +820,7 @@
         renderPagination(totalPages);
     }
 
+    
     function renderPagination(totalPages) {
         pagination.innerHTML = "";
 
@@ -842,6 +843,7 @@
             pagination.appendChild(button);
         }
 
+        // Previous button
         addButton(
             "‹",
             Math.max(1, currentPage - 1),
@@ -849,53 +851,23 @@
             currentPage === 1
         );
 
-        let pages = [];
+        // Show only 3 consecutive page numbers
+        const startPage = Math.min(
+            Math.max(1, currentPage),
+            Math.max(1, totalPages - 2)
+        );
 
-        if (totalPages <= 6) {
-            pages = Array.from(
-                { length: totalPages },
-                (_, index) => index + 1
+        const endPage = Math.min(totalPages, startPage + 2);
+
+        for (let page = startPage; page <= endPage; page++) {
+            addButton(
+                String(page),
+                page,
+                page === currentPage
             );
-        } else if (currentPage <= 3) {
-            pages = [1, 2, 3, 4, 5, "...", totalPages];
-        } else if (currentPage >= totalPages - 2) {
-            pages = [
-                1,
-                "...",
-                totalPages - 4,
-                totalPages - 3,
-                totalPages - 2,
-                totalPages - 1,
-                totalPages
-            ];
-        } else {
-            pages = [
-                1,
-                "...",
-                currentPage - 1,
-                currentPage,
-                currentPage + 1,
-                "...",
-                totalPages
-            ];
         }
 
-        pages.forEach(page => {
-            if (page === "...") {
-                const span = document.createElement("span");
-
-                span.className = "audit-page-ellipsis";
-                span.textContent = "...";
-                pagination.appendChild(span);
-            } else {
-                addButton(
-                    String(page),
-                    page,
-                    page === currentPage
-                );
-            }
-        });
-
+        // Next button
         addButton(
             "›",
             Math.min(totalPages, currentPage + 1),
@@ -903,6 +875,8 @@
             currentPage === totalPages
         );
     }
+
+
 
     searchInput.addEventListener("input", applyFilters);
     actionFilter.addEventListener("change", applyFilters);
