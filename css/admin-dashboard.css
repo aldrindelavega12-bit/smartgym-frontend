@@ -8090,91 +8090,22 @@ a[href="#incomeReport"]::before {
 
 
 
-/* =========================================
-   MANAGER DASHBOARD - INCOME CARD
-========================================= */
+/* FIX INCOME POPUP ONLY — PRESERVE CARD DESIGN */
 
 #incomeCard {
-    position: relative;
     overflow: visible;
-    border: 1px solid #e4ece7;
-    border-radius: 20px;
-    background: #ffffff;
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-#incomeCard:hover {
-    box-shadow: 0 12px 30px rgba(16, 80, 49, 0.10);
-}
-
-#incomeCard .summary-content {
-    padding: 22px 21px;
-}
-
-#incomeCard .summary-content > span {
-    display: block;
-    margin-bottom: 7px;
-    color: #64748b;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-}
-
-#incomeCard #total-income {
-    display: block;
-    margin: 0 0 7px;
-    color: #078746;
-    font-size: clamp(25px, 2.1vw, 32px);
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.8px;
-    overflow-wrap: anywhere;
-}
-
-#incomeCard .summary-content > small {
-    display: block;
-    color: #84918a;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-/* Income breakdown popup */
 #incomeCard .summary-preview {
     position: absolute;
     top: calc(100% + 12px);
     left: 0;
+    right: auto;
+    transform: none;
     width: 350px;
-    max-width: min(350px, calc(100vw - 48px));
+    max-width: calc(100vw - 180px);
     box-sizing: border-box;
-    padding: 22px;
-    background: #ffffff;
-    border: 1px solid #e5eee8;
-    border-radius: 18px;
-    box-shadow: 0 18px 45px rgba(15, 50, 32, 0.14);
-    z-index: 100;
-}
-
-/* Popup heading */
-#incomeCard .summary-preview h4 {
-    margin: 0 0 5px;
-    color: #173b2b;
-    font-size: 17px;
-    font-weight: 750;
-}
-
-#incomeCard .summary-preview > p {
-    margin: 0 0 19px;
-    color: #84918a;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-/* Breakdown rows */
-#incomeCard #incomePreviewList {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    width: 100%;
+    z-index: 9999;
 }
 
 #incomeCard .income-preview-item {
@@ -8182,119 +8113,15 @@ a[href="#incomeReport"]::before {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px 0;
-    border-bottom: 1px solid #edf2ee;
-}
-
-#incomeCard .income-preview-item:last-child {
-    padding-bottom: 0;
-    border-bottom: none;
 }
 
 #incomeCard .income-preview-item span {
     flex: 1;
     min-width: 0;
-    color: #526258;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.5;
 }
 
 #incomeCard .income-preview-item strong {
     flex-shrink: 0;
-    color: #173b2b;
-    font-size: 14px;
-    font-weight: 750;
-    font-variant-numeric: tabular-nums;
-    text-align: right;
     white-space: nowrap;
-}
-
-/* Loading and error messages */
-#incomeCard .preview-loading,
-#incomeCard .preview-error {
-    padding: 12px 0;
-    color: #64748b;
-    font-size: 13px;
-}
-
-/* Mobile layout */
-@media (max-width: 600px) {
-    #incomeCard .summary-preview {
-        left: 0;
-        width: 320px;
-        max-width: calc(100vw - 48px);
-        padding: 18px;
-    }
-
-    #incomeCard .summary-content {
-        padding: 19px;
-    }
-
-    #incomeCard #total-income {
-        font-size: 27px;
-    }
-
-    #incomeCard .income-preview-item {
-        gap: 10px;
-    }
-}
-
-/* FIX: INCOME POPUP CLIPPED ON THE LEFT */
-
-#incomeCard {
-    position: relative;
-    overflow: visible !important;
-}
-
-#incomeCard .summary-preview {
-    position: absolute !important;
-    top: calc(100% + 12px) !important;
-
-    /* Align popup to the left edge of income card */
-    left: 0 !important;
-    right: auto !important;
-    transform: none !important;
-
-    width: 350px !important;
-    max-width: calc(100vw - 180px) !important;
-    box-sizing: border-box !important;
-
-    padding: 22px !important;
-    border-radius: 18px !important;
-    background: #ffffff !important;
-    border: 1px solid #e5eee8 !important;
-    box-shadow: 0 18px 45px rgba(15, 50, 32, 0.14) !important;
-
-    z-index: 9999 !important;
-}
-
-/* Keep labels and amounts aligned */
-#incomeCard .income-preview-item {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 16px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-#incomeCard .income-preview-item span {
-    flex: 1 !important;
-    min-width: 0 !important;
-}
-
-#incomeCard .income-preview-item strong {
-    flex-shrink: 0 !important;
-    white-space: nowrap !important;
-    text-align: right !important;
-}
-
-@media (max-width: 600px) {
-    #incomeCard .summary-preview {
-        width: 320px !important;
-        max-width: calc(100vw - 40px) !important;
-    }
+    text-align: right;
 }
