@@ -574,9 +574,7 @@ if(
                     </div>
 
 
-                    <strong>
-                        ₱25,500.00
-                    </strong>
+                    <strong id="incomeTotalValue">Loading...</strong>
 
                 </div>
 
@@ -604,9 +602,7 @@ if(
                         </div>
 
 
-                        <strong>
-                            ₱8,000.00
-                        </strong>
+                        <strong id="memberIncomeValue">Loading...</strong>
 
                     </div>
 
@@ -628,9 +624,8 @@ if(
                         </div>
 
 
-                        <strong>
-                            ₱5,000.00
-                        </strong>
+                        <strong id="walkinIncomeValue">Loading...</strong>
+
 
                     </div>
 
@@ -653,9 +648,7 @@ if(
                         </div>
 
 
-                        <strong>
-                            ₱4,500.00
-                        </strong>
+                        <strong id="lockerIncomeValue">Loading...</strong>
 
                     </div>
 
@@ -677,9 +670,7 @@ if(
                         </div>
 
 
-                        <strong>
-                            ₱8,000.00
-                        </strong>
+                        <strong id="trainerIncomeValue">Loading...</strong>
 
                     </div>
 
@@ -3750,6 +3741,122 @@ function initializeTrainerReport(){
     );
 
 }
+
+
+
+/* =====================================================
+   LOAD INCOME REPORT FROM API
+===================================================== */
+
+const INCOME_REPORT_API =
+    "https://smartgym-api-ia2e.onrender.com/api/reports/income";
+
+
+function formatIncomeAmount(value) {
+
+    return new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(Number(value));
+
+}
+
+
+function setIncomeReportValue(elementId, value) {
+
+    const element = document.getElementById(elementId);
+
+    if (!element) return;
+
+    element.textContent =
+        value === null || value === undefined
+            ? "Not classified"
+            : formatIncomeAmount(value);
+
+}
+
+
+async function loadIncomeReport() {
+
+    const valueIds = [
+        "incomeTotalValue",
+        "memberIncomeValue",
+        "walkinIncomeValue",
+        "lockerIncomeValue",
+        "trainerIncomeValue"
+    ];
+
+    valueIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = "Loading...";
+    });
+
+    const params = new URLSearchParams({
+        period: incomePeriod,
+        start_date: formatIncomeInputDate(incomeStartDate),
+        end_date: formatIncomeInputDate(incomeEndDate)
+    });
+
+    try {
+
+        const response = await fetch(
+            `${INCOME_REPORT_API}?${params.toString()}`
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success || !result.summary) {
+            throw new Error(
+                result.message || "Invalid income report response."
+            );
+        }
+
+        const summary = result.summary;
+
+        setIncomeReportValue(
+            "incomeTotalValue",
+            summary.total_income
+        );
+
+        setIncomeReportValue(
+            "memberIncomeValue",
+            summary.member_income
+        );
+
+        setIncomeReportValue(
+            "walkinIncomeValue",
+            summary.walkin_income
+        );
+
+        setIncomeReportValue(
+            "lockerIncomeValue",
+            summary.locker_income
+        );
+
+        setIncomeReportValue(
+            "trainerIncomeValue",
+            summary.trainer_income
+        );
+
+    } catch (error) {
+
+        console.error("Failed to load Income Report:", error);
+
+        valueIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = "Unavailable";
+        });
+
+    }
+
+}
+
 /* =====================================================
    START DATE CHANGED
 ===================================================== */
@@ -8015,7 +8122,7 @@ initializeIncomeReport();
 
 loadMessageCount();
 initializeTrainerReport();
-
+loadIncomeReport();
 initializeAttendanceDateFilter();
 
 </script>
