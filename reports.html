@@ -3091,7 +3091,6 @@ function updateIncomeDateDisplay(){
 /* =====================================================
    SET PERIOD
 ===================================================== */
-
 function setIncomePeriod(period) {
     incomePeriod = period;
 
@@ -3107,8 +3106,8 @@ function setIncomePeriod(period) {
         dailyBtn?.classList.add("active");
 
         incomeEndDate = new Date(incomeStartDate);
-
         setIncomeDateMode("single");
+
     } else if (period === "weekly") {
         weeklyBtn?.classList.add("active");
 
@@ -3118,6 +3117,7 @@ function setIncomePeriod(period) {
         incomeEndDate = range.end;
 
         setIncomeDateMode("single");
+
     } else if (period === "custom") {
         customBtn?.classList.add("active");
 
@@ -3126,8 +3126,8 @@ function setIncomePeriod(period) {
 
     updateIncomeDateDisplay();
     updateIncomeReportView();
-    loadIncomeReport();
 }
+
 
 /* =====================================================
    DATE DISPLAY MODE
@@ -3708,9 +3708,7 @@ function setIncomeReportValue(elementId, value) {
 
 }
 
-
 async function loadIncomeReport() {
-
     const valueIds = [
         "incomeTotalValue",
         "memberIncomeValue",
@@ -3724,16 +3722,30 @@ async function loadIncomeReport() {
         if (element) element.textContent = "Loading...";
     });
 
+    const startDate = formatIncomeInputDate(incomeStartDate);
+    const endDate = formatIncomeInputDate(
+        incomePeriod === "daily"
+            ? incomeStartDate
+            : incomeEndDate
+    );
+
     const params = new URLSearchParams({
         period: incomePeriod,
-        start_date: formatIncomeInputDate(incomeStartDate),
-        end_date: formatIncomeInputDate(incomeEndDate)
+        start_date: startDate,
+        end_date: endDate,
+        _: String(Date.now())
+    });
+
+    console.log("[INCOME REPORT] Request:", {
+        period: incomePeriod,
+        start_date: startDate,
+        end_date: endDate
     });
 
     try {
-
         const response = await fetch(
-            `${INCOME_REPORT_API}?${params.toString()}`
+            `${INCOME_REPORT_API}?${params.toString()}`,
+            { cache: "no-store" }
         );
 
         if (!response.ok) {
@@ -3741,6 +3753,8 @@ async function loadIncomeReport() {
         }
 
         const result = await response.json();
+
+        console.log("[INCOME REPORT] API response:", result);
 
         if (!result.success || !result.summary) {
             throw new Error(
@@ -3750,43 +3764,22 @@ async function loadIncomeReport() {
 
         const summary = result.summary;
 
-        setIncomeReportValue(
-            "incomeTotalValue",
-            summary.total_income
-        );
-
-        setIncomeReportValue(
-            "memberIncomeValue",
-            summary.member_income
-        );
-
-        setIncomeReportValue(
-            "walkinIncomeValue",
-            summary.walkin_income
-        );
-
-        setIncomeReportValue(
-            "lockerIncomeValue",
-            summary.locker_income
-        );
-
-        setIncomeReportValue(
-            "trainerIncomeValue",
-            summary.trainer_income
-        );
+        setIncomeReportValue("incomeTotalValue", summary.total_income);
+        setIncomeReportValue("memberIncomeValue", summary.member_income);
+        setIncomeReportValue("walkinIncomeValue", summary.walkin_income);
+        setIncomeReportValue("lockerIncomeValue", summary.locker_income);
+        setIncomeReportValue("trainerIncomeValue", summary.trainer_income);
 
     } catch (error) {
-
         console.error("Failed to load Income Report:", error);
 
         valueIds.forEach(id => {
             const element = document.getElementById(id);
             if (element) element.textContent = "Unavailable";
         });
-
     }
-
 }
+
 
 /* =====================================================
    START DATE CHANGED
@@ -3947,7 +3940,6 @@ function handleIncomeEndDateChange(){
 /* =====================================================
    UPDATE REPORT DESCRIPTION
 ===================================================== */
-
 function updateIncomeReportView() {
     const description = document.querySelector(".total-income-card p");
 
@@ -3955,16 +3947,14 @@ function updateIncomeReportView() {
         if (incomePeriod === "daily") {
             description.innerText =
                 "Total revenue for the selected date.";
-        }
-        else if (incomePeriod === "weekly") {
+        } else if (incomePeriod === "weekly") {
             description.innerText =
                 `Total revenue for the week of ${
                     formatIncomeDate(incomeStartDate)
                 } – ${
                     formatIncomeDate(incomeEndDate)
                 }.`;
-        }
-        else if (incomePeriod === "custom") {
+        } else if (incomePeriod === "custom") {
             description.innerText =
                 `Total revenue from ${
                     formatIncomeDate(incomeStartDate)
