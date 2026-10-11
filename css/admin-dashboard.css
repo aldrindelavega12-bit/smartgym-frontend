@@ -8090,38 +8090,96 @@ a[href="#incomeReport"]::before {
 
 
 
-/* FIX INCOME POPUP ONLY — PRESERVE CARD DESIGN */
-
-#incomeCard {
-    overflow: visible;
-}
+/* =========================================
+   INCOME HOVER POPUP — REFINED DESIGN
+   Keep the original summary card unchanged
+========================================= */
 
 #incomeCard .summary-preview {
     position: absolute;
     top: calc(100% + 12px);
     left: 0;
     right: auto;
-    transform: none;
-    width: 350px;
-    max-width: calc(100vw - 180px);
+
+    width: 340px;
+    max-width: calc(100vw - 40px);
     box-sizing: border-box;
+
+    padding: 20px 22px;
+    background: #ffffff;
+    border: 1px solid #e5eee8;
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 30px rgba(21, 55, 37, 0.10),
+        0 2px 6px rgba(21, 55, 37, 0.04);
+
     z-index: 9999;
 }
 
+/* Popup heading */
+#incomeCard .summary-preview h4 {
+    margin: 0 0 4px;
+    color: #183b2a;
+    font-size: 16px;
+    font-weight: 750;
+}
+
+#incomeCard .summary-preview > p {
+    margin: 0 0 16px;
+    color: #84918a;
+    font-size: 12px;
+}
+
+/* Breakdown container */
+#incomeCard #incomePreviewList {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Each income row */
 #incomeCard .income-preview-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+
+    padding: 10px 0;
+    border-bottom: 1px solid #edf2ee;
+}
+
+#incomeCard .income-preview-item:first-child {
+    padding-top: 0;
+}
+
+#incomeCard .income-preview-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 #incomeCard .income-preview-item span {
     flex: 1;
     min-width: 0;
+    color: #536359;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 #incomeCard .income-preview-item strong {
     flex-shrink: 0;
-    white-space: nowrap;
+    color: #183b2a;
+    font-size: 14px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
     text-align: right;
+    white-space: nowrap;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    #incomeCard .summary-preview {
+        width: 320px;
+        max-width: calc(100vw - 40px);
+        padding: 18px;
+    }
 }
