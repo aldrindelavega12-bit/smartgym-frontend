@@ -550,18 +550,32 @@ async function loadTodayIncome() {
     const incomeElement = document.getElementById("total-income");
     const previewElement = document.getElementById("incomePreviewList");
 
-    if (!incomeElement) return;
+    if (!incomeElement) {
+        console.error("TOTAL INCOME ERROR: #total-income not found.");
+        return;
+    }
 
     try {
-        incomeElement.innerText = "Loading...";
+        incomeElement.textContent = "Loading...";
 
+        if (previewElement) {
+            previewElement.innerHTML = `
+                <div class="preview-loading">
+                    Loading income breakdown...
+                </div>
+            `;
+        }
+
+        // Get today's local date
         const today = new Date();
+
         const localDate = [
             today.getFullYear(),
             String(today.getMonth() + 1).padStart(2, "0"),
             String(today.getDate()).padStart(2, "0")
         ].join("-");
 
+        // Request income report from the backend
         const params = new URLSearchParams({
             period: "daily",
             start_date: localDate,
@@ -579,33 +593,55 @@ async function loadTodayIncome() {
         const data = await response.json();
 
         if (!data.success || !data.summary) {
-            throw new Error(data.message || "Invalid income response.");
+            throw new Error(
+                data.message || "Invalid income report response."
+            );
         }
 
         const summary = data.summary;
+
+        // =========================================
+        // TOTAL INCOME
+        // =========================================
+
         const income = Number(summary.total_income ?? 0);
 
         if (!Number.isFinite(income)) {
             throw new Error("Invalid total income value.");
         }
 
-        incomeElement.innerText = `₱${income.toLocaleString("en-PH", {
+        incomeElement.textContent = `₱${income.toLocaleString("en-PH", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         })}`;
 
-        // Update the existing income preview, if available.
+        // =========================================
+        // INCOME BREAKDOWN
+        // =========================================
+
         if (previewElement) {
             const categories = [
-                ["Member Income", summary.member_income],
-                ["Walk-in Income", summary.walkin_income],
-                ["Locker Income", summary.locker_income],
-                ["Trainer Income", summary.trainer_income]
+                {
+                    label: "Member Income",
+                    amount: summary.member_income
+                },
+                {
+                    label: "Walk-in Income",
+                    amount: summary.walkin_income
+                },
+                {
+                    label: "Locker Income",
+                    amount: summary.locker_income
+                },
+                {
+                    label: "Trainer Income",
+                    amount: summary.trainer_income
+                }
             ];
 
-            previewElement.innerHTML = "";
+            previewElement.replaceChildren();
 
-            categories.forEach(([label, amount]) => {
+            categories.forEach(({ label, amount }) => {
                 const item = document.createElement("div");
                 item.className = "income-preview-item";
 
@@ -613,32 +649,48 @@ async function loadTodayIncome() {
                 name.textContent = label;
 
                 const value = document.createElement("strong");
-                value.textContent = `₱${Number(amount ?? 0).toLocaleString("en-PH", {
+
+                const numericAmount = Number(amount ?? 0);
+
+                value.textContent = `₱${(
+                    Number.isFinite(numericAmount)
+                        ? numericAmount
+                        : 0
+                ).toLocaleString("en-PH", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 })}`;
 
-                item.append(name, value);
+                item.appendChild(name);
+                item.appendChild(value);
+
                 previewElement.appendChild(item);
             });
         }
 
-        console.log("MANAGER TODAY INCOME:", income, summary);
+        console.log("MANAGER TODAY INCOME:", {
+            date: localDate,
+            total_income: income,
+            member_income: summary.member_income,
+            walkin_income: summary.walkin_income,
+            locker_income: summary.locker_income,
+            trainer_income: summary.trainer_income
+        });
 
     } catch (error) {
         console.error("TOTAL INCOME ERROR:", error);
-        incomeElement.innerText = "Unavailable";
+
+        incomeElement.textContent = "Unavailable";
 
         if (previewElement) {
             previewElement.innerHTML = `
                 <div class="preview-error">
-                    Unable to load income summary
+                    Unable to load income breakdown.
                 </div>
             `;
         }
     }
 }
-
 
 
 // =====================================================
