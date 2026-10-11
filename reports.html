@@ -3103,37 +3103,23 @@ function setIncomePeriod(period) {
     weeklyBtn?.classList.remove("active");
     customBtn?.classList.remove("active");
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
     if (period === "daily") {
         dailyBtn?.classList.add("active");
 
-        incomeStartDate = new Date(today);
-        incomeEndDate = new Date(today);
+        incomeEndDate = new Date(incomeStartDate);
 
         setIncomeDateMode("single");
-    }
-
-    else if (period === "weekly") {
+    } else if (period === "weekly") {
         weeklyBtn?.classList.add("active");
 
-        // Monday to Sunday of the current week
-        const range = getIncomeWeekRange(today);
+        const range = getIncomeWeekRange(incomeStartDate);
 
-        incomeStartDate = new Date(range.start);
-        incomeEndDate = new Date(range.end);
+        incomeStartDate = range.start;
+        incomeEndDate = range.end;
 
         setIncomeDateMode("single");
-    }
-
-    else if (period === "custom") {
+    } else if (period === "custom") {
         customBtn?.classList.add("active");
-
-        // Keep the current range when switching to Custom Date
-        if (incomeStartDate > incomeEndDate) {
-            incomeEndDate = new Date(incomeStartDate);
-        }
 
         setIncomeDateMode("range");
     }
