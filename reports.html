@@ -5765,46 +5765,107 @@ async function loadLockerReport(){
 
 }
 
-// ==========================================
-// TRAINER REPORT
-// ==========================================
+/* =====================================================
+   TRAINER REPORT — DYNAMIC API DATA
+===================================================== */
 
 const TRAINER_REPORT_API =
-    "https://smartgym-api-i2a2e.onrender.com/api/reports/trainer";
+    "https://smartgym-api-ia2e.onrender.com/api/reports/trainer";
 
 let trainerReportData = {};
 let trainerReportList = [];
 let filteredTrainerReport = [];
+let trainerReportCurrentPage = 1;
 
-// ==========================================
-// SHOW TRAINER REPORT
-// ==========================================
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function trainerEscape(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function trainerDate(value) {
+    if (!value) return "—";
+    return String(value).split("T")[0].split(" ")[0];
+}
+
+function trainerCurrency(value) {
+    const amount = Number(value);
+
+    if (value === null || value === undefined || value === "") {
+        return "Unavailable";
+    }
+
+    if (!Number.isFinite(amount)) {
+        return "Unavailable";
+    }
+
+    return amount.toLocaleString("en-PH", {
+        style: "currency",
+        currency: "PHP"
+    });
+}
+
+
+/* =====================================================
+   SHOW TRAINER REPORT
+===================================================== */
 
 async function showTrainerReport() {
-    const trainerReportSection =
-        document.getElementById("trainerReport");
+    const landing = document.querySelector(".reports-landing");
+    const workingArea = document.querySelector(".reports-working-area");
 
-    if (trainerReportSection) {
-        trainerReportSection.style.display = "block";
+    if (landing) {
+        landing.style.display = "none";
+    }
+
+    if (workingArea) {
+        workingArea.style.display = "block";
+    }
+
+    [
+        "incomeReport",
+        "attendanceReport",
+        "lockerReport",
+        "trainerDetails"
+    ].forEach(id => {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.style.display = "none";
+        }
+    });
+
+    const report = document.getElementById("trainerReport");
+
+    if (report) {
+        report.style.display = "block";
     }
 
     await loadTrainerReport();
 }
 
-// ==========================================
-// LOAD TRAINER REPORT FROM API
-// ==========================================
+
+/* =====================================================
+   LOAD TRAINER REPORT
+===================================================== */
 
 async function loadTrainerReport() {
-    const tableBody =
-        document.getElementById("trainerReportBody");
+    const body = document.getElementById("trainerReportBody");
 
-    if (!tableBody) {
+    if (!body) {
         console.error("Trainer Report table body not found.");
         return;
     }
 
-    tableBody.innerHTML = `
+    body.innerHTML = `
         <tr>
             <td colspan="6">Loading trainer report...</td>
         </tr>
@@ -5815,13 +5876,12 @@ async function loadTrainerReport() {
             method: "GET",
             headers: {
                 "Accept": "application/json"
-            }
+            },
+            cache: "no-store"
         });
 
         if (!response.ok) {
-            throw new Error(
-                `API request failed: ${response.status}`
-            );
+            throw new Error(`API request failed: ${response.status}`);
         }
 
         const result = await response.json();
@@ -5837,27 +5897,34 @@ async function loadTrainerReport() {
 
         trainerReportList = result.data;
         filteredTrainerReport = [...trainerReportList];
-
         trainerReportData = {};
 
-        trainerReportList.forEach((trainer) => {
+        trainerReportList.forEach(trainer => {
             const trainerId = String(
                 trainer.trainer_id ?? trainer.id ?? ""
             );
 
-            trainerReportData[trainerId] = trainer;
+            if (trainerId) {
+                trainerReportData[trainerId] = trainer;
+            }
         });
+
+        trainerReportCurrentPage = 1;
 
         renderTrainerReport(filteredTrainerReport);
         updateTrainerReportSummary(filteredTrainerReport);
 
     } catch (error) {
-        console.error("Failed to load Trainer Report:", error);
+        console.error("Trainer Report error:", error);
 
-        tableBody.innerHTML = `
+        trainerReportList = [];
+        filteredTrainerReport = [];
+        trainerReportData = {};
+
+        body.innerHTML = `
             <tr>
                 <td colspan="6">
-                    Failed to load trainer report.
+                    Unable to load Trainer Report.
                     Check the API endpoint and server logs.
                 </td>
             </tr>
@@ -5868,18 +5935,66 @@ async function loadTrainerReport() {
     }
 }
 
-// ==========================================
-// RENDER TRAINER TABLE
-// ==========================================
 
-function renderTrainerReport(trainers) {
-    const tableBody =
-        document.getElementById("trainerReportBody");
+/* =====================================================
+   SUMMARY
+===================================================== */
 
-    if (!tableBody) return;
+function updateTrainerReportSummary(trainers = filteredTrainerReport) {
+    setTrainerReportText(
+        "trainerTotalCount",
+        trainers.length
+    );
+
+    /*
+      Revenue must come from actual trainer_fee payments
+      returned by the API. Do not derive income from
+      assignments, trainee counts, or trainer plan prices.
+    */
+
+    const hasRevenue = trainers.every(trainer =>
+        trainer.total_fees !== null &&
+        trainer.total_fees !== undefined &&
+        trainer.total_fees !== "" &&
+        Number.isFinite(Number(trainer.total_fees))
+    );
+
+    if (!trainers.length || !hasRevenue) {
+        setTrainerReportText("trainerTotalIncome", "Unavailable");
+        return;
+    }
+
+    const totalIncome = trainers.reduce(
+        (sum, trainer) => sum + Number(trainer.total_fees),
+        0
+    );
+
+    setTrainerReportText(
+        "trainerTotalIncome",
+        trainerCurrency(totalIncome)
+    );
+}
+
+function setTrainerReportText(id, value) {
+    const element = document.getElementById(id);
+
+    if (element) {
+        element.textContent = value;
+    }
+}
+
+
+/* =====================================================
+   RENDER TRAINER TABLE
+===================================================== */
+
+function renderTrainerReport(trainers = filteredTrainerReport) {
+    const body = document.getElementById("trainerReportBody");
+
+    if (!body) return;
 
     if (!trainers.length) {
-        tableBody.innerHTML = `
+        body.innerHTML = `
             <tr>
                 <td colspan="6">No trainer records found.</td>
             </tr>
@@ -5887,40 +6002,51 @@ function renderTrainerReport(trainers) {
         return;
     }
 
-    tableBody.innerHTML = trainers.map((trainer) => {
+    body.innerHTML = trainers.map(trainer => {
         const trainerId = String(
             trainer.trainer_id ?? trainer.id ?? ""
         );
 
         const trainerName =
-            trainer.trainer_name ?? trainer.fullname ?? "Unavailable";
+            trainer.trainer_name ??
+            trainer.fullname ??
+            trainer.name ??
+            "Unavailable";
 
-        const programCount =
-            Number(trainer.program_count ?? 0);
+        const programCount = Number(
+            trainer.program_count ?? 0
+        );
 
-        const activeClients =
-            Number(trainer.active_clients ?? 0);
+        const activeClients = Number(
+            trainer.active_clients ?? 0
+        );
 
         const totalFees = trainer.total_fees;
 
         return `
             <tr>
-                <td>${escapeTrainerHTML(trainerId)}</td>
-                <td>${escapeTrainerHTML(trainerName)}</td>
-                <td>${programCount}</td>
-                <td>${activeClients}</td>
+                <td>${trainerEscape(trainerId)}</td>
+
+                <td>${trainerEscape(trainerName)}</td>
+
+                <td>${Number.isFinite(programCount) ? programCount : 0}</td>
+
+                <td>${Number.isFinite(activeClients) ? activeClients : 0}</td>
+
                 <td>
                     ${
                         totalFees === null ||
-                        totalFees === undefined
+                        totalFees === undefined ||
+                        totalFees === ""
                             ? "Unavailable"
-                            : formatTrainerCurrency(totalFees)
+                            : trainerCurrency(totalFees)
                     }
                 </td>
+
                 <td>
                     <button
                         type="button"
-                        onclick="viewTrainerDetails('${escapeTrainerAttribute(trainerId)}')">
+                        onclick="viewTrainerDetails('${trainerEscape(trainerId)}')">
                         View
                     </button>
                 </td>
@@ -5929,88 +6055,73 @@ function renderTrainerReport(trainers) {
     }).join("");
 }
 
-// ==========================================
-// SUMMARY
-// ==========================================
 
-function updateTrainerReportSummary(trainers) {
-    setTrainerReportText(
-        "trainerTotalCount",
-        trainers.length
-    );
-
-    const allFeesAvailable = trainers.every((trainer) =>
-        trainer.total_fees !== null &&
-        trainer.total_fees !== undefined &&
-        Number.isFinite(Number(trainer.total_fees))
-    );
-
-    const totalIncome = trainers.reduce((total, trainer) => {
-        return total + Number(trainer.total_fees ?? 0);
-    }, 0);
-
-    setTrainerReportText(
-        "trainerTotalIncome",
-        allFeesAvailable
-            ? formatTrainerCurrency(totalIncome)
-            : "Unavailable"
-    );
-}
-
-// ==========================================
-// SEARCH TRAINERS
-// ==========================================
+/* =====================================================
+   SEARCH TRAINER
+===================================================== */
 
 function searchTrainerReport() {
-    const searchInput =
-        document.getElementById("trainerReportSearch");
+    const searchInput = document.getElementById("trainerReportSearch");
 
-    const searchTerm =
-        (searchInput?.value ?? "").trim().toLowerCase();
+    const query = String(searchInput?.value ?? "")
+        .trim()
+        .toLowerCase();
 
-    filteredTrainerReport = trainerReportList.filter((trainer) => {
+    filteredTrainerReport = trainerReportList.filter(trainer => {
         const trainerId = String(
             trainer.trainer_id ?? trainer.id ?? ""
         ).toLowerCase();
 
         const trainerName = String(
-            trainer.trainer_name ?? trainer.fullname ?? ""
+            trainer.trainer_name ??
+            trainer.fullname ??
+            trainer.name ??
+            ""
         ).toLowerCase();
 
         return (
-            trainerId.includes(searchTerm) ||
-            trainerName.includes(searchTerm)
+            trainerId.includes(query) ||
+            trainerName.includes(query)
         );
     });
+
+    trainerReportCurrentPage = 1;
 
     renderTrainerReport(filteredTrainerReport);
     updateTrainerReportSummary(filteredTrainerReport);
 }
 
-// ==========================================
-// VIEW TRAINER DETAILS
-// ==========================================
+
+/* =====================================================
+   VIEW TRAINER DETAILS
+===================================================== */
 
 function viewTrainerDetails(trainerId) {
     const trainer = trainerReportData[String(trainerId)];
 
     if (!trainer) {
-        console.error("Trainer details not found:", trainerId);
+        console.error("Trainer record not found:", trainerId);
         return;
     }
 
-    const detailsPanel =
-        document.getElementById("trainerDetails");
+    const details = document.getElementById("trainerDetails");
 
-    setTrainerReportText(
-        "trainerDetailsName",
-        trainer.trainer_name ??
-        trainer.fullname ??
-        "Unavailable"
-    );
+    if (!details) {
+        console.error("Trainer details section not found.");
+        return;
+    }
 
-    const traineesBody =
-        document.getElementById("trainerTraineesBody");
+    const nameElement = document.getElementById("trainerDetailsName");
+
+    if (nameElement) {
+        nameElement.textContent =
+            trainer.trainer_name ??
+            trainer.fullname ??
+            trainer.name ??
+            "Unavailable";
+    }
+
+    const traineesBody = document.getElementById("trainerTraineesBody");
 
     if (traineesBody) {
         const trainees = Array.isArray(trainer.trainees)
@@ -6020,111 +6131,60 @@ function viewTrainerDetails(trainerId) {
         if (!trainees.length) {
             traineesBody.innerHTML = `
                 <tr>
-                    <td colspan="4">No trainee records found.</td>
+                    <td colspan="4">No trainee records available.</td>
                 </tr>
             `;
         } else {
-            traineesBody.innerHTML = trainees.map((trainee) => `
+            traineesBody.innerHTML = trainees.map(trainee => `
                 <tr>
-                    <td>${escapeTrainerHTML(
-                        trainee.member_name ??
-                        trainee.full_name ??
-                        trainee.member_id ??
-                        "Unavailable"
-                    )}</td>
-                    <td>${escapeTrainerHTML(
-                        trainee.program_name ??
-                        trainee.plan_name ??
-                        "Unavailable"
-                    )}</td>
-                    <td>${escapeTrainerHTML(
-                        trainee.start_date ?? "Unavailable"
-                    )}</td>
-                    <td>${escapeTrainerHTML(
-                        trainee.status ?? "Unavailable"
-                    )}</td>
+                    <td>${trainerEscape(trainee.member_id ?? trainee.memberId ?? "—")}</td>
+                    <td>${trainerEscape(trainee.member_name ?? trainee.name ?? "Unavailable")}</td>
+                    <td>${trainerEscape(trainee.program_name ?? trainee.program ?? "—")}</td>
+                    <td>${trainerEscape(trainerDate(trainee.start_date ?? trainee.startDate))}</td>
                 </tr>
             `).join("");
         }
     }
 
-    if (detailsPanel) {
-        detailsPanel.style.display = "block";
+    const report = document.getElementById("trainerReport");
+
+    if (report) {
+        report.style.display = "none";
     }
+
+    details.style.display = "block";
 }
 
-// ==========================================
-// CLOSE TRAINER DETAILS
-// ==========================================
+
+/* =====================================================
+   CLOSE TRAINER DETAILS
+===================================================== */
 
 function closeTrainerDetails() {
-    const detailsPanel =
-        document.getElementById("trainerDetails");
+    const details = document.getElementById("trainerDetails");
+    const report = document.getElementById("trainerReport");
 
-    if (detailsPanel) {
-        detailsPanel.style.display = "none";
+    if (details) {
+        details.style.display = "none";
+    }
+
+    if (report) {
+        report.style.display = "block";
     }
 }
 
-// ==========================================
-// HELPERS
-// ==========================================
 
-function setTrainerReportText(elementId, value) {
-    const element = document.getElementById(elementId);
+/* =====================================================
+   SEARCH EVENT
+===================================================== */
 
-    if (element) {
-        element.textContent = String(value);
-    }
-}
-
-function formatTrainerCurrency(amount) {
-    return Number(amount).toLocaleString("en-PH", {
-        style: "currency",
-        currency: "PHP"
-    });
-}
-
-function escapeTrainerHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, (character) => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[character]);
-}
-
-function escapeTrainerAttribute(value) {
-    return escapeTrainerHTML(value);
-}
-
-// ==========================================
-// EVENT LISTENERS
-// ==========================================
-
-document.addEventListener("DOMContentLoaded", () => {
-    const searchInput =
-        document.getElementById("trainerReportSearch");
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("trainerReportSearch");
 
     if (searchInput) {
-        searchInput.addEventListener(
-            "input",
-            searchTrainerReport
-        );
-    }
-
-    const closeButton =
-        document.getElementById("closeTrainerDetails");
-
-    if (closeButton) {
-        closeButton.addEventListener(
-            "click",
-            closeTrainerDetails
-        );
+        searchInput.addEventListener("input", searchTrainerReport);
     }
 });
-
 /* =====================================================
    LOCKER SUMMARY
 ===================================================== */
