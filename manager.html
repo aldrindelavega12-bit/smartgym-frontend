@@ -540,66 +540,104 @@ menu.innerHTML = `
 // TODAY'S TOTAL INCOME
 // =====================================================
 
+
+ // =====================================================
+ // TODAY'S TOTAL INCOME
+ // Uses the Income Report API
+ // =====================================================
+
 async function loadTodayIncome() {
+    const incomeElement = document.getElementById("total-income");
+    const previewElement = document.getElementById("incomePreviewList");
+
+    if (!incomeElement) return;
 
     try {
+        incomeElement.innerText = "Loading...";
 
-        const res = await fetch(
-            `${API_URL}/api/dashboard`
+        const today = new Date();
+        const localDate = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+        ].join("-");
+
+        const params = new URLSearchParams({
+            period: "daily",
+            start_date: localDate,
+            end_date: localDate
+        });
+
+        const response = await fetch(
+            `${API_URL}/api/reports/income?${params.toString()}`
         );
 
-        if (!res.ok) {
-
-            throw new Error(
-                `Income API error: ${res.status}`
-            );
-
+        if (!response.ok) {
+            throw new Error(`Income API error: ${response.status}`);
         }
 
-        const data = await res.json();
+        const data = await response.json();
 
-        const income =
-            Number(
-                data.today_income ??
-                data.total_income ??
-                data.income_today ??
-                0
-            );
+        if (!data.success || !data.summary) {
+            throw new Error(data.message || "Invalid income response.");
+        }
 
-        document.getElementById(
-            "total-income"
-        ).innerText =
-            `₱${income.toLocaleString(
-                "en-PH",
-                {
+        const summary = data.summary;
+        const income = Number(summary.total_income ?? 0);
+
+        if (!Number.isFinite(income)) {
+            throw new Error("Invalid total income value.");
+        }
+
+        incomeElement.innerText = `₱${income.toLocaleString("en-PH", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+
+        // Update the existing income preview, if available.
+        if (previewElement) {
+            const categories = [
+                ["Member Income", summary.member_income],
+                ["Walk-in Income", summary.walkin_income],
+                ["Locker Income", summary.locker_income],
+                ["Trainer Income", summary.trainer_income]
+            ];
+
+            previewElement.innerHTML = "";
+
+            categories.forEach(([label, amount]) => {
+                const item = document.createElement("div");
+                item.className = "income-preview-item";
+
+                const name = document.createElement("span");
+                name.textContent = label;
+
+                const value = document.createElement("strong");
+                value.textContent = `₱${Number(amount ?? 0).toLocaleString("en-PH", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
-                }
-            )}`;
+                })}`;
 
-        console.log(
-            "TODAY'S TOTAL INCOME:",
-            income
-        );
+                item.append(name, value);
+                previewElement.appendChild(item);
+            });
+        }
 
+        console.log("MANAGER TODAY INCOME:", income, summary);
+
+    } catch (error) {
+        console.error("TOTAL INCOME ERROR:", error);
+        incomeElement.innerText = "Unavailable";
+
+        if (previewElement) {
+            previewElement.innerHTML = `
+                <div class="preview-error">
+                    Unable to load income summary
+                </div>
+            `;
+        }
     }
-
-    catch (error) {
-
-        console.error(
-            "TOTAL INCOME ERROR:",
-            error
-        );
-
-        document.getElementById(
-            "total-income"
-        ).innerText =
-            "₱0.00";
-
-    }
-
 }
-
 
 
 
