@@ -3092,111 +3092,56 @@ function updateIncomeDateDisplay(){
    SET PERIOD
 ===================================================== */
 
-function setIncomePeriod(period){
+function setIncomePeriod(period) {
+    incomePeriod = period;
 
-    incomePeriod =
-        period;
-
-
-    const dailyBtn =
-        document.getElementById(
-            "incomeDailyBtn"
-        );
-
-    const weeklyBtn =
-        document.getElementById(
-            "incomeWeeklyBtn"
-        );
-
-    const customBtn =
-        document.getElementById(
-            "incomeCustomBtn"
-        );
-
+    const dailyBtn = document.getElementById("incomeDailyBtn");
+    const weeklyBtn = document.getElementById("incomeWeeklyBtn");
+    const customBtn = document.getElementById("incomeCustomBtn");
 
     dailyBtn?.classList.remove("active");
-
     weeklyBtn?.classList.remove("active");
-
     customBtn?.classList.remove("active");
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    /*
-     * DAILY
-     */
-
-    if(period === "daily"){
-
+    if (period === "daily") {
         dailyBtn?.classList.add("active");
 
-
-        incomeEndDate =
-            new Date(
-                incomeStartDate
-            );
-
+        incomeStartDate = new Date(today);
+        incomeEndDate = new Date(today);
 
         setIncomeDateMode("single");
-
-        updateIncomeDateDisplay();
-
-        updateIncomeReportView();
-
-        return;
-
     }
 
-
-    /*
-     * WEEKLY
-     */
-
-    if(period === "weekly"){
-
+    else if (period === "weekly") {
         weeklyBtn?.classList.add("active");
 
+        // Monday to Sunday of the current week
+        const range = getIncomeWeekRange(today);
 
-        const range =
-            getIncomeWeekRange(
-                incomeStartDate
-            );
-
-
-        incomeStartDate =
-            range.start;
-
-        incomeEndDate =
-            range.end;
-
+        incomeStartDate = new Date(range.start);
+        incomeEndDate = new Date(range.end);
 
         setIncomeDateMode("single");
-
-        updateIncomeDateDisplay();
-
-        updateIncomeReportView();
-
-        return;
-
     }
 
-
-    /*
-     * CUSTOM DATE RANGE
-     */
-
-    if(period === "custom"){
-
+    else if (period === "custom") {
         customBtn?.classList.add("active");
 
+        // Keep the current range when switching to Custom Date
+        if (incomeStartDate > incomeEndDate) {
+            incomeEndDate = new Date(incomeStartDate);
+        }
 
         setIncomeDateMode("range");
-
-        updateIncomeDateDisplay();
-
     }
 
+    updateIncomeDateDisplay();
+    updateIncomeReportView();
+    loadIncomeReport();
 }
-
 
 /* =====================================================
    DATE DISPLAY MODE
@@ -4017,49 +3962,33 @@ function handleIncomeEndDateChange(){
    UPDATE REPORT DESCRIPTION
 ===================================================== */
 
-function updateIncomeReportView(){
+function updateIncomeReportView() {
+    const description = document.querySelector(".total-income-card p");
 
-    const description =
-        document.querySelector(
-            ".total-income-card p"
-        );
-
-
-    if(!description)
-        return;
-
-
-    if(incomePeriod === "daily"){
-
-        description.innerText =
-            "Total revenue for the selected date.";
-
+    if (description) {
+        if (incomePeriod === "daily") {
+            description.innerText =
+                "Total revenue for the selected date.";
+        }
+        else if (incomePeriod === "weekly") {
+            description.innerText =
+                `Total revenue for the week of ${
+                    formatIncomeDate(incomeStartDate)
+                } – ${
+                    formatIncomeDate(incomeEndDate)
+                }.`;
+        }
+        else if (incomePeriod === "custom") {
+            description.innerText =
+                `Total revenue from ${
+                    formatIncomeDate(incomeStartDate)
+                } to ${
+                    formatIncomeDate(incomeEndDate)
+                }.`;
+        }
     }
 
-
-    else if(incomePeriod === "weekly"){
-
-        description.innerText =
-            `Total revenue for the week of ${
-                formatIncomeDate(incomeStartDate)
-            } – ${
-                formatIncomeDate(incomeEndDate)
-            }.`;
-
-    }
-
-
-    else if(incomePeriod === "custom"){
-
-        description.innerText =
-            `Total revenue from ${
-                formatIncomeDate(incomeStartDate)
-            } to ${
-                formatIncomeDate(incomeEndDate)
-            }.`;
-
-    }
-
+    loadIncomeReport();
 }
 
 
