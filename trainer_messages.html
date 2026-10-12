@@ -1132,55 +1132,111 @@ const menu =
         "menu"
     );
 
-
 menu.innerHTML = `
+    <a href="trainer.html" data-module="dashboard">Home</a>
 
-    <a href="trainer.html">
-        Home
-
-    </a>
-
-
-    <a
-        href="trainer_messages.html"
-        class="msg-link"
-    >
-
-
+    <a href="trainer_messages.html" data-module="messages" class="msg-link active">
         Messages
-
-        <span
-            id="msg-count"
-            class="msg-count"
-        >
-            0
-        </span>
-
+        <span id="msg-count" class="msg-count">0</span>
     </a>
 
+    <a href="trainee.html" data-module="trainee">Trainee</a>
 
-    <a href="trainee.html">
+    <a href="trainer-schedule.html" data-module="schedule">Schedule</a>
 
-
-        Trainee
-
-    </a>
-
-
-    <a href="trainer-schedule.html">
-        Schedule
-
-    </a>
-
-    <a href="client_requests.html">
-
-        Client Requests
-
-    </a>
-
+    <a href="client_requests.html" data-module="client_requests">Client Requests</a>
 `;
 
 
+
+async function loadTrainerModuleAccess() {
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(trainerId)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(module => {
+                if (typeof module === "string") {
+                    return module;
+                }
+
+                return (
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
+                    ""
+                );
+            }).map(key => String(key).trim().toLowerCase())
+        );
+
+        const menuItems = [
+            {
+                key: "dashboard",
+                href: "trainer.html",
+                label: "Home"
+            },
+            {
+                key: "messages",
+                href: "trainer_messages.html",
+                label: `Messages <span id="msg-count" class="msg-count">0</span>`,
+                className: "msg-link active"
+            },
+            {
+                key: "trainee",
+                href: "trainee.html",
+                label: "Trainee"
+            },
+            {
+                key: "schedule",
+                href: "trainer-schedule.html",
+                label: "Schedule"
+            },
+            {
+                key: "client_requests",
+                href: "client_requests.html",
+                label: "Client Requests"
+            }
+        ];
+
+        menu.innerHTML = menuItems
+            .filter(item => allowedModules.has(item.key))
+            .map(item => `
+                <a href="${item.href}"
+                   data-module="${item.key}"
+                   class="${item.className || ""}">
+                    ${item.label}
+                </a>
+            `)
+            .join("");
+
+        console.log(
+            "TRAINER MESSAGES ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+        await loadMessageCount();
+
+    } catch (error) {
+        console.error(
+            "TRAINER MESSAGES MODULE ACCESS ERROR:",
+            error
+        );
+    }
+}
 /* =========================================================
    PROFILE
 ========================================================= */
@@ -2740,7 +2796,7 @@ function goMessages(){
 ========================================================= */
 
 loadMessages();
-
+loadTrainerModuleAccess();
 loadMessageCount();
 
 
