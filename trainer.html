@@ -319,53 +319,26 @@
     <!-- MENU -->
 
     <div class="menu">
-
-        <a
-            href="trainer.html"
-            class="active">
-
+        <a href="trainer.html" data-module="dashboard" class="active">
             Home
-
         </a>
 
-
-        <a
-            href="trainer_messages.html"
-            class="msg-link">
-
+        <a href="trainer_messages.html" data-module="messages" class="msg-link">
             Messages
-
-            <span
-                id="msg-count"
-                class="msg-count">
-
-                0
-
-            </span>
-
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
-
-        <a href="trainee.html">
-
+        <a href="trainee.html" data-module="trainee">
             Trainee
-
         </a>
 
-
-        <a href="trainer-schedule.html">
-
+        <a href="trainer-schedule.html" data-module="schedule">
             Schedule
-
         </a>
 
-
-        <a href="client_requests.html">
-
+        <a href="client_requests.html" data-module="client_requests">
             Client Requests
-
         </a>
-
     </div>
 
 
@@ -993,7 +966,48 @@ if(
 }
 
 
+// =====================================================
+// TRAINER MODULE ACCESS
+// =====================================================
 
+async function loadTrainerModuleAccess() {
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to load module permissions.");
+        }
+
+        const data = await response.json();
+
+        const modules = new Set(
+            (Array.isArray(data) ? data : data.modules || [])
+                .map(module =>
+                    typeof module === "string"
+                        ? module
+                        : module.module_key || module.module_name || module.key
+                )
+                .filter(Boolean)
+                .map(module => module.toLowerCase())
+        );
+
+        document.querySelectorAll("[data-module]").forEach(element => {
+            const moduleKey = element.dataset.module;
+
+            element.style.display = modules.has(moduleKey)
+                ? ""
+                : "none";
+        });
+
+    } catch (error) {
+        console.error("TRAINER MODULE ACCESS ERROR:", error);
+    }
+}
+
+loadTrainerModuleAccess();
 // =====================================================
 // MESSAGE COUNT
 // =====================================================
