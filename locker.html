@@ -24,18 +24,22 @@
 
 </head>
 
-<style>
-    /* LOCKER PAGE: ONLY LOCKER IS ACTIVE */
-    body .navbar .menu a[href="locker.html"] {
-        background: #eaf6ee !important;
-        color: #087c3d !important;
-    }
 
-    body .navbar .menu a[href="staff.html"],
-    body .navbar .menu a[href="admin.html"] {
-        background: transparent !important;
-        color: #56635b !important;
-    }
+<style>
+/* Locker page: remove Home highlight */
+body .navbar .menu a[href="staff.html"],
+body .navbar .menu a[href="admin.html"] {
+    background: transparent !important;
+    color: #172033 !important;
+    box-shadow: none !important;
+}
+
+/* Only Locker stays highlighted */
+body .navbar .menu a[href="locker.html"] {
+    background: #eaf6ee !important;
+    color: #087c3d !important;
+    box-shadow: none !important;
+}
 </style>
 <body data-module="locker">
 
