@@ -965,32 +965,54 @@ if(
 }
 
 async function loadTrainerModuleAccess() {
-    const items = document.querySelectorAll("[data-module]");
+    const menu = document.querySelector(".navbar .menu");
 
-    const cards = {
-        messages: document.querySelector(".cards .card:nth-child(1)"),
-        trainee: document.querySelector(".cards .card:nth-child(2)"),
-        schedule: document.querySelector(".cards .card:nth-child(3)"),
-        client_requests: [...document.querySelectorAll(".cards .card")]
-            .find(card =>
-                card.querySelector("h3")?.textContent.trim() === "Client Requests"
-            )
-    };
+    if (!menu || !user || !user.user_id) {
+        console.error("Missing trainer menu or user ID.");
+        return;
+    }
 
-    const traineesSummary = document.getElementById("traineesCard");
-    const requestsSummary = document.getElementById("requestsCard");
+    const menuItems = [
+        {
+            key: "dashboard",
+            label: "Home",
+            page: "trainer.html"
+        },
+        {
+            key: "messages",
+            label: "Messages",
+            page: "trainer_messages.html",
+            className: "msg-link",
+            badge: true
+        },
+        {
+            key: "trainee",
+            label: "Trainee",
+            page: "trainee.html"
+        },
+        {
+            key: "schedule",
+            label: "Schedule",
+            page: "trainer-schedule.html"
+        },
+        {
+            key: "client_requests",
+            label: "Client Requests",
+            page: "client_requests.html"
+        }
+    ];
 
-    // Itago muna ang mga module habang kinukuha ang permissions
-    items.forEach(item => {
-        item.style.display = "none";
+    menu.innerHTML = "<p>Loading menu...</p>";
+
+    // Itago muna ang lahat ng quick cards
+    document.querySelectorAll(".cards .card").forEach(card => {
+        card.style.display = "none";
     });
 
-    Object.values(cards).forEach(card => {
-        if (card) card.style.display = "none";
-    });
-
-    if (traineesSummary) traineesSummary.style.display = "none";
-    if (requestsSummary) requestsSummary.style.display = "none";
+    // Itago muna ang summary cards na may module permission
+    document.getElementById("requestsCard")?.style.setProperty(
+        "display", "none"
+    );
 
     try {
         const response = await fetch(
@@ -999,68 +1021,92 @@ async function loadTrainerModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error(`Module access HTTP ${response.status}`);
+            throw new Error(`Module access API error: ${response.status}`);
         }
 
         const data = await response.json();
 
-        const modules = new Set(
-            (Array.isArray(data) ? data : data.modules || [])
-                .map(item => {
-                    if (typeof item === "string") return item;
-
-                    return item.module_key ||
-                           item.module_name ||
-                           item.key;
-                })
-                .filter(Boolean)
-                .map(key => String(key).trim().toLowerCase())
-        );
-
-        console.log("TRAINER ALLOWED MODULES:", [...modules]);
-
-        // SIDEBAR
-        items.forEach(item => {
-            const key = item.dataset.module.toLowerCase();
-            item.style.display = modules.has(key) ? "" : "none";
-        });
-
-        // QUICK-ACTION CARDS
-        Object.entries(cards).forEach(([key, card]) => {
-            if (card) {
-                card.style.display = modules.has(key) ? "" : "none";
-            }
-        });
-
-        // SUMMARY CARDS
-        if (traineesSummary) {
-            traineesSummary.style.display =
-                modules.has("trainee") ? "" : "none";
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module permissions response.");
         }
 
-        
+        const allowedModules = new Set(data.modules);
+
+        console.log("TRAINER ALLOWED MODULES:", [...allowedModules]);
+
+        // SIDEBAR: katulad ng Staff Dashboard
+        menu.innerHTML = menuItems
+            .filter(item => allowedModules.has(item.key))
+            .map(item => `
+                <a
+                    href="${item.page}"
+                    data-module="${item.key}"
+                    ${item.className ? `class="${item.className}"` : ""}
+                >
+                    ${item.label}
+                    ${
+                        item.badge
+                            ? '<span id="msg-count" class="msg-count">0</span>'
+                            : ""
+                    }
+                </a>
+            `)
+            .join("");
+
+        if (!menu.innerHTML.trim()) {
+            menu.innerHTML = "<p>No modules assigned.</p>";
+        }
+
+        // QUICK CARDS: gamitin ang data-module gaya ng Staff
+        const cardModuleKeys = [
+            "messages",
+            "trainee",
+            "schedule",
+            "client_requests"
+        ];
+
+        document.querySelectorAll(".cards .card").forEach(card => {
+            const title = card.querySelector("h3")?.textContent.trim();
+
+            const moduleMap = {
+                "Messages": "messages",
+                "Trainee": "trainee",
+                "Schedule": "schedule",
+                "Client Requests": "client_requests"
+            };
+
+            const moduleKey = moduleMap[title];
+
+            card.dataset.module = moduleKey || "";
+
+            card.style.display =
+                moduleKey && allowedModules.has(moduleKey) ? "" : "none";
+        });
+
+        // SUMMARY: Client Requests
+        const requestsCard = document.getElementById("requestsCard");
+
+        if (requestsCard) {
+            requestsCard.style.display =
+                allowedModules.has("client_requests") ? "" : "none";
+        }
+
+        // SUMMARY: My Trainees
+        const traineesCard = document.getElementById("traineesCard");
+
+        if (traineesCard) {
+            traineesCard.style.display =
+                allowedModules.has("trainee") ? "" : "none";
+        }
+
     } catch (error) {
         console.error("TRAINER MODULE ACCESS ERROR:", error);
+        menu.innerHTML = "<p>Unable to load module permissions.</p>";
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const allowedModules = ["dashboard", "messages", "trainee", "schedule"];
 
-    if (!allowedModules.includes("client_requests")) {
-        document.getElementById("requestsCard")?.style.setProperty("display", "none", "important");
 
-        document.querySelectorAll(".cards .card").forEach(card => {
-            if (card.querySelector("h3")?.textContent.trim() === "Client Requests") {
-                card.style.setProperty("display", "none", "important");
-            }
-        });
-
-        document.querySelectorAll('[data-module="client_requests"]').forEach(item => {
-            item.style.setProperty("display", "none", "important");
-        });
-    }
-});
 
 // =====================================================
 // MESSAGE COUNT
