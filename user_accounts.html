@@ -3533,52 +3533,79 @@
     ===================================================== */
 
     async function saveUserAccess() {
-
         if (!selectedUserId) {
             return;
         }
 
+        const user = users[selectedUserId];
+
+        if (!user || !user.user_id) {
+            showUsersToast(
+                "Error",
+                "User ID not found."
+            );
+            return;
+        }
 
         const selectedModules = [];
 
+        document.querySelectorAll(
+            ".module-option input:checked"
+        ).forEach(checkbox => {
+            selectedModules.push(checkbox.value);
+        });
 
-        document
-            .querySelectorAll(
-                ".module-option input:checked"
-            )
-            .forEach(
-                checkbox => {
+        const saveButton = document.querySelector(
+            ".user-save-btn"
+        );
 
-                    selectedModules.push(
-                        checkbox.value
-                    );
+        try {
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
 
+            const response = await fetch(
+                `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        modules: selectedModules
+                    })
                 }
             );
 
+            const result = await response.json();
 
-        /*
-         * Temporary frontend storage.
-         */
+            if (!response.ok || result.status !== "success") {
+                throw new Error(
+                    result.message || "Failed to save module access."
+                );
+            }
 
-        if (users[selectedUserId]) {
+            user.modules = selectedModules;
 
-            users[selectedUserId].modules =
-                selectedModules;
+            closeUserModal();
 
+            showUsersToast(
+                "Success",
+                "Module access saved successfully."
+            );
+
+        } catch (error) {
+            console.error("SAVE MODULE ACCESS ERROR:", error);
+
+            showUsersToast(
+                "Error",
+                error.message || "Failed to save module access."
+            );
+
+        } finally {
+            saveButton.disabled = false;
+            saveButton.textContent = "Save Access";
         }
-
-
-        closeUserModal();
-
-
-        showUsersToast(
-            "Access Updated",
-            "Module access has been updated temporarily."
-        );
-
     }
-
 
     /* =====================================================
        SEARCH
