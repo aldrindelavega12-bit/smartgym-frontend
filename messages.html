@@ -1336,7 +1336,7 @@
     </style>
 </head>
 
-<body>
+<body data-module="messages">
 
 <script>
 
@@ -1535,6 +1535,60 @@ if (!user) {
 <script>
 
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+
+async function checkMessagesPageAccess() {
+    if (!user || !user.user_id) {
+        window.location.href = "index.html";
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to verify module access.");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
+        }
+
+        if (!data.modules.includes("messages")) {
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang Messages.</p>
+                    <button onclick="location.href='staff.html'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error("MESSAGES ACCESS ERROR:", error);
+
+        document.body.innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang module permission. Pakisubukan ulit.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
+
+        return false;
+    }
+}
+
 
 // ================= MENU =================
 const menu = document.getElementById("menu");
@@ -2333,14 +2387,14 @@ socket.on("connect", () => {
         "Messages page connected"
     );
 });
-loadMessages();
-loadMessageCount();
+checkMessagesPageAccess().then((hasAccess) => {
+    if (!hasAccess) return;
 
-setInterval(
-    loadMessageCount,
-    3000
-);
+    loadMessages();
+    loadMessageCount();
 
+    setInterval(loadMessageCount, 3000);
+});
 
 </script>
 
