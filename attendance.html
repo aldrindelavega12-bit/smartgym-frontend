@@ -35,10 +35,6 @@
 
 <script>
 
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
 
 if (!user) {
 
@@ -49,7 +45,59 @@ if (!user) {
 
 </script>
 
+<script>
+const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
+const user = JSON.parse(localStorage.getItem("user"));
+
+async function checkAttendanceAccess() {
+    if (!user) {
+        window.location.replace("index.html");
+        return false;
+    }
+
+    // Admin retains access to the attendance page.
+    if (user.role === "admin") {
+        return true;
+    }
+
+    if (user.role !== "staff" || !user.user_id) {
+        alert("You are not authorized to access this page.");
+        window.location.replace("staff.html");
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Permission check failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const allowedModules = data.modules || [];
+
+        if (!allowedModules.includes("attendance")) {
+            alert("You do not have permission to access Attendance.");
+            window.location.replace("staff.html");
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error("ATTENDANCE PERMISSION ERROR:", error);
+        alert("Unable to verify your permissions. Please try again.");
+        window.location.replace("staff.html");
+        return false;
+    }
+}
+
+const attendanceAccessGranted = checkAttendanceAccess();
+</script>
 <!-- =====================================================
      SIDEBAR
 ===================================================== -->
@@ -259,7 +307,7 @@ if (!user) {
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 <script>
-const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
 
 // ================= MENU =================
 const menu = document.getElementById("menu");
@@ -508,6 +556,10 @@ async function loadMessageCount(){
 
 // ================= LOAD ATTENDANCE =================
 async function loadAttendance(){
+
+    if (!(await attendanceAccessGranted)) {
+        return;
+    }
     try{
         const date = document.getElementById("dateFilter").value;
 
