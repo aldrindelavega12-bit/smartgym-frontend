@@ -22,7 +22,7 @@
           rel="stylesheet">
 </head>
 
-<body>
+<body data-module="dashboard">
 
 <!-- =====================================================
      SIDEBAR
@@ -542,6 +542,61 @@ async function loadStaffMenu() {
     } catch (error) {
         console.error("STAFF MODULE ACCESS ERROR:", error);
         menu.innerHTML = "<p>Unable to load module permissions.</p>";
+    }
+}
+
+async function checkCurrentPageAccess() {
+    if (!user || !user.user_id || user.role !== "staff") {
+        window.location.href = "index.html";
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Access API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module permissions response.");
+        }
+
+        const requiredModule = document.body.dataset.module;
+        const allowedModules = new Set(data.modules);
+
+        if (!requiredModule || !allowedModules.has(requiredModule)) {
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang page na ito.</p>
+                    <button onclick="location.href='staff.html'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error("PAGE ACCESS ERROR:", error);
+
+        document.body.innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang permissions mo. Pakisubukan ulit.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
+
+        return false;
     }
 }
 
@@ -1240,9 +1295,14 @@ function formatDate(value) {
 }
 
 
+(async () => {
+    const hasAccess = await checkCurrentPageAccess();
 
-loadDashboard();
-loadPendingMembers();
+    if (!hasAccess) return;
+
+    loadDashboard();
+    loadPendingMembers();
+})();
 
 </script>
 
