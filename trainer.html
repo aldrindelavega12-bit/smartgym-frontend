@@ -992,7 +992,10 @@ async function loadTrainerModuleAccess() {
                 )
                 .filter(Boolean)
                 .map(module => module.toLowerCase())
+                
         );
+
+        console.log("ALLOWED MODULES:", [...modules]);
 
         document.querySelectorAll("[data-module]").forEach(element => {
             const moduleKey = element.dataset.module;
@@ -1002,6 +1005,14 @@ async function loadTrainerModuleAccess() {
             element.style.display = allowed ? "" : "none";  
         });
 
+        document.querySelectorAll(
+            'a[href="trainer-schedule.html"], button[onclick*="trainer-schedule.html"]'
+        ).forEach(element => {
+            if (!modules.has("schedule")) {
+                element.style.display = "none";
+            }
+        });
+
     } catch (error) {
         console.error("TRAINER MODULE ACCESS ERROR:", error);
     }
@@ -1009,6 +1020,7 @@ async function loadTrainerModuleAccess() {
 
 loadTrainerModuleAccess();
 console.log("ALLOWED MODULES:", [...modules]);
+
 // =====================================================
 // MESSAGE COUNT
 // =====================================================
