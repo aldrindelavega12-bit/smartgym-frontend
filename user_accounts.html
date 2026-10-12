@@ -3328,91 +3328,77 @@
        OPEN USER MODAL
     ===================================================== */
 
-    function openUserModal(userId) {
-
-        const user =
-            users[userId];
-
+    async function openUserModal(userId) {
+        const user = users[userId];
 
         if (!user) {
-
-            console.error(
-                "User not found:",
-                userId
-            );
-
+            console.error("User not found:", userId);
             return;
-
         }
 
+        selectedUserId = userId;
 
-        selectedUserId =
-            userId;
+        document.getElementById("modalName").textContent =
+            user.name || "Unnamed User";
 
+        document.getElementById("modalUsername").textContent =
+            user.username || "-";
 
-        document.getElementById(
-            "modalName"
-        ).textContent =
-            user.name ||
-            "Unnamed User";
+        document.getElementById("modalRole").textContent =
+            user.role || "-";
 
+        const checkboxes = document.querySelectorAll(
+            ".module-option input"
+        );
 
-        document.getElementById(
-            "modalUsername"
-        ).textContent =
-            user.username ||
-            "-";
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+            updateModuleOption(checkbox);
+        });
 
+        userModal.classList.add("show");
+        document.body.style.overflow = "hidden";
 
-        document.getElementById(
-            "modalRole"
-        ).textContent =
-            user.role ||
-            "-";
+        try {
+            if (!user.user_id) {
+                throw new Error("User ID is missing from the account data.");
+            }
 
-
-        /*
-         * TEMPORARY MODULE ACCESS
-         *
-         * Currently modules are empty because
-         * we have not yet connected the module
-         * access backend.
-         */
-
-        const checkboxes =
-            document.querySelectorAll(
-                ".module-option input"
+            const response = await fetch(
+                `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`
             );
 
+            const result = await response.json();
 
-        checkboxes.forEach(
-            checkbox => {
+            if (!response.ok) {
+                throw new Error(
+                    result.message || "Failed to load module access."
+                );
+            }
 
-                checkbox.checked =
-                    user.modules.includes(
-                        checkbox.value
-                    );
+            const allowedModules = Array.isArray(result.modules)
+                ? result.modules
+                : [];
 
+            user.modules = allowedModules;
 
-                updateModuleOption(
-                    checkbox
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = allowedModules.includes(
+                    checkbox.value
                 );
 
-            }
-        );
+                updateModuleOption(checkbox);
+            });
 
+        } catch (error) {
+            console.error("LOAD MODULE ACCESS ERROR:", error);
 
-        userModal.classList.add(
-            "show"
-        );
-
-
-        document.body.style.overflow =
-            "hidden";
-
+            showUsersToast(
+                "Error",
+                error.message || "Failed to load module access."
+            );
+        }
     }
-
-
     /* =====================================================
        CLOSE USER MODAL
     ===================================================== */
