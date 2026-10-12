@@ -1011,7 +1011,29 @@ async function loadTrainerModuleAccess() {
         });
 
         // Dashboard cards
-        Object.entries(cards).forEach(([key, card]) => {
+                // Dashboard cards — match permissions with sidebar modules
+        const cardModules = [
+            {
+                key: "messages",
+                selector: ".cards .card:nth-child(1)"
+            },
+            {
+                key: "trainee",
+                selector: ".cards .card:nth-child(2)"
+            },
+            {
+                key: "schedule",
+                selector: ".cards .card:nth-child(3)"
+            },
+            {
+                key: "client_requests",
+                selector: ".cards .card:nth-child(4)"
+            }
+        ];
+
+        cardModules.forEach(({ key, selector }) => {
+            const card = document.querySelector(selector);
+
             if (card) {
                 card.style.display = modules.has(key) ? "" : "none";
             }
