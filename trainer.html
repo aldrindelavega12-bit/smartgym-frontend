@@ -1038,17 +1038,29 @@ async function loadTrainerModuleAccess() {
                 modules.has("trainee") ? "" : "none";
         }
 
-        if (requestsSummary) {
-            requestsSummary.style.display =
-                modules.has("client_requests") ? "" : "none";
-        }
-
+        
     } catch (error) {
         console.error("TRAINER MODULE ACCESS ERROR:", error);
     }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const allowedModules = ["dashboard", "messages", "trainee", "schedule"];
 
+    if (!allowedModules.includes("client_requests")) {
+        document.getElementById("requestsCard")?.style.setProperty("display", "none", "important");
+
+        document.querySelectorAll(".cards .card").forEach(card => {
+            if (card.querySelector("h3")?.textContent.trim() === "Client Requests") {
+                card.style.setProperty("display", "none", "important");
+            }
+        });
+
+        document.querySelectorAll('[data-module="client_requests"]').forEach(item => {
+            item.style.setProperty("display", "none", "important");
+        });
+    }
+});
 
 // =====================================================
 // MESSAGE COUNT
