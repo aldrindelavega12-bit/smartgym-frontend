@@ -1149,26 +1149,31 @@ function showNotifPopup(title,text){
     },4000);
 }
 // ================= INIT =================
-window.onload = () => {
+window.onload = async () => {
+    const hasAccess = await checkLockerPageAccess();
 
+    if (!hasAccess) return;
+
+    await buildLockerPermissionMenu();
+
+    // Set today's date using local time.
     const now = new Date();
 
     const today =
-        `${now.getFullYear()}-${
-            String(now.getMonth() + 1).padStart(2, "0")
-        }-${
-            String(now.getDate()).padStart(2, "0")
-        }`;
+        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
     document.getElementById("dateFilter").value = today;
-
     document.getElementById("approvalDate").value = today;
 
-    // Current tab muna
+    // Load the current locker data.
     loadLockers();
 
+    // Load message count only if the Messages module is allowed.
+    if (user.role === "admin" ||
+        document.querySelector('#menu a[href="messages.html"]')) {
+        loadMessageCount();
+    }
 };
-
 const lockerTabs = document.querySelectorAll(".locker-tab");
 
 const lockerViews = {
@@ -1341,8 +1346,11 @@ function logout() {
 }
 
 // fallback refresh
-setInterval(loadLockers, 10000);
-loadMessageCount();
+setInterval(() => {
+    if (document.body.dataset.module === "locker") {
+        loadLockers();
+    }
+}, 10000);
 socket.on("new_message", () => {
 
     loadMessages();
