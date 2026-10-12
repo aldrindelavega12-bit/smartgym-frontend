@@ -446,115 +446,112 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
+
 // ================= MENU =================
 
-const menu =
-    document.getElementById("menu");
+const menu = document.getElementById("menu");
 
-
-if(user.role === "manager"){
-
+if (user.role === "manager") {
     menu.innerHTML = `
-
-        <a href="manager.html">
-
-            Home
-
-        </a>
-
-
-
-        <a href="reports.html">
-
-            Reports
-
-        </a>
-
-
-        <a href="members.html"
-           class="active">
-
-
-            Members
-
-        </a>
-
-
-        <a href="walkin.html">
-
-
-            Walk-ins
-
-        </a>
-
-
-        <a href="staff_manage.html">
-
-            
-
-            Staff
-
-        </a>
-
-        <a href="archive.html">
-
-            Archive
-
-        </a>
-
+        <a href="manager.html" data-module="dashboard">Home</a>
+        <a href="reports.html" data-module="reports">Reports</a>
+        <a href="members.html" data-module="members" class="active">Members</a>
+        <a href="walkin.html" data-module="walkin">Walk-ins</a>
+        <a href="staff_manage.html" data-module="staff">Staff</a>
+        <a href="archive.html" data-module="archive">Archive</a>
     `;
-
-}
-else{
-
+} else {
     menu.innerHTML = `
-
-        <a href="staff.html">
-
-            <i class="fa-solid fa-house"></i>
-
-            Home
-
+        <a href="staff.html" data-module="dashboard">
+            <i class="fa-solid fa-house"></i> Home
         </a>
-
-
-        <a href="messages.html"
-           class="msg-link">
-
+        <a href="messages.html" class="msg-link" data-module="messages">
             <i class="fa-regular fa-envelope"></i>
-
             Messages
-
-            <span
-                id="msg-count"
-                class="msg-count">
-
-                0
-
-            </span>
-
+            <span id="msg-count" class="msg-count">0</span>
         </a>
-
-
-        <a href="attendance.html">
-
-            <i class="fa-regular fa-calendar-check"></i>
-
-            Attendance
-
+        <a href="attendance.html" data-module="attendance">
+            <i class="fa-regular fa-calendar-check"></i> Attendance
         </a>
-
-
-        <a href="locker.html">
-
-            <i class="fa-solid fa-lock"></i>
-
-            Locker
-
+        <a href="locker.html" data-module="locker">
+            <i class="fa-solid fa-lock"></i> Locker
         </a>
-
     `;
+}
 
+loadMembersModuleAccess();
+
+
+// ================= MODULE ACCESS =================
+
+async function loadMembersModuleAccess() {
+    const menuItems = document.querySelectorAll(
+        "#menu a[data-module]"
+    );
+
+    menuItems.forEach(item => {
+        item.style.display = "none";
+    });
+
+    try {
+        if (!user || !user.user_id) {
+            throw new Error("User ID not found.");
+        }
+
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : data.modules;
+
+        if (!Array.isArray(modules)) {
+            throw new Error("Invalid module access response.");
+        }
+
+        const allowedModules = new Set(
+            modules
+                .map(item => {
+                    if (typeof item === "string") {
+                        return item;
+                    }
+
+                    return item.module_key ||
+                           item.module_name ||
+                           item.key;
+                })
+                .filter(Boolean)
+                .map(key => String(key).trim().toLowerCase())
+        );
+
+        menuItems.forEach(item => {
+            const moduleKey = item.dataset.module
+                .trim()
+                .toLowerCase();
+
+            item.style.display =
+                allowedModules.has(moduleKey) ? "" : "none";
+        });
+
+        console.log(
+            "MEMBERS ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+    } catch (error) {
+        console.error(
+            "MEMBERS MODULE ACCESS ERROR:",
+            error
+        );
+    }
 }
 
 // =====================================================
