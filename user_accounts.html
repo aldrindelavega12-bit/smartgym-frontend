@@ -2111,179 +2111,12 @@
                 </div>
 
 
-                <div class="module-grid">
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="dashboard"
-                        >
-
-                        <span>
-                            Dashboard
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="members"
-                        >
-
-                        <span>
-                            Members
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="attendance"
-                        >
-
-                        <span>
-                            Attendance
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="locker"
-                        >
-
-                        <span>
-                            Locker
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="payments"
-                        >
-
-                        <span>
-                            Payments
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="reports"
-                        >
-
-                        <span>
-                            Reports
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="enrollment"
-                        >
-
-                        <span>
-                            Enrollment
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="messages"
-                        >
-
-                        <span>
-                            Messages
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="trainer"
-                        >
-
-                        <span>
-                            Trainer
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="client_request"
-                        >
-
-                        <span>
-                            Client Request
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="archive"
-                        >
-
-                        <span>
-                            Archive
-                        </span>
-
-                    </label>
-
-
-                    <label class="module-option">
-
-                        <input
-                            type="checkbox"
-                            value="system_settings"
-                        >
-
-                        <span>
-                            System Settings
-                        </span>
-
-                    </label>
-
-
+                <div class="module-grid" id="moduleGrid">
+                    <p>Loading modules...</p>
                 </div>
 
+
+                
             </div>
 
 
@@ -2353,7 +2186,7 @@
     ===================================================== */
 
     let users = {};
-
+    let availableModules = [];
     let selectedUserId = null;
 
     let allUsers = [];
@@ -2386,7 +2219,65 @@
     /* =====================================================
        LOAD USER ACCOUNTS
     ===================================================== */
+    async function loadAvailableModules() {
+        const moduleGrid = document.getElementById("moduleGrid");
 
+        moduleGrid.innerHTML = "<p>Loading modules...</p>";
+
+        try {
+            const response = await fetch(`${API_URL}/api/modules`);
+            const result = await response.json();
+
+            if (!response.ok || result.status !== "success") {
+                throw new Error(result.message || "Failed to load modules.");
+            }
+
+            availableModules = Array.isArray(result.modules)
+                ? result.modules
+                : [];
+
+            if (availableModules.length === 0) {
+                moduleGrid.innerHTML = "<p>No active modules found.</p>";
+                return;
+            }
+
+            moduleGrid.innerHTML = "";
+
+            availableModules.forEach(module => {
+                const moduleKey = module.module_key;
+
+                const label = moduleKey
+                    .split("_")
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ");
+
+                const option = document.createElement("label");
+                option.className = "module-option";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.value = moduleKey;
+
+                const span = document.createElement("span");
+                span.textContent = label;
+
+                checkbox.addEventListener("change", function () {
+                    updateModuleOption(this);
+                });
+
+                option.appendChild(checkbox);
+                option.appendChild(span);
+
+                moduleGrid.appendChild(option);
+            });
+
+        } catch (error) {
+            console.error("LOAD MODULES ERROR:", error);
+            moduleGrid.innerHTML = "<p>Failed to load modules. Please refresh.</p>";
+
+            showUsersToast("Error", "Failed to load modules from database.");
+        }
+    }
     async function loadUsers() {
 
         try {
@@ -3836,14 +3727,10 @@
        INITIAL LOAD
     ===================================================== */
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function() {
-
-            loadUsers();
-
-        }
-    );
+    document.addEventListener("DOMContentLoaded", async function () {
+        await loadAvailableModules();
+        await loadUsers();
+    });
 
 </script>
 
