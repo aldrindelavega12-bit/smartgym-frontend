@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html>
+
+<style>
+    /* Reset all sidebar links first */
+    .navbar .menu a {
+        background: transparent !important;
+        color: #172033 !important;
+        box-shadow: none !important;
+    }
+
+    /* Highlight Locker only */
+    .navbar .menu a[href="locker.html"] {
+        background: #eaf6ee !important;
+        color: #087c3d !important;
+        box-shadow: none !important;
+    }
+</style>
 <head>
     <title>Locker</title>
         <meta name="viewport"
@@ -25,22 +41,6 @@
 </head>
 
 
-<style>
-/* Locker page: remove Home highlight */
-body .navbar .menu a[href="staff.html"],
-body .navbar .menu a[href="admin.html"] {
-    background: transparent !important;
-    color: #172033 !important;
-    box-shadow: none !important;
-}
-
-/* Only Locker stays highlighted */
-body .navbar .menu a[href="locker.html"] {
-    background: #eaf6ee !important;
-    color: #087c3d !important;
-    box-shadow: none !important;
-}
-</style>
 <body data-module="locker">
 
 <!-- 🔒 ROLE PROTECTION -->
