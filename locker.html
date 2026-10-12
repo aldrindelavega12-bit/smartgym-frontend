@@ -23,7 +23,7 @@
           rel="stylesheet">
 
 </head>
-<body>
+<body data-module="locker">
 
 <!-- 🔒 ROLE PROTECTION -->
 <script>
@@ -464,7 +464,57 @@ if (!user) {
 
 <script>
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
+async function checkLockerPageAccess() {
+    if (!user || !user.user_id) {
+        window.location.href = "index.html";
+        return false;
+    }
 
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to verify module access.");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
+        }
+
+        if (!data.modules.includes("locker")) {
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang Locker.</p>
+                    <button onclick="location.href='staff.html'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error("LOCKER ACCESS ERROR:", error);
+
+        document.body.innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang module permission. Pakisubukan ulit.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
+
+        return false;
+    }
+}
 const staffName =
     document.getElementById("staffName");
 
@@ -491,85 +541,72 @@ if(user){
 }
 
 // ================= MENU =================
-const menu = document.getElementById("menu");
+async function buildLockerPermissionMenu() {
+    const menu = document.getElementById("menu");
 
-if(user.role === "admin"){
-    menu.innerHTML = `
-    <a href="admin.html">
-        
-        Home
-    </a>
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
 
-    <a href="messages.html" class="msg-link">
+        if (!response.ok) {
+            throw new Error("Unable to load module permissions.");
+        }
 
-       
+        const data = await response.json();
 
-        Messages
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
+        }
 
-        <span
-            id="msg-count"
-            class="msg-count">
-            0
-        </span>
+        const allowed = new Set(data.modules);
+        const isAdmin = user.role === "admin";
 
-    </a>
+        const links = isAdmin
+            ? [
+                { key: "dashboard", href: "admin.html", label: "Home" },
+                { key: "messages", href: "messages.html", label: "Messages", badge: true },
+                { key: "attendance", href: "attendance.html", label: "Attendance" },
+                { key: "locker", href: "locker.html", label: "Locker" },
+                { key: "members", href: "members.html", label: "Members" },
+                { key: "staff_manage", href: "staff_manage.html", label: "Staff" },
+                { key: "create_account", href: "create_account.html", label: "Create Account" }
+            ]
+            : [
+                { key: "dashboard", href: "staff.html", label: "Home" },
+                { key: "messages", href: "messages.html", label: "Messages", badge: true },
+                { key: "attendance", href: "attendance.html", label: "Attendance" },
+                { key: "locker", href: "locker.html", label: "Locker" }
+            ];
 
-    <a href="attendance.html">
-        
-        Attendance
-    </a>
+        menu.innerHTML = links
+            .filter(link => allowed.has(link.key))
+            .map(link => `
+                <a href="${link.href}">
+                    ${link.label}
+                    ${link.badge
+                        ? '<span id="msg-count" class="msg-count">0</span>'
+                        : ""}
+                </a>
+            `)
+            .join("");
 
-    <a href="locker.html">
-        
-        Locker
-    </a>
+        const lockerLink = menu.querySelector(
+            'a[href="locker.html"]'
+        );
 
-    <a href="members.html">
-        
-        Members
-    </a>
+        if (lockerLink) {
+            lockerLink.classList.add("active");
+            lockerLink.style.setProperty("background", "#eaf7f0", "important");
+            lockerLink.style.setProperty("color", "#078a43", "important");
+        }
 
-    <a href="staff_manage.html">
-        
-        Staff
-    </a>
-
-    <a href="create_account.html">
-        
-        Create Account
-    </a>
-`;
-}else{
-    menu.innerHTML = `
-        <a href="staff.html">
-            
-            Home
-        </a>
-
-        <a href="messages.html" class="msg-link">
-
-            
-
-            Messages
-
-            <span
-                id="msg-count"
-                class="msg-count">
-                0
-            </span>
-
-        </a>
-
-        <a href="attendance.html">
-           
-            Attendance
-        </a>
-
-        <a href="locker.html">
-            
-            Locker
-        </a>
-    `;
+    } catch (error) {
+        console.error("LOCKER MENU ERROR:", error);
+        menu.innerHTML =
+            "<p>Unable to load menu permissions. Please refresh.</p>";
+    }
 }
 // ================= FORCE ACTIVE SIDEBAR =================
 
