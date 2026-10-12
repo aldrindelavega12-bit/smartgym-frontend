@@ -290,59 +290,37 @@
     </div>
 
 
+   
     <div class="menu">
 
-        <a href="trainer.html">
+        <a href="trainer.html" data-module="dashboard">
             Home
         </a>
 
-
-        <a
-            href="trainer_messages.html"
-            class="msg-link"
-        >
-
+        <a href="trainer_messages.html"
+        data-module="messages"
+        class="msg-link">
             Messages
-
-            <span
-                id="msg-count"
-                class="msg-count"
-            >
-                0
-            </span>
-
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
-
-        <a
-            href="trainee.html"
-            class="active"
-        >
+        <a href="trainee.html"
+        data-module="trainee"
+        class="active">
             Trainee
         </a>
 
-
-        <a
-            href="trainer-schedule.html"
-        >
+        <a href="trainer-schedule.html" data-module="schedule">
             Schedule
         </a>
 
-
-        <a href="client_requests.html">
-
+        <a href="client_requests.html" data-module="client_requests">
             Client Requests
-
-            <span
-                id="request-count"
-                class="msg-count"
-            >
-                0
-            </span>
-
+            <span id="request-count" class="msg-count">0</span>
         </a>
 
     </div>
+
 
 </div>
 
@@ -810,6 +788,75 @@ if(
 
 }
 
+
+/* =====================================================
+   MODULE ACCESS
+===================================================== */
+
+async function loadTrainerModuleAccess() {
+    const menuItems = document.querySelectorAll(
+        ".navbar .menu a[data-module]"
+    );
+
+    // Itago muna habang hinihintay ang API
+    menuItems.forEach(item => {
+        item.style.display = "none";
+    });
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const moduleList = Array.isArray(data)
+            ? data
+            : data.modules;
+
+        if (!Array.isArray(moduleList)) {
+            throw new Error("Invalid module access response.");
+        }
+
+        const allowedModules = new Set(
+            moduleList.map(item => {
+                if (typeof item === "string") return item;
+
+                return item.module_key ||
+                       item.module_name ||
+                       item.key;
+            }).filter(Boolean).map(key =>
+                String(key).trim().toLowerCase()
+            )
+        );
+
+        menuItems.forEach(item => {
+            const key = item.dataset.module.toLowerCase();
+
+            if (allowedModules.has(key)) {
+                item.style.display = "";
+
+                // Panatilihin ang active link
+                if (item.getAttribute("href") === "trainee.html") {
+                    item.classList.add("active");
+                }
+            }
+        });
+
+        console.log(
+            "TRAINEE PAGE ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+    } catch (error) {
+        console.error("TRAINEE MODULE ACCESS ERROR:", error);
+    }
+}
 
 /* =====================================================
    DATA
