@@ -459,39 +459,87 @@ if (!user || user.role !== "staff") {
     window.location.href = "index.html";
 }
 
-// MENU
-document.getElementById("menu").innerHTML = `
 
-    <a href="staff.html">
+// ================= MODULE ACCESS SIDEBAR =================
 
-        Home
-    </a>
+async function loadStaffMenu() {
+    const menu = document.getElementById("menu");
 
-    <a href="messages.html" class="msg-link">
+    if (!menu || !user || !user.user_id) {
+        console.error("Missing menu or logged-in user ID.");
+        return;
+    }
 
+    // Default menu items and their module keys
+    const menuItems = [
+        {
+            key: "dashboard",
+            label: "Home",
+            page: "staff.html"
+        },
+        {
+            key: "messages",
+            label: "Messages",
+            page: "messages.html",
+            className: "msg-link",
+            badge: true
+        },
+        {
+            key: "attendance",
+            label: "Attendance",
+            page: "attendance.html"
+        },
+        {
+            key: "locker",
+            label: "Locker",
+            page: "locker.html"
+        }
+    ];
 
+    menu.innerHTML = "<p>Loading menu...</p>";
 
-        Messages
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
 
-        <span
-            id="msg-count"
-            class="msg-count">
-            0
-        </span>
+        if (!response.ok) {
+            throw new Error(`Module access API error: ${response.status}`);
+        }
 
-    </a>
+        const data = await response.json();
+        const allowedModules = new Set(data.modules || []);
 
-    <a href="attendance.html">
+        // Show only modules allowed for this user
+        menu.innerHTML = menuItems
+            .filter(item => allowedModules.has(item.key))
+            .map(item => `
+                <a
+                    href="${item.page}"
+                    ${item.className ? `class="${item.className}"` : ""}
+                >
+                    ${item.label}
+                    ${
+                        item.badge
+                            ? `<span id="msg-count" class="msg-count">0</span>`
+                            : ""
+                    }
+                </a>
+            `)
+            .join("");
 
-        Attendance
-    </a>
+        if (!menu.innerHTML.trim()) {
+            menu.innerHTML = "<p>No modules assigned.</p>";
+        }
 
-    <a href="locker.html">
+    } catch (error) {
+        console.error("STAFF MODULE ACCESS ERROR:", error);
+        menu.innerHTML = "<p>Unable to load module permissions.</p>";
+    }
+}
 
-        Locker
-    </a>
-
-`;
+loadStaffMenu();
 
 // ================= SOCKET =================
 const socket = io("https://smartgym-api-ia2e.onrender.com", {
