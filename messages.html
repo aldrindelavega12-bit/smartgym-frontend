@@ -1618,84 +1618,77 @@ if(user){
 
 }
 
-if(user.role === "admin"){
-   menu.innerHTML = `
-    <a href="admin.html">
-        <i class="fa-solid fa-house"></i>
-        Home
-    </a>
+async function buildPermissionMenu() {
+    const menu = document.getElementById("menu");
 
-    <a href="messages.html" class="msg-link">
+    if (!user || !user.user_id) {
+        window.location.href = "index.html";
+        return;
+    }
 
-        
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
 
-        Messages
+        if (!response.ok) {
+            throw new Error("Failed to load module permissions.");
+        }
 
-        <span
-            id="msg-count"
-            class="msg-count">
-            0
-        </span>
+        const data = await response.json();
 
-    </a>
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module permissions.");
+        }
 
-    <a href="attendance.html">
-        
-        Attendance
-    </a>
+        const allowedModules = new Set(data.modules);
+        const isAdmin = user.role === "admin";
 
-    <a href="locker.html">
-        
-        Locker
-    </a>
+        const links = isAdmin
+            ? [
+                { key: "dashboard", href: "admin.html", label: "Home" },
+                { key: "messages", href: "messages.html", label: "Messages" },
+                { key: "attendance", href: "attendance.html", label: "Attendance" },
+                { key: "locker", href: "locker.html", label: "Locker" },
+                { key: "members", href: "members.html", label: "Members" },
+                { key: "staff_manage", href: "staff_manage.html", label: "Staff" },
+                { key: "create_account", href: "create_account.html", label: "Create Account" }
+            ]
+            : [
+                { key: "dashboard", href: "staff.html", label: "Home" },
+                { key: "messages", href: "messages.html", label: "Messages" },
+                { key: "attendance", href: "attendance.html", label: "Attendance" },
+                { key: "locker", href: "locker.html", label: "Locker" }
+            ];
 
-    <a href="members.html">
-       
-        Members
-    </a>
+        menu.innerHTML = links
+            .filter(link => allowedModules.has(link.key))
+            .map(link => {
+                const active = link.key === "messages";
+                const badge = active
+                    ? '<span id="msg-count" class="msg-count">0</span>'
+                    : "";
 
-    <a href="staff_manage.html">
-       
-        Staff
-    </a>
+                return `
+                    <a href="${link.href}"
+                       ${active ? 'class="msg-link"' : ""}>
+                        ${link.label}
+                        ${badge}
+                    </a>
+                `;
+            })
+            .join("");
 
-    <a href="create_account.html">
-        
-        Create Account
-    </a>
-`;
-}else{
-    menu.innerHTML = `
-         <a href="staff.html">
-            
-            Home
-        </a>
-
-        <a href="messages.html" class="msg-link">
-
-            
-
-            Messages
-
-            <span
-                id="msg-count"
-                class="msg-count">
-                0
-            </span>
-
-        </a>
-
-        <a href="attendance.html">
-            
-            Attendance
-        </a>
-
-        <a href="locker.html">
-            
-            Locker
-        </a>
-    `;
+    } catch (error) {
+        console.error("SIDEBAR PERMISSION ERROR:", error);
+        menu.innerHTML =
+            "<p>Unable to load menu permissions. Please refresh.</p>";
+    }
 }
+
+buildPermissionMenu();
+
 
 // ================= SOCKET =================
 const socket = io(API_URL, { transports: ["websocket"] });
