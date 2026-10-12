@@ -793,15 +793,48 @@ if(
    MODULE ACCESS
 ===================================================== */
 
-async function loadTrainerModuleAccess() {
-    const menuItems = document.querySelectorAll(
-        ".navbar .menu a[data-module]"
-    );
 
-    // Itago muna habang hinihintay ang API
-    menuItems.forEach(item => {
-        item.style.display = "none";
-    });
+async function loadTrainerModuleAccess() {
+    const menu = document.querySelector(".navbar .menu");
+
+    if (!menu || !user || !user.user_id) {
+        console.error("Missing trainee menu or trainer user ID.");
+        return;
+    }
+
+    const menuItems = [
+        {
+            key: "dashboard",
+            label: "Home",
+            page: "trainer.html"
+        },
+        {
+            key: "messages",
+            label: "Messages",
+            page: "trainer_messages.html",
+            className: "msg-link",
+            badge: true
+        },
+        {
+            key: "trainee",
+            label: "Trainee",
+            page: "trainee.html",
+            active: true
+        },
+        {
+            key: "schedule",
+            label: "Schedule",
+            page: "trainer-schedule.html"
+        },
+        {
+            key: "client_requests",
+            label: "Client Requests",
+            page: "client_requests.html"
+        }
+    ];
+
+    // Itago muna ang menu habang kinukuha ang permissions.
+    menu.innerHTML = "<p>Loading menu...</p>";
 
     try {
         const response = await fetch(
@@ -810,53 +843,72 @@ async function loadTrainerModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            throw new Error(`Module access API error: ${response.status}`);
         }
 
         const data = await response.json();
 
-        const moduleList = Array.isArray(data)
-            ? data
-            : data.modules;
+        const modules = Array.isArray(data.modules)
+            ? data.modules
+            : Array.isArray(data)
+                ? data
+                : null;
 
-        if (!Array.isArray(moduleList)) {
-            throw new Error("Invalid module access response.");
+        if (!modules) {
+            throw new Error("Invalid module permissions response.");
         }
 
         const allowedModules = new Set(
-            moduleList.map(item => {
-                if (typeof item === "string") return item;
-
-                return item.module_key ||
-                       item.module_name ||
-                       item.key;
-            }).filter(Boolean).map(key =>
-                String(key).trim().toLowerCase()
-            )
-        );
-
-        menuItems.forEach(item => {
-            const key = item.dataset.module.toLowerCase();
-
-            if (allowedModules.has(key)) {
-                item.style.display = "";
-
-                // Panatilihin ang active link
-                if (item.getAttribute("href") === "trainee.html") {
-                    item.classList.add("active");
+            modules.map(item => {
+                if (typeof item === "string") {
+                    return item.trim().toLowerCase();
                 }
-            }
-        });
+
+                return String(
+                    item.module_key ||
+                    item.module_name ||
+                    item.key ||
+                    ""
+                ).trim().toLowerCase();
+            }).filter(Boolean)
+        );
 
         console.log(
             "TRAINEE PAGE ALLOWED MODULES:",
             [...allowedModules]
         );
 
+        // Sidebar: idagdag lamang ang mga module na may permission.
+        menu.innerHTML = menuItems
+            .filter(item => allowedModules.has(item.key))
+            .map(item => `
+                <a
+                    href="${item.page}"
+                    data-module="${item.key}"
+                    ${item.className ? `class="${item.className}"` : ""}
+                    ${item.active ? 'class="active"' : ""}
+                >
+                    ${item.label}
+                    ${
+                        item.badge
+                            ? '<span id="msg-count" class="msg-count">0</span>'
+                            : ""
+                    }
+                </a>
+            `)
+            .join("");
+
+        if (!menu.innerHTML.trim()) {
+            menu.innerHTML = "<p>No modules assigned.</p>";
+        }
+
     } catch (error) {
         console.error("TRAINEE MODULE ACCESS ERROR:", error);
+        menu.innerHTML = "<p>Unable to load module permissions.</p>";
     }
 }
+
+
 
 /* =====================================================
    DATA
