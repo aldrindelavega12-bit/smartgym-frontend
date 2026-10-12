@@ -333,7 +333,7 @@
 
             <!-- REPORTS -->
 
-            <div class="quick-card">
+            <div class="quick-card" data-module="reports">
 
                 <h3>
                     Reports
@@ -354,7 +354,7 @@
 
             <!-- MEMBERS -->
 
-            <div class="quick-card">
+            <div class="quick-card" data-module="members">
 
                 <h3>
                     Members
@@ -375,7 +375,7 @@
 
             <!-- WALK-INS -->
 
-            <div class="quick-card">
+            <div class="quick-card" data-module="walkins">
 
                 <h3>
                     Walk-ins
@@ -396,7 +396,7 @@
 
             <!-- STAFF -->
 
-            <div class="quick-card">
+            <div class="quick-card" data-module="staff">
 
                 <h3>
                     Staff
@@ -417,7 +417,7 @@
 
             <!-- ARCHIVE -->
 
-            <div class="quick-card">
+            <div class="quick-card" data-module="archive">
 
                 <h3>
                     Archive
@@ -560,9 +560,10 @@ async function loadManagerModuleAccess() {
             })
         );
 
-        menu.querySelectorAll("a[data-module]").forEach(link => {
-            link.style.display = allowedModules.has(
-                link.dataset.module
+        
+        document.querySelectorAll("[data-module]").forEach(element => {
+            element.style.display = allowedModules.has(
+                element.dataset.module
             ) ? "" : "none";
         });
 
