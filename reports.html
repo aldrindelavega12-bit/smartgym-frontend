@@ -813,9 +813,7 @@ if(
                                         Trainer Name
                                     </th>
 
-                                    <th>
-                                        Program Count
-                                    </th>
+                                    
 
                                     <th>
                                         Active Clients
@@ -826,7 +824,7 @@ if(
                                     </th>
 
                                     <th>
-                                        Action
+                                         
                                     </th>
 
                                 </tr>
@@ -837,7 +835,7 @@ if(
                             
                             <tbody id="trainerReportBody">
                                 <tr>
-                                    <td colspan="6">Loading trainer records...</td>
+                                    <td colspan="5">Loading trainer records...</td>
                                 </tr>
                             </tbody>
 
@@ -6013,9 +6011,6 @@ function renderTrainerReport(trainers = filteredTrainerReport) {
             trainer.name ??
             "Unavailable";
 
-        const programCount = Number(
-            trainer.program_count ?? 0
-        );
 
         const activeClients = Number(
             trainer.active_clients ?? 0
@@ -6029,7 +6024,7 @@ function renderTrainerReport(trainers = filteredTrainerReport) {
 
                 <td>${trainerEscape(trainerName)}</td>
 
-                <td>${Number.isFinite(programCount) ? programCount : 0}</td>
+                
 
                 <td>${Number.isFinite(activeClients) ? activeClients : 0}</td>
 
