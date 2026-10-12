@@ -592,16 +592,19 @@ async function buildLockerPermissionMenu() {
             `)
             .join("");
 
-        const lockerLink = menu.querySelector(
-            'a[href="locker.html"]'
-        );
+        menu.querySelectorAll("a").forEach(link => {
+            link.classList.remove("active");
+            link.style.setProperty("background", "transparent", "important");
+            link.style.setProperty("color", "#172033", "important");
+        });
+
+        const lockerLink = menu.querySelector('a[href="locker.html"]');
 
         if (lockerLink) {
             lockerLink.classList.add("active");
             lockerLink.style.setProperty("background", "#eaf7f0", "important");
             lockerLink.style.setProperty("color", "#078a43", "important");
         }
-
     } catch (error) {
         console.error("LOCKER MENU ERROR:", error);
         menu.innerHTML =
@@ -610,50 +613,9 @@ async function buildLockerPermissionMenu() {
 }
 // ================= FORCE ACTIVE SIDEBAR =================
 
-document.querySelectorAll("#menu a").forEach(link => {
-    link.classList.remove("active");
-});
 
-// LOCKER PAGE = LOCKER ACTIVE
-const lockerLink = document.querySelector(
-    '#menu a[href="locker.html"]'
-);
 
-const homeLink = document.querySelector(
-    '#menu a[href="staff.html"]'
-);
 
-if (homeLink) {
-    homeLink.classList.remove("active");
-
-    homeLink.style.setProperty(
-        "background",
-        "transparent",
-        "important"
-    );
-
-    homeLink.style.setProperty(
-        "color",
-        "#172033",
-        "important"
-    );
-}
-
-if (lockerLink) {
-    lockerLink.classList.add("active");
-
-    lockerLink.style.setProperty(
-        "background",
-        "#eaf7f0",
-        "important"
-    );
-
-    lockerLink.style.setProperty(
-        "color",
-        "#078a43",
-        "important"
-    );
-}
 // ================= SOCKET =================
 const socket = io(API_URL, {
     transports: ["websocket"],
