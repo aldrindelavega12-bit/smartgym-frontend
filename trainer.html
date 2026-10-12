@@ -997,9 +997,9 @@ async function loadTrainerModuleAccess() {
         document.querySelectorAll("[data-module]").forEach(element => {
             const moduleKey = element.dataset.module;
 
-            element.style.display = modules.has(moduleKey)
-                ? ""
-                : "none";
+            const allowed = modules.has(moduleKey);
+
+            element.style.display = allowed ? "" : "none";  
         });
 
     } catch (error) {
@@ -1008,6 +1008,7 @@ async function loadTrainerModuleAccess() {
 }
 
 loadTrainerModuleAccess();
+console.log("ALLOWED MODULES:", [...modules]);
 // =====================================================
 // MESSAGE COUNT
 // =====================================================
