@@ -2565,56 +2565,83 @@ socket.on("priority_alert", () => {
    MENU
 ===================================================== */
 
-const menu =
-    document.getElementById("menu");
+
+const menu = document.getElementById("menu");
 
 menu.innerHTML = `
-
-    <a href="manager.html">
-
-        Home
-
-    </a>
-
-    <a href="reports.html"
-       class="active">
-
-
-        Reports
-
-    </a>
-
-
-    <a href="members.html">
-
-
-        Members
-
-    </a>
-
-
-    <a href="walkin.html">
-
-
-        Walk-ins
-
-    </a>
-
-
-    <a href="staff_manage.html">
-
-        Staff
-
-    </a>
-
-    <a href="archive.html">
-
-        Archive
-
-    </a>
-
-
+    <a href="manager.html" data-module="dashboard">Home</a>
+    <a href="reports.html" data-module="reports" class="active">Reports</a>
+    <a href="members.html" data-module="members">Members</a>
+    <a href="walkin.html" data-module="walkin">Walk-ins</a>
+    <a href="staff_manage.html" data-module="staff">Staff</a>
+    <a href="archive.html" data-module="archive">Archive</a>
 `;
+
+/* =====================================================
+   MODULE ACCESS — SAME PATTERN AS TRAINEE.HTML
+===================================================== */
+
+async function loadReportsModuleAccess() {
+    const menuItems = document.querySelectorAll(
+        "#menu a[data-module]"
+    );
+
+    // Itago muna habang kinukuha ang permissions
+    menuItems.forEach(item => {
+        item.style.display = "none";
+    });
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const moduleList = Array.isArray(data)
+            ? data
+            : data.modules;
+
+        if (!Array.isArray(moduleList)) {
+            throw new Error("Invalid module access response.");
+        }
+
+        const allowedModules = new Set(
+            moduleList.map(item => {
+                if (typeof item === "string") return item;
+
+                return item.module_key ||
+                       item.module_name ||
+                       item.key;
+            })
+            .filter(Boolean)
+            .map(key => String(key).trim().toLowerCase())
+        );
+
+        menuItems.forEach(item => {
+            const key = item.dataset.module.trim().toLowerCase();
+
+            item.style.display = allowedModules.has(key)
+                ? ""
+                : "none";
+        });
+
+        console.log(
+            "REPORTS PAGE ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+    } catch (error) {
+        console.error("REPORTS MODULE ACCESS ERROR:", error);
+    }
+}
+
+loadReportsModuleAccess();
 
 /* =====================================================
    ATTENDANCE DATA
