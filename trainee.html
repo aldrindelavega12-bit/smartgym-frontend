@@ -52,6 +52,11 @@
             background: #f5faf7;
         }
 
+        .status-badge.unpaid {
+            background: #fff4d6;
+            color: #946200;
+        }
+
 
         /* =====================================================
            TRAINEE MODAL
@@ -1419,6 +1424,11 @@ function createTraineeRow(
         statusClass =
             "cancelled";
 
+    }
+
+    else if (traineeStatus === "unpaid") {
+        statusText = "Unpaid";
+        statusClass = "unpaid";
     }
 
     else if(
