@@ -381,59 +381,35 @@ async function buildAttendancePermissionMenu() {
 }
 
 buildAttendancePermissionMenu();
-// ================= FORCE ACTIVE SIDEBAR =================
-const staffName =
-    document.getElementById("staffName");
 
-const staffAvatar =
-    document.getElementById("staffAvatar");
+function setAttendanceActiveLink() {
+    const links = document.querySelectorAll("#menu a");
 
-if(user){
+    links.forEach(link => {
+        link.classList.remove("active");
 
-    const fullname =
-        user.fullname ||
-        user.name ||
-        user.full_name ||
-        "Staff";
+        // Clear any active styling left by shared CSS or older code.
+        link.style.setProperty("background", "transparent", "important");
+        link.style.setProperty("color", "#172033", "important");
+    });
 
-    if(staffName){
-        staffName.innerText = fullname;
-    }
-
-    if(staffAvatar){
-        staffAvatar.innerText =
-            fullname.charAt(0).toUpperCase();
-    }
-
-}
-
-document.querySelectorAll("#menu a").forEach(link => {
-    link.classList.remove("active");
-});
-
-const attendanceLink = document.querySelector(
-    '#menu a[href="attendance.html"]'
-);
-
-const homeLink = document.querySelector(
-    '#menu a[href="staff.html"]'
-);
-
-if (attendanceLink) {
-
-    attendanceLink.classList.add("active");
-
-    attendanceLink.style.setProperty(
-        "background",
-        "#eaf7f0",
-        "important"
+    const attendanceLink = document.querySelector(
+        '#menu a[href="attendance.html"]'
     );
 
-    attendanceLink.style.setProperty(
-        "color",
-        "#078a43",
-        "important"
-    );
+    if (attendanceLink) {
+        attendanceLink.classList.add("active");
+        attendanceLink.style.setProperty(
+            "background",
+            "#eaf7f0",
+            "important"
+        );
+        attendanceLink.style.setProperty(
+            "color",
+            "#078a43",
+            "important"
+        );
+    }
 }
 
 let lastUnread = 0;
@@ -739,6 +715,7 @@ window.onload = async () => {
     document.getElementById("dateFilter").value = today;
 
     await buildAttendancePermissionMenu();
+    setAttendanceActiveLink();
 
     loadAttendance();
 
