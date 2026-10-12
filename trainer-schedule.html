@@ -783,73 +783,25 @@ if (
 
         <!-- HOME -->
 
-        <a
-            href="trainer.html">
-
-            <span>
-                Home
-            </span>
-
+        <a href="trainer.html" data-module="dashboard">
+            <span>Home</span>
         </a>
 
-
-        <!-- MESSAGES -->
-
-        <a
-            href="trainer_messages.html"
-            class="msg-link">
-
-
-            <span>
-                Messages
-            </span>
-
-            <span
-                id="msg-count"
-                class="msg-count">
-
-                0
-
-            </span>
-
+        <a href="trainer_messages.html" data-module="messages" class="msg-link">
+            <span>Messages</span>
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
-
-        <!-- TRAINEE -->
-
-        <a
-            href="trainee.html">
-
-            <span>
-                Trainee
-            </span>
-
+        <a href="trainee.html" data-module="trainee">
+            <span>Trainee</span>
         </a>
 
-
-        <!-- SCHEDULE -->
-
-        <a
-            href="trainer-schedule.html"
-            class="active">
-
-
-            <span>
-                Schedule
-            </span>
-
+        <a href="trainer-schedule.html" data-module="schedule" class="active">
+            <span>Schedule</span>
         </a>
 
-
-        <!-- CLIENT REQUESTS -->
-
-        <a
-            href="client_requests.html">
-
-            <span>
-                Client Requests
-            </span>
-
+        <a href="client_requests.html" data-module="client_requests">
+            <span>Client Requests</span>
         </a>
 
 
@@ -1224,6 +1176,58 @@ document.getElementById(
         .charAt(0)
         .toUpperCase();
 
+
+async function loadTrainerModuleAccess() {
+    const menu = document.querySelector(".navbar .menu");
+
+    if (!menu || !trainerId) return;
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(trainerId)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(module => {
+                if (typeof module === "string") {
+                    return module.trim().toLowerCase();
+                }
+
+                return String(
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
+                    ""
+                ).trim().toLowerCase();
+            })
+        );
+
+        menu.querySelectorAll("a[data-module]").forEach(link => {
+            link.style.display = allowedModules.has(
+                link.dataset.module
+            ) ? "" : "none";
+        });
+
+    } catch (error) {
+        console.error(
+            "TRAINER SCHEDULE MODULE ACCESS ERROR:",
+            error
+        );
+    }
+}
 
 /* =========================================================
    DATA
@@ -2257,7 +2261,7 @@ document
    INITIAL LOAD
 ========================================================= */
 setTodayDate();
-
+loadTrainerModuleAccess();
 loadSchedules();
 
 </script>
