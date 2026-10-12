@@ -341,7 +341,6 @@
         </a>
     </div>
 
-
 </div>
 
 
@@ -971,6 +970,13 @@ if(
 // =====================================================
 
 async function loadTrainerModuleAccess() {
+    const menuItems = document.querySelectorAll("[data-module]");
+
+    // Itago muna para hindi makita habang naglo-load
+    menuItems.forEach(item => {
+        item.style.display = "none";
+    });
+
     try {
         const response = await fetch(
             `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
@@ -978,38 +984,41 @@ async function loadTrainerModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error("Failed to load module permissions.");
+            throw new Error(`Module access HTTP ${response.status}`);
         }
 
         const data = await response.json();
 
-        const modules = new Set(
+        const allowedModules = new Set(
             (Array.isArray(data) ? data : data.modules || [])
-                .map(module =>
-                    typeof module === "string"
-                        ? module
-                        : module.module_key || module.module_name || module.key
-                )
+                .map(item => {
+                    if (typeof item === "string") return item;
+
+                    return item.module_key || item.module_name || item.key;
+                })
                 .filter(Boolean)
-                .map(module => module.toLowerCase())
-                
+                .map(key => String(key).trim().toLowerCase())
         );
 
-        console.log("ALLOWED MODULES:", [...modules]);
+        console.log("TRAINER ALLOWED MODULES:", [...allowedModules]);
 
-        document.querySelectorAll("[data-module]").forEach(element => {
-            const moduleKey = element.dataset.module;
+        menuItems.forEach(item => {
+            const key = item.dataset.module.toLowerCase();
 
-            const allowed = modules.has(moduleKey);
-
-            element.style.display = allowed ? "" : "none";  
+            item.style.display = allowedModules.has(key) ? "" : "none";
         });
 
-        document.querySelectorAll(
-            'a[href="trainer-schedule.html"], button[onclick*="trainer-schedule.html"]'
-        ).forEach(element => {
-            if (!modules.has("schedule")) {
-                element.style.display = "none";
+        // Dashboard quick-action cards
+        const cardModules = {
+            messages: document.querySelector(".cards .card:nth-child(1)"),
+            trainee: document.querySelector(".cards .card:nth-child(2)"),
+            schedule: document.querySelector(".cards .card:nth-child(3)"),
+            client_requests: document.querySelector(".cards .card:nth-child(4)")
+        };
+
+        Object.entries(cardModules).forEach(([key, card]) => {
+            if (card) {
+                card.style.display = allowedModules.has(key) ? "" : "none";
             }
         });
 
@@ -1018,9 +1027,9 @@ async function loadTrainerModuleAccess() {
     }
 }
 
-loadTrainerModuleAccess();
-console.log("ALLOWED MODULES:", [...modules]);
-
+if (user && user.role === "trainer") {
+    loadTrainerModuleAccess();
+}
 // =====================================================
 // MESSAGE COUNT
 // =====================================================
