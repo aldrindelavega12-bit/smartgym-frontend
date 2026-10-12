@@ -524,8 +524,30 @@ menu.innerHTML = `
     </a>
 `;
 
+
 async function loadManagerModuleAccess() {
-    if (!menu || !user || !user.user_id) return;
+    if (!menu || !user || !user.user_id) {
+        console.error("Missing manager menu or user ID.");
+        return;
+    }
+
+    const menuItems = [
+        { key: "dashboard", label: "Home", page: "manager.html" },
+        { key: "reports", label: "Reports", page: "reports.html" },
+        { key: "members", label: "Members", page: "members.html" },
+        { key: "walkins", label: "Walk-ins", page: "walkin.html" },
+        { key: "staff", label: "Staff", page: "staff_manage.html" },
+        { key: "archive", label: "Archive", page: "archive.html" }
+    ];
+
+    // Itago muna ang sidebar links at quick cards.
+    menu.querySelectorAll("a").forEach(link => {
+        link.style.display = "none";
+    });
+
+    document.querySelectorAll(".quick-card").forEach(card => {
+        card.style.display = "none";
+    });
 
     try {
         const response = await fetch(
@@ -534,19 +556,17 @@ async function loadManagerModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            throw new Error(`Module access API error: ${response.status}`);
         }
 
         const data = await response.json();
 
-        const modules = Array.isArray(data)
-            ? data
-            : Array.isArray(data.modules)
-                ? data.modules
-                : [];
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module permissions response.");
+        }
 
         const allowedModules = new Set(
-            modules.map(module => {
+            data.modules.map(module => {
                 if (typeof module === "string") {
                     return module.trim().toLowerCase();
                 }
@@ -560,20 +580,51 @@ async function loadManagerModuleAccess() {
             })
         );
 
-        
-        document.querySelectorAll("[data-module]").forEach(element => {
-            element.style.display = allowedModules.has(
-                element.dataset.module
-            ) ? "" : "none";
+        console.log("MANAGER ALLOWED MODULES:", [...allowedModules]);
+
+        // SIDEBAR
+        menu.innerHTML = menuItems
+            .filter(item => allowedModules.has(item.key))
+            .map(item => `
+                <a
+                    href="${item.page}"
+                    data-module="${item.key}"
+                    ${item.key === "dashboard" ? 'class="active"' : ""}
+                >
+                    ${item.label}
+                </a>
+            `)
+            .join("");
+
+        if (!menu.innerHTML.trim()) {
+            menu.innerHTML = "<p>No modules assigned.</p>";
+        }
+
+        // QUICK CARDS
+        const cardModuleMap = {
+            "Reports": "reports",
+            "Members": "members",
+            "Walk-ins": "walkins",
+            "Staff": "staff",
+            "Archive": "archive"
+        };
+
+        document.querySelectorAll(".quick-card").forEach(card => {
+            const title = card.querySelector("h3")?.textContent.trim();
+            const moduleKey = cardModuleMap[title];
+
+            card.style.display =
+                moduleKey && allowedModules.has(moduleKey) ? "" : "none";
         });
 
     } catch (error) {
-        console.error(
-            "MANAGER MODULE ACCESS ERROR:",
-            error
-        );
+        console.error("MANAGER MODULE ACCESS ERROR:", error);
+        menu.innerHTML = "<p>Unable to load module permissions.</p>";
     }
 }
+
+
+
 
 // =====================================================
 // TODAY'S TOTAL INCOME
