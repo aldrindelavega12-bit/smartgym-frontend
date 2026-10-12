@@ -26,7 +26,7 @@
 
 </head>
 
-<body>
+<body data-module="attendance">
 
 
 <!-- =====================================================
@@ -260,89 +260,127 @@ if (!user) {
 
 <script>
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
+async function checkAttendancePageAccess() {
+    if (!user || !user.user_id) {
+        window.location.href = "index.html";
+        return false;
+    }
 
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to verify module access.");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
+        }
+
+        if (!data.modules.includes("attendance")) {
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang Attendance.</p>
+                    <button onclick="location.href='staff.html'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error("ATTENDANCE ACCESS ERROR:", error);
+
+        document.body.innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang module permission. Pakisubukan ulit.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
+
+        return false;
+    }
+}
 // ================= MENU =================
 const menu = document.getElementById("menu");
 
-if(user.role === "admin"){
-    menu.innerHTML = `
-    <a href="admin.html">
-        
-        Home
-    </a>
+async function buildAttendancePermissionMenu() {
+    const menu = document.getElementById("menu");
 
-   <a href="messages.html" class="msg-link">
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
 
-       
+        if (!response.ok) {
+            throw new Error("Unable to load module permissions.");
+        }
 
-        Messages
+        const data = await response.json();
 
-        <span
-            id="msg-count"
-            class="msg-count">
-            0
-        </span>
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
+        }
 
-    </a>
+        const allowed = new Set(data.modules);
+        const isAdmin = user.role === "admin";
 
-    <a href="attendance.html">
-        
-        Attendance
-    </a>
+        const links = isAdmin
+            ? [
+                { key: "dashboard", href: "admin.html", label: "Home" },
+                { key: "messages", href: "messages.html", label: "Messages", badge: true },
+                { key: "attendance", href: "attendance.html", label: "Attendance" },
+                { key: "locker", href: "locker.html", label: "Locker" },
+                { key: "members", href: "members.html", label: "Members" },
+                { key: "staff_manage", href: "staff_manage.html", label: "Staff" },
+                { key: "create_account", href: "create_account.html", label: "Create Account" }
+            ]
+            : [
+                { key: "dashboard", href: "staff.html", label: "Home" },
+                { key: "messages", href: "messages.html", label: "Messages", badge: true },
+                { key: "attendance", href: "attendance.html", label: "Attendance" },
+                { key: "locker", href: "locker.html", label: "Locker" }
+            ];
 
-    <a href="locker.html">
-        
-        Locker
-    </a>
+        menu.innerHTML = links
+            .filter(link => allowed.has(link.key))
+            .map(link => `
+                <a href="${link.href}">
+                    ${link.label}
+                    ${link.badge
+                        ? '<span id="msg-count" class="msg-count">0</span>'
+                        : ""}
+                </a>
+            `)
+            .join("");
 
-    <a href="members.html">
-        
-        Members
-    </a>
+        const attendanceLink = menu.querySelector(
+            'a[href="attendance.html"]'
+        );
 
-    <a href="staff_manage.html">
-        
-        Staff
-    </a>
+        if (attendanceLink) {
+            attendanceLink.classList.add("active");
+        }
 
-    <a href="create_account.html">
-        
-        Create Account
-    </a>
-`;
-}else{
-    menu.innerHTML = `
-        <a href="staff.html">
-           
-            Home
-        </a>
-
-        <a href="messages.html" class="msg-link">
-
-            
-
-            Messages
-
-            <span
-                id="msg-count"
-                class="msg-count">
-                0
-            </span>
-
-        </a>
-
-        <a href="attendance.html">
-            
-            Attendance
-        </a>
-
-        <a href="locker.html">
-            
-            Locker
-        </a>
-    `;
+    } catch (error) {
+        console.error("ATTENDANCE MENU ERROR:", error);
+        menu.innerHTML =
+            "<p>Unable to load menu permissions. Please refresh.</p>";
+    }
 }
 
+buildAttendancePermissionMenu();
 // ================= FORCE ACTIVE SIDEBAR =================
 const staffName =
     document.getElementById("staffName");
@@ -705,19 +743,33 @@ function logout(){
 }
 
 // ================= INIT =================
-window.onload = () => {
+let attendanceAccessGranted = false;
+
+window.onload = async () => {
+    const hasAccess = await checkAttendancePageAccess();
+
+    if (!hasAccess) return;
+
+    attendanceAccessGranted = true;
+
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("dateFilter").value = today;
-    loadAttendance();
-};
-loadMessageCount();
-// 🔁 fallback refresh
-setInterval(loadAttendance, 10000);
-socket.on("new_message", () => {
 
-    loadMessages();
-    loadMessageCount();
-});
+    await buildAttendancePermissionMenu();
+
+    loadAttendance();
+
+    if (user.role === "admin" ||
+        document.querySelector('#menu a[href="messages.html"]')) {
+        loadMessageCount();
+    }
+
+    setInterval(() => {
+        if (attendanceAccessGranted) {
+            loadAttendance();
+        }
+    }, 10000);
+};
 
 socket.on("priority_alert", () => {
 
