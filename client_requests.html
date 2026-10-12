@@ -67,52 +67,32 @@
     <div class="menu">
 
 
-        <a href="trainer.html">
+            
+    <a href="trainer.html" data-module="dashboard">
+        Home
+    </a>
 
+    <a href="trainer_messages.html"
+    data-module="messages"
+    class="msg-link">
+        Messages
+        <span id="msg-count" class="msg-count">0</span>
+    </a>
 
-            Home
+    <a href="trainee.html" data-module="trainee">
+        Trainee
+    </a>
 
-        </a>
+    <a href="trainer-schedule.html" data-module="schedule">
+        Schedule
+    </a>
 
+    <a href="client_requests.html"
+    data-module="client_requests"
+    class="active">
+        Client Requests
+    </a>
 
-
-        <a
-            href="trainer_messages.html"
-            class="msg-link">
-            Messages
-
-            <span
-                id="msg-count"
-                class="msg-count">
-
-                0
-
-            </span>
-
-        </a>
-
-        <a href="trainee.html">
-
-            Trainee
-
-        </a>
-
-        <a href="trainer-schedule.html">
-
-            Schedule
-
-        </a>
-
-
-
-        <a
-            href="client_requests.html"
-            class="active">
-
-
-            Client Requests
-
-        </a>
 
 
     </div>
@@ -497,6 +477,58 @@ if(
 }
 
 
+
+async function loadTrainerModuleAccess() {
+    const menu = document.querySelector(".navbar .menu");
+
+    if (!menu || !user || !user.user_id) return;
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(module => {
+                if (typeof module === "string") {
+                    return module.trim().toLowerCase();
+                }
+
+                return String(
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
+                    ""
+                ).trim().toLowerCase();
+            })
+        );
+
+        menu.querySelectorAll("a[data-module]").forEach(link => {
+            link.style.display = allowedModules.has(
+                link.dataset.module
+            ) ? "" : "none";
+        });
+
+    } catch (error) {
+        console.error(
+            "CLIENT REQUESTS MODULE ACCESS ERROR:",
+            error
+        );
+    }
+}
 
 /* =====================================================
    DATA
@@ -1908,7 +1940,7 @@ document
 ===================================================== */
 
 loadMessageCount();
-
+loadTrainerModuleAccess();
 loadClientRequests();
 
 
