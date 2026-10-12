@@ -23,6 +23,20 @@
           rel="stylesheet">
 
 </head>
+
+<style>
+    /* LOCKER PAGE: ONLY LOCKER IS ACTIVE */
+    body .navbar .menu a[href="locker.html"] {
+        background: #eaf6ee !important;
+        color: #087c3d !important;
+    }
+
+    body .navbar .menu a[href="staff.html"],
+    body .navbar .menu a[href="admin.html"] {
+        background: transparent !important;
+        color: #56635b !important;
+    }
+</style>
 <body data-module="locker">
 
 <!-- 🔒 ROLE PROTECTION -->
@@ -541,6 +555,7 @@ if(user){
 }
 
 // ================= MENU =================
+// ================= MENU =================
 async function buildLockerPermissionMenu() {
     const menu = document.getElementById("menu");
 
@@ -580,6 +595,7 @@ async function buildLockerPermissionMenu() {
                 { key: "locker", href: "locker.html", label: "Locker" }
             ];
 
+        // Build sidebar using assigned module permissions.
         menu.innerHTML = links
             .filter(link => allowed.has(link.key))
             .map(link => `
@@ -592,28 +608,43 @@ async function buildLockerPermissionMenu() {
             `)
             .join("");
 
+        // Remove active state from every sidebar link.
         menu.querySelectorAll("a").forEach(link => {
             link.classList.remove("active");
-            link.style.setProperty("background", "transparent", "important");
-            link.style.setProperty("color", "#172033", "important");
+            link.style.removeProperty("background");
+            link.style.removeProperty("color");
         });
 
-        const lockerLink = menu.querySelector('a[href="locker.html"]');
+        // Set Locker as the only active sidebar link.
+        const lockerLink = menu.querySelector(
+            'a[href="locker.html"]'
+        );
 
         if (lockerLink) {
             lockerLink.classList.add("active");
-            lockerLink.style.setProperty("background", "#eaf7f0", "important");
-            lockerLink.style.setProperty("color", "#078a43", "important");
+            lockerLink.style.setProperty(
+                "background",
+                "#eaf6ee",
+                "important"
+            );
+            lockerLink.style.setProperty(
+                "color",
+                "#087c3d",
+                "important"
+            );
         }
+
+        return true;
+
     } catch (error) {
         console.error("LOCKER MENU ERROR:", error);
+
         menu.innerHTML =
             "<p>Unable to load menu permissions. Please refresh.</p>";
+
+        return false;
     }
 }
-// ================= FORCE ACTIVE SIDEBAR =================
-
-
 
 
 // ================= SOCKET =================
