@@ -490,51 +490,89 @@ const menu =
     document.getElementById("menu");
 
 
+
 menu.innerHTML = `
-
     <a href="manager.html"
+       data-module="dashboard"
        class="active">
-
         Home
-
     </a>
 
-
-    <a href="reports.html">
-
+    <a href="reports.html"
+       data-module="reports">
         Reports
-
     </a>
 
-
-    <a href="members.html">
-
+    <a href="members.html"
+       data-module="members">
         Members
-
     </a>
 
-
-    <a href="walkin.html">
-
+    <a href="walkin.html"
+       data-module="walkins">
         Walk-ins
-
     </a>
 
-
-    <a href="staff_manage.html">
-
+    <a href="staff_manage.html"
+       data-module="staff">
         Staff
-
     </a>
 
-
-    <a href="archive.html">
-
+    <a href="archive.html"
+       data-module="archive">
         Archive
-
     </a>
-
 `;
+
+async function loadManagerModuleAccess() {
+    if (!menu || !user || !user.user_id) return;
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(module => {
+                if (typeof module === "string") {
+                    return module.trim().toLowerCase();
+                }
+
+                return String(
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
+                    ""
+                ).trim().toLowerCase();
+            })
+        );
+
+        menu.querySelectorAll("a[data-module]").forEach(link => {
+            link.style.display = allowedModules.has(
+                link.dataset.module
+            ) ? "" : "none";
+        });
+
+    } catch (error) {
+        console.error(
+            "MANAGER MODULE ACCESS ERROR:",
+            error
+        );
+    }
+}
 
 // =====================================================
 // TODAY'S TOTAL INCOME
@@ -1255,7 +1293,7 @@ socket.on(
 // =====================================================
 // INIT
 // =====================================================
-
+loadManagerModuleAccess();
 loadDashboard().then(() => {
 
     loadMemberSummary();
