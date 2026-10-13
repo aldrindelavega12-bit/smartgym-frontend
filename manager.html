@@ -601,6 +601,7 @@ async function loadManagerModuleAccess() {
         }
 
         // QUICK CARDS
+        
         const cardModuleMap = {
             "Reports": "reports",
             "Members": "members",
@@ -608,6 +609,15 @@ async function loadManagerModuleAccess() {
             "Staff": "staff",
             "Archive": "archive"
         };
+
+        document.querySelectorAll(".quick-card[data-module]").forEach(card => {
+            const moduleKey = card.dataset.module.trim().toLowerCase();
+
+            card.style.display = allowedModules.has(moduleKey)
+                ? ""
+                : "none";
+        });
+
 
         document.querySelectorAll(".quick-card").forEach(card => {
             const title = card.querySelector("h3")?.textContent.trim();
