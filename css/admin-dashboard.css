@@ -8183,7 +8183,9 @@ a[href="#incomeReport"]::before {
         padding: 18px;
     }
 }
-
+.quick-card[hidden] {
+    display: none !important;
+}
 /* ==========================================
    TRAINER REPORT TABLE FIX
 ========================================== */
