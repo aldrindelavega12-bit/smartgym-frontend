@@ -96,32 +96,29 @@ if (!user || user.role !== "member") {
     <!-- MENU -->
     <div class="menu">
 
-        <a href="member.html" class="active">
+                
+        <a href="member.html" class="active" data-module="dashboard">
             Home
         </a>
 
-        <a href="member_messages.html"
-        class="msg-link">
+        <a href="member_messages.html" class="msg-link" data-module="messages">
             Messages
-            <span id="msg-count"
-                class="msg-count">
-                0
-            </span>
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
-        <a href="program.html">
+        <a href="program.html" data-module="program">
             Program
         </a>
 
-        <a href="get_program.html">
+        <a href="get_program.html" data-module="get_program">
             Get Program
         </a>
 
-        <a href="locker_booking.html">
+        <a href="locker_booking.html" data-module="book_locker">
             Book Locker
         </a>
 
-        <a href="membership.html">
+        <a href="membership.html" data-module="membership">
             Membership
         </a>
 
@@ -213,7 +210,7 @@ if (!user || user.role !== "member") {
     <div class="cards">
 
         <!-- MESSAGES -->
-        <div class="card">
+        <div class="card" data-module-card="messages">
 
             <h3>
                 Messages
@@ -232,7 +229,7 @@ if (!user || user.role !== "member") {
 
 
         <!-- PROGRAM -->
-        <div class="card">
+        <div class="card" data-module-card="program">
 
             <h3>
                 Program
@@ -251,7 +248,7 @@ if (!user || user.role !== "member") {
 
 
         <!-- GET PROGRAM -->
-        <div class="card">
+        <div class="card" data-module-card="get_program">
 
             <h3>
                 Get Program
@@ -270,7 +267,7 @@ if (!user || user.role !== "member") {
 
 
         <!-- BOOK LOCKER -->
-        <div class="card">
+        <div class="card" data-module-card="book_locker">
 
             <h3>
                 Book Locker
@@ -289,7 +286,7 @@ if (!user || user.role !== "member") {
 
 
         <!-- MEMBERSHIP -->
-        <div class="card">
+        <div class="card" data-module-card="membership">
 
             <h3>
                 Membership Details
@@ -673,6 +670,85 @@ const API_URL =
 "https://smartgym-api-ia2e.onrender.com";
 
 
+async function loadMemberModuleAccess() {
+    const sidebarLinks = document.querySelectorAll(
+        ".navbar .menu a[data-module]"
+    );
+
+    const quickCards = document.querySelectorAll(
+        ".cards [data-module-card]"
+    );
+
+    // Itago muna habang kinukuha ang permissions
+    sidebarLinks.forEach(link => {
+        link.style.display = "none";
+    });
+
+    quickCards.forEach(card => {
+        card.style.display = "none";
+    });
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userData.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to load module access");
+        }
+
+        const data = await response.json();
+        const modules = Array.isArray(data)
+            ? data
+            : data.modules || [];
+
+        const allowedModules = new Set(
+            modules.map(item => {
+                const key = typeof item === "string"
+                    ? item
+                    : item.module_key ||
+                      item.module_name ||
+                      item.key ||
+                      "";
+
+                return String(key).trim().toLowerCase();
+            })
+        );
+
+        // Sidebar filtering
+        sidebarLinks.forEach(link => {
+            const moduleKey = link.dataset.module
+                .trim()
+                .toLowerCase();
+
+            link.style.display =
+                allowedModules.has(moduleKey) ? "" : "none";
+        });
+
+        // Quick card filtering
+        quickCards.forEach(card => {
+            const moduleKey = card.dataset.moduleCard
+                .trim()
+                .toLowerCase();
+
+            card.style.display =
+                allowedModules.has(moduleKey) ? "" : "none";
+        });
+
+        console.log(
+            "MEMBER ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+    } catch (error) {
+        console.error(
+            "MEMBER MODULE ACCESS ERROR:",
+            error
+        );
+    }
+}
+loadMemberModuleAccess();
 // ==============================
 // LOAD USER
 // ==============================
