@@ -284,7 +284,7 @@ menu.innerHTML = `
     </a>
 `;
 
-loadArchiveModuleAccess();
+
 
 
 async function loadArchiveModuleAccess() {
@@ -369,6 +369,7 @@ document.addEventListener("click", function(event) {
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 let archiveRecords = [];
+loadArchiveModuleAccess();
 let filteredRecords = [];
 let currentPage = 1;
 const recordsPerPage = 8;
