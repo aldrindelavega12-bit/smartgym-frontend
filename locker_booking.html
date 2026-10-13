@@ -1332,49 +1332,38 @@
     </div>
 
 
+    
     <div class="menu">
-
-        <a href="member.html">
+        <a href="member.html" data-module="dashboard">
             Home
         </a>
 
-
         <a href="member_messages.html"
-           class="msg-link">
-
+        class="msg-link"
+        data-module="messages">
             Messages
-
-            <span id="msg-count"
-                  class="msg-count">
-                0
-            </span>
-
+            <span id="msg-count" class="msg-count">0</span>
         </a>
 
-
-        <a href="program.html">
+        <a href="program.html" data-module="program">
             Program
         </a>
 
-
-        <a href="get_program.html">
+        <a href="get_program.html" data-module="get_program">
             Get Program
         </a>
 
-
         <a href="locker_booking.html"
-           class="active">
-
+        class="active"
+        data-module="locker">
             Book Locker
-
         </a>
 
-
-        <a href="membership.html">
+        <a href="membership.html" data-module="membership">
             Membership
         </a>
-
     </div>
+
 
 </div>
 
@@ -2106,6 +2095,72 @@
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
+
+async function loadMemberModuleAccess() {
+    const currentUser = JSON.parse(
+        localStorage.getItem("user") || "null"
+    );
+
+    if (!currentUser) return;
+
+    const userId =
+        currentUser.user_id ||
+        currentUser.member_id ||
+        currentUser.id;
+
+    if (!userId) return;
+
+    const menuLinks = document.querySelectorAll(
+        ".navbar .menu a[data-module]"
+    );
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : (data.modules || []);
+
+        const allowedModules = new Set(
+            modules.map(item => {
+                if (typeof item === "string") {
+                    return item.trim().toLowerCase();
+                }
+
+                return String(
+                    item.module_key ||
+                    item.module_name ||
+                    item.key ||
+                    ""
+                ).trim().toLowerCase();
+            })
+        );
+
+        menuLinks.forEach(link => {
+            const moduleKey = link.dataset.module
+                .trim()
+                .toLowerCase();
+
+            link.style.display =
+                allowedModules.has(moduleKey) ? "" : "none";
+        });
+
+    } catch (error) {
+        console.error(
+            "Failed to load member module access:",
+            error
+        );
+    }
+}
 
 const user =
     JSON.parse(
@@ -5269,7 +5324,7 @@ function goMessages(){
 ========================================================= */
 
 loadMessageCount();
-
+loadMemberModuleAccess();
 
 setInterval(
     loadMessageCount,
