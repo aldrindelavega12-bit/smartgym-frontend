@@ -257,49 +257,90 @@ if (!user || user.role !== "manager") {
 
 const menu = document.getElementById("menu");
 
+
 menu.innerHTML = `
-    <a href="manager.html"">
-
+    <a href="manager.html" data-module="dashboard">
         Home
-
     </a>
 
-
-    <a href="reports.html">
-
+    <a href="reports.html" data-module="reports">
         Reports
-
     </a>
 
-
-    <a href="members.html">
-
+    <a href="members.html" data-module="members">
         Members
-
     </a>
 
-
-    <a href="walkin.html">
-
+    <a href="walkin.html" data-module="walkin">
         Walk-ins
-
     </a>
 
-
-    <a href="staff_manage.html">
-
+    <a href="staff_manage.html" data-module="staff">
         Staff
-
     </a>
 
-
-    <a href="archive.html"
-    class="active">
-
+    <a href="archive.html" data-module="archive" class="active">
         Archive
-
     </a>
 `;
+
+loadArchiveModuleAccess();
+
+
+async function loadArchiveModuleAccess() {
+    const menuLinks = document.querySelectorAll(
+        "#menu a[data-module]"
+    );
+
+    menuLinks.forEach(link => {
+        link.style.display = "none";
+    });
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to load module access.");
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(item => {
+                const key = typeof item === "string"
+                    ? item
+                    : item.module_key ||
+                      item.module_name ||
+                      item.key ||
+                      "";
+
+                return String(key).trim().toLowerCase();
+            })
+        );
+
+        menuLinks.forEach(link => {
+            const moduleKey = link.dataset.module.toLowerCase();
+
+            link.style.display = allowedModules.has(moduleKey)
+                ? ""
+                : "none";
+        });
+
+    } catch (error) {
+        console.error("Archive module access error:", error);
+    }
+}
+
+
 
 function toggleStaffMenu() {
     document.getElementById("staffDropdown")
