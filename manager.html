@@ -525,6 +525,7 @@ menu.innerHTML = `
 `;
 
 
+
 async function loadManagerModuleAccess() {
     if (!menu || !user || !user.user_id) {
         console.error("Missing manager menu or user ID.");
@@ -532,21 +533,45 @@ async function loadManagerModuleAccess() {
     }
 
     const menuItems = [
-        { key: "dashboard", label: "Home", page: "manager.html" },
-        { key: "reports", label: "Reports", page: "reports.html" },
-        { key: "members", label: "Members", page: "members.html" },
-        { key: "walkins", label: "Walk-ins", page: "walkin.html" },
-        { key: "staff", label: "Staff", page: "staff_manage.html" },
-        { key: "archive", label: "Archive", page: "archive.html" }
+        {
+            key: "dashboard",
+            label: "Home",
+            page: "manager.html"
+        },
+        {
+            key: "reports",
+            label: "Reports",
+            page: "reports.html"
+        },
+        {
+            key: "members",
+            label: "Members",
+            page: "members.html"
+        },
+        {
+            key: "walkins",
+            label: "Walk-ins",
+            page: "walkin.html"
+        },
+        {
+            key: "staff",
+            label: "Staff",
+            page: "staff_manage.html"
+        },
+        {
+            key: "archive",
+            label: "Archive",
+            page: "archive.html"
+        }
     ];
 
-    // Itago muna ang sidebar links at quick cards.
+    // Hide sidebar links and quick cards before loading permissions.
     menu.querySelectorAll("a").forEach(link => {
         link.style.display = "none";
     });
 
-    document.querySelectorAll(".quick-card").forEach(card => {
-        card.style.display = "none";
+    document.querySelectorAll(".quick-card[data-module]").forEach(card => {
+        card.hidden = true;
     });
 
     try {
@@ -556,13 +581,17 @@ async function loadManagerModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error(`Module access API error: ${response.status}`);
+            throw new Error(
+                `Module access API error: ${response.status}`
+            );
         }
 
         const data = await response.json();
 
         if (!Array.isArray(data.modules)) {
-            throw new Error("Invalid module permissions response.");
+            throw new Error(
+                "Invalid module permissions response."
+            );
         }
 
         const allowedModules = new Set(
@@ -580,7 +609,10 @@ async function loadManagerModuleAccess() {
             })
         );
 
-        console.log("MANAGER ALLOWED MODULES:", [...allowedModules]);
+        console.log(
+            "MANAGER ALLOWED MODULES:",
+            [...allowedModules]
+        );
 
         // SIDEBAR
         menu.innerHTML = menuItems
@@ -600,41 +632,30 @@ async function loadManagerModuleAccess() {
             menu.innerHTML = "<p>No modules assigned.</p>";
         }
 
-        // QUICK CARDS
-        
-        const cardModuleMap = {
-            "Reports": "reports",
-            "Members": "members",
-            "Walk-ins": "walkins",
-            "Staff": "staff",
-            "Archive": "archive"
-        };
-
+        // QUICK CARDS: match each card's data-module to permissions.
         document.querySelectorAll(".quick-card[data-module]").forEach(card => {
-            const moduleKey = card.dataset.module.trim().toLowerCase();
+            const moduleKey = (
+                card.dataset.module || ""
+            ).trim().toLowerCase();
 
-            card.style.display = allowedModules.has(moduleKey)
-                ? ""
-                : "none";
-        });
-
-
-        document.querySelectorAll(".quick-card").forEach(card => {
-            const title = card.querySelector("h3")?.textContent.trim();
-            const moduleKey = cardModuleMap[title];
-
-            card.style.display =
-                moduleKey && allowedModules.has(moduleKey) ? "" : "none";
+            card.hidden = !allowedModules.has(moduleKey);
         });
 
     } catch (error) {
-        console.error("MANAGER MODULE ACCESS ERROR:", error);
-        menu.innerHTML = "<p>Unable to load module permissions.</p>";
+        console.error(
+            "MANAGER MODULE ACCESS ERROR:",
+            error
+        );
+
+        menu.innerHTML =
+            "<p>Unable to load module permissions.</p>";
+
+        // Fail closed: hide quick cards if permissions cannot load.
+        document.querySelectorAll(".quick-card[data-module]").forEach(card => {
+            card.hidden = true;
+        });
     }
 }
-
-
-
 
 // =====================================================
 // TODAY'S TOTAL INCOME
