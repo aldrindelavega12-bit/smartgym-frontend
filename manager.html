@@ -577,12 +577,7 @@ async function loadManagerModuleAccess() {
                 .trim()
                 .toLowerCase();
 
-            return (
-                key &&
-                allowedModules.has(key) &&
-                module.page_url &&
-                String(module.page_url).trim()
-            );
+             return key && allowedModules.has(key);
         });
 
         console.log(
