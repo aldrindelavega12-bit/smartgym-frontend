@@ -536,38 +536,66 @@ menu.innerHTML = `
 `;
 
 
-async function loadDashboard() {
+
+async function loadManagerModuleAccess() {
+    if (!menu || !user?.user_id) {
+        console.error("Missing menu or user ID.");
+        return;
+    }
+
     try {
-        const res = await fetch(`${API_URL}/api/dashboard`);
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            { cache: "no-store" }
+        );
 
-        if (!res.ok) {
-            throw new Error(`Dashboard API error: ${res.status}`);
+        if (!response.ok) {
+            throw new Error(`Module access error: ${response.status}`);
         }
 
-        const data = await res.json();
+        const data = await response.json();
 
-        // Update only elements that actually exist
-        const totalElement = document.getElementById("total");
-        const activeElement = document.getElementById("active");
-        const lockersElement = document.getElementById("lockers");
-
-        if (totalElement) {
-            totalElement.innerText = data.total_attendance ?? 0;
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
         }
 
-        if (activeElement && data.active_users !== undefined) {
-            activeElement.innerText = data.active_users ?? 0;
-        }
+        const allowedModules = new Set(
+            data.modules.map(module =>
+                String(
+                    typeof module === "string"
+                        ? module
+                        : module.module_key || ""
+                ).trim().toLowerCase()
+            ).filter(Boolean)
+        );
 
-        if (lockersElement) {
-            lockersElement.innerText = data.active_lockers ?? 0;
-        }
+        // SIDEBAR: SHOW/HIDE HTML LINKS
+        menu.querySelectorAll("[data-module]").forEach(link => {
+            const key = link.dataset.module.trim().toLowerCase();
+            link.hidden = !allowedModules.has(key);
+        });
 
-    } catch (err) {
-        console.error("Dashboard error:", err);
+        // QUICK CARDS: SHOW/HIDE
+        document.querySelectorAll(".quick-card[data-module]").forEach(card => {
+            const key = card.dataset.module.trim().toLowerCase();
+            card.hidden = !allowedModules.has(key);
+        });
+
+        console.log("MANAGER ALLOWED MODULES:", [...allowedModules]);
+
+    } catch (error) {
+        console.error("MANAGER MODULE ACCESS ERROR:", error);
+
+        // Hide restricted navigation if permissions cannot load
+        menu.querySelectorAll("[data-module]").forEach(link => {
+            link.hidden = true;
+        });
+
+        document.querySelectorAll(".quick-card[data-module]").forEach(card => {
+            card.hidden = true;
+        });
     }
 }
-
 
  // =====================================================
  // TODAY'S TOTAL INCOME
