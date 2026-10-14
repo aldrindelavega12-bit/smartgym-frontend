@@ -562,6 +562,7 @@ async function loadManagerModuleAccess() {
             throw new Error("Invalid module API response.");
         }
 
+        // MODULE KEYS ALLOWED FOR THIS USER
         const allowedModules = new Set(
             accessData.modules.map(module =>
                 String(
@@ -569,40 +570,67 @@ async function loadManagerModuleAccess() {
                         ? module
                         : module.module_key || ""
                 ).trim().toLowerCase()
-            )
+            ).filter(Boolean)
         );
 
-        const visibleModules = modulesData.modules.filter(module => {
-            const key = String(module.module_key || "")
-                .trim()
-                .toLowerCase();
+        // EACH HTML PAGE DEFINES ITS OWN HREF AND LABEL
+        const managerLinks = {
+            dashboard: {
+                label: "Home",
+                href: "manager.html"
+            },
+            reports: {
+                label: "Reports",
+                href: "reports.html"
+            },
+            members: {
+                label: "Members",
+                href: "members.html"
+            },
+            walkins: {
+                label: "Walk-ins",
+                href: "walkin.html"
+            },
+            staff: {
+                label: "Staff",
+                href: "staff_manage.html"
+            },
+            archive: {
+                label: "Archive",
+                href: "archive.html"
+            }
+        };
 
-             return key && allowedModules.has(key);
-        });
+        // GET ACTIVE MODULE KEYS FROM API
+        const activeModuleKeys = new Set(
+            modulesData.modules.map(module =>
+                String(module.module_key || "")
+                    .trim()
+                    .toLowerCase()
+            ).filter(Boolean)
+        );
 
         console.log(
             "MANAGER ALLOWED MODULES:",
             [...allowedModules]
         );
 
-        console.log(
-            "MANAGER VISIBLE MODULES:",
-            visibleModules
-        );
-
         // SIDEBAR
         menu.replaceChildren();
 
-        visibleModules.forEach(module => {
-            const key = String(module.module_key).trim().toLowerCase();
-            const label = String(module.module_name || key);
-            const page = String(module.page_url).trim();
+        Object.entries(managerLinks).forEach(([key, config]) => {
+            // Show only active modules assigned to this user
+            if (
+                !activeModuleKeys.has(key) ||
+                !allowedModules.has(key)
+            ) {
+                return;
+            }
 
             const link = document.createElement("a");
-
-            link.href = page;
+            link.href = config.href;
             link.dataset.module = key;
-            link.textContent = label;
+            link.textContent = config.label;
 
             if (key === "dashboard") {
                 link.classList.add("active");
@@ -611,45 +639,46 @@ async function loadManagerModuleAccess() {
             menu.appendChild(link);
         });
 
-        if (!visibleModules.length) {
+        if (!menu.children.length) {
             menu.textContent = "No modules assigned.";
         }
 
-        // QUICK CARDS: existing cards only
+        // QUICK CARDS: HIDE OR SHOW USING EXISTING PERMISSIONS
         document.querySelectorAll(
             ".quick-card[data-module]"
         ).forEach(card => {
-            const key = card.dataset.module
+            const key = String(card.dataset.module || "")
                 .trim()
                 .toLowerCase();
 
             card.hidden = !allowedModules.has(key);
         });
 
-        // Keep existing card links consistent with their module permission
+        // KEEP QUICK CARD LINKS CONSISTENT WITH PERMISSIONS
         document.querySelectorAll(
             ".quick-card[data-module] a"
         ).forEach(link => {
             const card = link.closest(".quick-card");
-            const key = card?.dataset.module
-                ?.trim()
+            const key = String(card?.dataset.module || "")
+                .trim()
                 .toLowerCase();
 
-            if (key && allowedModules.has(key)) {
-                link.hidden = false;
-            } else {
-                link.hidden = true;
-            }
+            link.hidden = !key || !allowedModules.has(key);
         });
 
-    } catch (error) {
-        console.error(
-            "MANAGER MODULE ACCESS ERROR:",
-            error
+        console.log(
+            "MANAGER VISIBLE MENU:",
+            [...menu.querySelectorAll("a")].map(link => ({
+                label: link.textContent,
+                href: link.getAttribute("href"),
+                module: link.dataset.module
+            }))
         );
 
-        menu.textContent =
-            "Unable to load module permissions.";
+    } catch (error) {
+        console.error("MANAGER MODULE ACCESS ERROR:", error);
+
+        menu.textContent = "Unable to load module permissions.";
 
         document.querySelectorAll(
             ".quick-card[data-module]"
