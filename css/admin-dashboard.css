@@ -8186,6 +8186,14 @@ a[href="#incomeReport"]::before {
 .quick-card[hidden] {
     display: none !important;
 }
+
+
+/* Respect JavaScript module permissions */
+#menu [data-module][hidden],
+.quick-card[data-module][hidden] {
+    display: none !important;
+}
+
 /* ==========================================
    TRAINER REPORT TABLE FIX
 ========================================== */
