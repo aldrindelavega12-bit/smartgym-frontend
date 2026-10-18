@@ -415,6 +415,7 @@
                         <option value="deleted">Deleted</option>
                         <option value="archived">Archived</option>
                         <option value="restored">Restored</option>
+                        <option value="payment">Payment</option>
                         <option value="backup">Backup</option>
                         <option value="login">Login</option>
                         <option value="settings">Settings</option>
@@ -532,6 +533,10 @@
             return "settings";
         }
 
+        if (value.includes("payment")) {
+            return "payment";
+        }
+
         return value;
     }
 
@@ -552,7 +557,14 @@
 
             ARCHIVE_MEMBER: "Archive",
             ARCHIVE_WALKIN: "Archive",
-            ARCHIVE_STAFF: "Archive"
+            ARCHIVE_STAFF: "Archive",
+
+            WALKIN_PAYMENT: "Payment",
+            MEMBERSHIP_PAYMENT: "Payment",
+            MEMBERSHIP_TYPE_PAYMENT: "Payment",
+            WALKIN_ACCESS_PAYMENT: "Payment",
+            TRAINER_FEE_PAYMENT: "Payment",
+            PAYMENT: "Payment"
         };
 
         if (labels[value]) {
@@ -607,6 +619,11 @@
 
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
+        if (
+            String(record.raw_action || "").toUpperCase().includes("PAYMENT")
+        ) {
+            return raw || "—";
+        }
         const parts = raw.split("|").map(part => part.trim());
 
         const entity = parts[0] || "";
