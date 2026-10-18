@@ -619,14 +619,83 @@
 
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
-        if (
-            String(record.raw_action || "").toUpperCase().includes("PAYMENT")
-        ) {
-            return raw || "—";
+        const action = String(record.raw_action || "").toUpperCase();
+
+        if (!raw) {
+            return "—";
         }
+
+        // PAYMENT: display a clean payment summary only.
+        if (action.includes("PAYMENT")) {
+            const parts = raw.split("|").map(part => part.trim());
+
+            const getValue = (label) => {
+                const item = parts.find(part =>
+                    new RegExp("^" + label + "\\s*:", "i").test(part)
+                );
+
+                return item
+                    ? item.replace(new RegExp("^" + label + "\\s*:\\s*", "i"), "").trim()
+                    : "";
+            };
+
+            const walkinId = getValue("ID");
+            const walkinName = getValue("Name");
+            const access = getValue("Daily Access");
+            const locker = getValue("Locker");
+            const lockerFee = getValue("Locker Fee");
+            const trainer = getValue("Trainer");
+            const trainerFee = getValue("Trainer Fee");
+            const total = getValue("Total");
+
+            const summary = [];
+
+            summary.push("Walk-in Payment");
+
+            if (walkinId) {
+                summary.push("ID: " + walkinId);
+            }
+
+            if (walkinName) {
+                summary.push("Name: " + walkinName);
+            }
+
+            if (access) {
+                summary.push("Access: " + access);
+            }
+
+            if (locker && locker.toLowerCase() !== "none") {
+                summary.push("Locker: " + locker);
+
+                if (lockerFee) {
+                    summary.push("Locker Fee: " + lockerFee);
+                }
+            } else {
+                summary.push("Locker: None");
+            }
+
+            if (trainer && trainer.toLowerCase() !== "none") {
+                summary.push("Trainer: " + trainer);
+
+                if (trainerFee) {
+                    summary.push("Trainer Fee: " + trainerFee);
+                }
+            } else {
+                summary.push("Trainer: None");
+            }
+
+            if (total) {
+                summary.push("Total Paid: " + total);
+            }
+
+            return summary.join(" | ");
+        }
+
+        // NON-PAYMENT AUDIT LOGS: preserve the existing behavior.
         const parts = raw.split("|").map(part => part.trim());
 
         const entity = parts[0] || "";
+
         const idPart = parts.find(part => /^ID\s*:/i.test(part));
         const namePart = parts.find(part => /^Name\s*:/i.test(part));
 
@@ -645,6 +714,7 @@
         ].filter(Boolean).join(" ");
 
         const actorRole = String(record.actor_role || "").trim();
+
         const actorName = String(
             record.actor_name || record.actor_id || "Unknown"
         ).trim();
@@ -652,7 +722,7 @@
         const actionDescription = getActionDescription(record.raw_action);
 
         if (!actionDescription || !target) {
-            return raw || "—";
+            return raw;
         }
 
         const actor = actorRole
