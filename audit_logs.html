@@ -617,6 +617,7 @@
             value.replace(/_/g, " ").toLowerCase();
     }
 
+    
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
         const action = String(record.raw_action || "").toUpperCase();
@@ -625,7 +626,7 @@
             return "—";
         }
 
-        // PAYMENT: display a clean payment summary only.
+        // PAYMENT LOGS
         if (action.includes("PAYMENT")) {
             const parts = raw.split("|").map(part => part.trim());
 
@@ -635,53 +636,77 @@
                 );
 
                 return item
-                    ? item.replace(new RegExp("^" + label + "\\s*:\\s*", "i"), "").trim()
+                    ? item.replace(
+                        new RegExp("^" + label + "\\s*:\\s*", "i"),
+                        ""
+                    ).trim()
                     : "";
             };
 
-            const walkinId = getValue("ID");
-            const walkinName = getValue("Name");
-            const access = getValue("Daily Access");
+            const id = getValue("ID");
+            const name = getValue("Name");
+            const membershipFee = getValue("Membership Fee");
+            const access = getValue("Access") || getValue("Daily Access");
             const locker = getValue("Locker");
             const lockerFee = getValue("Locker Fee");
             const trainer = getValue("Trainer");
             const trainerFee = getValue("Trainer Fee");
-            const total = getValue("Total");
+            const total = getValue("Total Paid") || getValue("Total");
+
+            const isMemberPayment =
+                action === "PAYMENT" &&
+                (
+                    raw.toLowerCase().includes("member payment") ||
+                    Boolean(membershipFee)
+                );
 
             const summary = [];
 
-            summary.push("Walk-in Payment");
+            summary.push(
+                isMemberPayment ? "Member Payment" : "Walk-in Payment"
+            );
 
-            if (walkinId) {
-                summary.push("ID: " + walkinId);
-            }
+            if (id) summary.push("ID: " + id);
+            if (name) summary.push("Name: " + name);
 
-            if (walkinName) {
-                summary.push("Name: " + walkinName);
-            }
-
-            if (access) {
-                summary.push("Access: " + access);
-            }
-
-            if (locker && locker.toLowerCase() !== "none") {
-                summary.push("Locker: " + locker);
-
-                if (lockerFee) {
-                    summary.push("Locker Fee: " + lockerFee);
+            if (isMemberPayment) {
+                if (membershipFee) {
+                    summary.push("Membership Fee: " + membershipFee);
                 }
-            } else {
-                summary.push("Locker: None");
-            }
 
-            if (trainer && trainer.toLowerCase() !== "none") {
-                summary.push("Trainer: " + trainer);
+                if (access) {
+                    summary.push("Access: " + access);
+                }
+
+                if (trainer && trainer.toLowerCase() !== "none") {
+                    summary.push("Trainer: " + trainer);
+                } else {
+                    summary.push("Trainer: None");
+                }
 
                 if (trainerFee) {
                     summary.push("Trainer Fee: " + trainerFee);
                 }
             } else {
-                summary.push("Trainer: None");
+                if (access) summary.push("Access: " + access);
+
+                if (locker && locker.toLowerCase() !== "none") {
+                    summary.push("Locker: " + locker);
+                    if (lockerFee) {
+                        summary.push("Locker Fee: " + lockerFee);
+                    }
+                } else {
+                    summary.push("Locker: None");
+                }
+
+                if (trainer && trainer.toLowerCase() !== "none") {
+                    summary.push("Trainer: " + trainer);
+                    if (trainerFee) {
+                        summary.push("Trainer Fee: " + trainerFee);
+                    }
+                } else {
+                    summary.push("Trainer: None");
+                }
             }
 
             if (total) {
@@ -691,9 +716,8 @@
             return summary.join(" | ");
         }
 
-        // NON-PAYMENT AUDIT LOGS: preserve the existing behavior.
+        // NON-PAYMENT AUDIT LOGS: preserve existing behavior.
         const parts = raw.split("|").map(part => part.trim());
-
         const entity = parts[0] || "";
 
         const idPart = parts.find(part => /^ID\s*:/i.test(part));
@@ -714,7 +738,6 @@
         ].filter(Boolean).join(" ");
 
         const actorRole = String(record.actor_role || "").trim();
-
         const actorName = String(
             record.actor_name || record.actor_id || "Unknown"
         ).trim();
@@ -731,6 +754,8 @@
 
         return `${actor} ${actionDescription} ${target}.`;
     }
+
+
 
     function parseDate(value) {
         if (!value) return null;
