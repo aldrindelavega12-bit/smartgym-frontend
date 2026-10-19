@@ -826,18 +826,22 @@
                 throw new Error("Invalid audit logs response from API.");
             }
 
+            
             auditRecords = result.data.map(record => ({
                 id: record.id,
                 actor_name: record.actor_name || "",
                 actor_id: record.actor_id || "",
                 actor_role: record.actor_role || "",
-                user_name: record.actor_name || record.actor_id || "Unknown",
-                role: capitalize(record.actor_role),
+                user_name: record.actor_name || "Unknown",
+                role: record.actor_role
+                    ? capitalize(record.actor_role)
+                    : "Unknown",
                 raw_action: record.action || "",
                 action: getActionLabel(record.action),
                 details: record.details || "",
                 date: record.created_at || ""
             }));
+
 
             auditRecords = auditRecords.map(record => ({
                 ...record,
