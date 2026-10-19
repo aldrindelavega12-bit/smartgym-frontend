@@ -544,6 +544,13 @@
         const value = String(action || "").toUpperCase();
 
         const labels = {
+            CREATE_MEMBER: "Create",
+            ADD_MEMBER: "Create",
+            CREATE_WALKIN: "Create",
+            ADD_WALKIN: "Create",
+            CREATE_STAFF: "Create",
+            ADD_STAFF: "Create",
+
             RESTORE_MEMBER: "Restore",
             RESTORE_WALKIN: "Restore",
             RESTORE_STAFF: "Restore",
@@ -577,31 +584,33 @@
             .replace(/\b\w/g, letter => letter.toUpperCase());
     }
 
+
+
     function getActionDescription(action) {
         const value = String(action || "").toUpperCase();
 
         const descriptions = {
-            ARCHIVE_MEMBER: "archived member",
-            RESTORE_MEMBER: "restored member",
-            DELETE_MEMBER: "deleted member",
-            DELETE_ARCHIVED_MEMBER: "deleted member from archive",
+            CREATE_MEMBER: "created new Member",
+            ADD_MEMBER: "created new Member",
+            CREATE_WALKIN: "created new Walk-in",
+            ADD_WALKIN: "created new Walk-in",
+            CREATE_STAFF: "created new Staff",
+            ADD_STAFF: "created new Staff",
 
-            ARCHIVE_WALKIN: "archived walk-in",
-            RESTORE_WALKIN: "restored walk-in",
-            DELETE_WALKIN: "deleted walk-in",
-            DELETE_ARCHIVED_WALKIN: "deleted walk-in from archive",
+            ARCHIVE_MEMBER: "archived Member",
+            RESTORE_MEMBER: "restored Member",
+            DELETE_MEMBER: "deleted Member",
+            DELETE_ARCHIVED_MEMBER: "deleted Member from archive",
 
-            ARCHIVE_STAFF: "archived staff",
-            RESTORE_STAFF: "restored staff",
-            DELETE_STAFF: "deleted staff",
-            DELETE_ARCHIVED_STAFF: "deleted staff from archive",
+            ARCHIVE_WALKIN: "archived Walk-in",
+            RESTORE_WALKIN: "restored Walk-in",
+            DELETE_WALKIN: "deleted Walk-in",
+            DELETE_ARCHIVED_WALKIN: "deleted Walk-in from archive",
 
-            ADD_MEMBER: "added member",
-            CREATE_MEMBER: "created member",
-            ADD_WALKIN: "added walk-in",
-            CREATE_WALKIN: "created walk-in",
-            ADD_STAFF: "added staff",
-            CREATE_STAFF: "created staff",
+            ARCHIVE_STAFF: "archived Staff",
+            RESTORE_STAFF: "restored Staff",
+            DELETE_STAFF: "deleted Staff",
+            DELETE_ARCHIVED_STAFF: "deleted Staff from archive",
 
             MEMBERSHIP_PAYMENT: "processed membership payment",
             MEMBERSHIP_TYPE_PAYMENT: "processed membership type payment",
@@ -616,8 +625,7 @@
         return descriptions[value] ||
             value.replace(/_/g, " ").toLowerCase();
     }
-
-    
+        
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
         const action = String(record.raw_action || "").toUpperCase();
