@@ -630,7 +630,9 @@
             return "—";
         }
 
+        // ==========================================================
         // PAYMENT LOGS
+        // ==========================================================
         if (action.includes("PAYMENT")) {
             const parts = raw.split("|").map(part => part.trim());
 
@@ -645,6 +647,19 @@
                         ""
                     ).trim()
                     : "";
+            };
+
+            const isMeaningful = (value) => {
+                const normalized = String(value ?? "").trim().toLowerCase();
+
+                return normalized !== "" &&
+                    normalized !== "none" &&
+                    normalized !== "null" &&
+                    normalized !== "n/a" &&
+                    normalized !== "0" &&
+                    normalized !== "0.00" &&
+                    normalized !== "php 0" &&
+                    normalized !== "php 0.00";
             };
 
             const id = getValue("ID");
@@ -670,57 +685,63 @@
                 isMemberPayment ? "Member Payment" : "Walk-in Payment"
             );
 
-            if (id) summary.push("ID: " + id);
-            if (name) summary.push("Name: " + name);
+            if (isMeaningful(id)) {
+                summary.push("ID: " + id);
+            }
+
+            if (isMeaningful(name)) {
+                summary.push("Name: " + name);
+            }
 
             if (isMemberPayment) {
-                if (membershipFee) {
+                if (isMeaningful(membershipFee)) {
                     summary.push("Membership Fee: " + membershipFee);
                 }
 
-                if (access) {
+                if (isMeaningful(access)) {
                     summary.push("Access: " + access);
                 }
 
-                if (trainer && trainer.toLowerCase() !== "none") {
+                if (isMeaningful(trainer)) {
                     summary.push("Trainer: " + trainer);
-                } else {
-                    summary.push("Trainer: None");
                 }
 
-                if (trainerFee) {
+                if (isMeaningful(trainerFee)) {
                     summary.push("Trainer Fee: " + trainerFee);
                 }
-            } else {
-                if (access) summary.push("Access: " + access);
 
-                if (locker && locker.toLowerCase() !== "none") {
-                    summary.push("Locker: " + locker);
-                    if (lockerFee) {
-                        summary.push("Locker Fee: " + lockerFee);
-                    }
-                } else {
-                    summary.push("Locker: None");
+            } else {
+                if (isMeaningful(access)) {
+                    summary.push("Access: " + access);
                 }
 
-                if (trainer && trainer.toLowerCase() !== "none") {
+                if (isMeaningful(locker)) {
+                    summary.push("Locker: " + locker);
+                }
+
+                if (isMeaningful(lockerFee)) {
+                    summary.push("Locker Fee: " + lockerFee);
+                }
+
+                if (isMeaningful(trainer)) {
                     summary.push("Trainer: " + trainer);
-                    if (trainerFee) {
-                        summary.push("Trainer Fee: " + trainerFee);
-                    }
-                } else {
-                    summary.push("Trainer: None");
+                }
+
+                if (isMeaningful(trainerFee)) {
+                    summary.push("Trainer Fee: " + trainerFee);
                 }
             }
 
-            if (total) {
+            if (isMeaningful(total)) {
                 summary.push("Total Paid: " + total);
             }
 
             return summary.join(" | ");
         }
 
-        // NON-PAYMENT AUDIT LOGS: preserve existing behavior.
+        // ==========================================================
+        // NON-PAYMENT AUDIT LOGS
+        // ==========================================================
         const parts = raw.split("|").map(part => part.trim());
         const entity = parts[0] || "";
 
@@ -742,6 +763,7 @@
         ].filter(Boolean).join(" ");
 
         const actorRole = String(record.actor_role || "").trim();
+
         const actorName = String(
             record.actor_name || record.actor_id || "Unknown"
         ).trim();
@@ -756,16 +778,18 @@
             ? `${capitalize(actorRole)} ${actorName}`
             : actorName;
 
-        if (action === "CREATE_MEMBER" || action === "ADD_MEMBER") {
-            const memberName = targetName || "Unknown";
-            const memberId = targetId ? ` (${targetId})` : "";
-
-            return `${actor} created new Member ${memberName}${memberId}.`;
+        // Avoid duplicate "Member Member" on create-member logs.
+        if (
+            action === "CREATE_MEMBER" ||
+            action === "ADD_MEMBER"
+        ) {
+            return `${actor} created new Member ${targetName || "Unknown"}${
+                targetId ? ` (${targetId})` : ""
+            }.`;
         }
 
         return `${actor} ${actionDescription} ${target}.`;
     }
-
 
 
     function parseDate(value) {
