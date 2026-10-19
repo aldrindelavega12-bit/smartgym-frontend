@@ -622,6 +622,7 @@
             value.replace(/_/g, " ").toLowerCase();
     }
         
+    
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
         const action = String(record.raw_action || "").toUpperCase();
@@ -637,13 +638,18 @@
             const parts = raw.split("|").map(part => part.trim());
 
             const getValue = (label) => {
+                const escapedLabel = label.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    "\\$&"
+                );
+
                 const item = parts.find(part =>
-                    new RegExp("^" + label + "\\s*:", "i").test(part)
+                    new RegExp("^" + escapedLabel + "\\s*:", "i").test(part)
                 );
 
                 return item
                     ? item.replace(
-                        new RegExp("^" + label + "\\s*:\\s*", "i"),
+                        new RegExp("^" + escapedLabel + "\\s*:\\s*", "i"),
                         ""
                     ).trim()
                     : "";
@@ -664,12 +670,19 @@
 
             const id = getValue("ID");
             const name = getValue("Name");
+
             const membershipFee = getValue("Membership Fee");
             const access = getValue("Access") || getValue("Daily Access");
+
             const locker = getValue("Locker");
             const lockerFee = getValue("Locker Fee");
+
+            const trainerName = getValue("Trainer Name");
+            const trainerId = getValue("Trainer ID");
+            const trainerPlan = getValue("Trainer Plan");
             const trainer = getValue("Trainer");
             const trainerFee = getValue("Trainer Fee");
+
             const total = getValue("Total Paid") || getValue("Total");
 
             const isMemberPayment =
@@ -693,6 +706,9 @@
                 summary.push("Name: " + name);
             }
 
+            // ----------------------------------------------------------
+            // MEMBER PAYMENT
+            // ----------------------------------------------------------
             if (isMemberPayment) {
                 if (isMeaningful(membershipFee)) {
                     summary.push("Membership Fee: " + membershipFee);
@@ -702,14 +718,36 @@
                     summary.push("Access: " + access);
                 }
 
-                if (isMeaningful(trainer)) {
+                // Support new and old trainer detail formats
+                if (isMeaningful(trainerName) || isMeaningful(trainerId)) {
+                    let trainerLabel = "Trainer: ";
+
+                    if (isMeaningful(trainerName)) {
+                        trainerLabel += trainerName;
+                    }
+
+                    if (isMeaningful(trainerId)) {
+                        trainerLabel += isMeaningful(trainerName)
+                            ? " (" + trainerId + ")"
+                            : trainerId;
+                    }
+
+                    summary.push(trainerLabel);
+                } else if (isMeaningful(trainer)) {
                     summary.push("Trainer: " + trainer);
+                }
+
+                if (isMeaningful(trainerPlan)) {
+                    summary.push("Trainer Plan: " + trainerPlan);
                 }
 
                 if (isMeaningful(trainerFee)) {
                     summary.push("Trainer Fee: " + trainerFee);
                 }
 
+            // ----------------------------------------------------------
+            // WALK-IN PAYMENT
+            // ----------------------------------------------------------
             } else {
                 if (isMeaningful(access)) {
                     summary.push("Access: " + access);
@@ -723,8 +761,29 @@
                     summary.push("Locker Fee: " + lockerFee);
                 }
 
-                if (isMeaningful(trainer)) {
+                // Display trainer name and ID
+                if (isMeaningful(trainerName) || isMeaningful(trainerId)) {
+                    let trainerLabel = "Trainer: ";
+
+                    if (isMeaningful(trainerName)) {
+                        trainerLabel += trainerName;
+                    }
+
+                    if (isMeaningful(trainerId)) {
+                        trainerLabel += isMeaningful(trainerName)
+                            ? " (" + trainerId + ")"
+                            : trainerId;
+                    }
+
+                    summary.push(trainerLabel);
+
+                } else if (isMeaningful(trainer)) {
+                    // Backward compatibility with old records
                     summary.push("Trainer: " + trainer);
+                }
+
+                if (isMeaningful(trainerPlan)) {
+                    summary.push("Trainer Plan: " + trainerPlan);
                 }
 
                 if (isMeaningful(trainerFee)) {
@@ -778,7 +837,7 @@
             ? `${capitalize(actorRole)} ${actorName}`
             : actorName;
 
-        // Avoid duplicate "Member Member" on create-member logs.
+        // Avoid duplicate "Member Member" on create-member logs
         if (
             action === "CREATE_MEMBER" ||
             action === "ADD_MEMBER"
