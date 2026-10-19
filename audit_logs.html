@@ -567,7 +567,8 @@
             MEMBERSHIP_TYPE_PAYMENT: "Payment",
             WALKIN_ACCESS_PAYMENT: "Payment",
             TRAINER_FEE_PAYMENT: "Payment",
-            PAYMENT: "Payment"
+            PAYMENT: "Payment",
+            LOCKER_OVERTIME_PAYMENT: "Payment"
         };
 
         if (labels[value]) {
@@ -586,10 +587,10 @@
         const value = String(action || "").toUpperCase();
 
         const descriptions = {
-            CREATE_MEMBER: "created new Member",
-            ADD_MEMBER: "created new Member",
-            CREATE_WALKIN: "created new Walk-in",
-            ADD_WALKIN: "created new Walk-in",
+            CREATE_MEMBER: "created new ",
+            ADD_MEMBER: "created new ",
+            CREATE_WALKIN: "created new ",
+            ADD_WALKIN: "created new ",
             CREATE_STAFF: "created new ",
             ADD_STAFF: "created new ",
 
@@ -691,6 +692,25 @@
                     raw.toLowerCase().includes("member payment") ||
                     Boolean(membershipFee)
                 );
+            if (action === "LOCKER_OVERTIME_PAYMENT") {
+                const id = getValue("ID");
+                const name = getValue("Name");
+                const locker = getValue("Locker");
+                const amount = (
+                    getValue("Amount Paid") ||
+                    getValue("Payment Amount") ||
+                    getValue("Total Paid") ||
+                    getValue("Total")
+                );
+
+                return [
+                    "Locker Overtime",
+                    id ? `ID: ${id}` : "",
+                    name ? `Name: ${name}` : "",
+                    locker ? `Locker: ${locker}` : "",
+                    amount ? `Amount Paid: ${amount}` : ""
+                ].filter(Boolean).join(" | ");
+            }
 
             const summary = [];
 
