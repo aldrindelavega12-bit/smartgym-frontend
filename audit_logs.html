@@ -760,6 +760,13 @@
             ? `${capitalize(actorRole)} ${actorName}`
             : actorName;
 
+        if (action === "CREATE_MEMBER" || action === "ADD_MEMBER") {
+            const memberName = targetName || "Unknown";
+            const memberId = targetId ? ` (${targetId})` : "";
+
+            return `${actor} created new Member ${memberName}${memberId}.`;
+        }
+
         return `${actor} ${actionDescription} ${target}.`;
     }
 
