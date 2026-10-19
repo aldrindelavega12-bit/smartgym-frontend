@@ -623,7 +623,8 @@
             value.replace(/_/g, " ").toLowerCase();
     }
         
-    
+        
+        
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
         const action = String(record.raw_action || "").toUpperCase();
@@ -632,9 +633,7 @@
             return "—";
         }
 
-        // ==========================================================
         // PAYMENT LOGS
-        // ==========================================================
         if (action.includes("PAYMENT")) {
             const parts = raw.split("|").map(part => part.trim());
 
@@ -671,19 +670,56 @@
 
             const id = getValue("ID");
             const name = getValue("Name");
+            const locker = getValue("Locker");
+
+            // Support both explicit action and generic PAYMENT action.
+            // The backend may store locker overtime as PAYMENT.
+            const isLockerOvertime =
+                action === "LOCKER_OVERTIME_PAYMENT" ||
+                /locker\s+overtime/i.test(raw);
+
+            if (isLockerOvertime) {
+                const amount =
+                    getValue("Amount Paid") ||
+                    getValue("Payment Amount") ||
+                    getValue("Total Paid") ||
+                    getValue("Total");
+
+                const summary = ["Locker Overtime"];
+
+                if (isMeaningful(id)) {
+                    summary.push("ID: " + id);
+                }
+
+                if (isMeaningful(name)) {
+                    summary.push("Name: " + name);
+                }
+
+                if (isMeaningful(locker)) {
+                    summary.push("Locker: " + locker);
+                }
+
+                if (isMeaningful(amount)) {
+                    summary.push("Amount Paid: " + amount);
+                }
+
+                const paymentId = getValue("Payment ID");
+
+                if (isMeaningful(paymentId)) {
+                    summary.push("Payment ID: " + paymentId);
+                }
+
+                return summary.join(" | ");
+            }
 
             const membershipFee = getValue("Membership Fee");
             const access = getValue("Access") || getValue("Daily Access");
-
-            const locker = getValue("Locker");
             const lockerFee = getValue("Locker Fee");
-
             const trainerName = getValue("Trainer Name");
             const trainerId = getValue("Trainer ID");
             const trainerPlan = getValue("Trainer Plan");
             const trainer = getValue("Trainer");
             const trainerFee = getValue("Trainer Fee");
-
             const total = getValue("Total Paid") || getValue("Total");
 
             const isMemberPayment =
@@ -692,25 +728,6 @@
                     raw.toLowerCase().includes("member payment") ||
                     Boolean(membershipFee)
                 );
-            if (action === "LOCKER_OVERTIME_PAYMENT") {
-                const id = getValue("ID");
-                const name = getValue("Name");
-                const locker = getValue("Locker");
-                const amount = (
-                    getValue("Amount Paid") ||
-                    getValue("Payment Amount") ||
-                    getValue("Total Paid") ||
-                    getValue("Total")
-                );
-
-                return [
-                    "Locker Overtime",
-                    id ? `ID: ${id}` : "",
-                    name ? `Name: ${name}` : "",
-                    locker ? `Locker: ${locker}` : "",
-                    amount ? `Amount Paid: ${amount}` : ""
-                ].filter(Boolean).join(" | ");
-            }
 
             const summary = [];
 
@@ -726,9 +743,6 @@
                 summary.push("Name: " + name);
             }
 
-            // ----------------------------------------------------------
-            // MEMBER PAYMENT
-            // ----------------------------------------------------------
             if (isMemberPayment) {
                 if (isMeaningful(membershipFee)) {
                     summary.push("Membership Fee: " + membershipFee);
@@ -738,7 +752,6 @@
                     summary.push("Access: " + access);
                 }
 
-                // Support new and old trainer detail formats
                 if (isMeaningful(trainerName) || isMeaningful(trainerId)) {
                     let trainerLabel = "Trainer: ";
 
@@ -764,10 +777,6 @@
                 if (isMeaningful(trainerFee)) {
                     summary.push("Trainer Fee: " + trainerFee);
                 }
-
-            // ----------------------------------------------------------
-            // WALK-IN PAYMENT
-            // ----------------------------------------------------------
             } else {
                 if (isMeaningful(access)) {
                     summary.push("Access: " + access);
@@ -781,7 +790,6 @@
                     summary.push("Locker Fee: " + lockerFee);
                 }
 
-                // Display trainer name and ID
                 if (isMeaningful(trainerName) || isMeaningful(trainerId)) {
                     let trainerLabel = "Trainer: ";
 
@@ -796,9 +804,7 @@
                     }
 
                     summary.push(trainerLabel);
-
                 } else if (isMeaningful(trainer)) {
-                    // Backward compatibility with old records
                     summary.push("Trainer: " + trainer);
                 }
 
@@ -814,9 +820,7 @@
             return summary.join(" | ");
         }
 
-        // ==========================================================
         // NON-PAYMENT AUDIT LOGS
-        // ==========================================================
         const parts = raw.split("|").map(part => part.trim());
         const entity = parts[0] || "";
 
@@ -853,12 +857,11 @@
             ? `${capitalize(actorRole)} ${actorName}`
             : actorName;
 
-        // Avoid duplicate "Member Member" on create-member logs
         if (
             action === "CREATE_MEMBER" ||
             action === "ADD_MEMBER"
         ) {
-            return `${actor} created new Member ${targetName || "Unknown"}${
+            return ` ${actor} created new Member ${targetName || "Unknown"}${
                 targetId ? ` (${targetId})` : ""
             }.`;
         }
