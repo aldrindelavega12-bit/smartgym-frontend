@@ -623,8 +623,7 @@
             value.replace(/_/g, " ").toLowerCase();
     }
         
-        
-        
+    
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
         const action = String(record.raw_action || "").toUpperCase();
@@ -672,8 +671,7 @@
             const name = getValue("Name");
             const locker = getValue("Locker");
 
-            // Support both explicit action and generic PAYMENT action.
-            // The backend may store locker overtime as PAYMENT.
+            // LOCKER OVERTIME PAYMENT
             const isLockerOvertime =
                 action === "LOCKER_OVERTIME_PAYMENT" ||
                 /locker\s+overtime/i.test(raw);
@@ -712,27 +710,94 @@
                 return summary.join(" | ");
             }
 
+            // TRAINER PAYMENT
+            // Supports generic PAYMENT action and trainer-specific actions.
+            const isTrainerPayment =
+                /trainer\s+payment/i.test(raw) ||
+                /trainer\s+fee\s+payment/i.test(raw) ||
+                action === "TRAINER_FEE_PAYMENT";
+
+            if (isTrainerPayment) {
+                const summary = ["Trainer Payment"];
+
+                const trainerName =
+                    getValue("Trainer Name") ||
+                    getValue("Trainer");
+
+                const trainerId = getValue("Trainer ID");
+
+                const trainerPlan =
+                    getValue("Trainer Plan") ||
+                    getValue("Plan");
+
+                const trainerFee =
+                    getValue("Trainer Fee") ||
+                    getValue("Amount") ||
+                    getValue("Payment Amount");
+
+                const paymentId = getValue("Payment ID");
+
+                if (isMeaningful(id)) {
+                    summary.push("ID: " + id);
+                }
+
+                if (isMeaningful(name)) {
+                    summary.push("Name: " + name);
+                }
+
+                if (isMeaningful(trainerName)) {
+                    summary.push(
+                        "Trainer: " + trainerName +
+                        (
+                            isMeaningful(trainerId)
+                                ? " (" + trainerId + ")"
+                                : ""
+                        )
+                    );
+                } else if (isMeaningful(trainerId)) {
+                    summary.push("Trainer: " + trainerId);
+                }
+
+                if (isMeaningful(trainerPlan)) {
+                    summary.push("Trainer Plan: " + trainerPlan);
+                }
+
+                if (isMeaningful(trainerFee)) {
+                    summary.push("Trainer Fee: " + trainerFee);
+                }
+
+                if (isMeaningful(paymentId)) {
+                    summary.push("Payment ID: " + paymentId);
+                }
+
+                return summary.join(" | ");
+            }
+
+            // OTHER PAYMENT DETAILS
             const membershipFee = getValue("Membership Fee");
             const access = getValue("Access") || getValue("Daily Access");
             const lockerFee = getValue("Locker Fee");
-            const trainerName = getValue("Trainer Name");
+            const trainerName =
+                getValue("Trainer Name") ||
+                getValue("Trainer");
             const trainerId = getValue("Trainer ID");
             const trainerPlan = getValue("Trainer Plan");
-            const trainer = getValue("Trainer");
             const trainerFee = getValue("Trainer Fee");
             const total = getValue("Total Paid") || getValue("Total");
 
             const isMemberPayment =
                 action === "PAYMENT" &&
                 (
-                    raw.toLowerCase().includes("member payment") ||
+                    /member payment/i.test(raw) ||
                     Boolean(membershipFee)
                 );
 
             const summary = [];
 
             summary.push(
-                isMemberPayment ? "Member Payment" : "Walk-in Payment"
+                isMemberPayment
+                    ? "Member Payment"
+                    : "Walk-in Payment"
             );
 
             if (isMeaningful(id)) {
@@ -766,8 +831,6 @@
                     }
 
                     summary.push(trainerLabel);
-                } else if (isMeaningful(trainer)) {
-                    summary.push("Trainer: " + trainer);
                 }
 
                 if (isMeaningful(trainerPlan)) {
@@ -804,8 +867,6 @@
                     }
 
                     summary.push(trainerLabel);
-                } else if (isMeaningful(trainer)) {
-                    summary.push("Trainer: " + trainer);
                 }
 
                 if (isMeaningful(trainerFee)) {
@@ -869,6 +930,7 @@
         return `${actor} ${actionDescription} ${target}.`;
     }
 
+        
 
     function parseDate(value) {
         if (!value) return null;
