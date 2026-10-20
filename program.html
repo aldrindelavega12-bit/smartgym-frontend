@@ -1842,22 +1842,24 @@ let selectedGetTrainerPlan = null;
 /* =========================================================
    OPEN GET TRAINER CONFIRMATION
 ========================================================= */
+function openGetTrainerConfirmation() {
+    const getTrainerCard = document.querySelector(
+        ".program-action.get-trainer"
+    );
 
-function openGetTrainerConfirmation(){
-
-    const modal =
-        document.getElementById(
-            "getTrainerConfirmModal"
-        );
-
-    if(!modal){
+    // Huwag magpatuloy kapag disabled ang card.
+    if (!getTrainerCard || getTrainerCard.disabled) {
         return;
     }
 
-    modal.classList.add("show");
+    const modal = document.getElementById(
+        "getTrainerConfirmModal"
+    );
 
+    if (modal) {
+        modal.classList.add("show");
+    }
 }
-
 
 /* =========================================================
    CLOSE GET TRAINER CONFIRMATION
@@ -3642,6 +3644,8 @@ async function loadCurrentProgram(){
         currentTrainerData =
             current;
 
+        updateGetTrainerCard();
+
 
         /* =====================================================
            RENEW BUTTON
@@ -5302,6 +5306,24 @@ async function renewTraining(){
 
     }
 
+}
+
+function updateGetTrainerCard() {
+    const card = document.querySelector(
+        ".program-action.get-trainer"
+    );
+
+    if (!card) return;
+
+    const hasTrainer = Boolean(currentTrainerData);
+
+    card.disabled = hasTrainer;
+    card.style.pointerEvents = hasTrainer ? "none" : "auto";
+    card.style.opacity = hasTrainer ? "0.5" : "1";
+    card.style.cursor = hasTrainer ? "not-allowed" : "pointer";
+    card.title = hasTrainer
+        ? "You already have a trainer."
+        : "Get a trainer";
 }
 
 
