@@ -624,6 +624,7 @@
     }
         
     
+    
     function getDetails(record) {
         const raw = String(record.details ?? "").trim();
         const action = String(record.raw_action || "").toUpperCase();
@@ -701,12 +702,11 @@
                     summary.push("Amount Paid: " + amount);
                 }
 
-
+                // Payment ID intentionally hidden from display.
                 return summary.join(" | ");
             }
 
             // TRAINER PAYMENT
-            // Supports generic PAYMENT action and trainer-specific actions.
             const isTrainerPayment =
                 /trainer\s+payment/i.test(raw) ||
                 /trainer\s+fee\s+payment/i.test(raw) ||
@@ -729,6 +729,10 @@
                     getValue("Trainer Fee") ||
                     getValue("Amount") ||
                     getValue("Payment Amount");
+
+                if (isMeaningful(id)) {
+                    summary.push("ID: " + id);
+                }
 
                 if (isMeaningful(name)) {
                     summary.push("Name: " + name);
@@ -755,10 +759,7 @@
                     summary.push("Trainer Fee: " + trainerFee);
                 }
 
-                if (isMeaningful(paymentId)) {
-                    summary.push("Payment ID: " + paymentId);
-                }
-
+                // Payment ID intentionally hidden from display.
                 return summary.join(" | ");
             }
 
@@ -766,9 +767,11 @@
             const membershipFee = getValue("Membership Fee");
             const access = getValue("Access") || getValue("Daily Access");
             const lockerFee = getValue("Locker Fee");
+
             const trainerName =
                 getValue("Trainer Name") ||
                 getValue("Trainer");
+
             const trainerId = getValue("Trainer ID");
             const trainerPlan = getValue("Trainer Plan");
             const trainerFee = getValue("Trainer Fee");
@@ -919,7 +922,6 @@
         return `${actor} ${actionDescription} ${target}.`;
     }
 
-        
 
     function parseDate(value) {
         if (!value) return null;
