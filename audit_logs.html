@@ -701,11 +701,6 @@
                     summary.push("Amount Paid: " + amount);
                 }
 
-                const paymentId = getValue("Payment ID");
-
-                if (isMeaningful(paymentId)) {
-                    summary.push("Payment ID: " + paymentId);
-                }
 
                 return summary.join(" | ");
             }
@@ -734,12 +729,6 @@
                     getValue("Trainer Fee") ||
                     getValue("Amount") ||
                     getValue("Payment Amount");
-
-                const paymentId = getValue("Payment ID");
-
-                if (isMeaningful(id)) {
-                    summary.push("ID: " + id);
-                }
 
                 if (isMeaningful(name)) {
                     summary.push("Name: " + name);
