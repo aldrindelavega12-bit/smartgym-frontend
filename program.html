@@ -144,10 +144,22 @@
         box-shadow: none !important;
     }
 
+    
+
     .program-action.get-trainer {
-        border: none !important;
+        border: 1px solid transparent !important;
+        border-radius: 16px !important;
         box-shadow: none !important;
         outline: none !important;
+        background: #f3faf6 !important;
+        transition: background 0.2s ease;
+    }
+
+    .program-action.get-trainer:disabled {
+        border: 1px solid transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
+        cursor: not-allowed;
     }
 
     /* ...yung natitirang CSS na sinend ko... */
