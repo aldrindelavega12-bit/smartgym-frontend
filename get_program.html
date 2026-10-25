@@ -2506,327 +2506,267 @@ function formatMoney(
 /* =========================================================
    SEND REQUEST
 ========================================================= */
+/* =========================================================
+   SEND PROGRAM REQUEST
+   Supports:
+   1. Program only
+   2. Program with trainer
+========================================================= */
 
-async function sendProgramRequest(){
+async function sendProgramRequest() {
 
-    /*
-    =========================================================
-    ACTIVE PROGRAM PROTECTION
-    =========================================================
-
-    Kapag may active program na ang member,
-    bawal nang mag-submit ng panibagong program request.
-
-    Hindi natin chine-check ang expiration date.
-    Ang basis ay ACTIVE status lamang.
-    =========================================================
-    */
-
-    if(hasActiveProgram){
-
+    if (hasActiveProgram) {
         showNotifPopup(
             "Request Failed",
             "You already have an active program."
         );
-
-
         return;
-
     }
 
-
     /* =========================
-       VALIDATION
+       VALIDATE PROGRAM
     ========================= */
 
-    if(!selectedProgram){
-
+    if (!selectedProgram) {
         showNotifPopup(
             "Request Failed",
             "Please select a program."
         );
-
         return;
     }
 
-
-
-    if(!selectedPlan){
-
+    if (!selectedPlan) {
         showNotifPopup(
             "Request Failed",
-            "Please select a plan."
+            "Please select a program plan."
         );
-
         return;
     }
 
-
-    if(!selectedTrainer){
-
-        showNotifPopup(
-            "Request Failed",
-            "Please select a trainer."
-        );
-
-        return;
-    }
-
-
-    if(!selectedPaymentType){
-
-        showNotifPopup(
-            "Request Failed",
-            "Please select a payment option."
-        );
-
-        return;
-    }
-
-
-    if(!selectedStartDate){
-
+    if (!selectedStartDate) {
         showNotifPopup(
             "Request Failed",
             "Please select a starting date."
         );
-
         return;
     }
-
-
-    if(!selectedPrice){
-
-        showNotifPopup(
-            "Request Failed",
-            "Selected trainer has no price for this payment option."
-        );
-
-        return;
-    }
-
 
     /* =========================
        MEMBER ID
-       ========================= */
+    ========================= */
 
     const memberId =
         userData.user_id ||
         userData.member_id;
 
-
-    if(!memberId){
-
+    if (!memberId) {
         showNotifPopup(
             "Request Failed",
             "Member ID not found."
         );
-
         return;
     }
-
-
-    /* =========================
-       GET TRAINER RATE PLAN ID
-       ========================= */
-
-    let trainerRatePlanId = null;
-
-
-    if(selectedPaymentType === "Daily"){
-
-        trainerRatePlanId =
-            selectedTrainer.planIdDay;
-
-    }
-
-    else if(selectedPaymentType === "Weekly"){
-
-        trainerRatePlanId =
-            selectedTrainer.planIdWeek;
-
-    }
-
-    else if(selectedPaymentType === "Monthly"){
-
-        trainerRatePlanId =
-            selectedTrainer.planIdMonth;
-
-    }
-
-
-    if(!trainerRatePlanId){
-
-        showNotifPopup(
-            "Request Failed",
-            "Trainer rate plan ID not found."
-        );
-
-        return;
-    }
-
 
     /* =========================
        START DATE
-       ========================= */
+    ========================= */
 
     const startDate =
-        document.getElementById(
-            "startDate"
-        ).value;
+        document.getElementById("startDate")?.value ||
+        selectedStartDate;
 
-
-    if(!startDate){
-
+    if (!startDate) {
         showNotifPopup(
             "Request Failed",
             "Please select a starting date."
         );
-
         return;
     }
 
-
     /* =========================
-       REQUEST DATA
-       ========================= */
+       DETERMINE REQUEST TYPE
+    ========================= */
 
-    const requestData = {
+    const hasTrainer = Boolean(selectedTrainer);
 
-        member_id:
-            memberId,
+    let endpoint = "";
+    let requestData = {};
 
-        trainer_id:
-            selectedTrainer.id,
+    if (hasTrainer) {
 
-        program_id:
-            selectedProgram.id,
+        /*
+         * EXISTING TRAINER FLOW
+         * Preserve trainer and payment validations.
+         */
 
-        program_plan_id:
-            selectedPlan.id,
+        if (!selectedPaymentType) {
+            showNotifPopup(
+                "Request Failed",
+                "Please select a trainer payment option."
+            );
+            return;
+        }
 
-        plan_id:
-            trainerRatePlanId,
+        if (!selectedPrice) {
+            showNotifPopup(
+                "Request Failed",
+                "Selected trainer has no price for this payment option."
+            );
+            return;
+        }
 
-        start_date:
-            startDate
+        let trainerRatePlanId = null;
 
-    };
+        if (selectedPaymentType === "Daily") {
+            trainerRatePlanId =
+                selectedTrainer.planIdDay;
+        } else if (selectedPaymentType === "Weekly") {
+            trainerRatePlanId =
+                selectedTrainer.planIdWeek;
+        } else if (selectedPaymentType === "Monthly") {
+            trainerRatePlanId =
+                selectedTrainer.planIdMonth;
+        }
 
+        if (!trainerRatePlanId) {
+            showNotifPopup(
+                "Request Failed",
+                "Trainer rate plan ID not found."
+            );
+            return;
+        }
 
-    console.log(
-        "TRAINER REQUEST DATA:",
-        requestData
+        endpoint = `${API_URL}/api/trainer/request`;
+
+        requestData = {
+            member_id: memberId,
+            trainer_id: selectedTrainer.id,
+            program_id: selectedProgram.id,
+            program_plan_id: selectedPlan.id,
+            plan_id: trainerRatePlanId,
+            start_date: startDate
+        };
+
+    } else {
+
+        /*
+         * PROGRAM-ONLY FLOW
+         * No trainer assignment.
+         * No trainer payment.
+         */
+
+        endpoint = `${API_URL}/api/member/program-only`;
+
+        requestData = {
+            member_id: memberId,
+            program_id: selectedProgram.id,
+            program_plan_id: selectedPlan.id,
+            start_date: startDate
+        };
+    }
+
+    console.log("PROGRAM REQUEST TYPE:", hasTrainer
+        ? "PROGRAM WITH TRAINER"
+        : "PROGRAM ONLY"
     );
 
+    console.log("PROGRAM REQUEST DATA:", requestData);
 
     /* =========================
        SEND REQUEST
-       ========================= */
+    ========================= */
 
-    try{
+    const button = document.querySelector(
+        ".send-request-btn"
+    );
 
-        const response =
-            await fetch(
-                `${API_URL}/api/trainer/request`,
-                {
-                    method:
-                        "POST",
+    try {
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
+        if (button) {
+            button.disabled = true;
+            button.innerText = "Submitting...";
+        }
 
-                    body:
-                        JSON.stringify(
-                            requestData
-                        )
-                }
-            );
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
 
+        const data = await response.json();
 
-        const data =
-            await response.json();
+        console.log("PROGRAM REQUEST RESPONSE:", data);
 
-
-        console.log(
-            "TRAINER REQUEST RESPONSE:",
-            data
-        );
-
-
-        /* =========================
-           ERROR
-           ========================= */
-
-        if(!response.ok){
-
+        if (!response.ok) {
             throw new Error(
                 data.message ||
                 `HTTP ${response.status}`
             );
-
         }
 
-
         /* =========================
-           SUCCESS
-           ========================= */
+           SUCCESS MESSAGE
+        ========================= */
+
+        const programName =
+            selectedProgram.program_name ||
+            selectedProgram.name ||
+            "Selected program";
+
+        const planName =
+            selectedPlan.plan_name ||
+            selectedPlan.name ||
+            "Selected plan";
+
+        let successMessage = "";
+
+        if (hasTrainer) {
+
+            const trainerName =
+                selectedTrainer.name ||
+                selectedTrainer.fullname ||
+                "Selected trainer";
+
+            successMessage =
+                `${programName} — ${planName} with ${trainerName} has been submitted successfully.`;
+
+        } else {
+
+            successMessage =
+                `${programName} — ${planName} has been started successfully without a trainer.`;
+        }
 
         showNotifPopup(
-
-            "Request Sent",
-
-            `${selectedProgram.name} — ${selectedPlan.plan_name} with ${selectedTrainer.name} has been submitted successfully.`
-
+            "Program Submitted",
+            successMessage
         );
 
-
-        /* =========================
-           DISABLE BUTTON
-           ========================= */
-
-        const button =
-            document.querySelector(
-                ".send-request-btn"
-            );
-
-
-        if(button){
-
-            button.disabled =
-                true;
-
-            button.innerText =
-                "Request Sent";
-
+        if (button) {
+            button.disabled = true;
+            button.innerText = "Request Sent";
         }
 
-
-    }
-    catch(error){
+    } catch (error) {
 
         console.error(
-            "TRAINER REQUEST ERROR:",
+            "PROGRAM REQUEST ERROR:",
             error
         );
 
-
         showNotifPopup(
-
             "Request Failed",
-
             error.message ||
-            "Failed to submit trainer request."
-
+            "Failed to submit program request."
         );
 
+        if (button) {
+            button.disabled = false;
+            button.innerText = "Get Program";
+        }
     }
-
 }
-
-
 
 
 /* =========================================================
