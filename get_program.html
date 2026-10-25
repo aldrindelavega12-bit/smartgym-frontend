@@ -1729,52 +1729,19 @@ function renderPlans(plans){
    SELECT PLAN
 ========================================================= */
 
-function selectPlan(
-    button,
-    plan
-){
+function selectPlan(button, plan) {
+    // Select plan card
+    document.querySelectorAll("#planOptions .plan-card")
+        .forEach(item => item.classList.remove("selected"));
 
-    /* =========================
-       SELECT PLAN CARD
-    ========================= */
+    button.classList.add("selected");
 
-    document
-        .querySelectorAll(
-            ".plan-card"
-        )
-        .forEach(
-            item =>
-                item.classList.remove(
-                    "selected"
-                )
-        );
-
-
-    button.classList.add(
-        "selected"
-    );
-
-
-    /* =========================
-       SAVE SELECTED PLAN
-    ========================= */
-
-    selectedPlan =
-        plan;
-
-
-    document.getElementById(
-        "selectedPlan"
-    ).innerText =
+    // Save selected plan
+    selectedPlan = plan;
+    document.getElementById("selectedPlan").innerText =
         plan.plan_name;
 
-
-    /* =========================
-       SHOW TRAINER
-    ========================= */
-
-    
-
+    // Show trainer preference
     const preferencePanel =
         document.getElementById("trainerPreferencePanel");
 
@@ -1782,79 +1749,45 @@ function selectPlan(
         preferencePanel.style.display = "block";
     }
 
+    // Reset trainer preference
+    wantsTrainer = null;
+
+    document.getElementById("trainerYesBtn")
+        ?.classList.remove("selected");
+
+    document.getElementById("trainerNoBtn")
+        ?.classList.remove("selected");
+
+    // Hide trainer and payment panels until preference is chosen
     const trainerPanel =
         document.getElementById("trainerPanel");
+
+    const paymentPanel =
+        document.getElementById("paymentPanel");
 
     if (trainerPanel) {
         trainerPanel.style.display = "none";
     }
 
-    
-
     if (paymentPanel) {
         paymentPanel.style.display = "none";
     }
 
-    wantsTrainer = null;
+    // Reset selected trainer
+    selectedTrainer = null;
 
-    document.getElementById("trainerYesBtn")
-        .classList.remove("selected");
+    document.getElementById("trainerOptions").innerHTML = "";
 
-    document.getElementById("trainerNoBtn")
-        .classList.remove("selected");
+    document.getElementById("selectedTrainer").innerText = "-";
 
-
-    /* =========================
-       PAYMENT HIDDEN
-    ========================= */
-
-    const paymentPanel =
-        document.getElementById(
-            "paymentPanel"
-        );
-
-    if(paymentPanel){
-
-        paymentPanel.style.display =
-            "none";
-
-    }
-
-
-    /* =========================
-       RESET TRAINER
-    ========================= */
-
-    selectedTrainer =
-        null;
-
-
-    document.getElementById(
-        "selectedTrainer"
-    ).innerText =
-        "-";
-
-
-    document.getElementById(
-        "selectedTrainerRole"
-    ).innerText =
+    document.getElementById("selectedTrainerRole").innerText =
         "Personal Trainer";
 
-
-    /* =========================
-       RESET PAYMENT
-    ========================= */
-
+    // Reset payment
     resetPayment();
-
-
-    /* =========================
-       SHOW TRAINERS
-    ========================= */
-
-    renderTrainers();
-
 }
+
+
 
 /* =========================================================
    RENDER TRAINERS
