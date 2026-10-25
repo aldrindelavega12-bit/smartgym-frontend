@@ -324,25 +324,19 @@ if (!user || user.role !== "member") {
                     <p>Choose whether you want a personal trainer for your program.</p>
                 </div>
 
-                <div class="program-options">
-                    <button
-                        type="button"
-                        class="plan-card"
-                        id="trainerYesBtn"
-                        onclick="selectTrainerPreference(true)"
-                    >
-                        <strong>Yes, I want a trainer</strong>
-                        <p>Choose a trainer and select a payment option.</p>
+                <div class="trainer-preference-options">
+                    <button type="button" id="trainerYesBtn"
+                            class="trainer-preference-card"
+                            onclick="selectTrainerPreference(true)">
+                        <span class="trainer-option-title">With Trainer</span>
+                        <span class="trainer-option-subtitle">Personal training</span>
                     </button>
 
-                    <button
-                        type="button"
-                        class="plan-card"
-                        id="trainerNoBtn"
-                        onclick="selectTrainerPreference(false)"
-                    >
-                        <strong>No, I'll train on my own</strong>
-                        <p>Choose a program and plan without a trainer.</p>
+                    <button type="button" id="trainerNoBtn"
+                            class="trainer-preference-card"
+                            onclick="selectTrainerPreference(false)">
+                        <span class="trainer-option-title">Without Trainer</span>
+                        <span class="trainer-option-subtitle">Train independently</span>
                     </button>
                 </div>
             </section>
