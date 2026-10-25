@@ -1761,67 +1761,66 @@ body {
     margin: 0 !important;
 }
 
-.trainer-preference-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(160px, 190px));
-    gap: 12px;
-    margin-top: 14px;
+/* TRAINER PREFERENCE CARDS */
+#trainerPreferencePanel .trainer-preference-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
 }
 
-.trainer-preference-card {
+#trainerYesBtn,
+#trainerNoBtn {
+    width: 160px;
+    min-height: 66px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     justify-content: center;
-    gap: 8px;
-    min-height: 100px;
-    padding: 18px 16px;
+    align-items: flex-start;
+    gap: 5px;
+    box-sizing: border-box;
+
     background: #ffffff;
     border: 1px solid #d8e4dd;
-    border-radius: 10px;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.2s ease,
-                border-color 0.2s ease;
-}
+    border-radius: 9px;
 
-.trainer-option-title {
-    color: #17221c;
+    color: #111827;
     font-family: Arial, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.4;
+    text-align: left;
+
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
 }
 
-.trainer-option-subtitle {
-    color: #64766b;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.trainer-preference-card:hover {
+#trainerYesBtn:hover,
+#trainerNoBtn:hover {
     border-color: #00a34a;
-    background: #f5fbf7;
+    background: #f4fbf6;
 }
 
-.trainer-preference-card.selected {
-    border: 1.5px solid #00a34a;
+#trainerYesBtn.selected,
+#trainerNoBtn.selected {
     background: #edf9f1;
+    border: 1px solid #00a34a;
+    color: #008b42;
 }
 
-.trainer-preference-card:focus-visible {
-    outline: 2px solid #00a34a;
-    outline-offset: 3px;
+/* SUBTEXT */
+#trainerYesBtn .trainer-option-subtitle,
+#trainerNoBtn .trainer-option-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: #64766b;
 }
 
 @media (max-width: 480px) {
-    .trainer-preference-options {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-    }
-
-    .trainer-preference-card {
-        padding: 14px 12px;
+    #trainerYesBtn,
+    #trainerNoBtn {
+        width: calc(50% - 4px);
+        min-width: 0;
     }
 }
