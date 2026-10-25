@@ -311,35 +311,62 @@ if (!user || user.role !== "member") {
 
             </section>
 
+            <!-- =================================================
+                TRAINER PREFERENCE
+            ================================================== -->
+            <section
+                class="program-panel"
+                id="trainerPreferencePanel"
+                style="display:none;"
+            >
+                <div class="section-header">
+                    <h2>Do you want to have a trainer?</h2>
+                    <p>Choose whether you want a personal trainer for your program.</p>
+                </div>
+
+                <div class="program-options">
+                    <button
+                        type="button"
+                        class="plan-card"
+                        id="trainerYesBtn"
+                        onclick="selectTrainerPreference(true)"
+                    >
+                        <strong>Yes, I want a trainer</strong>
+                        <p>Choose a trainer and select a payment option.</p>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="plan-card"
+                        id="trainerNoBtn"
+                        onclick="selectTrainerPreference(false)"
+                    >
+                        <strong>No, I'll train on my own</strong>
+                        <p>Choose a program and plan without a trainer.</p>
+                    </button>
+                </div>
+            </section>
+
 
             <!-- =================================================
-                 TRAINER
+                TRAINER
             ================================================== -->
-
             <section
                 class="program-panel"
                 id="trainerPanel"
-                style="display:none;">
-
+                style="display:none;"
+            >
                 <div class="section-header">
-
-                    <h2>
-                        Choose a Trainer
-                    </h2>
-
-                    <p>
-                        Select a trainer who offers this program.
-                    </p>
-
+                    <h2>Choose a Trainer</h2>
+                    <p>Select a trainer who offers this program.</p>
                 </div>
-
 
                 <div
                     class="trainer-options"
-                    id="trainerOptions">
-                </div>
-
+                    id="trainerOptions"
+                ></div>
             </section>
+
 
 
             <!-- =================================================
@@ -1746,17 +1773,35 @@ function selectPlan(
        SHOW TRAINER
     ========================= */
 
-    const trainerPanel =
-        document.getElementById(
-            "trainerPanel"
-        );
+    
 
-    if(trainerPanel){
+    const preferencePanel =
+        document.getElementById("trainerPreferencePanel");
 
-        trainerPanel.style.display =
-            "block";
-
+    if (preferencePanel) {
+        preferencePanel.style.display = "block";
     }
+
+    const trainerPanel =
+        document.getElementById("trainerPanel");
+
+    if (trainerPanel) {
+        trainerPanel.style.display = "none";
+    }
+
+    
+
+    if (paymentPanel) {
+        paymentPanel.style.display = "none";
+    }
+
+    wantsTrainer = null;
+
+    document.getElementById("trainerYesBtn")
+        .classList.remove("selected");
+
+    document.getElementById("trainerNoBtn")
+        .classList.remove("selected");
 
 
     /* =========================
@@ -2502,7 +2547,47 @@ function formatMoney(
 
 }
 
+let wantsTrainer = null;
 
+function selectTrainerPreference(wantsTrainerValue) {
+    wantsTrainer = wantsTrainerValue;
+
+    const yesBtn = document.getElementById("trainerYesBtn");
+    const noBtn = document.getElementById("trainerNoBtn");
+    const trainerPanel = document.getElementById("trainerPanel");
+    const paymentPanel = document.getElementById("paymentPanel");
+
+    yesBtn.classList.toggle("selected", wantsTrainerValue);
+    noBtn.classList.toggle("selected", !wantsTrainerValue);
+
+    // Reset previous trainer and payment selection.
+    selectedTrainer = null;
+    selectedPaymentType = null;
+    selectedPaymentDays = 0;
+    selectedPrice = 0;
+
+    resetPayment();
+
+    if (wantsTrainerValue) {
+        trainerPanel.style.display = "block";
+        paymentPanel.style.display = "none";
+
+        renderTrainers();
+    } else {
+        trainerPanel.style.display = "none";
+        paymentPanel.style.display = "none";
+
+        document.getElementById("selectedTrainer").innerText = "-";
+        document.getElementById("selectedTrainerRole").innerText =
+            "No trainer";
+
+        document.getElementById("selectedDuration").innerText = "-";
+        document.getElementById("selectedDurationPrice").innerText = "₱0.00";
+        document.getElementById("detailPrice").innerText = "₱0.00";
+
+        updateStartDate();
+    }
+}
 /* =========================================================
    SEND REQUEST
 ========================================================= */
@@ -2586,8 +2671,25 @@ async function sendProgramRequest() {
     /* =========================
        DETERMINE REQUEST TYPE
     ========================= */
+    
+    
+    if (wantsTrainer === null) {
+        showNotifPopup(
+            "Request Failed",
+            "Please choose whether you want a trainer."
+        );
+        return;
+    }
 
-    const hasTrainer = Boolean(selectedTrainer);
+    if (wantsTrainer && !selectedTrainer) {
+        showNotifPopup(
+            "Request Failed",
+            "Please select a trainer."
+        );
+        return;
+    }
+
+    const hasTrainer = wantsTrainer;
 
     let endpoint = "";
     let requestData = {};
