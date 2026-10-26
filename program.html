@@ -3735,16 +3735,34 @@ async function loadCurrentProgram(){
 
             }
 
-            /* ================================================
-               HIDE TRAINER-SPECIFIC DETAILS
-               TRAINER / STARTED / VALID UNTIL
-            ================================================ */
+            /* =====================================================
+            KEEP DETAILS VISIBLE BUT CLEAR THEIR VALUES
+            ===================================================== */
 
+            /* Ipakita ulit ang labels */
             trainerDetails.forEach(detail => {
-
-                detail.style.display = "none";
-
+                detail.style.display = "";
             });
+
+            /* Trainer: blank */
+            if(trainerNameElement){
+                trainerNameElement.innerText = "";
+            }
+
+            /* Started: blank */
+            if(startDateElement){
+                startDateElement.innerText = "";
+            }
+
+            /* Valid Until: blank */
+            if(endDateElement){
+                endDateElement.innerText = "";
+            }
+
+            /* Walang trainer renewal */
+            if(renewButton){
+                renewButton.style.display = "none";
+            }
 
             /* ================================================
                HIDE TRAINER RENEWAL BUTTON
