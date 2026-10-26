@@ -212,7 +212,31 @@
     }
 }
 
+/* FIX: KEEP GET TRAINER CARD BEHIND MODALS */
+.program-action,
+.program-actions,
+.program-action-card {
+    z-index: auto !important;
+}
 
+/* Force both modals above page content */
+#changeProgramModal,
+#changeProgramConfirmModal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+    isolation: isolate;
+}
+
+/* Modal overlay must cover the entire viewport */
+#changeProgramModal::before,
+#changeProgramConfirmModal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: -1;
+}
 
 </style>
 
