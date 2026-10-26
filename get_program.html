@@ -1818,12 +1818,7 @@ function renderTrainers(){
                         )}
                     </strong>
 
-                    <span>
-                        ${escapeHtml(
-                            selectedProgram.name
-                        )}
-                        Specialist
-                    </span>
+                    
 
                 </div>
 
@@ -1921,23 +1916,19 @@ function renderTrainers(){
    TRAINER SELECTION
 ========================================================= */
 
-function updateTrainerSelection(){
+function updateTrainerSelection() {
 
-    document.getElementById(
-        "selectedTrainer"
-    ).innerText =
-        selectedTrainer?.name ||
-        "-";
+    document.getElementById("selectedTrainer").innerText =
+        selectedTrainer?.name || "-";
 
+    const trainerRole = document.getElementById("selectedTrainerRole");
 
-    document.getElementById(
-        "selectedTrainerRole"
-    ).innerText =
-        selectedProgram
-            ? `${selectedProgram.name} Specialist`
-            : "Personal Trainer";
-
+    if (trainerRole) {
+        trainerRole.style.display = "none";
+        trainerRole.innerText = "";
+    }
 }
+
 
 
 /* =========================================================
