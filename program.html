@@ -164,18 +164,54 @@
 
     /* ...yung natitirang CSS na sinend ko... */
 
-/* FIX: CHANGE PROGRAM MODAL MUST BE ABOVE THE CARDS */
+
+/* =========================================
+   FIX: CHANGE PROGRAM MODAL OVERLAPPING
+========================================= */
+
+/* Keep action cards in the background */
+.program-action {
+    position: relative;
+    z-index: 1;
+}
+
+/* Main Change Program modal */
+#changeProgramModal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99999 !important;
+}
+
+/* Change Program confirmation modal */
 #changeProgramConfirmModal {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 10000000 !important;
+    z-index: 100000 !important;
 }
 
-#changeProgramConfirmModal .change-confirm-content,
-#changeProgramConfirmModal .change-program-confirm-content {
+/* Keep modal content above its overlay */
+#changeProgramModal .modal-content,
+#changeProgramConfirmModal .modal-content {
     position: relative;
-    z-index: 10000001 !important;
+    z-index: 100001 !important;
 }
+
+/* Prevent horizontal overflow inside the modal */
+#changeProgramModal,
+#changeProgramConfirmModal {
+    box-sizing: border-box;
+}
+
+/* Responsive modal width */
+@media (max-width: 768px) {
+    #changeProgramModal .modal-content,
+    #changeProgramConfirmModal .modal-content {
+        width: calc(100% - 32px) !important;
+        max-width: 100% !important;
+        margin: 16px auto;
+    }
+}
+
 
 
 </style>
