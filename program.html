@@ -164,6 +164,18 @@
 
     /* ...yung natitirang CSS na sinend ko... */
 
+/* FIX: CHANGE PROGRAM MODAL MUST BE ABOVE THE CARDS */
+#changeProgramConfirmModal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 10000000 !important;
+}
+
+#changeProgramConfirmModal .change-confirm-content,
+#changeProgramConfirmModal .change-program-confirm-content {
+    position: relative;
+    z-index: 10000001 !important;
+}
 
 
 </style>
