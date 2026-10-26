@@ -7518,133 +7518,111 @@ function selectChangeProgramSplit(
    CONFIRM CHANGE PROGRAM
 ========================================================= */
 
-async function confirmChangeProgram(){
 
-    if(
-        !selectedChangeProgram ||
-        !selectedChangeProgramSplit
-    ){
+async function confirmChangeProgram() {
 
-        alert(
-            "Please select a program and split."
-        );
-
+    if (!selectedChangeProgram || !selectedChangeProgramSplit) {
+        alert("Please select a program and split.");
         return;
     }
-
 
     const memberId =
         user?.member_id ||
         user?.user_id ||
         user?.id;
 
-
-    if(!memberId){
-
-        alert(
-            "Member ID not found."
-        );
-
+    if (!memberId) {
+        alert("Member ID not found.");
         return;
     }
 
+    const confirmButton = document.getElementById(
+        "changeProgramConfirmButton"
+    );
 
-    const confirmButton =
-        document.getElementById(
-            "changeProgramConfirmButton"
+    confirmButton.disabled = true;
+    confirmButton.innerText = "Submitting...";
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/member/change-program`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    member_id: memberId,
+                    program_id: selectedChangeProgram.program_id,
+                    program_plan_id: selectedChangeProgramSplit.id
+                })
+            }
         );
 
+        const result = await response.json();
 
-    confirmButton.disabled =
-        true;
+        console.log("CHANGE PROGRAM RESPONSE:", result);
 
-
-    confirmButton.innerText =
-        "Submitting...";
-
-
-    try{
-
-        const response =
-            await fetch(
-                `${API_URL}/api/member/change-program`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        member_id:
-                            memberId,
-
-                        program_id:
-                            selectedChangeProgram.program_id,
-
-                        program_plan_id:
-                            selectedChangeProgramSplit.id
-
-                    })
-
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        console.log(
-            "CHANGE PROGRAM RESPONSE:",
-            result
-        );
-
-
-        if(!response.ok){
-
+        if (!response.ok) {
             throw new Error(
-                result.message ||
-                "Change program request failed."
+                result.message || "Change program failed."
             );
-
         }
 
+        // Walang trainer: direct change, walang pending request.
+        if (
+            result.action === "program_changed" ||
+            result.pending_request_created === false
+        ) {
+            alert(
+                "Program changed successfully. Your new workout schedule is ready."
+            );
 
+            closeChangeProgram();
+
+            await loadCurrentProgram();
+            await loadTrainingSchedule();
+
+            return;
+        }
+
+        // May trainer: kailangan munang tanggapin ang request.
+        if (
+            result.action === "program_change_requested" ||
+            result.status === "pending"
+        ) {
+            alert(
+                "Change program request submitted. Waiting for your trainer to accept."
+            );
+
+            closeChangeProgram();
+
+            return;
+        }
+
+        // Huwag magkunwaring pending o successful kung hindi malinaw ang response.
         alert(
-            "Change program request submitted. Waiting for your trainer to accept."
+            result.message ||
+            "The server processed the request. Please refresh the page to verify the program."
         );
-
 
         closeChangeProgram();
-    }
-    catch(error){
 
-        console.error(
-            "CHANGE PROGRAM ERROR:",
-            error
-        );
+        await loadCurrentProgram();
+        await loadTrainingSchedule();
 
+    } catch (error) {
+        console.error("CHANGE PROGRAM ERROR:", error);
 
         alert(
             error.message ||
-            "Unable to submit change program request."
+            "Unable to change program."
         );
 
+    } finally {
+        confirmButton.disabled = false;
+        confirmButton.innerText = "Submit Request";
     }
-    finally{
-
-        confirmButton.disabled =
-            false;
-
-
-        confirmButton.innerText =
-            "Submit Request";
-
-    }
-
 }
 
 
