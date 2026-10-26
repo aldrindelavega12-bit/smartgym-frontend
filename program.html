@@ -3584,6 +3584,10 @@ function formatProgramDate(
    LOAD CURRENT PROGRAM
 ========================================================= */
 
+/* =========================================================
+   LOAD CURRENT PROGRAM
+========================================================= */
+
 async function loadCurrentProgram(){
 
     const memberId =
@@ -3591,12 +3595,10 @@ async function loadCurrentProgram(){
         user?.user_id ||
         user?.id;
 
-
     console.log(
         "CURRENT PROGRAM MEMBER ID:",
         memberId
     );
-
 
     if(!memberId){
 
@@ -3609,27 +3611,21 @@ async function loadCurrentProgram(){
         return;
     }
 
-
     try{
 
-        const response =
-            await fetch(
-                `${API_URL}/api/member/trainer-status/${memberId}`,
-                {
-                    cache: "no-store"
-                }
-            );
+        const response = await fetch(
+            `${API_URL}/api/member/trainer-status/${memberId}`,
+            {
+                cache: "no-store"
+            }
+        );
 
-
-        const result =
-            await response.json();
-
+        const result = await response.json();
 
         console.log(
             "CURRENT PROGRAM RESPONSE:",
             result
         );
-
 
         if(!response.ok){
 
@@ -3640,48 +3636,187 @@ async function loadCurrentProgram(){
 
         }
 
-
         /* =====================================================
-           NO ACTIVE PROGRAM
-           ===================================================== */
+           GET ELEMENTS
+        ===================================================== */
 
-        if(
-            result.has_trainer === false ||
-            !result.trainer
-        ){
+        const programNameElement =
+            document.getElementById("currentProgramName");
 
-            setCurrentProgramEmpty();
+        const programPlanElement =
+            document.getElementById("currentProgramPlan");
 
-            return;
+        const trainerNameElement =
+            document.getElementById("currentTrainerName");
 
-        }
+        const startDateElement =
+            document.getElementById("programStartDate");
 
+        const endDateElement =
+            document.getElementById("programEndDate");
 
-        /* =====================================================
-           CURRENT PROGRAM
-           ===================================================== */
-
-        const current =
-            result.trainer;
-
-        currentTrainerData =
-            current;
-
-        updateGetTrainerCard();
-
-
-        /* =====================================================
-           RENEW BUTTON
-           
-           > 3 DAYS = LOCKED
-           <= 3 DAYS = ENABLED
-           ===================================================== */
+        const trainerDetails =
+            document.querySelectorAll(
+                ".program-details .program-detail"
+            );
 
         const renewButton =
             document.querySelector(
                 ".program-action.renew"
             );
 
+        /* =====================================================
+           DETERMINE TRAINER STATUS
+        ===================================================== */
+
+        const hasTrainer =
+            result.has_trainer === true &&
+            !!result.trainer;
+
+        /* =====================================================
+           MEMBER WITHOUT TRAINER
+           SHOW PROGRAM IF AVAILABLE
+        ===================================================== */
+
+        if(!hasTrainer){
+
+            const program = result.program;
+
+            currentTrainerData = null;
+
+            /* Walang active program */
+            if(!program){
+
+                setCurrentProgramEmpty();
+
+                trainerDetails.forEach(detail => {
+                    detail.style.display = "none";
+                });
+
+                if(renewButton){
+                    renewButton.style.display = "none";
+                }
+
+                return;
+            }
+
+            /* ================================================
+               PROGRAM NAME
+            ================================================ */
+
+            if(programNameElement){
+
+                programNameElement.innerText =
+                    program.program_name || "-";
+
+            }
+
+            /* ================================================
+               PROGRAM PLAN / SPLIT
+            ================================================ */
+
+            if(programPlanElement){
+
+                programPlanElement.innerText =
+                    program.program_plan_name ||
+                    program.program_plan ||
+                    program.split_name ||
+                    "-";
+
+            }
+
+            /* ================================================
+               NO TRAINER
+            ================================================ */
+
+            if(trainerNameElement){
+
+                trainerNameElement.innerText = "-";
+
+            }
+
+            /* ================================================
+               HIDE TRAINER-SPECIFIC DETAILS
+               TRAINER / STARTED / VALID UNTIL
+            ================================================ */
+
+            trainerDetails.forEach(detail => {
+
+                detail.style.display = "none";
+
+            });
+
+            /* ================================================
+               HIDE TRAINER RENEWAL BUTTON
+            ================================================ */
+
+            if(renewButton){
+
+                renewButton.style.display = "none";
+
+            }
+
+            /* ================================================
+               SCHEDULE DATE = TODAY
+            ================================================ */
+
+            selectedScheduleDate = new Date();
+
+            selectedScheduleDate.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+            /* ================================================
+               RENDER WORKOUT SCHEDULE
+            ================================================ */
+
+            renderTrainingSchedule();
+
+            console.log(
+                "PROGRAM WITHOUT TRAINER:",
+                program
+            );
+
+            return;
+        }
+
+        /* =====================================================
+           MEMBER WITH TRAINER
+        ===================================================== */
+
+        const current = result.trainer;
+
+        currentTrainerData = current;
+
+        /* Ibalik ang trainer details kung dati itong nakatago */
+        trainerDetails.forEach(detail => {
+
+            detail.style.display = "";
+
+        });
+
+        /* Ipakita ang renewal button para sa may trainer */
+        if(renewButton){
+
+            renewButton.style.display = "";
+
+        }
+
+        /* =====================================================
+           UPDATE GET TRAINER CARD
+        ===================================================== */
+
+        updateGetTrainerCard();
+
+        /* =====================================================
+           RENEW BUTTON VALIDATION
+
+           MORE THAN 3 DAYS = LOCKED
+           3 DAYS OR LESS = ENABLED
+        ===================================================== */
 
         if(renewButton){
 
@@ -3690,26 +3825,17 @@ async function loadCurrentProgram(){
                     current.status || ""
                 ).toLowerCase() === "active";
 
-
-            /* ================================================
-               ACTUAL DATABASE END DATE
-               ================================================ */
+            const endDateString =
+                current.end_date
+                    ? String(current.end_date).substring(0, 10)
+                    : "";
 
             const currentEndDate =
-                new Date(
-                    String(
-                        current.end_date
-                    ).substring(0, 10)
-                    + "T00:00:00"
-                );
+                endDateString
+                    ? new Date(endDateString + "T00:00:00")
+                    : null;
 
-
-            /* ================================================
-               TODAY
-               ================================================ */
-
-            const today =
-                new Date();
+            const today = new Date();
 
             today.setHours(
                 0,
@@ -3718,24 +3844,19 @@ async function loadCurrentProgram(){
                 0
             );
 
-
-            /* ================================================
-               DAYS REMAINING
-               ================================================ */
-
             const millisecondsPerDay =
                 1000 * 60 * 60 * 24;
 
-
             const daysRemaining =
-                Math.round(
-                    (
-                        currentEndDate.getTime() -
-                        today.getTime()
-                    ) /
-                    millisecondsPerDay
-                );
-
+                currentEndDate &&
+                !isNaN(currentEndDate.getTime())
+                    ? Math.round(
+                        (
+                            currentEndDate.getTime() -
+                            today.getTime()
+                        ) / millisecondsPerDay
+                    )
+                    : 0;
 
             console.log(
                 "TODAY:",
@@ -3752,43 +3873,26 @@ async function loadCurrentProgram(){
                 daysRemaining
             );
 
-
-            /* ================================================
-               RENEWAL LOCK
-
-               More than 3 days = LOCKED
-               3 days or less = ENABLED
-               ================================================ */
-
             const renewalLocked =
                 isActive &&
                 daysRemaining > 3;
 
-
             if(renewalLocked){
 
-                /* Actual button disabled */
                 renewButton.disabled = true;
 
-
-                /* Completely block clicking */
                 renewButton.style.pointerEvents =
                     "none";
 
-
-                /* Disabled appearance */
                 renewButton.style.opacity =
                     "0.55";
-
 
                 renewButton.style.cursor =
                     "not-allowed";
 
-
                 renewButton.classList.add(
                     "renew-disabled"
                 );
-
 
                 renewButton.title =
                     `Renewal available when 3 days or less remain. ${daysRemaining} days remaining.`;
@@ -3796,27 +3900,20 @@ async function loadCurrentProgram(){
             }
             else{
 
-                /* Enable */
-                renewButton.disabled =
-                    false;
-
+                renewButton.disabled = false;
 
                 renewButton.style.pointerEvents =
                     "auto";
 
-
                 renewButton.style.opacity =
                     "1";
-
 
                 renewButton.style.cursor =
                     "pointer";
 
-
                 renewButton.classList.remove(
                     "renew-disabled"
                 );
-
 
                 renewButton.title =
                     "Renew your trainer fee.";
@@ -3825,81 +3922,62 @@ async function loadCurrentProgram(){
 
         }
 
-
         /* =====================================================
-           PROGRAM
-           ===================================================== */
-
-        document.getElementById(
-            "currentProgramName"
-        ).innerText =
-            current.program_name ||
-            "-";
-
-
-        /* =====================================================
-           PLAN / SPLIT
-           ===================================================== */
-
-        document.getElementById(
-            "currentProgramPlan"
-        ).innerText =
-            current.program_plan_name ||
-            current.program_plan ||
-            current.split_name ||
-            "-";
-
-
-        /* =====================================================
-        TRAINER
+           PROGRAM NAME
         ===================================================== */
 
-        const currentStatus =
-            String(
-                current.status || ""
-            ).toLowerCase();
+        if(programNameElement){
 
-        const isPending =
-            currentStatus === "pending";
+            programNameElement.innerText =
+                current.program_name || "-";
 
+        }
 
         /* =====================================================
-        TRAINER DISPLAY
+           PROGRAM PLAN / SPLIT
         ===================================================== */
 
-        document.getElementById(
-            "currentTrainerName"
-        ).innerText =
-            current.trainer_name ||
-            current.fullname ||
-            "-";
+        if(programPlanElement){
+
+            programPlanElement.innerText =
+                current.program_plan_name ||
+                current.program_plan ||
+                current.split_name ||
+                "-";
+
+        }
 
         /* =====================================================
-        START DATE
+           TRAINER NAME
         ===================================================== */
 
-        const startDateValue =
-            current.start_date;
+        if(trainerNameElement){
 
-        document.getElementById(
-            "programStartDate"
-        ).innerText =
-            formatProgramDate(
-                startDateValue
-            );
+            trainerNameElement.innerText =
+                current.trainer_name ||
+                current.fullname ||
+                "-";
 
+        }
 
         /* =====================================================
-           SCHEDULE START DATE
-           ===================================================== */
-
-        /* =====================================================
-        SCHEDULE DATE
-        ALWAYS USE TODAY
+           START DATE
         ===================================================== */
 
-        selectedScheduleDate =
-            new Date();
+        if(startDateElement){
+
+            startDateElement.innerText =
+                formatProgramDate(
+                    current.start_date
+                );
+
+        }
+
+        /* =====================================================
+           SCHEDULE DATE = TODAY
+        ===================================================== */
+
+        selectedScheduleDate = new Date();
 
         selectedScheduleDate.setHours(
             0,
@@ -3908,23 +3986,29 @@ async function loadCurrentProgram(){
             0
         );
 
+        /* =====================================================
+           RENDER WORKOUT SCHEDULE
+        ===================================================== */
 
         renderTrainingSchedule();
 
-
         /* =====================================================
-        VALID UNTIL
+           VALID UNTIL
         ===================================================== */
 
-        const endDateValue =
-            current.end_date;
+        if(endDateElement){
 
-        document.getElementById(
-            "programEndDate"
-        ).innerText =
-            formatProgramDate(
-                endDateValue
-            );
+            endDateElement.innerText =
+                formatProgramDate(
+                    current.end_date
+                );
+
+        }
+
+        console.log(
+            "PROGRAM WITH TRAINER:",
+            current
+        );
 
     }
     catch(error){
@@ -3934,35 +4018,53 @@ async function loadCurrentProgram(){
             error
         );
 
+        const programNameElement =
+            document.getElementById("currentProgramName");
 
-        document.getElementById(
-            "currentProgramName"
-        ).innerText =
-            "Unable to load";
+        const programPlanElement =
+            document.getElementById("currentProgramPlan");
 
+        const trainerNameElement =
+            document.getElementById("currentTrainerName");
 
-        document.getElementById(
-            "currentProgramPlan"
-        ).innerText =
-            "-";
+        const startDateElement =
+            document.getElementById("programStartDate");
 
+        const endDateElement =
+            document.getElementById("programEndDate");
 
-        document.getElementById(
-            "currentTrainerName"
-        ).innerText =
-            "-";
+        if(programNameElement){
 
+            programNameElement.innerText =
+                "Unable to load";
 
-        document.getElementById(
-            "programStartDate"
-        ).innerText =
-            "-";
+        }
 
+        if(programPlanElement){
 
-        document.getElementById(
-            "programEndDate"
-        ).innerText =
-            "-";
+            programPlanElement.innerText = "-";
+
+        }
+
+        if(trainerNameElement){
+
+            trainerNameElement.innerText = "-";
+
+        }
+
+        if(startDateElement){
+
+            startDateElement.innerText = "-";
+
+        }
+
+        if(endDateElement){
+
+            endDateElement.innerText = "-";
+
+        }
+
+        currentTrainerData = null;
 
     }
 
