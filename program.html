@@ -6725,28 +6725,59 @@ let selectedChangeProgramSplit = null;
 
 
 /* =========================================================
-   STEP 1
-   CLICK CHANGE PROGRAM
-   SHOW CONFIRMATION
+   STEP 1: OPEN CONFIRMATION
+   WORKS WITH OR WITHOUT TRAINER
 ========================================================= */
 
 function changeProgram(){
 
-    if(!currentTrainerData){
+    const currentProgramName =
+        document.getElementById("currentProgramName")?.innerText?.trim();
 
-        alert(
-            "Current program information is not available."
-        );
+    const currentProgramPlan =
+        document.getElementById("currentProgramPlan")?.innerText?.trim();
+
+    // Kailangang may active program ang member.
+    if(
+        !currentProgramName ||
+        currentProgramName === "-" ||
+        currentProgramName === "Unable to load"
+    ){
+
+        alert("Current program information is not available.");
 
         return;
     }
 
+    // Siguraduhing may confirmation modal.
+    const confirmationModal =
+        document.getElementById("changeProgramConfirmModal");
 
-    document
-        .getElementById(
-            "changeProgramConfirmModal"
-        )
-        .classList.add("show");
+    if(!confirmationModal){
+
+        console.error("Change Program confirmation modal not found.");
+
+        return;
+    }
+
+    // Ipakita ang current program at split kung may labels.
+    const confirmationText =
+        confirmationModal.querySelector(
+            ".change-program-confirm-message"
+        );
+
+    if(confirmationText){
+
+        confirmationText.innerText =
+            `Your current program is ${currentProgramName}` +
+            (currentProgramPlan && currentProgramPlan !== "-"
+                ? ` (${currentProgramPlan})`
+                : "") +
+            ". Do you want to change your program?";
+
+    }
+
+    confirmationModal.classList.add("show");
 
 }
 
@@ -6757,18 +6788,20 @@ function changeProgram(){
 
 function closeChangeProgramConfirmation(){
 
-    document
-        .getElementById(
-            "changeProgramConfirmModal"
-        )
-        .classList.remove("show");
+    const modal =
+        document.getElementById("changeProgramConfirmModal");
+
+    if(modal){
+
+        modal.classList.remove("show");
+
+    }
 
 }
 
 
 /* =========================================================
-   STEP 2
-   YES
+   STEP 2: PROCEED TO CHANGE PROGRAM
 ========================================================= */
 
 async function proceedChangeProgram(){
@@ -6783,112 +6816,149 @@ async function proceedChangeProgram(){
 
 
 /* =========================================================
-   OPEN MAIN MODAL
+   OPEN MAIN CHANGE PROGRAM MODAL
+   WORKS WITH OR WITHOUT TRAINER
 ========================================================= */
 
 function openChangeProgramModal(){
 
     const modal =
-        document.getElementById(
-            "changeProgramModal"
-        );
-
+        document.getElementById("changeProgramModal");
 
     if(!modal){
+
+        console.error("Change Program modal not found.");
 
         return;
     }
 
+    // Kunin ang current program mula sa My Program display.
+    const currentProgramName =
+        document.getElementById("currentProgramName")?.innerText?.trim();
 
-    /* CURRENT PROGRAM */
+    const currentProgramPlan =
+        document.getElementById("currentProgramPlan")?.innerText?.trim();
 
-    document.getElementById(
-        "changeProgramCurrentName"
-    ).innerText =
-        currentTrainerData?.program_name ||
-        "-";
-
-
-    /* CURRENT SPLIT */
-
-    document.getElementById(
-        "changeProgramCurrentSplit"
-    ).innerText =
-        currentTrainerData?.program_plan_name ||
-        currentTrainerData?.program_plan ||
-        currentTrainerData?.split_name ||
-        "-";
-
-
-    /* CURRENT TRAINER */
-
-    document.getElementById(
-        "changeProgramCurrentTrainer"
-    ).innerText =
+    // Trainer data ay optional.
+    const currentTrainerName =
         currentTrainerData?.trainer_name ||
         currentTrainerData?.fullname ||
-        "-";
+        "";
 
+    // Current program.
+    const programNameElement =
+        document.getElementById("changeProgramCurrentName");
 
-    /* RESET */
+    if(programNameElement){
 
+        programNameElement.innerText =
+            currentProgramName &&
+            currentProgramName !== "Unable to load"
+                ? currentProgramName
+                : "-";
+
+    }
+
+    // Current split.
+    const splitElement =
+        document.getElementById("changeProgramCurrentSplit");
+
+    if(splitElement){
+
+        splitElement.innerText =
+            currentProgramPlan &&
+            currentProgramPlan !== "-"
+                ? currentProgramPlan
+                : "-";
+
+    }
+
+    // Trainer remains blank when the member has no trainer.
+    const trainerElement =
+        document.getElementById("changeProgramCurrentTrainer");
+
+    if(trainerElement){
+
+        trainerElement.innerText = currentTrainerName;
+
+    }
+
+    // Reset selected program and split.
     selectedChangeProgram = null;
 
     selectedChangeProgramSplit = null;
 
+    // Hide split selection until a program is selected.
+    const splitSection =
+        document.getElementById("changeProgramSplitSection");
 
-    /* HIDE SPLIT */
+    if(splitSection){
 
-    document.getElementById(
-        "changeProgramSplitSection"
-    ).style.display = "none";
+        splitSection.style.display = "none";
 
+    }
 
-    /* HIDE REVIEW */
+    // Hide preview until a split is selected.
+    const preview =
+        document.getElementById("changeProgramPreview");
 
-    document.getElementById(
-        "changeProgramPreview"
-    ).style.display = "none";
+    if(preview){
 
+        preview.style.display = "none";
 
-    /* DISABLE SUBMIT */
+    }
 
-    document.getElementById(
-        "changeProgramConfirmButton"
-    ).disabled = true;
+    // Disable submit until both selections are complete.
+    const confirmButton =
+        document.getElementById("changeProgramConfirmButton");
 
+    if(confirmButton){
 
-    /* RESET PROGRAM LIST */
+        confirmButton.disabled = true;
 
-    document.getElementById(
-        "changeProgramList"
-    ).innerHTML = `
-        <div class="change-program-loading">
-            Loading programs...
-        </div>
-    `;
+        confirmButton.innerText = "Submit Request";
 
+    }
 
-    /* OPEN */
+    // Reset available programs list.
+    const programList =
+        document.getElementById("changeProgramList");
 
+    if(programList){
+
+        programList.innerHTML = `
+            <div class="change-program-loading">
+                Loading programs...
+            </div>
+        `;
+
+    }
+
+    // Show modal.
     modal.classList.add("show");
 
 }
 
 
 /* =========================================================
-   CLOSE CHANGE PROGRAM
+   CLOSE MAIN MODAL
 ========================================================= */
 
 function closeChangeProgram(){
 
-    document
-        .getElementById(
-            "changeProgramModal"
-        )
-        .classList.remove("show");
+    const modal =
+        document.getElementById("changeProgramModal");
+
+    if(modal){
+
+        modal.classList.remove("show");
+
+    }
 
 }
+
+
+
 
 /* =========================================================
    LOAD PROGRAMS
