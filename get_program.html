@@ -1350,119 +1350,76 @@ function getProgramSubtitle(name){
 /* =========================================================
    SELECT PROGRAM
 ========================================================= */
+async function selectProgram(program) {
 
-async function selectProgram(program){
+    selectedProgram = program;
 
-    selectedProgram =
-        program;
-
-    selectedTrainer =
-        null;
-
-    selectedPlan =
-        null;
-
-    selectedPaymentType =
-        null;
-
-    selectedPaymentDays =
-        0;
-
-    selectedPrice =
-        0;
+    selectedTrainer = null;
+    selectedPlan = null;
+    selectedPaymentType = null;
+    selectedPaymentDays = 0;
+    selectedPrice = 0;
 
 
     /* =========================
-       PROGRAM
+       DISPLAY SELECTED PROGRAM
     ========================= */
 
-    document.getElementById(
-        "selectedProgram"
-    ).innerText =
+    document.getElementById("selectedProgram").innerText =
         program.name;
 
 
     /* =========================
-       SHOW PLAN
+       SHOW PLAN PANEL
     ========================= */
 
-    const planPanel =
-        document.getElementById(
-            "planPanel"
-        );
+    const planPanel = document.getElementById("planPanel");
 
-    if(planPanel){
-
-        planPanel.style.display =
-            "block";
-
+    if (planPanel) {
+        planPanel.style.display = "block";
     }
 
 
     /* =========================
-       HIDE TRAINER
+       HIDE TRAINER PANEL
     ========================= */
 
-    const trainerPanel =
-        document.getElementById(
-            "trainerPanel"
-        );
+    const trainerPanel = document.getElementById("trainerPanel");
 
-    if(trainerPanel){
-
-        trainerPanel.style.display =
-            "none";
-
+    if (trainerPanel) {
+        trainerPanel.style.display = "none";
     }
 
 
     /* =========================
-       HIDE PAYMENT
+       HIDE PAYMENT PANEL
     ========================= */
 
-    const paymentPanel =
-        document.getElementById(
-            "paymentPanel"
-        );
+    const paymentPanel = document.getElementById("paymentPanel");
 
-    if(paymentPanel){
-
-        paymentPanel.style.display =
-            "none";
-
+    if (paymentPanel) {
+        paymentPanel.style.display = "none";
     }
 
 
     /* =========================
-       RESET PLAN
+       RESET SELECTED PLAN
     ========================= */
 
-    selectedPlan =
-        null;
+    selectedPlan = null;
 
-    document.getElementById(
-        "selectedPlan"
-    ).innerText =
-        "-";
+    document.getElementById("selectedPlan").innerText = "-";
 
 
     /* =========================
-       RESET TRAINER
+       RESET SELECTED TRAINER
     ========================= */
 
-    document.getElementById(
-        "trainerOptions"
-    ).innerHTML =
-        "";
+    document.getElementById("trainerOptions").innerHTML = "";
 
-    document.getElementById(
-        "selectedTrainer"
-    ).innerText =
-        "-";
+    document.getElementById("selectedTrainer").innerText = "-";
 
-    document.getElementById(
-        "selectedTrainerRole"
-    ).innerText =
+    document.getElementById("selectedTrainerRole").innerText =
         "Personal Trainer";
 
 
@@ -1474,28 +1431,22 @@ async function selectProgram(program){
 
 
     /* =========================
-       PLAN SUBTITLE
+       UPDATE PLAN SUBTITLE
     ========================= */
 
-    document.getElementById(
-        "planSubtitle"
-    ).innerText =
+    document.getElementById("planSubtitle").innerText =
         `Choose a training split for ${program.name}.`;
 
 
     /* =========================
-       LOAD PLANS FROM API
+       LOAD PROGRAM PLANS
     ========================= */
 
-    const planOptions =
-        document.getElementById(
-            "planOptions"
-        );
+    const planOptions = document.getElementById("planOptions");
 
-    if(!planOptions){
+    if (!planOptions) {
         return;
     }
-
 
     planOptions.innerHTML = `
         <p class="empty-message">
@@ -1503,145 +1454,150 @@ async function selectProgram(program){
         </p>
     `;
 
+    try {
 
-    try{
-
-        const response =
-            await fetch(
-                `${API_URL}/api/programs/${program.id}/plans`,
-                {
-                    cache:
-                        "no-store"
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.message ||
-                `HTTP ${response.status}`
-            );
-
-        }
-
-
-        if(
-            !Array.isArray(
-                data.plans
-            )
-        ){
-
-            throw new Error(
-                "Invalid plan data received."
-            );
-
-        }
-
-
-        renderPlans(
-            data.plans
+        const response = await fetch(
+            `${API_URL}/api/programs/${program.id}/plans`,
+            {
+                cache: "no-store"
+            }
         );
 
-    }
-    catch(error){
+        const data = await response.json();
 
-        console.error(
-            "PLAN LOAD ERROR:",
-            error
-        );
+        if (!response.ok) {
+            throw new Error(
+                data.message || `HTTP ${response.status}`
+            );
+        }
 
+        if (!Array.isArray(data.plans)) {
+            throw new Error("Invalid plan data received.");
+        }
+
+        renderPlans(data.plans);
+
+    } catch (error) {
+
+        console.error("PLAN LOAD ERROR:", error);
 
         planOptions.innerHTML = `
             <p class="empty-message">
                 Failed to load plans.
             </p>
         `;
-
     }
 
 
     /* =========================
-       LOAD TRAINERS
-       EXISTING API
+       LOAD ALL AVAILABLE TRAINERS
+       INDEPENDENT OF PROGRAM
     ========================= */
 
     trainers = [];
 
+    try {
 
-    const matching =
-        programTrainers.filter(
-            item =>
-                Number(
-                    item.program_id
-                ) ===
-                Number(
-                    selectedProgram.id
-                )
+        const response = await fetch(
+            `${API_URL}/api/available_trainers`,
+            {
+                cache: "no-store"
+            }
         );
 
+        const data = await response.json();
 
-    matching.forEach(
-        item => {
+        if (!response.ok) {
+            throw new Error(
+                data.message || `HTTP ${response.status}`
+            );
+        }
 
-           trainers.push({
+        if (!Array.isArray(data)) {
+            throw new Error("Invalid trainer data received.");
+        }
 
-                id:
-                    String(
-                        item.trainer_id
-                    ),
 
-                name:
-                    item.trainer_name,
+        /* =========================
+           REMOVE DUPLICATE TRAINERS
+        ========================= */
+
+        const uniqueTrainers = new Map();
+
+        data.forEach(item => {
+
+            const trainerId = String(
+                item.trainer_id || ""
+            );
+
+            if (!trainerId || uniqueTrainers.has(trainerId)) {
+                return;
+            }
+
+            uniqueTrainers.set(trainerId, {
+
+                id: trainerId,
+
+                name: item.trainer_name || "Unknown Trainer",
 
                 /* =========================
-                TRAINER RATE PLAN IDS
+                   TRAINER RATE PLAN IDS
                 ========================= */
 
-                planIdDay:
-                    Number(
-                        item.plan_id_day || 0
-                    ),
+                planIdDay: Number(
+                    item.plan_id_day || 0
+                ),
 
-                planIdWeek:
-                    Number(
-                        item.plan_id_week || 0
-                    ),
+                planIdWeek: Number(
+                    item.plan_id_week || 0
+                ),
 
-                planIdMonth:
-                    Number(
-                        item.plan_id_month || 0
-                    ),
+                planIdMonth: Number(
+                    item.plan_id_month || 0
+                ),
 
                 /* =========================
-                TRAINER RATE PRICES
+                   TRAINER RATE PRICES
                 ========================= */
 
-                priceDay:
-                    Number(
-                        item.price_day || 0
-                    ),
+                priceDay: Number(
+                    item.price_day || 0
+                ),
 
-                priceWeek:
-                    Number(
-                        item.price_week || 0
-                    ),
+                priceWeek: Number(
+                    item.price_week || 0
+                ),
 
-                priceMonth:
-                    Number(
-                        item.price_month || 0
-                    )
+                priceMonth: Number(
+                    item.price_month || 0
+                )
 
             });
 
-        }
-    );
+        });
+
+
+        trainers = Array.from(
+            uniqueTrainers.values()
+        );
+
+        console.log(
+            "ALL AVAILABLE TRAINERS:",
+            trainers
+        );
+
+    } catch (error) {
+
+        console.error(
+            "TRAINER LOAD ERROR:",
+            error
+        );
+
+        trainers = [];
+    }
 
 }
+
 
 function renderPlans(plans){
 
