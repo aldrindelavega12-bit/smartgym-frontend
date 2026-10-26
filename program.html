@@ -1302,16 +1302,9 @@
             </div>
 
 
-            <div>
-
-                <span>
-                    Status
-                </span>
-
-                <strong>
-                    Pending
-                </strong>
-
+            <div id="changeProgramStatusContainer">
+                <span>Status</span>
+                <strong id="changeProgramStatus"></strong>
             </div>
 
         </div>
@@ -7453,66 +7446,64 @@ async function loadChangeProgramSplits(
 /* =========================================================
    SELECT SPLIT
 ========================================================= */
-function selectChangeProgramSplit(
-    button,
-    plan
-){
 
+function selectChangeProgramSplit(button, plan) {
+
+    // Remove previous selection
     document
-        .querySelectorAll(
-            ".change-program-split-option"
-        )
-        .forEach(
-            function(card){
+        .querySelectorAll(".change-program-split-option")
+        .forEach(function (card) {
+            card.classList.remove("selected");
+        });
 
-                card.classList.remove(
-                    "selected"
-                );
+    // Select current split
+    button.classList.add("selected");
 
+    selectedChangeProgramSplit = plan;
+
+    // Update selected program
+    document.getElementById("changeProgramSelectedName").innerText =
+        selectedChangeProgram?.program_name || "-";
+
+    // Update selected split
+    document.getElementById("changeProgramSelectedSplit").innerText =
+        selectedChangeProgramSplit?.plan_name || "-";
+
+    // Get preview status container
+    const preview = document.getElementById("changeProgramPreview");
+
+    if (preview) {
+        const previewItems = preview.querySelectorAll(":scope > div");
+
+        // The third preview item contains Status
+        const statusContainer = previewItems[2];
+
+        if (statusContainer) {
+            const statusElement = statusContainer.querySelector("strong");
+
+            // Determine whether a trainer is assigned
+            const hasTrainer = Boolean(
+                currentTrainerData?.trainer_id ||
+                currentTrainerData?.trainer_name ||
+                currentTrainerData?.fullname
+            );
+
+            if (hasTrainer) {
+                statusContainer.style.display = "";
+                statusElement.textContent = "Pending";
+            } else {
+                statusContainer.style.display = "none";
+                statusElement.textContent = "";
             }
-        );
+        }
 
+        // Show preview
+        preview.style.display = "grid";
+    }
 
-    button.classList.add(
-        "selected"
-    );
-
-
-    selectedChangeProgramSplit =
-        plan;
-
-
-    /* REVIEW */
-
-    document.getElementById(
-        "changeProgramSelectedName"
-    ).innerText =
-        selectedChangeProgram?.program_name ||
-        "-";
-
-
-    document.getElementById(
-        "changeProgramSelectedSplit"
-    ).innerText =
-        selectedChangeProgramSplit?.plan_name ||
-        "-";
-
-
-    document.getElementById(
-        "changeProgramPreview"
-    ).style.display =
-        "grid";
-
-
-    /* ENABLE SUBMIT */
-
-    document.getElementById(
-        "changeProgramConfirmButton"
-    ).disabled =
-        false;
-
+    // Enable submit button
+    document.getElementById("changeProgramConfirmButton").disabled = false;
 }
-
 
 /* =========================================================
    CONFIRM CHANGE PROGRAM
