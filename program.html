@@ -5253,9 +5253,9 @@ async function submitMemberWorkoutAction(workoutId, action, choice = null) {
     }
 
     const endpoint =
-        action === "complete"
-            ? `${API_URL}/api/member/workout/${workoutId}/complete`
-            : `${API_URL}/api/member/workout/${workoutId}/missed-action`;
+    action === "complete"
+        ? `${API_URL}/api/member/workout/${workoutId}/complete`
+        : `${API_URL}/api/member/workout/${workoutId}/missed`;
 
     const payload = {
         member_id: memberId
