@@ -243,30 +243,32 @@
    WORKOUT ACTION BUTTONS
 ========================================= */
 
+
 .workout-actions {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
-    padding: 12px 10px 14px;
+    padding: 10px 8px;
     box-sizing: border-box;
 }
 
 .workout-actions button {
-    flex: 1;
+    flex: 0 1 84px;
     min-width: 0;
-    min-height: 40px;
-    padding: 9px 12px;
+    min-height: 32px;
+    padding: 6px 8px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: 7px;
     font-family: Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.2s ease,
-                border-color 0.2s ease,
-                transform 0.2s ease;
+                border-color 0.2s ease;
 }
 
 .workout-complete-btn {
@@ -277,7 +279,6 @@
 
 .workout-complete-btn:hover {
     background: #117a46;
-    transform: translateY(-1px);
 }
 
 .workout-missed-btn {
@@ -290,6 +291,7 @@
     background: #fff1f2;
     border-color: #dc3545 !important;
 }
+
 
 .workout-actions button:focus-visible,
 .missed-modal-content button:focus-visible {
