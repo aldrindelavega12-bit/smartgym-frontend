@@ -4692,29 +4692,24 @@ function renderTrainingSchedule(){
         return;
     }
 
-
     const container =
         document.getElementById(
             "trainingDays"
         );
-
 
     const dateLabel =
         document.getElementById(
             "scheduleDateLabel"
         );
 
-
     const datePicker =
         document.getElementById(
             "scheduleDatePicker"
         );
 
-
     if(!container){
         return;
     }
-
 
     /*
     =====================================================
@@ -4731,7 +4726,6 @@ function renderTrainingSchedule(){
 
     }
 
-
     /*
     =====================================================
     DATE INPUT
@@ -4747,16 +4741,13 @@ function renderTrainingSchedule(){
 
     }
 
-
     /*
     =====================================================
     CLEAR
     =====================================================
     */
 
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     /*
     =====================================================
@@ -4769,6 +4760,14 @@ function renderTrainingSchedule(){
             selectedScheduleDate
         );
 
+    /*
+    =====================================================
+    GET TODAY'S DATE
+    =====================================================
+    */
+
+    const todayKey =
+        getDateKey(new Date());
 
     /*
     =====================================================
@@ -4784,13 +4783,11 @@ function renderTrainingSchedule(){
                     date
                 );
 
-
             const status =
                 getWorkoutStatus(
                     workout,
                     date
                 );
-
 
             /*
             =================================================
@@ -4803,20 +4800,12 @@ function renderTrainingSchedule(){
                     "div"
                 );
 
-
             dayCard.className =
                 "training-day";
-
 
             /*
             =================================================
             STATUS CLASS
-            =================================================
-
-            Only add the class if it has a value.
-
-            Prevents:
-            classList.add("")
             =================================================
             */
 
@@ -4827,7 +4816,6 @@ function renderTrainingSchedule(){
                 );
 
             }
-
 
             /*
             =================================================
@@ -4842,7 +4830,6 @@ function renderTrainingSchedule(){
                         weekday: "short"
                     }
                 );
-
 
             /*
             =================================================
@@ -4903,7 +4890,6 @@ function renderTrainingSchedule(){
 
                 </div>
 
-
                 <div class="schedule-workout">
 
                     ${escapeHtml(
@@ -4911,7 +4897,6 @@ function renderTrainingSchedule(){
                     )}
 
                 </div>
-
 
                 ${
                     status.label
@@ -4927,6 +4912,79 @@ function renderTrainingSchedule(){
 
             `;
 
+            /*
+            =================================================
+            TODAY'S WORKOUT ACTIONS ONLY
+            =================================================
+            */
+
+            const dateKey =
+                getDateKey(date);
+
+            const workoutStatus =
+                String(
+                    workout?.status || ""
+                ).trim().toLowerCase();
+
+            const workoutNameLower =
+                String(
+                    workout?.workout_name || ""
+                ).trim().toLowerCase();
+
+            const canMarkWorkout =
+                dateKey === todayKey &&
+                workout &&
+                Number(workout.id) > 0 &&
+                workoutStatus === "scheduled" &&
+                workoutNameLower !== "rest";
+
+            if(canMarkWorkout){
+
+                const actions =
+                    document.createElement("div");
+
+                actions.className =
+                    "workout-actions";
+
+                const completeButton =
+                    document.createElement("button");
+
+                completeButton.type = "button";
+                completeButton.className =
+                    "workout-complete-btn";
+
+                completeButton.dataset.workoutId =
+                    String(workout.id);
+
+                completeButton.textContent =
+                    "Complete";
+
+                const missedButton =
+                    document.createElement("button");
+
+                missedButton.type = "button";
+                missedButton.className =
+                    "workout-missed-btn";
+
+                missedButton.dataset.workoutId =
+                    String(workout.id);
+
+                missedButton.textContent =
+                    "Missed";
+
+                actions.appendChild(
+                    completeButton
+                );
+
+                actions.appendChild(
+                    missedButton
+                );
+
+                dayCard.appendChild(
+                    actions
+                );
+
+            }
 
             /*
             =================================================
@@ -4942,6 +5000,210 @@ function renderTrainingSchedule(){
     );
 
 }
+
+
+
+/* =========================================================
+   MEMBER WORKOUT ACTIONS
+========================================================= */
+
+async function submitMemberWorkoutAction(workoutId, action, choice = null) {
+
+    const memberId =
+        user?.member_id ||
+        user?.user_id ||
+        user?.id;
+
+    if (!memberId) {
+        alert("Unable to identify your member account.");
+        return;
+    }
+
+    const endpoint =
+        action === "complete"
+            ? `${API_URL}/api/member/workout/${workoutId}/complete`
+            : `${API_URL}/api/member/workout/${workoutId}/missed-action`;
+
+    const payload = {
+        member_id: memberId
+    };
+
+    if (action === "missed") {
+        payload.choice = choice;
+    }
+
+    try {
+
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Unable to update workout."
+            );
+        }
+
+        alert(result.message || "Workout updated successfully.");
+
+        await loadTrainingSchedule();
+
+        renderTrainingSchedule();
+
+    } catch (error) {
+
+        console.error("MEMBER WORKOUT ACTION ERROR:", error);
+
+        alert(error.message || "Something went wrong.");
+
+    }
+}
+
+
+/* =========================================================
+   MISSED WORKOUT MODAL
+========================================================= */
+
+function showMissedWorkoutModal(workoutId) {
+
+    const existingModal =
+        document.getElementById("missedWorkoutModal");
+
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modal = document.createElement("div");
+
+    modal.id = "missedWorkoutModal";
+
+    modal.innerHTML = `
+        <div class="missed-modal-backdrop">
+            <div
+                class="missed-modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="missedModalTitle"
+            >
+                <h3 id="missedModalTitle">Mark Workout as Missed</h3>
+
+                <p>
+                    What would you like to do with your workout schedule?
+                </p>
+
+                <button
+                    type="button"
+                    id="moveMissedWorkout"
+                >
+                    Move to Next Day
+                </button>
+
+                <button
+                    type="button"
+                    id="keepMissedWorkout"
+                >
+                    Keep Schedule
+                </button>
+
+                <button
+                    type="button"
+                    id="cancelMissedWorkout"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document
+        .getElementById("moveMissedWorkout")
+        .addEventListener("click", async function() {
+
+            modal.remove();
+
+            await submitMemberWorkoutAction(
+                workoutId,
+                "missed",
+                "move"
+            );
+
+        });
+
+    document
+        .getElementById("keepMissedWorkout")
+        .addEventListener("click", async function() {
+
+            modal.remove();
+
+            await submitMemberWorkoutAction(
+                workoutId,
+                "missed",
+                "keep"
+            );
+
+        });
+
+    document
+        .getElementById("cancelMissedWorkout")
+        .addEventListener("click", function() {
+            modal.remove();
+        });
+}
+
+
+/* =========================================================
+   WORKOUT BUTTON EVENTS
+========================================================= */
+
+document.addEventListener("click", function(event) {
+
+    const completeButton =
+        event.target.closest(".workout-complete-btn");
+
+    if (completeButton) {
+
+        const workoutId =
+            Number(completeButton.dataset.workoutId);
+
+        if (!Number.isInteger(workoutId) || workoutId <= 0) {
+            return;
+        }
+
+        if (confirm("Mark today's workout as completed?")) {
+            submitMemberWorkoutAction(
+                workoutId,
+                "complete"
+            );
+        }
+
+        return;
+    }
+
+    const missedButton =
+        event.target.closest(".workout-missed-btn");
+
+    if (missedButton) {
+
+        const workoutId =
+            Number(missedButton.dataset.workoutId);
+
+        if (!Number.isInteger(workoutId) || workoutId <= 0) {
+            return;
+        }
+
+        showMissedWorkoutModal(workoutId);
+    }
+
+});
+
 
 /* =========================================================
    ESCAPE HTML
