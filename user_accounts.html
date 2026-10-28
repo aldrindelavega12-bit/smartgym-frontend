@@ -3154,22 +3154,36 @@
         console.log("Modal opened:", modal);
     }
 
-
-
-
     function showFinalDeleteModal() {
         if (!pendingDeleteUserId) {
             return;
         }
 
-        closeDeleteModal("deleteConfirmModal");
+        const firstModal = document.getElementById("deleteConfirmModal");
+        const secondModal = document.getElementById("finalDeleteModal");
+        const accountName = document.getElementById("finalDeleteAccountName");
 
-        document.getElementById("finalDeleteAccountName").textContent =
-            `Account: ${pendingDeleteUserName} (${pendingDeleteUserId})`;
+        // Preserve the selected account information.
+        const userId = pendingDeleteUserId;
+        const fullname = pendingDeleteUserName;
 
-        document.getElementById("finalDeleteModal").classList.add("active");
+        // Hide the first modal without clearing the selected account.
+        firstModal.classList.remove("active");
+        firstModal.style.display = "none";
+
+        // Set the account details for the final confirmation.
+        accountName.textContent = `Account: ${fullname} (${userId})`;
+
+        // Show the second modal above the page.
+        secondModal.style.display = "flex";
+        secondModal.style.position = "fixed";
+        secondModal.style.inset = "0";
+        secondModal.style.zIndex = "2147483647";
+        secondModal.style.justifyContent = "center";
+        secondModal.style.alignItems = "center";
+        secondModal.classList.add("active");
     }
-
+  
     function closeDeleteModal(modalId) {
         document.getElementById(modalId).classList.remove("active");
 
