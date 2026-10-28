@@ -3107,6 +3107,7 @@
     let pendingDeleteUserId = null;
     let pendingDeleteUserName = null;
 
+
     function confirmDeleteUser(userId, fullname) {
         console.log("Delete clicked:", userId, fullname);
 
@@ -3132,10 +3133,24 @@
 
         closeUserActionMenus();
 
+        // Move modal to body to avoid parent container issues.
+        document.body.appendChild(modal);
+
+        // Force the modal to display.
+        modal.style.display = "flex";
+        modal.style.position = "fixed";
+        modal.style.inset = "0";
+        modal.style.zIndex = "2147483647";
+        modal.style.justifyContent = "center";
+        modal.style.alignItems = "center";
+        modal.style.background = "rgba(15, 23, 42, 0.55)";
+
         modal.classList.add("active");
 
-        console.log("First confirmation modal opened.");
+        console.log("Modal opened:", modal);
     }
+
+
 
 
     function showFinalDeleteModal() {
