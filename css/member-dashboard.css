@@ -9605,3 +9605,271 @@ textarea {
         font-size: 13px;
     }
 }
+
+/* ==========================================
+   MESSAGE HISTORY MODAL
+========================================== */
+
+#messageModal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background: rgba(15, 30, 22, 0.48);
+
+    z-index: 99999;
+}
+
+
+/* MODAL BOX */
+
+#messageModal .message-history-modal {
+    display: flex;
+    flex-direction: column;
+
+    width: min(700px, 100%);
+
+    height: min(650px, 80vh);
+    max-height: 80vh;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe6;
+    border-radius: 16px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+
+    overflow: hidden;
+}
+
+
+/* FIXED HEADER */
+
+.message-history-header {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 22px 25px;
+
+    border-bottom: 1px solid #e1ebe6;
+    background: #ffffff;
+}
+
+.message-history-header h2 {
+    margin: 0;
+
+    color: #17231e;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
+}
+
+.message-history-header p {
+    margin: 5px 0 0;
+
+    color: #71817a;
+    font-size: 13px;
+}
+
+
+/* CLOSE BUTTON */
+
+#messageModal .modal-close {
+    position: static;
+
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #17231e;
+
+    font-size: 28px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+#messageModal .modal-close:hover {
+    background: #eaf6ee;
+    color: #008744;
+}
+
+
+/* SCROLLABLE HISTORY */
+
+#modalMessageList {
+    flex: 1;
+
+    min-height: 0;
+
+    padding: 8px 25px 20px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    overscroll-behavior: contain;
+
+    scrollbar-width: thin;
+    scrollbar-color: #c7d8ce transparent;
+}
+
+#modalMessageList::-webkit-scrollbar {
+    width: 7px;
+}
+
+#modalMessageList::-webkit-scrollbar-thumb {
+    background: #c7d8ce;
+    border-radius: 10px;
+}
+
+#modalMessageList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+/* EACH NOTIFICATION IN HISTORY */
+
+.modal-message-item {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 19px 0;
+
+    border-bottom: 1px solid #e1ebe6;
+}
+
+.modal-message-item:last-child {
+    border-bottom: none;
+}
+
+.modal-message-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-message-content .msg-text {
+    margin: 0 0 9px;
+
+    color: #17231e;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+.modal-message-content small {
+    display: block;
+
+    color: #71817a;
+
+    font-size: 12px;
+}
+
+.modal-message-reason {
+    margin: 0 0 9px;
+
+    color: #66776f;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* UNREAD HISTORY ITEM */
+
+.modal-message-item.message-unread .msg-text {
+    font-weight: 600;
+}
+
+
+/* ACTION MENU INSIDE MODAL */
+
+.modal-message-item .message-actions {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.modal-message-item .msg-menu {
+    top: 32px;
+    right: 0;
+
+    z-index: 100001;
+}
+
+
+/* BODY SCROLL LOCK */
+
+body.message-modal-open {
+    overflow: hidden;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+
+    #messageModal {
+        padding: 12px;
+    }
+
+    #messageModal .message-history-modal {
+        width: 100%;
+        height: 80vh;
+        max-height: 80vh;
+
+        border-radius: 12px;
+    }
+
+    .message-history-header {
+        padding: 18px;
+    }
+
+    .message-history-header h2 {
+        font-size: 18px;
+    }
+
+    #modalMessageList {
+        padding: 6px 18px 16px;
+    }
+
+    .modal-message-item {
+        gap: 10px;
+    }
+
+}

@@ -149,29 +149,41 @@ if(!user || user.role !== "member"){
 
 <!-- ================= MESSAGE MODAL ================= -->
 
+<!-- ================= MESSAGE HISTORY MODAL ================= -->
+
 <div id="messageModal"
-     class="modal">
+     class="modal"
+     onclick="if(event.target === this) closeMessage()">
 
-    <div class="modal-box">
+    <div class="modal-box message-history-modal">
 
-        <button class="modal-close"
-                onclick="closeMessage()">
-            ×
-        </button>
+        <div class="message-history-header">
 
-        <h2 id="modalTitle"></h2>
+            <div>
+                <h2 id="modalTitle">Notifications</h2>
+                <p id="modalSubtitle">Notification history</p>
+            </div>
 
-        <p id="modalMessage"></p>
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeMessage()"
+                aria-label="Close notifications">
+                &times;
+            </button>
 
-        <p id="modalReason"
-           class="reason"></p>
+        </div>
 
-        <small id="modalDate"></small>
+        <div id="modalMessageList"
+             class="modal-message-list">
+
+            <p class="empty-message">No messages</p>
+
+        </div>
 
     </div>
 
 </div>
-
 
 <!-- ================= MAIN ================= -->
 <!-- ================= MAIN ================= -->
@@ -521,16 +533,95 @@ function openMessageById(id) {
     }
 }
 
+/* ==========================================
+   GROUPED MESSAGE STATE
+========================================== */
+
+let messageGroups = new Map();
+let currentMessageGroupKey = null;
+
+
+/* ==========================================
+   SAFE HTML
+========================================== */
+
+function escapeMessageHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+
+/* ==========================================
+   UNIQUE SENDER KEY
+========================================== */
+
+function getMessageSenderKey(msg) {
+
+    const role = String(
+        msg.sender_role || ""
+    ).trim().toLowerCase();
+
+    const name = String(
+        msg.sender_name || "Smart Gym"
+    ).trim().toLowerCase();
+
+    const senderId =
+        msg.sender_id ??
+        msg.sender_user_id ??
+        msg.sender_staff_id ??
+        msg.trainer_id;
+
+    if (
+        senderId !== undefined &&
+        senderId !== null &&
+        String(senderId).trim() !== ""
+    ) {
+        return `${role}:id:${senderId}`;
+    }
+
+    return `${role}:name:${name}`;
+}
+
+
+/* ==========================================
+   ROLE LABEL
+========================================== */
+
+function getMessageRoleLabel(role) {
+
+    const normalized = String(
+        role || ""
+    ).trim().toLowerCase();
+
+    if (normalized === "staff") {
+        return "Front Desk";
+    }
+
+    if (normalized === "trainer") {
+        return "Trainer";
+    }
+
+    return role || "";
+}
+
 
 /* ==========================================
    LOAD MESSAGES
-   ONE CARD PER UNIQUE SENDER
+   ONE CARD PER SENDER
+   LATEST NOTIFICATION ONLY
 ========================================== */
 
 async function loadMessages() {
+
     try {
+
         const res = await fetch(
-            `${API_URL}/api/messages/${encodeURIComponent(messageUserId)}`,
+            `${API_URL}/api/messages/${messageUserId}`,
             {
                 cache: "no-store"
             }
@@ -542,21 +633,29 @@ async function loadMessages() {
 
         const data = await res.json();
 
-        const container = document.getElementById("message-list");
+        const container = document.getElementById(
+            "message-list"
+        );
 
         container.innerHTML = "";
-        renderedMessagesById.clear();
+
+        messageGroups.clear();
 
         if (!Array.isArray(data) || data.length === 0) {
+
             container.innerHTML = `
-                <p class="empty-message">No messages</p>
+                <p class="empty-message">
+                    No messages
+                </p>
             `;
+
             return;
         }
 
+
         /* ==========================================
-           KEEP ONLY THE LATEST SMART GYM MESSAGE
-           PRESERVE EXISTING BEHAVIOR
+           PRESERVE SMART GYM RULE
+           ONLY THE LATEST SMART GYM MESSAGE
         ========================================== */
 
         const smartGymMessages = data.filter(msg =>
@@ -566,9 +665,11 @@ async function loadMessages() {
         );
 
         const latestSmartGym = smartGymMessages
+            .slice()
             .sort((a, b) => Number(b.id) - Number(a.id))[0];
 
-        const visibleMessages = data.filter(msg =>
+
+        let visibleMessages = data.filter(msg =>
             String(msg.sender_name || "")
                 .trim()
                 .toLowerCase() !== "smart gym"
@@ -578,56 +679,56 @@ async function loadMessages() {
             visibleMessages.push(latestSmartGym);
         }
 
+
         /* ==========================================
-           NEWEST NOTIFICATIONS FIRST
+           NEWEST FIRST
         ========================================== */
 
         visibleMessages.sort(
             (a, b) => Number(b.id) - Number(a.id)
         );
 
-        /* ==========================================
-           GROUP BY UNIQUE SENDER
-        ========================================== */
 
-        const groupedMessages = new Map();
+        /* ==========================================
+           GROUP ALL NOTIFICATIONS BY SENDER
+        ========================================== */
 
         visibleMessages.forEach(msg => {
+
             const key = getMessageSenderKey(msg);
 
-            if (!groupedMessages.has(key)) {
-                groupedMessages.set(key, []);
+            if (!messageGroups.has(key)) {
+                messageGroups.set(key, []);
             }
 
-            groupedMessages.get(key).push(msg);
+            messageGroups.get(key).push(msg);
+
         });
 
+
         /* ==========================================
-           RENDER ONE CARD PER SENDER
+           DISPLAY ONE CARD PER SENDER
+           PREVIEW THE LATEST MESSAGE ONLY
         ========================================== */
 
-        for (const [senderKey, messages] of groupedMessages) {
-            // Messages are already sorted newest first.
-            const latestMessage = messages[0];
+        for (const [key, messages] of messageGroups) {
+
+            const latest = messages[0];
 
             const senderName = escapeMessageHTML(
-                latestMessage.sender_name || "Smart Gym"
+                latest.sender_name || "Smart Gym"
             );
-
-            const rawRole = String(
-                latestMessage.sender_role || ""
-            ).trim().toLowerCase();
 
             const senderRole = escapeMessageHTML(
-                rawRole === "staff"
-                    ? "Front Desk"
-                    : rawRole === "trainer"
-                        ? "Trainer"
-                        : latestMessage.sender_role || ""
+                getMessageRoleLabel(latest.sender_role)
             );
 
-            const hasUnread = messages.some(
-                msg => Number(msg.is_read) === 0
+            const latestText = escapeMessageHTML(
+                latest.message || ""
+            );
+
+            const latestDate = escapeMessageHTML(
+                latest.created_at || ""
             );
 
             const unreadCount = messages.filter(
@@ -636,13 +737,31 @@ async function loadMessages() {
 
             const card = document.createElement("div");
 
-            card.className = `msg-card${hasUnread ? " unread" : ""}`;
+            card.className = "msg-card";
 
-            card.dataset.senderKey = senderKey;
+            if (unreadCount > 0) {
+                card.classList.add("unread");
+            }
+
+            card.tabIndex = 0;
+            card.setAttribute("role", "button");
+
+            card.setAttribute(
+                "aria-label",
+                `View notifications from ${latest.sender_name}`
+            );
+
+
+            /* ==========================================
+               CARD CONTENT
+            ========================================== */
 
             card.innerHTML = `
+
                 <div class="msg-top">
+
                     <div class="sender-info">
+
                         <h3>${senderName}</h3>
 
                         <span class="sender-role">
@@ -650,167 +769,564 @@ async function loadMessages() {
                         </span>
 
                         ${
-                            hasUnread
-                                ? `
-                                    <span class="unread-badge">
-                                        ${unreadCount} NEW / UNREAD
-                                    </span>
-                                `
-                                : ""
+                            unreadCount > 0
+                            ? `
+                                <span class="unread-badge">
+                                    ${unreadCount} NEW / UNREAD
+                                </span>
+                            `
+                            : ""
                         }
+
                     </div>
-                </div>
 
-                <div class="grouped-message-list"></div>
-            `;
-
-            const messageList = card.querySelector(
-                ".grouped-message-list"
-            );
-
-            /* ==========================================
-               SHOW ALL NOTIFICATIONS IN THIS CARD
-            ========================================== */
-
-            messages.forEach(msg => {
-                renderedMessagesById.set(
-                    String(msg.id),
-                    msg
-                );
-
-                const row = document.createElement("div");
-
-                row.className = "grouped-message-item";
-
-                if (Number(msg.is_read) === 0) {
-                    row.classList.add("message-unread");
-                }
-
-                const messageText = escapeMessageHTML(
-                    msg.message || ""
-                );
-
-                const messageDate = escapeMessageHTML(
-                    msg.created_at || ""
-                );
-
-                row.innerHTML = `
-                    <div class="grouped-message-content"
+                    <div class="dots"
                          role="button"
                          tabindex="0"
-                         aria-label="Open notification">
-
-                        <p class="msg-text">
-                            ${messageText}
-                        </p>
-
-                        <small>${messageDate}</small>
+                         aria-label="Notification options">
+                        ⋮
                     </div>
 
-                    <div class="message-actions">
-                        <button
-                            type="button"
-                            class="dots"
-                            aria-label="Notification options"
-                            aria-expanded="false">
-                            ⋮
-                        </button>
+                </div>
 
-                        <div
-                            id="menu-${msg.id}"
-                            class="msg-menu">
+                <div class="msg-content">
 
-                            <button type="button"
-                                    data-action="delete">
-                                Delete
-                            </button>
+                    <p class="msg-text">
+                        ${latestText}
+                    </p>
 
-                            <button type="button"
-                                    data-action="read">
-                                Mark as Read
-                            </button>
+                    <small>
+                        ${latestDate}
+                    </small>
 
-                            <button type="button"
-                                    data-action="unread">
-                                Mark as Unread
-                            </button>
-                        </div>
-                    </div>
-                `;
+                </div>
 
-                const messageContent = row.querySelector(
-                    ".grouped-message-content"
-                );
+                <div
+                    id="menu-${latest.id}"
+                    class="msg-menu">
 
-                messageContent.addEventListener("click", () => {
-                    openMessageById(msg.id);
-                });
+                    <button
+                        type="button"
+                        data-action="delete">
+                        Delete latest notification
+                    </button>
 
-                messageContent.addEventListener("keydown", event => {
-                    if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        openMessageById(msg.id);
-                    }
-                });
+                    <button
+                        type="button"
+                        data-action="read">
+                        Mark as Read
+                    </button>
 
-                const menuButton = row.querySelector(".dots");
+                    <button
+                        type="button"
+                        data-action="unread">
+                        Mark as Unread
+                    </button>
 
-                menuButton.addEventListener("click", event => {
-                    event.stopPropagation();
+                </div>
 
-                    const menu = row.querySelector(".msg-menu");
-                    const willOpen = menu.style.display !== "block";
+            `;
 
-                    document.querySelectorAll(".msg-menu").forEach(
-                        otherMenu => {
-                            otherMenu.style.display = "none";
-                        }
-                    );
 
-                    document.querySelectorAll(
-                        ".message-actions .dots"
-                    ).forEach(button => {
-                        button.setAttribute("aria-expanded", "false");
-                    });
+            /* ==========================================
+               CLICK CARD TO OPEN FULL HISTORY
+            ========================================== */
 
-                    menu.style.display = willOpen ? "block" : "none";
-
-                    menuButton.setAttribute(
-                        "aria-expanded",
-                        String(willOpen)
-                    );
-                });
-
-                row.querySelectorAll(".msg-menu button").forEach(
-                    button => {
-                        button.addEventListener("click", async event => {
-                            event.stopPropagation();
-
-                            const action = button.dataset.action;
-                            const id = msg.id;
-
-                            if (action === "delete") {
-                                await deleteMessage(id);
-                            } else if (action === "read") {
-                                await markRead(id);
-                            } else if (action === "unread") {
-                                await markUnread(id);
-                            }
-                        });
-                    }
-                );
-
-                messageList.appendChild(row);
+            card.addEventListener("click", () => {
+                openMessage(key);
             });
 
+            card.addEventListener("keydown", event => {
+
+                if (
+                    event.target === card &&
+                    (event.key === "Enter" || event.key === " ")
+                ) {
+                    event.preventDefault();
+                    openMessage(key);
+                }
+
+            });
+
+
+            /* ==========================================
+               THREE-DOT MENU
+            ========================================== */
+
+            const dots = card.querySelector(".dots");
+
+            dots.addEventListener("click", event => {
+
+                event.stopPropagation();
+
+                toggleMenu(latest.id);
+
+            });
+
+            dots.addEventListener("keydown", event => {
+
+                if (event.key === "Enter" || event.key === " ") {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    toggleMenu(latest.id);
+
+                }
+
+            });
+
+
+            /* ==========================================
+               MENU ACTIONS
+            ========================================== */
+
+            card.querySelectorAll(
+                ".msg-menu button"
+            ).forEach(button => {
+
+                button.addEventListener("click", async event => {
+
+                    event.stopPropagation();
+
+                    const action = button.dataset.action;
+
+                    if (action === "delete") {
+                        await deleteMessage(latest.id);
+                    }
+
+                    if (action === "read") {
+                        await markRead(latest.id);
+                    }
+
+                    if (action === "unread") {
+                        await markUnread(latest.id);
+                    }
+
+                });
+
+            });
+
+
             container.appendChild(card);
+
         }
 
     } catch (err) {
-        console.error("LOAD MESSAGES ERROR:", err);
+
+        console.error(
+            "LOAD MESSAGES ERROR:",
+            err
+        );
+
     }
+
 }
 
+
+/* ==========================================
+   OPEN SENDER HISTORY MODAL
+========================================== */
+
+async function openMessage(senderKey) {
+
+    const messages = messageGroups.get(senderKey);
+
+    if (!messages || messages.length === 0) {
+        return;
+    }
+
+    currentMessageGroupKey = senderKey;
+
+    const latest = messages[0];
+
+    const modal = document.getElementById(
+        "messageModal"
+    );
+
+    const modalTitle = document.getElementById(
+        "modalTitle"
+    );
+
+    const modalSubtitle = document.getElementById(
+        "modalSubtitle"
+    );
+
+    const modalList = document.getElementById(
+        "modalMessageList"
+    );
+
+    modalTitle.textContent =
+        latest.sender_name || "Smart Gym";
+
+    modalSubtitle.textContent =
+        getMessageRoleLabel(latest.sender_role) +
+        " · " +
+        messages.length +
+        (messages.length === 1
+            ? " notification"
+            : " notifications");
+
+
+    /* ==========================================
+       RENDER ALL NOTIFICATIONS
+       NEWEST FIRST
+    ========================================== */
+
+    modalList.innerHTML = "";
+
+    messages.forEach(msg => {
+
+        const row = document.createElement("div");
+
+        row.className = "modal-message-item";
+
+        if (Number(msg.is_read) === 0) {
+            row.classList.add("message-unread");
+        }
+
+        row.innerHTML = `
+
+            <div class="modal-message-top">
+
+                <div class="modal-message-content">
+
+                    <p class="msg-text">
+                        ${escapeMessageHTML(msg.message || "")}
+                    </p>
+
+                    ${
+                        msg.reason
+                        ? `
+                            <p class="modal-message-reason">
+                                Reason: ${escapeMessageHTML(msg.reason)}
+                            </p>
+                        `
+                        : ""
+                    }
+
+                    <small>
+                        ${escapeMessageHTML(msg.created_at || "")}
+                    </small>
+
+                </div>
+
+                <div class="message-actions">
+
+                    <button
+                        type="button"
+                        class="dots"
+                        aria-label="Notification options"
+                        aria-expanded="false">
+                        ⋮
+                    </button>
+
+                    <div
+                        id="history-menu-${msg.id}"
+                        class="msg-menu">
+
+                        <button
+                            type="button"
+                            data-action="delete">
+                            Delete
+                        </button>
+
+                        <button
+                            type="button"
+                            data-action="read">
+                            Mark as Read
+                        </button>
+
+                        <button
+                            type="button"
+                            data-action="unread">
+                            Mark as Unread
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* ==========================================
+           HISTORY ITEM MENU
+        ========================================== */
+
+        const dots = row.querySelector(".dots");
+
+        dots.addEventListener("click", event => {
+
+            event.stopPropagation();
+
+            const menu = row.querySelector(".msg-menu");
+
+            const willOpen =
+                menu.style.display !== "block";
+
+            modalList.querySelectorAll(".msg-menu").forEach(
+                otherMenu => {
+                    otherMenu.style.display = "none";
+                }
+            );
+
+            modalList.querySelectorAll(
+                ".message-actions .dots"
+            ).forEach(button => {
+                button.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            });
+
+            menu.style.display =
+                willOpen ? "block" : "none";
+
+            dots.setAttribute(
+                "aria-expanded",
+                String(willOpen)
+            );
+
+        });
+
+
+        row.querySelectorAll(
+            ".msg-menu button"
+        ).forEach(button => {
+
+            button.addEventListener("click", async event => {
+
+                event.stopPropagation();
+
+                const action = button.dataset.action;
+
+                if (action === "delete") {
+                    await deleteMessage(msg.id);
+                }
+
+                if (action === "read") {
+                    await markRead(msg.id);
+                }
+
+                if (action === "unread") {
+                    await markUnread(msg.id);
+                }
+
+                // Refresh the open history after the action.
+                await loadMessages();
+
+                if (messageGroups.has(senderKey)) {
+                    openMessage(senderKey);
+                } else {
+                    closeMessage();
+                }
+
+            });
+
+        });
+
+        modalList.appendChild(row);
+
+    });
+
+
+    /* ==========================================
+       SHOW MODAL
+    ========================================== */
+
+    modal.style.display = "flex";
+
+    document.body.classList.add(
+        "message-modal-open"
+    );
+
+
+    /* ==========================================
+       MARK GROUP NOTIFICATIONS AS READ
+       WHEN THE USER OPENS THE HISTORY
+    ========================================== */
+
+    const unreadMessages = messages.filter(
+        msg => Number(msg.is_read) === 0
+    );
+
+    if (unreadMessages.length > 0) {
+
+        await Promise.all(
+            unreadMessages.map(msg =>
+                fetch(
+                    `${API_URL}/api/messages_read_single/${msg.id}`,
+                    {
+                        method: "POST"
+                    }
+                )
+            )
+        );
+
+        loadMessageCount();
+
+        await loadMessages();
+
+        // Re-render the history with the updated read statuses.
+        if (messageGroups.has(senderKey)) {
+            openMessageWithoutMarkingRead(senderKey);
+        }
+
+    }
+
+}
+
+
+/* ==========================================
+   RENDER HISTORY WITHOUT REPEATING READ API
+========================================== */
+
+function openMessageWithoutMarkingRead(senderKey) {
+
+    const messages = messageGroups.get(senderKey);
+
+    if (!messages || messages.length === 0) {
+        closeMessage();
+        return;
+    }
+
+    currentMessageGroupKey = senderKey;
+
+    document.getElementById("modalTitle").textContent =
+        messages[0].sender_name || "Smart Gym";
+
+    document.getElementById("modalSubtitle").textContent =
+        getMessageRoleLabel(messages[0].sender_role) +
+        " · " +
+        messages.length +
+        (messages.length === 1
+            ? " notification"
+            : " notifications");
+
+    const modalList = document.getElementById(
+        "modalMessageList"
+    );
+
+    modalList.innerHTML = "";
+
+    messages.forEach(msg => {
+
+        const row = document.createElement("div");
+
+        row.className = "modal-message-item";
+
+        if (Number(msg.is_read) === 0) {
+            row.classList.add("message-unread");
+        }
+
+        row.innerHTML = `
+            <div class="modal-message-content">
+
+                <p class="msg-text">
+                    ${escapeMessageHTML(msg.message || "")}
+                </p>
+
+                ${
+                    msg.reason
+                    ? `
+                        <p class="modal-message-reason">
+                            Reason: ${escapeMessageHTML(msg.reason)}
+                        </p>
+                    `
+                    : ""
+                }
+
+                <small>
+                    ${escapeMessageHTML(msg.created_at || "")}
+                </small>
+
+            </div>
+
+            <div class="message-actions">
+
+                <button
+                    type="button"
+                    class="dots"
+                    aria-label="Notification options">
+                    ⋮
+                </button>
+
+                <div
+                    id="history-menu-${msg.id}"
+                    class="msg-menu">
+
+                    <button
+                        type="button"
+                        onclick="deleteMessage(${msg.id})">
+                        Delete
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="markRead(${msg.id})">
+                        Mark as Read
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="markUnread(${msg.id})">
+                        Mark as Unread
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        const dots = row.querySelector(".dots");
+
+        dots.addEventListener("click", event => {
+
+            event.stopPropagation();
+
+            const menu = row.querySelector(".msg-menu");
+
+            const willOpen =
+                menu.style.display !== "block";
+
+            modalList.querySelectorAll(".msg-menu").forEach(
+                otherMenu => {
+                    otherMenu.style.display = "none";
+                }
+            );
+
+            menu.style.display =
+                willOpen ? "block" : "none";
+
+        });
+
+        modalList.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================
+   CLOSE HISTORY MODAL
+========================================== */
+
+function closeMessage() {
+
+    document.getElementById(
+        "messageModal"
+    ).style.display = "none";
+
+    document.body.classList.remove(
+        "message-modal-open"
+    );
+
+    currentMessageGroupKey = null;
+
+}
 
 
 
