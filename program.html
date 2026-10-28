@@ -470,6 +470,57 @@
 }
 
 
+.program-action-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 130px;
+    padding: 24px 32px;
+    box-sizing: border-box;
+
+    background: #f2faf5;
+    border: 1px solid #d2e9da;
+    border-radius: 18px;
+
+    color: #008542;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.program-action-card:hover {
+    background: #eaf7ef;
+    border-color: #b9dec7;
+}
+
+.program-action-card .action-content {
+    flex: 1;
+}
+
+.program-action-card .action-title {
+    margin: 0 0 6px;
+    color: #008542;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.program-action-card .action-description {
+    margin: 0;
+    max-width: 420px;
+    color: #687f71;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.program-action-card .action-arrow {
+    flex-shrink: 0;
+    margin-left: 20px;
+    color: #008542;
+    font-size: 20px;
+}
+
 
 </style>
 
@@ -755,72 +806,31 @@
                  PROGRAM ACTIONS
             ================================================== -->
 
+
             <div class="program-actions">
-
-
-                <!-- CHANGE PROGRAM -->
-
-                <button
-                    type="button"
-                    class="program-action change-program"
-                    onclick="changeProgram()">
-
-
+                <a href="YOUR_EXISTING_CHANGE_PROGRAM_LINK"
+                class="program-action-card">
                     <div class="action-content">
-
-
-                        <strong>
-                            Change Program
-                        </strong>
-
-
-                        <span>
-                            Choose a new program and split.
-                            Your current trainer will remain.
-                        </span>
-
-
+                        <h3 class="action-title">Change Program</h3>
+                        <p class="action-description">
+                            Choose a new program and split. Your current trainer will remain.
+                        </p>
                     </div>
+                    <span class="action-arrow">→</span>
+                </a>
 
-
-                    <span class="action-arrow">
-                        →
-                    </span>
-
-
-                </button>
-
-                <!-- GET TRAINER -->
-
-                <button
-                    type="button"
-                    class="program-action get-trainer"
-                    onclick="openGetTrainerConfirmation()"
-                >
-
+                <a href="YOUR_EXISTING_GET_TRAINER_LINK"
+                class="program-action-card">
                     <div class="action-content">
-
-                        <strong>
-                            Get Trainer
-                        </strong>
-
-                        <span>
-                            Choose a trainer for your current
-                            program and split.
-                        </span>
-
+                        <h3 class="action-title">Get Trainer</h3>
+                        <p class="action-description">
+                            Choose a trainer for your current program and split.
+                        </p>
                     </div>
-
-                    <span class="action-arrow">
-                        →
-                    </span>
-
-                </button>
-
-                
-
+                    <span class="action-arrow">→</span>
+                </a>
             </div>
-
+            
 
 
             <!-- =================================================
