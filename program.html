@@ -522,6 +522,106 @@
 }
 
 
+/* FORCE SAME DESIGN: CHANGE PROGRAM & GET TRAINER */
+.program-action-card,
+.change-program-card,
+.get-trainer-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 130px !important;
+    padding: 24px 32px !important;
+    margin: 0 !important;
+
+    background: #f2faf5 !important;
+    border: 1px solid #d2e9da !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+
+    color: #008542 !important;
+    text-decoration: none !important;
+}
+
+/* SAME TITLE SIZE */
+.program-action-card h3,
+.change-program-card h3,
+.get-trainer-card h3,
+.program-action-card .action-title,
+.change-program-card .action-title,
+.get-trainer-card .action-title {
+    margin: 0 0 6px !important;
+    padding: 0 !important;
+    color: #008542 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+}
+
+/* SAME DESCRIPTION SIZE */
+.program-action-card p,
+.change-program-card p,
+.get-trainer-card p,
+.program-action-card .action-description,
+.change-program-card .action-description,
+.get-trainer-card .action-description {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 420px !important;
+    color: #687f71 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+/* SAME ARROW */
+.program-action-card .action-arrow,
+.change-program-card .action-arrow,
+.get-trainer-card .action-arrow {
+    flex-shrink: 0 !important;
+    margin-left: 20px !important;
+    color: #008542 !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
+}
+
+/* SAME HOVER EFFECT */
+.program-action-card:hover,
+.change-program-card:hover,
+.get-trainer-card:hover {
+    background: #eaf7ef !important;
+    border-color: #b9dec7 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* KEEP BOTH CARDS EQUAL IN THE ROW */
+.program-actions,
+.program-action-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    align-items: stretch !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .program-actions,
+    .program-action-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    .program-action-card,
+    .change-program-card,
+    .get-trainer-card {
+        min-height: 100px !important;
+        padding: 20px 24px !important;
+    }
+}
+
 </style>
 
 <body>
