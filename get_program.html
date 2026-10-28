@@ -1165,112 +1165,62 @@ function renderPrograms(){
 /* =========================================================
    CHECK ACTIVE PROGRAM
 ========================================================= */
-
-async function checkActiveProgram(){
-
+async function checkActiveProgram() {
     const memberId =
         userData.user_id ||
         userData.member_id;
 
+    // Default to blocked until the API confirms the status.
+    hasActiveProgram = true;
 
-    /*
-    =========================================================
-    DEFAULT
-    =========================================================
-    */
-
-    hasActiveProgram = false;
-
-
-    if(!memberId){
+    if (!memberId) {
+        console.error("Cannot check active program: Member ID missing.");
         return;
     }
 
+    try {
+        const response = await fetch(
+            `${API_URL}/api/member/trainer-status/${encodeURIComponent(memberId)}`,
+            { cache: "no-store" }
+        );
 
-    try{
+        const data = await response.json();
 
-        const response =
-            await fetch(
-                `${API_URL}/api/member/trainer-status/${memberId}`,
-                {
-                    cache: "no-store"
-                }
+        if (!response.ok) {
+            throw new Error(
+                data.message || `HTTP ${response.status}`
             );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            console.warn(
-                "ACTIVE PROGRAM CHECK FAILED:",
-                data
-            );
-
-            return;
         }
 
+        const trainerStatus = String(
+            data?.trainer?.status || ""
+        ).toLowerCase();
 
-        /*
-        =====================================================
-        ACTIVE PROGRAM RULE
+        const hasTrainerProgram =
+            data?.has_trainer === true &&
+            data?.has_program === true &&
+            trainerStatus === "active";
 
-        Kapag ang accepted trainer request ay ACTIVE,
-        may active program ang member.
-
-        IMPORTANT:
-        HINDI natin chine-check ang:
-
-        - program_id
-        - trainer_id
-        - start_date
-        - end_date
-        - expiration date
-
-        Status "active" lang ang basis.
-        =====================================================
-        */
+        const hasProgramWithoutTrainer =
+            data?.has_trainer === false &&
+            data?.has_program === true &&
+            String(data?.program?.status || "").toLowerCase() === "active";
 
         hasActiveProgram =
-            data?.trainer &&
-            String(
-                data.trainer.status || ""
-            ).toLowerCase() === "active";
+            hasTrainerProgram || hasProgramWithoutTrainer;
 
+        console.log("MEMBER ID:", memberId);
+        console.log("HAS TRAINER:", data?.has_trainer);
+        console.log("HAS PROGRAM:", data?.has_program);
+        console.log("TRAINER STATUS:", trainerStatus);
+        console.log("HAS ACTIVE PROGRAM:", hasActiveProgram);
 
-        console.log(
-            "MEMBER ID:",
-            memberId
-        );
+    } catch (error) {
+        console.error("ACTIVE PROGRAM CHECK ERROR:", error);
 
-
-        console.log(
-            "TRAINER STATUS:",
-            data?.trainer?.status
-        );
-
-
-        console.log(
-            "HAS ACTIVE PROGRAM:",
-            hasActiveProgram
-        );
-
+        // Keep program selection blocked if status cannot be verified.
+        hasActiveProgram = true;
     }
-    catch(error){
-
-        console.error(
-            "ACTIVE PROGRAM CHECK ERROR:",
-            error
-        );
-
-
-        hasActiveProgram =
-            false;
-
-    }
-
 }
 
 
