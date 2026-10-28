@@ -2862,6 +2862,37 @@
         deleteUserAccount(userId);
     }
 
+    async function deleteUserAccount(userId) {
+        try {
+            const response = await fetch(
+                `${API_URL}/api/admin/delete_account/${encodeURIComponent(userId)}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || result.status !== "success") {
+                alert(result.message || "Failed to delete account.");
+                return;
+            }
+
+            // Success notification
+            alert("Account deleted successfully.");
+
+            // Refresh the user list
+            await loadUsers();
+
+        } catch (error) {
+            console.error("DELETE ACCOUNT ERROR:", error);
+            alert("Unable to connect to the server.");
+        }
+    }
+
 
     /* =====================================================
        STATUS
