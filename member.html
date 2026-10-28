@@ -1428,12 +1428,14 @@ async function loadMembership(){
             result.data;
 
 
+
         const membershipType = (
-            membership.membership_type || "membership"
+            membership.membership_type || "Membership"
         ).trim().toLowerCase();
 
         document.getElementById("membershipType").innerText =
-            membershipType;
+            membershipType.charAt(0).toUpperCase() + membershipType.slice(1);
+
 
 
         const statusElement =
