@@ -1121,6 +1121,85 @@
             background: #fef2f2;
         }
 
+        /* Keep the Action column consistently aligned */
+        th:last-child,
+        td.user-action-cell {
+            width: 100px;
+            min-width: 100px;
+            text-align: center !important;
+            vertical-align: middle;
+        }
+
+        /* Three-dot button */
+        .user-action-menu {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .user-action-trigger {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            margin: 0 auto;
+            border: 1px solid #dce5e1;
+            border-radius: 10px;
+            background: #fff;
+            color: #263b33;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .user-action-trigger:hover {
+            background: #f0f8f4;
+            border-color: #009653;
+        }
+
+        .user-action-dropdown {
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+            min-width: 130px;
+            padding: 5px;
+            background: #fff;
+            border: 1px solid #dce5e1;
+            border-radius: 9px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+            text-align: left;
+        }
+
+        .user-action-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .user-action-dropdown button:hover {
+            background: #f0f8f4;
+        }
+
+        .user-action-dropdown .delete-action {
+            color: #dc2626;
+        }
+
+        .user-action-dropdown .delete-action:hover {
+            background: #fef2f2;
+        }
+
+
 
 
     </style>
