@@ -806,31 +806,72 @@
                  PROGRAM ACTIONS
             ================================================== -->
 
-
             <div class="program-actions">
-                <a href="YOUR_EXISTING_CHANGE_PROGRAM_LINK"
-                class="program-action-card">
-                    <div class="action-content">
-                        <h3 class="action-title">Change Program</h3>
-                        <p class="action-description">
-                            Choose a new program and split. Your current trainer will remain.
-                        </p>
-                    </div>
-                    <span class="action-arrow">→</span>
-                </a>
 
-                <a href="YOUR_EXISTING_GET_TRAINER_LINK"
-                class="program-action-card">
+
+                <!-- CHANGE PROGRAM -->
+
+                <button
+                    type="button"
+                    class="program-action change-program"
+                    onclick="changeProgram()">
+
+
                     <div class="action-content">
-                        <h3 class="action-title">Get Trainer</h3>
-                        <p class="action-description">
-                            Choose a trainer for your current program and split.
-                        </p>
+
+
+                        <strong>
+                            Change Program
+                        </strong>
+
+
+                        <span>
+                            Choose a new program and split.
+                            Your current trainer will remain.
+                        </span>
+
+
                     </div>
-                    <span class="action-arrow">→</span>
-                </a>
+
+
+                    <span class="action-arrow">
+                        →
+                    </span>
+
+
+                </button>
+
+                <!-- GET TRAINER -->
+
+                <button
+                    type="button"
+                    class="program-action get-trainer"
+                    onclick="openGetTrainerConfirmation()"
+                >
+
+                    <div class="action-content">
+
+                        <strong>
+                            Get Trainer
+                        </strong>
+
+                        <span>
+                            Choose a trainer for your current
+                            program and split.
+                        </span>
+
+                    </div>
+
+                    <span class="action-arrow">
+                        →
+                    </span>
+
+                </button>
+
+                
+
             </div>
-            
+
 
 
             <!-- =================================================
