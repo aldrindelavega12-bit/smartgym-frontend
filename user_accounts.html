@@ -1216,14 +1216,18 @@
         }
 
         .delete-modal {
-            width: 100%;
-            max-width: 440px;
-            padding: 28px;
-            border-radius: 16px;
-            background: #fff;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            display: block !important;
+            width: 440px;
+            max-width: calc(100vw - 40px);
+            min-height: 150px;
             box-sizing: border-box;
-            animation: deleteModalAppear 0.18s ease-out;
+            padding: 28px;
+            background: #fff;
+            border-radius: 16px;
+            color: #1f2937;
+            position: relative;
+            margin: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         }
 
         .delete-modal h2 {
