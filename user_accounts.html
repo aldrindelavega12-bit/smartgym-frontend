@@ -1054,6 +1054,75 @@
         }
 
 
+        .user-action-cell {
+            text-align: center;
+        }
+
+        .user-action-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-action-trigger {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #dce5e1;
+            border-radius: 8px;
+            background: #fff;
+            color: #34413d;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .user-action-trigger:hover {
+            background: #f0f8f4;
+            border-color: #009653;
+        }
+
+        .user-action-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+            min-width: 120px;
+            padding: 5px;
+            background: #fff;
+            border: 1px solid #dce5e1;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+            text-align: left;
+        }
+
+        .user-action-dropdown.show {
+            display: block;
+        }
+
+        .user-action-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 9px 12px;
+            border: none;
+            border-radius: 5px;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .user-action-dropdown button:hover {
+            background: #f0f8f4;
+        }
+
+        .user-action-dropdown .delete-action {
+            color: #dc2626;
+        }
+
+        .user-action-dropdown .delete-action:hover {
+            background: #fef2f2;
+        }
+
+
+
     </style>
 </head>
 
@@ -1296,13 +1365,7 @@
                                         Status
                                     </th>
 
-                                    <th>
-                                        Last Login
-                                    </th>
-
-                                    <th>
-                                        Created At
-                                    </th>
+                                    
 
                                     <th>
                                         Action
@@ -2546,8 +2609,9 @@
     }
 
 
+    
     /* =====================================================
-       RENDER USERS
+    RENDER USERS
     ===================================================== */
 
     function renderUsers() {
@@ -2558,14 +2622,15 @@
 
             userTableBody.innerHTML = `
                 <tr>
-                    <td colspan="8" class="users-empty">
+                    <td colspan="6" class="users-empty">
                         No user accounts found.
                     </td>
                 </tr>
             `;
 
-            usersShowing.textContent =
-                "Showing 0 users";
+            usersShowing.textContent = "Showing 0 users";
+
+            renderUserPagination(0);
 
             return;
         }
@@ -2583,108 +2648,111 @@
         const startIndex =
             (currentUserPage - 1) * usersPerPage;
 
-        const endIndex =
-            Math.min(
-                startIndex + usersPerPage,
-                totalUsers
-            );
-
-        const pageUsers =
-            filteredUsers.slice(
-                startIndex,
-                endIndex
-            );
-
-        pageUsers.forEach(
-            (user, index) => {
-
-                const frontendUser =
-                    users[user.id];
-
-                const row =
-                    document.createElement("tr");
-
-                row.dataset.name =
-                    (
-                        user.fullname || ""
-                    ).toLowerCase();
-
-                row.dataset.username =
-                    (
-                        user.username || ""
-                    ).toLowerCase();
-
-                row.dataset.role =
-                    normalizeRole(
-                        user.role
-                    );
-
-                row.innerHTML = `
-
-                    <td class="user-number">
-                        ${startIndex + index + 1}
-                    </td>
-
-                    <td class="user-name">
-                        ${escapeHtml(
-                            user.fullname ||
-                            "Unnamed User"
-                        )}
-                    </td>
-
-                    <td class="user-username">
-                        ${escapeHtml(
-                            user.username ||
-                            "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${createRoleBadge(
-                            user.role
-                        )}
-                    </td>
-
-                    <td>
-                        ${createStatusBadge(
-                            user
-                        )}
-                    </td>
-
-                    <td>
-                        -
-                    </td>
-
-                    <td>
-                        ${formatDate(
-                            user.created_at
-                        )}
-                    </td>
-
-                    <td>
-                        <button
-                            class="view-user-btn"
-                            onclick="openUserModal(${user.id})"
-                        >
-                            View
-                        </button>
-                    </td>
-
-                `;
-
-                userTableBody.appendChild(row);
-
-            }
+        const endIndex = Math.min(
+            startIndex + usersPerPage,
+            totalUsers
         );
+
+        const pageUsers = filteredUsers.slice(
+            startIndex,
+            endIndex
+        );
+
+        pageUsers.forEach((user, index) => {
+
+            const row = document.createElement("tr");
+
+            row.dataset.name = (
+                user.fullname || ""
+            ).toLowerCase();
+
+            row.dataset.username = (
+                user.username || ""
+            ).toLowerCase();
+
+            row.dataset.role = normalizeRole(user.role);
+
+            const safeUserId = String(
+                user.user_id || ""
+            );
+
+            const safeUserIdForHtml = escapeHtml(
+                safeUserId
+            );
+
+            const safeFullname = escapeHtml(
+                user.fullname || "Unnamed User"
+            );
+
+            row.innerHTML = `
+
+                <td class="user-number">
+                    ${startIndex + index + 1}
+                </td>
+
+                <td class="user-name">
+                    ${safeFullname}
+                </td>
+
+                <td class="user-username">
+                    ${escapeHtml(user.username || "-")}
+                </td>
+
+                <td>
+                    ${createRoleBadge(user.role)}
+                </td>
+
+                <td>
+                    ${createStatusBadge(user)}
+                </td>
+
+                <td class="user-action-cell">
+                    <div class="user-action-menu">
+
+                        <button
+                            type="button"
+                            class="user-action-trigger"
+                            onclick="toggleUserActionMenu(event, '${safeUserIdForHtml}')"
+                            aria-label="Account actions"
+                            title="Account actions"
+                        >⋮</button>
+
+                        <div
+                            class="user-action-dropdown"
+                            id="userActionMenu-${safeUserIdForHtml}"
+                        >
+
+                            <button
+                                type="button"
+                                onclick="closeUserActionMenus(); openUserModal(${Number(user.id)})"
+                            >
+                                View
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-action"
+                                onclick="closeUserActionMenus(); confirmDeleteUser('${safeUserIdForHtml}', '${safeFullname}')"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+                </td>
+
+            `;
+
+            userTableBody.appendChild(row);
+
+        });
 
         usersShowing.textContent =
             `Showing ${startIndex + 1} to ${endIndex} of ${totalUsers} users`;
 
-        renderUserPagination(
-            totalPages
-        );
+        renderUserPagination(totalPages);
     }
-
 
     /* =====================================================
        ROLE NORMALIZATION
@@ -2754,6 +2822,44 @@
 
         `;
 
+    }
+
+    function toggleUserActionMenu(event, userId) {
+        event.stopPropagation();
+
+        const menu = document.getElementById(
+            `userActionMenu-${userId}`
+        );
+
+        const wasOpen = menu?.classList.contains("show");
+
+        closeUserActionMenus();
+
+        if (menu && !wasOpen) {
+            menu.classList.add("show");
+        }
+    }
+
+    function closeUserActionMenus() {
+        document.querySelectorAll(".user-action-dropdown.show")
+            .forEach(menu => menu.classList.remove("show"));
+    }
+
+    document.addEventListener("click", closeUserActionMenus);
+
+    function confirmDeleteUser(userId, fullname) {
+        if (!userId) {
+            alert("Cannot delete this account: missing user ID.");
+            return;
+        }
+
+        const confirmed = confirm(
+            `Are you sure you want to delete the account of ${fullname} (${userId})?`
+        );
+
+        if (!confirmed) return;
+
+        deleteUserAccount(userId);
     }
 
 
