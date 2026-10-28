@@ -1539,38 +1539,16 @@
                         <table class="users-table">
 
                             <thead>
-
                                 <tr>
-
-                                    <th>
-                                        #
-                                    </th>
-
-                                    <th>
-                                        Full Name
-                                    </th>
-
-                                    <th>
-                                        Username
-                                    </th>
-
-                                    <th>
-                                        Role
-                                    </th>
-
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    
-
-                                    <th>
-                                        Action
-                                    </th>
-
+                                    <th>No.</th>
+                                    <th>Full Name</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Assigned Module</th>
+                                    <th>Actions</th>
                                 </tr>
-
                             </thead>
+
 
 
                             <tbody id="userTableBody">
@@ -2876,11 +2854,9 @@
     ===================================================== */
 
     function renderUsers() {
-
         userTableBody.innerHTML = "";
 
         if (filteredUsers.length === 0) {
-
             userTableBody.innerHTML = `
                 <tr>
                     <td colspan="6" class="users-empty">
@@ -2890,63 +2866,59 @@
             `;
 
             usersShowing.textContent = "Showing 0 users";
-
             renderUserPagination(0);
-
             return;
         }
 
         const totalUsers = filteredUsers.length;
-
-        const totalPages = Math.ceil(
-            totalUsers / usersPerPage
-        );
+        const totalPages = Math.ceil(totalUsers / usersPerPage);
 
         if (currentUserPage > totalPages) {
             currentUserPage = totalPages;
         }
 
-        const startIndex =
-            (currentUserPage - 1) * usersPerPage;
-
-        const endIndex = Math.min(
-            startIndex + usersPerPage,
-            totalUsers
-        );
-
-        const pageUsers = filteredUsers.slice(
-            startIndex,
-            endIndex
-        );
+        const startIndex = (currentUserPage - 1) * usersPerPage;
+        const endIndex = Math.min(startIndex + usersPerPage, totalUsers);
+        const pageUsers = filteredUsers.slice(startIndex, endIndex);
 
         pageUsers.forEach((user, index) => {
-
             const row = document.createElement("tr");
 
-            row.dataset.name = (
-                user.fullname || ""
-            ).toLowerCase();
-
-            row.dataset.username = (
-                user.username || ""
-            ).toLowerCase();
-
+            row.dataset.name = (user.fullname || "").toLowerCase();
+            row.dataset.username = (user.username || "").toLowerCase();
             row.dataset.role = normalizeRole(user.role);
 
-            const safeUserId = String(
-                user.user_id || ""
-            );
+            const userId = String(user.user_id || "");
+            const safeUserId = escapeHtml(userId);
+            const safeFullname = escapeHtml(user.fullname || "Unnamed User");
 
-            const safeUserIdForHtml = escapeHtml(
-                safeUserId
-            );
+            // Use modules already provided by the API or saved in the frontend.
+            let modules = user.modules;
 
-            const safeFullname = escapeHtml(
-                user.fullname || "Unnamed User"
-            );
+            if (typeof modules === "string") {
+                try {
+                    modules = JSON.parse(modules);
+                } catch {
+                    modules = modules ? [modules] : [];
+                }
+            }
+
+            if (!Array.isArray(modules)) {
+                modules = [];
+            }
+
+            const moduleNames = modules
+                .map(module => {
+                    if (typeof module === "string") return module;
+                    return module?.module_name || module?.name || module?.module || "";
+                })
+                .filter(Boolean);
+
+            const assignedModules = moduleNames.length
+                ? moduleNames.map(escapeHtml).join(", ")
+                : "No modules assigned";
 
             row.innerHTML = `
-
                 <td class="user-number">
                     ${startIndex + index + 1}
                 </td>
@@ -2963,26 +2935,24 @@
                     ${createRoleBadge(user.role)}
                 </td>
 
-                <td>
-                    ${createStatusBadge(user)}
+                <td class="assigned-modules">
+                    ${assignedModules}
                 </td>
 
                 <td class="user-action-cell">
                     <div class="user-action-menu">
-
                         <button
                             type="button"
                             class="user-action-trigger"
-                            onclick="toggleUserActionMenu(event, '${safeUserIdForHtml}')"
+                            onclick="toggleUserActionMenu(event, '${safeUserId}')"
                             aria-label="Account actions"
                             title="Account actions"
                         >⋮</button>
 
                         <div
                             class="user-action-dropdown"
-                            id="userActionMenu-${safeUserIdForHtml}"
+                            id="userActionMenu-${safeUserId}"
                         >
-
                             <button
                                 type="button"
                                 onclick="closeUserActionMenus(); openUserModal(${Number(user.id)})"
@@ -2993,20 +2963,16 @@
                             <button
                                 type="button"
                                 class="delete-action"
-                                onclick="closeUserActionMenus(); confirmDeleteUser('${safeUserIdForHtml}', '${safeFullname}')"
+                                onclick="closeUserActionMenus(); confirmDeleteUser('${safeUserId}', '${safeFullname}')"
                             >
                                 Delete
                             </button>
-
                         </div>
-
                     </div>
                 </td>
-
             `;
 
             userTableBody.appendChild(row);
-
         });
 
         usersShowing.textContent =
@@ -3014,6 +2980,8 @@
 
         renderUserPagination(totalPages);
     }
+
+
 
     /* =====================================================
        ROLE NORMALIZATION
