@@ -3183,17 +3183,21 @@
         secondModal.style.alignItems = "center";
         secondModal.classList.add("active");
     }
-  
-    function closeDeleteModal(modalId) {
-        document.getElementById(modalId).classList.remove("active");
+    
 
-        // Clear pending account only when the user cancels.
-        if (modalId === "deleteConfirmModal" ||
-            modalId === "finalDeleteModal") {
-            pendingDeleteUserId = null;
-            pendingDeleteUserName = null;
+
+    function closeDeleteModal(modalId) {
+        const modal = document.getElementById(modalId);
+
+        if (modal) {
+            modal.classList.remove("active");
+            modal.style.display = "none";
         }
+
+        pendingDeleteUserId = null;
+        pendingDeleteUserName = null;
     }
+
 
     async function executeAccountDeletion() {
         if (!pendingDeleteUserId) {
