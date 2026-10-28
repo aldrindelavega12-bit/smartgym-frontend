@@ -633,10 +633,10 @@ if (!user || user.role !== "member") {
                     <button
                         type="button"
                         class="send-request-btn"
-                        onclick="sendProgramRequest()">
-
-                        Send Request
-
+                        id="programSubmitBtn"
+                        onclick="sendProgramRequest()"
+                        disabled>
+                        Get Program
                     </button>
 
 
@@ -1208,6 +1208,8 @@ async function checkActiveProgram() {
 
         hasActiveProgram =
             hasTrainerProgram || hasProgramWithoutTrainer;
+        
+        updateProgramSubmitButton();
 
         console.log("MEMBER ID:", memberId);
         console.log("HAS TRAINER:", data?.has_trainer);
@@ -1220,6 +1222,7 @@ async function checkActiveProgram() {
 
         // Keep program selection blocked if status cannot be verified.
         hasActiveProgram = true;
+        updateProgramSubmitButton();
     }
 }
 
@@ -1303,6 +1306,7 @@ async function selectProgram(program) {
     selectedPaymentType = null;
     selectedPaymentDays = 0;
     selectedPrice = 0;
+    wantsTrainer = null;
 
 
     /* =========================
@@ -1353,6 +1357,12 @@ async function selectProgram(program) {
     selectedPlan = null;
 
     document.getElementById("selectedPlan").innerText = "-";
+
+    document.getElementById("trainerPreferencePanel").style.display = "none";
+    document.getElementById("trainerYesBtn").classList.remove("selected");
+    document.getElementById("trainerNoBtn").classList.remove("selected");
+
+    updateProgramSubmitButton();
 
 
     /* =========================
@@ -1679,6 +1689,8 @@ function selectPlan(button, plan) {
 
     // Reset payment
     resetPayment();
+
+    updateProgramSubmitButton();
 }
 
 
@@ -1874,6 +1886,48 @@ function updateTrainerSelection() {
 }
 
 
+function updateProgramSubmitButton() {
+    const button = document.getElementById("programSubmitBtn");
+
+    if (!button) return;
+
+    // May active program na ang member.
+    if (hasActiveProgram) {
+        button.innerText = "Program Already Active";
+        button.disabled = true;
+        return;
+    }
+
+    // Hindi pa kumpleto ang required selections.
+    if (
+        !selectedProgram ||
+        !selectedPlan ||
+        !selectedStartDate ||
+        wantsTrainer === null
+    ) {
+        button.innerText =
+            wantsTrainer === true ? "Send Request" : "Get Program";
+
+        button.disabled = true;
+        return;
+    }
+
+    // May trainer: kailangan ang trainer at payment option.
+    if (wantsTrainer === true) {
+        button.innerText = "Send Request";
+
+        button.disabled =
+            !selectedTrainer ||
+            !selectedPaymentType ||
+            !selectedPrice;
+
+        return;
+    }
+
+    // Walang trainer: direktang kumuha ng program.
+    button.innerText = "Get Program";
+    button.disabled = false;
+}
 
 /* =========================================================
    UPDATE PAYMENT PRICES
@@ -2104,6 +2158,7 @@ function selectPayment(
     */
 
     updateStartDate();
+    updateProgramSubmitButton();
 
 }
 
@@ -2273,7 +2328,7 @@ function updateStartDate(){
         ).innerText =
             "End Date: -";
 
-
+        updateProgramSubmitButton();
         return;
 
     }
@@ -2404,6 +2459,7 @@ function selectTrainerPreference(wantsTrainerValue) {
         document.getElementById("detailPrice").innerText = "₱0.00";
 
         updateStartDate();
+        updateProgramSubmitButton();
     }
 }
 /* =========================================================
@@ -2665,7 +2721,9 @@ async function sendProgramRequest() {
 
         if (button) {
             button.disabled = true;
-            button.innerText = "Request Sent";
+            button.innerText = hasTrainer
+                ? "Request Sent"
+                : "Program Started";
         }
 
     } catch (error) {
@@ -2681,10 +2739,7 @@ async function sendProgramRequest() {
             "Failed to submit program request."
         );
 
-        if (button) {
-            button.disabled = false;
-            button.innerText = "Get Program";
-        }
+        updateProgramSubmitButton();
     }
 }
 
