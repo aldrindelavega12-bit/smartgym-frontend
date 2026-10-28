@@ -468,243 +468,350 @@ let firstLoad = true;
 
 /* ================= LOAD MESSAGES ================= */
 
-async function loadMessages(){
 
-    try{
+/* ==========================================
+   MESSAGE HELPERS
+========================================== */
 
+const renderedMessagesById = new Map();
+
+function escapeMessageHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function getMessageSenderKey(msg) {
+    const role = String(msg.sender_role || "")
+        .trim()
+        .toLowerCase();
+
+    const name = String(msg.sender_name || "Smart Gym")
+        .trim()
+        .toLowerCase();
+
+    // Prefer the sender's unique ID when available.
+    const senderId =
+        msg.sender_id ??
+        msg.sender_user_id ??
+        msg.sender_staff_id ??
+        msg.trainer_id;
+
+    if (
+        senderId !== undefined &&
+        senderId !== null &&
+        String(senderId).trim() !== ""
+    ) {
+        return `${role}:id:${senderId}`;
+    }
+
+    // Fallback for messages without a sender ID.
+    return `${role}:name:${name}`;
+}
+
+function openMessageById(id) {
+    const msg = renderedMessagesById.get(String(id));
+
+    if (msg) {
+        openMessage(msg);
+    }
+}
+
+
+/* ==========================================
+   LOAD MESSAGES
+   ONE CARD PER UNIQUE SENDER
+========================================== */
+
+async function loadMessages() {
+    try {
         const res = await fetch(
-            `${API_URL}/api/messages/${messageUserId}`,
+            `${API_URL}/api/messages/${encodeURIComponent(messageUserId)}`,
             {
                 cache: "no-store"
             }
         );
 
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+
         const data = await res.json();
 
-        const container =
-            document.getElementById("message-list");
+        const container = document.getElementById("message-list");
 
         container.innerHTML = "";
+        renderedMessagesById.clear();
 
-        if(
-            !Array.isArray(data) ||
-            data.length === 0
-        ){
-
+        if (!Array.isArray(data) || data.length === 0) {
             container.innerHTML = `
-                <p class="empty-message">
-                    No messages
-                </p>
+                <p class="empty-message">No messages</p>
             `;
-
             return;
         }
 
-
         /* ==========================================
-           GET LATEST SMART GYM MESSAGE ONLY
+           KEEP ONLY THE LATEST SMART GYM MESSAGE
+           PRESERVE EXISTING BEHAVIOR
         ========================================== */
 
-        const latestSmartGym =
-            data
-                .filter(msg => {
+        const smartGymMessages = data.filter(msg =>
+            String(msg.sender_name || "")
+                .trim()
+                .toLowerCase() === "smart gym"
+        );
 
-                    const senderName =
-                        String(
-                            msg.sender_name || ""
-                        )
-                        .trim()
-                        .toLowerCase();
+        const latestSmartGym = smartGymMessages
+            .sort((a, b) => Number(b.id) - Number(a.id))[0];
 
-                    return (
-                        senderName === "smart gym"
-                    );
+        const visibleMessages = data.filter(msg =>
+            String(msg.sender_name || "")
+                .trim()
+                .toLowerCase() !== "smart gym"
+        );
 
-                })
-                .sort(
-                    (a, b) =>
-                        Number(b.id) -
-                        Number(a.id)
-                )[0];
-
-
-        /* ==========================================
-           REMOVE OLDER SMART GYM MESSAGES
-           KEEP ALL OTHER SENDERS
-        ========================================== */
-
-        const visibleMessages =
-            data.filter(msg => {
-
-                const senderName =
-                    String(
-                        msg.sender_name || ""
-                    )
-                    .trim()
-                    .toLowerCase();
-
-                return (
-                    senderName !== "smart gym"
-                );
-
-            });
-
-
-        /* ==========================================
-           ADD ONLY LATEST SMART GYM MESSAGE
-        ========================================== */
-
-        if(latestSmartGym){
-
-            visibleMessages.push(
-                latestSmartGym
-            );
-
+        if (latestSmartGym) {
+            visibleMessages.push(latestSmartGym);
         }
 
-
         /* ==========================================
-           SORT NEWEST FIRST
+           NEWEST NOTIFICATIONS FIRST
         ========================================== */
 
         visibleMessages.sort(
-            (a, b) =>
-                Number(b.id) -
-                Number(a.id)
+            (a, b) => Number(b.id) - Number(a.id)
         );
-
 
         /* ==========================================
-           RENDER MESSAGES
+           GROUP BY UNIQUE SENDER
         ========================================== */
 
+        const groupedMessages = new Map();
+
         visibleMessages.forEach(msg => {
+            const key = getMessageSenderKey(msg);
 
-            const senderName =
-                msg.sender_name ||
-                "Smart Gym";
+            if (!groupedMessages.has(key)) {
+                groupedMessages.set(key, []);
+            }
 
-            const senderRole =
-                msg.sender_role === "staff"
-                    ? "Front Desk"
-                    : msg.sender_role === "trainer"
-                        ? "Trainer"
-                        : msg.sender_role || "";
-
-
-            container.innerHTML += `
-
-                <div
-                    class="msg-card ${
-                        Number(msg.is_read) === 0
-                            ? "unread"
-                            : ""
-                    }"
-                    onclick='openMessage(${JSON.stringify(msg)})'
-                >
-
-                    <div class="msg-top">
-
-                        <div class="sender-info">
-
-                            <h3>
-                                ${senderName}
-                            </h3>
-
-                            <span class="sender-role">
-                                ${senderRole}
-                            </span>
-
-                            ${
-                                Number(msg.is_read) === 0
-                                ?
-                                '<span class="unread-badge">NEW / UNREAD</span>'
-                                :
-                                ''
-                            }
-
-                        </div>
-
-
-                        <div
-                            class="dots"
-                            onclick="
-                                event.stopPropagation();
-                                toggleMenu(${msg.id})
-                            "
-                        >
-                            ⋮
-                        </div>
-
-                    </div>
-
-
-                    <div class="msg-content">
-
-                        <p class="msg-text">
-                            ${msg.message}
-                        </p>
-
-                        <small>
-                            ${msg.created_at}
-                        </small>
-
-                    </div>
-
-
-                    <div
-                        id="menu-${msg.id}"
-                        class="msg-menu"
-                    >
-
-                        <button
-                            onclick="
-                                event.stopPropagation();
-                                deleteMessage(${msg.id})
-                            "
-                        >
-                            Delete
-                        </button>
-
-
-                        <button
-                            onclick="
-                                event.stopPropagation();
-                                markRead(${msg.id})
-                            "
-                        >
-                            Mark as Read
-                        </button>
-
-
-                        <button
-                            onclick="
-                                event.stopPropagation();
-                                markUnread(${msg.id})
-                            "
-                        >
-                            Mark as Unread
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
+            groupedMessages.get(key).push(msg);
         });
 
+        /* ==========================================
+           RENDER ONE CARD PER SENDER
+        ========================================== */
 
-    }catch(err){
+        for (const [senderKey, messages] of groupedMessages) {
+            // Messages are already sorted newest first.
+            const latestMessage = messages[0];
 
-        console.error(
-            "LOAD MESSAGES ERROR:",
-            err
-        );
+            const senderName = escapeMessageHTML(
+                latestMessage.sender_name || "Smart Gym"
+            );
 
+            const rawRole = String(
+                latestMessage.sender_role || ""
+            ).trim().toLowerCase();
+
+            const senderRole = escapeMessageHTML(
+                rawRole === "staff"
+                    ? "Front Desk"
+                    : rawRole === "trainer"
+                        ? "Trainer"
+                        : latestMessage.sender_role || ""
+            );
+
+            const hasUnread = messages.some(
+                msg => Number(msg.is_read) === 0
+            );
+
+            const unreadCount = messages.filter(
+                msg => Number(msg.is_read) === 0
+            ).length;
+
+            const card = document.createElement("div");
+
+            card.className = `msg-card${hasUnread ? " unread" : ""}`;
+
+            card.dataset.senderKey = senderKey;
+
+            card.innerHTML = `
+                <div class="msg-top">
+                    <div class="sender-info">
+                        <h3>${senderName}</h3>
+
+                        <span class="sender-role">
+                            ${senderRole}
+                        </span>
+
+                        ${
+                            hasUnread
+                                ? `
+                                    <span class="unread-badge">
+                                        ${unreadCount} NEW / UNREAD
+                                    </span>
+                                `
+                                : ""
+                        }
+                    </div>
+                </div>
+
+                <div class="grouped-message-list"></div>
+            `;
+
+            const messageList = card.querySelector(
+                ".grouped-message-list"
+            );
+
+            /* ==========================================
+               SHOW ALL NOTIFICATIONS IN THIS CARD
+            ========================================== */
+
+            messages.forEach(msg => {
+                renderedMessagesById.set(
+                    String(msg.id),
+                    msg
+                );
+
+                const row = document.createElement("div");
+
+                row.className = "grouped-message-item";
+
+                if (Number(msg.is_read) === 0) {
+                    row.classList.add("message-unread");
+                }
+
+                const messageText = escapeMessageHTML(
+                    msg.message || ""
+                );
+
+                const messageDate = escapeMessageHTML(
+                    msg.created_at || ""
+                );
+
+                row.innerHTML = `
+                    <div class="grouped-message-content"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Open notification">
+
+                        <p class="msg-text">
+                            ${messageText}
+                        </p>
+
+                        <small>${messageDate}</small>
+                    </div>
+
+                    <div class="message-actions">
+                        <button
+                            type="button"
+                            class="dots"
+                            aria-label="Notification options"
+                            aria-expanded="false">
+                            ⋮
+                        </button>
+
+                        <div
+                            id="menu-${msg.id}"
+                            class="msg-menu">
+
+                            <button type="button"
+                                    data-action="delete">
+                                Delete
+                            </button>
+
+                            <button type="button"
+                                    data-action="read">
+                                Mark as Read
+                            </button>
+
+                            <button type="button"
+                                    data-action="unread">
+                                Mark as Unread
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                const messageContent = row.querySelector(
+                    ".grouped-message-content"
+                );
+
+                messageContent.addEventListener("click", () => {
+                    openMessageById(msg.id);
+                });
+
+                messageContent.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openMessageById(msg.id);
+                    }
+                });
+
+                const menuButton = row.querySelector(".dots");
+
+                menuButton.addEventListener("click", event => {
+                    event.stopPropagation();
+
+                    const menu = row.querySelector(".msg-menu");
+                    const willOpen = menu.style.display !== "block";
+
+                    document.querySelectorAll(".msg-menu").forEach(
+                        otherMenu => {
+                            otherMenu.style.display = "none";
+                        }
+                    );
+
+                    document.querySelectorAll(
+                        ".message-actions .dots"
+                    ).forEach(button => {
+                        button.setAttribute("aria-expanded", "false");
+                    });
+
+                    menu.style.display = willOpen ? "block" : "none";
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        String(willOpen)
+                    );
+                });
+
+                row.querySelectorAll(".msg-menu button").forEach(
+                    button => {
+                        button.addEventListener("click", async event => {
+                            event.stopPropagation();
+
+                            const action = button.dataset.action;
+                            const id = msg.id;
+
+                            if (action === "delete") {
+                                await deleteMessage(id);
+                            } else if (action === "read") {
+                                await markRead(id);
+                            } else if (action === "unread") {
+                                await markUnread(id);
+                            }
+                        });
+                    }
+                );
+
+                messageList.appendChild(row);
+            });
+
+            container.appendChild(card);
+        }
+
+    } catch (err) {
+        console.error("LOAD MESSAGES ERROR:", err);
     }
-
 }
+
+
 
 
 let lastCount = 0;

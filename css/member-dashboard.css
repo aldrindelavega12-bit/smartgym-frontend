@@ -9503,3 +9503,105 @@ textarea {
         padding: 14px 18px !important;
     }
 }
+
+
+/* ==========================================
+   GROUPED NOTIFICATIONS
+========================================== */
+
+#message-list > .msg-card {
+    cursor: default;
+}
+
+/* INDIVIDUAL NOTIFICATIONS INSIDE EACH CARD */
+
+.grouped-message-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+}
+
+.grouped-message-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 12px 0;
+    border-top: 1px solid #e1ebe6;
+}
+
+.grouped-message-item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.grouped-message-content {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.grouped-message-content .msg-text {
+    margin: 0 0 7px;
+    overflow-wrap: anywhere;
+}
+
+.grouped-message-content small {
+    display: block;
+    color: #71817a;
+    font-size: 12px;
+}
+
+.grouped-message-item.message-unread
+.grouped-message-content .msg-text {
+    font-weight: 600;
+}
+
+.grouped-message-content:focus-visible {
+    outline: 2px solid #008744;
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* ACTION MENU */
+
+.message-actions {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.message-actions .dots {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.grouped-message-item .msg-menu {
+    top: 30px;
+    right: 0;
+    z-index: 30;
+}
+
+/* KEEP THE SENDER HEADER COMPACT */
+
+#message-list > .msg-card .sender-info h3 {
+    margin-bottom: 0;
+}
+
+#message-list > .msg-card .unread-badge {
+    margin-top: 6px;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .grouped-message-item {
+        gap: 10px;
+    }
+
+    .grouped-message-content .msg-text {
+        font-size: 13px;
+    }
+}
