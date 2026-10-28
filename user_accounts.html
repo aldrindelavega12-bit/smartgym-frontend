@@ -3108,19 +3108,35 @@
     let pendingDeleteUserName = null;
 
     function confirmDeleteUser(userId, fullname) {
+        console.log("Delete clicked:", userId, fullname);
+
         if (!userId) {
-            alert("Cannot delete this account: missing user ID.");
+            alert("Missing user ID.");
+            return;
+        }
+
+        const modal = document.getElementById("deleteConfirmModal");
+        const message = document.getElementById("deleteConfirmMessage");
+
+        if (!modal || !message) {
+            console.error("Delete modal elements not found.");
+            alert("Delete confirmation modal is missing.");
             return;
         }
 
         pendingDeleteUserId = userId;
         pendingDeleteUserName = fullname || userId;
 
-        document.getElementById("deleteConfirmMessage").textContent =
+        message.textContent =
             `Are you sure you want to delete the account of ${pendingDeleteUserName}?`;
 
-        document.getElementById("deleteConfirmModal").classList.add("active");
+        closeUserActionMenus();
+
+        modal.classList.add("active");
+
+        console.log("First confirmation modal opened.");
     }
+
 
     function showFinalDeleteModal() {
         if (!pendingDeleteUserId) {
