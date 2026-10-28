@@ -1199,12 +1199,188 @@
             background: #fef2f2;
         }
 
+        .delete-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.55);
+            box-sizing: border-box;
+        }
+
+        .delete-modal-overlay.active {
+            display: flex;
+        }
+
+        .delete-modal {
+            width: 100%;
+            max-width: 440px;
+            padding: 28px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            animation: deleteModalAppear 0.18s ease-out;
+        }
+
+        .delete-modal h2 {
+            margin: 0 0 14px;
+            color: #1f2937;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .delete-modal p {
+            margin: 0 0 18px;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .delete-account-name {
+            padding: 12px;
+            border: 1px solid #fee2e2;
+            border-radius: 8px;
+            background: #fef2f2;
+            color: #991b1b !important;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .delete-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 26px;
+        }
+
+        .delete-modal-actions button {
+            min-height: 42px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-modal-cancel {
+            border: 1px solid #d1d5db;
+            background: #fff;
+            color: #374151;
+        }
+
+        .delete-modal-cancel:hover {
+            background: #f9fafb;
+        }
+
+        .delete-modal-continue {
+            border: 1px solid #009653;
+            background: #009653;
+            color: #fff;
+        }
+
+        .delete-modal-continue:hover {
+            background: #007f46;
+        }
+
+        .delete-modal-danger {
+            border: 1px solid #dc2626;
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .delete-modal-danger:hover {
+            background: #b91c1c;
+        }
+
+        .delete-modal-actions button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @keyframes deleteModalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+
 
 
 
     </style>
 </head>
 
+<!-- FIRST MODAL: Initial confirmation -->
+<div id="deleteConfirmModal" class="delete-modal-overlay">
+    <div class="delete-modal">
+        <h2>Delete Account?</h2>
+
+        <p id="deleteConfirmMessage">
+            Are you sure you want to delete this account?
+        </p>
+
+        <div class="delete-modal-actions">
+            <button
+                type="button"
+                class="delete-modal-cancel"
+                onclick="closeDeleteModal('deleteConfirmModal')"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="delete-modal-continue"
+                onclick="showFinalDeleteModal()"
+            >
+                Continue
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SECOND MODAL: Final confirmation -->
+<div id="finalDeleteModal" class="delete-modal-overlay">
+    <div class="delete-modal">
+        <h2>Confirm Deletion</h2>
+
+        <p>
+            Are you absolutely sure you want to delete this account?
+            This action cannot be undone.
+        </p>
+
+        <p id="finalDeleteAccountName" class="delete-account-name"></p>
+
+        <div class="delete-modal-actions">
+            <button
+                type="button"
+                class="delete-modal-cancel"
+                onclick="closeDeleteModal('finalDeleteModal')"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="confirmDeleteButton"
+                class="delete-modal-danger"
+                onclick="executeAccountDeletion()"
+            >
+                Confirm Delete
+            </button>
+        </div>
+    </div>
+</div>
 
 <body>
 
@@ -2926,22 +3102,60 @@
 
     document.addEventListener("click", closeUserActionMenus);
 
+    let pendingDeleteUserId = null;
+    let pendingDeleteUserName = null;
+
     function confirmDeleteUser(userId, fullname) {
         if (!userId) {
             alert("Cannot delete this account: missing user ID.");
             return;
         }
 
-        const confirmed = confirm(
-            `Are you sure you want to delete the account of ${fullname} (${userId})?`
-        );
+        pendingDeleteUserId = userId;
+        pendingDeleteUserName = fullname || userId;
 
-        if (!confirmed) return;
+        document.getElementById("deleteConfirmMessage").textContent =
+            `Are you sure you want to delete the account of ${pendingDeleteUserName}?`;
 
-        deleteUserAccount(userId);
+        document.getElementById("deleteConfirmModal").classList.add("active");
     }
 
-    async function deleteUserAccount(userId) {
+    function showFinalDeleteModal() {
+        if (!pendingDeleteUserId) {
+            return;
+        }
+
+        closeDeleteModal("deleteConfirmModal");
+
+        document.getElementById("finalDeleteAccountName").textContent =
+            `Account: ${pendingDeleteUserName} (${pendingDeleteUserId})`;
+
+        document.getElementById("finalDeleteModal").classList.add("active");
+    }
+
+    function closeDeleteModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+
+        // Clear pending account only when the user cancels.
+        if (modalId === "deleteConfirmModal" ||
+            modalId === "finalDeleteModal") {
+            pendingDeleteUserId = null;
+            pendingDeleteUserName = null;
+        }
+    }
+
+    async function executeAccountDeletion() {
+        if (!pendingDeleteUserId) {
+            alert("No account selected for deletion.");
+            return;
+        }
+
+        const userId = pendingDeleteUserId;
+        const button = document.getElementById("confirmDeleteButton");
+
+        button.disabled = true;
+        button.textContent = "Deleting...";
+
         try {
             const response = await fetch(
                 `${API_URL}/api/admin/delete_account/${encodeURIComponent(userId)}`,
@@ -2960,15 +3174,20 @@
                 return;
             }
 
-            // Success notification
+            closeDeleteModal("finalDeleteModal");
+
             alert("Account deleted successfully.");
 
-            // Refresh the user list
+            // Refresh the account table.
             await loadUsers();
 
         } catch (error) {
             console.error("DELETE ACCOUNT ERROR:", error);
             alert("Unable to connect to the server.");
+
+        } finally {
+            button.disabled = false;
+            button.textContent = "Confirm Delete";
         }
     }
 
