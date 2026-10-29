@@ -472,11 +472,8 @@ async function loadStaffMenu() {
 
     // Default menu items and their module keys
     const menuItems = [
-        {
-            key: "dashboard",
-            label: "Home",
-            page: "staff.html"
-        },
+        { key: "dashboard", label: "Home", page: "staff.html" },
+
         {
             key: "messages",
             label: "Messages",
@@ -484,16 +481,23 @@ async function loadStaffMenu() {
             className: "msg-link",
             badge: true
         },
-        {
-            key: "attendance",
-            label: "Attendance",
-            page: "attendance.html"
-        },
-        {
-            key: "locker",
-            label: "Locker",
-            page: "locker.html"
-        }
+
+        { key: "program", label: "Program", page: "program.html" },
+        { key: "get_program", label: "Get Program", page: "get_program.html" },
+        { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
+        { key: "membership", label: "Membership", page: "membership.html" },
+        { key: "attendance", label: "Attendance", page: "attendance.html" },
+        { key: "locker", label: "Locker", page: "locker.html" },
+        { key: "trainee", label: "Trainee", page: "trainer.html" },
+        { key: "schedule", label: "Trainee Schedule", page: "trainer_schedule.html" },
+        { key: "client_requests", label: "Client Requests", page: "client_requests.html" },
+        { key: "reports", label: "Reports", page: "reports.html" },
+        { key: "members", label: "Members", page: "member.html" },
+        { key: "walkins", label: "Walk-ins", page: "walkin.html" },
+        { key: "archive", label: "Archive", page: "archive.html" },
+        { key: "user_account_maintenance", label: "User Account Maintenance", page: "user_accounts.html" },
+        { key: "backup_restore", label: "Backup & Restore", page: "backup_restore.html" },
+        { key: "audit_logs", label: "Audit Logs", page: "audit_logs.html" }
     ];
 
     menu.innerHTML = "<p>Loading menu...</p>";
