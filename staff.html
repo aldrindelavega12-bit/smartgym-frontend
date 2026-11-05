@@ -236,96 +236,10 @@
 
         </div>
 
-        <!-- =================================================
-             QUICK ACTION CARDS
-        ================================================== -->
-
-        <div class="cards">
-
-
-            <!-- MESSAGES -->
-            <div class="card" data-module="messages">
-
-                <div class="card-icon">
-
-                </div>
-
-                <h3>
-                    Messages
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    system messages
-                </p>
-
-                <button
-                    onclick="go('messages.html')">
-
-                    View
-                    <span>→</span>
-
-                </button>
-
-            </div>
-
-
-            <!-- ATTENDANCE -->
-            <div class="card" data-module="attendance">
-
-                <div class="card-icon">
-
-                </div>
-
-                <h3>
-                    Attendance
-                </h3>
-
-                <p>
-                    View and monitor<br>
-                    attendance logs
-                </p>
-
-                <button
-                    onclick="go('attendance.html')">
-
-                    View
-                    <span>→</span>
-
-                </button>
-
-            </div>
-
-
-            <!-- LOCKER -->
-            <div class="card" data-module="locker">
-
-                <div class="card-icon">
-
-                </div>
-
-                <h3>
-                    Locker
-                </h3>
-
-                <p>
-                    View and monitor<br>
-                    locker activity
-                </p>
-
-                <button
-                    onclick="go('locker.html')">
-
-                    View
-                    <span>→</span>
-
-                </button>
-
-            </div>
-
-
+        <!-- QUICK ACTION CARDS -->
+        <div class="cards" id="quickCards">
+            <!-- Cards will be generated based on module permissions -->
         </div>
-
 
     </div>
 
@@ -417,7 +331,174 @@ const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 // 🔒 USER CHECK
 const user = JSON.parse(localStorage.getItem("user"));
+/* =====================================================
+   MASTER QUICK CARDS
+   All available staff modules
+===================================================== */
 
+const QUICK_CARD_ITEMS = [
+    {
+        key: "messages",
+        title: "Messages",
+        description: "View and manage system messages",
+        page: "messages.html"
+    },
+    {
+        key: "program",
+        title: "Program",
+        description: "View and manage workout programs",
+        page: "program.html"
+    },
+    {
+        key: "get_program",
+        title: "Get Program",
+        description: "View available workout programs",
+        page: "get_program.html"
+    },
+    {
+        key: "book_locker",
+        title: "Book Locker",
+        description: "View and manage locker bookings",
+        page: "locker_booking.html"
+    },
+    {
+        key: "membership",
+        title: "Membership",
+        description: "View and manage membership records",
+        page: "membership.html"
+    },
+    {
+        key: "attendance",
+        title: "Attendance",
+        description: "View and monitor attendance logs",
+        page: "attendance.html"
+    },
+    {
+        key: "locker",
+        title: "Locker",
+        description: "View and monitor locker activity",
+        page: "locker.html"
+    },
+    {
+        key: "trainee",
+        title: "Trainee",
+        description: "View and manage trainee records",
+        page: "trainer.html"
+    },
+    {
+        key: "schedule",
+        title: "Trainee Schedule",
+        description: "View and manage trainee workout schedules",
+        page: "trainer-schedule.html"
+    },
+    {
+        key: "client_requests",
+        title: "Client Requests",
+        description: "View and manage client requests",
+        page: "client_requests.html"
+    },
+    {
+        key: "reports",
+        title: "Reports",
+        description: "View system reports",
+        page: "reports.html"
+    },
+    {
+        key: "members",
+        title: "Members",
+        description: "View and manage gym members",
+        page: "member.html"
+    },
+    {
+        key: "walkins",
+        title: "Walk-ins",
+        description: "View and manage walk-in records",
+        page: "walkin.html"
+    },
+    {
+        key: "archive",
+        title: "Archive",
+        description: "View archived records",
+        page: "archive.html"
+    },
+    {
+        key: "user_account_maintenance",
+        title: "User Account Maintenance",
+        description: "Manage system user accounts",
+        page: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        title: "Backup & Restore",
+        description: "Manage database backups and restoration",
+        page: "backup_restore.html"
+    },
+    {
+        key: "audit_logs",
+        title: "Audit Logs",
+        description: "View system activity and audit records",
+        page: "audit_logs.html"
+    }
+];
+
+/* =====================================================
+   RENDER QUICK CARDS
+===================================================== */
+
+function renderQuickCards(allowedModules) {
+
+    const container = document.getElementById("quickCards");
+
+    if (!container) return;
+
+    // Clear existing cards to prevent duplicates.
+    container.innerHTML = "";
+
+    const permittedCards = QUICK_CARD_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
+
+    if (permittedCards.length === 0) {
+        container.innerHTML = `
+            <p style="color:#68736d; padding:15px;">
+                No available modules assigned.
+            </p>
+        `;
+        return;
+    }
+
+    permittedCards.forEach(item => {
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.module = item.key;
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "View →";
+
+        button.addEventListener("click", () => {
+            window.location.href = item.page;
+        });
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(button);
+
+        container.appendChild(card);
+    });
+
+    console.log(
+        "QUICK CARDS DISPLAYED:",
+        permittedCards.map(item => item.key)
+    );
+}
 // ================= STAFF PROFILE =================
 
 const staffName =
@@ -516,10 +597,7 @@ async function loadStaffMenu() {
         const allowedModules = new Set(data.modules || []);
 
         // Filter dashboard quick-action cards
-        document.querySelectorAll(".card[data-module]").forEach(card => {
-            const moduleKey = card.dataset.module;
-            card.style.display = allowedModules.has(moduleKey) ? "" : "none";
-        });
+        renderQuickCards(allowedModules);
 
         // Show only modules allowed for this user
         menu.innerHTML = menuItems
