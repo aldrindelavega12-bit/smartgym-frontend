@@ -727,31 +727,25 @@
 ========================================================= -->
 
 <script>
-
 const userData = JSON.parse(localStorage.getItem("user"));
+
+const allowedRoles = [
+    "pre_member",
+    "premember",
+    "member",
+    "staff",
+    "trainer",
+    "manager",
+    "admin"
+];
 
 if (!userData) {
     window.location.href = "index.html";
-}
-else if (userData.role === "trainer") {
-    // TRAINER ACCESS
-}
-else if (userData.role === "staff") {
-    // STAFF ACCESS
-    window.location.href = "staff.html";
-}
-else if (userData.role === "admin") {
-    // ADMIN ACCESS
-    window.location.href = "admin.html";
-}
-else if (userData.role === "manager") {
-    // MANAGER ACCESS
-    window.location.href = "manager.html";
-}
-else {
+} else if (!allowedRoles.includes(
+    String(userData.role || "").toLowerCase().replace("-", "_")
+)) {
     window.location.href = "index.html";
 }
-
 </script>
 
 
@@ -786,34 +780,7 @@ else {
 
     <!-- MENU -->
 
-    <div class="menu">
-
-
-        <!-- HOME -->
-
-        <a href="trainer.html" data-module="dashboard">
-            <span>Home</span>
-        </a>
-
-        <a href="trainer_messages.html" data-module="messages" class="msg-link">
-            <span>Messages</span>
-            <span id="msg-count" class="msg-count">0</span>
-        </a>
-
-        <a href="trainee.html" data-module="trainee">
-            <span>Trainee</span>
-        </a>
-
-        <a href="trainer-schedule.html" data-module="schedule" class="active">
-            <span>Schedule</span>
-        </a>
-
-        <a href="client_requests.html" data-module="client_requests">
-            <span>Client Requests</span>
-        </a>
-
-
-    </div>
+    <div class="menu" id="menu"></div>
 
 
 </div>
@@ -860,10 +827,8 @@ else {
 
                         </strong>
 
-                        <small>
-
-                            Trainer
-
+                        <small id="profile-role">
+                            User
                         </small>
 
                     </div>
@@ -1236,6 +1201,264 @@ async function loadTrainerModuleAccess() {
         );
     }
 }
+/* =========================================================
+   PROFILE ROLE
+========================================================= */
+
+const profileRole = document.getElementById("profile-role");
+
+if (profileRole) {
+    profileRole.textContent =
+        String(user?.role || "User")
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, char => char.toUpperCase());
+}
+/* =========================================================
+   MASTER MODULE MENU
+========================================================= */
+
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainer.html" },
+    {
+        key: "schedule",
+        label: "Trainee Schedule",
+        href: "trainer-schedule.html",
+        trainerHref: "trainer-schedule.html",
+        active: true
+    },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "member.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        href: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup & Restore",
+        href: "backup_restore.html"
+    },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
+
+
+/* =========================================================
+   MODULE KEY NORMALIZER
+========================================================= */
+
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        "home": "dashboard",
+        "trainee_schedule": "schedule",
+        "schedule": "schedule",
+        "client_request": "client_requests",
+        "walk_in": "walkins",
+        "walk_in_management": "walkins",
+        "user_accounts": "user_account_maintenance",
+        "user_account": "user_account_maintenance",
+        "backup": "backup_restore",
+        "backup_and_restore": "backup_restore",
+        "audit_log": "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+
+/* =========================================================
+   LOAD MODULE ACCESS AND RENDER SIDEBAR
+========================================================= */
+
+async function loadTrainerModuleAccess() {
+    const menu = document.getElementById("menu");
+
+    if (!menu || !user) {
+        return false;
+    }
+
+    // Do not display any module while permissions are loading.
+    menu.innerHTML = "";
+
+    // Use the logged-in user's ID for their personal permissions.
+    const accessUserId = user.user_id || (
+        user.role === "trainer" ? trainerId : null
+    );
+
+    if (!accessUserId) {
+        console.error("MODULE ACCESS: User ID is missing.");
+        showModuleAccessDenied();
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(accessUserId)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set();
+
+        modules.forEach(module => {
+            if (typeof module === "string") {
+                allowedModules.add(normalizeModuleKey(module));
+                return;
+            }
+
+            const moduleKey =
+                module.module_key ||
+                module.key ||
+                module.module_name ||
+                "";
+
+            if (moduleKey) {
+                allowedModules.add(normalizeModuleKey(moduleKey));
+            }
+        });
+
+        // The current page also requires schedule permission.
+        if (!allowedModules.has("schedule")) {
+            showModuleAccessDenied();
+            return false;
+        }
+
+        const role = String(user.role || "")
+            .toLowerCase()
+            .replace("-", "_");
+
+        // Render only modules allowed by the user's permissions.
+        MODULE_MENU.forEach(module => {
+            if (!allowedModules.has(module.key)) {
+                return;
+            }
+
+            const link = document.createElement("a");
+
+            link.href =
+                typeof module.href === "object"
+                    ? module.href[role] || "index.html"
+                    : (
+                        role === "trainer" && module.trainerHref
+                            ? module.trainerHref
+                            : module.href
+                    );
+
+            link.dataset.module = module.key;
+
+            if (module.className) {
+                link.classList.add(module.className);
+            }
+
+            if (module.active) {
+                link.classList.add("active");
+            }
+
+            const label = document.createElement("span");
+            label.textContent = module.label;
+            link.appendChild(label);
+
+            if (module.key === "messages") {
+                const badge = document.createElement("span");
+                badge.id = "msg-count";
+                badge.className = "msg-count";
+                badge.textContent = "0";
+                link.appendChild(badge);
+            }
+
+            menu.appendChild(link);
+        });
+
+        console.log(
+            "MODULE ACCESS USER:",
+            accessUserId
+        );
+
+        console.log(
+            "ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "MODULE ACCESS ERROR:",
+            error
+        );
+
+        showModuleAccessDenied();
+        return false;
+    }
+}
+
+
+/* =========================================================
+   ACCESS DENIED
+========================================================= */
+
+function showModuleAccessDenied() {
+    const layout = document.querySelector(".layout");
+
+    if (layout) {
+        layout.innerHTML = `
+            <div class="main">
+                <div class="schedule-empty" style="display:block;">
+                    <h3>Access Denied</h3>
+                    <p>
+                        You do not have permission to access this module.
+                        Please contact your administrator.
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+}
+
 
 /* =========================================================
    DATA
@@ -2265,6 +2488,37 @@ document
 
         }
     );
+
+
+    /* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+async function initializePage() {
+    setTodayDate();
+
+    const hasScheduleAccess =
+        await loadTrainerModuleAccess();
+
+    if (!hasScheduleAccess) {
+        return;
+    }
+
+    // Only trainers have a trainer-specific workout endpoint.
+    if (String(user.role).toLowerCase() === "trainer") {
+        loadSchedules();
+    } else {
+        document.getElementById("emptyState").style.display = "block";
+
+        document.querySelector("#emptyState h3").textContent =
+            "Schedule Access";
+
+        document.querySelector("#emptyState p").textContent =
+            "Your account has access to this module, but trainer schedule data is not yet connected to this account.";
+    }
+}
+
+initializePage();
 /* =========================================================
    INITIAL LOAD
 ========================================================= */
