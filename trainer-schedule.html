@@ -728,20 +728,28 @@
 
 <script>
 
-const userData =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
+const userData = JSON.parse(localStorage.getItem("user"));
 
-
-if (
-    !userData ||
-    userData.role !== "trainer"
-) {
-
-    window.location.href =
-        "index.html";
-
+if (!userData) {
+    window.location.href = "index.html";
+}
+else if (userData.role === "trainer") {
+    // TRAINER ACCESS
+}
+else if (userData.role === "staff") {
+    // STAFF ACCESS
+    window.location.href = "staff.html";
+}
+else if (userData.role === "admin") {
+    // ADMIN ACCESS
+    window.location.href = "admin.html";
+}
+else if (userData.role === "manager") {
+    // MANAGER ACCESS
+    window.location.href = "manager.html";
+}
+else {
+    window.location.href = "index.html";
 }
 
 </script>
