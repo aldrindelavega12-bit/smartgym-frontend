@@ -576,133 +576,12 @@
 
 
         <!-- =================================================
-             QUICK ACTION CARDS
+            QUICK ACTION CARDS
         ================================================== -->
 
-        <div class="cards">
+        <div class="cards" id="quickCards">
 
-
-            <!-- MESSAGES -->
-
-            <div class="card">
-
-
-                <h3>
-                    Messages
-                </h3>
-
-
-                <p>
-                    View and manage<br>
-                    messages from your trainees<br>
-                    and staff.
-                </p>
-
-
-                <button
-                    onclick="go('messages.html')">
-
-                    View
-
-                    <span>
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            <!-- TRAINEE -->
-
-            <div class="card">
-
-
-                <h3>
-                    Trainee
-                </h3>
-
-
-                <p>
-                    View and manage<br>
-                    your assigned trainees.
-                </p>
-
-
-                <button
-                    onclick="go('trainee.html')">
-
-                    View
-
-                    <span>
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            <!-- SCHEDULE -->
-
-            <div class="card">
-
-                <h3>
-                    Schedule
-                </h3>
-
-
-                <p>
-                    View and manage<br>
-                    your training schedule<br>
-                    and activities.
-                </p>
-
-
-                <button
-                    onclick="go('trainer-schedule.html')">
-
-                    View
-
-                    <span>
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            <!-- CLIENT REQUESTS -->
-
-            <div class="card">
-
-
-                <h3>
-                    Client Requests
-                </h3>
-
-
-                <p>
-                    View and manage<br>
-                    requests from members<br>
-                    who want to train with you.
-                </p>
-
-
-                <button
-                    onclick="go('client_requests.html')">
-
-                    View
-
-                    <span>
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
+            <!-- Cards generated based on module permissions -->
 
         </div>
 
@@ -908,6 +787,199 @@ const user =
     );
 
 
+/* =====================================================
+   MASTER QUICK CARD LIST
+   ALL SYSTEM MODULES
+===================================================== */
+
+const QUICK_CARD_ITEMS = [
+
+    {
+        key: "messages",
+        title: "Messages",
+        description: "View and manage system messages",
+        page: "trainer_messages.html"
+    },
+
+    {
+        key: "program",
+        title: "Program",
+        description: "View and manage workout programs",
+        page: "program.html"
+    },
+
+    {
+        key: "get_program",
+        title: "Get Program",
+        description: "View available workout programs",
+        page: "get_program.html"
+    },
+
+    {
+        key: "book_locker",
+        title: "Book Locker",
+        description: "View and manage locker bookings",
+        page: "locker_booking.html"
+    },
+
+    {
+        key: "membership",
+        title: "Membership",
+        description: "View and manage membership records",
+        page: "membership.html"
+    },
+
+    {
+        key: "attendance",
+        title: "Attendance",
+        description: "View and monitor attendance logs",
+        page: "attendance.html"
+    },
+
+    {
+        key: "locker",
+        title: "Locker",
+        description: "View and monitor locker activity",
+        page: "locker.html"
+    },
+
+    {
+        key: "trainee",
+        title: "Trainee",
+        description: "View and manage assigned trainees",
+        page: "trainee.html"
+    },
+
+    {
+        key: "schedule",
+        title: "Schedule",
+        description: "View and manage trainee workout schedules",
+        page: "trainer-schedule.html"
+    },
+
+    {
+        key: "client_requests",
+        title: "Client Requests",
+        description: "View and manage member training requests",
+        page: "client_requests.html"
+    },
+
+    {
+        key: "reports",
+        title: "Reports",
+        description: "View system reports",
+        page: "reports.html"
+    },
+
+    {
+        key: "members",
+        title: "Members",
+        description: "View and manage gym members",
+        page: "member.html"
+    },
+
+    {
+        key: "walkins",
+        title: "Walk-ins",
+        description: "View and manage walk-in records",
+        page: "walkin.html"
+    },
+
+    {
+        key: "archive",
+        title: "Archive",
+        description: "View archived records",
+        page: "archive.html"
+    },
+
+    {
+        key: "user_account_maintenance",
+        title: "User Account Maintenance",
+        description: "Manage system user accounts",
+        page: "user_accounts.html"
+    },
+
+    {
+        key: "backup_restore",
+        title: "Backup & Restore",
+        description: "Manage database backups and restoration",
+        page: "backup_restore.html"
+    },
+
+    {
+        key: "audit_logs",
+        title: "Audit Logs",
+        description: "View system activity and audit records",
+        page: "audit_logs.html"
+    }
+
+];
+
+/* =====================================================
+   RENDER TRAINER QUICK CARDS
+===================================================== */
+
+function renderQuickCards(allowedModules) {
+
+    const container =
+        document.getElementById("quickCards");
+
+    if (!container) return;
+
+    // Prevent duplicate cards.
+    container.innerHTML = "";
+
+    const permittedCards = QUICK_CARD_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
+
+    if (permittedCards.length === 0) {
+
+        container.innerHTML = `
+            <p style="color:#68736d; padding:15px;">
+                No available modules assigned.
+            </p>
+        `;
+
+        return;
+    }
+
+    permittedCards.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+        card.dataset.module = item.key;
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.textContent = "View →";
+
+        button.addEventListener("click", () => {
+            window.location.href = item.page;
+        });
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(button);
+
+        container.appendChild(card);
+
+    });
+
+    console.log(
+        "TRAINER QUICK CARDS:",
+        permittedCards.map(item => item.key)
+    );
+}
+
 const trainerName =
     document.getElementById(
         "trainerName"
@@ -1057,31 +1129,12 @@ async function loadTrainerModuleAccess() {
             menu.innerHTML = "<p>No modules assigned.</p>";
         }
 
-        // QUICK CARDS: gamitin ang data-module gaya ng Staff
-        const cardModuleKeys = [
-            "messages",
-            "trainee",
-            "schedule",
-            "client_requests"
-        ];
+        // =====================================================
+        // QUICK CARDS
+        // Generate cards using module permissions.
+        // =====================================================
 
-        document.querySelectorAll(".cards .card").forEach(card => {
-            const title = card.querySelector("h3")?.textContent.trim();
-
-            const moduleMap = {
-                "Messages": "messages",
-                "Trainee": "trainee",
-                "Schedule": "schedule",
-                "Client Requests": "client_requests"
-            };
-
-            const moduleKey = moduleMap[title];
-
-            card.dataset.module = moduleKey || "";
-
-            card.style.display =
-                moduleKey && allowedModules.has(moduleKey) ? "" : "none";
-        });
+        renderQuickCards(allowedModules);
 
         // SUMMARY: Client Requests
         const requestsCard = document.getElementById("requestsCard");
