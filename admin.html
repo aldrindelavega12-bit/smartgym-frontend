@@ -1424,27 +1424,33 @@ function renderQuickCards(allowedModules) {
    ADMIN MODULE ACCESS
 ===================================================== */
 
+/* =====================================================
+   ADMIN MODULE ACCESS
+   SIDEBAR + QUICK CARDS
+===================================================== */
+
 async function loadAdminModuleAccess() {
 
-    const container =
-        document.getElementById("quickCards");
+    const container = document.getElementById("quickCards");
+    const menu = document.getElementById("menu");
 
-    if (!container) return;
+    if (container) {
+        container.innerHTML = `
+            <p style="color:#68736d; padding:15px;">
+                Loading available modules...
+            </p>
+        `;
+    }
 
-    // Hide cards while loading permissions.
-    container.innerHTML = `
-        <p style="color:#68736d; padding:15px;">
-            Loading available modules...
-        </p>
-    `;
+    if (menu) {
+        menu.innerHTML = "";
+    }
 
     if (!user || !user.user_id) {
 
-        container.innerHTML = `
-            <p style="color:#c0392b; padding:15px;">
-                Unable to identify logged-in user.
-            </p>
-        `;
+        if (container) {
+            container.textContent = "Unable to identify logged-in user.";
+        }
 
         return;
     }
@@ -1463,31 +1469,42 @@ async function loadAdminModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error(
-                `Module access API error: ${response.status}`
-            );
+            throw new Error(`HTTP ${response.status}`);
         }
 
         const data = await response.json();
 
         if (!Array.isArray(data.modules)) {
-            throw new Error(
-                "Invalid module permissions response."
-            );
+            throw new Error("Invalid module permissions response.");
         }
 
         const allowedModules = new Set(
-            data.modules.map(module =>
-                String(module).trim().toLowerCase()
-            )
+            data.modules.map(module => {
+
+                if (typeof module === "string") {
+                    return module.trim().toLowerCase();
+                }
+
+                return String(
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
+                    ""
+                ).trim().toLowerCase();
+
+            }).filter(Boolean)
         );
+
+        // Render sidebar
+        renderAdminMenu(allowedModules);
+
+        // Render quick cards
+        renderQuickCards(allowedModules);
 
         console.log(
-            "ADMIN ALLOWED MODULES:",
+            "ADMIN MODULE ACCESS:",
             [...allowedModules]
         );
-
-        renderQuickCards(allowedModules);
 
     } catch (error) {
 
@@ -1496,13 +1513,20 @@ async function loadAdminModuleAccess() {
             error
         );
 
-        container.innerHTML = `
-            <p style="color:#c0392b; padding:15px;">
-                Unable to load module permissions.
-            </p>
-        `;
+        if (menu) {
+            menu.innerHTML = "";
+        }
+
+        if (container) {
+            container.innerHTML = `
+                <p style="color:#c0392b; padding:15px;">
+                    Unable to load module permissions.
+                </p>
+            `;
+        }
     }
 }
+
 // =====================================================
 // ADMIN PROTECTION
 // =====================================================
@@ -1522,52 +1546,149 @@ if (
 // ADMIN MENU
 // =====================================================
 
-const menu =
-    document.getElementById("menu");
+// =====================================================
+// ADMIN MENU ITEMS
+// ALL AVAILABLE MODULES
+// =====================================================
+
+const ADMIN_MENU_ITEMS = [
+
+    {
+        key: "dashboard",
+        label: "Home",
+        page: "admin.html"
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        page: "messages.html"
+    },
+    {
+        key: "program",
+        label: "Program",
+        page: "program.html"
+    },
+    {
+        key: "get_program",
+        label: "Get Program",
+        page: "get_program.html"
+    },
+    {
+        key: "book_locker",
+        label: "Book Locker",
+        page: "locker_booking.html"
+    },
+    {
+        key: "membership",
+        label: "Membership",
+        page: "membership.html"
+    },
+    {
+        key: "attendance",
+        label: "Attendance",
+        page: "attendance.html"
+    },
+    {
+        key: "locker",
+        label: "Locker",
+        page: "locker.html"
+    },
+    {
+        key: "trainee",
+        label: "Trainee",
+        page: "trainer.html"
+    },
+    {
+        key: "schedule",
+        label: "Trainee Schedule",
+        page: "trainer-schedule.html"
+    },
+    {
+        key: "client_requests",
+        label: "Client Requests",
+        page: "client_requests.html"
+    },
+    {
+        key: "reports",
+        label: "Reports",
+        page: "reports.html"
+    },
+    {
+        key: "members",
+        label: "Members",
+        page: "member.html"
+    },
+    {
+        key: "walkins",
+        label: "Walk-ins",
+        page: "walkin.html"
+    },
+    {
+        key: "archive",
+        label: "Archive",
+        page: "archive.html"
+    },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        page: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup & Restore",
+        page: "backup_restore.html"
+    },
+    {
+        key: "audit_logs",
+        label: "Audit Logs",
+        page: "audit_logs.html"
+    }
+
+];
 
 
-menu.innerHTML = `
+// =====================================================
+// RENDER ADMIN SIDEBAR
+// =====================================================
 
-    <a
-        href="admin.html"
-        class="active"
-    >
+function renderAdminMenu(allowedModules) {
 
-        
+    const menu = document.getElementById("menu");
 
-        Home
+    if (!menu) return;
 
-    </a>
+    menu.innerHTML = "";
 
+    const currentPage = window.location.pathname
+        .split("/")
+        .pop()
+        .toLowerCase();
 
-    <a href="user_accounts.html">
+    const permittedItems = ADMIN_MENU_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
 
-        
+    permittedItems.forEach(item => {
 
-        User Account Maintenance
+        const link = document.createElement("a");
 
-    </a>
+        link.href = item.page;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
 
+        if (currentPage === item.page.toLowerCase()) {
+            link.classList.add("active");
+        }
 
-    <a href="backup_restore.html">
+        menu.appendChild(link);
 
-        
-        Backup & Restore
+    });
 
-    </a>
-
-
-    <a href="audit_logs.html">
-
-        
-
-        Audit Logs
-
-    </a>
-
-`;
-
-
+    console.log(
+        "ADMIN SIDEBAR MODULES:",
+        permittedItems.map(item => item.key)
+    );
+}
 // =====================================================
 // PROFILE DROPDOWN
 // =====================================================
