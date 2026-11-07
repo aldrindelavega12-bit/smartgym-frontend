@@ -9926,3 +9926,11 @@ body.message-modal-open {
         grid-template-columns: 1fr !important;
     }
 }
+
+.cards .card button span {
+    display: none !important;
+}
+
+.cards .card button::after {
+    content: none !important;
+}
