@@ -1234,10 +1234,6 @@ async function loadLatestBackup() {
     }
 }
 
-loadLatestBackup();
-loadRecentAuditLogs();
-
-loadAdminModuleAccess();
 // =====================================================
 // GET USER
 // =====================================================
@@ -1878,6 +1874,10 @@ if (socket){
 
 }
 
+loadLatestBackup();
+loadRecentAuditLogs();
+
+loadAdminModuleAccess();
 </script>
 
 
