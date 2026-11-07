@@ -251,95 +251,163 @@ if (!user || user.role !== "manager") {
 </div>
 
 <script>
+
 /* =====================================================
-   SIDEBAR MENU
+   SIDEBAR MENU - MANAGER
 ===================================================== */
 
 const menu = document.getElementById("menu");
 
+const menuItems = [
+    {
+        key: "dashboard",
+        label: "Home",
+        page: "manager.html"
+    },
+    {
+        key: "reports",
+        label: "Reports",
+        page: "reports.html"
+    },
+    {
+        key: "members",
+        label: "Members",
+        page: "members.html"
+    },
+    {
+        key: "walkins",
+        label: "Walk-ins",
+        page: "walkin.html"
+    },
+    {
+        key: "staff",
+        label: "Staff",
+        page: "staff_manage.html"
+    },
+    {
+        key: "archive",
+        label: "Archive",
+        page: "archive.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup and Restore",
+        page: "backup_restore.html"
+    },
+    {
+        key: "audit_logs",
+        label: "Audit Logs",
+        page: "audit_logs.html"
+    }
+];
 
-menu.innerHTML = `
-    <a href="manager.html" data-module="dashboard">
-        Home
-    </a>
 
-    <a href="reports.html" data-module="reports">
-        Reports
-    </a>
+/* =====================================================
+   RENDER MANAGER SIDEBAR
+===================================================== */
 
-    <a href="members.html" data-module="members">
-        Members
-    </a>
+function renderManagerMenu(allowedModules) {
 
-    <a href="walkin.html" data-module="walkins">
-        Walk-ins
-    </a>
+    const currentPage = window.location.pathname
+        .split("/")
+        .pop()
+        .toLowerCase();
 
-    <a href="staff_manage.html" data-module="staff">
-        Staff
-    </a>
+    menu.innerHTML = "";
 
-    <a href="archive.html" data-module="archive" class="active">
-        Archive
-    </a>
-`;
+    menuItems.forEach(item => {
+
+        if (!allowedModules.has(item.key)) {
+            return;
+        }
+
+        const link = document.createElement("a");
+
+        link.href = item.page;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (currentPage === item.page.toLowerCase()) {
+            link.classList.add("active");
+        }
+
+        menu.appendChild(link);
+
+    });
+}
 
 
-
+/* =====================================================
+   LOAD MANAGER MODULE ACCESS
+===================================================== */
 
 async function loadArchiveModuleAccess() {
-    const menuLinks = document.querySelectorAll(
-        "#menu a[data-module]"
-    );
 
-    menuLinks.forEach(link => {
-        link.style.display = "none";
-    });
+    const userId = user?.user_id || user?.id;
+
+    if (!menu || !userId) {
+        console.error("Missing menu or user ID.");
+        return;
+    }
 
     try {
+
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
-            { cache: "no-store" }
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
         );
 
         if (!response.ok) {
-            throw new Error("Failed to load module access.");
+            throw new Error(
+                `Module access error: ${response.status}`
+            );
         }
 
         const data = await response.json();
 
-        const modules = Array.isArray(data)
-            ? data
-            : Array.isArray(data.modules)
-                ? data.modules
-                : [];
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module access response.");
+        }
 
         const allowedModules = new Set(
-            modules.map(item => {
-                const key = typeof item === "string"
-                    ? item
-                    : item.module_key ||
-                      item.module_name ||
-                      item.key ||
-                      "";
+            data.modules.map(module => {
 
-                return String(key).trim().toLowerCase();
-            })
+                return String(
+                    typeof module === "string"
+                        ? module
+                        : module.module_key ||
+                          module.module_name ||
+                          module.key ||
+                          ""
+                ).trim().toLowerCase();
+
+            }).filter(Boolean)
         );
 
-        menuLinks.forEach(link => {
-            const moduleKey = link.dataset.module.toLowerCase();
+        renderManagerMenu(allowedModules);
 
-            link.style.display = allowedModules.has(moduleKey)
-                ? ""
-                : "none";
-        });
+        console.log(
+            "MANAGER ALLOWED MODULES:",
+            [...allowedModules]
+        );
 
     } catch (error) {
-        console.error("Archive module access error:", error);
+
+        console.error(
+            "ARCHIVE MODULE ACCESS ERROR:",
+            error
+        );
+
+        menu.innerHTML = "";
+
     }
 }
-
 
 
 function toggleStaffMenu() {
