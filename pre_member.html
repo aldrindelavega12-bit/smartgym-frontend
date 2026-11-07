@@ -65,16 +65,7 @@
 
         <!-- HOME ONLY -->
 
-        <div class="menu">
-
-            <a href="pre_member.html"
-               class="active">
-
-                Home
-
-            </a>
-
-        </div>
+        <div class="menu" id="menu"></div>
 
 
     </div>
@@ -1238,6 +1229,93 @@ const API_URL =
 const userData =
     JSON.parse(localStorage.getItem("user")) || {};
 
+// ================= PRE-MEMBER MODULE ACCESS =================
+
+async function loadPreMemberMenu() {
+
+    const menu = document.getElementById("menu");
+
+    if (!menu) return;
+
+    if (!userData.id && !userData.user_id) {
+        console.error("Missing Pre-Member user ID.");
+        return;
+    }
+
+    const userId = userData.user_id || userData.id;
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Module access API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module permissions response.");
+        }
+
+        const allowedModules = new Set(
+            data.modules.map(module => {
+                if (typeof module === "string") {
+                    return module.trim().toLowerCase();
+                }
+
+                return String(
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
+                    ""
+                ).trim().toLowerCase();
+            }).filter(Boolean)
+        );
+
+        const menuItems = [
+            {
+                key: "dashboard",
+                label: "Home",
+                page: "pre_member.html"
+            }
+        ];
+
+        const currentPage = document.body.dataset.module || "dashboard";
+
+        if (!allowedModules.has(currentPage)) {
+            menu.innerHTML = "<p>No modules assigned.</p>";
+
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang page na ito.</p>
+                </main>
+            `;
+
+            return;
+        }
+
+        menu.innerHTML = menuItems
+            .filter(item => allowedModules.has(item.key))
+            .map(item => `
+                <a href="${item.page}" class="active">
+                    ${item.label}
+                </a>
+            `)
+            .join("");
+
+    } catch (error) {
+
+        console.error("PRE-MEMBER MODULE ACCESS ERROR:", error);
+        menu.innerHTML = "<p>Unable to load module permissions.</p>";
+
+    }
+}
+loadPreMemberMenu();
 /* =========================================================
    USER DATA
    ========================================================= */

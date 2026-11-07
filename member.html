@@ -58,7 +58,7 @@
 
 </style>
 
-<body>
+<body data-module="dashboard">
 
 <!-- ROLE PROTECTION -->
 <script>
@@ -671,6 +671,7 @@ const API_URL =
 
 
 async function loadMemberModuleAccess() {
+
     const sidebarLinks = document.querySelectorAll(
         ".navbar .menu a[data-module]"
     );
@@ -679,75 +680,98 @@ async function loadMemberModuleAccess() {
         ".cards [data-module-card]"
     );
 
-    // Itago muna habang kinukuha ang permissions
-    sidebarLinks.forEach(link => {
-        link.style.display = "none";
-    });
-
-    quickCards.forEach(card => {
-        card.style.display = "none";
-    });
+    // Hide muna habang chine-check ang permissions
+    sidebarLinks.forEach(link => link.style.display = "none");
+    quickCards.forEach(card => card.style.display = "none");
 
     try {
+
+        const accessUserId = userData.user_id || userData.id;
+
+        if (!accessUserId) {
+            throw new Error("Missing member user ID.");
+        }
+
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(userData.user_id)}`,
+            `${API_URL}/api/user/module-access/${encodeURIComponent(accessUserId)}`,
             { cache: "no-store" }
         );
 
         if (!response.ok) {
-            throw new Error("Failed to load module access");
+            throw new Error(`Module access API error: ${response.status}`);
         }
 
         const data = await response.json();
-        const modules = Array.isArray(data)
-            ? data
-            : data.modules || [];
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error("Invalid module permissions response.");
+        }
 
         const allowedModules = new Set(
-            modules.map(item => {
-                const key = typeof item === "string"
-                    ? item
-                    : item.module_key ||
-                      item.module_name ||
-                      item.key ||
-                      "";
+            data.modules.map(item => {
+                if (typeof item === "string") {
+                    return item.trim().toLowerCase();
+                }
 
-                return String(key).trim().toLowerCase();
-            })
+                return String(
+                    item.module_key ||
+                    item.module_name ||
+                    item.key ||
+                    ""
+                ).trim().toLowerCase();
+            }).filter(Boolean)
         );
 
-        // Sidebar filtering
+        // Check current page access
+        const requiredModule = document.body.dataset.module;
+
+        if (!requiredModule || !allowedModules.has(requiredModule.toLowerCase())) {
+
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang page na ito.</p>
+                    <button onclick="location.href='member.html'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+
+            return;
+        }
+
+        // Filter sidebar
         sidebarLinks.forEach(link => {
-            const moduleKey = link.dataset.module
-                .trim()
-                .toLowerCase();
+            const moduleKey = link.dataset.module.trim().toLowerCase();
 
             link.style.display =
                 allowedModules.has(moduleKey) ? "" : "none";
         });
 
-        // Quick card filtering
+        // Filter quick cards
         quickCards.forEach(card => {
-            const moduleKey = card.dataset.moduleCard
-                .trim()
-                .toLowerCase();
+            const moduleKey = card.dataset.moduleCard.trim().toLowerCase();
 
             card.style.display =
                 allowedModules.has(moduleKey) ? "" : "none";
         });
 
-        console.log(
-            "MEMBER ALLOWED MODULES:",
-            [...allowedModules]
-        );
+        console.log("MEMBER ALLOWED MODULES:", [...allowedModules]);
 
     } catch (error) {
-        console.error(
-            "MEMBER MODULE ACCESS ERROR:",
-            error
-        );
+
+        console.error("MEMBER MODULE ACCESS ERROR:", error);
+
+        document.body.innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang module permissions mo.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
     }
 }
+
 
 // ==============================
 // LOAD USER
