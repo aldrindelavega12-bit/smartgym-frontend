@@ -948,71 +948,15 @@
              QUICK ACTIONS
         ================================================== -->
 
+        <!-- =================================================
+            QUICK ACTIONS
+        ================================================== -->
+
         <div class="admin-quick-section">
 
-            <div class="quick-cards">
+            <div class="quick-cards" id="quickCards">
 
-
-                <!-- USER ACCOUNT MAINTENANCE -->
-
-                <div class="quick-card">
-
-                    <h3>
-                        User Account Maintenance
-                    </h3>
-
-                    <p>
-                        Manage system users
-                    </p>
-
-                    <a href="user_accounts.html">
-                        View →
-                    </a>
-
-                </div>
-
-
-
-                <!-- BACKUP & RESTORE -->
-
-                <div class="quick-card">
-
-                    <h3>
-                        Backup & Restore
-                    </h3>
-
-                    <p>
-                        Create or restore<br>
-                        database backups
-                    </p>
-
-                    <a href="backup_restore.html">
-                        View →
-                    </a>
-
-                </div>
-
-
-
-                <!-- AUDIT LOGS -->
-
-                <div class="quick-card">
-
-                    <h3>
-                        Audit Logs
-                    </h3>
-
-                    <p>
-                        Track system<br>
-                        activities
-                    </p>
-
-                    <a href="audit_logs.html">
-                        View →
-                    </a>
-
-                </div>
-
+                <!-- Generated according to module permissions -->
 
             </div>
 
@@ -1292,6 +1236,8 @@ async function loadLatestBackup() {
 
 loadLatestBackup();
 loadRecentAuditLogs();
+
+loadAdminModuleAccess();
 // =====================================================
 // GET USER
 // =====================================================
@@ -1301,7 +1247,262 @@ const user =
         localStorage.getItem("user")
     );
 
+/* =====================================================
+   MASTER QUICK CARD LIST
+   ALL SYSTEM MODULES
+===================================================== */
 
+const QUICK_CARD_ITEMS = [
+
+    {
+        key: "messages",
+        title: "Messages",
+        description: "View and manage system messages",
+        page: "messages.html"
+    },
+    {
+        key: "program",
+        title: "Program",
+        description: "View and manage workout programs",
+        page: "program.html"
+    },
+    {
+        key: "get_program",
+        title: "Get Program",
+        description: "View available workout programs",
+        page: "get_program.html"
+    },
+    {
+        key: "book_locker",
+        title: "Book Locker",
+        description: "View and manage locker bookings",
+        page: "locker_booking.html"
+    },
+    {
+        key: "membership",
+        title: "Membership",
+        description: "View and manage membership records",
+        page: "membership.html"
+    },
+    {
+        key: "attendance",
+        title: "Attendance",
+        description: "View and monitor attendance logs",
+        page: "attendance.html"
+    },
+    {
+        key: "locker",
+        title: "Locker",
+        description: "View and monitor locker activity",
+        page: "locker.html"
+    },
+    {
+        key: "trainee",
+        title: "Trainee",
+        description: "View and manage trainee records",
+        page: "trainer.html"
+    },
+    {
+        key: "schedule",
+        title: "Trainee Schedule",
+        description: "View and manage trainee schedules",
+        page: "trainer-schedule.html"
+    },
+    {
+        key: "client_requests",
+        title: "Client Requests",
+        description: "View and manage client requests",
+        page: "client_requests.html"
+    },
+    {
+        key: "reports",
+        title: "Reports",
+        description: "View system reports",
+        page: "reports.html"
+    },
+    {
+        key: "members",
+        title: "Members",
+        description: "View and manage gym members",
+        page: "member.html"
+    },
+    {
+        key: "walkins",
+        title: "Walk-ins",
+        description: "View and manage walk-in records",
+        page: "walkin.html"
+    },
+    {
+        key: "archive",
+        title: "Archive",
+        description: "View archived records",
+        page: "archive.html"
+    },
+    {
+        key: "user_account_maintenance",
+        title: "User Account Maintenance",
+        description: "Manage system user accounts",
+        page: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        title: "Backup & Restore",
+        description: "Manage database backups and restoration",
+        page: "backup_restore.html"
+    },
+    {
+        key: "audit_logs",
+        title: "Audit Logs",
+        description: "View system activity and audit records",
+        page: "audit_logs.html"
+    }
+
+];
+
+/* =====================================================
+   RENDER ADMIN QUICK CARDS
+===================================================== */
+
+function renderQuickCards(allowedModules) {
+
+    const container =
+        document.getElementById("quickCards");
+
+    if (!container) return;
+
+    // Prevent duplicate cards.
+    container.innerHTML = "";
+
+    const permittedCards = QUICK_CARD_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
+
+    if (permittedCards.length === 0) {
+
+        container.innerHTML = `
+            <p style="color:#68736d; padding:15px;">
+                No available modules assigned.
+            </p>
+        `;
+
+        return;
+    }
+
+    permittedCards.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className = "quick-card";
+        card.dataset.module = item.key;
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+
+        const link = document.createElement("a");
+
+        link.href = item.page;
+        link.textContent = "View →";
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(link);
+
+        container.appendChild(card);
+
+    });
+
+    console.log(
+        "ADMIN QUICK CARDS:",
+        permittedCards.map(item => item.key)
+    );
+}
+
+/* =====================================================
+   ADMIN MODULE ACCESS
+===================================================== */
+
+async function loadAdminModuleAccess() {
+
+    const container =
+        document.getElementById("quickCards");
+
+    if (!container) return;
+
+    // Hide cards while loading permissions.
+    container.innerHTML = `
+        <p style="color:#68736d; padding:15px;">
+            Loading available modules...
+        </p>
+    `;
+
+    if (!user || !user.user_id) {
+
+        container.innerHTML = `
+            <p style="color:#c0392b; padding:15px;">
+                Unable to identify logged-in user.
+            </p>
+        `;
+
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Module access API error: ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.modules)) {
+            throw new Error(
+                "Invalid module permissions response."
+            );
+        }
+
+        const allowedModules = new Set(
+            data.modules.map(module =>
+                String(module).trim().toLowerCase()
+            )
+        );
+
+        console.log(
+            "ADMIN ALLOWED MODULES:",
+            [...allowedModules]
+        );
+
+        renderQuickCards(allowedModules);
+
+    } catch (error) {
+
+        console.error(
+            "ADMIN MODULE ACCESS ERROR:",
+            error
+        );
+
+        container.innerHTML = `
+            <p style="color:#c0392b; padding:15px;">
+                Unable to load module permissions.
+            </p>
+        `;
+    }
+}
 // =====================================================
 // ADMIN PROTECTION
 // =====================================================

@@ -8346,3 +8346,49 @@ a[href="#incomeReport"]::before {
         max-width: 100%;
     }
 }
+
+/* =====================================================
+   ADMIN QUICK CARDS - FORCE OVERRIDE
+===================================================== */
+
+.quick-cards {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    align-items: start !important;
+}
+
+.quick-cards .quick-card {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 18px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+}
+
+.quick-cards .quick-card h3 {
+    margin: 0 0 6px !important;
+}
+
+.quick-cards .quick-card p {
+    margin: 0 !important;
+    min-height: 0 !important;
+}
+
+.quick-cards .quick-card a {
+    margin-top: 12px !important;
+}
+
+@media (max-width: 1200px) {
+    .quick-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .quick-cards {
+        grid-template-columns: 1fr !important;
+    }
+}
