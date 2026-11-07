@@ -94,35 +94,7 @@ if (!user || user.role !== "member") {
 
 
     <!-- MENU -->
-    <div class="menu">
-
-                
-        <a href="member.html" class="active" data-module="dashboard">
-            Home
-        </a>
-
-        <a href="member_messages.html" class="msg-link" data-module="messages">
-            Messages
-            <span id="msg-count" class="msg-count">0</span>
-        </a>
-
-        <a href="program.html" data-module="program">
-            Program
-        </a>
-
-        <a href="get_program.html" data-module="get_program">
-            Get Program
-        </a>
-
-        <a href="locker_booking.html" data-module="book_locker">
-            Book Locker
-        </a>
-
-        <a href="membership.html" data-module="membership">
-            Membership
-        </a>
-
-    </div>
+    <div class="menu"></div>
 
 </div>
 
@@ -206,104 +178,7 @@ if (!user || user.role !== "member") {
     </div>
 
 
-    <!-- CARDS -->
-    <div class="cards">
-
-        <!-- MESSAGES -->
-        <div class="card" data-module-card="messages">
-
-            <h3>
-                Messages
-            </h3>
-
-            <p>
-                View your<br>
-                messages
-            </p>
-
-            <button onclick="go('member_messages.html')">
-                Open
-            </button>
-
-        </div>
-
-
-        <!-- PROGRAM -->
-        <div class="card" data-module-card="program">
-
-            <h3>
-                Program
-            </h3>
-
-            <p>
-                View your<br>
-                training program
-            </p>
-
-            <button onclick="go('program.html')">
-                View
-            </button>
-
-        </div>
-
-
-        <!-- GET PROGRAM -->
-        <div class="card" data-module-card="get_program">
-
-            <h3>
-                Get Program
-            </h3>
-
-            <p>
-                Choose a program<br>
-                and trainer
-            </p>
-
-            <button onclick="go('get_program.html')">
-                Open
-            </button>
-
-        </div>
-
-
-        <!-- BOOK LOCKER -->
-        <div class="card" data-module-card="book_locker">
-
-            <h3>
-                Book Locker
-            </h3>
-
-            <p>
-                Reserve a locker<br>
-                for your items
-            </p>
-
-            <button onclick="go('locker_booking.html')">
-                Book Now
-            </button>
-
-        </div>
-
-
-        <!-- MEMBERSHIP -->
-        <div class="card" data-module-card="membership">
-
-            <h3>
-                Membership Details
-            </h3>
-
-            <p>
-                View your membership<br>
-                information
-            </p>
-
-            <button onclick="go('membership.html')">
-                View
-            </button>
-
-        </div>
-
-    </div>
+    <div class="cards" id="quickCards"></div>
 
 </div>
 
@@ -670,35 +545,240 @@ const API_URL =
 "https://smartgym-api-ia2e.onrender.com";
 
 
+/* =====================================================
+   MEMBER MASTER QUICK CARD LIST
+   ALL SYSTEM MODULES
+===================================================== */
+
+const QUICK_CARD_ITEMS = [
+
+    {
+        key: "messages",
+        title: "Messages",
+        description: "View and manage system messages",
+        page: "member_messages.html"
+    },
+
+    {
+        key: "program",
+        title: "Program",
+        description: "View and manage workout programs",
+        page: "program.html"
+    },
+
+    {
+        key: "get_program",
+        title: "Get Program",
+        description: "View available workout programs",
+        page: "get_program.html"
+    },
+
+    {
+        key: "book_locker",
+        title: "Book Locker",
+        description: "View and manage locker bookings",
+        page: "locker_booking.html"
+    },
+
+    {
+        key: "membership",
+        title: "Membership",
+        description: "View and manage membership records",
+        page: "membership.html"
+    },
+
+    {
+        key: "attendance",
+        title: "Attendance",
+        description: "View and monitor attendance logs",
+        page: "attendance.html"
+    },
+
+    {
+        key: "locker",
+        title: "Locker",
+        description: "View and monitor locker activity",
+        page: "locker.html"
+    },
+
+    {
+        key: "trainee",
+        title: "Trainee",
+        description: "View and manage assigned trainees",
+        page: "trainee.html"
+    },
+
+    {
+        key: "schedule",
+        title: "Schedule",
+        description: "View and manage trainee workout schedules",
+        page: "trainer-schedule.html"
+    },
+
+    {
+        key: "client_requests",
+        title: "Client Requests",
+        description: "View and manage member training requests",
+        page: "client_requests.html"
+    },
+
+    {
+        key: "reports",
+        title: "Reports",
+        description: "View system reports",
+        page: "reports.html"
+    },
+
+    {
+        key: "members",
+        title: "Members",
+        description: "View and manage gym members",
+        page: "member.html"
+    },
+
+    {
+        key: "walkins",
+        title: "Walk-ins",
+        description: "View and manage walk-in records",
+        page: "walkin.html"
+    },
+
+    {
+        key: "archive",
+        title: "Archive",
+        description: "View archived records",
+        page: "archive.html"
+    },
+
+    {
+        key: "user_account_maintenance",
+        title: "User Account Maintenance",
+        description: "Manage system user accounts",
+        page: "user_accounts.html"
+    },
+
+    {
+        key: "backup_restore",
+        title: "Backup & Restore",
+        description: "Manage database backups and restoration",
+        page: "backup_restore.html"
+    },
+
+    {
+        key: "audit_logs",
+        title: "Audit Logs",
+        description: "View system activity and audit records",
+        page: "audit_logs.html"
+    }
+
+];
+
+
+/* =====================================================
+   RENDER MEMBER QUICK CARDS
+===================================================== */
+
+function renderQuickCards(allowedModules) {
+
+    const container =
+        document.getElementById("quickCards");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const permittedCards = QUICK_CARD_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
+
+    if (permittedCards.length === 0) {
+
+        container.innerHTML = `
+            <p style="color:#68736d; padding:15px;">
+                No available modules assigned.
+            </p>
+        `;
+
+        return;
+    }
+
+    permittedCards.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+        card.dataset.module = item.key;
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.textContent = "View →";
+
+        button.addEventListener("click", () => {
+            window.location.href = item.page;
+        });
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(button);
+
+        container.appendChild(card);
+
+    });
+
+    console.log(
+        "MEMBER QUICK CARDS:",
+        permittedCards.map(item => item.key)
+    );
+}
+
+
+/* =====================================================
+   MEMBER MODULE ACCESS
+   SIDEBAR + QUICK CARDS + DASHBOARD PANELS
+===================================================== */
+
 async function loadMemberModuleAccess() {
 
-    const sidebarLinks = document.querySelectorAll(
-        ".navbar .menu a[data-module]"
-    );
+    const menu =
+        document.querySelector(".navbar .menu");
 
-    const quickCards = document.querySelectorAll(
-        ".cards [data-module-card]"
-    );
+    const container =
+        document.getElementById("quickCards");
 
-    // Hide muna habang chine-check ang permissions
-    sidebarLinks.forEach(link => link.style.display = "none");
-    quickCards.forEach(card => card.style.display = "none");
+    if (!menu || !userData || !userData.user_id) {
+
+        console.error("Missing member menu or user ID.");
+        return;
+    }
+
+    menu.innerHTML = "<p>Loading menu...</p>";
+
+    if (container) {
+        container.innerHTML = "";
+    }
 
     try {
 
-        const accessUserId = userData.user_id || userData.id;
-
-        if (!accessUserId) {
-            throw new Error("Missing member user ID.");
-        }
-
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(accessUserId)}`,
-            { cache: "no-store" }
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userData.user_id)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
         );
 
         if (!response.ok) {
-            throw new Error(`Module access API error: ${response.status}`);
+            throw new Error(`HTTP ${response.status}`);
         }
 
         const data = await response.json();
@@ -708,70 +788,250 @@ async function loadMemberModuleAccess() {
         }
 
         const allowedModules = new Set(
-            data.modules.map(item => {
-                if (typeof item === "string") {
-                    return item.trim().toLowerCase();
+            data.modules.map(module => {
+
+                if (typeof module === "string") {
+                    return module.trim().toLowerCase();
                 }
 
                 return String(
-                    item.module_key ||
-                    item.module_name ||
-                    item.key ||
+                    module.module_key ||
+                    module.module_name ||
+                    module.key ||
                     ""
                 ).trim().toLowerCase();
+
             }).filter(Boolean)
         );
 
-        // Check current page access
-        const requiredModule = document.body.dataset.module;
+        console.log(
+            "MEMBER ALLOWED MODULES:",
+            [...allowedModules]
+        );
 
-        if (!requiredModule || !allowedModules.has(requiredModule.toLowerCase())) {
 
-            document.body.innerHTML = `
-                <main style="font-family:Arial;text-align:center;padding:60px 20px">
-                    <h2>Access Denied</h2>
-                    <p>Wala kang permission para buksan ang page na ito.</p>
-                    <button onclick="location.href='member.html'">
-                        Back to Dashboard
-                    </button>
-                </main>
-            `;
+        // =====================================================
+        // SIDEBAR MASTER MODULE LIST
+        // =====================================================
 
-            return;
+        const menuItems = [
+
+            {
+                key: "dashboard",
+                label: "Home",
+                page: "member.html"
+            },
+
+            {
+                key: "messages",
+                label: "Messages",
+                page: "member_messages.html",
+                className: "msg-link",
+                badge: true
+            },
+
+            {
+                key: "program",
+                label: "Program",
+                page: "program.html"
+            },
+
+            {
+                key: "get_program",
+                label: "Get Program",
+                page: "get_program.html"
+            },
+
+            {
+                key: "book_locker",
+                label: "Book Locker",
+                page: "locker_booking.html"
+            },
+
+            {
+                key: "membership",
+                label: "Membership",
+                page: "membership.html"
+            },
+
+            {
+                key: "attendance",
+                label: "Attendance",
+                page: "attendance.html"
+            },
+
+            {
+                key: "locker",
+                label: "Locker",
+                page: "locker.html"
+            },
+
+            {
+                key: "trainee",
+                label: "Trainee",
+                page: "trainee.html"
+            },
+
+            {
+                key: "schedule",
+                label: "Schedule",
+                page: "trainer-schedule.html"
+            },
+
+            {
+                key: "client_requests",
+                label: "Client Requests",
+                page: "client_requests.html"
+            },
+
+            {
+                key: "reports",
+                label: "Reports",
+                page: "reports.html"
+            },
+
+            {
+                key: "members",
+                label: "Members",
+                page: "member.html"
+            },
+
+            {
+                key: "walkins",
+                label: "Walk-ins",
+                page: "walkin.html"
+            },
+
+            {
+                key: "archive",
+                label: "Archive",
+                page: "archive.html"
+            },
+
+            {
+                key: "user_account_maintenance",
+                label: "User Account Maintenance",
+                page: "user_accounts.html"
+            },
+
+            {
+                key: "backup_restore",
+                label: "Backup & Restore",
+                page: "backup_restore.html"
+            },
+
+            {
+                key: "audit_logs",
+                label: "Audit Logs",
+                page: "audit_logs.html"
+            }
+
+        ];
+
+
+        // =====================================================
+        // RENDER SIDEBAR
+        // =====================================================
+
+        const currentPage = window.location.pathname
+            .split("/")
+            .pop()
+            .toLowerCase();
+
+        menu.innerHTML = "";
+
+        const permittedMenuItems = menuItems.filter(item =>
+            allowedModules.has(item.key)
+        );
+
+        permittedMenuItems.forEach(item => {
+
+            const link = document.createElement("a");
+
+            link.href = item.page;
+            link.dataset.module = item.key;
+            link.textContent = item.label;
+
+            if (item.className) {
+                link.classList.add(item.className);
+            }
+
+            if (currentPage === item.page.toLowerCase()) {
+                link.classList.add("active");
+            }
+
+            if (item.badge) {
+
+                const badge = document.createElement("span");
+
+                badge.id = "msg-count";
+                badge.className = "msg-count";
+                badge.textContent = "0";
+
+                link.appendChild(badge);
+            }
+
+            menu.appendChild(link);
+
+        });
+
+        if (!permittedMenuItems.length) {
+            menu.innerHTML = "<p>No modules assigned.</p>";
         }
 
-        // Filter sidebar
-        sidebarLinks.forEach(link => {
-            const moduleKey = link.dataset.module.trim().toLowerCase();
 
-            link.style.display =
-                allowedModules.has(moduleKey) ? "" : "none";
-        });
+        // =====================================================
+        // QUICK CARDS
+        // =====================================================
 
-        // Filter quick cards
-        quickCards.forEach(card => {
-            const moduleKey = card.dataset.moduleCard.trim().toLowerCase();
+        renderQuickCards(allowedModules);
 
-            card.style.display =
-                allowedModules.has(moduleKey) ? "" : "none";
-        });
 
-        console.log("MEMBER ALLOWED MODULES:", [...allowedModules]);
+        // =====================================================
+        // DASHBOARD PANEL PERMISSIONS
+        // =====================================================
 
-    } catch (error) {
+        const workoutPanel =
+            document.querySelector(".today-workout-panel");
 
-        console.error("MEMBER MODULE ACCESS ERROR:", error);
+        if (workoutPanel) {
+            workoutPanel.style.display =
+                allowedModules.has("program") ? "" : "none";
+        }
 
-        document.body.innerHTML = `
-            <main style="font-family:Arial;text-align:center;padding:60px 20px">
-                <h2>Unable to Verify Access</h2>
-                <p>Hindi ma-verify ang module permissions mo.</p>
-                <button onclick="location.reload()">Retry</button>
-            </main>
-        `;
+        const membershipPanel =
+            document.querySelector(
+                ".dashboard-info > .dashboard-panel:nth-child(2)"
+            );
+
+        if (membershipPanel) {
+            membershipPanel.style.display =
+                allowedModules.has("membership") ? "" : "none";
+        }
+
     }
-}
 
+    catch (error) {
+
+        console.error(
+            "MEMBER MODULE ACCESS ERROR:",
+            error
+        );
+
+        menu.innerHTML =
+            "<p>Unable to load module permissions.</p>";
+
+        if (container) {
+            container.innerHTML = `
+                <p style="color:#c0392b; padding:15px;">
+                    Unable to load module permissions.
+                </p>
+            `;
+        }
+
+    }
+
+}
 
 // ==============================
 // LOAD USER
