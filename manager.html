@@ -328,114 +328,11 @@
              MANAGER QUICK ACTION CARDS
         ================================================== -->
 
-        <div class="quick-cards">
+        <!-- =====================================================
+            MANAGER QUICK ACTION CARDS
+        ===================================================== -->
 
-
-            <!-- REPORTS -->
-
-            <div class="quick-card" data-module="reports">
-
-                <h3>
-                    Reports
-                </h3>
-
-                <p>
-                    View income reports<br>
-                    and summaries
-                </p>
-
-                <a href="reports.html">
-                    View →
-                </a>
-
-            </div>
-
-
-
-            <!-- MEMBERS -->
-
-            <div class="quick-card" data-module="members">
-
-                <h3>
-                    Members
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    member records
-                </p>
-
-                <a href="members.html">
-                    View →
-                </a>
-
-            </div>
-
-
-
-            <!-- WALK-INS -->
-
-            <div class="quick-card" data-module="walkins">
-
-                <h3>
-                    Walk-ins
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    walk-in records
-                </p>
-
-                <a href="walkin.html">
-                    View →
-                </a>
-
-            </div>
-
-
-
-            <!-- STAFF -->
-
-            <div class="quick-card" data-module="staff">
-
-                <h3>
-                    Staff
-                </h3>
-
-                <p>
-                    View and manage<br>
-                    staff accounts
-                </p>
-
-                <a href="staff_manage.html">
-                    View →
-                </a>
-
-            </div>
-
-
-
-            <!-- ARCHIVE -->
-
-            <div class="quick-card" data-module="archive">
-
-                <h3>
-                    Archive
-                </h3>
-
-                <p>
-                    View archived<br>
-                    records
-                </p>
-
-                <a href="archive.html">
-                    View →
-                </a>
-
-            </div>
-
-
-        </div>
+        <div class="quick-cards" id="quickCards"></div>
 
 
     </div>
@@ -481,76 +378,211 @@ if (
 
 }
 
+// =====================================================
+// MANAGER MENU ITEMS
+// =====================================================
+
+const menuItems = [
+    {
+        key: "dashboard",
+        label: "Home",
+        page: "manager.html"
+    },
+    {
+        key: "reports",
+        label: "Reports",
+        page: "reports.html"
+    },
+    {
+        key: "members",
+        label: "Members",
+        page: "members.html"
+    },
+    {
+        key: "walkins",
+        label: "Walk-ins",
+        page: "walkin.html"
+    },
+    {
+        key: "staff",
+        label: "Staff",
+        page: "staff_manage.html"
+    },
+    {
+        key: "archive",
+        label: "Archive",
+        page: "archive.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup and Restore",
+        page: "backup_restore.html"
+    },
+    {
+        key: "audit_logs",
+        label: "Audit Logs",
+        page: "audit_logs.html"
+    }
+];
+
 
 // =====================================================
-// MANAGER MENU
+// MANAGER QUICK CARD ITEMS
 // =====================================================
 
-const menu =
-    document.getElementById("menu");
+const QUICK_CARD_ITEMS = [
+    {
+        key: "reports",
+        title: "Reports",
+        description: "View income reports and summaries",
+        page: "reports.html"
+    },
+    {
+        key: "members",
+        title: "Members",
+        description: "View and manage member records",
+        page: "members.html"
+    },
+    {
+        key: "walkins",
+        title: "Walk-ins",
+        description: "View and manage walk-in records",
+        page: "walkin.html"
+    },
+    {
+        key: "staff",
+        title: "Staff",
+        description: "View and manage staff accounts",
+        page: "staff_manage.html"
+    },
+    {
+        key: "archive",
+        title: "Archive",
+        description: "View archived records",
+        page: "archive.html"
+    },
+    {
+        key: "backup_restore",
+        title: "Backup and Restore",
+        description: "Manage database backup and restoration",
+        page: "backup_restore.html"
+    },
+    {
+        key: "audit_logs",
+        title: "Audit Logs",
+        description: "View system activity records",
+        page: "audit_logs.html"
+    }
+];
 
 
+// =====================================================
+// RENDER MANAGER SIDEBAR
+// =====================================================
 
-menu.innerHTML = `
-    <a href="manager.html"
-       data-module="dashboard"
-       class="active">
-        Home
-    </a>
+function renderManagerMenu(allowedModules) {
 
-    <a href="reports.html"
-       data-module="reports">
-        Reports
-    </a>
+    const currentPage = window.location.pathname
+        .split("/")
+        .pop()
+        .toLowerCase();
 
-    <a href="members.html"
-       data-module="members">
-        Members
-    </a>
+    menu.innerHTML = "";
 
-    <a href="walkin.html"
-       data-module="walkins">
-        Walk-ins
-    </a>
+    menuItems.forEach(item => {
 
-    <a href="staff_manage.html"
-       data-module="staff">
-        Staff
-    </a>
+        if (!allowedModules.has(item.key)) {
+            return;
+        }
 
-    <a href="archive.html"
-       data-module="archive">
-        Archive
-    </a>
+        const link = document.createElement("a");
 
-    <a href="backup_restore.html"
-       data-module="backup_restore">
-        Backup and Restore
-    </a>
+        link.href = item.page;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
 
-    <a href="audit_logs.html"
-       data-module="audit_logs">
-        Audit Logs
-    </a>
+        if (currentPage === item.page.toLowerCase()) {
+            link.classList.add("active");
+        }
 
-`;
+        menu.appendChild(link);
+
+    });
+}
 
 
+// =====================================================
+// RENDER MANAGER QUICK CARDS
+// =====================================================
+
+function renderManagerQuickCards(allowedModules) {
+
+    const container = document.getElementById("quickCards");
+
+    if (!container) {
+        console.error("Quick Cards container not found.");
+        return;
+    }
+
+    container.innerHTML = "";
+
+    QUICK_CARD_ITEMS.forEach(item => {
+
+        if (!allowedModules.has(item.key)) {
+            return;
+        }
+
+        const card = document.createElement("div");
+
+        card.className = "quick-card";
+        card.dataset.module = item.key;
+
+        card.innerHTML = `
+            <h3>${item.title}</h3>
+
+            <p>${item.description}</p>
+
+            <a href="${item.page}">
+                View →
+            </a>
+        `;
+
+        container.appendChild(card);
+
+    });
+}
+
+
+// =====================================================
+// LOAD MANAGER MODULE ACCESS
+// =====================================================
 
 async function loadManagerModuleAccess() {
-    if (!menu || !user?.user_id) {
+
+    const userId = user?.user_id || user?.id;
+
+    if (!menu || !userId) {
         console.error("Missing menu or user ID.");
         return;
     }
 
     try {
+
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
-            { cache: "no-store" }
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
         );
 
         if (!response.ok) {
-            throw new Error(`Module access error: ${response.status}`);
+            throw new Error(
+                `Module access error: ${response.status}`
+            );
         }
 
         const data = await response.json();
@@ -560,42 +592,49 @@ async function loadManagerModuleAccess() {
         }
 
         const allowedModules = new Set(
-            data.modules.map(module =>
-                String(
+            data.modules.map(module => {
+
+                return String(
                     typeof module === "string"
                         ? module
-                        : module.module_key || ""
-                ).trim().toLowerCase()
-            ).filter(Boolean)
+                        : module.module_key ||
+                          module.module_name ||
+                          module.key ||
+                          ""
+                ).trim().toLowerCase();
+
+            }).filter(Boolean)
         );
 
-        // SIDEBAR: SHOW/HIDE HTML LINKS
-        menu.querySelectorAll("[data-module]").forEach(link => {
-            const key = link.dataset.module.trim().toLowerCase();
-            link.hidden = !allowedModules.has(key);
-        });
+        // RENDER SIDEBAR
+        renderManagerMenu(allowedModules);
 
-        // QUICK CARDS: SHOW/HIDE
-        document.querySelectorAll(".quick-card[data-module]").forEach(card => {
-            const key = card.dataset.module.trim().toLowerCase();
-            card.hidden = !allowedModules.has(key);
-        });
+        // RENDER QUICK CARDS
+        renderManagerQuickCards(allowedModules);
 
-        console.log("MANAGER ALLOWED MODULES:", [...allowedModules]);
+        console.log(
+            "MANAGER ALLOWED MODULES:",
+            [...allowedModules]
+        );
 
     } catch (error) {
-        console.error("MANAGER MODULE ACCESS ERROR:", error);
 
-        // Hide restricted navigation if permissions cannot load
-        menu.querySelectorAll("[data-module]").forEach(link => {
-            link.hidden = true;
-        });
+        console.error(
+            "MANAGER MODULE ACCESS ERROR:",
+            error
+        );
 
-        document.querySelectorAll(".quick-card[data-module]").forEach(card => {
-            card.hidden = true;
-        });
+        menu.innerHTML = "";
+
+        const container = document.getElementById("quickCards");
+
+        if (container) {
+            container.innerHTML = "";
+        }
+
     }
 }
+
 
  // =====================================================
  // TODAY'S TOTAL INCOME
