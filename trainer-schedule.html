@@ -808,29 +808,11 @@ if (!userData) {
                     onclick="toggleMenu()">
 
 
-                    <div
-                        class="trainer-avatar"
-                        id="profileInitial">
+                    <div class="trainer-avatar" id="trainerAvatar">U</div>
 
-                        T
-
-                    </div>
-
-
-                    <div
-                        class="trainer-info">
-
-                        <strong
-                            id="profile-name">
-
-                            Trainer
-
-                        </strong>
-
-                        <small id="profile-role">
-                            User
-                        </small>
-
+                    <div class="trainer-info">
+                        <strong id="trainerName">User</strong>
+                        <small id="trainerRole">User</small>
                     </div>
 
 
@@ -1386,7 +1368,17 @@ async function loadTrainerModuleAccess() {
         return false;
     }
 }
+const role = String(
+    user.role ||
+    user.user_type ||
+    user.account_type ||
+    "User"
+)
+.trim()
+.replace(/[_-]+/g, " ")
+.replace(/\b\w/g, char => char.toUpperCase());
 
+document.getElementById("trainerRole").innerText = role;
 
 /* =========================================================
    ACCESS DENIED
