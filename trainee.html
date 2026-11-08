@@ -314,25 +314,13 @@
                 onclick="toggleTrainerMenu()"
             >
 
-                <div
-                    class="trainer-avatar"
-                    id="trainerAvatar"
-                >
-                    T
-                </div>
-
+                <div class="trainer-avatar" id="trainerAvatar">U</div>
 
                 <div class="trainer-info">
-
-                    <strong id="trainerName">
-                        Trainer
-                    </strong>
-
-                    <small>
-                        Trainer
-                    </small>
-
+                    <strong id="trainerName">User</strong>
+                    <small id="trainerRole">User</small>
                 </div>
+
 
 
                 <i
@@ -1050,7 +1038,17 @@ async function checkTrainerPageAccess() {
         return false;
     }
 }
+const role = String(
+    user.role ||
+    user.user_type ||
+    user.account_type ||
+    "User"
+)
+.trim()
+.replace(/[_-]+/g, " ")
+.replace(/\b\w/g, char => char.toUpperCase());
 
+document.getElementById("trainerRole").innerText = role;
 /* =====================================================
    DATA
 ===================================================== */
