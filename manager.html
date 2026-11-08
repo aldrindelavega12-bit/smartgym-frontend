@@ -568,6 +568,7 @@ function renderManagerMenu(allowedModules) {
 // RENDER MANAGER QUICK CARDS
 // =====================================================
 
+
 function renderManagerQuickCards(allowedModules) {
 
     const container = document.getElementById("quickCards");
@@ -596,31 +597,14 @@ function renderManagerQuickCards(allowedModules) {
         card.className = "quick-card";
         card.dataset.module = item.key;
 
-        const title = document.createElement("h3");
-        title.textContent = item.title;
-
-        const description = document.createElement("p");
-        description.textContent = item.description;
-
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = "View →";
-
-        button.addEventListener("click", () => {
-            window.location.href = item.page;
-        });
-
-        card.appendChild(title);
-        card.appendChild(description);
-        card.appendChild(button);
+        card.innerHTML = `
+            <h3>${item.title}</h3>
+            <p>${item.description}</p>
+            <a href="${item.page}">View →</a>
+        `;
 
         container.appendChild(card);
     });
-
-    console.log(
-        "MANAGER QUICK CARDS DISPLAYED:",
-        permittedCards.map(item => item.key)
-    );
 }
 
 
