@@ -1150,57 +1150,8 @@ document.getElementById(
         .toUpperCase();
 
 
-async function loadTrainerModuleAccess() {
-    const menu = document.querySelector(".navbar .menu");
 
-    if (!menu || !trainerId) return;
 
-    try {
-        const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(trainerId)}`,
-            { cache: "no-store" }
-        );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        const modules = Array.isArray(data)
-            ? data
-            : Array.isArray(data.modules)
-                ? data.modules
-                : [];
-
-        const allowedModules = new Set(
-            modules.map(module => {
-                if (typeof module === "string") {
-                    return module.trim().toLowerCase();
-                }
-
-                return String(
-                    module.module_key ||
-                    module.module_name ||
-                    module.key ||
-                    ""
-                ).trim().toLowerCase();
-            })
-        );
-
-        menu.querySelectorAll("a[data-module]").forEach(link => {
-            link.style.display = allowedModules.has(
-                link.dataset.module
-            ) ? "" : "none";
-        });
-
-    } catch (error) {
-        console.error(
-            "TRAINER SCHEDULE MODULE ACCESS ERROR:",
-            error
-        );
-    }
-}
 /* =========================================================
    PROFILE ROLE
 ========================================================= */
