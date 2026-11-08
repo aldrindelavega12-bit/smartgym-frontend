@@ -338,12 +338,7 @@
             </div>
         </div>
 
-        <div class="menu">
-            <a href="admin.html">Home</a>
-            <a href="user_accounts.html">User Account Maintenance</a>
-            <a href="backup_restore.html">Backup &amp; Restore</a>
-            <a href="audit_logs.html" class="active">Audit Logs</a>
-        </div>
+        <div class="menu" id="menu"></div>
     </div>
 
     <!-- MAIN LAYOUT -->
@@ -358,11 +353,12 @@
                         id="staffProfile"
                         onclick="toggleStaffMenu(event)"
                     >
-                        <div class="staff-avatar">A</div>
+
+                        <div class="staff-avatar" id="profileInitial">U</div>
 
                         <div class="staff-info">
-                            <strong>Admin</strong>
-                            <small>Administrator</small>
+                            <strong id="profileName">User</strong>
+                            <small id="profileRole">User</small>
                         </div>
 
                         <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
@@ -460,6 +456,277 @@
     const PAGE_SIZE = 10;
     const AUDIT_API_URL =
         "https://smartgym-api-ia2e.onrender.com/api/audit-logs";
+
+    
+    /* =====================================================
+    USER SESSION
+    ===================================================== */
+
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+
+    const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+
+    /* =====================================================
+    MASTER MODULE MENU
+    ===================================================== */
+
+    const MODULE_MENU = [
+        {
+            key: "dashboard",
+            label: "Home",
+            href: {
+                pre_member: "pre_member.html",
+                premember: "pre_member.html",
+                member: "member.html",
+                staff: "staff.html",
+                front_desk: "staff.html",
+                trainer: "trainer.html",
+                manager: "manager.html",
+                admin: "admin.html"
+            }
+        },
+        {
+            key: "messages",
+            label: "Messages",
+            href: "messages.html",
+            trainerHref: "trainer_messages.html"
+        },
+        { key: "program", label: "Program", href: "program.html" },
+        { key: "get_program", label: "Get Program", href: "get_program.html" },
+        { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+        { key: "membership", label: "Membership", href: "membership.html" },
+        { key: "attendance", label: "Attendance", href: "attendance.html" },
+        { key: "locker", label: "Locker", href: "locker.html" },
+        { key: "trainee", label: "Trainee", href: "trainer.html" },
+        {
+            key: "schedule",
+            label: "Schedule",
+            href: "trainer-schedule.html",
+            trainerHref: "trainer-schedule.html"
+        },
+        { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+        { key: "reports", label: "Reports", href: "reports.html" },
+        { key: "members", label: "Members", href: "member.html" },
+        { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+        { key: "staff", label: "Staff", href: "staff_manage.html" },
+        { key: "archive", label: "Archive", href: "archive.html" },
+        {
+            key: "user_account_maintenance",
+            label: "User Account Maintenance",
+            href: "user_accounts.html"
+        },
+        { key: "backup_restore", label: "Backup & Restore", href: "backup_restore.html" },
+        { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+    ];
+
+
+    /* =====================================================
+    NORMALIZE MODULE KEY
+    ===================================================== */
+
+    function normalizeModuleKey(value) {
+
+        const key = String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+
+        const aliases = {
+            home: "dashboard",
+            client_request: "client_requests",
+            walk_in: "walkins",
+            walk_in_management: "walkins",
+            user_accounts: "user_account_maintenance",
+            user_account: "user_account_maintenance",
+            backup: "backup_restore",
+            backup_and_restore: "backup_restore",
+            audit_log: "audit_logs"
+        };
+
+        return aliases[key] || key;
+    }
+
+
+    /* =====================================================
+    DYNAMIC PROFILE
+    ===================================================== */
+
+    function loadAuditProfile() {
+
+        const name =
+            user?.full_name ||
+            user?.fullname ||
+            user?.name ||
+            user?.username ||
+            "User";
+
+        document.getElementById("profileName").textContent = name;
+
+        document.getElementById("profileInitial").textContent =
+            name.trim().charAt(0).toUpperCase();
+
+        document.getElementById("profileRole").textContent =
+            String(user?.role || "User")
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+
+    /* =====================================================
+    DASHBOARD LINK
+    ===================================================== */
+
+    function getDashboardPage() {
+
+        const role = String(user?.role || "").toLowerCase();
+
+        const item = MODULE_MENU.find(module =>
+            module.key === "dashboard"
+        );
+
+        return item.href[role] || "index.html";
+    }
+
+
+    /* =====================================================
+    RENDER SIDEBAR
+    ===================================================== */
+
+    function renderAuditMenu(allowedModules) {
+
+        const menu = document.getElementById("menu");
+
+        if (!menu) return;
+
+        const currentPage = window.location.pathname
+            .split("/")
+            .pop()
+            .toLowerCase();
+
+        menu.innerHTML = "";
+
+        MODULE_MENU.forEach(item => {
+
+            if (!allowedModules.has(item.key)) return;
+
+            let page = typeof item.href === "object"
+                ? item.href[String(user.role || "").toLowerCase()] || "index.html"
+                : item.href;
+
+            if (item.trainerHref &&
+                String(user.role || "").toLowerCase() === "trainer") {
+                page = item.trainerHref;
+            }
+
+            const link = document.createElement("a");
+
+            link.href = page;
+            link.dataset.module = item.key;
+            link.textContent = item.label;
+
+            if (currentPage === page.toLowerCase()) {
+                link.classList.add("active");
+            }
+
+            menu.appendChild(link);
+        });
+    }
+
+
+    /* =====================================================
+    MODULE ACCESS VALIDATION
+    ===================================================== */
+
+    async function checkAuditModuleAccess() {
+
+        if (!user) {
+            window.location.href = "index.html";
+            return false;
+        }
+
+        const userId = user.user_id || user.id;
+
+        if (!userId) {
+            console.error("User ID not found.");
+            return false;
+        }
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load module permissions.");
+            }
+
+            const data = await response.json();
+
+            const modules = Array.isArray(data)
+                ? data
+                : Array.isArray(data.modules)
+                    ? data.modules
+                    : [];
+
+            const allowedModules = new Set(
+                modules.map(module => {
+
+                    const key = typeof module === "string"
+                        ? module
+                        : module.module_key ||
+                        module.key ||
+                        module.module_name ||
+                        "";
+
+                    return normalizeModuleKey(key);
+
+                }).filter(Boolean)
+            );
+
+            renderAuditMenu(allowedModules);
+
+            if (!allowedModules.has("audit_logs")) {
+
+                document.querySelector(".layout").innerHTML = `
+                    <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                        <h2>Access Denied</h2>
+                        <p>Wala kang permission para buksan ang Audit Logs.</p>
+                        <button onclick="location.href='${getDashboardPage()}'">
+                            Back to Dashboard
+                        </button>
+                    </main>
+                `;
+
+                return false;
+            }
+
+            return true;
+
+        } catch (error) {
+
+            console.error("AUDIT MODULE ACCESS ERROR:", error);
+
+            document.querySelector(".layout").innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Unable to Verify Access</h2>
+                    <p>Hindi ma-verify ang module permissions.</p>
+                    <button onclick="location.reload()">Retry</button>
+                </main>
+            `;
+
+            return false;
+        }
+    }
+
 
     let auditRecords = [];
     let filteredRecords = [];
@@ -1182,15 +1449,32 @@
     });
 
     function logout(event) {
+
         if (event) event.stopPropagation();
-        window.location.href = "login.html";
+
+        localStorage.removeItem("user");
+
+        window.location.href = "index.html";
     }
 
-    // No default date filter; show all available dates.
-    dateFilter.value = "";
+    /* =====================================================
+    INITIALIZE AUDIT LOGS
+    ===================================================== */
 
-    // Load actual records from the API.
-    loadAuditLogs();
+    async function initializeAuditPage() {
+
+        loadAuditProfile();
+
+        const hasAccess = await checkAuditModuleAccess();
+
+        if (!hasAccess) return;
+
+        dateFilter.value = "";
+
+        await loadAuditLogs();
+    }
+
+    initializeAuditPage();
 </script>
 
 
