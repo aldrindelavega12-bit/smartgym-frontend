@@ -111,20 +111,11 @@ if(!user){
                     class="staff-profile"
                     onclick="toggleStaffMenu()">
 
-                    <div class="staff-avatar">
-                        M
-                    </div>
+                    <div class="staff-avatar" id="staffAvatar">U</div>
 
                     <div class="staff-info">
-
-                        <strong>
-                            Manager
-                        </strong>
-
-                        <small>
-                            Gym Manager
-                        </small>
-
+                        <strong id="staffName">User</strong>
+                        <small id="staffRole">User</small>
                     </div>
 
                     <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
@@ -446,60 +437,148 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
+// ================= MASTER MODULE MENU =================
 
-// ================= MENU =================
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        memberHref: "member_messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainer.html" },
+    { key: "schedule", label: "Schedule", href: "trainer-schedule.html" },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "members.html", active: true },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        href: "user_accounts.html"
+    },
+    { key: "backup_restore", label: "Backup & Restore", href: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
 
-const menu = document.getElementById("menu");
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
 
-if (user.role === "manager") {
-    menu.innerHTML = `
-        <a href="manager.html" data-module="dashboard">Home</a>
-        <a href="reports.html" data-module="reports">Reports</a>
-        <a href="members.html" data-module="members" class="active">Members</a>
-        <a href="walkin.html" data-module="walkins">Walk-ins</a>
-        <a href="staff_manage.html" data-module="staff">Staff</a>
-        <a href="archive.html" data-module="archive">Archive</a>
-    `;
-} else {
-    menu.innerHTML = `
-        <a href="staff.html" data-module="dashboard">
-            <i class="fa-solid fa-house"></i> Home
-        </a>
-        <a href="messages.html" class="msg-link" data-module="messages">
-            <i class="fa-regular fa-envelope"></i>
-            Messages
-            <span id="msg-count" class="msg-count">0</span>
-        </a>
-        <a href="attendance.html" data-module="attendance">
-            <i class="fa-regular fa-calendar-check"></i> Attendance
-        </a>
-        <a href="locker.html" data-module="locker">
-            <i class="fa-solid fa-lock"></i> Locker
-        </a>
-    `;
+    const aliases = {
+        home: "dashboard",
+        trainee_schedule: "schedule",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
 }
 
-loadMembersModuleAccess();
+function getMembersDashboardHref() {
+    const role = String(user.role || user.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
 
+    const dashboard = MODULE_MENU.find(item => item.key === "dashboard");
 
-// ================= MODULE ACCESS =================
+    return dashboard.href[role] || "index.html";
+}
 
-async function loadMembersModuleAccess() {
-    const menuItems = document.querySelectorAll(
-        "#menu a[data-module]"
-    );
+function renderMembersMenu(allowedModules) {
+    const menu = document.getElementById("menu");
 
-    menuItems.forEach(item => {
-        item.style.display = "none";
-    });
+    if (!menu) return;
 
-    try {
-        if (!user || !user.user_id) {
-            throw new Error("User ID not found.");
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        const role = String(user.role || user.user_type || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+
+        let href = typeof item.href === "object"
+            ? item.href[role]
+            : item.href;
+
+        if (item.key === "messages") {
+            if (role === "member") href = item.memberHref;
+            if (role === "trainer") href = item.trainerHref;
         }
 
+        if (!href) return;
+
+        const link = document.createElement("a");
+
+        link.href = href;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.className) {
+            link.classList.add(item.className);
+        }
+
+        if (item.active) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "messages") {
+            const badge = document.createElement("span");
+            badge.id = "msg-count";
+            badge.className = "msg-count";
+            badge.textContent = "0";
+            link.appendChild(badge);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+async function checkMembersPageAccess() {
+    const userId = user.user_id || user.member_id || user.id;
+
+    if (!userId) {
+        window.location.href = "index.html";
+        return false;
+    }
+
+    try {
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
             { cache: "no-store" }
         );
 
@@ -508,52 +587,76 @@ async function loadMembersModuleAccess() {
         }
 
         const data = await response.json();
-
-        const modules = Array.isArray(data)
-            ? data
-            : data.modules;
-
-        if (!Array.isArray(modules)) {
-            throw new Error("Invalid module access response.");
-        }
+        const modules = Array.isArray(data) ? data : (data.modules || []);
 
         const allowedModules = new Set(
-            modules
-                .map(item => {
-                    if (typeof item === "string") {
-                        return item;
-                    }
-
-                    return item.module_key ||
-                           item.module_name ||
-                           item.key;
-                })
-                .filter(Boolean)
-                .map(key => String(key).trim().toLowerCase())
+            modules.map(item =>
+                normalizeModuleKey(
+                    typeof item === "string"
+                        ? item
+                        : item.module_key || item.key || item.module_name || ""
+                )
+            )
         );
 
-        menuItems.forEach(item => {
-            const moduleKey = item.dataset.module
-                .trim()
-                .toLowerCase();
+        renderMembersMenu(allowedModules);
 
-            item.style.display =
-                allowedModules.has(moduleKey) ? "" : "none";
-        });
+        if (!allowedModules.has("members")) {
+            alert("You do not have permission to access this module.");
+            window.location.href = getMembersDashboardHref();
+            return false;
+        }
 
-        console.log(
-            "MEMBERS ALLOWED MODULES:",
-            [...allowedModules]
-        );
+        return true;
 
     } catch (error) {
-        console.error(
-            "MEMBERS MODULE ACCESS ERROR:",
-            error
-        );
+        console.error("MEMBERS ACCESS ERROR:", error);
+        alert("Unable to verify module access. Please try again.");
+        window.location.href = getMembersDashboardHref();
+        return false;
     }
 }
 
+// ================= DYNAMIC PROFILE =================
+
+const profileData =
+    JSON.parse(localStorage.getItem("profile") || "null") || {};
+
+const displayName =
+    profileData.name ||
+    profileData.full_name ||
+    profileData.fullname ||
+    user.full_name ||
+    user.fullname ||
+    user.name ||
+    user.username ||
+    "User";
+
+const displayRole =
+    profileData.role ||
+    user.role ||
+    user.user_type ||
+    user.account_type ||
+    "User";
+
+const staffName = document.getElementById("staffName");
+const staffAvatar = document.getElementById("staffAvatar");
+const staffRole = document.getElementById("staffRole");
+
+if (staffName) {
+    staffName.textContent = displayName;
+}
+
+if (staffAvatar) {
+    staffAvatar.textContent =
+        displayName.trim().charAt(0).toUpperCase() || "U";
+}
+
+if (staffRole) {
+    staffRole.textContent = String(displayRole)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+}
 // =====================================================
 // APPLY SEARCH + FILTER + SORT
 // =====================================================
@@ -1552,13 +1655,9 @@ window.addEventListener(
 
 // ================= LOGOUT =================
 
-function logout(){
-
-    localStorage.clear();
-
-    window.location.href =
-        "index.html";
-
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
 }
 // =====================================================
 // SEARCH / FILTER EVENTS
@@ -1597,14 +1696,16 @@ document
 
 // ================= INIT =================
 
-window.onload = () => {
+window.onload = async () => {
+    const hasAccess = await checkMembersPageAccess();
 
-    loadMembers();
+    if (!hasAccess) return;
 
-    loadMessageCount();
-
+    await Promise.all([
+        loadMembers(),
+        loadMessageCount()
+    ]);
 };
-
 </script>
 
 
