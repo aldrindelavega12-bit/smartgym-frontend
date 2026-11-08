@@ -1106,46 +1106,48 @@ console.log(
 
 
 /* =========================================================
-   TRAINER NAME
+   USER PROFILE
 ========================================================= */
 
-const trainerName =
+const displayName =
     user?.full_name ||
     user?.fullname ||
     user?.name ||
     user?.username ||
-    "Luis Dela Vega";
+    "User";
 
+const displayRole = String(
+    user?.role ||
+    user?.user_type ||
+    user?.account_type ||
+    "User"
+)
+.trim()
+.replace(/[_-]+/g, " ")
+.replace(/\b\w/g, char => char.toUpperCase());
 
-document.getElementById(
-    "profile-name"
-).textContent =
-    trainerName;
+const trainerNameElement =
+    document.getElementById("trainerName");
 
+const trainerAvatarElement =
+    document.getElementById("trainerAvatar");
 
-document.getElementById(
-    "profileInitial"
-).textContent =
-    trainerName
-        .trim()
-        .charAt(0)
-        .toUpperCase();
+const trainerRoleElement =
+    document.getElementById("trainerRole");
 
-
-
-
-/* =========================================================
-   PROFILE ROLE
-========================================================= */
-
-const profileRole = document.getElementById("profile-role");
-
-if (profileRole) {
-    profileRole.textContent =
-        String(user?.role || "User")
-            .replace(/_/g, " ")
-            .replace(/\b\w/g, char => char.toUpperCase());
+if (trainerNameElement) {
+    trainerNameElement.textContent = displayName;
 }
+
+if (trainerAvatarElement) {
+    trainerAvatarElement.textContent =
+        displayName.trim().charAt(0).toUpperCase();
+}
+
+if (trainerRoleElement) {
+    trainerRoleElement.textContent = displayRole;
+}
+
 /* =========================================================
    MASTER MODULE MENU
 ========================================================= */
