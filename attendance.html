@@ -260,16 +260,28 @@ if (!user) {
 
 <script>
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+
 async function checkAttendancePageAccess() {
-    if (!user || !user.user_id) {
+
+    const userId = user?.user_id || user?.id;
+
+    if (!user || !userId) {
         window.location.href = "index.html";
         return false;
     }
 
     try {
+
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
-            { cache: "no-store" }
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
         );
 
         if (!response.ok) {
@@ -282,22 +294,50 @@ async function checkAttendancePageAccess() {
             throw new Error("Invalid module access response.");
         }
 
-        if (!data.modules.includes("attendance")) {
+        const allowedModules = data.modules.map(module => {
+
+            const key = typeof module === "string"
+                ? module
+                : module.module_key ||
+                  module.module_name ||
+                  module.key ||
+                  "";
+
+            return String(key).trim().toLowerCase();
+
+        });
+
+        if (!allowedModules.includes("attendance")) {
+
+            const dashboards = {
+                manager: "manager.html",
+                admin: "admin.html",
+                staff: "staff.html",
+                trainer: "trainer.html",
+                member: "member_dashboard.html",
+                walkin: "walkin_dashboard.html"
+            };
+
+            const role = String(user.role || "").toLowerCase();
+            const homepage = dashboards[role] || "index.html";
+
             document.body.innerHTML = `
                 <main style="font-family:Arial;text-align:center;padding:60px 20px">
                     <h2>Access Denied</h2>
                     <p>Wala kang permission para buksan ang Attendance.</p>
-                    <button onclick="location.href='staff.html'">
+                    <button onclick="location.href='${homepage}'">
                         Back to Dashboard
                     </button>
                 </main>
             `;
+
             return false;
         }
 
         return true;
 
     } catch (error) {
+
         console.error("ATTENDANCE ACCESS ERROR:", error);
 
         document.body.innerHTML = `
@@ -311,16 +351,53 @@ async function checkAttendancePageAccess() {
         return false;
     }
 }
-// ================= MENU =================
+
+
+
+// ================= DYNAMIC SIDEBAR MENU =================
+
 const menu = document.getElementById("menu");
 
 async function buildAttendancePermissionMenu() {
+
     const menu = document.getElementById("menu");
+    const userId = user?.user_id || user?.id;
+
+    if (!menu || !userId) {
+        console.error("Missing menu element or user ID.");
+        return;
+    }
+
+    const isAdmin = user.role?.toLowerCase() === "admin";
+
+    const menuItems = isAdmin
+        ? [
+            { key: "dashboard", href: "admin.html", label: "Home" },
+            { key: "messages", href: "messages.html", label: "Messages", badge: true },
+            { key: "attendance", href: "attendance.html", label: "Attendance" },
+            { key: "locker", href: "locker.html", label: "Locker" },
+            { key: "members", href: "members.html", label: "Members" },
+            { key: "staff_manage", href: "staff_manage.html", label: "Staff" },
+            { key: "create_account", href: "create_account.html", label: "Create Account" }
+        ]
+        : [
+            { key: "dashboard", href: "staff.html", label: "Home" },
+            { key: "messages", href: "messages.html", label: "Messages", badge: true },
+            { key: "attendance", href: "attendance.html", label: "Attendance" },
+            { key: "locker", href: "locker.html", label: "Locker" }
+        ];
 
     try {
+
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
-            { cache: "no-store" }
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
         );
 
         if (!response.ok) {
@@ -333,54 +410,60 @@ async function buildAttendancePermissionMenu() {
             throw new Error("Invalid module access response.");
         }
 
-        const allowed = new Set(data.modules);
-        const isAdmin = user.role === "admin";
+        const allowedModules = new Set(
+            data.modules.map(item => {
 
-        const links = isAdmin
-            ? [
-                { key: "dashboard", href: "admin.html", label: "Home" },
-                { key: "messages", href: "messages.html", label: "Messages", badge: true },
-                { key: "attendance", href: "attendance.html", label: "Attendance" },
-                { key: "locker", href: "locker.html", label: "Locker" },
-                { key: "members", href: "members.html", label: "Members" },
-                { key: "staff_manage", href: "staff_manage.html", label: "Staff" },
-                { key: "create_account", href: "create_account.html", label: "Create Account" }
-            ]
-            : [
-                { key: "dashboard", href: "staff.html", label: "Home" },
-                { key: "messages", href: "messages.html", label: "Messages", badge: true },
-                { key: "attendance", href: "attendance.html", label: "Attendance" },
-                { key: "locker", href: "locker.html", label: "Locker" }
-            ];
+                const key = typeof item === "string"
+                    ? item
+                    : item.module_key || item.module_name || item.key || "";
 
-        menu.innerHTML = links
-            .filter(link => allowed.has(link.key))
-            .map(link => `
-                <a href="${link.href}">
-                    ${link.label}
-                    ${link.badge
-                        ? '<span id="msg-count" class="msg-count">0</span>'
-                        : ""}
-                </a>
-            `)
-            .join("");
+                return String(key).trim().toLowerCase();
 
-        const attendanceLink = menu.querySelector(
-            'a[href="attendance.html"]'
+            })
         );
 
-        if (attendanceLink) {
-            attendanceLink.classList.add("active");
-        }
+        const currentPage = window.location.pathname
+            .split("/")
+            .pop()
+            .toLowerCase();
+
+        menu.innerHTML = "";
+
+        menuItems.forEach(item => {
+
+            if (!allowedModules.has(item.key.toLowerCase())) {
+                return;
+            }
+
+            const link = document.createElement("a");
+
+            link.href = item.href;
+            link.dataset.module = item.key;
+            link.innerHTML = `
+                ${item.label}
+                ${item.badge
+                    ? '<span id="msg-count" class="msg-count">0</span>'
+                    : ""}
+            `;
+
+            if (currentPage === item.href.toLowerCase()) {
+                link.classList.add("active");
+            }
+
+            menu.appendChild(link);
+
+        });
 
     } catch (error) {
+
         console.error("ATTENDANCE MENU ERROR:", error);
-        menu.innerHTML =
-            "<p>Unable to load menu permissions. Please refresh.</p>";
+
+        menu.innerHTML = `
+            <p>Unable to load menu permissions. Please refresh.</p>
+        `;
+
     }
 }
-
-buildAttendancePermissionMenu();
 
 function setAttendanceActiveLink() {
     const links = document.querySelectorAll("#menu a");

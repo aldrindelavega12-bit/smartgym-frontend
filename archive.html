@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user || user.role !== "manager") {
+if (!user) {
     window.location.href = "index.html";
 }
 </script>
@@ -258,55 +258,38 @@ if (!user || user.role !== "manager") {
 
 const menu = document.getElementById("menu");
 
+
 const menuItems = [
-    {
-        key: "dashboard",
-        label: "Home",
-        page: "manager.html"
-    },
-    {
-        key: "reports",
-        label: "Reports",
-        page: "reports.html"
-    },
-    {
-        key: "members",
-        label: "Members",
-        page: "members.html"
-    },
-    {
-        key: "walkins",
-        label: "Walk-ins",
-        page: "walkin.html"
-    },
-    {
-        key: "staff",
-        label: "Staff",
-        page: "staff_manage.html"
-    },
-    {
-        key: "archive",
-        label: "Archive",
-        page: "archive.html"
-    },
-    {
-        key: "backup_restore",
-        label: "Backup and Restore",
-        page: "backup_restore.html"
-    },
-    {
-        key: "audit_logs",
-        label: "Audit Logs",
-        page: "audit_logs.html"
-    }
+    { key: "dashboard", label: "Home", page: "manager.html" },
+    { key: "messages", label: "Messages", page: "messages.html", badge: true },
+
+    { key: "program", label: "Program", page: "program.html" },
+    { key: "get_program", label: "Get Program", page: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
+    { key: "membership", label: "Membership", page: "membership.html" },
+
+    { key: "attendance", label: "Attendance", page: "attendance.html" },
+    { key: "locker", label: "Locker", page: "locker.html" },
+    { key: "trainee", label: "Trainee", page: "trainer.html" },
+    { key: "schedule", label: "Schedule", page: "trainer_schedule.html" },
+    { key: "client_requests", label: "Client Requests", page: "client_requests.html" },
+
+    { key: "reports", label: "Reports", page: "reports.html" },
+    { key: "members", label: "Members", page: "members.html" },
+    { key: "walkins", label: "Walk-ins", page: "walkin.html" },
+    { key: "staff", label: "Staff", page: "staff_manage.html" },
+    { key: "archive", label: "Archive", page: "archive.html" },
+
+    { key: "user_account_maintenance", label: "User Account Maintenance", page: "user_accounts.html" },
+    { key: "create_account", label: "Create Account", page: "create_account.html" },
+    { key: "backup_restore", label: "Backup and Restore", page: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", page: "audit_logs.html" }
 ];
 
 
-/* =====================================================
-   RENDER MANAGER SIDEBAR
-===================================================== */
+// ================= RENDER SIDEBAR =================
 
-function renderManagerMenu(allowedModules) {
+function renderArchiveMenu(allowedModules) {
 
     const currentPage = window.location.pathname
         .split("/")
@@ -317,98 +300,140 @@ function renderManagerMenu(allowedModules) {
 
     menuItems.forEach(item => {
 
-        if (!allowedModules.has(item.key)) {
-            return;
-        }
+        if (!allowedModules.has(item.key)) return;
 
         const link = document.createElement("a");
 
         link.href = item.page;
         link.dataset.module = item.key;
-        link.textContent = item.label;
+
+        link.innerHTML = `
+            ${item.label}
+            ${item.badge
+                ? '<span id="msg-count" class="msg-count">0</span>'
+                : ""}
+        `;
 
         if (currentPage === item.page.toLowerCase()) {
             link.classList.add("active");
         }
 
         menu.appendChild(link);
-
     });
 }
 
 
-/* =====================================================
-   LOAD MANAGER MODULE ACCESS
-===================================================== */
+// ================= LOAD MODULE ACCESS =================
 
 async function loadArchiveModuleAccess() {
 
     const userId = user?.user_id || user?.id;
 
     if (!menu || !userId) {
-        console.error("Missing menu or user ID.");
-        return;
+        throw new Error("Missing menu or user ID.");
+    }
+
+    const response = await fetch(
+        `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+        {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+                "Accept": "application/json"
+            }
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Unable to load module permissions.");
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.modules)) {
+        throw new Error("Invalid module access response.");
+    }
+
+    const allowedModules = new Set(
+        data.modules.map(module => {
+
+            const key = typeof module === "string"
+                ? module
+                : module.module_key ||
+                  module.module_name ||
+                  module.key ||
+                  "";
+
+            return String(key).trim().toLowerCase();
+
+        }).filter(Boolean)
+    );
+
+    renderArchiveMenu(allowedModules);
+
+    return allowedModules;
+}
+
+
+// ================= CHECK ARCHIVE PAGE ACCESS =================
+
+async function checkArchivePageAccess() {
+
+    const userId = user?.user_id || user?.id;
+
+    if (!user || !userId) {
+        window.location.href = "index.html";
+        return false;
     }
 
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
-            {
-                method: "GET",
-                cache: "no-store",
-                headers: {
-                    "Accept": "application/json"
-                }
-            }
-        );
+        const allowedModules = await loadArchiveModuleAccess();
 
-        if (!response.ok) {
-            throw new Error(
-                `Module access error: ${response.status}`
-            );
+        if (!allowedModules.has("archive")) {
+
+            const dashboards = {
+                manager: "manager.html",
+                admin: "admin.html",
+                staff: "staff.html",
+                trainer: "trainer.html",
+                member: "member_dashboard.html",
+                walkin: "walkin_dashboard.html"
+            };
+
+            const role = String(user.role || "").toLowerCase();
+            const homepage = dashboards[role] || "index.html";
+
+            document.body.innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang Archive.</p>
+                    <button onclick="location.href='${homepage}'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+
+            return false;
         }
 
-        const data = await response.json();
-
-        if (!Array.isArray(data.modules)) {
-            throw new Error("Invalid module access response.");
-        }
-
-        const allowedModules = new Set(
-            data.modules.map(module => {
-
-                return String(
-                    typeof module === "string"
-                        ? module
-                        : module.module_key ||
-                          module.module_name ||
-                          module.key ||
-                          ""
-                ).trim().toLowerCase();
-
-            }).filter(Boolean)
-        );
-
-        renderManagerMenu(allowedModules);
-
-        console.log(
-            "MANAGER ALLOWED MODULES:",
-            [...allowedModules]
-        );
+        return true;
 
     } catch (error) {
 
-        console.error(
-            "ARCHIVE MODULE ACCESS ERROR:",
-            error
-        );
+        console.error("ARCHIVE ACCESS ERROR:", error);
 
-        menu.innerHTML = "";
+        document.body.innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang module permission. Pakisubukan ulit.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
 
+        return false;
     }
 }
-
 
 function toggleStaffMenu() {
     document.getElementById("staffDropdown")
