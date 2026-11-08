@@ -36,20 +36,10 @@
 
 <script>
 
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
-
-if(
-    !user ||
-    user.role !== "manager"
-){
-
-    window.location.href =
-        "index.html";
-
+if (!user) {
+    window.location.href = "index.html";
 }
 
 </script>
@@ -117,21 +107,14 @@ if(
                 onclick="toggleStaffMenu()">
 
 
-               <div class="staff-avatar">
-                        M
+               <div class="staff-avatar" id="staffAvatar">
+                    U
                 </div>
 
-                    <div class="staff-info">
-
-                        <strong>
-                            Manager
-                        </strong>
-
-                        <small>
-                            Gym Manager
-                        </small>
-
-                    </div>
+                <div class="staff-info">
+                    <strong id="staffName">User</strong>
+                    <small id="staffRole">User</small>
+                </div>
                     
 
 
@@ -732,92 +715,283 @@ if(
 
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
-/* =====================================================
-   MENU
-===================================================== */
+const staffName =
+    user?.full_name ||
+    user?.fullname ||
+    user?.name ||
+    user?.username ||
+    "User";
 
+const staffRole =
+    user?.role ||
+    user?.user_type ||
+    user?.account_type ||
+    "User";
 
-/* =====================================================
-   MENU
-===================================================== */
+document.getElementById("staffName").textContent = staffName;
+
+document.getElementById("staffRole").textContent =
+    staffRole.replace(/_/g, " ").replace(/\b\w/g, char => char.toUpperCase());
+
+document.getElementById("staffAvatar").textContent =
+    staffName.trim().charAt(0).toUpperCase();
+
 
 const menu = document.getElementById("menu");
 
-menu.innerHTML = `
-    <a href="manager.html" data-module="dashboard">Home</a>
-    <a href="reports.html" data-module="reports">Reports</a>
-    <a href="members.html" data-module="members">Members</a>
-    <a href="walkin.html" data-module="walkins">Walk-ins</a>
-    <a href="staff_manage.html" data-module="staff" class="active">Staff</a>
-    <a href="archive.html" data-module="archive">Archive</a>
-`;
+const MODULE_MENU = [
+    { key: "dashboard", label: "Home", page: "manager.html" },
+    { key: "messages", label: "Messages", page: "messages.html", badge: true },
 
-loadStaffModuleAccess();
+    { key: "program", label: "Program", page: "program.html" },
+    { key: "get_program", label: "Get Program", page: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
+    { key: "membership", label: "Membership", page: "membership.html" },
+
+    { key: "attendance", label: "Attendance", page: "attendance.html" },
+    { key: "locker", label: "Locker", page: "locker.html" },
+    { key: "trainee", label: "Trainee", page: "trainee.html" },
+    { key: "schedule", label: "Schedule", page: "trainer_schedule.html" },
+    { key: "client_requests", label: "Client Requests", page: "client_requests.html" },
+
+    { key: "reports", label: "Reports", page: "reports.html" },
+    { key: "members", label: "Members", page: "members.html" },
+    { key: "walkins", label: "Walk-ins", page: "walkin.html" },
+    { key: "staff", label: "Staff", page: "staff_manage.html" },
+    { key: "archive", label: "Archive", page: "archive.html" },
+
+    { key: "user_account_maintenance", label: "User Account Maintenance", page: "user_accounts.html" },
+    { key: "create_account", label: "Create Account", page: "create_account.html" },
+    { key: "backup_restore", label: "Backup and Restore", page: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", page: "audit_logs.html" }
+];
 
 
 /* =====================================================
-   MODULE ACCESS
+   NORMALIZE MODULE KEY
+===================================================== */
+
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        home: "dashboard",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+
+/* =====================================================
+   RENDER STAFF SIDEBAR
+===================================================== */
+
+function renderStaffMenu(allowedModules) {
+    if (!menu) return;
+
+    const currentPage = window.location.pathname
+        .split("/")
+        .pop()
+        .toLowerCase();
+
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        const link = document.createElement("a");
+
+        link.href = item.page;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.page.toLowerCase() === currentPage) {
+            link.classList.add("active");
+        }
+
+        if (item.badge) {
+            const badge = document.createElement("span");
+            badge.id = "msg-count";
+            badge.className = "menu-badge";
+            badge.style.display = "none";
+            link.appendChild(badge);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+
+/* =====================================================
+   LOAD MODULE ACCESS
 ===================================================== */
 
 async function loadStaffModuleAccess() {
-    const menuItems = document.querySelectorAll(
-        "#menu a[data-module]"
+    const userId = user?.user_id || user?.id;
+
+    if (!menu || !userId) {
+        throw new Error("Missing menu or user ID.");
+    }
+
+    const response = await fetch(
+        `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+        {
+            method: "GET",
+            cache: "no-store",
+            headers: {
+                "Accept": "application/json"
+            }
+        }
     );
 
-    menuItems.forEach(item => {
-        item.style.display = "none";
-    });
+    if (!response.ok) {
+        throw new Error("Unable to load module permissions.");
+    }
 
+    const data = await response.json();
+
+    const modules = Array.isArray(data)
+        ? data
+        : Array.isArray(data.modules)
+            ? data.modules
+            : [];
+
+    const allowedModules = new Set(
+        modules.map(module => {
+            const key = typeof module === "string"
+                ? module
+                : module.module_key ||
+                  module.key ||
+                  module.module_name ||
+                  "";
+
+            return normalizeModuleKey(key);
+        }).filter(Boolean)
+    );
+
+    renderStaffMenu(allowedModules);
+
+    return allowedModules;
+}
+
+
+/* =====================================================
+   STAFF PAGE ACCESS
+===================================================== */
+
+function getDashboardPage() {
+    const role = String(user?.role || "").toLowerCase();
+
+    const dashboards = {
+        manager: "manager.html",
+        admin: "admin.html",
+        staff: "staff.html",
+        trainer: "trainer.html",
+        member: "member.html",
+        walkin: "walkin_dashboard.html"
+    };
+
+    return dashboards[role] || "index.html";
+}
+
+
+function showStaffAccessDenied() {
+    const main = document.querySelector(".main");
+
+    if (!main) return;
+
+    main.innerHTML = `
+        <div style="
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        ">
+            <h2>Access Denied</h2>
+
+            <p>
+                Wala kang permission para buksan ang Staff Management.
+            </p>
+
+            <a href="${getDashboardPage()}"
+               style="
+                   margin-top: 15px;
+                   padding: 12px 24px;
+                   background: #2563eb;
+                   color: white;
+                   text-decoration: none;
+                   border-radius: 6px;
+               ">
+                Back to Dashboard
+            </a>
+        </div>
+    `;
+}
+
+
+function showStaffAccessError() {
+    const main = document.querySelector(".main");
+
+    if (!main) return;
+
+    main.innerHTML = `
+        <div style="
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        ">
+            <h2>Unable to Verify Access</h2>
+
+            <p>
+                Unable to load your module permissions.
+                Please try again.
+            </p>
+
+            <button onclick="location.reload()"
+                    style="
+                        margin-top: 15px;
+                        padding: 12px 24px;
+                        cursor: pointer;
+                    ">
+                Retry
+            </button>
+        </div>
+    `;
+}
+
+
+async function checkStaffPageAccess() {
     try {
-        if (!user || !user.user_id) {
-            throw new Error("User ID not found.");
+        const allowedModules = await loadStaffModuleAccess();
+
+        if (!allowedModules.has("staff")) {
+            showStaffAccessDenied();
+            return false;
         }
 
-        const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
-            { cache: "no-store" }
-        );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        const modules = Array.isArray(data)
-            ? data
-            : data.modules;
-
-        if (!Array.isArray(modules)) {
-            throw new Error("Invalid module access response.");
-        }
-
-        const allowedModules = new Set(
-            modules
-                .map(item => {
-                    if (typeof item === "string") return item;
-
-                    return item.module_key ||
-                           item.module_name ||
-                           item.key;
-                })
-                .filter(Boolean)
-                .map(key => String(key).trim().toLowerCase())
-        );
-
-        menuItems.forEach(item => {
-            const key = item.dataset.module.trim().toLowerCase();
-
-            item.style.display =
-                allowedModules.has(key) ? "" : "none";
-        });
-
-        console.log(
-            "STAFF ALLOWED MODULES:",
-            [...allowedModules]
-        );
+        return true;
 
     } catch (error) {
         console.error("STAFF MODULE ACCESS ERROR:", error);
+
+        showStaffAccessError();
+        return false;
     }
 }
 
@@ -1697,12 +1871,21 @@ socket.on("priority_alert", () => {
     loadMessageCount();
 });
 
+
 /* =====================================================
    INITIAL LOAD
 ===================================================== */
 
-loadStaff();
-loadMessageCount();
+async function initializeStaff() {
+    const hasAccess = await checkStaffPageAccess();
+
+    if (!hasAccess) return;
+
+    loadStaff();
+    loadMessageCount();
+}
+
+initializeStaff();
 
 </script>
 
