@@ -948,36 +948,9 @@
     </div>
 
 
-    <div class="menu">
-
-        <a href="admin.html">
-            
-            Home
-        </a>
-
-        <a href="user_accounts.html">
-            
-            User Account Maintenance
-        </a>
-
-        <a
-            href="backup_restore.html"
-            class="active"
-        >
-            
-            Backup & Restore
-        </a>
-
-        <a href="audit_logs.html">
-            
-            Audit Logs
-        </a>
-
-    </div>
+    <div class="menu" id="menu"></div>
 
 </div>
-
-
 
 <div class="layout">
 
@@ -993,20 +966,11 @@
                     onclick="toggleStaffMenu()"
                 >
 
-                    <div class="staff-avatar">
-                        A
-                    </div>
+                    <div class="staff-avatar" id="profileInitial">U</div>
 
                     <div class="staff-info">
-
-                        <strong>
-                            Admin
-                        </strong>
-
-                        <small>
-                            Administrator
-                        </small>
-
+                        <strong id="profileName">User</strong>
+                        <small id="profileRole">User</small>
                     </div>
 
                     <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
@@ -1998,21 +1962,285 @@ const API_URL =
    ADMIN AUTH
 ===================================================== */
 
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
+/* =====================================================
+   USER AUTH
+===================================================== */
 
-if (
-    !user ||
-    user.role !== "admin"
-) {
+const user = JSON.parse(
+    localStorage.getItem("user") || "null"
+);
 
-    window.location.href =
-        "index.html";
-
+if (!user) {
+    window.location.href = "index.html";
 }
 
+
+/* =====================================================
+   DYNAMIC PROFILE
+===================================================== */
+
+function loadBackupProfile() {
+
+    const name =
+        user?.full_name ||
+        user?.fullname ||
+        user?.name ||
+        user?.username ||
+        "User";
+
+    document.getElementById("profileName").textContent = name;
+
+    document.getElementById("profileInitial").textContent =
+        name.trim().charAt(0).toUpperCase();
+
+    document.getElementById("profileRole").textContent =
+        String(user?.role || "User")
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+
+/* =====================================================
+   MASTER MODULE MENU
+===================================================== */
+
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            front_desk: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        trainerHref: "trainer_messages.html"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainer.html" },
+    {
+        key: "schedule",
+        label: "Schedule",
+        href: "trainer-schedule.html",
+        trainerHref: "trainer-schedule.html"
+    },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "member.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "staff", label: "Staff", href: "staff_manage.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        href: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup & Restore",
+        href: "backup_restore.html",
+        active: true
+    },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
+
+
+/* =====================================================
+   MODULE KEY NORMALIZER
+===================================================== */
+
+function normalizeModuleKey(value) {
+
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        home: "dashboard",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+
+/* =====================================================
+   DASHBOARD PAGE
+===================================================== */
+
+function getDashboardPage() {
+
+    const role = String(user?.role || "").toLowerCase();
+
+    const dashboard = MODULE_MENU.find(
+        item => item.key === "dashboard"
+    );
+
+    return dashboard.href[role] || "index.html";
+}
+
+
+/* =====================================================
+   RENDER SIDEBAR
+===================================================== */
+
+function renderBackupMenu(allowedModules) {
+
+    const menu = document.getElementById("menu");
+
+    if (!menu) return;
+
+    const currentPage = window.location.pathname
+        .split("/")
+        .pop()
+        .toLowerCase();
+
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+
+        if (!allowedModules.has(item.key)) return;
+
+        let page = typeof item.href === "object"
+            ? item.href[String(user.role || "").toLowerCase()] || "index.html"
+            : item.href;
+
+        if (
+            item.trainerHref &&
+            String(user.role || "").toLowerCase() === "trainer"
+        ) {
+            page = item.trainerHref;
+        }
+
+        const link = document.createElement("a");
+
+        link.href = page;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (currentPage === page.toLowerCase()) {
+            link.classList.add("active");
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+
+/* =====================================================
+   CHECK MODULE ACCESS
+===================================================== */
+
+async function checkBackupModuleAccess() {
+
+    if (!user) {
+        window.location.href = "index.html";
+        return false;
+    }
+
+    const userId = user.user_id || user.id;
+
+    if (!userId) {
+        console.error("User ID not found.");
+        return false;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to load module permissions.");
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(module => {
+
+                const key = typeof module === "string"
+                    ? module
+                    : module.module_key ||
+                      module.key ||
+                      module.module_name ||
+                      "";
+
+                return normalizeModuleKey(key);
+
+            }).filter(Boolean)
+        );
+
+        renderBackupMenu(allowedModules);
+
+        if (!allowedModules.has("backup_restore")) {
+
+            document.querySelector(".layout").innerHTML = `
+                <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                    <h2>Access Denied</h2>
+                    <p>Wala kang permission para buksan ang Backup & Restore.</p>
+                    <button onclick="location.href='${getDashboardPage()}'">
+                        Back to Dashboard
+                    </button>
+                </main>
+            `;
+
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+
+        console.error("BACKUP MODULE ACCESS ERROR:", error);
+
+        document.querySelector(".layout").innerHTML = `
+            <main style="font-family:Arial;text-align:center;padding:60px 20px">
+                <h2>Unable to Verify Access</h2>
+                <p>Hindi ma-verify ang module permissions.</p>
+                <button onclick="location.reload()">Retry</button>
+            </main>
+        `;
+
+        return false;
+    }
+}
 
 /* =====================================================
    PROFILE
@@ -2156,13 +2384,10 @@ async function confirmCreateBackup() {
 
 function logout() {
 
-    localStorage.clear();
+    localStorage.removeItem("user");
 
-    window.location.href =
-        "index.html";
-
+    window.location.href = "index.html";
 }
-
 
 /* =====================================================
    TOAST
@@ -4465,17 +4690,20 @@ function capitalize(value) {
    INITIAL LOAD
 ===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async function() {
+document.addEventListener("DOMContentLoaded", async function() {
 
-        await Promise.all([
-            loadBackups(),
-            loadLatestBackup()
-        ]);
+    loadBackupProfile();
 
-    }
-);
+    const hasAccess = await checkBackupModuleAccess();
+
+    if (!hasAccess) return;
+
+    await Promise.all([
+        loadBackups(),
+        loadLatestBackup()
+    ]);
+
+});
 
 </script>
 
