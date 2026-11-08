@@ -1331,38 +1331,7 @@
 
     </div>
 
-
-    
-    <div class="menu">
-        <a href="member.html" data-module="dashboard">
-            Home
-        </a>
-
-        <a href="member_messages.html"
-        class="msg-link"
-        data-module="messages">
-            Messages
-            <span id="msg-count" class="msg-count">0</span>
-        </a>
-
-        <a href="program.html" data-module="program">
-            Program
-        </a>
-
-        <a href="get_program.html" data-module="get_program">
-            Get Program
-        </a>
-
-        <a href="locker_booking.html"
-        class="active"
-        data-module="book_locker">
-            Book Locker
-        </a>
-
-        <a href="membership.html" data-module="membership">
-            Membership
-        </a>
-    </div>
+    <div class="menu" id="menu"></div>
 
 
 </div>
@@ -2096,23 +2065,128 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-async function loadMemberModuleAccess() {
-    const currentUser = JSON.parse(
-        localStorage.getItem("user") || "null"
-    );
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html", active: true },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainer.html" },
+    { key: "schedule", label: "Schedule", href: "trainer-schedule.html", trainerHref: "trainer-schedule.html" },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "member.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    { key: "user_account_maintenance", label: "User Account Maintenance", href: "user_accounts.html" },
+    { key: "backup_restore", label: "Backup & Restore", href: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
 
-    if (!currentUser) return;
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
 
-    const userId =
-        currentUser.user_id ||
-        currentUser.member_id ||
-        currentUser.id;
+    const aliases = {
+        home: "dashboard",
+        trainee_schedule: "schedule",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
 
-    if (!userId) return;
+    return aliases[key] || key;
+}
 
-    const menuLinks = document.querySelectorAll(
-        ".navbar .menu a[data-module]"
-    );
+function getLockerDashboardHref() {
+    const role = String(user.role || user.user_type || "")
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const dashboard = MODULE_MENU.find(item => item.key === "dashboard");
+
+    return dashboard.href[role] || "index.html";
+}
+
+function renderLockerMenu(allowedModules) {
+    const menu = document.getElementById("menu");
+    if (!menu) return;
+
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        let href = typeof item.href === "object"
+            ? item.href[String(user.role || "").toLowerCase()]
+            : item.href;
+
+        if (item.trainerHref && String(user.role || "").toLowerCase() === "trainer") {
+            href = item.trainerHref;
+        }
+
+        if (!href) return;
+
+        const link = document.createElement("a");
+        link.href = href;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.className) {
+            link.classList.add(item.className);
+        }
+
+        if (item.active) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "messages") {
+            const count = document.createElement("span");
+            count.id = "msg-count";
+            count.className = "msg-count";
+            count.textContent = "0";
+            link.appendChild(count);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+async function checkBookLockerAccess() {
+    const userId = user.user_id || user.member_id || user.id;
+
+    if (!userId) {
+        window.location.href = "index.html";
+        return false;
+    }
 
     try {
         const response = await fetch(
@@ -2125,7 +2199,6 @@ async function loadMemberModuleAccess() {
         }
 
         const data = await response.json();
-
         const modules = Array.isArray(data)
             ? data
             : (data.modules || []);
@@ -2133,47 +2206,41 @@ async function loadMemberModuleAccess() {
         const allowedModules = new Set(
             modules.map(item => {
                 if (typeof item === "string") {
-                    return item.trim().toLowerCase();
+                    return normalizeModuleKey(item);
                 }
 
-                return String(
+                return normalizeModuleKey(
                     item.module_key ||
-                    item.module_name ||
                     item.key ||
+                    item.module_name ||
                     ""
-                ).trim().toLowerCase();
+                );
             })
         );
 
-        menuLinks.forEach(link => {
-            const moduleKey = link.dataset.module
-                .trim()
-                .toLowerCase();
+        renderLockerMenu(allowedModules);
 
-            link.style.display =
-                allowedModules.has(moduleKey) ? "" : "none";
-        });
+        if (!allowedModules.has("book_locker")) {
+            alert("You do not have permission to access this module.");
+            window.location.href = getLockerDashboardHref();
+            return false;
+        }
+
+        return true;
 
     } catch (error) {
-        console.error(
-            "Failed to load member module access:",
-            error
-        );
+        console.error("Failed to check Book Locker access:", error);
+        alert("Unable to verify module access. Please try again.");
+        window.location.href = getLockerDashboardHref();
+        return false;
     }
 }
 
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
-
-if(!user){
-
+if (!user) {
     alert("Session expired.");
-
-    window.location.href =
-        "index.html";
+    window.location.href = "index.html";
 }
 
 
@@ -2209,77 +2276,37 @@ let firstLoad = true;
 let lockerPhysicalStatus = {};
 let lockerBookedStatus = {};
 
-/* =========================================================
-   PROFILE
-========================================================= */
-
-/* =========================================================
-   PROFILE - DYNAMIC FROM LOGGED-IN USER
-========================================================= */
-
 const profile =
-    JSON.parse(
-        localStorage.getItem("profile")
-    ) || {};
-
-
-/*
- * Get the actual logged-in user's name.
- * No hardcoded name.
- */
+    JSON.parse(localStorage.getItem("profile") || "null") || {};
 
 const displayName =
     profile.name ||
+    profile.full_name ||
     profile.fullname ||
+    user.full_name ||
     user.fullname ||
     user.name ||
     user.username ||
-    "";
-
-
-/*
- * Get first letter dynamically.
- */
-
-const firstLetter =
-    displayName
-        .trim()
-        .charAt(0)
-        .toUpperCase();
-
-
-/*
- * Get role dynamically.
- */
+    "User";
 
 const displayRole =
     profile.role ||
     user.role ||
     user.user_type ||
     user.account_type ||
-    "Member";
+    "User";
 
+document.getElementById("profileInitial").textContent =
+    displayName.trim().charAt(0).toUpperCase();
 
-/*
- * Update profile UI.
- */
-
-document.getElementById(
-    "profileInitial"
-).innerText =
-    firstLetter;
-
-
-document.getElementById(
-    "profile-name"
-).innerText =
+document.getElementById("profile-name").textContent =
     displayName;
 
+document.getElementById("profile-role").textContent =
+    String(displayRole)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
 
-document.getElementById(
-    "profile-role"
-).innerText =
-    displayRole;
 
 function updateLockerCards() {
 
@@ -2432,19 +2459,23 @@ function updateLockerCards() {
    PAGE LOAD
 ========================================================= */
 window.onload = async () => {
+    const hasAccess = await checkBookLockerAccess();
 
+    if (!hasAccess) return;
 
     renderCalendar();
 
     await selectToday();
 
-    // Load physical status + booking status
-    // at the same time.
     await Promise.all([
         loadCurrentLockerStatus(),
         loadBookedSlots()
     ]);
 
+    loadMessageCount();
+
+    setInterval(loadMessageCount, 3000);
+    setInterval(loadCurrentLockerStatus, 5000);
 };
 
 async function loadAllBookedSlotsForDate() {
@@ -5149,18 +5180,9 @@ async function changePassword(){
 
 }
 
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-function logout(){
-
-    localStorage.clear();
-
-    window.location.href =
-        "index.html";
-
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
 }
 
 /* =========================================================
@@ -5319,26 +5341,6 @@ function goMessages(){
 
 
 
-/* =========================================================
-   START MESSAGE CHECK
-========================================================= */
-
-loadMessageCount();
-loadMemberModuleAccess();
-
-setInterval(
-    loadMessageCount,
-    3000
-);
-
-/* =========================================================
-   REAL-TIME LOCKER STATUS REFRESH
-========================================================= */
-
-setInterval(
-    loadCurrentLockerStatus,
-    5000
-);
 
 </script>
 
