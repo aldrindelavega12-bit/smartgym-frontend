@@ -86,11 +86,13 @@ if (!user) {
             <div class="top-right">
                 <div class="staff-profile" onclick="toggleStaffMenu()">
 
-                    <div class="staff-avatar">M</div>
+                    
+
+                    <div class="staff-avatar" id="profileInitial">U</div>
 
                     <div class="staff-info">
-                        <strong>Manager</strong>
-                        <small>Gym Manager</small>
+                        <strong id="profile-name">User</strong>
+                        <small id="profile-role">User</small>
                     </div>
 
                     <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
@@ -253,13 +255,12 @@ if (!user) {
 <script>
 
 /* =====================================================
-   SIDEBAR MENU - MANAGER
+   SIDEBAR MENU - MASTER MODULE MENU
 ===================================================== */
 
 const menu = document.getElementById("menu");
 
-
-const menuItems = [
+const MODULE_MENU = [
     { key: "dashboard", label: "Home", page: "manager.html" },
     { key: "messages", label: "Messages", page: "messages.html", badge: true },
 
@@ -287,7 +288,36 @@ const menuItems = [
 ];
 
 
-// ================= RENDER SIDEBAR =================
+/* =====================================================
+   NORMALIZE MODULE KEYS
+===================================================== */
+
+function normalizeModuleKey(value) {
+
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        home: "dashboard",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+
+/* =====================================================
+   RENDER SIDEBAR
+===================================================== */
 
 function renderArchiveMenu(allowedModules) {
 
@@ -298,7 +328,7 @@ function renderArchiveMenu(allowedModules) {
 
     menu.innerHTML = "";
 
-    menuItems.forEach(item => {
+    MODULE_MENU.forEach(item => {
 
         if (!allowedModules.has(item.key)) return;
 
@@ -323,7 +353,9 @@ function renderArchiveMenu(allowedModules) {
 }
 
 
-// ================= LOAD MODULE ACCESS =================
+/* =====================================================
+   LOAD MODULE ACCESS
+===================================================== */
 
 async function loadArchiveModuleAccess() {
 
@@ -350,21 +382,23 @@ async function loadArchiveModuleAccess() {
 
     const data = await response.json();
 
-    if (!Array.isArray(data.modules)) {
-        throw new Error("Invalid module access response.");
-    }
+    const modules = Array.isArray(data)
+        ? data
+        : Array.isArray(data.modules)
+            ? data.modules
+            : [];
 
     const allowedModules = new Set(
-        data.modules.map(module => {
+        modules.map(module => {
 
             const key = typeof module === "string"
                 ? module
                 : module.module_key ||
-                  module.module_name ||
                   module.key ||
+                  module.module_name ||
                   "";
 
-            return String(key).trim().toLowerCase();
+            return normalizeModuleKey(key);
 
         }).filter(Boolean)
     );
@@ -375,7 +409,9 @@ async function loadArchiveModuleAccess() {
 }
 
 
-// ================= CHECK ARCHIVE PAGE ACCESS =================
+/* =====================================================
+   CHECK ARCHIVE PAGE ACCESS
+===================================================== */
 
 async function checkArchivePageAccess() {
 
@@ -435,6 +471,7 @@ async function checkArchivePageAccess() {
     }
 }
 
+
 function toggleStaffMenu() {
     document.getElementById("staffDropdown")
         .classList.toggle("show");
@@ -454,7 +491,26 @@ document.addEventListener("click", function(event) {
     }
 });
 
+/* =====================================================
+   DYNAMIC USER PROFILE
+===================================================== */
 
+const profileName =
+    user?.full_name ||
+    user?.fullname ||
+    user?.name ||
+    user?.username ||
+    "User";
+
+document.getElementById("profile-name").textContent = profileName;
+
+document.getElementById("profileInitial").textContent =
+    profileName.trim().charAt(0).toUpperCase();
+
+document.getElementById("profile-role").textContent =
+    String(user?.role || "User")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
 // =====================================================
 // ARCHIVE DATA
 // =====================================================
@@ -462,7 +518,6 @@ document.addEventListener("click", function(event) {
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 let archiveRecords = [];
-loadArchiveModuleAccess();
 let filteredRecords = [];
 let currentPage = 1;
 const recordsPerPage = 8;
@@ -835,7 +890,9 @@ async function confirmDelete() {
         "#deleteModal .archive-confirm-delete"
     );
 
-    if (!user?.user_id) {
+    const actorId = user?.user_id || user?.id;
+
+    if (!actorId) {
         alert("Unable to identify the current user. Please log in again.");
         return;
     }
@@ -854,7 +911,7 @@ async function confirmDelete() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    actor_id: user.user_id
+                    actor_id: actorId
                 })
             }
         );
@@ -915,7 +972,7 @@ async function confirmRestore() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    actor_id: user?.user_id
+                    actor_id: user?.user_id || user?.id
                 })
             }
         );
@@ -962,11 +1019,20 @@ document.getElementById("restoreModal")
         if (event.target === this) closeRestoreModal();
     });
 
-
 /* =====================================================
    INITIALIZE
 ===================================================== */
-loadArchive();
+
+async function initializeArchive() {
+
+    const hasAccess = await checkArchivePageAccess();
+
+    if (!hasAccess) return;
+
+    await loadArchive();
+}
+
+initializeArchive();
 </script>
 
 </body>
