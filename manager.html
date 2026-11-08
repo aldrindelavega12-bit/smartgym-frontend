@@ -1275,51 +1275,38 @@ async function loadAttendanceSummary() {
 // DASHBOARD
 // =====================================================
 
+
 async function loadDashboard() {
 
     try {
 
-        const res =
-            await fetch(
-                `${API_URL}/api/dashboard`
-            );
-
-
-        const data =
-            await res.json();
-
-
-        document.getElementById(
-            "total"
-        ).innerText =
-            data.total_attendance || 0;
-
-
-        document.getElementById(
-            "active"
-        ).innerText =
-            data.active_users || 0;
-
-
-        document.getElementById(
-            "lockers"
-        ).innerText =
-            data.active_lockers || 0;
-
-
-    }
-
-    catch (err) {
-
-        console.error(
-            "Dashboard error:",
-            err
+        const res = await fetch(
+            `${API_URL}/api/dashboard`
         );
 
+        if (!res.ok) {
+            throw new Error(`Dashboard API error: ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        const activeElement = document.getElementById("active");
+        const lockersElement = document.getElementById("lockers");
+
+        if (activeElement && data.active_users !== undefined) {
+            activeElement.innerText = data.active_users;
+        }
+
+        if (lockersElement) {
+            lockersElement.innerText = data.active_lockers || 0;
+        }
+
+    } catch (err) {
+
+        console.error("Dashboard error:", err);
+
     }
-
 }
-
 
 
 // =====================================================
