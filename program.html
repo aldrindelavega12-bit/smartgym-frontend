@@ -2397,12 +2397,11 @@ const displayName =
     "User";
 
 const displayRole =
-    profileData.role ||
     user?.role ||
     user?.user_type ||
     user?.account_type ||
+    profileData.role ||
     "User";
-
 const profileNameElement =
     document.getElementById("profile-name");
 
