@@ -100,16 +100,11 @@ if (!user) {
                     onclick="toggleStaffMenu()"
                 >
 
-                    <div class="staff-avatar" id="staffAvatar">
-                        S
-                    </div>
+                    <div class="staff-avatar" id="staffAvatar">U</div>
 
                     <div class="staff-info">
-
-                        <strong id="staffName">Staff</strong>
-
-                        <small>Staff</small>
-
+                        <strong id="staffName">User</strong>
+                        <small id="staffRole">User</small>
                     </div>
 
                     <i
@@ -482,38 +477,170 @@ if (!user) {
 
 <script>
 const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html", active: true },
+    { key: "trainee", label: "Trainee", href: "trainer.html" },
+    { key: "schedule", label: "Schedule", href: "trainer-schedule.html", trainerHref: "trainer-schedule.html" },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "member.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    { key: "user_account_maintenance", label: "User Account Maintenance", href: "user_accounts.html" },
+    { key: "backup_restore", label: "Backup & Restore", href: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
+
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        home: "dashboard",
+        trainee_schedule: "schedule",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+function getLockerDashboardHref() {
+    const role = String(user.role || user.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const dashboard = MODULE_MENU.find(item => item.key === "dashboard");
+
+    return dashboard.href[role] || "index.html";
+}
+
+function renderLockerMenu(allowedModules) {
+    const menu = document.getElementById("menu");
+    if (!menu) return;
+
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        let href = typeof item.href === "object"
+            ? item.href[String(user.role || "").toLowerCase()]
+            : item.href;
+
+        if (
+            item.trainerHref &&
+            String(user.role || "").toLowerCase() === "trainer"
+        ) {
+            href = item.trainerHref;
+        }
+
+        if (!href) return;
+
+        const link = document.createElement("a");
+        link.href = href;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.className) {
+            link.classList.add(item.className);
+        }
+
+        if (item.active) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "messages") {
+            const badge = document.createElement("span");
+            badge.id = "msg-count";
+            badge.className = "msg-count";
+            badge.textContent = "0";
+            link.appendChild(badge);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
 async function checkLockerPageAccess() {
-    if (!user || !user.user_id) {
+    const userId = user.user_id || user.member_id || user.id;
+
+    if (!userId) {
         window.location.href = "index.html";
         return false;
     }
 
     try {
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
             { cache: "no-store" }
         );
 
         if (!response.ok) {
-            throw new Error("Unable to verify module access.");
+            throw new Error(`HTTP ${response.status}`);
         }
 
         const data = await response.json();
 
-        if (!Array.isArray(data.modules)) {
-            throw new Error("Invalid module access response.");
-        }
+        const modules = Array.isArray(data)
+            ? data
+            : (data.modules || []);
 
-        if (!data.modules.includes("locker")) {
-            document.body.innerHTML = `
-                <main style="font-family:Arial;text-align:center;padding:60px 20px">
-                    <h2>Access Denied</h2>
-                    <p>Wala kang permission para buksan ang Locker.</p>
-                    <button onclick="location.href='staff.html'">
-                        Back to Dashboard
-                    </button>
-                </main>
-            `;
+        const allowedModules = new Set(
+            modules.map(item => {
+                if (typeof item === "string") {
+                    return normalizeModuleKey(item);
+                }
+
+                return normalizeModuleKey(
+                    item.module_key ||
+                    item.key ||
+                    item.module_name ||
+                    ""
+                );
+            })
+        );
+
+        renderLockerMenu(allowedModules);
+
+        if (!allowedModules.has("locker")) {
+            alert("You do not have permission to access this module.");
+            window.location.href = getLockerDashboardHref();
             return false;
         }
 
@@ -522,135 +649,52 @@ async function checkLockerPageAccess() {
     } catch (error) {
         console.error("LOCKER ACCESS ERROR:", error);
 
-        document.body.innerHTML = `
-            <main style="font-family:Arial;text-align:center;padding:60px 20px">
-                <h2>Unable to Verify Access</h2>
-                <p>Hindi ma-verify ang module permission. Pakisubukan ulit.</p>
-                <button onclick="location.reload()">Retry</button>
-            </main>
-        `;
-
-        return false;
-    }
-}
-const staffName =
-    document.getElementById("staffName");
-
-const staffAvatar =
-    document.getElementById("staffAvatar");
-
-if(user){
-
-    const fullname =
-        user.fullname ||
-        user.name ||
-        user.full_name ||
-        "Staff";
-
-    if(staffName){
-        staffName.innerText = fullname;
-    }
-
-    if(staffAvatar){
-        staffAvatar.innerText =
-            fullname.charAt(0).toUpperCase();
-    }
-
-}
-
-// ================= MENU =================
-// ================= MENU =================
-async function buildLockerPermissionMenu() {
-    const menu = document.getElementById("menu");
-
-    try {
-        const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
-            { cache: "no-store" }
-        );
-
-        if (!response.ok) {
-            throw new Error("Unable to load module permissions.");
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data.modules)) {
-            throw new Error("Invalid module access response.");
-        }
-
-        const allowed = new Set(data.modules);
-        const isAdmin = user.role === "admin";
-
-        const links = isAdmin
-            ? [
-                { key: "dashboard", href: "admin.html", label: "Home" },
-                { key: "messages", href: "messages.html", label: "Messages", badge: true },
-                { key: "attendance", href: "attendance.html", label: "Attendance" },
-                { key: "locker", href: "locker.html", label: "Locker" },
-                { key: "members", href: "members.html", label: "Members" },
-                { key: "staff_manage", href: "staff_manage.html", label: "Staff" },
-                { key: "create_account", href: "create_account.html", label: "Create Account" }
-            ]
-            : [
-                { key: "dashboard", href: "staff.html", label: "Home" },
-                { key: "messages", href: "messages.html", label: "Messages", badge: true },
-                { key: "attendance", href: "attendance.html", label: "Attendance" },
-                { key: "locker", href: "locker.html", label: "Locker" }
-            ];
-
-        // Build sidebar using assigned module permissions.
-        menu.innerHTML = links
-            .filter(link => allowed.has(link.key))
-            .map(link => `
-                <a href="${link.href}">
-                    ${link.label}
-                    ${link.badge
-                        ? '<span id="msg-count" class="msg-count">0</span>'
-                        : ""}
-                </a>
-            `)
-            .join("");
-
-        // Remove active state from every sidebar link.
-        menu.querySelectorAll("a").forEach(link => {
-            link.classList.remove("active");
-            link.style.removeProperty("background");
-            link.style.removeProperty("color");
-        });
-
-        // Set Locker as the only active sidebar link.
-        const lockerLink = menu.querySelector(
-            'a[href="locker.html"]'
-        );
-
-        if (lockerLink) {
-            lockerLink.classList.add("active");
-            lockerLink.style.setProperty(
-                "background",
-                "#eaf6ee",
-                "important"
-            );
-            lockerLink.style.setProperty(
-                "color",
-                "#087c3d",
-                "important"
-            );
-        }
-
-        return true;
-
-    } catch (error) {
-        console.error("LOCKER MENU ERROR:", error);
-
-        menu.innerHTML =
-            "<p>Unable to load menu permissions. Please refresh.</p>";
+        alert("Unable to verify module access. Please try again.");
+        window.location.href = getLockerDashboardHref();
 
         return false;
     }
 }
 
 
+const staffName = document.getElementById("staffName");
+const staffAvatar = document.getElementById("staffAvatar");
+const staffRole = document.getElementById("staffRole");
+
+const profileData =
+    JSON.parse(localStorage.getItem("profile") || "null") || {};
+
+const displayName =
+    profileData.name ||
+    profileData.full_name ||
+    profileData.fullname ||
+    user.full_name ||
+    user.fullname ||
+    user.name ||
+    user.username ||
+    "User";
+
+const displayRole =
+    profileData.role ||
+    user.role ||
+    user.user_type ||
+    user.account_type ||
+    "User";
+
+if (staffName) {
+    staffName.textContent = displayName;
+}
+
+if (staffAvatar) {
+    staffAvatar.textContent =
+        displayName.trim().charAt(0).toUpperCase();
+}
+
+if (staffRole) {
+    staffRole.textContent = String(displayRole)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+}
 // ================= SOCKET =================
 const socket = io(API_URL, {
     transports: ["websocket"],
@@ -1145,15 +1189,11 @@ function showNotifPopup(title,text){
 
     },4000);
 }
-// ================= INIT =================
 window.onload = async () => {
     const hasAccess = await checkLockerPageAccess();
 
     if (!hasAccess) return;
 
-    await buildLockerPermissionMenu();
-
-    // Set today's date using local time.
     const now = new Date();
 
     const today =
@@ -1162,12 +1202,9 @@ window.onload = async () => {
     document.getElementById("dateFilter").value = today;
     document.getElementById("approvalDate").value = today;
 
-    // Load the current locker data.
     loadLockers();
 
-    // Load message count only if the Messages module is allowed.
-    if (user.role === "admin" ||
-        document.querySelector('#menu a[href="messages.html"]')) {
+    if (document.querySelector('#menu a[data-module="messages"]')) {
         loadMessageCount();
     }
 };
@@ -1333,13 +1370,9 @@ window.addEventListener("click", function(e) {
 
 
 // ================= LOGOUT =================
-
 function logout() {
-
-    localStorage.clear();
-
+    localStorage.removeItem("user");
     window.location.href = "index.html";
-
 }
 
 // fallback refresh
