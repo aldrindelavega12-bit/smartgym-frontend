@@ -64,38 +64,7 @@
 
     <!-- MENU -->
 
-    <div class="menu">
-
-
-            
-    <a href="trainer.html" data-module="dashboard">
-        Home
-    </a>
-
-    <a href="trainer_messages.html"
-    data-module="messages"
-    class="msg-link">
-        Messages
-        <span id="msg-count" class="msg-count">0</span>
-    </a>
-
-    <a href="trainee.html" data-module="trainee">
-        Trainee
-    </a>
-
-    <a href="trainer-schedule.html" data-module="schedule">
-        Schedule
-    </a>
-
-    <a href="client_requests.html"
-    data-module="client_requests"
-    class="active">
-        Client Requests
-    </a>
-
-
-
-    </div>
+    <div class="menu" id="menu"></div>
 
 
 
@@ -125,24 +94,11 @@
                 onclick="toggleTrainerMenu()">
 
 
-                <div
-                    class="trainer-avatar"
-                    id="trainerAvatar"
-                >
-                    T
-                </div>
-
+                <div class="trainer-avatar" id="trainerAvatar">U</div>
 
                 <div class="trainer-info">
-
-                    <strong id="trainerName">
-                        Trainer
-                    </strong>
-
-                    <small>
-                        Trainer
-                    </small>
-
+                    <strong id="trainerName">User</strong>
+                    <small id="trainerRole">User</small>
                 </div>
 
 
@@ -419,73 +375,181 @@ const API_URL =
    USER
 ===================================================== */
 
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
-/* =====================================================
-   TRAINER PROFILE
-===================================================== */
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
-const trainerName =
-    document.getElementById(
-        "trainerName"
-    );
-
-const trainerAvatar =
-    document.getElementById(
-        "trainerAvatar"
-    );
-
-
-if(user){
-
-    const fullname =
-        user.fullname ||
-        user.name ||
-        user.full_name ||
-        "Trainer";
-
-
-    if(trainerName){
-
-        trainerName.innerText =
-            fullname;
-
-    }
-
-
-    if(trainerAvatar){
-
-        trainerAvatar.innerText =
-            fullname
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
+if (!user) {
+    window.location.href = "index.html";
 }
 
-if(
-    !user ||
-    user.role !== "trainer"
-){
+function loadClientRequestsProfile() {
+    const name =
+        user?.full_name ||
+        user?.fullname ||
+        user?.name ||
+        user?.username ||
+        "User";
 
-    window.location.href =
-        "index.html";
+    const role = String(user?.role || "User")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
 
+    document.getElementById("trainerName").textContent = name;
+    document.getElementById("trainerAvatar").textContent =
+        name.trim().charAt(0).toUpperCase();
+
+    document.getElementById("trainerRole").textContent = role;
 }
 
+// =========================================
+// MASTER MODULE MENU
+// =========================================
 
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainee.html" },
+    { key: "schedule", label: "Schedule", href: "trainer-schedule.html" },
+    {
+        key: "client_requests",
+        label: "Client Requests",
+        href: "client_requests.html",
+        active: true
+    },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "member.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        href: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup & Restore",
+        href: "backup_restore.html"
+    },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
 
-async function loadTrainerModuleAccess() {
-    const menu = document.querySelector(".navbar .menu");
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
 
-    if (!menu || !user || !user.user_id) return;
+    const aliases = {
+        home: "dashboard",
+        trainee_schedule: "schedule",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+function getDashboardHref() {
+    const role = normalizeModuleKey(user?.role);
+
+    const dashboard = MODULE_MENU.find(
+        item => item.key === "dashboard"
+    );
+
+    return dashboard.href[role] || "index.html";
+}
+
+function renderClientRequestsMenu(allowedModules) {
+    const menu = document.getElementById("menu");
+
+    if (!menu) return;
+
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        const link = document.createElement("a");
+
+        let href = item.href;
+
+        if (item.key === "dashboard") {
+            href = getDashboardHref();
+        } else if (
+            item.trainerHref &&
+            normalizeModuleKey(user.role) === "trainer"
+        ) {
+            href = item.trainerHref;
+        }
+
+        link.href = href;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.className) {
+            link.classList.add(item.className);
+        }
+
+        if (item.active) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "messages") {
+            const count = document.createElement("span");
+            count.id = "msg-count";
+            count.className = "msg-count";
+            count.textContent = "0";
+            link.appendChild(count);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+// =========================================
+// CHECK MODULE ACCESS
+// =========================================
+
+async function checkClientRequestsAccess() {
+    const userId = user?.user_id || user?.id;
+
+    if (!userId) {
+        window.location.href = "index.html";
+        return false;
+    }
 
     try {
         const response = await fetch(
-            `${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,
+            `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
             { cache: "no-store" }
         );
 
@@ -504,32 +568,60 @@ async function loadTrainerModuleAccess() {
         const allowedModules = new Set(
             modules.map(module => {
                 if (typeof module === "string") {
-                    return module.trim().toLowerCase();
+                    return normalizeModuleKey(module);
                 }
 
-                return String(
+                return normalizeModuleKey(
                     module.module_key ||
-                    module.module_name ||
                     module.key ||
-                    ""
-                ).trim().toLowerCase();
-            })
+                    module.module_name
+                );
+            }).filter(Boolean)
         );
 
-        menu.querySelectorAll("a[data-module]").forEach(link => {
-            link.style.display = allowedModules.has(
-                link.dataset.module
-            ) ? "" : "none";
-        });
+        renderClientRequestsMenu(allowedModules);
+
+        if (!allowedModules.has("client_requests")) {
+            document.querySelector(".layout").innerHTML = `
+                <div style="
+                    width:100%;
+                    padding:60px 20px;
+                    text-align:center;
+                ">
+                    <h2>Access Denied</h2>
+                    <p>
+                        You do not have permission to access
+                        the Client Requests module.
+                    </p>
+                    <button onclick="window.location.href='${getDashboardHref()}'">
+                        Back to Home
+                    </button>
+                </div>
+            `;
+
+            return false;
+        }
+
+        return true;
 
     } catch (error) {
-        console.error(
-            "CLIENT REQUESTS MODULE ACCESS ERROR:",
-            error
-        );
+        console.error("CLIENT REQUESTS ACCESS ERROR:", error);
+
+        document.querySelector(".layout").innerHTML = `
+            <div style="
+                width:100%;
+                padding:60px 20px;
+                text-align:center;
+            ">
+                <h2>Unable to Verify Access</h2>
+                <p>Please check your connection and try again.</p>
+                <button onclick="location.reload()">Retry</button>
+            </div>
+        `;
+
+        return false;
     }
 }
-
 /* =====================================================
    DATA
 ===================================================== */
@@ -1830,13 +1922,9 @@ window.addEventListener(
    LOGOUT
 ===================================================== */
 
-function logout(){
-
-    localStorage.clear();
-
-    window.location.href =
-        "index.html";
-
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
 }
 
 // =========================================
@@ -1939,10 +2027,36 @@ document
    INITIAL LOAD
 ===================================================== */
 
-loadMessageCount();
-loadTrainerModuleAccess();
-loadClientRequests();
+// =========================================
+// INITIAL LOAD
+// =========================================
 
+document.addEventListener("DOMContentLoaded", async function () {
+
+    loadClientRequestsProfile();
+
+    const hasAccess = await checkClientRequestsAccess();
+
+    if (!hasAccess) return;
+
+    await Promise.all([
+        loadMessageCount(),
+        loadClientRequests()
+    ]);
+
+    // =========================================
+    // AUTO REFRESH
+    // =========================================
+
+    setInterval(() => {
+        loadClientRequests();
+    }, 10000);
+
+    setInterval(() => {
+        loadMessageCount();
+    }, 10000);
+
+});
 
 
 /* =====================================================
