@@ -740,7 +740,7 @@ document.getElementById("staffAvatar").textContent =
 const menu = document.getElementById("menu");
 
 const MODULE_MENU = [
-    { key: "dashboard", label: "Home", page: "manager.html" },
+    { key: "dashboard", label: "Home", page: getHomePage() },
     { key: "messages", label: "Messages", page: "messages.html", badge: true },
 
     { key: "program", label: "Program", page: "program.html" },
@@ -792,7 +792,21 @@ function normalizeModuleKey(value) {
     return aliases[key] || key;
 }
 
+function getHomePage() {
+    const role = String(user?.role || "").toLowerCase();
 
+    const dashboards = {
+        manager: "manager.html",
+        admin: "admin.html",
+        staff: "staff.html",
+        front_desk: "staff.html",
+        trainer: "trainer.html",
+        member: "member_dashboard.html",
+        walkin: "walkin_dashboard.html"
+    };
+
+    return dashboards[role] || "index.html";
+}
 /* =====================================================
    RENDER STAFF SIDEBAR
 ===================================================== */
