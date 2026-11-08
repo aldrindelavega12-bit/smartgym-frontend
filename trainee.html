@@ -823,7 +823,6 @@ function normalizeModuleKey(value) {
 /* =====================================================
    RENDER TRAINEE SIDEBAR
 ===================================================== */
-
 function renderTrainerMenu(allowedModules) {
     if (!menu) return;
 
@@ -839,11 +838,39 @@ function renderTrainerMenu(allowedModules) {
 
         const link = document.createElement("a");
 
-        link.href = item.page;
+        if (item.key === "dashboard") {
+            const role = String(
+                user?.role ||
+                user?.user_type ||
+                user?.account_type ||
+                ""
+            ).toLowerCase().replace(/[\s-]+/g, "_");
+
+            const dashboards = {
+                pre_member: "pre_member.html",
+                premember: "pre_member.html",
+                member: "member.html",
+                staff: "staff.html",
+                trainer: "trainer.html",
+                manager: "manager.html",
+                admin: "admin.html",
+                walkin: "walkin_dashboard.html"
+            };
+
+            link.href = dashboards[role] || "index.html";
+        } else {
+            link.href = item.page;
+        }
+
         link.dataset.module = item.key;
         link.textContent = item.label;
 
-        if (item.page.toLowerCase() === currentPage) {
+        if (item.page?.toLowerCase() === currentPage) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "dashboard" &&
+            link.href.toLowerCase().endsWith(currentPage)) {
             link.classList.add("active");
         }
 
@@ -854,13 +881,13 @@ function renderTrainerMenu(allowedModules) {
             badge.id = "msg-count";
             badge.className = "msg-count";
             badge.textContent = "0";
+
             link.appendChild(badge);
         }
 
         menu.appendChild(link);
     });
 }
-
 
 /* =====================================================
    LOAD MODULE ACCESS
