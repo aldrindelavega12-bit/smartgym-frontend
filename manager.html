@@ -533,34 +533,34 @@ const MANAGER_MENU_ITEMS = [
 // RENDER MANAGER SIDEBAR
 // =====================================================
 
+
 function renderManagerMenu(allowedModules) {
+
+    const menu = document.getElementById("menu");
+
+    if (!menu) return;
 
     const currentPage = window.location.pathname
         .split("/")
         .pop()
         .toLowerCase();
 
-    menu.innerHTML = "";
+    const permittedMenu = MANAGER_MENU_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
 
-    menuItems.forEach(item => {
-
-        if (!allowedModules.has(item.key)) {
-            return;
-        }
-
-        const link = document.createElement("a");
-
-        link.href = item.page;
-        link.dataset.module = item.key;
-        link.textContent = item.label;
-
-        if (currentPage === item.page.toLowerCase()) {
-            link.classList.add("active");
-        }
-
-        menu.appendChild(link);
-
-    });
+    menu.innerHTML = permittedMenu.map(item => `
+        <a
+            href="${item.page}"
+            data-module="${item.key}"
+            class="${currentPage === item.page.toLowerCase() ? "active" : ""}"
+        >
+            ${item.label}
+            ${item.badge
+                ? '<span id="msg-count" class="msg-count">0</span>'
+                : ""}
+        </a>
+    `).join("");
 }
 
 
