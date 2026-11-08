@@ -572,37 +572,55 @@ function renderManagerQuickCards(allowedModules) {
 
     const container = document.getElementById("quickCards");
 
-    if (!container) {
-        console.error("Quick Cards container not found.");
-        return;
-    }
+    if (!container) return;
 
     container.innerHTML = "";
 
-    QUICK_CARD_ITEMS.forEach(item => {
+    const permittedCards = QUICK_CARD_ITEMS.filter(item =>
+        allowedModules.has(item.key)
+    );
 
-        if (!allowedModules.has(item.key)) {
-            return;
-        }
+    if (permittedCards.length === 0) {
+        container.innerHTML = `
+            <p style="color:#68736d; padding:15px;">
+                No available modules assigned.
+            </p>
+        `;
+        return;
+    }
+
+    permittedCards.forEach(item => {
 
         const card = document.createElement("div");
 
         card.className = "quick-card";
         card.dataset.module = item.key;
 
-        card.innerHTML = `
-            <h3>${item.title}</h3>
+        const title = document.createElement("h3");
+        title.textContent = item.title;
 
-            <p>${item.description}</p>
+        const description = document.createElement("p");
+        description.textContent = item.description;
 
-            <a href="${item.page}">
-                View →
-            </a>
-        `;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "View →";
+
+        button.addEventListener("click", () => {
+            window.location.href = item.page;
+        });
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(button);
 
         container.appendChild(card);
-
     });
+
+    console.log(
+        "MANAGER QUICK CARDS DISPLAYED:",
+        permittedCards.map(item => item.key)
+    );
 }
 
 
@@ -612,14 +630,17 @@ function renderManagerQuickCards(allowedModules) {
 
 async function loadManagerModuleAccess() {
 
+    const menu = document.getElementById("menu");
     const userId = user?.user_id || user?.id;
 
     if (!menu || !userId) {
-        console.error("Missing menu or user ID.");
+        console.error("Missing menu or user information.");
         return;
     }
 
     try {
+
+        menu.innerHTML = "<p>Loading menu...</p>";
 
         const response = await fetch(
             `${API_URL}/api/user/module-access/${encodeURIComponent(userId)}`,
@@ -633,36 +654,36 @@ async function loadManagerModuleAccess() {
         );
 
         if (!response.ok) {
-            throw new Error(
-                `Module access error: ${response.status}`
-            );
+            throw new Error(`Module access API error: ${response.status}`);
         }
 
         const data = await response.json();
 
-        if (!Array.isArray(data.modules)) {
-            throw new Error("Invalid module access response.");
-        }
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
 
         const allowedModules = new Set(
-            data.modules.map(module => {
+            modules.map(module => {
 
-                return String(
-                    typeof module === "string"
-                        ? module
-                        : module.module_key ||
-                          module.module_name ||
-                          module.key ||
-                          ""
-                ).trim().toLowerCase();
+                const key = typeof module === "string"
+                    ? module
+                    : module.module_key ||
+                      module.module_name ||
+                      module.key ||
+                      "";
+
+                return String(key)
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[\s-]+/g, "_");
 
             }).filter(Boolean)
         );
 
-        // RENDER SIDEBAR
         renderManagerMenu(allowedModules);
-
-        // RENDER QUICK CARDS
         renderManagerQuickCards(allowedModules);
 
         console.log(
@@ -672,19 +693,15 @@ async function loadManagerModuleAccess() {
 
     } catch (error) {
 
-        console.error(
-            "MANAGER MODULE ACCESS ERROR:",
-            error
-        );
+        console.error("MANAGER MODULE ACCESS ERROR:", error);
 
-        menu.innerHTML = "";
+        menu.innerHTML = "<p>Unable to load module permissions.</p>";
 
         const container = document.getElementById("quickCards");
 
         if (container) {
             container.innerHTML = "";
         }
-
     }
 }
 
