@@ -33,13 +33,10 @@
 
 <script>
 
-const userData =
-    JSON.parse(localStorage.getItem("user"));
+const userData = JSON.parse(localStorage.getItem("user") || "null");
 
-if(!userData || userData.role !== "member"){
-
+if (!userData) {
     window.location.href = "index.html";
-
 }
 
 </script>
@@ -73,36 +70,7 @@ if(!userData || userData.role !== "member"){
     <!-- MENU -->
 
         
-    <div class="menu">
-        <a href="member.html" data-module="dashboard">
-            Home
-        </a>
-
-        <a href="member_messages.html"
-        class="msg-link"
-        data-module="messages">
-            Messages
-            <span id="msg-count" class="msg-count">0</span>
-        </a>
-
-        <a href="program.html" data-module="program">
-            Program
-        </a>
-
-        <a href="get_program.html" data-module="get_program">
-            Get Program
-        </a>
-
-        <a href="locker_booking.html" data-module="book_locker">
-            Book Locker
-        </a>
-
-        <a href="membership.html"
-        class="active"
-        data-module="membership">
-            Membership
-        </a>
-    </div>
+    <div class="menu" id="menu"></div>
 
 
 </div>
@@ -132,26 +100,11 @@ if(!userData || userData.role !== "member"){
 
                 <!-- AVATAR -->
 
-                <div class="user-avatar"
-                     id="profileInitial">
-
-                    A
-
-                </div>
-
-
-                <!-- USER INFO -->
+                <div class="user-avatar" id="profileInitial">U</div>
 
                 <div class="user-info">
-
-                    <strong id="profile-name">
-                        Aldrin
-                    </strong>
-
-                    <small>
-                        Member
-                    </small>
-
+                    <strong id="profile-name">User</strong>
+                    <small id="profile-role">User</small>
                 </div>
 
 
@@ -445,23 +398,147 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-async function loadMemberModuleAccess() {
-    const currentUser = JSON.parse(
-        localStorage.getItem("user") || "null"
-    );
+// ================= MASTER MODULE MENU =================
 
-    if (!currentUser) return;
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            front_desk: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        memberHref: "member_messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    { key: "get_program", label: "Get Program", href: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html", active: true },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainer.html" },
+    { key: "schedule", label: "Schedule", href: "trainer-schedule.html" },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "members.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    { key: "user_account_maintenance", label: "User Account Maintenance", href: "user_accounts.html" },
+    { key: "backup_restore", label: "Backup & Restore", href: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
 
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        home: "dashboard",
+        trainee_schedule: "schedule",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+function getMembershipDashboardHref() {
+    const role = String(
+        userData.role || userData.user_type || ""
+    )
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const dashboard = MODULE_MENU.find(item => item.key === "dashboard");
+
+    return dashboard.href[role] || "staff.html";
+}
+
+function renderMembershipMenu(allowedModules) {
+    const menu = document.getElementById("menu");
+    if (!menu) return;
+
+    menu.innerHTML = "";
+
+    const role = String(
+        userData.role || userData.user_type || ""
+    )
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        let href = typeof item.href === "object"
+            ? item.href[role]
+            : item.href;
+
+        if (item.key === "messages") {
+            if (role === "member") href = item.memberHref;
+            if (role === "trainer") href = item.trainerHref;
+        }
+
+        if (!href) return;
+
+        const link = document.createElement("a");
+
+        link.href = href;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.className) {
+            link.classList.add(item.className);
+        }
+
+        if (item.active) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "messages") {
+            const badge = document.createElement("span");
+            badge.id = "msg-count";
+            badge.className = "msg-count";
+            badge.textContent = "0";
+            link.appendChild(badge);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+async function checkMembershipPageAccess() {
     const userId =
-        currentUser.user_id ||
-        currentUser.member_id ||
-        currentUser.id;
+        userData.user_id ||
+        userData.member_id ||
+        userData.id;
 
-    if (!userId) return;
-
-    const menuLinks = document.querySelectorAll(
-        ".navbar .menu a[data-module]"
-    );
+    if (!userId) {
+        window.location.href = "index.html";
+        return false;
+    }
 
     try {
         const response = await fetch(
@@ -480,72 +557,70 @@ async function loadMemberModuleAccess() {
             : (data.modules || []);
 
         const allowedModules = new Set(
-            modules.map(item => {
-                if (typeof item === "string") {
-                    return item.trim().toLowerCase();
-                }
-
-                return String(
-                    item.module_key ||
-                    item.module_name ||
-                    item.key ||
-                    ""
-                ).trim().toLowerCase();
-            })
+            modules.map(item =>
+                normalizeModuleKey(
+                    typeof item === "string"
+                        ? item
+                        : item.module_key ||
+                          item.key ||
+                          item.module_name ||
+                          ""
+                )
+            )
         );
 
-        menuLinks.forEach(link => {
-            const moduleKey = link.dataset.module
-                .trim()
-                .toLowerCase();
+        renderMembershipMenu(allowedModules);
 
-            link.style.display =
-                allowedModules.has(moduleKey) ? "" : "none";
-        });
+        if (!allowedModules.has("membership")) {
+            alert("You do not have permission to access this module.");
+            window.location.href = getMembershipDashboardHref();
+            return false;
+        }
+
+        return true;
 
     } catch (error) {
-        console.error(
-            "Failed to load member module access:",
-            error
-        );
+        console.error("MEMBERSHIP ACCESS ERROR:", error);
+
+        alert("Unable to verify module access. Please try again.");
+        window.location.href = getMembershipDashboardHref();
+
+        return false;
     }
 }
-
 /* =========================================================
    USER
 ========================================================= */
 
 const profile =
-    JSON.parse(
-        localStorage.getItem("profile")
-    ) || {};
-
+    JSON.parse(localStorage.getItem("profile") || "null") || {};
 
 const displayName =
     profile.name ||
+    profile.full_name ||
+    profile.fullname ||
+    userData.full_name ||
     userData.fullname ||
+    userData.name ||
     userData.username ||
-    "Member";
+    "User";
 
+const displayRole =
+    profile.role ||
+    userData.role ||
+    userData.user_type ||
+    userData.account_type ||
+    "User";
 
-const firstLetter =
-    displayName
-        .trim()
-        .charAt(0)
-        .toUpperCase();
+document.getElementById("profileInitial").textContent =
+    displayName.trim().charAt(0).toUpperCase() || "U";
 
+document.getElementById("profile-name").textContent = displayName;
 
-document.getElementById(
-    "profileInitial"
-).innerText =
-    firstLetter;
-
-
-document.getElementById(
-    "profile-name"
-).innerText =
-    displayName;
-
+document.getElementById("profile-role").textContent =
+    String(displayRole)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
 /* =========================================================
    MEMBER IDS
 ========================================================= */
@@ -1318,31 +1393,32 @@ async function changePassword(){
 /* =========================================================
    LOGOUT
 ========================================================= */
-
-function logout(){
-
-    localStorage.clear();
-
-    window.location.href =
-        "index.html";
-
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
 }
-
-
 
 /* =========================================================
    INITIAL LOAD
 ========================================================= */
-loadMemberModuleAccess();
-loadMembership();
+// ================= INITIAL LOAD =================
 
-checkMessageNotification();
+window.onload = async () => {
+    const hasAccess = await checkMembershipPageAccess();
 
+    if (!hasAccess) return;
 
-setInterval(
-    checkMessageNotification,
-    3000
-);
+    const memberId =
+        userData.user_id ||
+        userData.member_id ||
+        userData.id;
+
+    await loadMembership();
+
+    checkMessageNotification();
+
+    setInterval(checkMessageNotification, 3000);
+};
 
 </script>
 
