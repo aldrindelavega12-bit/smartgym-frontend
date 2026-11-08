@@ -2570,8 +2570,24 @@ socket.on("priority_alert", () => {
 
 const menu = document.getElementById("menu");
 
+function getHomePage() {
+    const role = String(user?.role || "").toLowerCase();
+
+    const dashboards = {
+        manager: "manager.html",
+        admin: "admin.html",
+        staff: "staff.html",
+        front_desk: "staff.html",
+        trainer: "trainer.html",
+        member: "member_dashboard.html",
+        walkin: "walkin_dashboard.html"
+    };
+
+    return dashboards[role] || "index.html";
+}
+
 const MODULE_MENU = [
-    { key: "dashboard", label: "Home", page: "manager.html" },
+    { key: "dashboard", label: "Home", page: getHomePage() },
     { key: "messages", label: "Messages", page: "messages.html", badge: true },
 
     { key: "program", label: "Program", page: "program.html" },
@@ -2591,12 +2607,15 @@ const MODULE_MENU = [
     { key: "staff", label: "Staff", page: "staff_manage.html" },
     { key: "archive", label: "Archive", page: "archive.html" },
 
-    { key: "user_account_maintenance", label: "User Account Maintenance", page: "user_accounts.html" },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        page: "user_accounts.html"
+    },
     { key: "create_account", label: "Create Account", page: "create_account.html" },
     { key: "backup_restore", label: "Backup and Restore", page: "backup_restore.html" },
     { key: "audit_logs", label: "Audit Logs", page: "audit_logs.html" }
 ];
-
 
 /* =====================================================
    NORMALIZE MODULE KEYS
@@ -2628,8 +2647,13 @@ function normalizeModuleKey(value) {
 /* =====================================================
    RENDER SIDEBAR
 ===================================================== */
+/* =====================================================
+   RENDER REPORTS SIDEBAR
+===================================================== */
 
 function renderReportsMenu(allowedModules) {
+
+    if (!menu) return;
 
     const currentPage = window.location.pathname
         .split("/")
@@ -2644,25 +2668,35 @@ function renderReportsMenu(allowedModules) {
 
         const link = document.createElement("a");
 
-        link.href = item.page;
+        // Use the correct destination.
+        link.href = new URL(
+            item.page,
+            window.location.href
+        ).href;
+
         link.dataset.module = item.key;
 
         link.innerHTML = `
             ${item.label}
-            ${item.badge
-                ? '<span id="msg-count" class="msg-count">0</span>'
-                : ""}
+            ${
+                item.badge
+                    ? '<span id="msg-count" class="msg-count">0</span>'
+                    : ""
+            }
         `;
 
-        if (currentPage === item.page.toLowerCase()) {
+        const targetPage = item.page
+            .split("/")
+            .pop()
+            .toLowerCase();
+
+        if (currentPage === targetPage) {
             link.classList.add("active");
         }
 
         menu.appendChild(link);
     });
 }
-
-
 /* =====================================================
    LOAD MODULE ACCESS
 ===================================================== */
