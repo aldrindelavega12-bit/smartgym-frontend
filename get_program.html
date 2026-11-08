@@ -76,19 +76,13 @@
 ========================================================= -->
 
 <script>
-
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
+    const user = JSON.parse(
+        localStorage.getItem("user") || "null"
     );
 
-if (!user || user.role !== "member") {
-
-    window.location.href =
-        "index.html";
-
-}
-
+    if (!user) {
+        window.location.href = "index.html";
+    }
 </script>
 
 
@@ -116,36 +110,7 @@ if (!user || user.role !== "member") {
 
 
     
-    <div class="menu">
-        <a href="member.html" data-module="dashboard">
-            Home
-        </a>
-
-        <a href="member_messages.html"
-        class="msg-link"
-        data-module="messages">
-            Messages
-            <span id="msg-count" class="msg-count">0</span>
-        </a>
-
-        <a href="program.html" data-module="program">
-            Program
-        </a>
-
-        <a href="get_program.html"
-        class="active"
-        data-module="get_program">
-            Get Program
-        </a>
-
-        <a href="locker_booking.html" data-module="book_locker">
-            Book Locker
-        </a>
-
-        <a href="membership.html" data-module="membership">
-            Membership
-        </a>
-    </div>
+    <div class="menu" id="menu"></div>
 
 
 </div>
@@ -173,25 +138,13 @@ if (!user || user.role !== "member") {
             onclick="toggleMenu()">
 
 
-            <div
-                class="user-avatar"
-                id="profileInitial">
-
-                A
-
+           <div class="user-avatar" id="profileInitial">
+                U
             </div>
 
-
             <div class="user-info">
-
-                <strong id="profile-name">
-                    Member
-                </strong>
-
-                <small>
-                    Member
-                </small>
-
+                <strong id="profile-name">User</strong>
+                <small id="profile-role">User</small>
             </div>
 
 
@@ -676,57 +629,39 @@ if (!user || user.role !== "member") {
 <script>
 
 
-/* =========================================================
-   USER
-========================================================= */
+const userData = JSON.parse(
+    localStorage.getItem("user") || "null"
+) || {};
 
-const userData =
-    JSON.parse(
-        localStorage.getItem("user")
-    ) || {};
-
-
-const profileData =
-    JSON.parse(
-        localStorage.getItem("profile")
-    ) || {};
-
+const profileData = JSON.parse(
+    localStorage.getItem("profile") || "null"
+) || {};
 
 const displayName =
     profileData.name ||
+    userData.full_name ||
     userData.fullname ||
+    userData.name ||
     userData.username ||
-    "Member";
+    "User";
 
+const profileName = document.getElementById("profile-name");
+const profileInitial = document.getElementById("profileInitial");
+const profileRole = document.getElementById("profile-role");
 
-const profileName =
-    document.getElementById(
-        "profile-name"
-    );
-
-
-const profileInitial =
-    document.getElementById(
-        "profileInitial"
-    );
-
-
-if(profileName){
-
-    profileName.innerText =
-        displayName;
-
+if (profileName) {
+    profileName.textContent = displayName;
 }
 
+if (profileInitial) {
+    profileInitial.textContent =
+        displayName.trim().charAt(0).toUpperCase();
+}
 
-if(profileInitial){
-
-    profileInitial.innerText =
-        displayName
-            .trim()
-            .charAt(0)
-            .toUpperCase();
-
+if (profileRole) {
+    profileRole.textContent = String(userData.role || "User")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
 }
 
 
@@ -738,23 +673,167 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-async function loadMemberModuleAccess() {
-    const currentUser = JSON.parse(
-        localStorage.getItem("user") || "null"
+// =========================================
+// MASTER MODULE MENU
+// =========================================
+
+const MODULE_MENU = [
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
+    {
+        key: "messages",
+        label: "Messages",
+        href: "messages.html",
+        trainerHref: "trainer_messages.html",
+        className: "msg-link"
+    },
+    { key: "program", label: "Program", href: "program.html" },
+    {
+        key: "get_program",
+        label: "Get Program",
+        href: "get_program.html",
+        active: true
+    },
+    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
+    { key: "membership", label: "Membership", href: "membership.html" },
+    { key: "attendance", label: "Attendance", href: "attendance.html" },
+    { key: "locker", label: "Locker", href: "locker.html" },
+    { key: "trainee", label: "Trainee", href: "trainee.html" },
+    { key: "schedule", label: "Schedule", href: "trainer-schedule.html" },
+    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
+    { key: "reports", label: "Reports", href: "reports.html" },
+    { key: "members", label: "Members", href: "member.html" },
+    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
+    { key: "archive", label: "Archive", href: "archive.html" },
+    {
+        key: "user_account_maintenance",
+        label: "User Account Maintenance",
+        href: "user_accounts.html"
+    },
+    {
+        key: "backup_restore",
+        label: "Backup & Restore",
+        href: "backup_restore.html"
+    },
+    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+];
+
+// =========================================
+// MODULE KEY NORMALIZER
+// =========================================
+
+function normalizeModuleKey(value) {
+    const key = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        home: "dashboard",
+        trainee_schedule: "schedule",
+        client_request: "client_requests",
+        walk_in: "walkins",
+        walk_in_management: "walkins",
+        user_accounts: "user_account_maintenance",
+        user_account: "user_account_maintenance",
+        backup: "backup_restore",
+        backup_and_restore: "backup_restore",
+        audit_log: "audit_logs"
+    };
+
+    return aliases[key] || key;
+}
+
+// =========================================
+// DASHBOARD URL
+// =========================================
+
+function getDashboardHref() {
+    const role = normalizeModuleKey(userData.role);
+
+    const dashboard = MODULE_MENU.find(
+        item => item.key === "dashboard"
     );
 
-    if (!currentUser) return;
+    return dashboard.href[role] || "index.html";
+}
 
+// =========================================
+// RENDER SIDEBAR
+// =========================================
+
+function renderGetProgramMenu(allowedModules) {
+    const menu = document.getElementById("menu");
+
+    if (!menu) return;
+
+    menu.innerHTML = "";
+
+    MODULE_MENU.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        const link = document.createElement("a");
+
+        let href = item.href;
+
+        if (item.key === "dashboard") {
+            href = getDashboardHref();
+        } else if (
+            item.trainerHref &&
+            normalizeModuleKey(userData.role) === "trainer"
+        ) {
+            href = item.trainerHref;
+        }
+
+        link.href = href;
+        link.dataset.module = item.key;
+        link.textContent = item.label;
+
+        if (item.className) {
+            link.classList.add(item.className);
+        }
+
+        if (item.active) {
+            link.classList.add("active");
+        }
+
+        if (item.key === "messages") {
+            const badge = document.createElement("span");
+            badge.id = "msg-count";
+            badge.className = "msg-count";
+            badge.textContent = "0";
+            link.appendChild(badge);
+        }
+
+        menu.appendChild(link);
+    });
+}
+
+// =========================================
+// CHECK GET PROGRAM ACCESS
+// =========================================
+
+async function checkGetProgramAccess() {
     const userId =
-        currentUser.user_id ||
-        currentUser.member_id ||
-        currentUser.id;
+        userData.user_id ||
+        userData.member_id ||
+        userData.id;
 
-    if (!userId) return;
-
-    const menuLinks = document.querySelectorAll(
-        ".navbar .menu a[data-module]"
-    );
+    if (!userId) {
+        window.location.href = "index.html";
+        return false;
+    }
 
     try {
         const response = await fetch(
@@ -770,40 +849,67 @@ async function loadMemberModuleAccess() {
 
         const modules = Array.isArray(data)
             ? data
-            : (data.modules || []);
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
 
         const allowedModules = new Set(
             modules.map(item => {
                 if (typeof item === "string") {
-                    return item.trim().toLowerCase();
+                    return normalizeModuleKey(item);
                 }
 
-                return String(
+                return normalizeModuleKey(
                     item.module_key ||
-                    item.module_name ||
                     item.key ||
-                    ""
-                ).trim().toLowerCase();
-            })
+                    item.module_name
+                );
+            }).filter(Boolean)
         );
 
-        menuLinks.forEach(link => {
-            const moduleKey = link.dataset.module
-                .trim()
-                .toLowerCase();
+        renderGetProgramMenu(allowedModules);
 
-            link.style.display =
-                allowedModules.has(moduleKey) ? "" : "none";
-        });
+        if (!allowedModules.has("get_program")) {
+            document.querySelector(".layout").innerHTML = `
+                <div style="
+                    width:100%;
+                    padding:60px 20px;
+                    text-align:center;
+                ">
+                    <h2>Access Denied</h2>
+                    <p>
+                        You do not have permission to access
+                        the Get Program module.
+                    </p>
+                    <button onclick="window.location.href='${getDashboardHref()}'">
+                        Back to Home
+                    </button>
+                </div>
+            `;
+
+            return false;
+        }
+
+        return true;
 
     } catch (error) {
-        console.error(
-            "Failed to load member module access:",
-            error
-        );
+        console.error("GET PROGRAM ACCESS ERROR:", error);
+
+        document.querySelector(".layout").innerHTML = `
+            <div style="
+                width:100%;
+                padding:60px 20px;
+                text-align:center;
+            ">
+                <h2>Unable to Verify Access</h2>
+                <p>Please check your connection and try again.</p>
+                <button onclick="location.reload()">Retry</button>
+            </div>
+        `;
+
+        return false;
     }
 }
-
 /* =========================================================
    DATA
 ========================================================= */
@@ -879,13 +985,7 @@ function setDefaultDate(){
 }
 
 
-/* =========================================================
-   LOAD PROGRAMS
-========================================================= */
 
-/* =========================================================
-   LOAD PROGRAMS
-========================================================= */
 
 async function loadPrograms(){
 
@@ -2922,13 +3022,9 @@ window.addEventListener(
    LOGOUT
 ========================================================= */
 
-function logout(){
-
-    localStorage.clear();
-
-    window.location.href =
-        "index.html";
-
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
 }
 
 
@@ -2972,16 +3068,25 @@ function escapeHtml(
 }
 
 
-/* =========================================================
-   START
-========================================================= */
 
-setDefaultDate();
+// =========================================
+// INITIAL LOAD
+// =========================================
 
-loadPrograms();
-loadMemberModuleAccess();
-loadMessageCount();
+document.addEventListener("DOMContentLoaded", async function () {
 
+    const hasAccess = await checkGetProgramAccess();
+
+    if (!hasAccess) return;
+
+    setDefaultDate();
+
+    await Promise.all([
+        loadPrograms(),
+        loadMessageCount()
+    ]);
+
+});
 </script>
 
 
