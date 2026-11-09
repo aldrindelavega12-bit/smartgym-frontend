@@ -408,7 +408,12 @@ function normalizeModuleKey(value) {
 
 const MODULE_MENU = [
     { key: "dashboard", label: "Home", page: getHomePage() },
-    { key: "messages", label: "Messages", page: "messages.html", badge: true },
+    {
+        key: "messages",
+        label: "Messages",
+        page: getMessagesPage(),
+        badge: true
+    },
     { key: "program", label: "Program", page: "program.html" },
     { key: "get_program", label: "Get Program", page: "get_program.html" },
     { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
@@ -585,7 +590,23 @@ function showMemberActionModal({
         }
     };
 }
+function getMessagesPage() {
+    const role = String(user?.role || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
 
+    const messagePages = {
+        member: "member_messages.html",
+        trainer: "trainer_messages.html",
+        staff: "messages.html",
+        front_desk: "messages.html",
+        manager: "messages.html",
+        admin: "messages.html"
+    };
+
+    return messagePages[role] || "messages.html";
+}
 /* =====================================================
    PROFILE DROPDOWN
 ===================================================== */
