@@ -1530,28 +1530,7 @@
         </div>
 
 
-        <div class="menu">
-
-            <a href="admin.html">
-                Home
-            </a>
-
-            <a
-                href="user_accounts.html"
-                class="active"
-            >
-                User Account Maintenance
-            </a>
-
-            <a href="backup_restore.html">
-                Backup &amp; Restore
-            </a>
-
-            <a href="audit_logs.html">
-                Audit Logs
-            </a>
-
-        </div>
+        <div class="menu" id="menu"></div>
 
     </div>
 
@@ -1579,20 +1558,11 @@
                         onclick="toggleStaffMenu()"
                     >
 
-                        <div class="staff-avatar">
-                            A
-                        </div>
+                        <div class="staff-avatar" id="profileInitial">U</div>
 
                         <div class="staff-info">
-
-                            <strong>
-                                Admin
-                            </strong>
-
-                            <small>
-                                Administrator
-                            </small>
-
+                            <strong id="profileName">User</strong>
+                            <small id="profileRole">User</small>
                         </div>
 
                         <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
@@ -2679,6 +2649,289 @@
 
     const API_URL =
         "https://smartgym-api-ia2e.onrender.com";
+
+    // =====================================================
+    // LOGGED-IN USER
+    // =====================================================
+
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+
+    if (!user) {
+        window.location.href = "index.html";
+    }
+
+    const currentUserId = user?.user_id || user?.id;
+
+
+    // =====================================================
+    // USER PROFILE
+    // =====================================================
+
+    const profileName = document.getElementById("profileName");
+    const profileRole = document.getElementById("profileRole");
+    const profileInitial = document.getElementById("profileInitial");
+
+    const fullname =
+        user?.fullname ||
+        user?.name ||
+        user?.full_name ||
+        "User";
+
+    if (profileName) profileName.textContent = fullname;
+
+    if (profileRole) {
+        profileRole.textContent = String(user?.role || "User")
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    if (profileInitial) {
+        profileInitial.textContent = fullname.charAt(0).toUpperCase();
+    }
+
+
+    // =====================================================
+    // HOME DESTINATION
+    // =====================================================
+
+    function getHomePage() {
+
+        const role = String(user?.role || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+
+        const dashboards = {
+            manager: "manager.html",
+            admin: "admin.html",
+            staff: "staff.html",
+            front_desk: "staff.html",
+            trainer: "trainer.html",
+            member: "member.html",
+            walkin: "walkin_dashboard.html"
+        };
+
+        return dashboards[role] || "index.html";
+    }
+
+
+    // =====================================================
+    // MASTER MODULE MENU
+    // =====================================================
+
+    const MODULE_MENU = [
+        { key: "dashboard", label: "Home", page: getHomePage() },
+        { key: "messages", label: "Messages", page: "messages.html", badge: true },
+
+        { key: "program", label: "Program", page: "program.html" },
+        { key: "get_program", label: "Get Program", page: "get_program.html" },
+        { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
+        { key: "membership", label: "Membership", page: "membership.html" },
+
+        { key: "attendance", label: "Attendance", page: "attendance.html" },
+        { key: "locker", label: "Locker", page: "locker.html" },
+        { key: "trainee", label: "Trainee", page: "trainee.html" },
+        { key: "schedule", label: "Schedule", page: "trainer_schedule.html" },
+        { key: "client_requests", label: "Client Requests", page: "client_requests.html" },
+
+        { key: "reports", label: "Reports", page: "reports.html" },
+        { key: "members", label: "Members", page: "members.html" },
+        { key: "walkins", label: "Walk-ins", page: "walkin.html" },
+        { key: "staff", label: "Staff", page: "staff_manage.html" },
+        { key: "archive", label: "Archive", page: "archive.html" },
+
+        {
+            key: "user_account_maintenance",
+            label: "User Account Maintenance",
+            page: "user_accounts.html"
+        },
+        { key: "create_account", label: "Create Account", page: "create_account.html" },
+        { key: "backup_restore", label: "Backup and Restore", page: "backup_restore.html" },
+        { key: "audit_logs", label: "Audit Logs", page: "audit_logs.html" }
+    ];
+
+
+    // =====================================================
+    // NORMALIZE MODULE KEYS
+    // =====================================================
+
+    function normalizeModuleKey(value) {
+
+        const key = String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+
+        const aliases = {
+            home: "dashboard",
+            client_request: "client_requests",
+            walk_in: "walkins",
+            walk_in_management: "walkins",
+            user_accounts: "user_account_maintenance",
+            user_account: "user_account_maintenance",
+            backup: "backup_restore",
+            backup_and_restore: "backup_restore",
+            audit_log: "audit_logs"
+        };
+
+        return aliases[key] || key;
+    }
+
+
+    // =====================================================
+    // RENDER SIDEBAR
+    // =====================================================
+
+    function renderUserAccountsMenu(allowedModules) {
+
+        const menu = document.getElementById("menu");
+
+        const currentPage = window.location.pathname
+            .split("/")
+            .pop()
+            .toLowerCase();
+
+        menu.innerHTML = "";
+
+        MODULE_MENU.forEach(item => {
+
+            if (!allowedModules.has(item.key)) return;
+
+            const link = document.createElement("a");
+
+            link.href = item.page;
+            link.dataset.module = item.key;
+
+            if (currentPage === item.page.toLowerCase()) {
+                link.classList.add("active");
+            }
+
+            link.innerHTML = `
+                ${item.label}
+                ${item.badge
+                    ? '<span id="msg-count" class="msg-count">0</span>'
+                    : ""}
+            `;
+
+            menu.appendChild(link);
+        });
+    }
+
+
+    // =====================================================
+    // LOAD MODULE ACCESS
+    // =====================================================
+
+    async function loadUserAccountsModuleAccess() {
+
+        const menu = document.getElementById("menu");
+
+        if (!menu || !currentUserId) {
+            throw new Error("Missing menu or user ID.");
+        }
+
+        const response = await fetch(
+            `${API_URL}/api/user/module-access/${encodeURIComponent(currentUserId)}`,
+            {
+                method: "GET",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to load module permissions.");
+        }
+
+        const data = await response.json();
+
+        const modules = Array.isArray(data)
+            ? data
+            : Array.isArray(data.modules)
+                ? data.modules
+                : [];
+
+        const allowedModules = new Set(
+            modules.map(module => {
+
+                const key = typeof module === "string"
+                    ? module
+                    : module.module_key ||
+                    module.key ||
+                    module.module_name ||
+                    "";
+
+                return normalizeModuleKey(key);
+
+            }).filter(Boolean)
+        );
+
+        renderUserAccountsMenu(allowedModules);
+
+        return allowedModules;
+    }
+
+
+    // =====================================================
+    // CHECK PAGE ACCESS
+    // =====================================================
+
+    async function checkUserAccountsPageAccess() {
+
+        const page = document.querySelector(".layout");
+
+        if (!user || !currentUserId) {
+            window.location.href = "index.html";
+            return false;
+        }
+
+        try {
+
+            const allowedModules = await loadUserAccountsModuleAccess();
+
+            if (!allowedModules.has("user_account_maintenance")) {
+
+                if (page) {
+                    page.innerHTML = `
+                        <div class="main">
+                            <div style="
+                                padding: 60px 20px;
+                                text-align: center;
+                            ">
+                                <h2>Access Denied</h2>
+                                <p>You do not have permission to access User Account Maintenance.</p>
+                                <a href="${getHomePage()}">Back to Home</a>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                return false;
+            }
+
+            return true;
+
+        } catch (error) {
+
+            console.error("USER ACCOUNT MODULE ACCESS ERROR:", error);
+
+            if (page) {
+                page.innerHTML = `
+                    <div class="main">
+                        <div style="padding:60px 20px;text-align:center;">
+                            <h2>Unable to Load Module Access</h2>
+                            <p>Please refresh the page and try again.</p>
+                            <button onclick="location.reload()">Retry</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return false;
+        }
+    }
 
 
     /* =====================================================
@@ -4323,13 +4576,8 @@
     ===================================================== */
 
     function logout() {
-
         localStorage.clear();
-
-
-        window.location.href =
-            "index.html";
-
+        window.location.href = "index.html";
     }
 
 
@@ -4379,13 +4627,15 @@
     }
 
 
-    /* =====================================================
-       INITIAL LOAD
-    ===================================================== */
-
     document.addEventListener("DOMContentLoaded", async function () {
+
+        const hasAccess = await checkUserAccountsPageAccess();
+
+        if (!hasAccess) return;
+
         await loadAvailableModules();
         await loadUsers();
+
     });
 
 </script>
