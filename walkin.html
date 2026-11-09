@@ -526,12 +526,7 @@ async function checkWalkinPageAccess() {
 }
 
 function loadUserProfile() {
-    const name =
-        user?.name ||
-        user?.full_name ||
-        user?.username ||
-        "User";
-
+    const name = user?.fullname || "User";
     const role = user?.role || "User";
 
     document.getElementById("profileInitial").textContent =
