@@ -312,100 +312,85 @@ function closeActivationModal() {
 }
 
 // ACTIVATE ACCOUNT
+// ACTIVATE ACCOUNT
 async function activateAccount() {
 
+    const activationCode =
+        document.getElementById("activationCode").value.trim();
+
     const username =
-    document.getElementById(
-        "activationUsername"
-    ).value.trim();
+        document.getElementById("activationUsername").value.trim();
 
     const password =
-    document.getElementById(
-        "activationPassword"
-    ).value;
+        document.getElementById("activationPassword").value;
 
     const confirm =
-    document.getElementById(
-        "activationConfirm"
-    ).value;
+        document.getElementById("activationConfirm").value;
 
     const btn =
-    document.getElementById(
-        "activateBtn"
-    );
+        document.getElementById("activateBtn");
 
-    if (username === "") {
 
-        alert("Please enter username.");
-
+    if (!activationCode) {
+        alert("Please enter your activation code.");
         return;
+    }
 
+    if (!username) {
+        alert("Please enter username.");
+        return;
     }
 
     if (password.length < 8) {
-
         alert("Password must be at least 8 characters.");
-
         return;
-
     }
 
     if (password !== confirm) {
-
         alert("Passwords do not match.");
-
         return;
-
     }
 
     btn.disabled = true;
-
     btn.innerText = "Activating...";
 
     try {
 
         const response = await fetch(
-
             `${API_URL}/api/activate_account`,
-
             {
-
                 method: "POST",
 
                 headers: {
-
                     "Content-Type": "application/json"
-
                 },
 
                 body: JSON.stringify({
 
                     token: activationToken,
 
+                    activation_code: activationCode,
+
                     username: username,
 
                     password: password
 
                 })
-
             }
-
         );
 
         const result = await response.json();
 
-        console.log(result);
+        console.log("ACTIVATE ACCOUNT:", result);
 
         if (!result.success) {
 
             btn.disabled = false;
-
             btn.innerText = "Activate Account";
 
-            alert(result.message);
+            alert(result.message || "Invalid activation details.");
 
             return;
-
         }
 
         alert("Account activated successfully!");
@@ -418,12 +403,11 @@ async function activateAccount() {
 
     catch (err) {
 
-        console.error(err);
+        console.error("ACTIVATION ERROR:", err);
 
         alert("Server Error.");
 
         btn.disabled = false;
-
         btn.innerText = "Activate Account";
 
     }
