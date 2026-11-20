@@ -499,6 +499,23 @@ const QUICK_CARD_ITEMS = [
     }
 ];
 
+function getMessagesPage() {
+    const role = String(user?.role || user?.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const messagePages = {
+        member: "member_messages.html",
+        trainer: "trainer_messages.html",
+        staff: "messages.html",
+        front_desk: "messages.html",
+        manager: "messages.html",
+        admin: "messages.html"
+    };
+
+    return messagePages[role] || "messages.html";
+}
 
 
 /* =====================================================
@@ -507,7 +524,7 @@ const QUICK_CARD_ITEMS = [
 
 const MANAGER_MENU_ITEMS = [
     { key: "dashboard", label: "Home", page: "manager.html" },
-    { key: "messages", label: "Messages", href: "messages.html" },
+    { key: "messages", label: "Messages", href: getMessagesPage() },
     { key: "program", label: "Program", page: "program.html" },
     { key: "get_program", label: "Get Program", page: "get_program.html" },
     { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
