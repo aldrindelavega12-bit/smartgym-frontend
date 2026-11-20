@@ -2120,28 +2120,47 @@ const API_URL =
    MASTER MODULE MENU
 ===================================================== */
 
-const MODULE_MENU = [
-    {
-        key: "dashboard",
-        label: "Home",
-        href: {
-            pre_member: "pre_member.html",
-            premember: "pre_member.html",
-            member: "member.html",
-            staff: "staff.html",
-            trainer: "trainer.html",
+
+function getHomePage() {
+        const role = String(user?.role || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+
+        const dashboards = {
             manager: "manager.html",
-            admin: "admin.html"
-        }
-    },
-    {
-        key: "messages",
-        label: "Messages",
-        href: "messages.html",
-        memberHref: "member_messages.html",
-        trainerHref: "trainer_messages.html",
-        className: "msg-link"
-    },
+            admin: "admin.html",
+            staff: "staff.html",
+            front_desk: "staff.html",
+            trainer: "trainer.html",
+            member: "member.html",
+            walkin: "walkin_dashboard.html"
+        };
+
+        return dashboards[role] || "index.html";
+    }
+function getMessagesPage() {
+    const role = String(user?.role || user?.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const messagePages = {
+        member: "member_messages.html",
+        trainer: "trainer_messages.html",
+        staff: "messages.html",
+        front_desk: "messages.html",
+        manager: "messages.html",
+        admin: "messages.html"
+    };
+
+    return messagePages[role] || "messages.html";
+}
+const menu = document.getElementById("menu");
+
+const MODULE_MENU = [
+    { key: "dashboard", label: "Home", href: getHomePage() },
+    { key: "messages", label: "Messages", href: getMessagesPage() },
     { key: "program", label: "Program", href: "program.html", active: true },
     { key: "get_program", label: "Get Program", href: "get_program.html" },
     { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },

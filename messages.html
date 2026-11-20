@@ -1546,9 +1546,26 @@ function getMessagesPage() {
 
     return messagePages[role] || "messages.html";
 }
+function getHomePage() {
+        const role = String(user?.role || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
 
+        const dashboards = {
+            manager: "manager.html",
+            admin: "admin.html",
+            staff: "staff.html",
+            front_desk: "staff.html",
+            trainer: "trainer.html",
+            member: "member.html",
+            walkin: "walkin_dashboard.html"
+        };
+
+        return dashboards[role] || "index.html";
+    }
 const MODULE_MENU = [
-    { key: "dashboard", label: "Home", page: "manager.html" },
+    { key: "dashboard", label: "Home", page: getHomePage() },
     { key: "messages", label: "Messages", page: getMessagesPage(), badge: true },
 
     { key: "program", label: "Program", page: "program.html" },
