@@ -261,7 +261,19 @@ if (!user) {
 const menu = document.getElementById("menu");
 
 const MODULE_MENU = [
-    { key: "dashboard", label: "Home", page: "manager.html" },
+    {
+        key: "dashboard",
+        label: "Home",
+        href: {
+            pre_member: "pre_member.html",
+            premember: "pre_member.html",
+            member: "member.html",
+            staff: "staff.html",
+            trainer: "trainer.html",
+            manager: "manager.html",
+            admin: "admin.html"
+        }
+    },
     {
         key: "messages",
         label: "Messages",
