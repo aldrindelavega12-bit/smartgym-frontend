@@ -461,7 +461,24 @@
     /* =====================================================
     USER SESSION
     ===================================================== */
+    function getHomePage() {
+        const role = String(user?.role || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
 
+        const dashboards = {
+            manager: "manager.html",
+            admin: "admin.html",
+            staff: "staff.html",
+            front_desk: "staff.html",
+            trainer: "trainer.html",
+            member: "member.html",
+            walkin: "walkin_dashboard.html"
+        };
+
+        return dashboards[role] || "index.html";
+    }
     const user = JSON.parse(localStorage.getItem("user") || "null");
 
     const API_URL = "https://smartgym-api-ia2e.onrender.com";
@@ -475,16 +492,7 @@
         {
             key: "dashboard",
             label: "Home",
-            href: {
-                pre_member: "pre_member.html",
-                premember: "pre_member.html",
-                member: "member.html",
-                staff: "staff.html",
-                front_desk: "staff.html",
-                trainer: "trainer.html",
-                manager: "manager.html",
-                admin: "admin.html"
-            }
+            href: getHomePage()
         },
         {
             key: "messages",
