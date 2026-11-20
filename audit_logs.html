@@ -489,7 +489,7 @@
         {
             key: "messages",
             label: "Messages",
-            href: "messages.html",
+            href: getMessagesPage(),
             trainerHref: "trainer_messages.html"
         },
         { key: "program", label: "Program", href: "program.html" },
@@ -546,6 +546,24 @@
 
         return aliases[key] || key;
     }
+    function getMessagesPage() {
+        const role = String(user?.role || user?.user_type || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[\s-]+/g, "_");
+
+        const messagePages = {
+            member: "member_messages.html",
+            trainer: "trainer_messages.html",
+            staff: "messages.html",
+            front_desk: "messages.html",
+            manager: "messages.html",
+            admin: "messages.html"
+        };
+
+        return messagePages[role] || "messages.html";
+    }
+
 
 
     /* =====================================================
