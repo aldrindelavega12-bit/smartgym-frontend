@@ -775,14 +775,9 @@ function normalizeModuleKey(value) {
 // DASHBOARD URL
 // =========================================
 
+
 function getDashboardHref() {
-    const role = normalizeModuleKey(userData.role);
-
-    const dashboard = MODULE_MENU.find(
-        item => item.key === "dashboard"
-    );
-
-    return dashboard.href[role] || "index.html";
+    return getHomePage();
 }
 
 // =========================================
