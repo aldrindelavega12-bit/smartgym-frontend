@@ -551,9 +551,7 @@ const MANAGER_MENU_ITEMS = [
 // RENDER MANAGER SIDEBAR
 // =====================================================
 
-
 function renderManagerMenu(allowedModules) {
-
     const menu = document.getElementById("menu");
 
     if (!menu) return;
@@ -563,22 +561,37 @@ function renderManagerMenu(allowedModules) {
         .pop()
         .toLowerCase();
 
-    const permittedMenu = MANAGER_MENU_ITEMS.filter(item =>
-        allowedModules.has(item.key)
-    );
+    menu.innerHTML = "";
 
-    menu.innerHTML = permittedMenu.map(item => `
-        <a
-            href="${item.page}"
-            data-module="${item.key}"
-            class="${currentPage === item.page.toLowerCase() ? "active" : ""}"
-        >
+    MANAGER_MENU_ITEMS.forEach(item => {
+        if (!allowedModules.has(item.key)) return;
+
+        const page = item.page || item.href;
+
+        // Skip menu items without a valid destination
+        if (!page || typeof page !== "string") {
+            console.error("MENU PAGE MISSING:", item.key, item);
+            return;
+        }
+
+        const link = document.createElement("a");
+
+        link.href = page;
+        link.dataset.module = item.key;
+
+        if (currentPage === page.toLowerCase()) {
+            link.classList.add("active");
+        }
+
+        link.innerHTML = `
             ${item.label}
             ${item.badge
                 ? '<span id="msg-count" class="msg-count">0</span>'
                 : ""}
-        </a>
-    `).join("");
+        `;
+
+        menu.appendChild(link);
+    });
 }
 
 
