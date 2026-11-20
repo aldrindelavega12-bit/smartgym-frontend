@@ -2064,17 +2064,47 @@
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
-const user = JSON.parse(localStorage.getItem("user") || "null");
 
-if (!user) {
-    alert("Session expired.");
-    window.location.href = "index.html";
+function getHomePage() {
+    const role = String(user?.role || user?.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const dashboards = {
+        manager: "manager.html",
+        admin: "admin.html",
+        staff: "staff.html",
+        front_desk: "staff.html",
+        trainer: "trainer.html",
+        member: "member.html",
+        walkin: "walkin_dashboard.html"
+    };
+
+    return dashboards[role] || null;
+}
+function getMessagesPage() {
+    const role = String(user?.role || user?.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const messagePages = {
+        member: "member_messages.html",
+        trainer: "trainer_messages.html",
+        staff: "messages.html",
+        front_desk: "messages.html",
+        manager: "messages.html",
+        admin: "messages.html"
+    };
+
+    return messagePages[role] || "messages.html";
 }
 const menu = document.getElementById("menu");
 
 const MODULE_MENU = [
-    { key: "dashboard", label: "Home", href: getHomePage },
-    { key: "messages", label: "Messages", href: getMessagesPage },
+    { key: "dashboard", label: "Home", href: getHomePage() },
+    { key: "messages", label: "Messages", href: getMessagesPage() },
     { key: "program", label: "Program", href: "program.html" },
     { key: "get_program", label: "Get Program", href: "get_program.html" },
     { key: "book_locker", label: "Book Locker", href: "locker_booking.html", active: true },
@@ -2219,7 +2249,12 @@ async function checkBookLockerAccess() {
     }
 }
 
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
+if (!user) {
+    alert("Session expired.");
+    window.location.href = "index.html";
+}
 
 
 /*
@@ -2285,41 +2320,6 @@ document.getElementById("profile-role").textContent =
         .replace(/_/g, " ")
         .replace(/\b\w/g, char => char.toUpperCase());
 
-function getHomePage() {
-        const role = String(user?.role || "")
-            .trim()
-            .toLowerCase()
-            .replace(/[\s-]+/g, "_");
-
-        const dashboards = {
-            manager: "manager.html",
-            admin: "admin.html",
-            staff: "staff.html",
-            front_desk: "staff.html",
-            trainer: "trainer.html",
-            member: "member.html",
-            walkin: "walkin_dashboard.html"
-        };
-
-        return dashboards[role] || "index.html";
-    }
-function getMessagesPage() {
-    const role = String(user?.role || user?.user_type || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\s-]+/g, "_");
-
-    const messagePages = {
-        member: "member_messages.html",
-        trainer: "trainer_messages.html",
-        staff: "messages.html",
-        front_desk: "messages.html",
-        manager: "messages.html",
-        admin: "messages.html"
-    };
-
-    return messagePages[role] || "messages.html";
-}
 
 function updateLockerCards() {
 
