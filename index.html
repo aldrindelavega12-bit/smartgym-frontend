@@ -183,6 +183,12 @@
 
                     <p id="error" class="error-message"></p>
 
+                    <div class="activate-account-link">
+                        <span onclick="openActivationModal()">
+                            Activate your account
+                        </span>
+                    </div>
+
 
                     <div class="create-account">
 
@@ -443,6 +449,19 @@
             Activate Account
 
         </h2>
+
+        <div class="activation-group">
+
+            <input
+                id="activationCode"
+                class="activation-input"
+                type="text"
+                placeholder="Enter your activation code"
+                autocomplete="one-time-code"
+                required
+            >
+
+        </div>
 
         <div class="activation-group">
 
@@ -1483,7 +1502,13 @@ function toggleForgotPassword(inputId, icon) {
     }
 
 }
+function openActivationModal() {
+    document.getElementById("activationModal").style.display = "flex";
+}
 
+function closeActivationModal() {
+    document.getElementById("activationModal").style.display = "none";
+}
 /* =========================================================
    FORGOT PASSWORD VALIDATION
 ========================================================= */

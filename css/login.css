@@ -1743,3 +1743,21 @@
     transform: translateY(-1px);
 
 }
+
+.activate-account-link {
+    text-align: center;
+    margin-top: 18px;
+    margin-bottom: 5px;
+}
+
+.activate-account-link span {
+    color: #00b967;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.activate-account-link span:hover {
+    color: #009e58;
+}
