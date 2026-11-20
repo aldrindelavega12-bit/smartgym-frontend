@@ -274,7 +274,8 @@ async function checkActivationToken() {
         }
 
         // Hide manual code input because token came from email link
-        document.getElementById("activationCode").closest(".activation-group").style.display = "none";
+        document.getElementById("activationCode").value = activationToken;
+        document.getElementById("activationCode").readOnly = true;
 
         document.getElementById("activationModal").style.display = "flex";
 
@@ -290,22 +291,19 @@ async function checkActivationToken() {
 // OPEN MANUAL ACTIVATION
 function openActivationModal() {
 
-    // No URL token means user will enter code manually
     activationToken = null;
 
     const codeInput = document.getElementById("activationCode");
 
     codeInput.value = "";
-    codeInput.closest(".activation-group").style.display = "block";
+    codeInput.readOnly = false;
 
     document.getElementById("activationUsername").value = "";
     document.getElementById("activationPassword").value = "";
     document.getElementById("activationConfirm").value = "";
 
     document.getElementById("activationModal").style.display = "flex";
-
 }
-
 // CLOSE ACTIVATION MODAL
 function closeActivationModal() {
 
