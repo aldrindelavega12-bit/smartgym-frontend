@@ -496,15 +496,11 @@ function normalizeModuleKey(value) {
     return aliases[key] || key;
 }
 
+
 function getDashboardHref() {
-    const role = normalizeModuleKey(user?.role);
-
-    const dashboard = MODULE_MENU.find(
-        item => item.key === "dashboard"
-    );
-
-    return dashboard.href[role] || "index.html";
+    return getHomePage();
 }
+
 
 function renderClientRequestsMenu(allowedModules) {
     const menu = document.getElementById("menu");
