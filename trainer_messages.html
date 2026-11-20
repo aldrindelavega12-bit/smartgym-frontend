@@ -1147,7 +1147,30 @@ menu.innerHTML = `
     <a href="client_requests.html" data-module="client_requests">Client Requests</a>
 `;
 
+function getUserRole() {
+    return String(
+        user?.role ||
+        user?.user_type ||
+        user?.account_type ||
+        ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+}
 
+function getMessagesPage() {
+    const pages = {
+        member: "member_messages.html",
+        trainer: "trainer_messages.html",
+        staff: "messages.html",
+        front_desk: "messages.html",
+        manager: "messages.html",
+        admin: "messages.html"
+    };
+
+    return pages[getUserRole()] || "messages.html";
+}
 
 async function loadTrainerModuleAccess() {
     try {
