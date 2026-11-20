@@ -479,9 +479,16 @@ function normalizeModuleKey(value) {
 }
 
 function getMembershipDashboardHref() {
-    
+    const role = String(
+        userData.role || userData.user_type || ""
+    )
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
 
-    return getHomePage();
+    const dashboard = MODULE_MENU.find(item => item.key === "dashboard");
+
+    return dashboard.href[role] || "staff.html";
 }
 
 function renderMembershipMenu(allowedModules) {
