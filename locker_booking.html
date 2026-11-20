@@ -2065,9 +2065,71 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
-// INITIALIZE USER FIRST
-const user = JSON.parse(localStorage.getItem("user") || "null");
+let lockerPhysicalStatus = {};
+let lockerBookedStatus = {};
 
+const profile =
+    JSON.parse(localStorage.getItem("profile") || "null") || {};
+
+const displayName =
+    profile.name ||
+    profile.full_name ||
+    profile.fullname ||
+    user.full_name ||
+    user.fullname ||
+    user.name ||
+    user.username ||
+    "User";
+
+const displayRole =
+    profile.role ||
+    user.role ||
+    user.user_type ||
+    user.account_type ||
+    "User";
+
+/*
+   IMPORTANT:
+   Declare memberId BEFORE calling
+   checkNewMessage().
+*/
+
+const memberId = user.user_id;
+
+const messageUserId =
+    user.id;
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let selectedLocker = null;
+
+let selectedDate = null;
+
+let selectedStart = null;
+
+let selectedEnd = null;
+
+let currentDate = new Date();
+
+let lastMessageCount = 0;
+
+let firstLoad = true;
+
+
+document.getElementById("profileInitial").textContent =
+    displayName.trim().charAt(0).toUpperCase();
+
+document.getElementById("profile-name").textContent =
+    displayName;
+
+document.getElementById("profile-role").textContent =
+    String(displayRole)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+
+        
 if (!user) {
     alert("Session expired.");
     window.location.href = "index.html";
@@ -2258,66 +2320,6 @@ async function checkBookLockerAccess() {
 
 
 
-/*
-   IMPORTANT:
-   Declare memberId BEFORE calling
-   checkNewMessage().
-*/
-
-const memberId = user.user_id;
-
-const messageUserId =
-    user.id;
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let selectedLocker = null;
-
-let selectedDate = null;
-
-let selectedStart = null;
-
-let selectedEnd = null;
-
-let currentDate = new Date();
-
-let lastMessageCount = 0;
-
-let firstLoad = true;
-
-let lockerPhysicalStatus = {};
-let lockerBookedStatus = {};
-
-
-const displayName =
-    profile.name ||
-    profile.full_name ||
-    profile.fullname ||
-    user.full_name ||
-    user.fullname ||
-    user.name ||
-    user.username ||
-    "User";
-
-const displayRole =
-    profile.role ||
-    user.role ||
-    user.user_type ||
-    user.account_type ||
-    "User";
-
-document.getElementById("profileInitial").textContent =
-    displayName.trim().charAt(0).toUpperCase();
-
-document.getElementById("profile-name").textContent =
-    displayName;
-
-document.getElementById("profile-role").textContent =
-    String(displayRole)
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, char => char.toUpperCase());
 
 
 function updateLockerCards() {
