@@ -2065,6 +2065,13 @@ const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
 
+// INITIALIZE USER FIRST
+const user = JSON.parse(localStorage.getItem("user") || "null");
+
+if (!user) {
+    alert("Session expired.");
+    window.location.href = "index.html";
+}
 function getHomePage() {
     const role = String(user?.role || user?.user_type || "")
         .trim()
@@ -2249,12 +2256,6 @@ async function checkBookLockerAccess() {
     }
 }
 
-const user = JSON.parse(localStorage.getItem("user") || "null");
-
-if (!user) {
-    alert("Session expired.");
-    window.location.href = "index.html";
-}
 
 
 /*
@@ -2289,8 +2290,6 @@ let firstLoad = true;
 let lockerPhysicalStatus = {};
 let lockerBookedStatus = {};
 
-const profile =
-    JSON.parse(localStorage.getItem("profile") || "null") || {};
 
 const displayName =
     profile.name ||
