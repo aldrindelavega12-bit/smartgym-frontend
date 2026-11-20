@@ -232,6 +232,7 @@ async function login() {
     }
 
 }
+
 // ==========================================
 // ACTIVATION
 // ==========================================
@@ -240,78 +241,90 @@ const API_URL = "https://smartgym-api-ia2e.onrender.com";
 
 let activationToken = null;
 
-// CHECK LINK
+// CHECK IF ACTIVATION LINK WAS OPENED
 window.addEventListener("DOMContentLoaded", () => {
 
     const params = new URLSearchParams(window.location.search);
 
     activationToken = params.get("token");
 
-    if (!activationToken) {
-
-        return;
-
+    if (activationToken) {
+        checkActivationToken();
     }
-
-    checkActivationToken();
 
 });
 
-// VERIFY TOKEN
+// VERIFY ACTIVATION TOKEN FROM EMAIL LINK
 async function checkActivationToken() {
 
     try {
 
         const response = await fetch(
-
-            `${API_URL}/api/activation/${activationToken}`
-
+            `${API_URL}/api/activation/${encodeURIComponent(activationToken)}`
         );
 
         const result = await response.json();
 
-        console.log(result);
+        console.log("ACTIVATION LINK:", result);
 
         if (!result.success) {
-
-            alert(result.message);
-
+            alert(result.message || "Invalid or expired activation link.");
+            activationToken = null;
             return;
-
         }
 
-        document.getElementById(
-            "activationModal"
-        ).style.display = "flex";
+        // Hide manual code input because token came from email link
+        document.getElementById("activationCode").closest(".activation-group").style.display = "none";
 
-    }
+        document.getElementById("activationModal").style.display = "flex";
 
-    catch (err) {
+    } catch (err) {
 
-        console.error(err);
-
+        console.error("ACTIVATION LINK ERROR:", err);
         alert("Unable to verify activation link.");
 
     }
 
 }
 
-// CLOSE
+// OPEN MANUAL ACTIVATION
+function openActivationModal() {
+
+    // No URL token means user will enter code manually
+    activationToken = null;
+
+    const codeInput = document.getElementById("activationCode");
+
+    codeInput.value = "";
+    codeInput.closest(".activation-group").style.display = "block";
+
+    document.getElementById("activationUsername").value = "";
+    document.getElementById("activationPassword").value = "";
+    document.getElementById("activationConfirm").value = "";
+
+    document.getElementById("activationModal").style.display = "flex";
+
+}
+
+// CLOSE ACTIVATION MODAL
 function closeActivationModal() {
 
-    document.getElementById(
-        "activationModal"
-    ).style.display = "none";
+    document.getElementById("activationModal").style.display = "none";
+
+    // Remove token from URL if present
+    const url = new URL(window.location.href);
+    url.searchParams.delete("token");
 
     window.history.replaceState(
         {},
         document.title,
-        window.location.pathname
+        url.pathname + url.search + url.hash
     );
+
+    activationToken = null;
 
 }
 
-// ACTIVATE ACCOUNT
 // ACTIVATE ACCOUNT
 async function activateAccount() {
 
@@ -330,8 +343,11 @@ async function activateAccount() {
     const btn =
         document.getElementById("activateBtn");
 
+    // Use URL token if opened through email.
+    // Otherwise, use manually entered activation code.
+    const token = activationToken || activationCode;
 
-    if (!activationCode) {
+    if (!token) {
         alert("Please enter your activation code.");
         return;
     }
@@ -356,25 +372,35 @@ async function activateAccount() {
 
     try {
 
+        // VERIFY TOKEN (works for both manual and email link)
+        const verifyResponse = await fetch(
+            `${API_URL}/api/activation/${encodeURIComponent(token)}`
+        );
+
+        const verifyResult = await verifyResponse.json();
+
+        if (!verifyResult.success) {
+
+            alert(verifyResult.message || "Invalid or expired activation code.");
+
+            btn.disabled = false;
+            btn.innerText = "Activate Account";
+
+            return;
+        }
+
+        // CREATE ACCOUNT
         const response = await fetch(
             `${API_URL}/api/activate_account`,
             {
                 method: "POST",
-
                 headers: {
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
-
-                    token: activationToken,
-
-                    activation_code: activationCode,
-
+                    token: token,
                     username: username,
-
                     password: password
-
                 })
             }
         );
@@ -385,10 +411,10 @@ async function activateAccount() {
 
         if (!result.success) {
 
+            alert(result.message || "Unable to activate account.");
+
             btn.disabled = false;
             btn.innerText = "Activate Account";
-
-            alert(result.message || "Invalid activation details.");
 
             return;
         }
@@ -399,13 +425,11 @@ async function activateAccount() {
 
         window.location.href = "index.html";
 
-    }
-
-    catch (err) {
+    } catch (err) {
 
         console.error("ACTIVATION ERROR:", err);
 
-        alert("Server Error.");
+        alert("Unable to connect to server.");
 
         btn.disabled = false;
         btn.innerText = "Activate Account";
