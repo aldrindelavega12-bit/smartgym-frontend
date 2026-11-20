@@ -337,11 +337,36 @@ if (!user) {
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
+function getUserRole() {
+    return String(
+        user.role ||
+        user.user_type ||
+        user.account_type ||
+        ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
+}
+
+function getMessagesPage() {
+    const pages = {
+        member: "member_messages.html",
+        trainer: "trainer_messages.html",
+        staff: "messages.html",
+        front_desk: "messages.html",
+        manager: "messages.html",
+        admin: "messages.html"
+    };
+
+    return pages[getUserRole()] || "member_messages.html";
+}
+
 const MODULE_MENU = [
     {
         key: "dashboard",
         label: "Home",
-        href: {
+        page: {
             pre_member: "pre_member.html",
             premember: "pre_member.html",
             member: "member.html",
@@ -354,35 +379,30 @@ const MODULE_MENU = [
     {
         key: "messages",
         label: "Messages",
-        href: "member_messages.html",
-        trainerHref: "trainer_messages.html",
+        page: getMessagesPage(),
         className: "msg-link",
         active: true
     },
-    { key: "program", label: "Program", href: "program.html" },
-    { key: "get_program", label: "Get Program", href: "get_program.html" },
-    { key: "book_locker", label: "Book Locker", href: "locker_booking.html" },
-    { key: "membership", label: "Membership", href: "membership.html" },
-    { key: "attendance", label: "Attendance", href: "attendance.html" },
-    { key: "locker", label: "Locker", href: "locker.html" },
-    { key: "trainee", label: "Trainee", href: "trainer.html" },
-    {
-        key: "schedule",
-        label: "Schedule",
-        href: "trainer-schedule.html"
-    },
-    { key: "client_requests", label: "Client Requests", href: "client_requests.html" },
-    { key: "reports", label: "Reports", href: "reports.html" },
-    { key: "members", label: "Members", href: "member.html" },
-    { key: "walkins", label: "Walk-ins", href: "walkin.html" },
-    { key: "archive", label: "Archive", href: "archive.html" },
+    { key: "program", label: "Program", page: "program.html" },
+    { key: "get_program", label: "Get Program", page: "get_program.html" },
+    { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
+    { key: "membership", label: "Membership", page: "membership.html" },
+    { key: "attendance", label: "Attendance", page: "attendance.html" },
+    { key: "locker", label: "Locker", page: "locker.html" },
+    { key: "trainee", label: "Trainee", page: "trainer.html" },
+    { key: "schedule", label: "Schedule", page: "trainer-schedule.html" },
+    { key: "client_requests", label: "Client Requests", page: "client_requests.html" },
+    { key: "reports", label: "Reports", page: "reports.html" },
+    { key: "members", label: "Members", page: "member.html" },
+    { key: "walkins", label: "Walk-ins", page: "walkin.html" },
+    { key: "archive", label: "Archive", page: "archive.html" },
     {
         key: "user_account_maintenance",
         label: "User Account Maintenance",
-        href: "user_accounts.html"
+        page: "user_accounts.html"
     },
-    { key: "backup_restore", label: "Backup & Restore", href: "backup_restore.html" },
-    { key: "audit_logs", label: "Audit Logs", href: "audit_logs.html" }
+    { key: "backup_restore", label: "Backup & Restore", page: "backup_restore.html" },
+    { key: "audit_logs", label: "Audit Logs", page: "audit_logs.html" }
 ];
 
 function normalizeModuleKey(value) {
@@ -408,16 +428,14 @@ function normalizeModuleKey(value) {
 }
 
 function getMessagesDashboardHref() {
-    const role = String(user.role || user.user_type || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\s-]+/g, "_");
+    const dashboard = MODULE_MENU.find(
+        item => item.key === "dashboard"
+    );
 
-    const dashboard = MODULE_MENU.find(item => item.key === "dashboard");
+    const role = getUserRole();
 
-    return dashboard.href[role] || "index.html";
+    return dashboard.page[role] || "index.html";
 }
-
 function renderMessagesMenu(allowedModules) {
     const menu = document.getElementById("menu");
 
@@ -428,16 +446,9 @@ function renderMessagesMenu(allowedModules) {
     MODULE_MENU.forEach(item => {
         if (!allowedModules.has(item.key)) return;
 
-        let href = typeof item.href === "object"
-            ? item.href[String(user.role || user.user_type || "").toLowerCase()]
-            : item.href;
-
-        if (
-            item.key === "messages" &&
-            String(user.role || "").toLowerCase() === "trainer"
-        ) {
-            href = item.trainerHref;
-        }
+        const href = typeof item.page === "object"
+            ? item.page[getUserRole()]
+            : item.page;
 
         if (!href) return;
 
@@ -466,7 +477,6 @@ function renderMessagesMenu(allowedModules) {
         menu.appendChild(link);
     });
 }
-
 async function checkMessagesPageAccess() {
     const userId = user.user_id || user.member_id || user.id;
 
