@@ -2120,7 +2120,9 @@ const API_URL =
    MASTER MODULE MENU
 ===================================================== */
 
-
+const user = JSON.parse(
+    localStorage.getItem("user") || "null"
+);
 function getHomePage() {
         const role = String(user?.role || "")
             .trim()
@@ -2369,15 +2371,6 @@ async function loadMemberModuleAccess() {
         return false;
     }
 }
-/* =========================================================
-   USER
-========================================================= */
-
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
-
 
 
 /* =========================================================
