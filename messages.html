@@ -1651,6 +1651,11 @@ async function checkMessagesPageAccess() {
         return false;
     }
 }
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+    window.location.href = "index.html";
+}
 
 
 // ================= MENU =================
@@ -1662,23 +1667,35 @@ const staffName =
 const staffAvatar =
     document.getElementById("staffAvatar");
 
-if(user){
-
+if (user) {
     const fullname =
+        user.full_name ||
         user.fullname ||
         user.name ||
-        user.full_name ||
-        "Staff";
+        user.username ||
+        "User";
 
-    if(staffName){
+    const role = String(
+        user.role || user.user_type || "User"
+    )
+    .trim()
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, char => char.toUpperCase());
+
+    if (staffName) {
         staffName.innerText = fullname;
     }
 
-    if(staffAvatar){
+    if (staffAvatar) {
         staffAvatar.innerText =
-            fullname.charAt(0).toUpperCase();
+            fullname.trim().charAt(0).toUpperCase();
     }
 
+    const staffRole = document.getElementById("staffRole");
+
+    if (staffRole) {
+        staffRole.innerText = role;
+    }
 }
 
 async function buildPermissionMenu() {
