@@ -2068,9 +2068,11 @@ const API_URL =
 let lockerPhysicalStatus = {};
 let lockerBookedStatus = {};
 
-const profile =
-    JSON.parse(localStorage.getItem("profile") || "null") || {};
-
+const user = JSON.parse(
+    localStorage.getItem("user") || "null"
+) || JSON.parse(
+    localStorage.getItem("profile") || "null"
+) || {};
 const displayName =
     profile.name ||
     profile.full_name ||
@@ -2129,7 +2131,7 @@ document.getElementById("profile-role").textContent =
         .replace(/_/g, " ")
         .replace(/\b\w/g, char => char.toUpperCase());
 
-        
+
 if (!user) {
     alert("Session expired.");
     window.location.href = "index.html";
