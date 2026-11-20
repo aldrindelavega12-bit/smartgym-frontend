@@ -397,7 +397,9 @@ if (!userData) {
 const API_URL =
     "https://smartgym-api-ia2e.onrender.com";
 
-
+const user = JSON.parse(
+    localStorage.getItem("user") || "null"
+);
 function getHomePage() {
         const role = String(user?.role || "")
             .trim()
