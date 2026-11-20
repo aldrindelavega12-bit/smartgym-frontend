@@ -496,8 +496,9 @@ function normalizeModuleKey(value) {
     return aliases[key] || key;
 }
 
-function getDashboardHref() {
-    const role = normalizeModuleKey(user?.role);
+function getDashboardPage() {
+
+    const role = String(user?.role || "").toLowerCase();
 
     const dashboard = MODULE_MENU.find(
         item => item.key === "dashboard"
