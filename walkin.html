@@ -1108,13 +1108,6 @@ function renderWalkins(){
                             Archive
                         </button>
 
-                        <button
-                            type="button"
-                            class="member-menu-item delete-item"
-                            onclick="deleteWalkin('${walkin.id}')">
-                            <i class="fa-solid fa-trash"></i>
-                            Delete
-                        </button>
                     </div>
                 </div>
             </td>
@@ -1274,58 +1267,6 @@ async function archiveWalkin(walkinId) {
         }
     });
 }
-
-
-async function deleteWalkin(walkinId) {
-    showMemberActionModal({
-        title: "Delete Walk-in?",
-        message: "This walk-in will be permanently deleted. This action cannot be undone.",
-        actionLabel: "Delete Permanently",
-        actionType: "delete",
-        icon: "fa-solid fa-trash",
-
-        onConfirm: async (closeModal) => {
-            try {
-                if (!user?.user_id) {
-                    throw new Error("Unable to identify the logged-in manager.");
-                }
-
-                const response = await fetch(
-                    `${API_URL}/api/records/walkin/${encodeURIComponent(walkinId)}`,
-                    {
-                        method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            actor_id: user.user_id
-                        })
-                    }
-                );
-
-                const result = await response.json();
-
-                if (!response.ok || result.success === false) {
-                    throw new Error(
-                        result.error ||
-                        result.message ||
-                        "Failed to delete walk-in."
-                    );
-                }
-
-                closeModal();
-                await loadWalkins();
-
-            } catch (error) {
-                console.error("DELETE WALK-IN ERROR:", error);
-
-                document.getElementById("memberModalMessage").textContent =
-                    error.message || "Failed to delete walk-in.";
-            }
-        }
-    });
-}
-
 
 
 /* =========================================================
