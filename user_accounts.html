@@ -3408,13 +3408,7 @@
                                 View
                             </button>
 
-                            <button
-                                type="button"
-                                class="delete-action"
-                                onclick="closeUserActionMenus(); confirmDeleteUser('${safeUserId}', '${safeFullname}')"
-                            >
-                                Delete
-                            </button>
+                            
                         </div>
                     </div>
                 </td>
@@ -3524,9 +3518,6 @@
 
     document.addEventListener("click", closeUserActionMenus);
 
-    let pendingDeleteUserId = null;
-    let pendingDeleteUserName = null;
-
 
     function confirmDeleteUser(userId, fullname) {
         console.log("Delete clicked:", userId, fullname);
@@ -3612,54 +3603,6 @@
 
         pendingDeleteUserId = null;
         pendingDeleteUserName = null;
-    }
-
-
-    async function executeAccountDeletion() {
-        if (!pendingDeleteUserId) {
-            alert("No account selected for deletion.");
-            return;
-        }
-
-        const userId = pendingDeleteUserId;
-        const button = document.getElementById("confirmDeleteButton");
-
-        button.disabled = true;
-        button.textContent = "Deleting...";
-
-        try {
-            const response = await fetch(
-                `${API_URL}/api/admin/delete_account/${encodeURIComponent(userId)}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-
-            const result = await response.json();
-
-            if (!response.ok || result.status !== "success") {
-                alert(result.message || "Failed to delete account.");
-                return;
-            }
-
-            closeDeleteModal("finalDeleteModal");
-
-            alert("Account deleted successfully.");
-
-            // Refresh the account table.
-            await loadUsers();
-
-        } catch (error) {
-            console.error("DELETE ACCOUNT ERROR:", error);
-            alert("Unable to connect to the server.");
-
-        } finally {
-            button.disabled = false;
-            button.textContent = "Confirm Delete";
-        }
     }
 
 
