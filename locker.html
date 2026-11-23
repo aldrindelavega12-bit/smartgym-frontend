@@ -869,8 +869,9 @@ async function loadHistory(){
                 <tr>
                     <td>Locker ${row.locker}</td>
                     <td>${row.name}</td>
-                    <td>${formatTime(row.start)}</td>
-                    <td>${formatTime(row.end)}</td>
+                   
+                    <td>${row.start || "-"}</td>
+                    <td>${row.end || "-"}</td>
                 </tr>
             `;
         });
@@ -1136,17 +1137,8 @@ function formatStatus(status){
     return "🟢 AVAILABLE";
 }
 
-function formatTime(dt){
-    if(!dt || dt === "-") return "-";
 
-    return new Date(dt).toLocaleString([], {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
+
 let lastUnread = 0;
 
 function showNotifPopup(title,text){
