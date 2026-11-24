@@ -1366,21 +1366,20 @@
 @media(max-width:620px){.locker-page-wrap{padding:16px 12px}.locker-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.booking-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 
-/* ===== Compact top spacing above Book a Locker ===== */
-.layout {
-    align-items: start !important;
-}
-.layout > .main {
-    padding-top: 18px !important;
-    margin-top: 0 !important;
-}
-.main > .locker-page-wrap {
-    padding-top: 12px !important;
-    margin-top: 0 !important;
-}
-.locker-page-wrap h2 {
-    margin-top: 0 !important;
-}
+/* ===== Available time-slot cards, shown after date + locker selection ===== */
+.time-slots-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0 16px}
+.time-slot-card{min-height:66px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:12px 14px;border:1px solid #dce8e1;border-radius:13px;background:#fff;color:#102027;cursor:pointer;transition:.15s ease}
+.time-slot-card strong{font-size:13px;font-weight:750}
+.time-slot-card span{font-size:11px;color:#087c3d}
+.time-slot-card:hover:not(:disabled){border-color:#087c3d;background:#f7fcf8}
+.time-slot-card.selected{border:1.5px solid #087c3d;background:#f0f8f2}
+.time-slot-card.selected span{font-weight:700}
+.time-slot-card:disabled,.time-slot-card.unavailable{background:#f1f4f2;border-color:#e1e8e3;color:#9aa69e;cursor:not-allowed}
+.time-slot-card:disabled span{color:#9aa69e}
+.slots-loading{grid-column:1/-1;padding:28px 12px;text-align:center;color:#718078;font-size:13px}
+.time-slot-empty{min-height:210px}
+.time-picker-area{display:none!important}
+@media(max-width:620px){.time-slots-grid{grid-template-columns:1fr}}
 
 </style>
 
@@ -1753,15 +1752,7 @@
                     <span>Select a date and locker first.</span>
                 </div>
 
-                <div class="time-picker-area">
-                    <label for="startTime">Select Start Time</label>
-                    <input type="time" id="startTime" class="time-input" onchange="updateTimePreview()">
-                    <div class="preview-box">
-                        <div class="preview-row"><span>Start:</span><span id="previewStart">--:--</span></div>
-                        <div class="preview-row"><span>End:</span><span id="previewEnd">--:--</span></div>
-                        <div class="preview-row"><span>Duration:</span><span>3 Hours</span></div>
-                    </div>
-                </div>
+                <div id="timeSlotsGrid" class="time-slots-grid"></div>
 
                 <div class="slot-note">
                     Each reservation is <strong>3 hours</strong>. Any time slot that overlaps an existing reservation will be disabled.
@@ -2419,7 +2410,10 @@ function selectLocker(element, locker) {
     selectedLocker =
         Number(locker);
 
+    selectedStart = null;
+    selectedEnd = null;
     updateBookingSummary();
+    loadTimeSlots();
 
     console.log(
         "[SELECTED LOCKER]",
@@ -3381,13 +3375,14 @@ function renderCalendar(){
 
 
                 selectedDate = fullDate;
-
+                selectedStart = null;
+                selectedEnd = null;
                 updateBookingSummary();
 
-                if(selectedStart){
-
-                    loadAvailableLockers();
-
+                if (selectedLocker) {
+                    loadTimeSlots();
+                } else {
+                    resetTimeSlots("Select a date and locker to view available times.");
                 }
 
             };
@@ -3429,198 +3424,189 @@ function changeMonth(
    TIME PREVIEW
 ========================================================= */
 
-function updateTimePreview(){
+function resetTimeSlots(message = "Select a date and locker to view available times.") {
+    const empty = document.getElementById("timeSlotEmpty");
+    const grid = document.getElementById("timeSlotsGrid");
 
-    const input =
-        document.getElementById(
-            "startTime"
-        ).value;
+    if (empty) {
+        empty.style.display = "flex";
+        empty.querySelector("strong").textContent = "No time slots to display yet";
+        empty.querySelector("span").textContent = message;
+    }
+    if (grid) grid.innerHTML = "";
+    selectedStart = null;
+    selectedEnd = null;
+    updateBookingSummary();
+}
 
+function timeToMinutesValue(value) {
+    if (!value) return null;
+    const parts = String(value).split(":");
+    if (parts.length < 2) return null;
+    return Number(parts[0]) * 60 + Number(parts[1]);
+}
 
-    /*
-     * NO TIME SELECTED
-     */
+function normalizeSlotTime(value) {
+    if (value === null || value === undefined) return "";
+    const raw = String(value).trim();
 
-    if(!input){
-
-        selectedStart = null;
-        selectedEnd = null;
-
-        document
-            .getElementById("previewStart")
-            .innerText = "--:--";
-
-        document
-            .getElementById("previewEnd")
-            .innerText = "--:--";
-
-        hideAvailableLockers();
-
-        updateBookingSummary();
-
-        return;
+    if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(raw)) {
+        const pieces = raw.split(":");
+        return `${String(Number(pieces[0])).padStart(2, "0")}:${pieces[1]}`;
     }
 
+    const match = raw.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (match) {
+        let hour = Number(match[1]) % 12;
+        if (match[3].toUpperCase() === "PM") hour += 12;
+        return `${String(hour).padStart(2, "0")}:${match[2]}`;
+    }
+    return "";
+}
 
-    /*
-     * SAVE START TIME
-     */
+function getSlotRange(slot) {
+    let rawStart = "";
+    let rawEnd = "";
 
-    selectedStart = input;
+    if (typeof slot === "string") {
+        const parts = slot.split(/\s*-\s*/);
+        rawStart = parts[0] || "";
+        rawEnd = parts[1] || "";
+    } else if (slot && typeof slot === "object") {
+        rawStart = slot.start_time ?? slot.startTime ?? slot.start ??
+            slot.time ?? slot.booking_start ?? slot.booking_start_time ?? slot.from ?? "";
+        rawEnd = slot.end_time ?? slot.endTime ?? slot.end ??
+            slot.booking_end ?? slot.booking_end_time ?? slot.to ?? "";
+    }
 
+    return {
+        start: normalizeSlotTime(rawStart) || normalizeBookingTime(rawStart),
+        end: normalizeSlotTime(rawEnd) || normalizeBookingTime(rawEnd)
+    };
+}
 
-    const [hour, minute] =
-        input
-            .split(":")
-            .map(Number);
+function slotOverlapsBooking(slotStart, slotEnd, booking) {
+    const range = getSlotRange(booking);
+    if (!range.start || !range.end) return false;
 
+    const a = timeToMinutesValue(slotStart);
+    let b = timeToMinutesValue(slotEnd);
+    const c = timeToMinutesValue(range.start);
+    let d = timeToMinutesValue(range.end);
 
-    /*
-     * CREATE START DATE
-     */
+    if ([a, b, c, d].some(v => v === null || Number.isNaN(v))) return false;
+    if (b <= a) b += 1440;
+    if (d <= c) d += 1440;
 
-    const startDate =
-        new Date();
+    return a < d && b > c;
+}
 
-    startDate.setHours(
-        hour,
-        minute,
-        0,
-        0
-    );
+function chooseTimeSlot(start, end, element) {
+    selectedStart = start;
+    selectedEnd = end;
 
+    document.querySelectorAll(".time-slot-card").forEach(card => {
+        card.classList.remove("selected");
+    });
+    if (element) element.classList.add("selected");
 
-    /*
-     * 3 HOURS
-     */
-
-    const endDate =
-        new Date(startDate);
-
-    endDate.setHours(
-        endDate.getHours() + 3
-    );
-
-
-    /*
-     * SAVE END TIME
-     */
-
-    selectedEnd =
-        endDate
-            .toTimeString()
-            .slice(0,5);
-
-
-    /*
-     * UPDATE PREVIEW
-     */
-
-    document
-        .getElementById(
-            "previewStart"
-        )
-        .innerText =
-        formatTime(
-            selectedStart
-        );
-
-
-    document
-        .getElementById(
-            "previewEnd"
-        )
-        .innerText =
-        formatTime(
-            selectedEnd
-        );
-
-
-    /*
-     * UPDATE SUMMARY
-     */
+    const empty = document.getElementById("timeSlotEmpty");
+    if (empty) empty.style.display = "none";
 
     updateBookingSummary();
-
-
-    /*
-     * DATE + TIME COMPLETE
-     * LOAD AVAILABLE LOCKERS
-     */
-
-    if(
-        selectedDate &&
-        selectedStart &&
-        selectedEnd
-    ){
-
-        loadAvailableLockers();
-
-    }
-
 }
 
-/* =========================================================
-   SHOW AVAILABLE LOCKERS
-========================================================= */
+async function loadTimeSlots() {
+    const empty = document.getElementById("timeSlotEmpty");
+    const grid = document.getElementById("timeSlotsGrid");
+    if (!grid || !empty) return;
 
-function showAvailableLockers(){
-
-    const box =
-        document.getElementById(
-            "availableLockersBox"
-        );
-
-    if(!box){
+    if (!selectedDate || !selectedLocker) {
+        resetTimeSlots();
         return;
     }
 
-    box.classList.add("show");
+    empty.style.display = "none";
+    grid.innerHTML = '<div class="slots-loading">Loading available time slots...</div>';
 
-}
-
-
-/* =========================================================
-   HIDE AVAILABLE LOCKERS
-========================================================= */
-
-function hideAvailableLockers(){
-
-    const box =
-        document.getElementById(
-            "availableLockersBox"
+    let bookedSlots = [];
+    try {
+        const response = await fetch(
+            `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`,
+            { cache: "no-store" }
         );
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    if(!box){
+        const data = await response.json();
+        bookedSlots = Array.isArray(data)
+            ? data
+            : (Array.isArray(data.slots) ? data.slots : []);
+    } catch (error) {
+        console.error("[TIME SLOTS] Failed to load bookings:", error);
+        grid.innerHTML = '<div class="slots-loading">Unable to load time slots. Please try again.</div>';
         return;
     }
 
-    box.classList.remove("show");
+    const physicalStatus = String(
+        lockerPhysicalStatus[String(selectedLocker)] || "AVAILABLE"
+    ).toUpperCase();
 
+    if (physicalStatus === "IN_USE" || physicalStatus === "OVERTIME") {
+        grid.innerHTML = '<div class="slots-loading">This locker is currently unavailable.</div>';
+        return;
+    }
 
-    /*
-     * Remove previous selection
-     */
+    grid.innerHTML = "";
 
-    document
-        .querySelectorAll(".locker-card")
-        .forEach(card => {
+    // Starts every hour from 8 AM; each booking is exactly 3 hours, ending by 10 PM.
+    for (let hour = 8; hour <= 19; hour++) {
+        const start = `${String(hour).padStart(2, "0")}:00`;
+        const end = `${String(hour + 3).padStart(2, "0")}:00`;
 
-            card.classList.remove(
-                "active"
-            );
+        const unavailable = bookedSlots.some(booking =>
+            slotOverlapsBooking(start, end, booking)
+        );
 
-        });
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = `time-slot-card${unavailable ? " unavailable" : ""}`;
 
+        card.innerHTML = `
+            <strong>${formatTime(start)} – ${formatTime(end)}</strong>
+            <span>${unavailable ? "Unavailable · Overlapping booking" : "Available"}</span>
+        `;
+
+        if (unavailable) {
+            card.disabled = true;
+        } else {
+            card.addEventListener("click", () => chooseTimeSlot(start, end, card));
+        }
+
+        grid.appendChild(card);
+    }
+}
+
+/* Legacy callers now refresh the generated time-slot list. */
+function updateTimePreview() {
+    loadTimeSlots();
+}
+
+function showAvailableLockers() {
+    const box = document.getElementById("availableLockersBox");
+    if (box) box.classList.add("show");
+}
+
+function hideAvailableLockers() {
+    const box = document.getElementById("availableLockersBox");
+    if (box) box.classList.remove("show");
+
+    document.querySelectorAll(".locker-card").forEach(card => {
+        card.classList.remove("active");
+    });
 
     selectedLocker = null;
-
+    resetTimeSlots();
 }
-
-
-/* =========================================================
-   UPDATE BOOKING SUMMARY
-========================================================= */
 
 function updateBookingSummary(){
 
@@ -4639,17 +4625,7 @@ async function submitBooking(){
 
             selectedEnd =
                 null;
-
-
-            document
-                .getElementById(
-                    "startTime"
-                )
-                .value =
-                "";
-
-
-            document
+document
                 .getElementById(
                     "previewStart"
                 )
