@@ -1304,6 +1304,67 @@
 
 }
 
+
+/* ===== Exact content arrangement from reference image 1 ===== */
+.locker-page-wrap{width:100%;max-width:none;margin:0;padding:24px;box-sizing:border-box}
+.locker-page-wrap h2{font-size:30px;line-height:1.2;font-weight:800;color:#102027;margin:0 0 7px}
+.locker-page-wrap>p{font-size:14px;color:#718078;margin:0 0 22px}
+.locker-booking-container{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.locker-left-column,.locker-time-section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.locker-calendar-box,.available-lockers-box,.time-slots-panel,.locker-existing-bookings,.booking-summary,.locker-guidelines{background:#fff;border:1px solid #dce8e1;border-radius:16px;box-shadow:0 7px 22px rgba(20,60,40,.045);padding:20px}
+.section-heading h3,.available-lockers-header h3,.locker-existing-bookings h3{font-size:18px;font-weight:750;color:#102027;margin:0 0 5px}
+.section-heading p,.available-lockers-header p{font-size:13px;color:#718078;margin:0}
+.calendar-header{margin:16px 0 18px;display:flex;justify-content:space-between;align-items:center}
+.calendar-header h3{font-size:17px;font-weight:750;margin:0}
+.calendar-header button{width:36px;height:36px;border:0;border-radius:10px;background:#f0f5f2;color:#173326;font-size:21px;cursor:pointer}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;text-align:center}
+.day-name{font-size:11px;font-weight:700;color:#78877e;padding:7px 0 9px}
+.locker-day{min-height:40px;border-radius:10px;font-size:13px;font-weight:600}
+.selected-day{background:#087c3d!important;color:#fff!important}
+.calendar-footnote{border-top:1px solid #e8efea;margin-top:18px;padding-top:13px;color:#718078;font-size:12px}
+.available-lockers-box{display:block!important}
+.available-lockers-header{margin-bottom:16px}
+.locker-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.locker-card{min-width:0;min-height:148px;padding:16px 9px;border:1px solid #dce8e1;border-radius:13px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:.15s}
+.locker-card h3{font-size:14px;margin:0;color:#102027}
+.locker-card.active{border:2px solid #087c3d;background:#f0f8f2}
+.locker-position{width:100%;box-sizing:border-box;text-align:center;padding:6px 4px;border-radius:20px;background:#e5f4eb;color:#087c3d;font-size:10px;font-weight:700}
+.locker-status{font-size:11px;font-weight:700}
+.locker-select-circle{width:18px;height:18px;border:2px solid #a5b5aa;border-radius:50%;box-sizing:border-box}
+.locker-card.active .locker-select-circle{border:5px solid #087c3d}
+.locker-helper-text{font-size:12px;color:#718078;margin:14px 0 0}
+.time-slots-panel{min-height:418px;display:flex;flex-direction:column}
+.slot-legend{display:flex;gap:14px;align-items:center;margin-top:18px;font-size:10px;color:#718078;flex-wrap:wrap}
+.slot-legend span{display:flex;align-items:center;gap:5px}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.available-dot{background:#087c3d}.selected-dot{background:#0b8b4a}.unavailable-dot{background:#c6d0ca}
+.time-slot-empty{flex:1;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#102027;font-size:13px}
+.clock-symbol{font-size:29px;line-height:1;color:#087c3d;margin-bottom:5px}
+.time-slot-empty span{font-size:12px;color:#718078}
+.time-picker-area{border-top:1px solid #edf1ee;padding-top:14px;display:block}
+.time-picker-area label{display:block;font-size:13px;font-weight:700;margin-bottom:8px;color:#102027}
+.time-picker-area .time-input{height:43px;border:1px solid #d7e3dc;border-radius:10px;padding:0 12px;width:100%;box-sizing:border-box}
+.preview-box{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap}
+.preview-row{display:flex;gap:6px;font-size:12px}
+.preview-row span:first-child{color:#718078}
+.preview-row span:last-child{font-weight:700;color:#102027}
+.slot-note{background:#f4faf6;border:1px solid #e0eee4;border-radius:10px;padding:12px;font-size:11px;color:#718078;margin-top:auto}
+.slot-note strong{color:#087c3d}
+.locker-existing-bookings h3{font-size:16px;margin:0 0 12px}
+.empty-booking{min-height:64px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid #e1e9e4;border-radius:11px;background:#fafcfb;color:#718078;font-size:12px}
+.booking-item{background:#f7faf8;border:1px solid #dce8e1;padding:12px 14px;border-radius:11px;margin-top:10px;font-size:13px}
+.booking-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;background:#eff7f1;border-color:#d8eadf;padding:16px}
+.summary-item{min-width:0;border:0;padding:0}
+.summary-label{display:block;font-size:10px;color:#718078;margin-bottom:5px}
+.summary-value{display:block;font-size:12px;font-weight:750;color:#183b27;white-space:normal;overflow-wrap:anywhere}
+.locker-submit-btn{grid-column:1/-1;width:100%;min-height:44px;border:0;border-radius:9px;background:#087c3d;color:#fff;font-size:12px;font-weight:750;cursor:pointer}
+.locker-guidelines{font-size:11px;color:#718078;padding:16px}
+.locker-guidelines strong{color:#102027}
+.locker-guidelines ul{margin:8px 0 0;padding-left:18px;line-height:1.8}
+.no-available-lockers.show{display:block}
+@media(max-width:1050px){.locker-booking-container{grid-template-columns:1fr}}
+@media(max-width:620px){.locker-page-wrap{padding:16px 12px}.locker-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.booking-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 
 <body>
@@ -1590,444 +1651,148 @@
 
 <div class="locker-page-wrap">
 
-
-    <h2>
-        Book a Locker
-    </h2>
-
-
-    <p>
-        Reserve an available locker for your gym session.
-    </p>
-
-
-    <!-- =====================================================
-         BOOKING AREA
-    ====================================================== -->
+    <h2>Book a Locker</h2>
+    <p>Reserve an available locker for your gym session.</p>
 
     <div class="locker-booking-container">
 
-
-        <!-- =================================================
-             LEFT COLUMN
-        ================================================== -->
-
+        <!-- LEFT: DATE + LOCKER SELECTION -->
         <div class="locker-left-column">
 
-
-            <!-- =================================================
-                 CALENDAR
-            ================================================== -->
-
-            <div class="locker-calendar-box">
-
+            <section class="locker-calendar-box">
+                <div class="section-heading">
+                    <h3>Select Date</h3>
+                    <p>Choose the date you want to reserve a locker.</p>
+                </div>
 
                 <div class="calendar-header">
-
-
-                    <button
-                        type="button"
-                        onclick="changeMonth(-1)">
-
-                        ❮
-
-                    </button>
-
-
+                    <button type="button" onclick="changeMonth(-1)" aria-label="Previous month">‹</button>
                     <h3 id="monthYear"></h3>
-
-
-                    <button
-                        type="button"
-                        onclick="changeMonth(1)">
-
-                        ❯
-
-                    </button>
-
-
+                    <button type="button" onclick="changeMonth(1)" aria-label="Next month">›</button>
                 </div>
 
+                <div class="days" id="calendarDays"></div>
 
-                <div
-                    class="days"
-                    id="calendarDays">
-                </div>
+                <div class="calendar-footnote">Booking hours: 8:00 AM – 10:00 PM</div>
+            </section>
 
-
-                <!-- =================================================
-                     START TIME
-                ================================================== -->
-
-                <div class="locker-time-box">
-
-
-                    <h3>
-                        Select Start Time
-                    </h3>
-
-
-                    <input
-                        type="time"
-                        id="startTime"
-                        class="time-input"
-                        onchange="updateTimePreview()"
-                    >
-
-
-                    <div class="preview-box">
-
-
-                        <div class="preview-row">
-
-                            <span>
-                                Start:
-                            </span>
-
-                            <span id="previewStart">
-                                --:--
-                            </span>
-
-                        </div>
-
-
-                        <div class="preview-row">
-
-                            <span>
-                                End:
-                            </span>
-
-                            <span id="previewEnd">
-                                --:--
-                            </span>
-
-                        </div>
-
-
-                        <div class="preview-row">
-
-                            <span>
-                                Duration:
-                            </span>
-
-                            <span>
-                                3 Hours
-                            </span>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             RIGHT COLUMN
-        ================================================== -->
-
-        <div class="locker-time-section">
-
-
-            <!-- =================================================
-                 AVAILABLE LOCKERS
-                 
-                 IMPORTANT:
-                 HIDDEN BY DEFAULT.
-                 JS WILL SHOW THIS ONLY AFTER:
-                 DATE + TIME ARE SELECTED.
-            ================================================== -->
-
-            <div
-                id="availableLockersBox"
-                class="available-lockers-box">
-
-
+            <section class="available-lockers-box show" id="availableLockersBox">
                 <div class="available-lockers-header">
-
-                    <h3>
-                        Available Lockers
-                    </h3>
-
-
-                    <p>
-
-                        Available lockers for
-
-                        <strong id="availableLockerDate">
-                            --
-                        </strong>
-
-                        at
-
-                        <strong id="availableLockerTime">
-                            --
-                        </strong>
-
-                    </p>
-
+                    <h3>Select Locker</h3>
+                    <p>Choose a locker to view its available time slots.</p>
                 </div>
-
-
-                <!-- =================================================
-                     LOCKER CARDS
-                ================================================== -->
 
                 <div class="locker-cards">
 
-
-                    <!-- LOCKER 1 -->
-
-                    <div
-                        class="locker-card"
-                        data-locker="1"
-                        onclick="selectLocker(this, 1)"
-                    >
-
-                        <h3>
-                            Locker 1
-                        </h3>
-
-
-                        <div class="locker-position">
-                            Bottom Part
-                        </div>
-
-
-                        <div
-                            class="locker-status available">
-
-                            Available
-
-                        </div>
-
-
-                        <div
-                            class="locker-select-circle">
-                        </div>
-
+                    <div class="locker-card" data-locker="1" onclick="selectLocker(this, 1)">
+                        <h3>Locker 1</h3>
+                        <div class="locker-position">Bottom Part</div>
+                        <div class="locker-status available">Available</div>
+                        <div class="locker-select-circle"></div>
                     </div>
 
-
-                    <!-- LOCKER 2 -->
-
-                    <div
-                        class="locker-card"
-                        data-locker="2"
-                        onclick="selectLocker(this, 2)"
-                    >
-
-                        <h3>
-                            Locker 2
-                        </h3>
-
-
-                        <div class="locker-position">
-                            Middle Part
-                        </div>
-
-
-                        <div
-                            class="locker-status available">
-
-                            Available
-
-                        </div>
-
-
-                        <div
-                            class="locker-select-circle">
-                        </div>
-
+                    <div class="locker-card" data-locker="2" onclick="selectLocker(this, 2)">
+                        <h3>Locker 2</h3>
+                        <div class="locker-position">Middle Part</div>
+                        <div class="locker-status available">Available</div>
+                        <div class="locker-select-circle"></div>
                     </div>
 
-
-                    <!-- LOCKER 3 -->
-
-                    <div
-                        class="locker-card"
-                        data-locker="3"
-                        onclick="selectLocker(this, 3)"
-                    >
-
-                        <h3>
-                            Locker 3
-                        </h3>
-
-
-                        <div class="locker-position">
-                            Upper Part
-                        </div>
-
-
-                        <div
-                            class="locker-status available">
-
-                            Available
-
-                        </div>
-
-
-                        <div
-                            class="locker-select-circle">
-                        </div>
-
+                    <div class="locker-card" data-locker="3" onclick="selectLocker(this, 3)">
+                        <h3>Locker 3</h3>
+                        <div class="locker-position">Upper Part</div>
+                        <div class="locker-status available">Available</div>
+                        <div class="locker-select-circle"></div>
                     </div>
 
-
                 </div>
 
-
-                <!-- NO AVAILABLE LOCKERS -->
-
-                <div
-                    id="noAvailableLockers"
-                    class="no-available-lockers">
-
-                    No lockers are available for the selected
-                    date and time.
-
+                <div id="noAvailableLockers" class="no-available-lockers">
+                    No lockers are available for the selected date and time.
                 </div>
-
-
-            </div>
-
-
-            <!-- =================================================
-                 RESERVED SLOTS
-            ================================================== -->
-
-            <div class="locker-existing-bookings">
-
-
-                <h3>
-                    Reserved Slots (Your Booking)
-                </h3>
-
-
-                <div id="reservedList">
-
-
-                    <div class="empty-booking">
-
-                        No reserved slots yet.
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- =================================================
-                 BOOKING SUMMARY
-            ================================================== -->
-
-            <div class="booking-summary">
-
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        Selected Date
-                    </span>
-
-                    <span
-                        id="summaryDate"
-                        class="summary-value">
-
-                        --
-
-                    </span>
-
-                </div>
-
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        Selected Time
-                    </span>
-
-                    <span
-                        id="summaryTime"
-                        class="summary-value">
-
-                        --
-
-                    </span>
-
-                </div>
-
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        Duration
-                    </span>
-
-                    <span
-                        id="summaryDuration"
-                        class="summary-value">
-
-                        3 Hours
-
-                    </span>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="locker-submit-btn"
-                    onclick="submitBooking()">
-
-                    Confirm Booking
-
-                </button>
-
-
-            </div>
-
-                <div class="locker-rules">
-
-
-                    ⚠ Max usage:
-                    <b>3 hours</b>
-
-                    <br>
-
-
-                    ⚠ Grace period:
-                    <b>20 minutes</b>
-
-                    <br>
-
-
-                    ⚠ Auto cancel if no show
-
-                    <br>
-
-
-                    ⚠ Needs admin approval
-
-
-                </div>
+                <p class="locker-helper-text">Select a date first, then choose a locker.</p>
+            </section>
 
         </div>
 
+        <!-- RIGHT: TIME SLOTS + RESERVATIONS + SUMMARY -->
+        <div class="locker-time-section">
+
+            <section class="time-slots-panel">
+                <div class="available-lockers-header">
+                    <h3>Available Time Slots</h3>
+                    <p>Select a date and locker to view available times.</p>
+                </div>
+
+                <div class="slot-legend">
+                    <span><i class="legend-dot available-dot"></i>Available</span>
+                    <span><i class="legend-dot selected-dot"></i>Selected</span>
+                    <span><i class="legend-dot unavailable-dot"></i>Unavailable</span>
+                </div>
+
+                <div class="time-slot-empty" id="timeSlotEmpty">
+                    <div class="clock-symbol">◷</div>
+                    <strong>No time slots to display yet</strong>
+                    <span>Select a date and locker first.</span>
+                </div>
+
+                <div class="time-picker-area">
+                    <label for="startTime">Select Start Time</label>
+                    <input type="time" id="startTime" class="time-input" onchange="updateTimePreview()">
+                    <div class="preview-box">
+                        <div class="preview-row"><span>Start:</span><span id="previewStart">--:--</span></div>
+                        <div class="preview-row"><span>End:</span><span id="previewEnd">--:--</span></div>
+                        <div class="preview-row"><span>Duration:</span><span>3 Hours</span></div>
+                    </div>
+                </div>
+
+                <div class="slot-note">
+                    Each reservation is <strong>3 hours</strong>. Any time slot that overlaps an existing reservation will be disabled.
+                </div>
+            </section>
+
+            <section class="locker-existing-bookings">
+                <h3>Your Reservations</h3>
+                <div id="reservedList">
+                    <div class="empty-booking">No reserved slots yet.</div>
+                </div>
+            </section>
+
+            <section class="booking-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Selected Date</span>
+                    <span id="summaryDate" class="summary-value">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Selected Locker</span>
+                    <span id="summaryLocker" class="summary-value">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Selected Time</span>
+                    <span id="summaryTime" class="summary-value">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Duration</span>
+                    <span id="summaryDuration" class="summary-value">3 Hours</span>
+                </div>
+                <button type="button" class="locker-submit-btn" onclick="submitBooking()">Confirm Booking</button>
+            </section>
+
+            <section class="locker-guidelines">
+                <strong>Booking Guidelines</strong>
+                <ul>
+                    <li>Booking hours: 8:00 AM to 10:00 PM.</li>
+                    <li>Each reservation has a fixed duration of 3 hours.</li>
+                    <li>Overlapping time slots for the selected locker cannot be booked.</li>
+                    <li>Early release does not automatically shorten the reserved time window.</li>
+                </ul>
+            </section>
+
+        </div>
     </div>
+</div>
 
-
-    <!-- =========================================================
+<!-- =========================================================
          NOTIFICATION POPUP
     ========================================================= -->
 
@@ -2636,6 +2401,8 @@ function selectLocker(element, locker) {
 
     selectedLocker =
         Number(locker);
+
+    updateBookingSummary();
 
     console.log(
         "[SELECTED LOCKER]",
@@ -3855,6 +3622,9 @@ function updateBookingSummary(){
             "summaryDuration"
         );
 
+    const lockerElement =
+        document.getElementById("summaryLocker");
+
 
     /*
      * DATE
@@ -3915,6 +3685,17 @@ function updateBookingSummary(){
 
         }
 
+    }
+
+
+    /*
+     * SELECTED LOCKER
+     */
+
+    if(lockerElement){
+        lockerElement.innerText = selectedLocker
+            ? `Locker ${selectedLocker}`
+            : "--";
     }
 
 
