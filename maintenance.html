@@ -1,109 +1,1550 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maintenance | Smart Gym</title>
-<link rel="stylesheet" href="css/admin-dashboard.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-/* Uses the same white background, green accents, Inter font and dashboard layout. */
-.maintenance-wrap{padding:14px 0 30px}
-.maintenance-hero{background:#008f4c;color:#fff;border-radius:12px;padding:22px 25px;display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:13px}
-.maintenance-hero h1{font-size:23px;margin:0 0 6px;font-weight:800}.maintenance-hero p{font-size:11px;margin:0;color:#e6f5ec}
-.m-add{border:1px solid #fff;background:#fff;color:#008f4c;border-radius:7px;padding:10px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
-.m-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:13px}
-.m-stat,.m-panel{background:#fff;border:1px solid #e5e9e7;border-radius:11px;box-shadow:0 5px 16px rgba(0,0,0,.035)}
-.m-stat{padding:13px 15px}.m-stat span{font-size:10px;color:#777}.m-stat strong{display:block;font-size:22px;margin-top:6px;color:#202820}.m-stat small{font-size:9px;color:#89948d}
-.m-panel{overflow:hidden}.m-tabs{display:flex;gap:0;padding:0 13px;border-bottom:1px solid #e8eeea;overflow-x:auto}
-.m-tab{border:0;background:transparent;padding:13px 12px 11px;color:#718078;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent}
-.m-tab.active{color:#008f4c;border-bottom-color:#008f4c}
-.m-toolbar{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}.m-title strong{font-size:13px}.m-title small{display:block;color:#818c85;font-size:10px;margin-top:4px}
-.m-search{width:220px;max-width:100%;border:1px solid #dfe7e2;border-radius:7px;padding:9px 11px;font:10px Inter;outline:none}.m-search:focus,.m-field input:focus,.m-field textarea:focus{border-color:#80bd98;box-shadow:0 0 0 2px #008f4c12}
-.m-table-wrap{overflow-x:auto}.m-table{width:100%;border-collapse:collapse;min-width:650px}.m-table th{text-align:left;padding:10px 15px;background:#edf8f2;color:#345144;font-size:9px;font-weight:800;white-space:nowrap}.m-table td{padding:11px 15px;border-bottom:1px solid #edf0ef;color:#4a554e;font-size:10px;vertical-align:middle}.m-table tbody tr:last-child td{border-bottom:0}.m-table tbody tr:hover{background:#fbfdfb}
-.m-name{font-weight:700;color:#202b24}.m-sub{font-size:9px;color:#89948d;margin-top:3px}.m-price{font-weight:700;color:#263b2e;white-space:nowrap}
-.m-status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:9px;font-weight:700}.m-status.active{background:#dff3e7;color:#078348}.m-status.inactive{background:#f0f2f1;color:#77827b}
-.m-actions{display:flex;gap:5px;white-space:nowrap}.m-action{border:1px solid #dfe7e2;background:#fff;color:#526158;border-radius:5px;padding:5px 7px;font-size:9px;font-weight:700;cursor:pointer}.m-action:hover{border-color:#8fc6a6;color:#008f4c}.m-action.delete:hover{border-color:#e6b9bd;color:#bd3540}
-.m-empty{text-align:center!important;color:#89948d!important;padding:28px!important}.m-note{padding:10px 15px;background:#fbfdfb;border-top:1px solid #edf0ef;color:#89948d;font-size:9px;line-height:1.5}
-.m-overlay{position:fixed;inset:0;background:#0f1c146e;display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}.m-overlay.show{display:flex}.m-modal{width:min(480px,100%);background:#fff;border-radius:11px;box-shadow:0 18px 55px #0003;overflow:hidden}
-.m-modal-head{padding:15px 18px;border-bottom:1px solid #e9eeeb;display:flex;align-items:center;justify-content:space-between}.m-modal-head h2{font-size:14px;margin:0}.m-close{border:0;background:none;font-size:21px;color:#7b8780;cursor:pointer}.m-modal-body{padding:17px 18px}.m-field{margin-bottom:12px}.m-field label{display:block;font-size:10px;font-weight:700;color:#4b5a51;margin-bottom:6px}.m-field input,.m-field textarea{width:100%;border:1px solid #dfe7e2;border-radius:7px;padding:9px 10px;font:10px Inter;outline:none}.m-field textarea{min-height:70px;resize:vertical}
-.m-modal-foot{padding:12px 18px;background:#fafcfb;border-top:1px solid #edf0ef;display:flex;justify-content:flex-end;gap:7px}.m-btn{border-radius:6px;padding:8px 12px;font-size:10px;font-weight:700;cursor:pointer}.m-cancel{border:1px solid #dfe7e2;background:#fff;color:#536158}.m-save{border:1px solid #008f4c;background:#008f4c;color:#fff}.m-delete{border:1px solid #c83e48;background:#c83e48;color:#fff}
-.m-toast{position:fixed;right:20px;bottom:20px;background:#173b28;color:#fff;padding:11px 15px;border-radius:7px;font-size:10px;z-index:10000;display:none}.m-toast.show{display:block}
-@media(max-width:900px){.m-stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.maintenance-hero{align-items:flex-start;flex-direction:column;padding:18px}.m-toolbar{align-items:flex-start;flex-direction:column}.m-search{width:100%}.m-stats{gap:7px}.m-stat{padding:11px}}
-</style>
-</head>
-<body>
-<div class="navbar"><div class="brand"><div class="brand-text"><strong>SMART GYM</strong><span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span></div></div><div class="menu" id="menu"></div></div>
-<div class="layout"><div class="main">
-<div class="top-header"><div class="top-right"><div class="staff-profile" onclick="toggleStaffMenu()"><div class="staff-avatar" id="staffAvatar">A</div><div class="staff-info"><strong id="staffName">Admin</strong><small id="staffRole">Administrator</small></div><i class="fa-solid fa-chevron-down staff-profile-chevron"></i><div id="staffDropdown" class="staff-profile-dropdown"><button onclick="logout();event.stopPropagation();" class="staff-dropdown-logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button></div></div></div></div>
-<div class="content"><div class="maintenance-wrap">
-<div class="maintenance-hero"><div><h1>MAINTENANCE</h1><p>Manage system configurations, available options, and pricing.</p></div><button class="m-add" id="addBtn"><i class="fa-solid fa-plus"></i> Add New Record</button></div>
-<div class="m-stats">
-<div class="m-stat"><span>Total Configurations</span><strong id="totalCount">0</strong><small>Across all categories</small></div>
-<div class="m-stat"><span>Active Records</span><strong id="activeCount">0</strong><small>Currently available</small></div>
-<div class="m-stat"><span>Inactive Records</span><strong id="inactiveCount">0</strong><small>Not currently selectable</small></div>
-<div class="m-stat"><span>Configuration Groups</span><strong>4</strong><small>Available categories</small></div>
-</div>
-<div class="m-panel">
-<div class="m-tabs"><button class="m-tab active" data-category="programs">Program We Offer</button><button class="m-tab" data-category="access">Gym Access Type</button><button class="m-tab" data-category="membership">Membership Type</button><button class="m-tab" data-category="trainer">Trainer Plans</button></div>
-<div class="m-toolbar"><div class="m-title"><strong id="tableTitle">Program We Offer</strong><small id="tableDescription">Manage available workout programs and their duration.</small></div><input class="m-search" id="searchInput" type="search" placeholder="Search records..."></div>
-<div class="m-table-wrap"><table class="m-table"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div>
-<div class="m-note">Frontend preview only: changes are saved in this browser. Database/API integration will be connected separately.</div>
-</div></div></div></div></div>
 
-<div class="m-overlay" id="formOverlay"><form class="m-modal" id="recordForm"><div class="m-modal-head"><h2 id="formTitle">Add Record</h2><button type="button" class="m-close" data-close="formOverlay">×</button></div><div class="m-modal-body" id="formFields"></div><div class="m-modal-foot"><button type="button" class="m-btn m-cancel" data-close="formOverlay">Cancel</button><button type="submit" class="m-btn m-save">Save Record</button></div></form></div>
-<div class="m-overlay" id="deleteOverlay"><div class="m-modal"><div class="m-modal-head"><h2>Delete Record</h2><button class="m-close" data-close="deleteOverlay">×</button></div><div class="m-modal-body"><p id="deleteMessage" style="font-size:11px;color:#66736b;line-height:1.6"></p><p style="font-size:10px;color:#89948d;line-height:1.5">Records referenced by transactions should be protected in the backend. Deactivation is safer when history exists.</p></div><div class="m-modal-foot"><button class="m-btn m-cancel" data-close="deleteOverlay">Cancel</button><button class="m-btn m-delete" id="confirmDelete">Delete</button></div></div></div>
-<div class="m-toast" id="toast"></div>
-<script>
-const API_URL="https://smartgym-api-ia2e.onrender.com";
-const user=JSON.parse(localStorage.getItem("user")||"null");
-const menuItems=[
-["dashboard","Home","admin.html"],["messages","Messages","messages.html"],["program","Program","program.html"],["get_program","Get Program","get_program.html"],["book_locker","Book Locker","locker_booking.html"],["membership","Membership","membership.html"],["attendance","Attendance","attendance.html"],["locker","Locker","locker.html"],["trainee","Trainee","trainee.html"],["schedule","Trainee Schedule","trainer-schedule.html"],["client_requests","Client Requests","client_requests.html"],["reports","Reports","reports.html"],["members","Members","members.html"],["walkins","Walk-ins","walkin.html"],["archive","Archive","archive.html"],["user_account_maintenance","User Account Maintenance","user_accounts.html"],["backup_restore","Backup & Restore","backup_restore.html"],["audit_logs","Audit Logs","audit_logs.html"],["maintenance","Maintenance","maintenance.html"]];
-function renderMenu(keys){const menu=document.getElementById("menu");menu.innerHTML="";const page=location.pathname.split("/").pop().toLowerCase();menuItems.filter(x=>keys.has(x[0])).forEach(x=>{const a=document.createElement("a");a.href=x[2];a.dataset.module=x[0];a.textContent=x[1];if(page===x[2])a.classList.add("active");menu.appendChild(a)})}
-async function loadMenu(){if(!user||!user.user_id){location.href="index.html";return}try{const r=await fetch(`${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw Error(`HTTP ${r.status}`);const d=await r.json();if(!Array.isArray(d.modules))throw Error("Invalid permissions");const keys=new Set(d.modules.map(m=>typeof m==="string"?m.trim().toLowerCase():String(m.module_key||m.module_name||m.key||"").trim().toLowerCase()).filter(Boolean));if(!keys.has("maintenance")){alert("You do not have access to Maintenance.");location.href="admin.html";return}renderMenu(keys)}catch(e){console.error(e);alert("Unable to verify module permissions.");location.href="admin.html"}}
-if(!user||user.role!=="admin")location.href="index.html";
-document.getElementById("staffName").textContent=user?.name||user?.full_name||"Admin";document.getElementById("staffRole").textContent=user?.role||"Administrator";document.getElementById("staffAvatar").textContent=(user?.name||user?.full_name||"A").charAt(0).toUpperCase();
-function toggleStaffMenu(){document.querySelector(".staff-profile")?.classList.toggle("active");document.getElementById("staffDropdown")?.classList.toggle("show")}
-window.addEventListener("click",e=>{if(!e.target.closest(".staff-profile")){document.querySelector(".staff-profile")?.classList.remove("active");document.getElementById("staffDropdown")?.classList.remove("show")}});
-function logout(){localStorage.clear();location.href="index.html"}
-const config={
-programs:{title:"Program We Offer",desc:"Manage available workout programs and their duration.",cols:["Program","Description","Duration","Status","Actions"],fields:[["program_name","Program Name","text"],["description","Description","textarea"],["duration_days","Duration (days)","number"]]},
-access:{title:"Gym Access Type",desc:"Manage gym access options, prices, and duration.",cols:["Access Type","Price","Duration","Status","Actions"],fields:[["access_name","Access Name","text"],["price","Price (₱)","number"],["duration_days","Duration (days)","number"]]},
-membership:{title:"Membership Type",desc:"Manage membership packages, fees, and validity.",cols:["Membership","Fee","Validity","Status","Actions"],fields:[["membership_name","Membership Name","text"],["fee","Fee (₱)","number"],["validity_days","Validity (days)","number"]]},
-trainer:{title:"Trainer Plans",desc:"Manage trainer-specific plans, duration, and price.",cols:["Plan","Trainer ID","Price","Duration","Status","Actions"],fields:[["trainer_id","Trainer ID","text"],["plan_name","Plan Name","text"],["price","Price (₱)","number"],["duration_days","Duration (days)","number"]]}
-};
-const seed={
-programs:[{id:1,program_name:"Weight Loss",description:"Workout plan focused on weight management",duration_days:30,active:1},{id:2,program_name:"Muscle Building",description:"Strength and muscle development program",duration_days:60,active:1},{id:3,program_name:"Strength Training",description:"Progressive strength training program",duration_days:45,active:1}],
-access:[{id:1,access_name:"Daily",price:100,duration_days:1,status:"active"},{id:2,access_name:"Weekly",price:500,duration_days:7,status:"active"},{id:3,access_name:"Monthly",price:1200,duration_days:30,status:"active"}],
-membership:[{id:1,membership_name:"Basic",fee:800,validity_days:30,status:"active"},{id:2,membership_name:"Standard",fee:1200,validity_days:30,status:"active"},{id:3,membership_name:"Premium",fee:1800,validity_days:30,status:"active"}],
-trainer:[{id:1,trainer_id:"T0001",plan_name:"Basic Coaching",duration_days:30,price:1500,active:1},{id:2,trainer_id:"T0002",plan_name:"Personal Training",duration_days:30,price:2500,active:1}]};
-const storageKey="smartgym_maintenance_preview_v2";let data;try{data=JSON.parse(localStorage.getItem(storageKey))||JSON.parse(JSON.stringify(seed))}catch(e){data=JSON.parse(JSON.stringify(seed))}
-let category="programs",editing=null,deleting=null;const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const isActive=(c,r)=>c==="programs"||c==="trainer"?Number(r.active)===1:r.status==="active";
-function persist(){localStorage.setItem(storageKey,JSON.stringify(data))}
-function cash(v){return "₱"+Number(v||0).toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function stats(){const all=Object.entries(data).flatMap(([c,rs])=>rs.map(r=>({c,r})));$("totalCount").textContent=all.length;$("activeCount").textContent=all.filter(x=>isActive(x.c,x.r)).length;$("inactiveCount").textContent=all.filter(x=>!isActive(x.c,x.r)).length}
-function render(){const c=config[category],q=$("searchInput").value.trim().toLowerCase();$("tableTitle").textContent=c.title;$("tableDescription").textContent=c.desc;$("tableHead").innerHTML="<tr>"+c.cols.map(x=>`<th>${x}</th>`).join("")+"</tr>";const rows=data[category].filter(r=>JSON.stringify(r).toLowerCase().includes(q));$("tableBody").innerHTML=rows.length?rows.map(r=>{const on=isActive(category,r),badge=`<span class="m-status ${on?"active":"inactive"}">${on?"Active":"Inactive"}</span>`;let cells="";
-if(category==="programs")cells=`<td><div class="m-name">${esc(r.program_name)}</div><div class="m-sub">ID: ${r.id}</div></td><td>${esc(r.description||"—")}</td><td>${r.duration_days} days</td><td>${badge}</td>`;
-if(category==="access")cells=`<td><div class="m-name">${esc(r.access_name)}</div><div class="m-sub">ID: ${r.id}</div></td><td class="m-price">${cash(r.price)}</td><td>${r.duration_days} days</td><td>${badge}</td>`;
-if(category==="membership")cells=`<td><div class="m-name">${esc(r.membership_name)}</div><div class="m-sub">ID: ${r.id}</div></td><td class="m-price">${cash(r.fee)}</td><td>${r.validity_days} days</td><td>${badge}</td>`;
-if(category==="trainer")cells=`<td><div class="m-name">${esc(r.plan_name)}</div><div class="m-sub">Plan ID: ${r.id}</div></td><td>${esc(r.trainer_id)}</td><td class="m-price">${cash(r.price)}</td><td>${r.duration_days} days</td><td>${badge}</td>`;
-return `<tr>${cells}<td><div class="m-actions"><button class="m-action" data-act="edit" data-id="${r.id}">Edit</button><button class="m-action" data-act="toggle" data-id="${r.id}">${on?"Deactivate":"Activate"}</button><button class="m-action delete" data-act="delete" data-id="${r.id}">Delete</button></div></td></tr>`}).join(""):`<tr><td class="m-empty" colspan="${c.cols.length}">No records found.</td></tr>`;stats()}
-function openForm(row=null){editing=row?row.id:null;$("formTitle").textContent=(row?"Edit ":"Add ")+config[category].title;$("formFields").innerHTML=config[category].fields.map(([k,label,type])=>{const v=row?.[k]??"";return type==="textarea"?`<div class="m-field"><label>${label}</label><textarea name="${k}">${esc(v)}</textarea></div>`:`<div class="m-field"><label>${label}</label><input name="${k}" type="${type}" value="${esc(v)}" ${type==="number"?'min="0" step="0.01"':''} required></div>`}).join("");$("formOverlay").classList.add("show")}
-function close(id){$(id).classList.remove("show")}
-function toast(s){$("toast").textContent=s;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2500)}
-$("addBtn").onclick=()=>openForm();
-document.querySelectorAll(".m-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".m-tab").forEach(x=>x.classList.toggle("active",x===b));category=b.dataset.category;$("searchInput").value="";render()});
-$("searchInput").oninput=render;
-$("tableBody").onclick=e=>{const b=e.target.closest("button[data-act]");if(!b)return;const row=data[category].find(x=>Number(x.id)===Number(b.dataset.id));if(!row)return;if(b.dataset.act==="edit")openForm(row);if(b.dataset.act==="toggle"){const was=isActive(category,row);if(category==="programs"||category==="trainer")row.active=was?0:1;else row.status=was?"inactive":"active";persist();render();toast(was?"Record deactivated.":"Record activated.")}if(b.dataset.act==="delete"){deleting=row.id;$("deleteMessage").textContent=`Delete "${row.program_name||row.access_name||row.membership_name||row.plan_name}"?`;$("deleteOverlay").classList.add("show")}};
-$("recordForm").onsubmit=e=>{e.preventDefault();const record={};for(const [k,v] of new FormData(e.currentTarget).entries()){record[k]=config[category].fields.find(f=>f[0]===k)[2]==="number"?Number(v):v.trim()}if(editing!==null){const i=data[category].findIndex(x=>Number(x.id)===Number(editing));data[category][i]={...data[category][i],...record}}else{record.id=Math.max(0,...data[category].map(x=>Number(x.id)||0))+1;if(category==="programs"||category==="trainer")record.active=1;else record.status="active";data[category].push(record)}persist();close("formOverlay");render();toast(editing!==null?"Record updated.":"Record added.");editing=null};
-$("confirmDelete").onclick=()=>{data[category]=data[category].filter(x=>Number(x.id)!==Number(deleting));persist();close("deleteOverlay");render();toast("Record deleted from preview.");deleting=null};
-document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
-document.querySelectorAll(".m-overlay").forEach(o=>o.onclick=e=>{if(e.target===o)o.classList.remove("show")});
-render();loadMenu();
-</script>
-</body></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance | Smart Gym</title>
+
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #17211c;
+        }
+
+        .main {
+            padding: 28px 34px;
+        }
+
+        .maintenance-heading {
+            margin-bottom: 22px;
+        }
+
+        .maintenance-heading h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .maintenance-heading p {
+            margin: 6px 0 0;
+            color: #718078;
+            font-size: 14px;
+        }
+
+        .maintenance-tabs {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: #fff;
+            border: 1px solid #e1e8e4;
+            border-radius: 12px;
+            padding: 0 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            border: none;
+            background: transparent;
+            padding: 18px 22px;
+            color: #58665f;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            color: #008f4c;
+        }
+
+        .tab-button.active {
+            color: #008f4c;
+            border-bottom-color: #008f4c;
+        }
+
+        .maintenance-card {
+            background: #fff;
+            border: 1px solid #e2e9e5;
+            border-radius: 13px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .035);
+            overflow: hidden;
+        }
+
+        .table-toolbar {
+            display: grid;
+            grid-template-columns: minmax(200px, 1fr) auto 220px;
+            gap: 12px;
+            padding: 16px 16px;
+        }
+
+        .search-input,
+        .sort-select,
+        .form-control {
+            width: 100%;
+            height: 43px;
+            padding: 0 15px;
+            border: 1px solid #dce5e0;
+            border-radius: 9px;
+            outline: none;
+            background: #fff;
+            color: #26332c;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .search-input:focus,
+        .sort-select:focus,
+        .form-control:focus {
+            border-color: #008f4c;
+        }
+
+        .add-button {
+            height: 43px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 9px;
+            background: #008f4c;
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .add-button:hover {
+            background: #007c41;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding: 0 12px;
+        }
+
+        .maintenance-table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        .maintenance-table th {
+            padding: 13px 14px;
+            background: #eaf6f0;
+            color: #263d31;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .maintenance-table td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #e9efeb;
+            font-size: 13px;
+            color: #536158;
+            vertical-align: middle;
+        }
+
+        .maintenance-table tbody tr:hover {
+            background: #fbfdfc;
+        }
+
+        .record-name {
+            font-weight: 700;
+            color: #17211c;
+        }
+
+        .record-id {
+            display: block;
+            margin-top: 5px;
+            font-size: 11px;
+            color: #89968e;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-active {
+            background: #d9f5e6;
+            color: #008044;
+        }
+
+        .status-inactive {
+            background: #fce8e8;
+            color: #c0392b;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .action-button {
+            padding: 7px 11px;
+            border: 1px solid #dce5e0;
+            border-radius: 8px;
+            background: #fff;
+            color: #27352d;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            background: #f0f8f3;
+            border-color: #008f4c;
+            color: #008f4c;
+        }
+
+        .action-button.delete:hover {
+            background: #fff1f1;
+            border-color: #d9534f;
+            color: #d9534f;
+        }
+
+        .table-footer {
+            padding: 17px 22px;
+            color: #7b8981;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            padding: 35px !important;
+            text-align: center;
+            color: #89968e !important;
+        }
+
+        /* MODAL */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, .45);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, .15);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 19px 22px;
+            border-bottom: 1px solid #e8eee9;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #f1f5f2;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #37463d;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-control {
+            height: 42px;
+        }
+
+        textarea.form-control {
+            height: 90px;
+            padding: 12px 14px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            padding: 16px 22px;
+            border-top: 1px solid #e8eee9;
+        }
+
+        .cancel-button,
+        .save-button {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .cancel-button {
+            background: #fff;
+            border: 1px solid #dce5e0;
+            color: #536158;
+        }
+
+        .save-button {
+            background: #008f4c;
+            border: 1px solid #008f4c;
+            color: #fff;
+        }
+
+        .save-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 25px;
+            z-index: 10000;
+            padding: 14px 20px;
+            border-radius: 9px;
+            background: #008f4c;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .main {
+                padding: 22px 16px;
+            }
+
+            .table-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .add-button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .maintenance-heading h1 {
+                font-size: 25px;
+            }
+
+            .tab-button {
+                padding: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="navbar">
+
+        <div class="brand">
+            <div class="brand-text">
+                <strong>SMART GYM</strong>
+                <span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span>
+            </div>
+        </div>
+
+        <div class="menu" id="menu"></div>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="layout">
+
+        <div class="main">
+
+            <!-- TOP HEADER -->
+
+            <div class="top-header">
+
+                <div class="top-right">
+
+                    <div class="staff-profile" onclick="toggleStaffMenu()">
+
+                        <div class="staff-avatar" id="staffAvatar">
+                            A
+                        </div>
+
+                        <div class="staff-info">
+                            <strong id="staffName">Admin</strong>
+                            <small id="staffRole">Administrator</small>
+                        </div>
+
+                        <i class="fa-solid fa-chevron-down staff-profile-chevron"></i>
+
+                        <div id="staffDropdown" class="staff-profile-dropdown">
+                            <button
+                                class="staff-dropdown-logout"
+                                onclick="logout(); event.stopPropagation();">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Log Out
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PAGE TITLE -->
+
+            <div class="maintenance-heading">
+
+                <h1>Maintenance</h1>
+
+                <p>
+                    Manage gym configurations, available options, and pricing.
+                </p>
+
+            </div>
+
+            <!-- TABS -->
+
+            <div class="maintenance-tabs">
+
+                <button class="tab-button active"
+                    data-category="programs"
+                    onclick="switchTab('programs', this)">
+                    Programs
+                </button>
+
+                <button class="tab-button"
+                    data-category="gym_access_types"
+                    onclick="switchTab('gym_access_types', this)">
+                    Gym Access Types
+                </button>
+
+                <button class="tab-button"
+                    data-category="membership_types"
+                    onclick="switchTab('membership_types', this)">
+                    Membership Types
+                </button>
+
+                <button class="tab-button"
+                    data-category="trainer_plans"
+                    onclick="switchTab('trainer_plans', this)">
+                    Trainer Plans
+                </button>
+
+                <button class="tab-button"
+                    data-category="modules"
+                    onclick="switchTab('modules', this)">
+                    Modules
+                </button>
+
+            </div>
+
+            <!-- TABLE CARD -->
+
+            <div class="maintenance-card">
+
+                <div class="table-toolbar">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Search records..."
+                        oninput="renderTable()">
+
+                    <button class="add-button" onclick="openAddModal()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add New Record
+                    </button>
+
+                    <select
+                        id="sortSelect"
+                        class="sort-select"
+                        onchange="renderTable()">
+
+                        <option value="default">Sort by</option>
+                        <option value="name">Name A-Z</option>
+                        <option value="name_desc">Name Z-A</option>
+                        <option value="active">Active First</option>
+                        <option value="inactive">Inactive First</option>
+
+                    </select>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table class="maintenance-table">
+
+                        <thead id="tableHead"></thead>
+
+                        <tbody id="tableBody">
+                            <tr>
+                                <td class="empty-state">
+                                    Loading records...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="table-footer" id="tableFooter">
+                    Showing 0 entries
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ADD / EDIT MODAL -->
+
+    <div class="modal-overlay" id="recordModal">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">Add New Record</h2>
+
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <form id="recordForm" onsubmit="saveRecord(event)">
+
+                <div class="modal-body" id="modalFields"></div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        onclick="closeModal()">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                        id="saveButton">
+                        Save Record
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- NOTIFICATION -->
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // =====================================================
+        // CONFIGURATION
+        // =====================================================
+
+        const API_URL = "https://smartgym-api-ia2e.onrender.com";
+
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+
+        const API_ENDPOINTS = {
+            programs: "/api/maintenance/programs",
+            gym_access_types: "/api/maintenance/gym-access-types",
+            membership_types: "/api/maintenance/membership-types",
+            trainer_plans: "/api/maintenance/trainer-plans",
+            modules: "/api/maintenance/modules"
+        };
+
+        const CONFIG = {
+            programs: {
+                title: "Programs",
+                nameField: "program_name",
+                columns: [
+                    ["ID", "id"],
+                    ["Program Name", "program_name"],
+                    ["Description", "description"],
+                    ["Duration", "duration_days"],
+                    ["Status", "active"]
+                ],
+                fields: [
+                    {
+                        name: "program_name",
+                        label: "Program Name",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "description",
+                        label: "Description",
+                        type: "textarea"
+                    },
+                    {
+                        name: "duration_days",
+                        label: "Duration (Days)",
+                        type: "number",
+                        required: true,
+                        min: 1
+                    }
+                ],
+                statusField: "active"
+            },
+
+            gym_access_types: {
+                title: "Gym Access Types",
+                nameField: "access_name",
+                columns: [
+                    ["ID", "id"],
+                    ["Access Name", "access_name"],
+                    ["Price", "price"],
+                    ["Duration", "duration_days"],
+                    ["Status", "status"]
+                ],
+                fields: [
+                    {
+                        name: "access_name",
+                        label: "Access Name",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "price",
+                        label: "Price",
+                        type: "number",
+                        required: true,
+                        min: 0,
+                        step: "0.01"
+                    },
+                    {
+                        name: "duration_days",
+                        label: "Duration (Days)",
+                        type: "number",
+                        required: true,
+                        min: 1
+                    }
+                ],
+                statusField: "status"
+            },
+
+            membership_types: {
+                title: "Membership Types",
+                nameField: "membership_name",
+                columns: [
+                    ["ID", "id"],
+                    ["Membership Name", "membership_name"],
+                    ["Fee", "fee"],
+                    ["Validity", "validity_days"],
+                    ["Status", "status"]
+                ],
+                fields: [
+                    {
+                        name: "membership_name",
+                        label: "Membership Name",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "fee",
+                        label: "Membership Fee",
+                        type: "number",
+                        required: true,
+                        min: 0,
+                        step: "0.01"
+                    },
+                    {
+                        name: "validity_days",
+                        label: "Validity (Days)",
+                        type: "number",
+                        required: true,
+                        min: 1
+                    }
+                ],
+                statusField: "status"
+            },
+
+            trainer_plans: {
+                title: "Trainer Plans",
+                nameField: "plan_name",
+                columns: [
+                    ["ID", "id"],
+                    ["Trainer ID", "trainer_id"],
+                    ["Plan Name", "plan_name"],
+                    ["Duration", "duration_days"],
+                    ["Price", "price"],
+                    ["Status", "active"]
+                ],
+                fields: [
+                    {
+                        name: "trainer_id",
+                        label: "Trainer ID",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "plan_name",
+                        label: "Plan Name",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "duration_days",
+                        label: "Duration (Days)",
+                        type: "number",
+                        required: true,
+                        min: 1
+                    },
+                    {
+                        name: "price",
+                        label: "Price",
+                        type: "number",
+                        required: true,
+                        min: 0,
+                        step: "0.01"
+                    }
+                ],
+                statusField: "active"
+            },
+
+            modules: {
+                title: "Modules",
+                nameField: "module_name",
+                columns: [
+                    ["ID", "id"],
+                    ["Module Name", "module_name"],
+                    ["Module Key", "module_key"],
+                    ["Page URL", "page_url"],
+                    ["Status", "active"]
+                ],
+                fields: [
+                    {
+                        name: "module_name",
+                        label: "Module Name",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "module_key",
+                        label: "Module Key",
+                        type: "text",
+                        required: true
+                    },
+                    {
+                        name: "page_url",
+                        label: "Page URL",
+                        type: "text"
+                    }
+                ],
+                statusField: "active"
+            }
+        };
+
+        let currentCategory = "programs";
+        let records = {};
+        let editingId = null;
+
+        Object.keys(CONFIG).forEach(category => {
+            records[category] = [];
+        });
+
+        // =====================================================
+        // AUTHENTICATION
+        // =====================================================
+
+        if (!user || user.role !== "admin") {
+            window.location.href = "index.html";
+        }
+
+        if (user) {
+            const displayName = user.full_name || user.name || "Admin";
+
+            document.getElementById("staffName").textContent = displayName;
+            document.getElementById("staffRole").textContent = user.role || "admin";
+            document.getElementById("staffAvatar").textContent =
+                displayName.charAt(0).toUpperCase();
+        }
+
+        // =====================================================
+        // API HELPERS
+        // =====================================================
+
+        async function apiRequest(url, options = {}) {
+            const response = await fetch(`${API_URL}${url}`, {
+                ...options,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    ...(options.headers || {})
+                }
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message || result.error || `HTTP ${response.status}`
+                );
+            }
+
+            return result;
+        }
+
+        function extractRecords(result) {
+            if (Array.isArray(result)) {
+                return result;
+            }
+
+            if (Array.isArray(result.data)) {
+                return result.data;
+            }
+
+            if (Array.isArray(result.records)) {
+                return result.records;
+            }
+
+            return [];
+        }
+
+        // =====================================================
+        // LOAD RECORDS
+        // =====================================================
+
+        async function loadRecords(category = currentCategory) {
+            const tbody = document.getElementById("tableBody");
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="10" class="empty-state">
+                        Loading records...
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const result = await apiRequest(
+                    API_ENDPOINTS[category]
+                );
+
+                records[category] = extractRecords(result);
+
+                renderTable();
+
+            } catch (error) {
+                console.error(`Failed to load ${category}:`, error);
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="empty-state">
+                            Unable to load records.
+                            Please check the backend API endpoint.
+                        </td>
+                    </tr>
+                `;
+
+                document.getElementById("tableFooter").textContent =
+                    "Unable to load records.";
+            }
+        }
+
+        // =====================================================
+        // SWITCH TABS
+        // =====================================================
+
+        function switchTab(category, button) {
+            currentCategory = category;
+
+            document.querySelectorAll(".tab-button").forEach(tab => {
+                tab.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            document.getElementById("searchInput").value = "";
+            document.getElementById("sortSelect").value = "default";
+
+            updateAddButton();
+            renderTable();
+
+            loadRecords(category);
+        }
+
+        function updateAddButton() {
+            const button = document.querySelector(".add-button");
+
+            button.innerHTML = `
+                <i class="fa-solid fa-plus"></i>
+                Add New ${CONFIG[currentCategory].title.replace(/s$/, "")}
+            `;
+        }
+
+        // =====================================================
+        // RENDER TABLE
+        // =====================================================
+
+        function renderTable() {
+            const config = CONFIG[currentCategory];
+            const tbody = document.getElementById("tableBody");
+            const thead = document.getElementById("tableHead");
+
+            thead.innerHTML = `
+                <tr>
+                    ${config.columns.map(column => `
+                        <th>${escapeHTML(column[0])}</th>
+                    `).join("")}
+                    <th>Actions</th>
+                </tr>
+            `;
+
+            const searchValue = document
+                .getElementById("searchInput")
+                .value.toLowerCase()
+                .trim();
+
+            const sortValue = document.getElementById("sortSelect").value;
+
+            let filtered = [...(records[currentCategory] || [])];
+
+            filtered = filtered.filter(record => {
+                return Object.values(record).some(value =>
+                    String(value ?? "").toLowerCase().includes(searchValue)
+                );
+            });
+
+            if (sortValue === "name") {
+                filtered.sort((a, b) =>
+                    String(a[config.nameField] || "")
+                        .localeCompare(String(b[config.nameField] || ""))
+                );
+            }
+
+            if (sortValue === "name_desc") {
+                filtered.sort((a, b) =>
+                    String(b[config.nameField] || "")
+                        .localeCompare(String(a[config.nameField] || ""))
+                );
+            }
+
+            if (sortValue === "active") {
+                filtered.sort((a, b) =>
+                    Number(isActive(b, config.statusField)) -
+                    Number(isActive(a, config.statusField))
+                );
+            }
+
+            if (sortValue === "inactive") {
+                filtered.sort((a, b) =>
+                    Number(isActive(a, config.statusField)) -
+                    Number(isActive(b, config.statusField))
+                );
+            }
+
+            if (!filtered.length) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="${config.columns.length + 1}"
+                            class="empty-state">
+                            No records found.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = filtered.map(record => {
+                    const cells = config.columns.map(column => {
+                        const value = record[column[1]];
+
+                        if (column[1] === config.statusField) {
+                            return `
+                                <td>
+                                    ${renderStatus(value)}
+                                </td>
+                            `;
+                        }
+
+                        if (
+                            column[1] === "price" ||
+                            column[1] === "fee"
+                        ) {
+                            return `
+                                <td>${formatCurrency(value)}</td>
+                            `;
+                        }
+
+                        if (column[1] === "duration_days") {
+                            return `
+                                <td>${escapeHTML(value)} days</td>
+                            `;
+                        }
+
+                        return `
+                            <td>${escapeHTML(value ?? "--")}</td>
+                        `;
+                    }).join("");
+
+                    return `
+                        <tr>
+                            ${cells}
+
+                            <td>
+                                <div class="action-group">
+
+                                    <button
+                                        class="action-button"
+                                        onclick="editRecord(${Number(record.id)})">
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        class="action-button"
+                                        onclick="toggleStatus(${Number(record.id)})">
+                                        ${isActive(record, config.statusField)
+                                            ? "Deactivate"
+                                            : "Activate"}
+                                    </button>
+
+                                    <button
+                                        class="action-button delete"
+                                        onclick="deleteRecord(${Number(record.id)})">
+                                        Delete
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join("");
+            }
+
+            document.getElementById("tableFooter").textContent =
+                `Showing ${filtered.length} of ${records[currentCategory].length} entries`;
+        }
+
+        // =====================================================
+        // STATUS HELPERS
+        // =====================================================
+
+        function isActive(record, field) {
+            const value = record[field];
+
+            if (value === undefined || value === null) {
+                return false;
+            }
+
+            if (typeof value === "number") {
+                return value === 1;
+            }
+
+            return ["1", "active", "true", "enabled"]
+                .includes(String(value).toLowerCase());
+        }
+
+        function renderStatus(value) {
+            const active = (
+                value === 1 ||
+                value === true ||
+                String(value).toLowerCase() === "active"
+            );
+
+            return `
+                <span class="status-badge ${
+                    active ? "status-active" : "status-inactive"
+                }">
+                    ${active ? "Active" : "Inactive"}
+                </span>
+            `;
+        }
+
+        function formatCurrency(value) {
+            const amount = Number(value);
+
+            if (!Number.isFinite(amount)) {
+                return "--";
+            }
+
+            return "₱" + amount.toLocaleString("en-PH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // =====================================================
+        // MODAL
+        // =====================================================
+
+        function openAddModal() {
+            editingId = null;
+
+            document.getElementById("modalTitle").textContent =
+                `Add New ${CONFIG[currentCategory].title.replace(/s$/, "")}`;
+
+            document.getElementById("saveButton").textContent =
+                "Save Record";
+
+            buildForm({});
+            document.getElementById("recordModal").classList.add("show");
+        }
+
+        function editRecord(id) {
+            const record = records[currentCategory].find(item =>
+                Number(item.id) === Number(id)
+            );
+
+            if (!record) {
+                showNotification("Record not found.");
+                return;
+            }
+
+            editingId = id;
+
+            document.getElementById("modalTitle").textContent =
+                `Edit ${CONFIG[currentCategory].title.replace(/s$/, "")}`;
+
+            document.getElementById("saveButton").textContent =
+                "Update Record";
+
+            buildForm(record);
+            document.getElementById("recordModal").classList.add("show");
+        }
+
+        function buildForm(record) {
+            const config = CONFIG[currentCategory];
+            const container = document.getElementById("modalFields");
+
+            container.innerHTML = config.fields.map(field => {
+                const value = record[field.name] ?? "";
+
+                if (field.type === "textarea") {
+                    return `
+                        <div class="form-group">
+                            <label for="${field.name}">
+                                ${escapeHTML(field.label)}
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                id="${field.name}"
+                                name="${field.name}"
+                                ${field.required ? "required" : ""}
+                            >${escapeHTML(value)}</textarea>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="form-group">
+                        <label for="${field.name}">
+                            ${escapeHTML(field.label)}
+                        </label>
+
+                        <input
+                            class="form-control"
+                            type="${field.type}"
+                            id="${field.name}"
+                            name="${field.name}"
+                            value="${escapeHTML(value)}"
+                            ${field.required ? "required" : ""}
+                            ${field.min !== undefined ? `min="${field.min}"` : ""}
+                            ${field.step ? `step="${field.step}"` : ""}
+                        >
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function closeModal() {
+            document.getElementById("recordModal").classList.remove("show");
+            document.getElementById("recordForm").reset();
+            editingId = null;
+        }
+
+        // =====================================================
+        // SAVE RECORD
+        // =====================================================
+
+        async function saveRecord(event) {
+            event.preventDefault();
+
+            const form = document.getElementById("recordForm");
+            const saveButton = document.getElementById("saveButton");
+            const formData = new FormData(form);
+
+            const payload = {};
+
+            for (const [key, value] of formData.entries()) {
+                const field = CONFIG[currentCategory].fields.find(item =>
+                    item.name === key
+                );
+
+                payload[key] = field && field.type === "number"
+                    ? Number(value)
+                    : value.trim();
+            }
+
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+
+            try {
+                const baseUrl = API_ENDPOINTS[currentCategory];
+
+                const url = editingId
+                    ? `${baseUrl}/${encodeURIComponent(editingId)}`
+                    : baseUrl;
+
+                await apiRequest(url, {
+                    method: editingId ? "PUT" : "POST",
+                    body: JSON.stringify(payload)
+                });
+
+                closeModal();
+
+                showNotification(
+                    editingId
+                        ? "Record updated successfully."
+                        : "Record added successfully."
+                );
+
+                await loadRecords(currentCategory);
+
+            } catch (error) {
+                console.error("Save error:", error);
+                alert(error.message || "Unable to save record.");
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = editingId
+                    ? "Update Record"
+                    : "Save Record";
+            }
+        }
+
+        // =====================================================
+        // ACTIVATE / DEACTIVATE
+        // =====================================================
+
+        async function toggleStatus(id) {
+            const config = CONFIG[currentCategory];
+
+            const record = records[currentCategory].find(item =>
+                Number(item.id) === Number(id)
+            );
+
+            if (!record) return;
+
+            const currentlyActive = isActive(
+                record,
+                config.statusField
+            );
+
+            const action = currentlyActive
+                ? "deactivate"
+                : "activate";
+
+            if (!confirm(`Are you sure you want to ${action} this record?`)) {
+                return;
+            }
+
+            const statusValue =
+                config.statusField === "active"
+                    ? (currentlyActive ? 0 : 1)
+                    : (currentlyActive ? "inactive" : "active");
+
+            try {
+                await apiRequest(
+                    `${API_ENDPOINTS[currentCategory]}/${encodeURIComponent(id)}/status`,
+                    {
+                        method: "PATCH",
+                        body: JSON.stringify({
+                            [config.statusField]: statusValue
+                        })
+                    }
+                );
+
+                showNotification(
+                    `Record ${action}d successfully.`
+                );
+
+                await loadRecords(currentCategory);
+
+            } catch (error) {
+                console.error("Status update error:", error);
+                alert(error.message || "Unable to update record status.");
+            }
+        }
+
+        // =====================================================
+        // DELETE RECORD
+        // =====================================================
+
+        async function deleteRecord(id) {
+            const confirmed = confirm(
+                "Are you sure you want to delete this record? This action cannot be undone."
+            );
+
+            if (!confirmed) return;
+
+            try {
+                await apiRequest(
+                    `${API_ENDPOINTS[currentCategory]}/${encodeURIComponent(id)}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                showNotification("Record deleted successfully.");
+
+                await loadRecords(currentCategory);
+
+            } catch (error) {
+                console.error("Delete error:", error);
+                alert(error.message || "Unable to delete record.");
+            }
+        }
+
+        // =====================================================
+        // NOTIFICATION
+        // =====================================================
+
+        function showNotification(message) {
+            const notification =
+                document.getElementById("notification");
+
+            notification.textContent = message;
+            notification.classList.add("show");
+
+            setTimeout(() => {
+                notification.classList.remove("show");
+            }, 3000);
+        }
+
+        // =====================================================
+        // HTML ESCAPING
+        // =====================================================
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, character => {
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                };
+
+                return entities[character];
+            });
+        }
+
+        // =====================================================
+        // SIDEBAR MODULE ACCESS
+        // =====================================================
+
+        const ADMIN_MENU_ITEMS = [
+            {
+                key: "dashboard",
+                label: "Home",
+                page: "admin.html"
+            },
+            {
+                key: "user_account_maintenance",
+                label: "User Account Maintenance",
+                page: "user_accounts.html"
+            },
+            {
+                key: "backup_restore",
+                label: "Backup & Restore",
+                page: "backup_restore.html"
+            },
+            {
+                key: "audit_logs",
+                label: "Audit Logs",
+                page: "audit_logs.html"
+            },
+            {
+                key: "maintenance",
+                label: "Maintenance",
+                page: "maintenance.html"
+            }
+        ];
+
+        async function loadAdminMenu() {
+            const menu = document.getElementById("menu");
+
+            if (!user || !user.user_id) {
+                menu.innerHTML = "";
+                return;
+            }
+
+            try {
+                const result = await apiRequest(
+                    `/api/user/module-access/${encodeURIComponent(user.user_id)}`
+                );
+
+                if (!Array.isArray(result.modules)) {
+                    throw new Error("Invalid module permissions.");
+                }
+
+                const allowedModules = new Set(
+                    result.modules.map(module => {
+                        if (typeof module === "string") {
+                            return module.toLowerCase();
+                        }
+
+                        return String(
+                            module.module_key ||
+                            module.module_name ||
+                            module.key ||
+                            ""
+                        ).toLowerCase();
+                    })
+                );
+
+                const currentPage = window.location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+                menu.innerHTML = "";
+
+                ADMIN_MENU_ITEMS
+                    .filter(item => allowedModules.has(item.key))
+                    .forEach(item => {
+                        const link = document.createElement("a");
+
+                        link.href = item.page;
+                        link.textContent = item.label;
+
+                        if (item.page.toLowerCase() === currentPage) {
+                            link.classList.add("active");
+                        }
+
+                        menu.appendChild(link);
+                    });
+
+            } catch (error) {
+                console.error("Sidebar error:", error);
+                menu.innerHTML = "";
+            }
+        }
+
+        // =====================================================
+        // PROFILE DROPDOWN
+        // =====================================================
+
+        function toggleStaffMenu() {
+            const profile = document.querySelector(".staff-profile");
+            const dropdown = document.getElementById("staffDropdown");
+
+            if (!dropdown || !profile) return;
+
+            profile.classList.toggle("active");
+            dropdown.classList.toggle("show");
+        }
+
+        window.addEventListener("click", event => {
+            if (!event.target.closest(".staff-profile")) {
+                document.querySelector(".staff-profile")
+                    ?.classList.remove("active");
+
+                document.getElementById("staffDropdown")
+                    ?.classList.remove("show");
+            }
+        });
+
+        // =====================================================
+        // LOGOUT
+        // =====================================================
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
+        // =====================================================
+        // INITIALIZE
+        // =====================================================
+
+        updateAddButton();
+        loadAdminMenu();
+        loadRecords("programs");
+
+    </script>
+
+</body>
+</html>
