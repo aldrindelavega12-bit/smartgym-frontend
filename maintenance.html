@@ -846,14 +846,49 @@
         // =====================================================
         // API HELPERS
         // =====================================================
-
+        
         async function apiRequest(url, options = {}) {
+
+            const method = (options.method || "GET").toUpperCase();
+
+            const isMaintenanceRequest = url.includes("/api/maintenance/");
+
+            const requestOptions = { ...options };
+
+            if (isMaintenanceRequest) {
+
+                if (!user || !user.user_id) {
+                    throw new Error("Admin user ID not found. Please login again.");
+                }
+
+                const actorId = user.user_id;
+
+                if (method === "GET") {
+
+                    const separator = url.includes("?") ? "&" : "?";
+
+                    url += `${separator}actor_id=${encodeURIComponent(actorId)}`;
+
+                } else {
+
+                    let payload = {};
+
+                    if (requestOptions.body) {
+                        payload = JSON.parse(requestOptions.body);
+                    }
+
+                    payload.actor_id = actorId;
+
+                    requestOptions.body = JSON.stringify(payload);
+                }
+            }
+
             const response = await fetch(`${API_URL}${url}`, {
-                ...options,
+                ...requestOptions,
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    ...(options.headers || {})
+                    ...(requestOptions.headers || {})
                 }
             });
 
@@ -868,6 +903,7 @@
             return result;
         }
 
+       
         function extractRecords(result) {
             if (Array.isArray(result)) {
                 return result;
