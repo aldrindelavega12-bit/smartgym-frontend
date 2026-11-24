@@ -1380,7 +1380,39 @@
 .time-slot-empty{min-height:210px}
 .time-picker-area{display:none!important}
 @media(max-width:620px){.time-slots-grid{grid-template-columns:1fr}}
+/* ===== TIME SLOTS: COMPACT OVERRIDE ===== */
 
+/* Remove legend */
+.slot-legend {
+    display: none !important;
+}
+
+/* Reduce spacing below heading */
+.time-slots-panel .available-lockers-header {
+    margin-bottom: 8px !important;
+}
+
+/* Compact time slot grid */
+.time-slots-grid {
+    gap: 8px !important;
+    margin: 10px 0 8px !important;
+}
+
+/* Reduce card height and spacing */
+.time-slot-card {
+    min-height: 62px !important;
+    padding: 10px 14px !important;
+    gap: 4px !important;
+}
+
+/* Slightly tighter text */
+.time-slot-card strong {
+    font-size: 13px !important;
+}
+
+.time-slot-card span {
+    font-size: 11px !important;
+}
 </style>
 
 <body>
