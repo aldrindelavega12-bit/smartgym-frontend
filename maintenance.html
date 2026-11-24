@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maintenance | Smart Gym</title>
+<link rel="stylesheet" href="css/admin-dashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Uses the same white background, green accents, Inter font and dashboard layout. */
+.maintenance-wrap{padding:14px 0 30px}
+.maintenance-hero{background:#008f4c;color:#fff;border-radius:12px;padding:22px 25px;display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:13px}
+.maintenance-hero h1{font-size:23px;margin:0 0 6px;font-weight:800}.maintenance-hero p{font-size:11px;margin:0;color:#e6f5ec}
+.m-add{border:1px solid #fff;background:#fff;color:#008f4c;border-radius:7px;padding:10px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.m-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:13px}
+.m-stat,.m-panel{background:#fff;border:1px solid #e5e9e7;border-radius:11px;box-shadow:0 5px 16px rgba(0,0,0,.035)}
+.m-stat{padding:13px 15px}.m-stat span{font-size:10px;color:#777}.m-stat strong{display:block;font-size:22px;margin-top:6px;color:#202820}.m-stat small{font-size:9px;color:#89948d}
+.m-panel{overflow:hidden}.m-tabs{display:flex;gap:0;padding:0 13px;border-bottom:1px solid #e8eeea;overflow-x:auto}
+.m-tab{border:0;background:transparent;padding:13px 12px 11px;color:#718078;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent}
+.m-tab.active{color:#008f4c;border-bottom-color:#008f4c}
+.m-toolbar{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}.m-title strong{font-size:13px}.m-title small{display:block;color:#818c85;font-size:10px;margin-top:4px}
+.m-search{width:220px;max-width:100%;border:1px solid #dfe7e2;border-radius:7px;padding:9px 11px;font:10px Inter;outline:none}.m-search:focus,.m-field input:focus,.m-field textarea:focus{border-color:#80bd98;box-shadow:0 0 0 2px #008f4c12}
+.m-table-wrap{overflow-x:auto}.m-table{width:100%;border-collapse:collapse;min-width:650px}.m-table th{text-align:left;padding:10px 15px;background:#edf8f2;color:#345144;font-size:9px;font-weight:800;white-space:nowrap}.m-table td{padding:11px 15px;border-bottom:1px solid #edf0ef;color:#4a554e;font-size:10px;vertical-align:middle}.m-table tbody tr:last-child td{border-bottom:0}.m-table tbody tr:hover{background:#fbfdfb}
+.m-name{font-weight:700;color:#202b24}.m-sub{font-size:9px;color:#89948d;margin-top:3px}.m-price{font-weight:700;color:#263b2e;white-space:nowrap}
+.m-status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:9px;font-weight:700}.m-status.active{background:#dff3e7;color:#078348}.m-status.inactive{background:#f0f2f1;color:#77827b}
+.m-actions{display:flex;gap:5px;white-space:nowrap}.m-action{border:1px solid #dfe7e2;background:#fff;color:#526158;border-radius:5px;padding:5px 7px;font-size:9px;font-weight:700;cursor:pointer}.m-action:hover{border-color:#8fc6a6;color:#008f4c}.m-action.delete:hover{border-color:#e6b9bd;color:#bd3540}
+.m-empty{text-align:center!important;color:#89948d!important;padding:28px!important}.m-note{padding:10px 15px;background:#fbfdfb;border-top:1px solid #edf0ef;color:#89948d;font-size:9px;line-height:1.5}
+.m-overlay{position:fixed;inset:0;background:#0f1c146e;display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}.m-overlay.show{display:flex}.m-modal{width:min(480px,100%);background:#fff;border-radius:11px;box-shadow:0 18px 55px #0003;overflow:hidden}
+.m-modal-head{padding:15px 18px;border-bottom:1px solid #e9eeeb;display:flex;align-items:center;justify-content:space-between}.m-modal-head h2{font-size:14px;margin:0}.m-close{border:0;background:none;font-size:21px;color:#7b8780;cursor:pointer}.m-modal-body{padding:17px 18px}.m-field{margin-bottom:12px}.m-field label{display:block;font-size:10px;font-weight:700;color:#4b5a51;margin-bottom:6px}.m-field input,.m-field textarea{width:100%;border:1px solid #dfe7e2;border-radius:7px;padding:9px 10px;font:10px Inter;outline:none}.m-field textarea{min-height:70px;resize:vertical}
+.m-modal-foot{padding:12px 18px;background:#fafcfb;border-top:1px solid #edf0ef;display:flex;justify-content:flex-end;gap:7px}.m-btn{border-radius:6px;padding:8px 12px;font-size:10px;font-weight:700;cursor:pointer}.m-cancel{border:1px solid #dfe7e2;background:#fff;color:#536158}.m-save{border:1px solid #008f4c;background:#008f4c;color:#fff}.m-delete{border:1px solid #c83e48;background:#c83e48;color:#fff}
+.m-toast{position:fixed;right:20px;bottom:20px;background:#173b28;color:#fff;padding:11px 15px;border-radius:7px;font-size:10px;z-index:10000;display:none}.m-toast.show{display:block}
+@media(max-width:900px){.m-stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.maintenance-hero{align-items:flex-start;flex-direction:column;padding:18px}.m-toolbar{align-items:flex-start;flex-direction:column}.m-search{width:100%}.m-stats{gap:7px}.m-stat{padding:11px}}
+</style>
+</head>
+<body>
+<div class="navbar"><div class="brand"><div class="brand-text"><strong>SMART GYM</strong><span>STRONGER PEOPLE • A HEALTHIER TOMORROW</span></div></div><div class="menu" id="menu"></div></div>
+<div class="layout"><div class="main">
+<div class="top-header"><div class="top-right"><div class="staff-profile" onclick="toggleStaffMenu()"><div class="staff-avatar" id="staffAvatar">A</div><div class="staff-info"><strong id="staffName">Admin</strong><small id="staffRole">Administrator</small></div><i class="fa-solid fa-chevron-down staff-profile-chevron"></i><div id="staffDropdown" class="staff-profile-dropdown"><button onclick="logout();event.stopPropagation();" class="staff-dropdown-logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button></div></div></div></div>
+<div class="content"><div class="maintenance-wrap">
+<div class="maintenance-hero"><div><h1>MAINTENANCE</h1><p>Manage system configurations, available options, and pricing.</p></div><button class="m-add" id="addBtn"><i class="fa-solid fa-plus"></i> Add New Record</button></div>
+<div class="m-stats">
+<div class="m-stat"><span>Total Configurations</span><strong id="totalCount">0</strong><small>Across all categories</small></div>
+<div class="m-stat"><span>Active Records</span><strong id="activeCount">0</strong><small>Currently available</small></div>
+<div class="m-stat"><span>Inactive Records</span><strong id="inactiveCount">0</strong><small>Not currently selectable</small></div>
+<div class="m-stat"><span>Configuration Groups</span><strong>4</strong><small>Available categories</small></div>
+</div>
+<div class="m-panel">
+<div class="m-tabs"><button class="m-tab active" data-category="programs">Program We Offer</button><button class="m-tab" data-category="access">Gym Access Type</button><button class="m-tab" data-category="membership">Membership Type</button><button class="m-tab" data-category="trainer">Trainer Plans</button></div>
+<div class="m-toolbar"><div class="m-title"><strong id="tableTitle">Program We Offer</strong><small id="tableDescription">Manage available workout programs and their duration.</small></div><input class="m-search" id="searchInput" type="search" placeholder="Search records..."></div>
+<div class="m-table-wrap"><table class="m-table"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div>
+<div class="m-note">Frontend preview only: changes are saved in this browser. Database/API integration will be connected separately.</div>
+</div></div></div></div></div>
+
+<div class="m-overlay" id="formOverlay"><form class="m-modal" id="recordForm"><div class="m-modal-head"><h2 id="formTitle">Add Record</h2><button type="button" class="m-close" data-close="formOverlay">×</button></div><div class="m-modal-body" id="formFields"></div><div class="m-modal-foot"><button type="button" class="m-btn m-cancel" data-close="formOverlay">Cancel</button><button type="submit" class="m-btn m-save">Save Record</button></div></form></div>
+<div class="m-overlay" id="deleteOverlay"><div class="m-modal"><div class="m-modal-head"><h2>Delete Record</h2><button class="m-close" data-close="deleteOverlay">×</button></div><div class="m-modal-body"><p id="deleteMessage" style="font-size:11px;color:#66736b;line-height:1.6"></p><p style="font-size:10px;color:#89948d;line-height:1.5">Records referenced by transactions should be protected in the backend. Deactivation is safer when history exists.</p></div><div class="m-modal-foot"><button class="m-btn m-cancel" data-close="deleteOverlay">Cancel</button><button class="m-btn m-delete" id="confirmDelete">Delete</button></div></div></div>
+<div class="m-toast" id="toast"></div>
+<script>
+const API_URL="https://smartgym-api-ia2e.onrender.com";
+const user=JSON.parse(localStorage.getItem("user")||"null");
+const menuItems=[
+["dashboard","Home","admin.html"],["messages","Messages","messages.html"],["program","Program","program.html"],["get_program","Get Program","get_program.html"],["book_locker","Book Locker","locker_booking.html"],["membership","Membership","membership.html"],["attendance","Attendance","attendance.html"],["locker","Locker","locker.html"],["trainee","Trainee","trainee.html"],["schedule","Trainee Schedule","trainer-schedule.html"],["client_requests","Client Requests","client_requests.html"],["reports","Reports","reports.html"],["members","Members","members.html"],["walkins","Walk-ins","walkin.html"],["archive","Archive","archive.html"],["user_account_maintenance","User Account Maintenance","user_accounts.html"],["backup_restore","Backup & Restore","backup_restore.html"],["audit_logs","Audit Logs","audit_logs.html"],["maintenance","Maintenance","maintenance.html"]];
+function renderMenu(keys){const menu=document.getElementById("menu");menu.innerHTML="";const page=location.pathname.split("/").pop().toLowerCase();menuItems.filter(x=>keys.has(x[0])).forEach(x=>{const a=document.createElement("a");a.href=x[2];a.dataset.module=x[0];a.textContent=x[1];if(page===x[2])a.classList.add("active");menu.appendChild(a)})}
+async function loadMenu(){if(!user||!user.user_id){location.href="index.html";return}try{const r=await fetch(`${API_URL}/api/user/module-access/${encodeURIComponent(user.user_id)}`,{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw Error(`HTTP ${r.status}`);const d=await r.json();if(!Array.isArray(d.modules))throw Error("Invalid permissions");const keys=new Set(d.modules.map(m=>typeof m==="string"?m.trim().toLowerCase():String(m.module_key||m.module_name||m.key||"").trim().toLowerCase()).filter(Boolean));if(!keys.has("maintenance")){alert("You do not have access to Maintenance.");location.href="admin.html";return}renderMenu(keys)}catch(e){console.error(e);alert("Unable to verify module permissions.");location.href="admin.html"}}
+if(!user||user.role!=="admin")location.href="index.html";
+document.getElementById("staffName").textContent=user?.name||user?.full_name||"Admin";document.getElementById("staffRole").textContent=user?.role||"Administrator";document.getElementById("staffAvatar").textContent=(user?.name||user?.full_name||"A").charAt(0).toUpperCase();
+function toggleStaffMenu(){document.querySelector(".staff-profile")?.classList.toggle("active");document.getElementById("staffDropdown")?.classList.toggle("show")}
+window.addEventListener("click",e=>{if(!e.target.closest(".staff-profile")){document.querySelector(".staff-profile")?.classList.remove("active");document.getElementById("staffDropdown")?.classList.remove("show")}});
+function logout(){localStorage.clear();location.href="index.html"}
+const config={
+programs:{title:"Program We Offer",desc:"Manage available workout programs and their duration.",cols:["Program","Description","Duration","Status","Actions"],fields:[["program_name","Program Name","text"],["description","Description","textarea"],["duration_days","Duration (days)","number"]]},
+access:{title:"Gym Access Type",desc:"Manage gym access options, prices, and duration.",cols:["Access Type","Price","Duration","Status","Actions"],fields:[["access_name","Access Name","text"],["price","Price (₱)","number"],["duration_days","Duration (days)","number"]]},
+membership:{title:"Membership Type",desc:"Manage membership packages, fees, and validity.",cols:["Membership","Fee","Validity","Status","Actions"],fields:[["membership_name","Membership Name","text"],["fee","Fee (₱)","number"],["validity_days","Validity (days)","number"]]},
+trainer:{title:"Trainer Plans",desc:"Manage trainer-specific plans, duration, and price.",cols:["Plan","Trainer ID","Price","Duration","Status","Actions"],fields:[["trainer_id","Trainer ID","text"],["plan_name","Plan Name","text"],["price","Price (₱)","number"],["duration_days","Duration (days)","number"]]}
+};
+const seed={
+programs:[{id:1,program_name:"Weight Loss",description:"Workout plan focused on weight management",duration_days:30,active:1},{id:2,program_name:"Muscle Building",description:"Strength and muscle development program",duration_days:60,active:1},{id:3,program_name:"Strength Training",description:"Progressive strength training program",duration_days:45,active:1}],
+access:[{id:1,access_name:"Daily",price:100,duration_days:1,status:"active"},{id:2,access_name:"Weekly",price:500,duration_days:7,status:"active"},{id:3,access_name:"Monthly",price:1200,duration_days:30,status:"active"}],
+membership:[{id:1,membership_name:"Basic",fee:800,validity_days:30,status:"active"},{id:2,membership_name:"Standard",fee:1200,validity_days:30,status:"active"},{id:3,membership_name:"Premium",fee:1800,validity_days:30,status:"active"}],
+trainer:[{id:1,trainer_id:"T0001",plan_name:"Basic Coaching",duration_days:30,price:1500,active:1},{id:2,trainer_id:"T0002",plan_name:"Personal Training",duration_days:30,price:2500,active:1}]};
+const storageKey="smartgym_maintenance_preview_v2";let data;try{data=JSON.parse(localStorage.getItem(storageKey))||JSON.parse(JSON.stringify(seed))}catch(e){data=JSON.parse(JSON.stringify(seed))}
+let category="programs",editing=null,deleting=null;const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isActive=(c,r)=>c==="programs"||c==="trainer"?Number(r.active)===1:r.status==="active";
+function persist(){localStorage.setItem(storageKey,JSON.stringify(data))}
+function cash(v){return "₱"+Number(v||0).toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function stats(){const all=Object.entries(data).flatMap(([c,rs])=>rs.map(r=>({c,r})));$("totalCount").textContent=all.length;$("activeCount").textContent=all.filter(x=>isActive(x.c,x.r)).length;$("inactiveCount").textContent=all.filter(x=>!isActive(x.c,x.r)).length}
+function render(){const c=config[category],q=$("searchInput").value.trim().toLowerCase();$("tableTitle").textContent=c.title;$("tableDescription").textContent=c.desc;$("tableHead").innerHTML="<tr>"+c.cols.map(x=>`<th>${x}</th>`).join("")+"</tr>";const rows=data[category].filter(r=>JSON.stringify(r).toLowerCase().includes(q));$("tableBody").innerHTML=rows.length?rows.map(r=>{const on=isActive(category,r),badge=`<span class="m-status ${on?"active":"inactive"}">${on?"Active":"Inactive"}</span>`;let cells="";
+if(category==="programs")cells=`<td><div class="m-name">${esc(r.program_name)}</div><div class="m-sub">ID: ${r.id}</div></td><td>${esc(r.description||"—")}</td><td>${r.duration_days} days</td><td>${badge}</td>`;
+if(category==="access")cells=`<td><div class="m-name">${esc(r.access_name)}</div><div class="m-sub">ID: ${r.id}</div></td><td class="m-price">${cash(r.price)}</td><td>${r.duration_days} days</td><td>${badge}</td>`;
+if(category==="membership")cells=`<td><div class="m-name">${esc(r.membership_name)}</div><div class="m-sub">ID: ${r.id}</div></td><td class="m-price">${cash(r.fee)}</td><td>${r.validity_days} days</td><td>${badge}</td>`;
+if(category==="trainer")cells=`<td><div class="m-name">${esc(r.plan_name)}</div><div class="m-sub">Plan ID: ${r.id}</div></td><td>${esc(r.trainer_id)}</td><td class="m-price">${cash(r.price)}</td><td>${r.duration_days} days</td><td>${badge}</td>`;
+return `<tr>${cells}<td><div class="m-actions"><button class="m-action" data-act="edit" data-id="${r.id}">Edit</button><button class="m-action" data-act="toggle" data-id="${r.id}">${on?"Deactivate":"Activate"}</button><button class="m-action delete" data-act="delete" data-id="${r.id}">Delete</button></div></td></tr>`}).join(""):`<tr><td class="m-empty" colspan="${c.cols.length}">No records found.</td></tr>`;stats()}
+function openForm(row=null){editing=row?row.id:null;$("formTitle").textContent=(row?"Edit ":"Add ")+config[category].title;$("formFields").innerHTML=config[category].fields.map(([k,label,type])=>{const v=row?.[k]??"";return type==="textarea"?`<div class="m-field"><label>${label}</label><textarea name="${k}">${esc(v)}</textarea></div>`:`<div class="m-field"><label>${label}</label><input name="${k}" type="${type}" value="${esc(v)}" ${type==="number"?'min="0" step="0.01"':''} required></div>`}).join("");$("formOverlay").classList.add("show")}
+function close(id){$(id).classList.remove("show")}
+function toast(s){$("toast").textContent=s;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2500)}
+$("addBtn").onclick=()=>openForm();
+document.querySelectorAll(".m-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".m-tab").forEach(x=>x.classList.toggle("active",x===b));category=b.dataset.category;$("searchInput").value="";render()});
+$("searchInput").oninput=render;
+$("tableBody").onclick=e=>{const b=e.target.closest("button[data-act]");if(!b)return;const row=data[category].find(x=>Number(x.id)===Number(b.dataset.id));if(!row)return;if(b.dataset.act==="edit")openForm(row);if(b.dataset.act==="toggle"){const was=isActive(category,row);if(category==="programs"||category==="trainer")row.active=was?0:1;else row.status=was?"inactive":"active";persist();render();toast(was?"Record deactivated.":"Record activated.")}if(b.dataset.act==="delete"){deleting=row.id;$("deleteMessage").textContent=`Delete "${row.program_name||row.access_name||row.membership_name||row.plan_name}"?`;$("deleteOverlay").classList.add("show")}};
+$("recordForm").onsubmit=e=>{e.preventDefault();const record={};for(const [k,v] of new FormData(e.currentTarget).entries()){record[k]=config[category].fields.find(f=>f[0]===k)[2]==="number"?Number(v):v.trim()}if(editing!==null){const i=data[category].findIndex(x=>Number(x.id)===Number(editing));data[category][i]={...data[category][i],...record}}else{record.id=Math.max(0,...data[category].map(x=>Number(x.id)||0))+1;if(category==="programs"||category==="trainer")record.active=1;else record.status="active";data[category].push(record)}persist();close("formOverlay");render();toast(editing!==null?"Record updated.":"Record added.");editing=null};
+$("confirmDelete").onclick=()=>{data[category]=data[category].filter(x=>Number(x.id)!==Number(deleting));persist();close("deleteOverlay");render();toast("Record deleted from preview.");deleting=null};
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
+document.querySelectorAll(".m-overlay").forEach(o=>o.onclick=e=>{if(e.target===o)o.classList.remove("show")});
+render();loadMenu();
+</script>
+</body></html>
