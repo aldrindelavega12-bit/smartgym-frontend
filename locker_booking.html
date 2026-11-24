@@ -3535,9 +3535,11 @@ function chooseTimeSlot(start, end, element) {
     updateBookingSummary();
 }
 
+
 async function loadTimeSlots() {
     const empty = document.getElementById("timeSlotEmpty");
     const grid = document.getElementById("timeSlotsGrid");
+
     if (!grid || !empty) return;
 
     if (!selectedDate || !selectedLocker) {
@@ -3548,62 +3550,166 @@ async function loadTimeSlots() {
     empty.style.display = "none";
     grid.innerHTML = '<div class="slots-loading">Loading available time slots...</div>';
 
+    // =====================================
+    // GET CURRENT PHILIPPINE DATE AND TIME
+    // =====================================
+
+    const now = new Date();
+
+    const manilaDate = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Manila",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).format(now);
+
+    const manilaTime = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Asia/Manila",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+    }).format(now);
+
+    const [currentHour, currentMinute] = manilaTime
+        .split(":")
+        .map(Number);
+
+    const currentMinutes = currentHour * 60 + currentMinute;
+
+    const isToday = selectedDate === manilaDate;
+
+    // =====================================
+    // LOAD EXISTING BOOKINGS
+    // =====================================
+
     let bookedSlots = [];
+
     try {
         const response = await fetch(
             `${API_URL}/api/booked_slots?locker=${selectedLocker}&date=${selectedDate}`,
             { cache: "no-store" }
         );
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
 
         const data = await response.json();
+
         bookedSlots = Array.isArray(data)
             ? data
             : (Array.isArray(data.slots) ? data.slots : []);
+
     } catch (error) {
         console.error("[TIME SLOTS] Failed to load bookings:", error);
-        grid.innerHTML = '<div class="slots-loading">Unable to load time slots. Please try again.</div>';
+
+        grid.innerHTML =
+            '<div class="slots-loading">Unable to load time slots. Please try again.</div>';
+
         return;
     }
+
+    // =====================================
+    // CHECK PHYSICAL LOCKER STATUS
+    // =====================================
 
     const physicalStatus = String(
         lockerPhysicalStatus[String(selectedLocker)] || "AVAILABLE"
     ).toUpperCase();
 
-    if (physicalStatus === "IN_USE" || physicalStatus === "OVERTIME") {
-        grid.innerHTML = '<div class="slots-loading">This locker is currently unavailable.</div>';
+    if (
+        physicalStatus === "IN_USE" ||
+        physicalStatus === "OVERTIME"
+    ) {
+        grid.innerHTML =
+            '<div class="slots-loading">This locker is currently unavailable.</div>';
+
         return;
     }
 
     grid.innerHTML = "";
 
-    // Starts every hour from 8 AM; each booking is exactly 3 hours, ending by 10 PM.
+    let displayedSlots = 0;
+
+    // =====================================
+    // GENERATE AVAILABLE TIME SLOTS
+    // =====================================
+
+    // Starts every hour from 8 AM.
+    // Each booking lasts exactly 3 hours.
+
     for (let hour = 8; hour <= 19; hour++) {
+
         const start = `${String(hour).padStart(2, "0")}:00`;
         const end = `${String(hour + 3).padStart(2, "0")}:00`;
+
+        const slotStartMinutes = hour * 60;
+
+        // =================================
+        // HIDE PAST TIME SLOTS
+        // =================================
+
+        if (
+            isToday &&
+            slotStartMinutes <= currentMinutes
+        ) {
+            continue;
+        }
+
+        // =================================
+        // CHECK EXISTING BOOKING OVERLAP
+        // =================================
 
         const unavailable = bookedSlots.some(booking =>
             slotOverlapsBooking(start, end, booking)
         );
 
+        // =================================
+        // CREATE SLOT CARD
+        // =================================
+
         const card = document.createElement("button");
+
         card.type = "button";
-        card.className = `time-slot-card${unavailable ? " unavailable" : ""}`;
+
+        card.className =
+            `time-slot-card${unavailable ? " unavailable" : ""}`;
 
         card.innerHTML = `
             <strong>${formatTime(start)} – ${formatTime(end)}</strong>
-            <span>${unavailable ? "Unavailable · Overlapping booking" : "Available"}</span>
+            <span>
+                ${unavailable
+                    ? "Unavailable · Overlapping booking"
+                    : "Available"}
+            </span>
         `;
 
         if (unavailable) {
             card.disabled = true;
         } else {
-            card.addEventListener("click", () => chooseTimeSlot(start, end, card));
+            card.addEventListener("click", () => {
+                chooseTimeSlot(start, end, card);
+            });
         }
 
         grid.appendChild(card);
+        displayedSlots++;
+    }
+
+    // =====================================
+    // NO FUTURE SLOTS
+    // =====================================
+
+    if (displayedSlots === 0) {
+        grid.innerHTML = `
+            <div class="slots-loading">
+                No more available time slots for today.
+                Please select another date.
+            </div>
+        `;
     }
 }
+
 
 /* Legacy callers now refresh the generated time-slot list. */
 function updateTimePreview() {
