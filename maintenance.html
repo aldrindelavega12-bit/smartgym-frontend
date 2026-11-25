@@ -1121,16 +1121,17 @@
                             <td>
                                 <div class="action-group">
 
-                                    <button
-                                        class="action-button"
-                                        onclick="editRecord(${Number(record.id)})">
-                                        ${currentCategory === "programs" ? `
+                                    ${currentCategory === "programs" ? `
                                             <button
                                                 class="action-button"
                                                 onclick="openProgramStructure(${Number(record.id)})">
                                                 Manage Splits
                                             </button>
                                         ` : ""}
+
+                                    <button
+                                        class="action-button"
+                                        onclick="editRecord(${Number(record.id)})">
                                         Edit
                                     </button>
 
