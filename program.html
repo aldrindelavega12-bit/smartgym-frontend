@@ -5111,10 +5111,111 @@ function renderTrainingSchedule(){
     const days = getScheduleDays(selectedScheduleDate);
     const todayKey = getDateKey(new Date());
 
+    /*
+    =====================================================
+    GET ALL ACTUAL WORKOUTS
+    =====================================================
+    */
+
+    const allDates = Object.keys(actualWorkoutMap || {}).sort();
+
+    /*
+    =====================================================
+    SELECT ONE PROGRAM WORKOUT PER DAY
+    ALTERNATE BETWEEN ACTIVE PROGRAMS
+    =====================================================
+    */
+
+    const selectedWorkouts = {};
+    let lastProgramKey = null;
+
+    allDates.forEach(dateKey => {
+
+        const entries = actualWorkoutMap[dateKey];
+
+        const workouts = Array.isArray(entries)
+            ? entries
+            : entries
+                ? [entries]
+                : [];
+
+        if(!workouts.length) return;
+
+        const nonRestWorkouts = workouts.filter(workout =>
+            String(workout.workout_name || "")
+                .trim()
+                .toLowerCase() !== "rest"
+        );
+
+        const restWorkouts = workouts.filter(workout =>
+            String(workout.workout_name || "")
+                .trim()
+                .toLowerCase() === "rest"
+        );
+
+        // Kung may actual workout, huwag piliin ang Rest.
+        const candidates = nonRestWorkouts.length
+            ? nonRestWorkouts
+            : restWorkouts;
+
+        if(!candidates.length) return;
+
+        let selected = null;
+
+        if(candidates.length === 1){
+
+            selected = candidates[0];
+
+        }else{
+
+            // Identify each program.
+            const getProgramKey = workout =>
+                String(
+                    workout.member_program_id ||
+                    workout.program_id ||
+                    workout.program_name ||
+                    workout.trainer_id ||
+                    "default"
+                );
+
+            // Prefer a different program from the previous workout.
+            selected =
+                candidates.find(workout =>
+                    getProgramKey(workout) !== lastProgramKey
+                ) || candidates[0];
+
+        }
+
+        selectedWorkouts[dateKey] = selected;
+
+        // Update alternating program only for actual workouts.
+        if(
+            String(selected.workout_name || "")
+                .trim()
+                .toLowerCase() !== "rest"
+        ){
+            lastProgramKey =
+                String(
+                    selected.member_program_id ||
+                    selected.program_id ||
+                    selected.program_name ||
+                    selected.trainer_id ||
+                    "default"
+                );
+        }
+
+    });
+
+    /*
+    =====================================================
+    RENDER 7 DAYS
+    =====================================================
+    */
+
     days.forEach(date => {
 
         const dateKey = getDateKey(date);
-        const workouts = getWorkoutForDate(date) || [];
+        const workout = selectedWorkouts[dateKey] || null;
 
         const dayCard = document.createElement("div");
         dayCard.className = "training-day";
@@ -5137,97 +5238,119 @@ function renderTrainingSchedule(){
 
         dayCard.appendChild(header);
 
-        if(workouts.length === 0){
+        /*
+        =====================================================
+        NO WORKOUT / REST
+        =====================================================
+        */
+
+        if(!workout){
 
             const rest = document.createElement("div");
             rest.className = "schedule-workout";
             rest.textContent = "Rest";
 
             dayCard.appendChild(rest);
+            container.appendChild(dayCard);
 
-        } else {
+            return;
+        }
 
-            workouts.forEach(workout => {
+        /*
+        =====================================================
+        WORKOUT DETAILS
+        =====================================================
+        */
 
-                const item = document.createElement("div");
-                item.className = "schedule-workout-item";
+        let workoutName =
+            workout.workout_name || "Workout";
 
-                let workoutName = workout.workout_name || "Workout";
+        if(workoutName.includes("—")){
+            workoutName = workoutName
+                .split("—")
+                .slice(1)
+                .join("—")
+                .trim();
+        }
 
-                if(workoutName.includes("—")){
-                    workoutName = workoutName
-                        .split("—")
-                        .slice(1)
-                        .join("—")
-                        .trim();
-                }
+        const status = getWorkoutStatus(workout, date);
 
-                const programName = workout.program_name || "";
+        const workoutDetails = document.createElement("div");
+        workoutDetails.className = "schedule-workout";
 
-                const status = getWorkoutStatus(workout, date);
+        workoutDetails.innerHTML = `
+            ${
+                workout.program_name
+                    ? `<small>${escapeHtml(workout.program_name)}</small>`
+                    : ""
+            }
 
-                const details = document.createElement("div");
-                details.className = "schedule-workout";
+            <div>${escapeHtml(workoutName)}</div>
 
-                details.innerHTML = `
-                    ${programName
-                        ? `<small>${escapeHtml(programName)}</small>`
-                        : ""}
-                    <div>${escapeHtml(workoutName)}</div>
-                    ${status.label
-                        ? `<div class="day-status ${status.className}">
-                            ${escapeHtml(status.label)}
-                           </div>`
-                        : ""}
-                `;
+            ${
+                status.label
+                    ? `<div class="day-status ${status.className}">
+                        ${escapeHtml(status.label)}
+                       </div>`
+                    : ""
+            }
+        `;
 
-                item.appendChild(details);
+        dayCard.appendChild(workoutDetails);
 
-                const workoutStatus = String(
-                    workout.status || ""
-                ).trim().toLowerCase();
+        /*
+        =====================================================
+        TODAY'S WORKOUT ACTIONS
+        ONLY ONE WORKOUT PER DAY
+        =====================================================
+        */
 
-                const workoutNameLower = String(
-                    workout.workout_name || ""
-                ).trim().toLowerCase();
+        const workoutStatus = String(
+            workout.status || ""
+        ).trim().toLowerCase();
 
-                const canMarkWorkout =
-                    dateKey === todayKey &&
-                    Number(workout.id) > 0 &&
-                    workoutStatus === "scheduled" &&
-                    workoutNameLower !== "rest";
+        const workoutNameLower = String(
+            workout.workout_name || ""
+        ).trim().toLowerCase();
 
-                if(canMarkWorkout){
+        const canMarkWorkout =
+            dateKey === todayKey &&
+            Number(workout.id) > 0 &&
+            workoutStatus === "scheduled" &&
+            workoutNameLower !== "rest";
 
-                    const actions = document.createElement("div");
-                    actions.className = "workout-actions";
+        if(canMarkWorkout){
 
-                    const completeButton = document.createElement("button");
-                    completeButton.type = "button";
-                    completeButton.className = "workout-complete-btn";
-                    completeButton.dataset.workoutId = String(workout.id);
-                    completeButton.textContent = "Complete";
+            const actions = document.createElement("div");
+            actions.className = "workout-actions";
 
-                    const missedButton = document.createElement("button");
-                    missedButton.type = "button";
-                    missedButton.className = "workout-missed-btn";
-                    missedButton.dataset.workoutId = String(workout.id);
-                    missedButton.textContent = "Missed";
+            const completeButton =
+                document.createElement("button");
 
-                    actions.appendChild(completeButton);
-                    actions.appendChild(missedButton);
+            completeButton.type = "button";
+            completeButton.className = "workout-complete-btn";
+            completeButton.dataset.workoutId = String(workout.id);
+            completeButton.textContent = "Complete";
 
-                    item.appendChild(actions);
-                }
+            const missedButton =
+                document.createElement("button");
 
-                dayCard.appendChild(item);
-            });
+            missedButton.type = "button";
+            missedButton.className = "workout-missed-btn";
+            missedButton.dataset.workoutId = String(workout.id);
+            missedButton.textContent = "Missed";
+
+            actions.appendChild(completeButton);
+            actions.appendChild(missedButton);
+
+            dayCard.appendChild(actions);
         }
 
         container.appendChild(dayCard);
-    });
-}
 
+    });
+
+}
 
 /* =========================================================
    MEMBER WORKOUT ACTIONS
