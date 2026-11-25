@@ -5111,111 +5111,65 @@ function renderTrainingSchedule(){
     const days = getScheduleDays(selectedScheduleDate);
     const todayKey = getDateKey(new Date());
 
-    /*
-    =====================================================
-    GET ALL ACTUAL WORKOUTS
-    =====================================================
-    */
-
+    // First date of the combined program schedule.
     const allDates = Object.keys(actualWorkoutMap || {}).sort();
+    const anchorDate = allDates[0] || "2026-11-26";
 
-    /*
-    =====================================================
-    SELECT ONE PROGRAM WORKOUT PER DAY
-    ALTERNATE BETWEEN ACTIVE PROGRAMS
-    =====================================================
-    */
+    function getDayIndex(dateKey){
 
-    const selectedWorkouts = {};
-    let lastProgramKey = null;
+        const start = new Date(anchorDate + "T00:00:00");
+        const current = new Date(dateKey + "T00:00:00");
 
-    allDates.forEach(dateKey => {
-
-        const entries = actualWorkoutMap[dateKey];
-
-        const workouts = Array.isArray(entries)
-            ? entries
-            : entries
-                ? [entries]
-                : [];
-
-        if(!workouts.length) return;
-
-        const nonRestWorkouts = workouts.filter(workout =>
-            String(workout.workout_name || "")
-                .trim()
-                .toLowerCase() !== "rest"
+        return Math.round(
+            (current - start) / (1000 * 60 * 60 * 24)
         );
+    }
 
-        const restWorkouts = workouts.filter(workout =>
-            String(workout.workout_name || "")
-                .trim()
-                .toLowerCase() === "rest"
-        );
+    function getProgramForDay(index){
 
-        // Kung may actual workout, huwag piliin ang Rest.
-        const candidates = nonRestWorkouts.length
-            ? nonRestWorkouts
-            : restWorkouts;
+        if(index < 0) return "build";
 
-        if(!candidates.length) return;
+        // Initial schedule:
+        // Day 1 Build, Rest, Day 1 Weight Loss,
+        // Day 2 Build, Day 2 Weight Loss, Rest.
+        if(index === 0) return "build";
+        if(index === 1) return "rest";
+        if(index === 2) return "weight";
+        if(index === 3) return "build";
+        if(index === 4) return "weight";
+        if(index === 5) return "rest";
 
-        let selected = null;
+        // Continuing cycle:
+        // Build, Weight Loss, Build, Weight Loss, Rest.
+        const cycle = (index - 6) % 5;
 
-        if(candidates.length === 1){
+        if(cycle === 0) return "build";
+        if(cycle === 1) return "weight";
+        if(cycle === 2) return "build";
+        if(cycle === 3) return "weight";
 
-            selected = candidates[0];
+        return "rest";
+    }
 
-        }else{
+    function getProgramKey(workout){
 
-            // Identify each program.
-            const getProgramKey = workout =>
-                String(
-                    workout.member_program_id ||
-                    workout.program_id ||
-                    workout.program_name ||
-                    workout.trainer_id ||
-                    "default"
-                );
+        const name = String(
+            workout.program_name ||
+            workout.workout_name ||
+            ""
+        ).toLowerCase();
 
-            // Prefer a different program from the previous workout.
-            selected =
-                candidates.find(workout =>
-                    getProgramKey(workout) !== lastProgramKey
-                ) || candidates[0];
+        if(name.includes("build muscle")) return "build";
+        if(name.includes("weight loss")) return "weight";
 
-        }
-
-        selectedWorkouts[dateKey] = selected;
-
-        // Update alternating program only for actual workouts.
-        if(
-            String(selected.workout_name || "")
-                .trim()
-                .toLowerCase() !== "rest"
-        ){
-            lastProgramKey =
-                String(
-                    selected.member_program_id ||
-                    selected.program_id ||
-                    selected.program_name ||
-                    selected.trainer_id ||
-                    "default"
-                );
-        }
-
-    });
-
-    /*
-    =====================================================
-    RENDER 7 DAYS
-    =====================================================
-    */
+        return "";
+    }
 
     days.forEach(date => {
 
         const dateKey = getDateKey(date);
-        const workout = selectedWorkouts[dateKey] || null;
+        const dayIndex = getDayIndex(dateKey);
+        const selectedProgram = getProgramForDay(dayIndex);
 
         const dayCard = document.createElement("div");
         dayCard.className = "training-day";
@@ -5238,13 +5192,8 @@ function renderTrainingSchedule(){
 
         dayCard.appendChild(header);
 
-        /*
-        =====================================================
-        NO WORKOUT / REST
-        =====================================================
-        */
-
-        if(!workout){
+        // Fixed rest day.
+        if(selectedProgram === "rest"){
 
             const rest = document.createElement("div");
             rest.className = "schedule-workout";
@@ -5256,14 +5205,32 @@ function renderTrainingSchedule(){
             return;
         }
 
-        /*
-        =====================================================
-        WORKOUT DETAILS
-        =====================================================
-        */
+        const entries = actualWorkoutMap[dateKey];
 
-        let workoutName =
-            workout.workout_name || "Workout";
+        const workouts = Array.isArray(entries)
+            ? entries
+            : entries
+                ? [entries]
+                : [];
+
+        // Select only the assigned program for this date.
+        const workout = workouts.find(item =>
+            getProgramKey(item) === selectedProgram
+        );
+
+        if(!workout){
+
+            const pending = document.createElement("div");
+            pending.className = "schedule-workout";
+            pending.textContent = "No workout available";
+
+            dayCard.appendChild(pending);
+            container.appendChild(dayCard);
+
+            return;
+        }
+
+        let workoutName = workout.workout_name || "Workout";
 
         if(workoutName.includes("—")){
             workoutName = workoutName
@@ -5275,15 +5242,16 @@ function renderTrainingSchedule(){
 
         const status = getWorkoutStatus(workout, date);
 
-        const workoutDetails = document.createElement("div");
-        workoutDetails.className = "schedule-workout";
+        const details = document.createElement("div");
+        details.className = "schedule-workout";
 
-        workoutDetails.innerHTML = `
-            ${
-                workout.program_name
-                    ? `<small>${escapeHtml(workout.program_name)}</small>`
-                    : ""
-            }
+        details.innerHTML = `
+            <small>${escapeHtml(
+                workout.program_name ||
+                (selectedProgram === "build"
+                    ? "Build Muscle"
+                    : "Weight Loss")
+            )}</small>
 
             <div>${escapeHtml(workoutName)}</div>
 
@@ -5296,15 +5264,9 @@ function renderTrainingSchedule(){
             }
         `;
 
-        dayCard.appendChild(workoutDetails);
+        dayCard.appendChild(details);
 
-        /*
-        =====================================================
-        TODAY'S WORKOUT ACTIONS
-        ONLY ONE WORKOUT PER DAY
-        =====================================================
-        */
-
+        // Only one workout action per date.
         const workoutStatus = String(
             workout.status || ""
         ).trim().toLowerCase();
@@ -5324,17 +5286,13 @@ function renderTrainingSchedule(){
             const actions = document.createElement("div");
             actions.className = "workout-actions";
 
-            const completeButton =
-                document.createElement("button");
-
+            const completeButton = document.createElement("button");
             completeButton.type = "button";
             completeButton.className = "workout-complete-btn";
             completeButton.dataset.workoutId = String(workout.id);
             completeButton.textContent = "Complete";
 
-            const missedButton =
-                document.createElement("button");
-
+            const missedButton = document.createElement("button");
             missedButton.type = "button";
             missedButton.className = "workout-missed-btn";
             missedButton.dataset.workoutId = String(workout.id);
@@ -5347,9 +5305,7 @@ function renderTrainingSchedule(){
         }
 
         container.appendChild(dayCard);
-
     });
-
 }
 
 /* =========================================================
