@@ -5111,47 +5111,32 @@ function renderTrainingSchedule(){
     const days = getScheduleDays(selectedScheduleDate);
     const todayKey = getDateKey(new Date());
 
-    // First date of the combined program schedule.
-    const allDates = Object.keys(actualWorkoutMap || {}).sort();
-    const anchorDate = allDates[0] || "2026-11-26";
+    // Fixed start of the combined program rotation.
+    const rotationStart = new Date("2026-11-26T00:00:00");
 
-    function getDayIndex(dateKey){
+    function getRotationDay(date){
 
-        const start = new Date(anchorDate + "T00:00:00");
-        const current = new Date(dateKey + "T00:00:00");
+        const current = new Date(getDateKey(date) + "T00:00:00");
 
         return Math.round(
-            (current - start) / (1000 * 60 * 60 * 24)
+            (current.getTime() - rotationStart.getTime()) /
+            (1000 * 60 * 60 * 24)
         );
     }
 
-    function getProgramForDay(index){
+    function getSelectedProgram(dayIndex){
 
-        if(index < 0) return "build";
+        const cycleDay = ((dayIndex % 5) + 5) % 5;
 
-        // Initial schedule:
-        // Day 1 Build, Rest, Day 1 Weight Loss,
-        // Day 2 Build, Day 2 Weight Loss, Rest.
-        if(index === 0) return "build";
-        if(index === 1) return "rest";
-        if(index === 2) return "weight";
-        if(index === 3) return "build";
-        if(index === 4) return "weight";
-        if(index === 5) return "rest";
-
-        // Continuing cycle:
-        // Build, Weight Loss, Build, Weight Loss, Rest.
-        const cycle = (index - 6) % 5;
-
-        if(cycle === 0) return "build";
-        if(cycle === 1) return "weight";
-        if(cycle === 2) return "build";
-        if(cycle === 3) return "weight";
+        if(cycleDay === 0) return "build";
+        if(cycleDay === 1) return "weight";
+        if(cycleDay === 2) return "build";
+        if(cycleDay === 3) return "weight";
 
         return "rest";
     }
 
-    function getProgramKey(workout){
+    function identifyProgram(workout){
 
         const name = String(
             workout.program_name ||
@@ -5159,8 +5144,13 @@ function renderTrainingSchedule(){
             ""
         ).toLowerCase();
 
-        if(name.includes("build muscle")) return "build";
-        if(name.includes("weight loss")) return "weight";
+        if(name.includes("build muscle")){
+            return "build";
+        }
+
+        if(name.includes("weight loss")){
+            return "weight";
+        }
 
         return "";
     }
@@ -5168,8 +5158,8 @@ function renderTrainingSchedule(){
     days.forEach(date => {
 
         const dateKey = getDateKey(date);
-        const dayIndex = getDayIndex(dateKey);
-        const selectedProgram = getProgramForDay(dayIndex);
+        const dayIndex = getRotationDay(date);
+        const selectedProgram = getSelectedProgram(dayIndex);
 
         const dayCard = document.createElement("div");
         dayCard.className = "training-day";
@@ -5192,7 +5182,7 @@ function renderTrainingSchedule(){
 
         dayCard.appendChild(header);
 
-        // Fixed rest day.
+        // REST DAY: every fifth day.
         if(selectedProgram === "rest"){
 
             const rest = document.createElement("div");
@@ -5205,6 +5195,7 @@ function renderTrainingSchedule(){
             return;
         }
 
+        // Get all workouts for this date.
         const entries = actualWorkoutMap[dateKey];
 
         const workouts = Array.isArray(entries)
@@ -5213,9 +5204,9 @@ function renderTrainingSchedule(){
                 ? [entries]
                 : [];
 
-        // Select only the assigned program for this date.
+        // Select ONLY the scheduled program.
         const workout = workouts.find(item =>
-            getProgramKey(item) === selectedProgram
+            identifyProgram(item) === selectedProgram
         );
 
         if(!workout){
@@ -5230,15 +5221,15 @@ function renderTrainingSchedule(){
             return;
         }
 
-        let workoutName = workout.workout_name || "Workout";
+        const workoutName = String(
+            workout.workout_name || "Workout"
+        ).split("—").length > 1
+            ? String(workout.workout_name).split("—").slice(1).join("—").trim()
+            : String(workout.workout_name || "Workout");
 
-        if(workoutName.includes("—")){
-            workoutName = workoutName
-                .split("—")
-                .slice(1)
-                .join("—")
-                .trim();
-        }
+        const programLabel = selectedProgram === "build"
+            ? "Build Muscle"
+            : "Weight Loss";
 
         const status = getWorkoutStatus(workout, date);
 
@@ -5246,15 +5237,8 @@ function renderTrainingSchedule(){
         details.className = "schedule-workout";
 
         details.innerHTML = `
-            <small>${escapeHtml(
-                workout.program_name ||
-                (selectedProgram === "build"
-                    ? "Build Muscle"
-                    : "Weight Loss")
-            )}</small>
-
+            <small>${escapeHtml(programLabel)}</small>
             <div>${escapeHtml(workoutName)}</div>
-
             ${
                 status.label
                     ? `<div class="day-status ${status.className}">
@@ -5266,7 +5250,7 @@ function renderTrainingSchedule(){
 
         dayCard.appendChild(details);
 
-        // Only one workout action per date.
+        // Only one workout can have actions per day.
         const workoutStatus = String(
             workout.status || ""
         ).trim().toLowerCase();
@@ -5305,6 +5289,7 @@ function renderTrainingSchedule(){
         }
 
         container.appendChild(dayCard);
+
     });
 }
 
