@@ -4722,208 +4722,121 @@ async function loadTrainingSchedule(){
         user?.user_id ||
         user?.id;
 
-
-    console.log(
-        "WORKOUT SCHEDULE MEMBER ID:",
-        memberId
-    );
-
-
     if(!memberId){
-
-        console.error(
-            "MEMBER ID NOT FOUND"
-        );
-
+        console.error("MEMBER ID NOT FOUND");
         workoutSchedule = [];
-
+        actualWorkoutMap = {};
         renderTrainingSchedule();
-
         return;
     }
 
-
     try{
 
-        const response =
-            await fetch(
-                `${API_URL}/api/member/workout-schedule/${memberId}`,
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        console.log(
-            "WORKOUT SCHEDULE RESPONSE:",
-            result
+        const response = await fetch(
+            `${API_URL}/api/member/workout-schedule/${memberId}`,
+            { cache: "no-store" }
         );
 
+        const result = await response.json();
+
+        console.log("WORKOUT SCHEDULE RESPONSE:", result);
 
         if(!response.ok){
-
             throw new Error(
-                result.message ||
-                `HTTP ${response.status}`
+                result.message || `HTTP ${response.status}`
             );
-
         }
 
-
-        /*
-        =====================================================
-        RESET
-        =====================================================
-        */
-
         workoutSchedule = [];
-
         workoutStatuses = {};
-
         actualWorkoutMap = {};
 
         const pattern =
             result.schedule_pattern ||
-            result.recurring_pattern |
+            result.recurring_pattern ||
             result.workouts ||
             [];
-
-        console.log("SCHEDULE PATTERN SOURCE:", pattern);
-        
 
         if(
             result.workout_statuses &&
             typeof result.workout_statuses === "object"
         ){
-
-            workoutStatuses =
-                result.workout_statuses;
-
+            workoutStatuses = result.workout_statuses;
         }
 
-        const actualWorkouts =
-            result.actual_workouts || [];
-
+        const actualWorkouts = result.actual_workouts || [];
         const todayKey = getDateKey(new Date());
 
         if(Array.isArray(actualWorkouts)){
 
             for(const workout of actualWorkouts){
 
-                const dateKey =
-                    String(
-                        workout.workout_date || ""
-                    ).substring(0, 10);
+                const dateKey = String(
+                    workout.workout_date || ""
+                ).substring(0, 10);
 
-                if(!dateKey){
-                    continue;
-                }
+                if(!dateKey) continue;
 
-                // 👉 AUTO-MISSED CHECK: Kung lumipas na ang petsa at walang status o blanko, i-update sa database at local
-                if (dateKey < todayKey && (!workout.status || workout.status === "")) {
-                    try {
-                        await fetch(`${API_URL}/api/member/workout/${workout.id}/missed`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" }
-                        });
-                        workout.status = "missed";
-                    } catch (err) {
-                        console.error("Error updating missed workout:", err);
+                // Auto-mark past workouts as missed.
+                if(
+                    dateKey < todayKey &&
+                    (!workout.status || workout.status === "")
+                ){
+                    try{
+                        const missedResponse = await fetch(
+                            `${API_URL}/api/member/workout/${workout.id}/missed`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            }
+                        );
+
+                        if(missedResponse.ok){
+                            workout.status = "missed";
+                        }
+
+                    }catch(err){
+                        console.error("AUTO MISSED ERROR:", err);
                     }
                 }
 
+                // IMPORTANT: Multiple workouts can share one date.
                 if(!actualWorkoutMap[dateKey]){
-
-                    actualWorkoutMap[dateKey] =
-                        workout;
-
+                    actualWorkoutMap[dateKey] = [];
                 }
 
+                actualWorkoutMap[dateKey].push(workout);
             }
-
         }
-
-        console.log(
-            "ACTUAL WORKOUT MAP:",
-            actualWorkoutMap
-        );
-
-
-        /*
-        =====================================================
-        SAVE PATTERN
-        =====================================================
-        */
 
         if(Array.isArray(pattern)){
-
-            workoutSchedule =
-                pattern.map(
-                    function(workout){
-
-                        return {
-
-                            day_number:
-                                workout.day_number,
-
-                            plan_day_id:
-                                workout.plan_day_id,
-
-                            day_name:
-                                workout.day_name,
-
-                            workout_name:
-                                workout.workout_name ||
-                                workout.day_name ||
-                                "Workout"
-
-                        };
-
-                    }
-                );
-
+            workoutSchedule = pattern.map(workout => ({
+                day_number: workout.day_number,
+                plan_day_id: workout.plan_day_id,
+                day_name: workout.day_name,
+                workout_name:
+                    workout.workout_name ||
+                    workout.day_name ||
+                    "Workout"
+            }));
         }
 
-
-        /*
-        =====================================================
-        DEBUG
-        =====================================================
-        */
-
-        console.log(
-            "RECURRING WORKOUT PATTERN:",
-            workoutSchedule
-        );
-
-
-        /*
-        =====================================================
-        RENDER
-        =====================================================
-        */
+        console.log("ACTUAL WORKOUT MAP:", actualWorkoutMap);
+        console.log("RECURRING WORKOUT PATTERN:", workoutSchedule);
 
         renderTrainingSchedule();
 
-    }
-    catch(error){
+    }catch(error){
 
-        console.error(
-            "LOAD TRAINING SCHEDULE ERROR:",
-            error
-        );
-
+        console.error("LOAD TRAINING SCHEDULE ERROR:", error);
 
         workoutSchedule = [];
+        actualWorkoutMap = {};
 
         renderTrainingSchedule();
-
     }
-
 }
 
 
@@ -5052,57 +4965,28 @@ function getScheduleDays(
 
 function getWorkoutForDate(date){
 
-    const dateKey =
-        getDateKey(date);
+    const dateKey = getDateKey(date);
 
+    const actualWorkouts = actualWorkoutMap[dateKey];
 
-    /*
-     * ONLY USE ACTUAL DATABASE WORKOUT
-     */
-
-    const actualWorkout =
-        actualWorkoutMap[dateKey];
-
-
-    /*
-     * NO DATABASE RECORD
-     * THERE IS NO WORKOUT
-     */
-
-    if(!actualWorkout){
-
-        return null;
-
+    if(!actualWorkouts || !actualWorkouts.length){
+        return [];
     }
 
-
-    /*
-     * RETURN DATABASE RECORD
-     */
-
-    return {
-
-        id:
-            actualWorkout.id,
-
-        member_id:
-            actualWorkout.member_id,
-
-        trainer_id:
-            actualWorkout.trainer_id,
-
-        workout_date:
-            dateKey,
-
-        workout_name:
-            actualWorkout.workout_name,
-
-        status:
-            actualWorkout.status
-
-    };
-
+    return actualWorkouts.map(workout => ({
+        id: workout.id,
+        member_id: workout.member_id,
+        trainer_id: workout.trainer_id,
+        member_program_id: workout.member_program_id,
+        workout_date: dateKey,
+        workout_name: workout.workout_name,
+        status: workout.status,
+        program_name: workout.program_name
+    }));
 }
+
+
+
 
 /* =========================================================
    GET STATUS
