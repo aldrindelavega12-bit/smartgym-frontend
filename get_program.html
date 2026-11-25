@@ -1154,123 +1154,38 @@ function buildPrograms(){
    RENDER PROGRAMS
 ========================================================= */
 
-/* =========================================================
-   RENDER PROGRAMS
-========================================================= */
-
-function renderPrograms(){
-
-    const container =
-        document.getElementById(
-            "programOptions"
-        );
-
+function renderPrograms() {
+    const container = document.getElementById("programOptions");
 
     container.innerHTML = "";
 
+    programs.forEach(program => {
+        const card = document.createElement("button");
 
-    programs.forEach(
-        program => {
+        card.type = "button";
+        card.className = "program-card";
 
-            const card =
-                document.createElement(
-                    "button"
-                );
+        card.innerHTML = `
+            <strong>
+                ${escapeHtml(program.name)}
+            </strong>
+            <span>
+                ${getProgramSubtitle(program.name)}
+            </span>
+        `;
 
+        // Allow selecting another program even if one is active.
+        card.onclick = () => {
+            document.querySelectorAll(".program-card")
+                .forEach(item => item.classList.remove("selected"));
 
-            card.type =
-                "button";
+            card.classList.add("selected");
 
+            selectProgram(program);
+        };
 
-            card.className =
-                "program-card";
-
-
-            card.innerHTML = `
-
-                <strong>
-                    ${escapeHtml(
-                        program.name
-                    )}
-                </strong>
-
-                <span>
-                    ${getProgramSubtitle(
-                        program.name
-                    )}
-                </span>
-
-
-            `;
-
-
-            /*
-            =================================================
-            MEMBER ALREADY HAS ACTIVE PROGRAM
-            =================================================
-            */
-
-            if(hasActiveProgram){
-
-                card.disabled =
-                    true;
-
-
-                card.classList.add(
-                    "program-disabled"
-                );
-
-
-                card.title =
-                    "You already have an active program.";
-
-            }
-
-
-            /*
-            =================================================
-            MEMBER HAS NO ACTIVE PROGRAM
-            =================================================
-            */
-
-            else{
-
-                card.onclick =
-                    () => {
-
-                        document
-                            .querySelectorAll(
-                                ".program-card"
-                            )
-                            .forEach(
-                                item =>
-                                    item.classList.remove(
-                                        "selected"
-                                    )
-                            );
-
-
-                        card.classList.add(
-                            "selected"
-                        );
-
-
-                        selectProgram(
-                            program
-                        );
-
-                    };
-
-            }
-
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
-
+        container.appendChild(card);
+    });
 }
 
 /* =========================================================
@@ -2002,14 +1917,6 @@ function updateProgramSubmitButton() {
 
     if (!button) return;
 
-    // May active program na ang member.
-    if (hasActiveProgram) {
-        button.innerText = "Program Already Active";
-        button.disabled = true;
-        return;
-    }
-
-    // Hindi pa kumpleto ang required selections.
     if (
         !selectedProgram ||
         !selectedPlan ||
@@ -2023,7 +1930,6 @@ function updateProgramSubmitButton() {
         return;
     }
 
-    // May trainer: kailangan ang trainer at payment option.
     if (wantsTrainer === true) {
         button.innerText = "Send Request";
 
@@ -2035,7 +1941,6 @@ function updateProgramSubmitButton() {
         return;
     }
 
-    // Walang trainer: direktang kumuha ng program.
     button.innerText = "Get Program";
     button.disabled = false;
 }
@@ -2584,14 +2489,6 @@ function selectTrainerPreference(wantsTrainerValue) {
 ========================================================= */
 
 async function sendProgramRequest() {
-
-    if (hasActiveProgram) {
-        showNotifPopup(
-            "Request Failed",
-            "You already have an active program."
-        );
-        return;
-    }
 
     /* =========================
        VALIDATE PROGRAM
