@@ -1108,6 +1108,14 @@
                                         Edit
                                     </button>
 
+                                    ${currentCategory === "programs" ? `
+                                        <button
+                                            class="action-button"
+                                            onclick="openProgramStructure(${Number(record.id)})">
+                                            Manage Splits
+                                        </button>
+                                    ` : ""}
+
                                     <button
                                         class="action-button"
                                         onclick="toggleStatus(${Number(record.id)})">
