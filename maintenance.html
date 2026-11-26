@@ -663,7 +663,7 @@
                     ["ID", "id"],
                     ["Program Name", "program_name"],
                     ["Description", "description"],
-                    ["Duration", "duration_days"],
+                    
                     ["Status", "active"]
                 ],
                 fields: [
@@ -678,13 +678,7 @@
                         label: "Description",
                         type: "textarea"
                     },
-                    {
-                        name: "duration_days",
-                        label: "Duration (Days)",
-                        type: "number",
-                        required: true,
-                        min: 1
-                    }
+                    
                 ],
                 statusField: "active"
             },
@@ -1320,6 +1314,21 @@
                 payload[key] = field && field.type === "number"
                     ? Number(value)
                     : value.trim();
+            }
+
+            // Automatically assign 120 days to Programs
+            if (currentCategory === "programs") {
+                if (!editingId) {
+                    payload.duration_days = 120;
+                } else {
+                    const existingProgram = records.programs.find(
+                        item => Number(item.id) === Number(editingId)
+                    );
+
+                    payload.duration_days = Number(
+                        existingProgram?.duration_days ?? 120
+                    );
+                }
             }
 
             saveButton.disabled = true;
