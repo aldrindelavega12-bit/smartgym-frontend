@@ -5047,10 +5047,6 @@ function getWorkoutStatus(workout, date){
 
 }
 
-/* =========================================================
-   RENDER 7-DAY SCHEDULE
-========================================================= */
-
 function renderTrainingSchedule(){
 
     if(!selectedScheduleDate) return;
@@ -5074,56 +5070,9 @@ function renderTrainingSchedule(){
     const days = getScheduleDays(selectedScheduleDate);
     const todayKey = getDateKey(new Date());
 
-    // Fixed start of the combined program rotation.
-    const rotationStart = new Date("2026-11-26T00:00:00");
-
-    function getRotationDay(date){
-
-        const current = new Date(getDateKey(date) + "T00:00:00");
-
-        return Math.round(
-            (current.getTime() - rotationStart.getTime()) /
-            (1000 * 60 * 60 * 24)
-        );
-    }
-
-    function getSelectedProgram(dayIndex){
-
-        const cycleDay = ((dayIndex % 5) + 5) % 5;
-
-        if(cycleDay === 0) return "build";
-        if(cycleDay === 1) return "weight";
-        if(cycleDay === 2) return "build";
-        if(cycleDay === 3) return "weight";
-
-        return "rest";
-    }
-
-    function identifyProgram(workout){
-
-        const name = String(
-            workout.program_name ||
-            workout.workout_name ||
-            ""
-        ).toLowerCase();
-
-        if(name.includes("build muscle")){
-            return "build";
-        }
-
-        if(name.includes("weight loss")){
-            return "weight";
-        }
-
-        return "";
-    }
-
     days.forEach(date => {
 
         const dateKey = getDateKey(date);
-        const dayIndex = getRotationDay(date);
-        const selectedProgram = getSelectedProgram(dayIndex);
-
         const dayCard = document.createElement("div");
         dayCard.className = "training-day";
 
@@ -5145,8 +5094,11 @@ function renderTrainingSchedule(){
 
         dayCard.appendChild(header);
 
-        // REST DAY: every fifth day.
-        if(selectedProgram === "rest"){
+        // Same database-backed schedule for With Trainer
+        // and Without Trainer.
+        const workouts = getWorkoutForDate(date);
+
+        if(!workouts.length){
 
             const rest = document.createElement("div");
             rest.className = "schedule-workout";
@@ -5158,103 +5110,78 @@ function renderTrainingSchedule(){
             return;
         }
 
-        // Get all workouts for this date.
-        const entries = actualWorkoutMap[dateKey];
+        workouts.forEach(workout => {
 
-        const workouts = Array.isArray(entries)
-            ? entries
-            : entries
-                ? [entries]
-                : [];
+            const workoutName = String(
+                workout.workout_name || "Workout"
+            ).trim();
 
-        // Select ONLY the scheduled program.
-        const workout = workouts.find(item =>
-            identifyProgram(item) === selectedProgram
-        );
+            const status = getWorkoutStatus(workout, date);
 
-        if(!workout){
+            const details = document.createElement("div");
+            details.className = "schedule-workout";
 
-            const pending = document.createElement("div");
-            pending.className = "schedule-workout";
-            pending.textContent = "No workout available";
+            const programLabel = String(
+                workout.program_name || ""
+            ).trim();
 
-            dayCard.appendChild(pending);
-            container.appendChild(dayCard);
-
-            return;
-        }
-
-        const workoutName = String(
-            workout.workout_name || "Workout"
-        ).split("—").length > 1
-            ? String(workout.workout_name).split("—").slice(1).join("—").trim()
-            : String(workout.workout_name || "Workout");
-
-        const programLabel = selectedProgram === "build"
-            ? "Build Muscle"
-            : "Weight Loss";
-
-        const status = getWorkoutStatus(workout, date);
-
-        const details = document.createElement("div");
-        details.className = "schedule-workout";
-
-        details.innerHTML = `
-            <small>${escapeHtml(programLabel)}</small>
-            <div>${escapeHtml(workoutName)}</div>
-            ${
-                status.label
-                    ? `<div class="day-status ${status.className}">
+            details.innerHTML = `
+                ${programLabel
+                    ? `<small>${escapeHtml(programLabel)}</small>`
+                    : ""}
+                <div>${escapeHtml(workoutName)}</div>
+                ${status.label
+                    ? `<div class="day-status ${escapeHtml(status.className)}">
                         ${escapeHtml(status.label)}
                        </div>`
-                    : ""
+                    : ""}
+            `;
+
+            dayCard.appendChild(details);
+
+            const workoutStatus = String(
+                workout.status || ""
+            ).trim().toLowerCase();
+
+            const workoutNameLower = workoutName.toLowerCase();
+
+            const canMarkWorkout =
+                dateKey === todayKey &&
+                Number(workout.id) > 0 &&
+                workoutStatus === "scheduled" &&
+                workoutNameLower !== "rest";
+
+            if(canMarkWorkout){
+
+                const actions = document.createElement("div");
+                actions.className = "workout-actions";
+
+                const completeButton = document.createElement("button");
+                completeButton.type = "button";
+                completeButton.className = "workout-complete-btn";
+                completeButton.dataset.workoutId = String(workout.id);
+                completeButton.textContent = "Complete";
+
+                const missedButton = document.createElement("button");
+                missedButton.type = "button";
+                missedButton.className = "workout-missed-btn";
+                missedButton.dataset.workoutId = String(workout.id);
+                missedButton.textContent = "Missed";
+
+                actions.appendChild(completeButton);
+                actions.appendChild(missedButton);
+
+                dayCard.appendChild(actions);
             }
-        `;
 
-        dayCard.appendChild(details);
-
-        // Only one workout can have actions per day.
-        const workoutStatus = String(
-            workout.status || ""
-        ).trim().toLowerCase();
-
-        const workoutNameLower = String(
-            workout.workout_name || ""
-        ).trim().toLowerCase();
-
-        const canMarkWorkout =
-            dateKey === todayKey &&
-            Number(workout.id) > 0 &&
-            workoutStatus === "scheduled" &&
-            workoutNameLower !== "rest";
-
-        if(canMarkWorkout){
-
-            const actions = document.createElement("div");
-            actions.className = "workout-actions";
-
-            const completeButton = document.createElement("button");
-            completeButton.type = "button";
-            completeButton.className = "workout-complete-btn";
-            completeButton.dataset.workoutId = String(workout.id);
-            completeButton.textContent = "Complete";
-
-            const missedButton = document.createElement("button");
-            missedButton.type = "button";
-            missedButton.className = "workout-missed-btn";
-            missedButton.dataset.workoutId = String(workout.id);
-            missedButton.textContent = "Missed";
-
-            actions.appendChild(completeButton);
-            actions.appendChild(missedButton);
-
-            dayCard.appendChild(actions);
-        }
+        });
 
         container.appendChild(dayCard);
 
     });
 }
+
+
 
 /* =========================================================
    MEMBER WORKOUT ACTIONS
