@@ -4218,14 +4218,28 @@ async function loadCurrentProgram(){
            SHOW PROGRAM IF AVAILABLE
         ===================================================== */
 
-        if(!hasTrainer){
 
-            const program = result.program;
+        if(!hasTrainer){
 
             currentTrainerData = null;
 
-            /* Walang active program */
-            if(!program){
+            // Get all active programs.
+            // Fallback supports the old API response.
+            const programs = Array.isArray(result.programs)
+                ? result.programs
+                : (result.program ? [result.program] : []);
+
+            const container = document.getElementById(
+                "currentProgramCards"
+            );
+
+            if(!container){
+                console.error("currentProgramCards container not found.");
+                return;
+            }
+
+            // No active programs
+            if(programs.length === 0){
 
                 setCurrentProgramEmpty();
 
@@ -4240,84 +4254,87 @@ async function loadCurrentProgram(){
                 return;
             }
 
-            /* ================================================
-               PROGRAM NAME
-            ================================================ */
+            // Use the existing card as the template.
+            const template = container.querySelector(
+                ".current-program-card"
+            );
 
-            if(programNameElement){
-
-                programNameElement.innerText =
-                    program.program_name || "-";
-
+            if(!template){
+                console.error("Current program card template not found.");
+                return;
             }
 
-            /* ================================================
-               PROGRAM PLAN / SPLIT
-            ================================================ */
+            // Remove previous cards except the template.
+            container.innerHTML = "";
 
-            if(programPlanElement){
+            programs.forEach((program, index) => {
 
-                programPlanElement.innerText =
-                    program.program_plan_name ||
-                    program.program_plan ||
-                    program.split_name ||
-                    "-";
+                const card = template.cloneNode(true);
 
-            }
+                const nameElement = card.querySelector(
+                    ".program-main-info h2"
+                );
 
-            /* ================================================
-               NO TRAINER
-            ================================================ */
+                const planElement = card.querySelector(
+                    ".program-main-info h3"
+                );
 
-            if(trainerNameElement){
+                const detailElements = card.querySelectorAll(
+                    ".program-details .program-detail strong"
+                );
 
-                trainerNameElement.innerText = "-";
+                // Program name
+                if(nameElement){
+                    nameElement.textContent =
+                        program.program_name || "-";
 
-            }
+                    if(index > 0){
+                        nameElement.removeAttribute("id");
+                    }
+                }
 
-            /* =====================================================
-            KEEP DETAILS VISIBLE BUT CLEAR THEIR VALUES
-            ===================================================== */
+                // Program plan / split
+                if(planElement){
+                    planElement.textContent =
+                        program.program_plan_name ||
+                        program.program_plan ||
+                        program.split_name ||
+                        "-";
 
-            /* Ipakita ulit ang labels */
-            trainerDetails.forEach(detail => {
-                detail.style.display = "";
+                    if(index > 0){
+                        planElement.removeAttribute("id");
+                    }
+                }
+
+                // No trainer details for members without a trainer.
+                detailElements.forEach((element, detailIndex) => {
+
+                    element.textContent = "";
+
+                    if(index > 0){
+                        element.removeAttribute("id");
+                    }
+
+                    const detail = element.closest(".program-detail");
+
+                    if(detail){
+                        detail.style.display = "";
+                    }
+                });
+
+                // Hide trainer renewal button.
+                const cardRenewButton = card.querySelector(
+                    ".program-action.renew"
+                );
+
+                if(cardRenewButton){
+                    cardRenewButton.style.display = "none";
+                }
+
+                container.appendChild(card);
             });
 
-            /* Trainer: blank */
-            if(trainerNameElement){
-                trainerNameElement.innerText = "";
-            }
-
-            /* Started: blank */
-            if(startDateElement){
-                startDateElement.innerText = "";
-            }
-
-            /* Valid Until: blank */
-            if(endDateElement){
-                endDateElement.innerText = "";
-            }
-
-            /* Walang trainer renewal */
-            if(renewButton){
-                renewButton.style.display = "none";
-            }
-
-            /* ================================================
-               HIDE TRAINER RENEWAL BUTTON
-            ================================================ */
-
-            if(renewButton){
-
-                renewButton.style.display = "none";
-
-            }
-
-            /* ================================================
-               SCHEDULE DATE = TODAY
-            ================================================ */
-
+            // Keep schedule logic unchanged.
             selectedScheduleDate = new Date();
 
             selectedScheduleDate.setHours(
@@ -4327,15 +4344,11 @@ async function loadCurrentProgram(){
                 0
             );
 
-            /* ================================================
-               RENDER WORKOUT SCHEDULE
-            ================================================ */
-
             renderTrainingSchedule();
 
             console.log(
-                "PROGRAM WITHOUT TRAINER:",
-                program
+                "PROGRAMS WITHOUT TRAINER:",
+                programs
             );
 
             return;
