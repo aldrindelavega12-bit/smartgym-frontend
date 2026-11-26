@@ -4223,22 +4223,13 @@ async function loadCurrentProgram(){
 
             currentTrainerData = null;
 
-            // Get all active programs.
-            // Fallback supports the old API response.
+            // Kunin lahat ng active programs.
+            // Backward compatible kung singular program lang ang API response.
             const programs = Array.isArray(result.programs)
                 ? result.programs
                 : (result.program ? [result.program] : []);
 
-            const container = document.getElementById(
-                "currentProgramCards"
-            );
-
-            if(!container){
-                console.error("currentProgramCards container not found.");
-                return;
-            }
-
-            // No active programs
+            /* WALANG ACTIVE PROGRAM */
             if(programs.length === 0){
 
                 setCurrentProgramEmpty();
@@ -4254,87 +4245,73 @@ async function loadCurrentProgram(){
                 return;
             }
 
-            // Use the existing card as the template.
-            const template = container.querySelector(
-                ".current-program-card"
-            );
+            /* ================================================
+            COMBINE PROGRAM NAMES
+            Example: BUILD MUSCLE - WEIGHT LOSS
+            ================================================ */
 
-            if(!template){
-                console.error("Current program card template not found.");
-                return;
+            const combinedProgramNames = programs
+                .map(program => program.program_name)
+                .filter(name => name && name.trim() !== "")
+                .join(" - ");
+
+            /* ================================================
+            COMBINE PROGRAM PLANS / SPLITS
+            Example: PPL - Cardio & Full Body
+            ================================================ */
+
+            const combinedProgramPlans = programs
+                .map(program =>
+                    program.program_plan_name ||
+                    program.program_plan ||
+                    program.split_name
+                )
+                .filter(plan => plan && plan.trim() !== "")
+                .join(" - ");
+
+            /* ================================================
+            DISPLAY IN ONE CARD ONLY
+            ================================================ */
+
+            if(programNameElement){
+                programNameElement.innerText =
+                    combinedProgramNames || "-";
             }
 
-            // Remove previous cards except the template.
-            container.innerHTML = "";
+            if(programPlanElement){
+                programPlanElement.innerText =
+                    combinedProgramPlans || "-";
+            }
 
-            programs.forEach((program, index) => {
+            /* ================================================
+            NO TRAINER DETAILS
+            ================================================ */
 
-                const card = template.cloneNode(true);
-
-                const nameElement = card.querySelector(
-                    ".program-main-info h2"
-                );
-
-                const planElement = card.querySelector(
-                    ".program-main-info h3"
-                );
-
-                const detailElements = card.querySelectorAll(
-                    ".program-details .program-detail strong"
-                );
-
-                // Program name
-                if(nameElement){
-                    nameElement.textContent =
-                        program.program_name || "-";
-
-                    if(index > 0){
-                        nameElement.removeAttribute("id");
-                    }
-                }
-
-                // Program plan / split
-                if(planElement){
-                    planElement.textContent =
-                        program.program_plan_name ||
-                        program.program_plan ||
-                        program.split_name ||
-                        "-";
-
-                    if(index > 0){
-                        planElement.removeAttribute("id");
-                    }
-                }
-
-                // No trainer details for members without a trainer.
-                detailElements.forEach((element, detailIndex) => {
-
-                    element.textContent = "";
-
-                    if(index > 0){
-                        element.removeAttribute("id");
-                    }
-
-                    const detail = element.closest(".program-detail");
-
-                    if(detail){
-                        detail.style.display = "";
-                    }
-                });
-
-                // Hide trainer renewal button.
-                const cardRenewButton = card.querySelector(
-                    ".program-action.renew"
-                );
-
-                if(cardRenewButton){
-                    cardRenewButton.style.display = "none";
-                }
-
-                container.appendChild(card);
+            trainerDetails.forEach(detail => {
+                detail.style.display = "";
             });
 
-            // Keep schedule logic unchanged.
+            if(trainerNameElement){
+                trainerNameElement.innerText = "";
+            }
+
+            if(startDateElement){
+                startDateElement.innerText = "";
+            }
+
+            if(endDateElement){
+                endDateElement.innerText = "";
+            }
+
+            /* HIDE TRAINER RENEWAL */
+            if(renewButton){
+                renewButton.style.display = "none";
+            }
+
+            /* ================================================
+            SCHEDULE DATE = TODAY
+            ================================================ */
+
             selectedScheduleDate = new Date();
 
             selectedScheduleDate.setHours(
@@ -4344,15 +4321,31 @@ async function loadCurrentProgram(){
                 0
             );
 
+            /* ================================================
+            RENDER WORKOUT SCHEDULE
+            ================================================ */
+
             renderTrainingSchedule();
 
             console.log(
-                "PROGRAMS WITHOUT TRAINER:",
+                "COMBINED ACTIVE PROGRAMS:",
                 programs
+            );
+
+            console.log(
+                "COMBINED PROGRAM NAME:",
+                combinedProgramNames
+            );
+
+            console.log(
+                "COMBINED PROGRAM PLAN:",
+                combinedProgramPlans
             );
 
             return;
         }
+
+
 
         /* =====================================================
            MEMBER WITH TRAINER
