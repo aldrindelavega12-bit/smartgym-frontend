@@ -805,7 +805,6 @@
                     ["ID", "id"],
                     ["Module Name", "module_name"],
                     ["Module Key", "module_key"],
-                    ["Page URL", "page_url"],
                     ["Status", "active"]
                 ],
                 fields: [
@@ -1077,14 +1076,13 @@
                 `;
             } else {
                 tbody.innerHTML = filtered.map(record => {
+
                     const cells = config.columns.map(column => {
                         const value = record[column[1]];
 
                         if (column[1] === config.statusField) {
                             return `
-                                <td>
-                                    ${renderStatus(value)}
-                                </td>
+                                <td>${renderStatus(value)}</td>
                             `;
                         }
 
@@ -1116,12 +1114,12 @@
                                 <div class="action-group">
 
                                     ${currentCategory === "programs" ? `
-                                            <button
-                                                class="action-button"
-                                                onclick="openProgramStructure(${Number(record.id)})">
-                                                Manage Splits
-                                            </button>
-                                        ` : ""}
+                                        <button
+                                            class="action-button"
+                                            onclick="openProgramStructure(${Number(record.id)})">
+                                            Manage Splits
+                                        </button>
+                                    ` : ""}
 
                                     <button
                                         class="action-button"
@@ -1130,13 +1128,16 @@
                                     </button>
 
                                     
-                                    <button
-                                        class="action-button"
-                                        onclick="toggleStatus(${Number(record.id)})">
-                                        ${isActive(record, config.statusField)
-                                            ? "Deactivate"
-                                            : "Activate"}
-                                    </button>
+
+                                    ${currentCategory !== "modules" ? `
+                                        <button
+                                            class="action-button"
+                                            onclick="toggleStatus(${Number(record.id)})">
+                                            ${isActive(record, config.statusField)
+                                                ? "Deactivate"
+                                                : "Activate"}
+                                        </button>
+                                    ` : ""}
 
                                     <button
                                         class="action-button delete"
@@ -1154,7 +1155,6 @@
             document.getElementById("tableFooter").textContent =
                 `Showing ${filtered.length} of ${records[currentCategory].length} entries`;
         }
-
         // =====================================================
         // STATUS HELPERS
         // =====================================================
@@ -1372,6 +1372,10 @@
         // =====================================================
 
         async function toggleStatus(id) {
+             if (currentCategory === "modules") {
+                showNotification("Module deactivation is not allowed.");
+                return;
+            }
             const config = CONFIG[currentCategory];
 
             const record = records[currentCategory].find(item =>
