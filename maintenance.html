@@ -1775,6 +1775,352 @@
                 alert(error.message || "Unable to deactivate split.");
             }
         }
+        
+        
+                
+        // =====================================================
+        // PLAN BY DAY MANAGEMENT
+        // =====================================================
+
+        let selectedSplitId = null;
+        let selectedSplitName = "";
+
+        async function managePlanDays(splitId, splitName) {
+
+            selectedSplitId = Number(splitId);
+            selectedSplitName = splitName;
+
+            document.getElementById("structureModalTitle").textContent =
+                `${selectedSplitName} - Plan by Day`;
+
+            await loadPlanDays();
+        }
+
+
+        // =====================================================
+        // LOAD PLAN DAYS
+        // =====================================================
+
+        async function loadPlanDays() {
+
+            const container = document.getElementById("structureModalBody");
+
+            container.innerHTML = "Loading plan days...";
+
+            try {
+
+                const result = await apiRequest(
+                    `/api/maintenance/splits/${selectedSplitId}/days`
+                );
+
+                const days = Array.isArray(result)
+                    ? result
+                    : result.days || result.data || result.records || [];
+
+                renderPlanDays(days);
+
+            } catch (error) {
+
+                console.error("LOAD PLAN DAYS ERROR:", error);
+
+                container.innerHTML = `
+                    <p style="color:#c0392b;">
+                        Unable to load plan days: ${escapeHTML(error.message)}
+                    </p>
+                `;
+            }
+        }
+
+
+        // =====================================================
+        // RENDER PLAN DAYS
+        // =====================================================
+
+        function renderPlanDays(days) {
+
+            const container = document.getElementById("structureModalBody");
+
+            container.innerHTML = `
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:20px;
+                ">
+
+                    <div>
+                        <strong>${escapeHTML(selectedSplitName)}</strong>
+
+                        <div style="font-size:12px;color:#718078;margin-top:4px;">
+                            Manage workout days
+                        </div>
+                    </div>
+
+                    <button
+                        class="add-button"
+                        onclick="addPlanDay()">
+                        + Add Day
+                    </button>
+
+                </div>
+
+                <div class="table-wrapper" style="padding:0;">
+
+                    <table class="maintenance-table" style="min-width:550px;">
+
+                        <thead>
+                            <tr>
+                                <th>Day Number</th>
+                                <th>Day Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            ${
+                                days.length
+                                ? days.map(day => `
+
+                                    <tr>
+
+                                        <td>
+                                            Day ${escapeHTML(day.day_number)}
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                ${escapeHTML(day.day_name || "")}
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            ${renderStatus(day.active)}
+                                        </td>
+
+                                        <td>
+
+                                            <div class="action-group">
+
+                                                <button
+                                                    class="action-button"
+                                                    onclick="manageBodyParts(
+                                                        ${Number(day.id)},
+                                                        ${Number(day.day_number)},
+                                                        '${escapeHTML(day.day_name || "").replace(/'/g, "\\'")}'
+                                                    )">
+                                                    Body Parts
+                                                </button>
+
+                                                <button
+                                                    class="action-button"
+                                                    onclick="editPlanDay(${Number(day.id)})">
+                                                    Edit
+                                                </button>
+
+                                                <button
+                                                    class="action-button delete"
+                                                    onclick="deactivatePlanDay(${Number(day.id)})">
+                                                    Deactivate
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `).join("")
+                                : `
+                                    <tr>
+                                        <td colspan="4" class="empty-state">
+                                            No plan days found.
+                                        </td>
+                                    </tr>
+                                `
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div style="margin-top:16px;">
+
+                    <button
+                        class="action-button"
+                        onclick="loadProgramSplits()">
+                        Back to Splits
+                    </button>
+
+                </div>
+            `;
+        }
+
+
+        // =====================================================
+        // ADD PLAN DAY
+        // =====================================================
+
+        async function addPlanDay() {
+
+            const dayNumberInput = prompt("Enter Day Number:");
+
+            if (dayNumberInput === null) return;
+
+            const dayNumber = Number(dayNumberInput);
+
+            if (!Number.isInteger(dayNumber) || dayNumber < 1) {
+                alert("Enter a valid day number.");
+                return;
+            }
+
+            const dayName = prompt(
+                "Enter Day Name (example: Upper Body, Lower Body, Rest):"
+            );
+
+            if (dayName === null) return;
+
+            if (!dayName.trim()) {
+                alert("Day name is required.");
+                return;
+            }
+
+            try {
+
+                await apiRequest(
+                    `/api/maintenance/splits/${selectedSplitId}/days`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
+                            day_number: dayNumber,
+                            day_name: dayName.trim()
+                        })
+                    }
+                );
+
+                showNotification("Plan day added successfully.");
+
+                await loadPlanDays();
+
+            } catch (error) {
+
+                console.error("ADD PLAN DAY ERROR:", error);
+
+                alert(error.message || "Unable to add plan day.");
+            }
+        }
+
+
+        // =====================================================
+        // EDIT PLAN DAY
+        // =====================================================
+
+        async function editPlanDay(dayId) {
+
+            try {
+
+                const result = await apiRequest(
+                    `/api/maintenance/splits/${selectedSplitId}/days`
+                );
+
+                const days = Array.isArray(result)
+                    ? result
+                    : result.days || result.data || result.records || [];
+
+                const day = days.find(item =>
+                    Number(item.id) === Number(dayId)
+                );
+
+                if (!day) {
+                    alert("Plan day not found.");
+                    return;
+                }
+
+                const dayNumberInput = prompt(
+                    "Edit Day Number:",
+                    day.day_number
+                );
+
+                if (dayNumberInput === null) return;
+
+                const dayNumber = Number(dayNumberInput);
+
+                if (!Number.isInteger(dayNumber) || dayNumber < 1) {
+                    alert("Enter a valid day number.");
+                    return;
+                }
+
+                const dayName = prompt(
+                    "Edit Day Name:",
+                    day.day_name || ""
+                );
+
+                if (dayName === null) return;
+
+                if (!dayName.trim()) {
+                    alert("Day name is required.");
+                    return;
+                }
+
+                await apiRequest(
+                    `/api/maintenance/plan-days/${dayId}`,
+                    {
+                        method: "PUT",
+                        body: JSON.stringify({
+                            day_number: dayNumber,
+                            day_name: dayName.trim()
+                        })
+                    }
+                );
+
+                showNotification("Plan day updated successfully.");
+
+                await loadPlanDays();
+
+            } catch (error) {
+
+                console.error("EDIT PLAN DAY ERROR:", error);
+
+                alert(error.message || "Unable to update plan day.");
+            }
+        }
+
+
+        // =====================================================
+        // DEACTIVATE PLAN DAY
+        // =====================================================
+
+        async function deactivatePlanDay(dayId) {
+
+            if (!confirm("Deactivate this plan day?")) {
+                return;
+            }
+
+            try {
+
+                await apiRequest(
+                    `/api/maintenance/plan-days/${dayId}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                showNotification("Plan day deactivated successfully.");
+
+                await loadPlanDays();
+
+            } catch (error) {
+
+                console.error("DEACTIVATE PLAN DAY ERROR:", error);
+
+                alert(error.message || "Unable to deactivate plan day.");
+            }
+        }
+
         // =====================================================
         // SIDEBAR MODULE ACCESS
         // =====================================================
