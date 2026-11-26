@@ -5132,22 +5132,31 @@ function renderTrainingSchedule(){
                 workout.program_name || ""
             ).trim();
 
+            
             const status = getWorkoutStatus(workout, date);
+
+            const isRestWorkout =
+                rawWorkoutName.toLowerCase() === "rest" ||
+                workoutName.toLowerCase() === "rest";
 
             const details = document.createElement("div");
             details.className = "schedule-workout";
 
-            details.innerHTML = `
-                ${programLabel
-                    ? `<small>${escapeHtml(programLabel)}</small>`
-                    : ""}
-                <div>${escapeHtml(workoutName || "Workout")}</div>
-                ${status.label
-                    ? `<div class="day-status ${status.className}">
-                        ${escapeHtml(status.label)}
-                       </div>`
-                    : ""}
-            `;
+            if(isRestWorkout){
+                details.textContent = "Rest";
+            } else {
+                details.innerHTML = `
+                    ${programLabel
+                        ? `<small>${escapeHtml(programLabel)}</small>`
+                        : ""}
+                    <div>${escapeHtml(workoutName || "Workout")}</div>
+                    ${status.label
+                        ? `<div class="day-status ${status.className}">
+                            ${escapeHtml(status.label)}
+                        </div>`
+                        : ""}
+                `;
+            }
 
             dayCard.appendChild(details);
 
@@ -5156,10 +5165,10 @@ function renderTrainingSchedule(){
             ).trim().toLowerCase();
 
             const canMarkWorkout =
+                !isRestWorkout &&
                 dateKey === todayKey &&
                 Number(workout.id) > 0 &&
-                workoutStatus === "scheduled" &&
-                rawWorkoutName.toLowerCase() !== "rest";
+                workoutStatus === "scheduled";
 
             if(canMarkWorkout){
 
@@ -5183,6 +5192,7 @@ function renderTrainingSchedule(){
 
                 dayCard.appendChild(actions);
             }
+
         });
 
         container.appendChild(dayCard);
