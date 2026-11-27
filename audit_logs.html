@@ -610,13 +610,7 @@
 
     function getDashboardPage() {
 
-        const role = String(user?.role || "").toLowerCase();
-
-        const item = MODULE_MENU.find(module =>
-            module.key === "dashboard"
-        );
-
-        return item.href[role] || "index.html";
+        return getHomePage();
     }
 
 
