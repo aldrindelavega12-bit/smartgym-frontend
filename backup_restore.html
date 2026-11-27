@@ -2112,13 +2112,7 @@ function normalizeModuleKey(value) {
 
 function getDashboardPage() {
 
-    const role = String(user?.role || "").toLowerCase();
-
-    const dashboard = MODULE_MENU.find(
-        item => item.key === "dashboard"
-    );
-
-    return dashboard.href[role] || "index.html";
+    return getHomePage();
 }
 
 
