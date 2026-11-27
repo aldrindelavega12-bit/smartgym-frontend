@@ -437,6 +437,8 @@ function getMessagesDashboardHref() {
 
     return getHomePage()
 }
+
+
 function renderMessagesMenu(allowedModules) {
     const menu = document.getElementById("menu");
 
@@ -445,11 +447,16 @@ function renderMessagesMenu(allowedModules) {
     menu.innerHTML = "";
 
     MODULE_MENU.forEach(item => {
+
         if (!allowedModules.has(item.key)) return;
 
-        const href = typeof item.page === "object"
-            ? item.page[getUserRole()]
-            : item.page;
+        // Support both href and page
+        const href = item.href ||
+            (
+                typeof item.page === "object"
+                    ? item.page[getUserRole()]
+                    : item.page
+            );
 
         if (!href) return;
 
@@ -478,6 +485,9 @@ function renderMessagesMenu(allowedModules) {
         menu.appendChild(link);
     });
 }
+
+
+
 async function checkMessagesPageAccess() {
     const userId = user.user_id || user.member_id || user.id;
 
