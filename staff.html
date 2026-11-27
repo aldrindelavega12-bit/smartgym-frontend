@@ -339,8 +339,8 @@ const user = JSON.parse(localStorage.getItem("user"));
 const QUICK_CARD_ITEMS = [
     {
         key: "messages",
-        title: "Messages",
-        description: "View and manage system messages",
+        title: "Notification",
+        description: "View and manage system notification",
         page: "messages.html"
     },
     {
@@ -553,7 +553,7 @@ if (!user || user.role !== "staff") {
 
 const STAFF_MENU_ITEMS = [
     { key: "dashboard", label: "Home", page: "staff.html" },
-    { key: "messages", label: "Messages", page: "messages.html", badge: true },
+    { key: "messages", label: "Notification", page: "messages.html", badge: true },
     { key: "program", label: "Program", page: "program.html" },
     { key: "get_program", label: "Get Program", page: "get_program.html" },
     { key: "book_locker", label: "Book Locker", page: "locker_booking.html" },
