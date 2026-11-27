@@ -2121,7 +2121,6 @@ function getDashboardPage() {
 ===================================================== */
 
 function renderBackupMenu(allowedModules) {
-
     const menu = document.getElementById("menu");
 
     if (!menu) return;
@@ -2131,30 +2130,51 @@ function renderBackupMenu(allowedModules) {
         .pop()
         .toLowerCase();
 
+    const role = String(user?.role || user?.user_type || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
     menu.innerHTML = "";
 
     MODULE_MENU.forEach(item => {
 
-        if (!allowedModules.has(item.key)) return;
+        const moduleKey = normalizeModuleKey(item.key);
 
-        let page = typeof item.href === "object"
-            ? item.href[String(user.role || "").toLowerCase()] || "index.html"
-            : item.href;
+        if (!allowedModules.has(moduleKey)) return;
 
-        if (
-            item.trainerHref &&
-            String(user.role || "").toLowerCase() === "trainer"
-        ) {
+        // Support both href and page
+        const destination = item.href ?? item.page;
+
+        let page = "index.html";
+
+        if (typeof destination === "string") {
+            page = destination;
+        } else if (destination && typeof destination === "object") {
+            page = destination[role] ||
+                   destination.default ||
+                   "index.html";
+        }
+
+        if (item.trainerHref && role === "trainer") {
             page = item.trainerHref;
         }
+
+        // Prevent undefined page
+        page = String(page || "index.html").trim();
 
         const link = document.createElement("a");
 
         link.href = page;
-        link.dataset.module = item.key;
+        link.dataset.module = moduleKey;
         link.textContent = item.label;
 
-        if (currentPage === page.toLowerCase()) {
+        const normalizedPage = page
+            .split("?")[0]
+            .split("#")[0]
+            .toLowerCase();
+
+        if (currentPage === normalizedPage) {
             link.classList.add("active");
         }
 
